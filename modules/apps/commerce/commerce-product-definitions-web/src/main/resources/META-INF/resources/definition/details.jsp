@@ -154,7 +154,8 @@ if ((cpDefinition != null) && (cpDefinition.getExpirationDate() != null)) {
 					<liferay-asset:asset-categories-selector
 						className="<%= CPDefinition.class.getName() %>"
 						classPK="<%= cpDefinitionId %>"
-						groupIds="<%= new long[] {company.getGroupId()} %>"
+						groupIds="<%= new long[] {company.getGroupId(), cpDefinitionsDisplayContext.getSiteGroupId()} %>"
+						visibilityTypes="<%= AssetVocabularyConstants.VISIBILITY_TYPES %>"
 					/>
 				</aui:field-wrapper>
 

@@ -395,6 +395,10 @@ public class CPDefinitionsDisplayContext
 		return headerActionModels;
 	}
 
+	public long getSiteGroupId() throws PortalException {
+		return cpRequestHelper.getSiteGroupId();
+	}
+
 	public String getUrlTitleMapAsXML() throws PortalException {
 		long cpDefinitionId = getCPDefinitionId();
 
