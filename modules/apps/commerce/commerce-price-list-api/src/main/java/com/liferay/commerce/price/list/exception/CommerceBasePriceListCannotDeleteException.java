@@ -11,6 +11,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 package com.liferay.commerce.price.list.exception;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -18,7 +19,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 /**
  * @author Alessio Antonio Rendina
  */
-public class CommerceBasePriceListCannotDeleteException extends PortalException {
+public class CommerceBasePriceListCannotDeleteException
+	extends PortalException {
 
 	public CommerceBasePriceListCannotDeleteException() {
 	}
@@ -27,7 +29,9 @@ public class CommerceBasePriceListCannotDeleteException extends PortalException 
 		super(msg);
 	}
 
-	public CommerceBasePriceListCannotDeleteException(String msg, Throwable throwable) {
+	public CommerceBasePriceListCannotDeleteException(
+		String msg, Throwable throwable) {
+
 		super(msg, throwable);
 	}
 
