@@ -412,8 +412,48 @@ public class CommercePriceListLocalServiceImpl
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
+	public CommercePriceList deleteCommercePriceList(
+			CommercePriceList commercePriceList)
+		throws PortalException {
+
+		if (commercePriceList.isCatalogBasePriceList()) {
+			throw new CommerceBasePriceListCannotDeleteException();
+		}
+
+		return commercePriceListLocalService.deleteForceCommercePriceList(
+			commercePriceList);
+	}
+
+	@Override
+	public CommercePriceList deleteCommercePriceList(long commercePriceListId)
+		throws PortalException {
+
+		CommercePriceList commercePriceList =
+			commercePriceListPersistence.findByPrimaryKey(commercePriceListId);
+
+		return commercePriceListLocalService.deleteCommercePriceList(
+			commercePriceList);
+	}
+
+	@Override
+	public void deleteCommercePriceLists(long companyId)
+		throws PortalException {
+
+		List<CommercePriceList> commercePriceLists =
+			commercePriceListLocalService.getCommercePriceLists(
+				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		for (CommercePriceList commercePriceList : commercePriceLists) {
+			commercePriceListLocalService.deleteForceCommercePriceList(
+				commercePriceList);
+		}
+	}
+
+	@Indexable(type = IndexableType.DELETE)
+	@Override
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CommercePriceList deleteForceCommercePriceList(
-		CommercePriceList commercePriceList)
+			CommercePriceList commercePriceList)
 		throws PortalException {
 
 		// Commerce price entries
@@ -477,46 +517,6 @@ public class CommercePriceListLocalServiceImpl
 		cleanPriceListCache(commercePriceList.getCompanyId());
 
 		return commercePriceList;
-	}
-
-	@Indexable(type = IndexableType.DELETE)
-	@Override
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CommercePriceList deleteCommercePriceList(
-			CommercePriceList commercePriceList)
-		throws PortalException {
-
-		if (commercePriceList.isCatalogBasePriceList()) {
-			throw new CommerceBasePriceListCannotDeleteException();
-		}
-
-		return commercePriceListLocalService.deleteForceCommercePriceList(
-			commercePriceList);
-	}
-
-	@Override
-	public CommercePriceList deleteCommercePriceList(long commercePriceListId)
-		throws PortalException {
-
-		CommercePriceList commercePriceList =
-			commercePriceListPersistence.findByPrimaryKey(commercePriceListId);
-
-		return commercePriceListLocalService.deleteCommercePriceList(
-			commercePriceList);
-	}
-
-	@Override
-	public void deleteCommercePriceLists(long companyId)
-		throws PortalException {
-
-		List<CommercePriceList> commercePriceLists =
-			commercePriceListLocalService.getCommercePriceLists(
-				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-
-		for (CommercePriceList commercePriceList : commercePriceLists) {
-			commercePriceListLocalService.deleteForceCommercePriceList(
-				commercePriceList);
-		}
 	}
 
 	@Override
