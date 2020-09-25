@@ -17,6 +17,7 @@ package com.liferay.commerce.price.list.service.impl;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
 import com.liferay.commerce.price.list.constants.CommercePriceListConstants;
+import com.liferay.commerce.price.list.exception.CommerceBasePriceListCannotDeleteException;
 import com.liferay.commerce.price.list.exception.CommercePriceListCurrencyException;
 import com.liferay.commerce.price.list.exception.CommercePriceListDisplayDateException;
 import com.liferay.commerce.price.list.exception.CommercePriceListExpirationDateException;
@@ -410,6 +411,10 @@ public class CommercePriceListLocalServiceImpl
 	public CommercePriceList deleteCommercePriceList(
 			CommercePriceList commercePriceList)
 		throws PortalException {
+
+		if (commercePriceList.isCatalogBasePriceList()) {
+			throw new CommerceBasePriceListCannotDeleteException();
+		}
 
 		// Commerce price entries
 
