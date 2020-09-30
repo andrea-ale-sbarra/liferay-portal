@@ -251,6 +251,12 @@ public interface CommercePriceListLocalService
 
 	public void deleteCommercePriceLists(long companyId) throws PortalException;
 
+	@Indexable(type = IndexableType.DELETE)
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
+	public CommercePriceList deleteForceCommercePriceList(
+			CommercePriceList commercePriceList)
+		throws PortalException;
+
 	/**
 	 * @throws PortalException
 	 */

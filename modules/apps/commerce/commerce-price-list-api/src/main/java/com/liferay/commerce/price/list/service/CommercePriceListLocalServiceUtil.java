@@ -346,6 +346,15 @@ public class CommercePriceListLocalServiceUtil {
 		getService().deleteCommercePriceLists(companyId);
 	}
 
+	public static com.liferay.commerce.price.list.model.CommercePriceList
+			deleteForceCommercePriceList(
+				com.liferay.commerce.price.list.model.CommercePriceList
+					commercePriceList)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().deleteForceCommercePriceList(commercePriceList);
+	}
+
 	/**
 	 * @throws PortalException
 	 */

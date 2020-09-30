@@ -137,7 +137,7 @@ public class CommerceCatalogModelListener
 					commerceCatalog.getGroupId(), type);
 
 		if (catalogBaseCommercePriceList != null) {
-			_commercePriceListLocalService.deleteCommercePriceList(
+			_commercePriceListLocalService.deleteForceCommercePriceList(
 				catalogBaseCommercePriceList);
 		}
 	}
