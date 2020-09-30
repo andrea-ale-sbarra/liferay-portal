@@ -366,6 +366,17 @@ public class CommercePriceListLocalServiceWrapper
 		_commercePriceListLocalService.deleteCommercePriceLists(companyId);
 	}
 
+	@Override
+	public com.liferay.commerce.price.list.model.CommercePriceList
+			deleteForceCommercePriceList(
+				com.liferay.commerce.price.list.model.CommercePriceList
+					commercePriceList)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _commercePriceListLocalService.deleteForceCommercePriceList(
+			commercePriceList);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
