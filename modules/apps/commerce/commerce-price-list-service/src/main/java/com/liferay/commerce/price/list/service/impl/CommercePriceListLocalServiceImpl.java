@@ -412,13 +412,9 @@ public class CommercePriceListLocalServiceImpl
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CommercePriceList deleteCommercePriceList(
-			CommercePriceList commercePriceList)
+	public CommercePriceList deleteForceCommercePriceList(
+		CommercePriceList commercePriceList)
 		throws PortalException {
-
-		if (commercePriceList.isCatalogBasePriceList()) {
-			throw new CommerceBasePriceListCannotDeleteException();
-		}
 
 		// Commerce price entries
 
@@ -483,6 +479,21 @@ public class CommercePriceListLocalServiceImpl
 		return commercePriceList;
 	}
 
+	@Indexable(type = IndexableType.DELETE)
+	@Override
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
+	public CommercePriceList deleteCommercePriceList(
+			CommercePriceList commercePriceList)
+		throws PortalException {
+
+		if (commercePriceList.isCatalogBasePriceList()) {
+			throw new CommerceBasePriceListCannotDeleteException();
+		}
+
+		return commercePriceListLocalService.deleteForceCommercePriceList(
+			commercePriceList);
+	}
+
 	@Override
 	public CommercePriceList deleteCommercePriceList(long commercePriceListId)
 		throws PortalException {
@@ -503,7 +514,7 @@ public class CommercePriceListLocalServiceImpl
 				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 		for (CommercePriceList commercePriceList : commercePriceLists) {
-			commercePriceListLocalService.deleteCommercePriceList(
+			commercePriceListLocalService.deleteForceCommercePriceList(
 				commercePriceList);
 		}
 	}
