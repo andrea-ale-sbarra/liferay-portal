@@ -24,6 +24,7 @@ import com.liferay.commerce.price.list.service.CommercePriceListCommerceAccountG
 import com.liferay.commerce.price.list.service.CommercePriceListLocalService;
 import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.CommerceCatalogLocalService;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -42,9 +43,11 @@ import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.search.filter.MissingFilter;
 import com.liferay.portal.kernel.search.filter.TermFilter;
 import com.liferay.portal.kernel.search.filter.TermsFilter;
+import com.liferay.portal.kernel.search.generic.WildcardQueryImpl;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.search.filter.FilterBuilders;
@@ -177,7 +180,15 @@ public class CommercePriceListIndexer extends BaseIndexer<CommercePriceList> {
 		throws Exception {
 
 		addSearchTerm(searchQuery, searchContext, Field.ENTRY_CLASS_PK, false);
-		addSearchTerm(searchQuery, searchContext, Field.NAME, false);
+
+		if (searchContext.getKeywords() == null) {
+			addSearchTerm(searchQuery, searchContext, Field.NAME, false);
+		}
+		else {
+			addWildcardPrefixQuery(
+				searchQuery, Field.NAME, searchContext.getKeywords());
+		}
+
 		addSearchTerm(searchQuery, searchContext, Field.USER_NAME, false);
 		addSearchTerm(
 			searchQuery, searchContext, FIELD_EXTERNAL_REFERENCE_CODE, false);
@@ -192,6 +203,18 @@ public class CommercePriceListIndexer extends BaseIndexer<CommercePriceList> {
 				addSearchExpando(searchQuery, searchContext, expandoAttributes);
 			}
 		}
+	}
+
+	protected void addWildcardPrefixQuery(
+			BooleanQuery searchQuery, String field, String keywords)
+		throws Exception {
+
+		WildcardQueryImpl wildcardQueryImpl = new WildcardQueryImpl(
+			field,
+			StringPool.STAR + StringUtil.toLowerCase(keywords) +
+				StringPool.STAR);
+
+		searchQuery.add(wildcardQueryImpl, BooleanClauseOccur.SHOULD);
 	}
 
 	@Override
@@ -219,6 +242,7 @@ public class CommercePriceListIndexer extends BaseIndexer<CommercePriceList> {
 		document.addNumber(
 			Field.ENTRY_CLASS_PK, commercePriceList.getCommercePriceListId());
 		document.addText(Field.NAME, commercePriceList.getName());
+		document.addKeyword(Field.NAME, commercePriceList.getName(), true);
 		document.addText(Field.USER_NAME, commercePriceList.getUserName());
 		document.addNumberSortable(
 			Field.PRIORITY, commercePriceList.getPriority());
