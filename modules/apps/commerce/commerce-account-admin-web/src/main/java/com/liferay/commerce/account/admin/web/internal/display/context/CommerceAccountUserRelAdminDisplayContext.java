@@ -14,6 +14,7 @@
 
 package com.liferay.commerce.account.admin.web.internal.display.context;
 
+import com.liferay.commerce.account.item.selector.criterion.CommerceAccountUserItemSelectorCriterion;
 import com.liferay.commerce.account.model.CommerceAccount;
 import com.liferay.commerce.account.model.CommerceAccountUserRel;
 import com.liferay.commerce.account.service.CommerceAccountService;
@@ -35,8 +36,6 @@ import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.users.admin.item.selector.UserItemSelectorCriterion;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,8 +84,8 @@ public class CommerceAccountUserRelAdminDisplayContext
 			RequestBackedPortletURLFactoryUtil.create(
 				commerceAccountAdminRequestHelper.getRequest());
 
-		UserItemSelectorCriterion userItemSelectorCriterion =
-			new UserItemSelectorCriterion();
+		CommerceAccountUserItemSelectorCriterion userItemSelectorCriterion =
+			new CommerceAccountUserItemSelectorCriterion();
 
 		userItemSelectorCriterion.setDesiredItemSelectorReturnTypes(
 			Collections.<ItemSelectorReturnType>singletonList(
@@ -96,9 +95,8 @@ public class CommerceAccountUserRelAdminDisplayContext
 			requestBackedPortletURLFactory, "usersSelectItem",
 			userItemSelectorCriterion);
 
-		String checkedUserIds = StringUtil.merge(getCheckedUserIds());
-
-		itemSelectorURL.setParameter("checkedUserIds", checkedUserIds);
+		itemSelectorURL.setParameter(
+			"commerceAccountId", String.valueOf(getCommerceAccountId()));
 
 		return itemSelectorURL.toString();
 	}
