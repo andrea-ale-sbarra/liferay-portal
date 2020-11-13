@@ -12,7 +12,7 @@
  * details.
  */
 
-import getJsModule from '../../utilities/modules';
+import {getJsModule} from '../../utilities/modules';
 import ActionsLinkRenderer from './ActionLinkRenderer';
 import ActionsDropdownRenderer from './ActionsDropdownRenderer';
 import BooleanRenderer from './BooleanRenderer';
