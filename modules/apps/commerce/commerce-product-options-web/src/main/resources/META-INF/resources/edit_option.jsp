@@ -131,4 +131,5 @@ PortletURL portletURL = renderResponse.createRenderURL();
 </aui:form>
 
 <liferay-frontend:component
-	module="commerce-product-options-web/js/index.es"/>
+	componentId='<%= liferayPortletResponse.getNamespace() + "ProductOptions" %>'
+	module="js/index"/>

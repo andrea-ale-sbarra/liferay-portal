@@ -17,10 +17,7 @@
 
 import {debounce} from 'frontend-js-web';
 
-
-
-
-export default function ({namespace}) {npmbundlerrc
+export default function ({namespace}) {
 	console.log('cucu')
 	var form = document.getElementById('#'+namespace + 'fm');
 
