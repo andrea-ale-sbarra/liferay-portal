@@ -12,9 +12,7 @@
  * details.
  */
 
-import {debounce} from 'frontend-js-web';
 import slugify from 'commerce-frontend-js/utilities/slugify'
-
 import {debounce} from 'frontend-js-web';
 
 export default function ({namespace}) {

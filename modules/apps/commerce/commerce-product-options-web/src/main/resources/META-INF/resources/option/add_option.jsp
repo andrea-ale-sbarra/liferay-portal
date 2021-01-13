@@ -48,7 +48,6 @@ CPOptionDisplayContext cpOptionDisplayContext = (CPOptionDisplayContext)request.
 	</portlet:renderURL>
 
 
-
 	<liferay-frontend:component
 		componentId='<%= liferayPortletResponse.getNamespace() + "add_option" %>'
 		context='<%=

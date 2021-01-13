@@ -42,6 +42,8 @@ export default function ({namespace,editOptionURL,windowState,defaultLanguageId}
 			defaultLanguageId
 		] = document.getElementById(namespace+'name').value;
 
+			AdminCatalogResource.createOption
+
 			AdminCatalogResource.createOption(formattedData)
 				.then(function (cpOption) {
 					const redirectURL = new Liferay.PortletURL.createURL(
