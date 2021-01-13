@@ -131,5 +131,5 @@ PortletURL portletURL = renderResponse.createRenderURL();
 </aui:form>
 
 <liferay-frontend:component
-	componentId='<%= liferayPortletResponse.getNamespace() + "ProductOptions" %>'
-	module="js/index"/>
+	componentId='<%= liferayPortletResponse.getNamespace() + "edit_option" %>'
+	module="js/edit_option"/>

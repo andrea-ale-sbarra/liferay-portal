@@ -12,13 +12,12 @@
  * details.
  */
 
-// import {debounce} from 'frontend-js-web';
-// import slugify from 'commerce-frontend-js/utilities/slugify'
+import {debounce} from 'frontend-js-web';
+import slugify from 'commerce-frontend-js/utilities/slugify'
 
 import {debounce} from 'frontend-js-web';
 
 export default function ({namespace}) {
-	console.log('cucu')
 	var form = document.getElementById('#'+namespace + 'fm');
 
 	var keyInput = form.querySelector('#'+namespace+ 'key');
@@ -28,7 +27,7 @@ export default function ({namespace}) {
 		keyInput.value = slugify.default(nameInput.value);
 	};
 
-	nameInput.addEventListener('input', debounce.(handleOnNameInput, 200));
+	nameInput.addEventListener('input', debounce(handleOnNameInput, 200));
 
 	document
 		.getElementById( namespace +'publishButton')
@@ -44,12 +43,3 @@ export default function ({namespace}) {
 			submitForm(form);
 		});
 }
-
-// export default class Test extends PortletBase {
-// 	attached() {
-// 		console.log('attached')
-// 	}
-// 	dispose() {
-// 		console.log('disposed')
-// 	}
-// }
