@@ -47,64 +47,16 @@ CPOptionDisplayContext cpOptionDisplayContext = (CPOptionDisplayContext)request.
 		<portlet:param name="mvcRenderCommandName" value="editOption" />
 	</portlet:renderURL>
 
-
 	<liferay-frontend:component
-		componentId='<%= liferayPortletResponse.getNamespace() + "add_option" %>'
 		context='<%=
 			HashMapBuilder.<String, Object>put(
 				"editOptionURL", editOptionURL
 			).put(
 				"windowState", LiferayWindowState.MAXIMIZED.toString()
 			).put(
-				"defaultLanguageId", "en_US"
+				"defaultLanguageId", LanguageUtil.getLanguageId(locale)
 			).build()
 		%>'
 		module="js/add_option"/>
 
-<%--	<aui:script require="commerce-frontend-js/utilities/eventsDefinitions as events, commerce-frontend-js/utilities/modals/index as ModalUtils, commerce-frontend-js/ServiceProvider/index as ServiceProvider">--%>
-<%--		var <portlet:namespace />defaultLanguageId = null;--%>
-
-<%--		var AdminCatalogResource = ServiceProvider.default.AdminCatalogAPI('v1');--%>
-
-<%--		Liferay.provide(--%>
-<%--			window,--%>
-<%--			'<portlet:namespace />apiSubmit',--%>
-<%--			function () {--%>
-<%--				ModalUtils.isSubmitting();--%>
-
-<%--				var formattedData =--%>
-<%--					{--%>
-<%--						fieldType : '',--%>
-<%--						key : '',--%>
-<%--						name: {}--%>
-<%--					};--%>
-
-<%--				formattedData.fieldType = document.getElementById('<portlet:namespace />DDMFormFieldTypeName').value;--%>
-
-<%--				formattedData.key = document.getElementById('<portlet:namespace />key').value;--%>
-
-<%--				formattedData.name[--%>
-<%--					<portlet:namespace />defaultLanguageId--%>
-<%--				] = document.getElementById('<portlet:namespace />name').value;--%>
-
-<%--				AdminCatalogResource.createOption(formattedData)--%>
-<%--					.then(function (cpOption) {--%>
-<%--						var redirectURL = new Liferay.PortletURL.createURL(--%>
-<%--							'<%= editOptionURL %>'--%>
-<%--						);--%>
-
-<%--						redirectURL.setParameter(--%>
-<%--							'p_p_state',--%>
-<%--							'<%= LiferayWindowState.MAXIMIZED.toString() %>'--%>
-<%--						);--%>
-
-<%--						redirectURL.setParameter('cpOptionId', cpOption.id);--%>
-
-<%--						ModalUtils.closeAndRedirect(redirectURL);--%>
-<%--					})--%>
-<%--					.catch(ModalUtils.onSubmitFail);--%>
-<%--			},--%>
-<%--			['liferay-portlet-url']--%>
-<%--		);--%>
-<%--	</aui:script>--%>
 </commerce-ui:modal-content>

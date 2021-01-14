@@ -130,6 +130,18 @@ PortletURL portletURL = renderResponse.createRenderURL();
 	</div>
 </aui:form>
 
+<portlet:renderURL var="editOptionURL">
+	<portlet:param name="mvcRenderCommandName" value="editOption" />
+</portlet:renderURL>
+
 <liferay-frontend:component
-	componentId='<%= liferayPortletResponse.getNamespace() + "edit_option" %>'
-	module="js/edit_option"/>
+	context='<%=
+			HashMapBuilder.<String, Object>put(
+				"editOptionURL", editOptionURL
+			).put(
+				"windowState", LiferayWindowState.MAXIMIZED.toString()
+			).put(
+				"defaultLanguageId", LanguageUtil.getLanguageId(locale)
+			).build()
+		%>'
+	module="js/add_option"/>
