@@ -30,6 +30,7 @@ import com.liferay.commerce.account.service.CommerceAccountService;
 import com.liferay.commerce.account.service.CommerceAccountUserRelService;
 import com.liferay.commerce.account.service.persistence.CommerceAccountOrganizationRelPK;
 import com.liferay.commerce.account.service.persistence.CommerceAccountUserRelPK;
+import com.liferay.commerce.constants.CommerceAddressConstants;
 import com.liferay.commerce.model.CommerceAddress;
 import com.liferay.commerce.model.CommerceCountry;
 import com.liferay.commerce.model.CommerceRegion;
@@ -510,10 +511,12 @@ public class AccountResourceImpl
 						_getCommerceRegionId(commerceCountry, accountAddress),
 						commerceCountry.getCommerceCountryId(),
 						accountAddress.getPhoneNumber(),
-						GetterUtil.get(
-							accountAddress.getDefaultBilling(), false),
-						GetterUtil.get(
-							accountAddress.getDefaultShipping(), false),
+						GetterUtil.getInteger(
+							accountAddress.getType(),
+							CommerceAddressConstants.
+								ADDRESS_TYPE_BILLING_AND_SHIPPING),
+						GetterUtil.getString(
+							accountAddress.getExternalReferenceCode(), null),
 						serviceContext);
 
 				if (GetterUtil.get(accountAddress.getDefaultBilling(), false)) {
