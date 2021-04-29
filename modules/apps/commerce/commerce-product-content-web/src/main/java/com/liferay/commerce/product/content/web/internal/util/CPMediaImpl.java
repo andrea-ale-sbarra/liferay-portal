@@ -39,10 +39,10 @@ public class CPMediaImpl implements CPMedia {
 			cpAttachmentFileEntry.getCPAttachmentFileEntryId());
 		_id = cpAttachmentFileEntry.getCPAttachmentFileEntryId();
 
-		if (fileEntry == null) {
+		if(fileEntry == null){
 			_mimeType = StringPool.BLANK;
 		}
-		else {
+		else{
 			_mimeType = fileEntry.getMimeType();
 		}
 

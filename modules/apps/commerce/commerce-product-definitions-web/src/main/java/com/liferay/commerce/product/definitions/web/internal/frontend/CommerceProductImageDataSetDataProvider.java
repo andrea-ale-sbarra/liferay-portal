@@ -90,7 +90,7 @@ public class CommerceProductImageDataSetDataProvider
 
 			FileEntry fileEntry = cpAttachmentFileEntry.fetchFileEntry();
 
-			if (fileEntry != null) {
+			if(fileEntry != null){
 				extension = HtmlUtil.escape(fileEntry.getExtension());
 			}
 
