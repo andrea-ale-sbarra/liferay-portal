@@ -51,19 +51,18 @@ cpAttachmentFileEntrySearchContainer.setResults(cpAttachmentFileEntries);
 			modelVar="cpAttachmentFileEntry"
 		>
 
-				<%
-				String thumbnailSrc = StringPool.BLANK;
+			<%
+			String thumbnailSrc = StringPool.BLANK;
 
-				FileEntry fileEntry = cpAttachmentFileEntry.fetchFileEntry();
+			FileEntry fileEntry = cpAttachmentFileEntry.fetchFileEntry();
 
-				if(fileEntry == null){
-					thumbnailSrc = cpAttachmentFileEntry.getCdnUrl();
-				}
-				else{
-					thumbnailSrc = CommerceMediaResolverUtil.getThumbnailUrl(cpAttachmentFileEntry.getCPAttachmentFileEntryId());
-				}
-
-				%>
+			if (fileEntry == null) {
+				thumbnailSrc = cpAttachmentFileEntry.getCdnUrl();
+			}
+			else {
+				thumbnailSrc = CommerceMediaResolverUtil.getThumbnailUrl(cpAttachmentFileEntry.getCPAttachmentFileEntryId());
+			}
+			%>
 
 			<c:choose>
 				<c:when test="<%= Validator.isNotNull(thumbnailSrc) %>">
