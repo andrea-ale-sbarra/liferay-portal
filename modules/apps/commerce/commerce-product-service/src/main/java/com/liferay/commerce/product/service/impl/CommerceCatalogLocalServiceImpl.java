@@ -116,6 +116,7 @@ public class CommerceCatalogLocalServiceImpl
 			catalogDefaultLanguageId, false, serviceContext);
 	}
 
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceCatalog addDefaultCommerceCatalog(long companyId)
 		throws PortalException {
