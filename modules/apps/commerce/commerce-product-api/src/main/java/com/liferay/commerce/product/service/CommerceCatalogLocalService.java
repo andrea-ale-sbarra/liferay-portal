@@ -93,6 +93,7 @@ public interface CommerceCatalogLocalService
 			ServiceContext serviceContext)
 		throws PortalException;
 
+	@Indexable(type = IndexableType.REINDEX)
 	public CommerceCatalog addDefaultCommerceCatalog(long companyId)
 		throws PortalException;
 
