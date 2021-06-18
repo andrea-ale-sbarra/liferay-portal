@@ -22,10 +22,11 @@ import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.verify.VerifyProcess;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alessio Antonio Rendina

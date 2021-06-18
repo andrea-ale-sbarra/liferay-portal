@@ -42,7 +42,6 @@ import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.search.filter.MissingFilter;
 import com.liferay.portal.kernel.search.filter.TermFilter;
 import com.liferay.portal.kernel.search.filter.TermsFilter;
-import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -345,9 +344,7 @@ public class CommercePriceListIndexer extends BaseIndexer<CommercePriceList> {
 		indexableActionableDynamicQuery.performActions();
 	}
 
-	private long _getCatalogId(CommercePriceList commercePriceList)
-		throws Exception {
-
+	private long _getCatalogId(CommercePriceList commercePriceList) {
 		CommerceCatalog commerceCatalog =
 			_commerceCatalogLocalService.fetchCommerceCatalogByGroupId(
 				commercePriceList.getGroupId());
@@ -361,9 +358,6 @@ public class CommercePriceListIndexer extends BaseIndexer<CommercePriceList> {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		CommercePriceListIndexer.class);
-
-	@Reference
-	private ClassNameLocalService _classNameLocalService;
 
 	@Reference
 	private CommerceCatalogLocalService _commerceCatalogLocalService;
