@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Marco Leo
  */
 @Component(
-	enabled = false, immediate = true, service = IndexSettingsContributor.class
+	immediate = true, service = IndexSettingsContributor.class
 )
 public class CommerceIndexSettingsContributor
 	implements IndexSettingsContributor {
