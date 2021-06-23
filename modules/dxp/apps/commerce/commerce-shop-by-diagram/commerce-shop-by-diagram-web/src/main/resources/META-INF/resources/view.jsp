@@ -17,9 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-	JSONSerializer jsonSerializer = JSONFactoryUtil.createJSONSerializer();
-
-	JSONObject jsonObject = JSONFactoryUtil.createJSONObject("{height:500px,width:100%}");
+JSONObject jsonObject = JSONFactoryUtil.createJSONObject("{height:500px,width:100%}");
 %>
 
 <div id="shop-by-diagram" />
