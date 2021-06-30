@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
 /**
  * Provides a wrapper for {@link CPDefinitionDiagramEntryLocalService}.
  *
- * @author Alessio Antonio Rendina
+ * @author Andrea Sbarra
  * @see CPDefinitionDiagramEntryLocalService
  * @generated
  */
@@ -53,22 +53,6 @@ public class CPDefinitionDiagramEntryLocalServiceWrapper
 
 		return _cpDefinitionDiagramEntryLocalService.
 			addCPDefinitionDiagramEntry(cpDefinitionDiagramEntry);
-	}
-
-	@Override
-	public com.liferay.commerce.shop.by.diagram.model.CPDefinitionDiagramEntry
-			addCPDefinitionDiagramEntry(
-				long userId, long cpDefinitionDiagramSettingsId,
-				String cpInstanceUuid, long cProductId, int number,
-				int quantity, double positionX, double positionY, double radius,
-				com.liferay.portal.kernel.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _cpDefinitionDiagramEntryLocalService.
-			addCPDefinitionDiagramEntry(
-				userId, cpDefinitionDiagramSettingsId, cpInstanceUuid,
-				cProductId, number, quantity, positionX, positionY, radius,
-				serviceContext);
 	}
 
 	/**
@@ -152,6 +136,13 @@ public class CPDefinitionDiagramEntryLocalServiceWrapper
 	@Override
 	public <T> T dslQuery(com.liferay.petra.sql.dsl.query.DSLQuery dslQuery) {
 		return _cpDefinitionDiagramEntryLocalService.dslQuery(dslQuery);
+	}
+
+	@Override
+	public int dslQueryCount(
+		com.liferay.petra.sql.dsl.query.DSLQuery dslQuery) {
+
+		return _cpDefinitionDiagramEntryLocalService.dslQueryCount(dslQuery);
 	}
 
 	@Override
@@ -282,17 +273,6 @@ public class CPDefinitionDiagramEntryLocalServiceWrapper
 			getCPDefinitionDiagramEntries(start, end);
 	}
 
-	@Override
-	public java.util.List
-		<com.liferay.commerce.shop.by.diagram.model.CPDefinitionDiagramEntry>
-			getCPDefinitionDiagramEntries(
-				long cpDefinitionDiagramSettingsId, int start, int end) {
-
-		return _cpDefinitionDiagramEntryLocalService.
-			getCPDefinitionDiagramEntries(
-				cpDefinitionDiagramSettingsId, start, end);
-	}
-
 	/**
 	 * Returns the number of cp definition diagram entries.
 	 *
@@ -302,14 +282,6 @@ public class CPDefinitionDiagramEntryLocalServiceWrapper
 	public int getCPDefinitionDiagramEntriesCount() {
 		return _cpDefinitionDiagramEntryLocalService.
 			getCPDefinitionDiagramEntriesCount();
-	}
-
-	@Override
-	public int getCPDefinitionDiagramEntriesCount(
-		long cpDefinitionDiagramSettingsId) {
-
-		return _cpDefinitionDiagramEntryLocalService.
-			getCPDefinitionDiagramEntriesCount(cpDefinitionDiagramSettingsId);
 	}
 
 	/**
@@ -376,21 +348,6 @@ public class CPDefinitionDiagramEntryLocalServiceWrapper
 
 		return _cpDefinitionDiagramEntryLocalService.
 			updateCPDefinitionDiagramEntry(cpDefinitionDiagramEntry);
-	}
-
-	@Override
-	public com.liferay.commerce.shop.by.diagram.model.CPDefinitionDiagramEntry
-			updateCPDefinitionDiagramEntry(
-				long cpDefinitionDiagramEntryId, String cpInstanceUuid,
-				long cProductId, int number, int quantity, double positionX,
-				double positionY, double radius,
-				com.liferay.portal.kernel.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _cpDefinitionDiagramEntryLocalService.
-			updateCPDefinitionDiagramEntry(
-				cpDefinitionDiagramEntryId, cpInstanceUuid, cProductId, number,
-				quantity, positionX, positionY, radius, serviceContext);
 	}
 
 	@Override

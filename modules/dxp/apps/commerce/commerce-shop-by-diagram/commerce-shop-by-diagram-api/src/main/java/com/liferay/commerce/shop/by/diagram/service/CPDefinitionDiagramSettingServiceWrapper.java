@@ -17,20 +17,20 @@ package com.liferay.commerce.shop.by.diagram.service;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
- * Provides a wrapper for {@link CPDefinitionDiagramEntryService}.
+ * Provides a wrapper for {@link CPDefinitionDiagramSettingService}.
  *
  * @author Andrea Sbarra
- * @see CPDefinitionDiagramEntryService
+ * @see CPDefinitionDiagramSettingService
  * @generated
  */
-public class CPDefinitionDiagramEntryServiceWrapper
-	implements CPDefinitionDiagramEntryService,
-			   ServiceWrapper<CPDefinitionDiagramEntryService> {
+public class CPDefinitionDiagramSettingServiceWrapper
+	implements CPDefinitionDiagramSettingService,
+			   ServiceWrapper<CPDefinitionDiagramSettingService> {
 
-	public CPDefinitionDiagramEntryServiceWrapper(
-		CPDefinitionDiagramEntryService cpDefinitionDiagramEntryService) {
+	public CPDefinitionDiagramSettingServiceWrapper(
+		CPDefinitionDiagramSettingService cpDefinitionDiagramSettingService) {
 
-		_cpDefinitionDiagramEntryService = cpDefinitionDiagramEntryService;
+		_cpDefinitionDiagramSettingService = cpDefinitionDiagramSettingService;
 	}
 
 	/**
@@ -40,21 +40,22 @@ public class CPDefinitionDiagramEntryServiceWrapper
 	 */
 	@Override
 	public String getOSGiServiceIdentifier() {
-		return _cpDefinitionDiagramEntryService.getOSGiServiceIdentifier();
+		return _cpDefinitionDiagramSettingService.getOSGiServiceIdentifier();
 	}
 
 	@Override
-	public CPDefinitionDiagramEntryService getWrappedService() {
-		return _cpDefinitionDiagramEntryService;
+	public CPDefinitionDiagramSettingService getWrappedService() {
+		return _cpDefinitionDiagramSettingService;
 	}
 
 	@Override
 	public void setWrappedService(
-		CPDefinitionDiagramEntryService cpDefinitionDiagramEntryService) {
+		CPDefinitionDiagramSettingService cpDefinitionDiagramSettingService) {
 
-		_cpDefinitionDiagramEntryService = cpDefinitionDiagramEntryService;
+		_cpDefinitionDiagramSettingService = cpDefinitionDiagramSettingService;
 	}
 
-	private CPDefinitionDiagramEntryService _cpDefinitionDiagramEntryService;
+	private CPDefinitionDiagramSettingService
+		_cpDefinitionDiagramSettingService;
 
 }

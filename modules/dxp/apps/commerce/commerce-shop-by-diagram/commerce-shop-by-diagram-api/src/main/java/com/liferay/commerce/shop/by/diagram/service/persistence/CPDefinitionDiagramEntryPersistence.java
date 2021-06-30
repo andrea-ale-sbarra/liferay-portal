@@ -27,7 +27,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * Caching information and settings can be found in <code>portal.properties</code>
  * </p>
  *
- * @author Alessio Antonio Rendina
+ * @author Andrea Sbarra
  * @see CPDefinitionDiagramEntryUtil
  * @generated
  */
@@ -42,155 +42,148 @@ public interface CPDefinitionDiagramEntryPersistence
 	 */
 
 	/**
-	 * Returns all the cp definition diagram entries where CPDefinitionDiagramSettingsId = &#63;.
+	 * Returns all the cp definition diagram entries where CPDefinitionId = &#63;.
 	 *
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID
+	 * @param CPDefinitionId the cp definition ID
 	 * @return the matching cp definition diagram entries
 	 */
-	public java.util.List<CPDefinitionDiagramEntry>
-		findByCPDefinitionDiagramSettingsId(long CPDefinitionDiagramSettingsId);
+	public java.util.List<CPDefinitionDiagramEntry> findByCPDefinitionId(
+		long CPDefinitionId);
 
 	/**
-	 * Returns a range of all the cp definition diagram entries where CPDefinitionDiagramSettingsId = &#63;.
+	 * Returns a range of all the cp definition diagram entries where CPDefinitionId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CPDefinitionDiagramEntryModelImpl</code>.
 	 * </p>
 	 *
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID
+	 * @param CPDefinitionId the cp definition ID
 	 * @param start the lower bound of the range of cp definition diagram entries
 	 * @param end the upper bound of the range of cp definition diagram entries (not inclusive)
 	 * @return the range of matching cp definition diagram entries
 	 */
-	public java.util.List<CPDefinitionDiagramEntry>
-		findByCPDefinitionDiagramSettingsId(
-			long CPDefinitionDiagramSettingsId, int start, int end);
+	public java.util.List<CPDefinitionDiagramEntry> findByCPDefinitionId(
+		long CPDefinitionId, int start, int end);
 
 	/**
-	 * Returns an ordered range of all the cp definition diagram entries where CPDefinitionDiagramSettingsId = &#63;.
+	 * Returns an ordered range of all the cp definition diagram entries where CPDefinitionId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CPDefinitionDiagramEntryModelImpl</code>.
 	 * </p>
 	 *
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID
+	 * @param CPDefinitionId the cp definition ID
 	 * @param start the lower bound of the range of cp definition diagram entries
 	 * @param end the upper bound of the range of cp definition diagram entries (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching cp definition diagram entries
 	 */
-	public java.util.List<CPDefinitionDiagramEntry>
-		findByCPDefinitionDiagramSettingsId(
-			long CPDefinitionDiagramSettingsId, int start, int end,
-			com.liferay.portal.kernel.util.OrderByComparator
-				<CPDefinitionDiagramEntry> orderByComparator);
+	public java.util.List<CPDefinitionDiagramEntry> findByCPDefinitionId(
+		long CPDefinitionId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<CPDefinitionDiagramEntry> orderByComparator);
 
 	/**
-	 * Returns an ordered range of all the cp definition diagram entries where CPDefinitionDiagramSettingsId = &#63;.
+	 * Returns an ordered range of all the cp definition diagram entries where CPDefinitionId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CPDefinitionDiagramEntryModelImpl</code>.
 	 * </p>
 	 *
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID
+	 * @param CPDefinitionId the cp definition ID
 	 * @param start the lower bound of the range of cp definition diagram entries
 	 * @param end the upper bound of the range of cp definition diagram entries (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching cp definition diagram entries
 	 */
-	public java.util.List<CPDefinitionDiagramEntry>
-		findByCPDefinitionDiagramSettingsId(
-			long CPDefinitionDiagramSettingsId, int start, int end,
-			com.liferay.portal.kernel.util.OrderByComparator
-				<CPDefinitionDiagramEntry> orderByComparator,
-			boolean useFinderCache);
+	public java.util.List<CPDefinitionDiagramEntry> findByCPDefinitionId(
+		long CPDefinitionId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<CPDefinitionDiagramEntry> orderByComparator,
+		boolean useFinderCache);
 
 	/**
-	 * Returns the first cp definition diagram entry in the ordered set where CPDefinitionDiagramSettingsId = &#63;.
+	 * Returns the first cp definition diagram entry in the ordered set where CPDefinitionId = &#63;.
 	 *
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID
+	 * @param CPDefinitionId the cp definition ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching cp definition diagram entry
 	 * @throws NoSuchCPDefinitionDiagramEntryException if a matching cp definition diagram entry could not be found
 	 */
-	public CPDefinitionDiagramEntry findByCPDefinitionDiagramSettingsId_First(
-			long CPDefinitionDiagramSettingsId,
+	public CPDefinitionDiagramEntry findByCPDefinitionId_First(
+			long CPDefinitionId,
 			com.liferay.portal.kernel.util.OrderByComparator
 				<CPDefinitionDiagramEntry> orderByComparator)
 		throws NoSuchCPDefinitionDiagramEntryException;
 
 	/**
-	 * Returns the first cp definition diagram entry in the ordered set where CPDefinitionDiagramSettingsId = &#63;.
+	 * Returns the first cp definition diagram entry in the ordered set where CPDefinitionId = &#63;.
 	 *
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID
+	 * @param CPDefinitionId the cp definition ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching cp definition diagram entry, or <code>null</code> if a matching cp definition diagram entry could not be found
 	 */
-	public CPDefinitionDiagramEntry fetchByCPDefinitionDiagramSettingsId_First(
-		long CPDefinitionDiagramSettingsId,
+	public CPDefinitionDiagramEntry fetchByCPDefinitionId_First(
+		long CPDefinitionId,
 		com.liferay.portal.kernel.util.OrderByComparator
 			<CPDefinitionDiagramEntry> orderByComparator);
 
 	/**
-	 * Returns the last cp definition diagram entry in the ordered set where CPDefinitionDiagramSettingsId = &#63;.
+	 * Returns the last cp definition diagram entry in the ordered set where CPDefinitionId = &#63;.
 	 *
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID
+	 * @param CPDefinitionId the cp definition ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching cp definition diagram entry
 	 * @throws NoSuchCPDefinitionDiagramEntryException if a matching cp definition diagram entry could not be found
 	 */
-	public CPDefinitionDiagramEntry findByCPDefinitionDiagramSettingsId_Last(
-			long CPDefinitionDiagramSettingsId,
+	public CPDefinitionDiagramEntry findByCPDefinitionId_Last(
+			long CPDefinitionId,
 			com.liferay.portal.kernel.util.OrderByComparator
 				<CPDefinitionDiagramEntry> orderByComparator)
 		throws NoSuchCPDefinitionDiagramEntryException;
 
 	/**
-	 * Returns the last cp definition diagram entry in the ordered set where CPDefinitionDiagramSettingsId = &#63;.
+	 * Returns the last cp definition diagram entry in the ordered set where CPDefinitionId = &#63;.
 	 *
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID
+	 * @param CPDefinitionId the cp definition ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching cp definition diagram entry, or <code>null</code> if a matching cp definition diagram entry could not be found
 	 */
-	public CPDefinitionDiagramEntry fetchByCPDefinitionDiagramSettingsId_Last(
-		long CPDefinitionDiagramSettingsId,
+	public CPDefinitionDiagramEntry fetchByCPDefinitionId_Last(
+		long CPDefinitionId,
 		com.liferay.portal.kernel.util.OrderByComparator
 			<CPDefinitionDiagramEntry> orderByComparator);
 
 	/**
-	 * Returns the cp definition diagram entries before and after the current cp definition diagram entry in the ordered set where CPDefinitionDiagramSettingsId = &#63;.
+	 * Returns the cp definition diagram entries before and after the current cp definition diagram entry in the ordered set where CPDefinitionId = &#63;.
 	 *
 	 * @param CPDefinitionDiagramEntryId the primary key of the current cp definition diagram entry
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID
+	 * @param CPDefinitionId the cp definition ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next cp definition diagram entry
 	 * @throws NoSuchCPDefinitionDiagramEntryException if a cp definition diagram entry with the primary key could not be found
 	 */
-	public CPDefinitionDiagramEntry[]
-			findByCPDefinitionDiagramSettingsId_PrevAndNext(
-				long CPDefinitionDiagramEntryId,
-				long CPDefinitionDiagramSettingsId,
-				com.liferay.portal.kernel.util.OrderByComparator
-					<CPDefinitionDiagramEntry> orderByComparator)
+	public CPDefinitionDiagramEntry[] findByCPDefinitionId_PrevAndNext(
+			long CPDefinitionDiagramEntryId, long CPDefinitionId,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<CPDefinitionDiagramEntry> orderByComparator)
 		throws NoSuchCPDefinitionDiagramEntryException;
 
 	/**
-	 * Removes all the cp definition diagram entries where CPDefinitionDiagramSettingsId = &#63; from the database.
+	 * Removes all the cp definition diagram entries where CPDefinitionId = &#63; from the database.
 	 *
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID
+	 * @param CPDefinitionId the cp definition ID
 	 */
-	public void removeByCPDefinitionDiagramSettingsId(
-		long CPDefinitionDiagramSettingsId);
+	public void removeByCPDefinitionId(long CPDefinitionId);
 
 	/**
-	 * Returns the number of cp definition diagram entries where CPDefinitionDiagramSettingsId = &#63;.
+	 * Returns the number of cp definition diagram entries where CPDefinitionId = &#63;.
 	 *
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID
+	 * @param CPDefinitionId the cp definition ID
 	 * @return the number of matching cp definition diagram entries
 	 */
-	public int countByCPDefinitionDiagramSettingsId(
-		long CPDefinitionDiagramSettingsId);
+	public int countByCPDefinitionId(long CPDefinitionId);
 
 	/**
 	 * Caches the cp definition diagram entry in the entity cache if it is enabled.

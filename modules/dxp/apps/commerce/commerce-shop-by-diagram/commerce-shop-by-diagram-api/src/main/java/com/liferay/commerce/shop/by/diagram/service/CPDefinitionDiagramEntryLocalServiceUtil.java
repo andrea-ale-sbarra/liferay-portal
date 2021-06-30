@@ -33,7 +33,7 @@ import java.util.List;
  * based on the propagated JAAS credentials because this service can only be
  * accessed from within the same VM.
  *
- * @author Alessio Antonio Rendina
+ * @author Andrea Sbarra
  * @see CPDefinitionDiagramEntryLocalService
  * @generated
  */
@@ -60,18 +60,6 @@ public class CPDefinitionDiagramEntryLocalServiceUtil {
 
 		return getService().addCPDefinitionDiagramEntry(
 			cpDefinitionDiagramEntry);
-	}
-
-	public static CPDefinitionDiagramEntry addCPDefinitionDiagramEntry(
-			long userId, long cpDefinitionDiagramSettingsId,
-			String cpInstanceUuid, long cProductId, int number, int quantity,
-			double positionX, double positionY, double radius,
-			com.liferay.portal.kernel.service.ServiceContext serviceContext)
-		throws PortalException {
-
-		return getService().addCPDefinitionDiagramEntry(
-			userId, cpDefinitionDiagramSettingsId, cpInstanceUuid, cProductId,
-			number, quantity, positionX, positionY, radius, serviceContext);
 	}
 
 	/**
@@ -145,6 +133,10 @@ public class CPDefinitionDiagramEntryLocalServiceUtil {
 
 	public static <T> T dslQuery(DSLQuery dslQuery) {
 		return getService().dslQuery(dslQuery);
+	}
+
+	public static int dslQueryCount(DSLQuery dslQuery) {
+		return getService().dslQueryCount(dslQuery);
 	}
 
 	public static DynamicQuery dynamicQuery() {
@@ -254,13 +246,6 @@ public class CPDefinitionDiagramEntryLocalServiceUtil {
 		return getService().getCPDefinitionDiagramEntries(start, end);
 	}
 
-	public static List<CPDefinitionDiagramEntry> getCPDefinitionDiagramEntries(
-		long cpDefinitionDiagramSettingsId, int start, int end) {
-
-		return getService().getCPDefinitionDiagramEntries(
-			cpDefinitionDiagramSettingsId, start, end);
-	}
-
 	/**
 	 * Returns the number of cp definition diagram entries.
 	 *
@@ -268,13 +253,6 @@ public class CPDefinitionDiagramEntryLocalServiceUtil {
 	 */
 	public static int getCPDefinitionDiagramEntriesCount() {
 		return getService().getCPDefinitionDiagramEntriesCount();
-	}
-
-	public static int getCPDefinitionDiagramEntriesCount(
-		long cpDefinitionDiagramSettingsId) {
-
-		return getService().getCPDefinitionDiagramEntriesCount(
-			cpDefinitionDiagramSettingsId);
 	}
 
 	/**
@@ -332,18 +310,6 @@ public class CPDefinitionDiagramEntryLocalServiceUtil {
 
 		return getService().updateCPDefinitionDiagramEntry(
 			cpDefinitionDiagramEntry);
-	}
-
-	public static CPDefinitionDiagramEntry updateCPDefinitionDiagramEntry(
-			long cpDefinitionDiagramEntryId, String cpInstanceUuid,
-			long cProductId, int number, int quantity, double positionX,
-			double positionY, double radius,
-			com.liferay.portal.kernel.service.ServiceContext serviceContext)
-		throws PortalException {
-
-		return getService().updateCPDefinitionDiagramEntry(
-			cpDefinitionDiagramEntryId, cpInstanceUuid, cProductId, number,
-			quantity, positionX, positionY, radius, serviceContext);
 	}
 
 	public static CPDefinitionDiagramEntryLocalService getService() {

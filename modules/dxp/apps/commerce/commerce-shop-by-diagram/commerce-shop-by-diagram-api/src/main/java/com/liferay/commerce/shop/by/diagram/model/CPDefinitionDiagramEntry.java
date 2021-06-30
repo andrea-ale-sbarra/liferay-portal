@@ -23,7 +23,7 @@ import org.osgi.annotation.versioning.ProviderType;
 /**
  * The extended model interface for the CPDefinitionDiagramEntry service. Represents a row in the &quot;CPDefinitionDiagramEntry&quot; database table, with each column mapped to a property of this class.
  *
- * @author Alessio Antonio Rendina
+ * @author Andrea Sbarra
  * @see CPDefinitionDiagramEntryModel
  * @generated
  */
@@ -62,8 +62,5 @@ public interface CPDefinitionDiagramEntry
 				}
 
 			};
-
-	public CPDefinitionDiagramSettings getCPDefinitionDiagramSettings()
-		throws com.liferay.portal.kernel.exception.PortalException;
 
 }

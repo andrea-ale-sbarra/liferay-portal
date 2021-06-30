@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * This class is used by SOAP remote services, specifically {@link com.liferay.commerce.shop.by.diagram.service.http.CPDefinitionDiagramEntryServiceSoap}.
  *
- * @author Alessio Antonio Rendina
+ * @author Andrea Sbarra
  * @deprecated As of Athanasius (7.3.x), with no direct replacement
  * @generated
  */
@@ -43,15 +43,12 @@ public class CPDefinitionDiagramEntrySoap implements Serializable {
 		soapModel.setUserName(model.getUserName());
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
-		soapModel.setCPDefinitionDiagramSettingsId(
-			model.getCPDefinitionDiagramSettingsId());
+		soapModel.setNumber(model.getNumber());
 		soapModel.setCPInstanceUuid(model.getCPInstanceUuid());
 		soapModel.setCProductId(model.getCProductId());
-		soapModel.setNumber(model.getNumber());
-		soapModel.setQuantity(model.getQuantity());
+		soapModel.setCPDefinitionId(model.getCPDefinitionId());
 		soapModel.setPositionX(model.getPositionX());
 		soapModel.setPositionY(model.getPositionY());
-		soapModel.setRadius(model.getRadius());
 
 		return soapModel;
 	}
@@ -163,14 +160,12 @@ public class CPDefinitionDiagramEntrySoap implements Serializable {
 		_modifiedDate = modifiedDate;
 	}
 
-	public long getCPDefinitionDiagramSettingsId() {
-		return _CPDefinitionDiagramSettingsId;
+	public int getNumber() {
+		return _number;
 	}
 
-	public void setCPDefinitionDiagramSettingsId(
-		long CPDefinitionDiagramSettingsId) {
-
-		_CPDefinitionDiagramSettingsId = CPDefinitionDiagramSettingsId;
+	public void setNumber(int number) {
+		_number = number;
 	}
 
 	public String getCPInstanceUuid() {
@@ -189,20 +184,12 @@ public class CPDefinitionDiagramEntrySoap implements Serializable {
 		_CProductId = CProductId;
 	}
 
-	public int getNumber() {
-		return _number;
+	public long getCPDefinitionId() {
+		return _CPDefinitionId;
 	}
 
-	public void setNumber(int number) {
-		_number = number;
-	}
-
-	public int getQuantity() {
-		return _quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		_quantity = quantity;
+	public void setCPDefinitionId(long CPDefinitionId) {
+		_CPDefinitionId = CPDefinitionId;
 	}
 
 	public double getPositionX() {
@@ -221,27 +208,17 @@ public class CPDefinitionDiagramEntrySoap implements Serializable {
 		_positionY = positionY;
 	}
 
-	public double getRadius() {
-		return _radius;
-	}
-
-	public void setRadius(double radius) {
-		_radius = radius;
-	}
-
 	private long _CPDefinitionDiagramEntryId;
 	private long _companyId;
 	private long _userId;
 	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;
-	private long _CPDefinitionDiagramSettingsId;
+	private int _number;
 	private String _CPInstanceUuid;
 	private long _CProductId;
-	private int _number;
-	private int _quantity;
+	private long _CPDefinitionId;
 	private double _positionX;
 	private double _positionY;
-	private double _radius;
 
 }

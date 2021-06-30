@@ -26,7 +26,7 @@ import java.util.Map;
  * This class is a wrapper for {@link CPDefinitionDiagramEntry}.
  * </p>
  *
- * @author Alessio Antonio Rendina
+ * @author Andrea Sbarra
  * @see CPDefinitionDiagramEntry
  * @generated
  */
@@ -52,16 +52,12 @@ public class CPDefinitionDiagramEntryWrapper
 		attributes.put("userName", getUserName());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
-		attributes.put(
-			"CPDefinitionDiagramSettingsId",
-			getCPDefinitionDiagramSettingsId());
+		attributes.put("number", getNumber());
 		attributes.put("CPInstanceUuid", getCPInstanceUuid());
 		attributes.put("CProductId", getCProductId());
-		attributes.put("number", getNumber());
-		attributes.put("quantity", getQuantity());
+		attributes.put("CPDefinitionId", getCPDefinitionId());
 		attributes.put("positionX", getPositionX());
 		attributes.put("positionY", getPositionY());
-		attributes.put("radius", getRadius());
 
 		return attributes;
 	}
@@ -105,11 +101,10 @@ public class CPDefinitionDiagramEntryWrapper
 			setModifiedDate(modifiedDate);
 		}
 
-		Long CPDefinitionDiagramSettingsId = (Long)attributes.get(
-			"CPDefinitionDiagramSettingsId");
+		Integer number = (Integer)attributes.get("number");
 
-		if (CPDefinitionDiagramSettingsId != null) {
-			setCPDefinitionDiagramSettingsId(CPDefinitionDiagramSettingsId);
+		if (number != null) {
+			setNumber(number);
 		}
 
 		String CPInstanceUuid = (String)attributes.get("CPInstanceUuid");
@@ -124,16 +119,10 @@ public class CPDefinitionDiagramEntryWrapper
 			setCProductId(CProductId);
 		}
 
-		Integer number = (Integer)attributes.get("number");
+		Long CPDefinitionId = (Long)attributes.get("CPDefinitionId");
 
-		if (number != null) {
-			setNumber(number);
-		}
-
-		Integer quantity = (Integer)attributes.get("quantity");
-
-		if (quantity != null) {
-			setQuantity(quantity);
+		if (CPDefinitionId != null) {
+			setCPDefinitionId(CPDefinitionId);
 		}
 
 		Double positionX = (Double)attributes.get("positionX");
@@ -146,12 +135,6 @@ public class CPDefinitionDiagramEntryWrapper
 
 		if (positionY != null) {
 			setPositionY(positionY);
-		}
-
-		Double radius = (Double)attributes.get("radius");
-
-		if (radius != null) {
-			setRadius(radius);
 		}
 	}
 
@@ -175,21 +158,14 @@ public class CPDefinitionDiagramEntryWrapper
 		return model.getCPDefinitionDiagramEntryId();
 	}
 
-	@Override
-	public CPDefinitionDiagramSettings getCPDefinitionDiagramSettings()
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return model.getCPDefinitionDiagramSettings();
-	}
-
 	/**
-	 * Returns the cp definition diagram settings ID of this cp definition diagram entry.
+	 * Returns the cp definition ID of this cp definition diagram entry.
 	 *
-	 * @return the cp definition diagram settings ID of this cp definition diagram entry
+	 * @return the cp definition ID of this cp definition diagram entry
 	 */
 	@Override
-	public long getCPDefinitionDiagramSettingsId() {
-		return model.getCPDefinitionDiagramSettingsId();
+	public long getCPDefinitionId() {
+		return model.getCPDefinitionId();
 	}
 
 	/**
@@ -273,26 +249,6 @@ public class CPDefinitionDiagramEntryWrapper
 	}
 
 	/**
-	 * Returns the quantity of this cp definition diagram entry.
-	 *
-	 * @return the quantity of this cp definition diagram entry
-	 */
-	@Override
-	public int getQuantity() {
-		return model.getQuantity();
-	}
-
-	/**
-	 * Returns the radius of this cp definition diagram entry.
-	 *
-	 * @return the radius of this cp definition diagram entry
-	 */
-	@Override
-	public double getRadius() {
-		return model.getRadius();
-	}
-
-	/**
 	 * Returns the user ID of this cp definition diagram entry.
 	 *
 	 * @return the user ID of this cp definition diagram entry
@@ -348,15 +304,13 @@ public class CPDefinitionDiagramEntryWrapper
 	}
 
 	/**
-	 * Sets the cp definition diagram settings ID of this cp definition diagram entry.
+	 * Sets the cp definition ID of this cp definition diagram entry.
 	 *
-	 * @param CPDefinitionDiagramSettingsId the cp definition diagram settings ID of this cp definition diagram entry
+	 * @param CPDefinitionId the cp definition ID of this cp definition diagram entry
 	 */
 	@Override
-	public void setCPDefinitionDiagramSettingsId(
-		long CPDefinitionDiagramSettingsId) {
-
-		model.setCPDefinitionDiagramSettingsId(CPDefinitionDiagramSettingsId);
+	public void setCPDefinitionId(long CPDefinitionId) {
+		model.setCPDefinitionId(CPDefinitionId);
 	}
 
 	/**
@@ -437,26 +391,6 @@ public class CPDefinitionDiagramEntryWrapper
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		model.setPrimaryKey(primaryKey);
-	}
-
-	/**
-	 * Sets the quantity of this cp definition diagram entry.
-	 *
-	 * @param quantity the quantity of this cp definition diagram entry
-	 */
-	@Override
-	public void setQuantity(int quantity) {
-		model.setQuantity(quantity);
-	}
-
-	/**
-	 * Sets the radius of this cp definition diagram entry.
-	 *
-	 * @param radius the radius of this cp definition diagram entry
-	 */
-	@Override
-	public void setRadius(double radius) {
-		model.setRadius(radius);
 	}
 
 	/**

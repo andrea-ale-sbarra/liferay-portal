@@ -139,23 +139,19 @@ public class CPDefinitionDiagramEntryPersistenceTest {
 
 		newCPDefinitionDiagramEntry.setModifiedDate(RandomTestUtil.nextDate());
 
-		newCPDefinitionDiagramEntry.setCPDefinitionDiagramSettingsId(
-			RandomTestUtil.nextLong());
+		newCPDefinitionDiagramEntry.setNumber(RandomTestUtil.nextInt());
 
 		newCPDefinitionDiagramEntry.setCPInstanceUuid(
 			RandomTestUtil.randomString());
 
 		newCPDefinitionDiagramEntry.setCProductId(RandomTestUtil.nextLong());
 
-		newCPDefinitionDiagramEntry.setNumber(RandomTestUtil.nextInt());
-
-		newCPDefinitionDiagramEntry.setQuantity(RandomTestUtil.nextInt());
+		newCPDefinitionDiagramEntry.setCPDefinitionId(
+			RandomTestUtil.nextLong());
 
 		newCPDefinitionDiagramEntry.setPositionX(RandomTestUtil.nextDouble());
 
 		newCPDefinitionDiagramEntry.setPositionY(RandomTestUtil.nextDouble());
-
-		newCPDefinitionDiagramEntry.setRadius(RandomTestUtil.nextDouble());
 
 		_cpDefinitionDiagramEntries.add(
 			_persistence.update(newCPDefinitionDiagramEntry));
@@ -187,8 +183,8 @@ public class CPDefinitionDiagramEntryPersistenceTest {
 			Time.getShortTimestamp(
 				newCPDefinitionDiagramEntry.getModifiedDate()));
 		Assert.assertEquals(
-			existingCPDefinitionDiagramEntry.getCPDefinitionDiagramSettingsId(),
-			newCPDefinitionDiagramEntry.getCPDefinitionDiagramSettingsId());
+			existingCPDefinitionDiagramEntry.getNumber(),
+			newCPDefinitionDiagramEntry.getNumber());
 		Assert.assertEquals(
 			existingCPDefinitionDiagramEntry.getCPInstanceUuid(),
 			newCPDefinitionDiagramEntry.getCPInstanceUuid());
@@ -196,28 +192,21 @@ public class CPDefinitionDiagramEntryPersistenceTest {
 			existingCPDefinitionDiagramEntry.getCProductId(),
 			newCPDefinitionDiagramEntry.getCProductId());
 		Assert.assertEquals(
-			existingCPDefinitionDiagramEntry.getNumber(),
-			newCPDefinitionDiagramEntry.getNumber());
-		Assert.assertEquals(
-			existingCPDefinitionDiagramEntry.getQuantity(),
-			newCPDefinitionDiagramEntry.getQuantity());
+			existingCPDefinitionDiagramEntry.getCPDefinitionId(),
+			newCPDefinitionDiagramEntry.getCPDefinitionId());
 		AssertUtils.assertEquals(
 			existingCPDefinitionDiagramEntry.getPositionX(),
 			newCPDefinitionDiagramEntry.getPositionX());
 		AssertUtils.assertEquals(
 			existingCPDefinitionDiagramEntry.getPositionY(),
 			newCPDefinitionDiagramEntry.getPositionY());
-		AssertUtils.assertEquals(
-			existingCPDefinitionDiagramEntry.getRadius(),
-			newCPDefinitionDiagramEntry.getRadius());
 	}
 
 	@Test
-	public void testCountByCPDefinitionDiagramSettingsId() throws Exception {
-		_persistence.countByCPDefinitionDiagramSettingsId(
-			RandomTestUtil.nextLong());
+	public void testCountByCPDefinitionId() throws Exception {
+		_persistence.countByCPDefinitionId(RandomTestUtil.nextLong());
 
-		_persistence.countByCPDefinitionDiagramSettingsId(0L);
+		_persistence.countByCPDefinitionId(0L);
 	}
 
 	@Test
@@ -252,10 +241,9 @@ public class CPDefinitionDiagramEntryPersistenceTest {
 		return OrderByComparatorFactoryUtil.create(
 			"CPDefinitionDiagramEntry", "CPDefinitionDiagramEntryId", true,
 			"companyId", true, "userId", true, "userName", true, "createDate",
-			true, "modifiedDate", true, "CPDefinitionDiagramSettingsId", true,
-			"CPInstanceUuid", true, "CProductId", true, "number", true,
-			"quantity", true, "positionX", true, "positionY", true, "radius",
-			true);
+			true, "modifiedDate", true, "number", true, "CPInstanceUuid", true,
+			"CProductId", true, "CPDefinitionId", true, "positionX", true,
+			"positionY", true);
 	}
 
 	@Test
@@ -514,23 +502,18 @@ public class CPDefinitionDiagramEntryPersistenceTest {
 
 		cpDefinitionDiagramEntry.setModifiedDate(RandomTestUtil.nextDate());
 
-		cpDefinitionDiagramEntry.setCPDefinitionDiagramSettingsId(
-			RandomTestUtil.nextLong());
+		cpDefinitionDiagramEntry.setNumber(RandomTestUtil.nextInt());
 
 		cpDefinitionDiagramEntry.setCPInstanceUuid(
 			RandomTestUtil.randomString());
 
 		cpDefinitionDiagramEntry.setCProductId(RandomTestUtil.nextLong());
 
-		cpDefinitionDiagramEntry.setNumber(RandomTestUtil.nextInt());
-
-		cpDefinitionDiagramEntry.setQuantity(RandomTestUtil.nextInt());
+		cpDefinitionDiagramEntry.setCPDefinitionId(RandomTestUtil.nextLong());
 
 		cpDefinitionDiagramEntry.setPositionX(RandomTestUtil.nextDouble());
 
 		cpDefinitionDiagramEntry.setPositionY(RandomTestUtil.nextDouble());
-
-		cpDefinitionDiagramEntry.setRadius(RandomTestUtil.nextDouble());
 
 		_cpDefinitionDiagramEntries.add(
 			_persistence.update(cpDefinitionDiagramEntry));

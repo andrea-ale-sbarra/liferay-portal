@@ -23,13 +23,10 @@ import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.PersistedModel;
-import com.liferay.portal.kernel.model.SystemEventConstants;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -47,7 +44,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * credentials because this service can only be accessed from within the same
  * VM.
  *
- * @author Alessio Antonio Rendina
+ * @author Andrea Sbarra
  * @see CPDefinitionDiagramEntryLocalServiceUtil
  * @generated
  */
@@ -79,13 +76,6 @@ public interface CPDefinitionDiagramEntryLocalService
 	public CPDefinitionDiagramEntry addCPDefinitionDiagramEntry(
 		CPDefinitionDiagramEntry cpDefinitionDiagramEntry);
 
-	public CPDefinitionDiagramEntry addCPDefinitionDiagramEntry(
-			long userId, long cpDefinitionDiagramSettingsId,
-			String cpInstanceUuid, long cProductId, int number, int quantity,
-			double positionX, double positionY, double radius,
-			ServiceContext serviceContext)
-		throws PortalException;
-
 	/**
 	 * Creates a new cp definition diagram entry with the primary key. Does not add the cp definition diagram entry to the database.
 	 *
@@ -113,7 +103,6 @@ public interface CPDefinitionDiagramEntryLocalService
 	 * @return the cp definition diagram entry that was removed
 	 */
 	@Indexable(type = IndexableType.DELETE)
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPDefinitionDiagramEntry deleteCPDefinitionDiagramEntry(
 		CPDefinitionDiagramEntry cpDefinitionDiagramEntry);
 
@@ -142,6 +131,9 @@ public interface CPDefinitionDiagramEntryLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public <T> T dslQuery(DSLQuery dslQuery);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int dslQueryCount(DSLQuery dslQuery);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public DynamicQuery dynamicQuery();
@@ -231,10 +223,6 @@ public interface CPDefinitionDiagramEntryLocalService
 	public List<CPDefinitionDiagramEntry> getCPDefinitionDiagramEntries(
 		int start, int end);
 
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<CPDefinitionDiagramEntry> getCPDefinitionDiagramEntries(
-		long cpDefinitionDiagramSettingsId, int start, int end);
-
 	/**
 	 * Returns the number of cp definition diagram entries.
 	 *
@@ -242,10 +230,6 @@ public interface CPDefinitionDiagramEntryLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCPDefinitionDiagramEntriesCount();
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getCPDefinitionDiagramEntriesCount(
-		long cpDefinitionDiagramSettingsId);
 
 	/**
 	 * Returns the cp definition diagram entry with the primary key.
@@ -290,11 +274,5 @@ public interface CPDefinitionDiagramEntryLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public CPDefinitionDiagramEntry updateCPDefinitionDiagramEntry(
 		CPDefinitionDiagramEntry cpDefinitionDiagramEntry);
-
-	public CPDefinitionDiagramEntry updateCPDefinitionDiagramEntry(
-			long cpDefinitionDiagramEntryId, String cpInstanceUuid,
-			long cProductId, int number, int quantity, double positionX,
-			double positionY, double radius, ServiceContext serviceContext)
-		throws PortalException;
 
 }
