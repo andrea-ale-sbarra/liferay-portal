@@ -59,5 +59,19 @@ const Liferay = {
 
 window.defaultFetch = fetch;
 
+window.fetch = (resource, {headers, ...init} = {}) => {
+	headers = new Headers({
+		Accept: 'application/json',
+		Authorization: `Basic ${window.btoa('test@test.com:test')}`,
+		'Content-Type': 'application/json',
+	});
+
+	// eslint-disable-next-line @liferay/portal/no-global-fetch
+	return window.defaultFetch(resource, {
+		...init,
+		headers,
+	});
+};
+
 window.Liferay = Liferay;
 window.themeDisplay = Liferay.ThemeDisplay;
