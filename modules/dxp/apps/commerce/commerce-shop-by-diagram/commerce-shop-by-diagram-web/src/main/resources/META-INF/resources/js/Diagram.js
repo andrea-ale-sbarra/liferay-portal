@@ -10,6 +10,7 @@
  */
 
 import {ClayIconSpriteContext} from '@clayui/icon';
+import {fetch} from 'frontend-js-web';
 import PropTypes from 'prop-types';
 import React, {useEffect, useState} from 'react';
 
@@ -28,7 +29,8 @@ const Diagram = ({
 	namespace,
 	navigationController,
 	newPinSettings,
-	pins,
+	pinsEndpoint,
+	productId,
 	spritemap,
 	zoomController,
 }) => {
@@ -44,7 +46,7 @@ const Diagram = ({
 	const [changedScale, setChangedScale] = useState(false);
 	const [scale, setScale] = useState(1);
 	const [selectedOption, setSelectedOption] = useState(1);
-	const [cPins, setCpins] = useState(pins);
+	const [cPins, setCpins] = useState([]);
 	const [showTooltip, setShowTooltip] = useState({
 		details: {
 			cx: 0,
@@ -63,8 +65,23 @@ const Diagram = ({
 	});
 
 	useEffect(() => {
+		fetch(`${pinsEndpoint}${productId}/pins`)
+			.then((response) => response.json())
+			.then((jsonResponse) => {
+				const loadedPins = jsonResponse.items.map((item) => ({
+					cx: item.positionX,
+					cy: item.positionY,
+					id: item.id,
+					label: item.number,
+				}));
+
+				setCpins(loadedPins);
+			});
+	}, [pinsEndpoint, productId]);
+
+	useEffect(() => {
 		if (!showTooltip.tooltip) {
-			const newCPinState = cPins.map((element) => {
+			const newCPinState = cPins?.map((element) => {
 				if (element.id === showTooltip.details.id) {
 					return {
 						cx: cPins[element.id].cx,
@@ -74,7 +91,7 @@ const Diagram = ({
 						id: showTooltip.details.id,
 						label: showTooltip.details.label,
 						linked_to_sku: showTooltip.details.linked_to_sku,
-						quantity: showTooltip.details.quantity,
+						quantity: showTooltip.details.quantit,
 						r: cPins[element.id].r,
 						sku: showTooltip.details.sku,
 					};
@@ -166,6 +183,7 @@ Diagram.defaultProps = {
 		height: '300px',
 		width: '100%',
 	},
+	isAdmin: true,
 	navigationController: {
 		dragStep: 10,
 		enable: true,
