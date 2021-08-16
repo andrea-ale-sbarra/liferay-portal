@@ -91,7 +91,7 @@ const Diagram = ({
 						id: showTooltip.details.id,
 						label: showTooltip.details.label,
 						linked_to_sku: showTooltip.details.linked_to_sku,
-						quantity: showTooltip.details.quantit,
+						quantity: showTooltip.details.quantity,
 						r: cPins[element.id].r,
 						sku: showTooltip.details.sku,
 					};

@@ -29,7 +29,7 @@
 		"checkFormat": "liferay-npm-scripts check",
 		"coverage": "liferay-npm-scripts test --coverage --silent --verbose",
 		"format": "liferay-npm-scripts fix",
-		"test": "liferay-npm-scripts test",
+		"test": "liferay-npm-scripts test --passWithNoTests",
 		"watch": "liferay-npm-scripts webpack --watch"
 	},
 	"version": "1.0.11"
