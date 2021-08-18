@@ -50,6 +50,8 @@ const ImagePins = ({
 	selectedOption,
 	setAddPinHandler,
 	setChangedScale,
+	pinsEndpoint,
+	productId,
 	setCpins,
 	setPinClickHandler,
 	setRemovePinHandler,
@@ -202,6 +204,7 @@ const ImagePins = ({
 						Math.abs(element.cx - updatedPin.cx) < 10 &&
 						Math.abs(element.cy - updatedPin.cy) < 10
 					) {
+						console.log({updatedPin})
 						pinClickAction(updatedPin);
 					}
 

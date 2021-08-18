@@ -12,38 +12,38 @@
 import ClayAutocomplete from '@clayui/autocomplete';
 import ClayButton from '@clayui/button';
 import ClayCard from '@clayui/card';
-import {useResource} from '@clayui/data-provider';
 import ClayDropDown from '@clayui/drop-down';
 import ClayForm, {ClayInput, ClayRadio, ClayRadioGroup} from '@clayui/form';
 import PropTypes from 'prop-types';
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useLayoutEffect, useEffect, useState} from 'react';
 
 const AdminTooltip = ({
 	namespace,
 	setRemovePinHandler,
 	setShowTooltip,
 	showTooltip,
+	deletePin,
+	searchSkus,
 	updatePin,
+	skus,
+	pinsEndpoint,
+	productId,
 }) => {
 	const [pinLabel, setPinLabel] = useState(showTooltip.details.label);
 	const [linkedValue, setLinkedValue] = useState(
 		showTooltip.details.linked_to_sku
 	);
-	const [sku, setSku] = useState(showTooltip.details.sku);
+	const [sku, setSku] = useState("");
 	const [quantity, setQuantity] = useState(showTooltip.details.quantity);
-	const [networkStatus, setNetworkStatus] = useState(4);
-	const initialLoading = networkStatus === 1;
-	const loadingAd = networkStatus < 4;
-	const error = networkStatus === 5;
-
-	const {resource} = useResource({
-		fetchPolicy: 'cache-first',
-		link: 'https://rickandmortyapi.com/api/character/',
-		onNetworkStatusChange: setNetworkStatus,
-		variables: {
-			name: sku,
-		},
-	});
+	const [skusList, setSkusList] = useState(skus)
+		const loadingAd = false;
+	useEffect(() => {
+		console.log(sku)
+		if (sku !== "") {
+			searchSkus()
+				
+		}
+	}, [sku])
 
 	useLayoutEffect(() => {
 		setSku(showTooltip.details.sku);
@@ -107,24 +107,26 @@ const AdminTooltip = ({
 							value={sku}
 						/>
 						<ClayAutocomplete.DropDown
-							active={(!!resource && !!sku) || initialLoading}
+							active={(skusList.length >=0) || initialLoading}
 						>
 							<ClayDropDown.ItemList>
-								{(error || (resource && resource.error)) && (
+								{skusList.length === 0 && (
 									<ClayDropDown.Item className="disabled">
 										No Results Found
 									</ClayDropDown.Item>
 								)}
-								{!error &&
-									resource &&
-									resource.results &&
-									resource.results.map((item) => (
+								{
+									skusList?.items?.map((item) => {
+										console.log({ skusList})
+										return (
 										<ClayAutocomplete.Item
-											key={item.id}
-											match={sku}
-											value={item.name}
-										/>
-									))}
+												key={item.id}
+												match={sku}
+												value={item.name}
+											/>
+										)
+									})
+								}
 							</ClayDropDown.ItemList>
 						</ClayAutocomplete.DropDown>
 						{loadingAd && <ClayAutocomplete.LoadingIndicator />}
@@ -150,6 +152,13 @@ const AdminTooltip = ({
 					<ClayButton
 						displayType="link"
 						onClick={() => {
+							const pinToDelete = ({
+								id: showTooltip.details.id,
+								number: pinLabel,
+								positionX: showTooltip.details.cx,
+								positionY: showTooltip.details.cy,
+							});
+							deletePin(pinToDelete)
 							setRemovePinHandler({
 								handler: true,
 								pin: showTooltip.details.id,
@@ -175,7 +184,7 @@ const AdminTooltip = ({
 				<ClayForm.Group className="col-6 d-flex form-group-sm justify-content-between mt-4">
 					<ClayButton
 						displayType="secondary"
-						onClick={() =>
+						onClick={() => {
 							setShowTooltip({
 								details: {
 									cx: null,
@@ -189,20 +198,18 @@ const AdminTooltip = ({
 								tooltip: false,
 							})
 						}
+						}
 					>
-						{Liferay.Language.get('cancel')}
+						{Liferay.Language.get('close')}
 					</ClayButton>
 					<ClayButton
 						displayType="primary"
 						onClick={() => {
 							updatePin({
-								cx: showTooltip.details.cx,
-								cy: showTooltip.details.cy,
 								id: showTooltip.details.id,
-								label: pinLabel,
-								linked_to_sku: linkedValue,
-								quantity,
-								sku,
+								number: pinLabel,
+								positionX: showTooltip.details.cx,
+								positionY: showTooltip.details.cy,
 							});
 							setShowTooltip({
 								details: {
