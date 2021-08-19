@@ -143,14 +143,8 @@ const Diagram = ({
 
 	const updatePin = (node) => {
 		if (node.id !== undefined) {
-			const body = {
-				id: node.id,
-				number: node.label || '',
-				positionX: node.cx,
-				positionY: node.cy,
-			};
 			fetch(`${pinsEndpoint}${PINS}/${node.id}`, {
-				body: JSON.stringify(body),
+				body: JSON.stringify(node),
 				headers: new Headers({
 					Accept: 'application/json',
 					'Content-Type': 'application/json',

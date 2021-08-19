@@ -35,7 +35,11 @@ const AdminTooltip = ({
 	const [skus, setSkus] = useState([])
 
 	const getSkus = (query) => {
-		return fetch(`${endpointURL}/skus/?search=${query}`, {
+		let queryParam = ""
+		if (query) {
+			queryParam = `?search=${query}`
+		}
+		return fetch(`${endpointURL}skus/${queryParam}`, {
 			headers: new Headers({
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
@@ -121,7 +125,7 @@ const AdminTooltip = ({
 							value={sku}
 						/>
 						<ClayAutocomplete.DropDown
-							active={skus || initialLoading}
+							active={skus}
 						>
 							<ClayDropDown.ItemList>
 								{skus && !skus.length && (
@@ -140,7 +144,6 @@ const AdminTooltip = ({
 								 ))}
 							</ClayDropDown.ItemList>
 						</ClayAutocomplete.DropDown>
-						{loading && <ClayAutocomplete.LoadingIndicator />}
 					</ClayAutocomplete>
 				</ClayForm.Group>
 
@@ -216,12 +219,14 @@ const AdminTooltip = ({
 					<ClayButton
 						displayType="primary"
 						onClick={() => {
-							updatePin({
+							const node = {	
 								id: showTooltip.details.id,
 								number: pinLabel,
 								positionX: showTooltip.details.cx,
 								positionY: showTooltip.details.cy,
-							});
+							
+							}
+							updatePin(node);
 							setShowTooltip({
 								details: {
 									cx: showTooltip.details.cx,
@@ -230,7 +235,7 @@ const AdminTooltip = ({
 									label: pinLabel,
 									linked_to_sku: linkedValue,
 									quantity,
-									sku: inputSku,
+									sku: sku || "",
 								},
 								tooltip: false,
 							});
