@@ -17,12 +17,16 @@ package com.liferay.headless.commerce.shop.by.diagram.internal.resource.v1_0;
 import com.liferay.commerce.product.exception.NoSuchCPDefinitionException;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.service.CPDefinitionService;
+import com.liferay.commerce.shop.by.diagram.model.CPDefinitionDiagramEntry;
 import com.liferay.commerce.shop.by.diagram.model.CPDefinitionDiagramPin;
+import com.liferay.commerce.shop.by.diagram.service.CPDefinitionDiagramEntryService;
 import com.liferay.commerce.shop.by.diagram.service.CPDefinitionDiagramPinService;
+import com.liferay.headless.commerce.shop.by.diagram.dto.v1_0.DiagramEntry;
 import com.liferay.headless.commerce.shop.by.diagram.dto.v1_0.Pin;
 import com.liferay.headless.commerce.shop.by.diagram.internal.dto.v1_0.converter.PinDTOConverter;
 import com.liferay.headless.commerce.shop.by.diagram.resource.v1_0.PinResource;
 import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
@@ -157,6 +161,22 @@ public class PinResourceImpl extends BasePinResourceImpl {
 				GetterUtil.getDouble(pin.getPositionX()),
 				GetterUtil.getDouble(pin.getPositionY()));
 
+		DiagramEntry diagramEntry = pin.getDiagramEntry();
+
+		if(diagramEntry == null){
+			diagramEntry = new DiagramEntry();
+		}
+		
+		_cpDefinitionDiagramEntryService.addCPDefinitionDiagramEntry(
+			contextUser.getUserId(), cpDefinitionId,
+			GetterUtil.getString(diagramEntry.getSkuUuid()),
+			GetterUtil.getLong(diagramEntry.getProductId()),
+			GetterUtil.getBoolean(diagramEntry.getDiagram()),
+			GetterUtil.getInteger(pin.getNumber()),
+			GetterUtil.getInteger(diagramEntry.getQuantity()),
+			GetterUtil.getString(diagramEntry.getSku()),
+			new ServiceContext());
+
 		return _toPin(cpDefinitionDiagramPin.getCPDefinitionDiagramPinId());
 	}
 
@@ -175,6 +195,9 @@ public class PinResourceImpl extends BasePinResourceImpl {
 			cpDefinitionDiagramPin -> _toPin(
 				cpDefinitionDiagramPin.getCPDefinitionDiagramPinId()));
 	}
+
+	@Reference
+	private CPDefinitionDiagramEntryService _cpDefinitionDiagramEntryService;
 
 	@Reference
 	private CPDefinitionDiagramPinService _cpDefinitionDiagramPinService;
