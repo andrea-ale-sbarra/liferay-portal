@@ -53,6 +53,7 @@ const Diagram = ({
 	const [selectedOption, setSelectedOption] = useState(1);
 	const [cPins, setCpins] = useState([]);
 	const [skus, setSkus] = useState([]);
+	const [skusListState, setSkusListState] = useState([]);
 	const [showTooltip, setShowTooltip] = useState({
 		details: {
 			cx: 0,
@@ -133,8 +134,9 @@ const Diagram = ({
 		})
 			.then((response) => response.json())
 			.then((jsonResponse) => {
+				debugger;
 				console.log(jsonResponse)
-				setSkus(jsonResponse.items)
+				setSkusListState(jsonResponse.items)
 				return jsonResponse
 			})
 	}
@@ -272,7 +274,7 @@ const Diagram = ({
 				>
 					{showTooltip.tooltip && (
 						<AdminTooltip
-							endpointURL=${pinsEndpoint}${SKUS}
+							endpointURL={pinsEndpoint}
 							namespace={namespace}
 							removePinHandler={removePinHandler}
 							setRemovePinHandler={setRemovePinHandler}
@@ -280,8 +282,7 @@ const Diagram = ({
 							showTooltip={showTooltip}
 							updatePin={updatePin}
 							deletePin={deletePin}
-							pinsEndpoint={pinsEndpoint}
-							productId={productId}
+							skusListState={skusListState}
 						/>
 					)}
 				</ImagePins>

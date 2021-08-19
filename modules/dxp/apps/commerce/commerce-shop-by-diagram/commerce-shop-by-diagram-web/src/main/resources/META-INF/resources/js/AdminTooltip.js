@@ -18,11 +18,11 @@ import PropTypes from 'prop-types';
 import React, {useLayoutEffect, useEffect, useState} from 'react';
 
 const AdminTooltip = ({
-  endpointURL,
 	namespace,
 	setRemovePinHandler,
 	setShowTooltip,
 	showTooltip,
+	endpointURL,
 	deletePin,
 	updatePin,
 }) => {
@@ -32,16 +32,40 @@ const AdminTooltip = ({
 	);
 	const [sku, setSku] = useState(showTooltip.details.sku);
 	const [quantity, setQuantity] = useState(showTooltip.details.quantity);
-	const [skus, setSkus] = useState()
+	const [skus, setSkus] = useState([])
 
 	const getSkus = (query) => {
-		return fetch(`${endpointURL}/${query}`, {
-		headers: new Headers({
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		})
-	}).then((response) =>  response.json())
-			.then(setSkus);
+		return fetch(`${endpointURL}/skus/?search=${query}`, {
+			headers: new Headers({
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			})
+		}).then((response) =>  response.json())
+		.then((jsonResponse) => {
+			console.log({jsonResponse})
+			setSkus(jsonResponse)
+			return jsonResponse.items
+		});
+	}
+	// const searchSkus = () => {
+	// 	return fetch(`${pinsEndpoint}skus`, {
+	// 		headers: new Headers({
+	// 			Accept: 'application/json',
+	// 			'Content-Type': 'application/json',
+	// 		})
+	// 	})
+	// 		.then((response) => response.json())
+	// 		.then((jsonResponse) => {
+	// 			console.log(jsonResponse)
+	// 			setSkus(jsonResponse.items)
+	// 			return jsonResponse
+	// 		})
+	// }
+
+	useEffect(() => {
+		const skuLoaded = getSkus(sku)
+		console.log({skuLoaded})
+	}, [sku])
 
 	return (
 		<ClayCard
@@ -206,7 +230,7 @@ const AdminTooltip = ({
 									label: pinLabel,
 									linked_to_sku: linkedValue,
 									quantity,
-									sku,
+									sku: inputSku,
 								},
 								tooltip: false,
 							});
