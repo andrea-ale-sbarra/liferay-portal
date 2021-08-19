@@ -89,24 +89,6 @@ const Diagram = ({
 				console.log({loadedPins})
 				setCpins(loadedPins);
 			})
-		// fetch(`${pinsEndpoint}${PRODUCTS}/${productId}/${PINS}`, {
-		// 	headers: new Headers({
-		// 		Accept: 'application/json',
-		// 		'Content-Type': 'application/json',
-		// 	})
-		// })
-		// 	.then((response) => response.json())
-		// 	.then((jsonResponse) => {
-		// 		// console.log(jsonResponse)
-		// 		// const loadedPins = jsonResponse.items.map((item) => ({
-		// 		// 	cx: item.positionX,
-		// 		// 	cy: item.positionY,
-		// 		// 	id: item.id,
-		// 		// 	label: item.number,
-		// 		// }));
-
-		// 		setCpins(jsonResponse.items);
-		// 	})
 	}, [pinsEndpoint, productId]);
 
 	const loadPins = () => 
@@ -158,7 +140,7 @@ const Diagram = ({
 	}
 
 	const updatePin = (node) => {
-		if (node.id !== 1) {
+		if (node.id !== undefined) {
 			const body = {
 				id: node.id,
 				number: node.label || '',
@@ -290,6 +272,7 @@ const Diagram = ({
 				>
 					{showTooltip.tooltip && (
 						<AdminTooltip
+							endpointURL=${pinsEndpoint}${SKUS}
 							namespace={namespace}
 							removePinHandler={removePinHandler}
 							setRemovePinHandler={setRemovePinHandler}

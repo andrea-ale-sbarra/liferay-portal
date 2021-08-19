@@ -18,38 +18,30 @@ import PropTypes from 'prop-types';
 import React, {useLayoutEffect, useEffect, useState} from 'react';
 
 const AdminTooltip = ({
+  endpointURL,
 	namespace,
 	setRemovePinHandler,
 	setShowTooltip,
 	showTooltip,
 	deletePin,
-	searchSkus,
 	updatePin,
-	skus,
-	pinsEndpoint,
-	productId,
 }) => {
 	const [pinLabel, setPinLabel] = useState(showTooltip.details.label);
 	const [linkedValue, setLinkedValue] = useState(
 		showTooltip.details.linked_to_sku
 	);
-	const [sku, setSku] = useState("");
+	const [sku, setSku] = useState(showTooltip.details.sku);
 	const [quantity, setQuantity] = useState(showTooltip.details.quantity);
-	const [skusList, setSkusList] = useState(skus)
-		const loadingAd = false;
-	useEffect(() => {
-		console.log(sku)
-		if (sku !== "") {
-			searchSkus()
-				
-		}
-	}, [sku])
+	const [skus, setSkus] = useState()
 
-	useLayoutEffect(() => {
-		setSku(showTooltip.details.sku);
-		setQuantity(showTooltip.details.quantity);
-		setPinLabel(showTooltip.details.label);
-	}, [showTooltip]);
+	const getSkus = (query) => {
+		return fetch(`${endpointURL}/${query}`, {
+		headers: new Headers({
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		})
+	}).then((response) =>  response.json())
+			.then(setSkus);
 
 	return (
 		<ClayCard
@@ -101,35 +93,30 @@ const AdminTooltip = ({
 					</label>
 					<ClayAutocomplete>
 						<ClayAutocomplete.Input
-							id={`${namespace}pin-sku`}
-							onChange={(event) => setSku(event.target.value)}
-							placeholder={Liferay.Language.get('select-sku')}
+							onChange={event => setSku(event.target.value)}
 							value={sku}
 						/>
 						<ClayAutocomplete.DropDown
-							active={(skusList.length >=0) || initialLoading}
+							active={skus || initialLoading}
 						>
 							<ClayDropDown.ItemList>
-								{skusList.length === 0 && (
+								{skus && !skus.length && (
 									<ClayDropDown.Item className="disabled">
-										No Results Found
+										{"No Results Found"}
 									</ClayDropDown.Item>
 								)}
 								{
-									skusList?.items?.map((item) => {
-										console.log({ skusList})
-										return (
-										<ClayAutocomplete.Item
-												key={item.id}
-												match={sku}
-												value={item.name}
-											/>
-										)
-									})
-								}
+									skus?.length &&
+									skus.map(item => (
+									 <ClayAutocomplete.Item
+										 key={item.id}
+										 match={sku}
+										 value={item.sku}
+									 />
+								 ))}
 							</ClayDropDown.ItemList>
 						</ClayAutocomplete.DropDown>
-						{loadingAd && <ClayAutocomplete.LoadingIndicator />}
+						{loading && <ClayAutocomplete.LoadingIndicator />}
 					</ClayAutocomplete>
 				</ClayForm.Group>
 
