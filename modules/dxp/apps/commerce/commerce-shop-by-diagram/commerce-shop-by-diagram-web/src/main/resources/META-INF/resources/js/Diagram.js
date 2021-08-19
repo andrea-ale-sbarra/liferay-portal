@@ -154,13 +154,8 @@ const Diagram = ({
 				response.json();
 			});
 		} else {
-			const body = {
-				number: node.label || '',
-				positionX: node.cx,
-				positionY: node.cy,
-			};
 			fetch(`${pinsEndpoint}${PRODUCTS}/${productId}/${PINS}`, {
-				body: JSON.stringify(body),
+				body: JSON.stringify(node),
 				headers: new Headers({
 					Accept: 'application/json',
 					'Content-Type': 'application/json',

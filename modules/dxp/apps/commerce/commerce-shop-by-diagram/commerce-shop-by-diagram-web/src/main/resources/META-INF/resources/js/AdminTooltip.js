@@ -30,7 +30,7 @@ const AdminTooltip = ({
 	const [linkedValue, setLinkedValue] = useState(
 		showTooltip.details.linked_to_sku
 	);
-	const [sku, setSku] = useState(showTooltip.details.sku);
+	const [sku, setSku] = useState(showTooltip.details.sku || "");
 	const [quantity, setQuantity] = useState(showTooltip.details.quantity);
 	const [skus, setSkus] = useState([])
 
