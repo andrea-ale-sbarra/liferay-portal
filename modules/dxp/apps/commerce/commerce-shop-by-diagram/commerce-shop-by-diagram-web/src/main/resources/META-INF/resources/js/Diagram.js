@@ -14,6 +14,7 @@ import {fetch} from 'frontend-js-web';
 import PropTypes from 'prop-types';
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 
+import {UPDATE_DATASET_DISPLAY} from "frontend-taglib-clay/data_set_display/utils/eventsDefinitions";
 import AdminTooltip from './AdminTooltip';
 import DiagramFooter from './DiagramFooter';
 import DiagramHeader from './DiagramHeader';
@@ -24,6 +25,7 @@ const PRODUCTS = 'products';
 const PINS = 'pins';
 
 const Diagram = ({
+	datasetDisplayId,
 	enablePanZoom,
 	enableResetZoom,
 	imageSettings,
@@ -163,6 +165,12 @@ const Diagram = ({
 				method: 'POST',
 			}).then((response) => {
 				response.json();
+			}).then((jsonResponse) => {
+				if(datasetDisplayId?.length > 0){
+					Liferay.fire(UPDATE_DATASET_DISPLAY, {
+						id: datasetDisplayId,
+					});
+				}
 			});
 		};
 		// toast pin updated?
@@ -380,8 +388,9 @@ Diagram.propTypes = {
 			sku: PropTypes.string,
 		})
 	),
-	enablePanZoom: PropTypes.bool,
+	datasetDisplayId: PropTypes.string,
 	deletePin: PropTypes.func,
+	enablePanZoom: PropTypes.bool,
 	enableResetZoom: PropTypes.bool,
 	imageSettings: PropTypes.shape({
 		height: PropTypes.string,

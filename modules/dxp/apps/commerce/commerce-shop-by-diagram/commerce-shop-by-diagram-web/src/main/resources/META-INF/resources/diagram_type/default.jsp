@@ -28,6 +28,8 @@ CPDefinition cpDefinition = cpDefinitionDiagramSettingDisplayContext.getCPDefini
 	module="js/Diagram"
 	props='<%=
 		HashMapBuilder.<String, Object>put(
+			"datasetDisplayId", CommerceDiagramDataSetConstants.COMMERCE_DATA_SET_KEY_DIAGRAM_MAPPED_PRODUCTS
+		).put(
 			"enablePanZoom", true
 		).put(
 			"enableResetZoom", true
