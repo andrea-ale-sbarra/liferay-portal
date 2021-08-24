@@ -78,7 +78,7 @@ const Diagram = ({
 	const loadPins = useCallback(
 		() =>
 			fetch(`${pinsEndpoint}${PRODUCTS}/${productId}/${PINS}`, {
-				HEADERS,
+				headers:HEADERS,
 			})
 				.then((response) => response.json())
 				.then((jsonResponse) => {
@@ -86,7 +86,7 @@ const Diagram = ({
 						cx: item.positionX,
 						cy: item.positionY,
 						id: item.id,
-						label: item.number,
+						label: item.sequence,
 					}));
 
 					setCpins(loadedPins);
@@ -96,7 +96,7 @@ const Diagram = ({
 
 	const deletePin = (node) => {
 		fetch(`${pinsEndpoint}${PINS}/${node.id}`, {
-			HEADERS,
+			headers:HEADERS,
 			method: 'DELETE',
 		});
 	};
@@ -104,14 +104,14 @@ const Diagram = ({
 	const updatePin = (node) => {
 		if (node.id) {
 			fetch(`${pinsEndpoint}${PINS}/${node.id}`, {
-				HEADERS,
+				headers:HEADERS,
 				body: JSON.stringify(node),
 				method: 'PATCH',
 			});
 		}
 		else {
 			fetch(`${pinsEndpoint}${PRODUCTS}/${productId}/${PINS}`, {
-				HEADERS,
+				headers:HEADERS,
 				body: JSON.stringify(node),
 				method: 'POST',
 			});
@@ -127,7 +127,7 @@ const Diagram = ({
 			}
 
 			return fetch(`${pinsEndpoint}skus/${queryParam}`, {
-				HEADERS,
+				headers:HEADERS,
 			})
 				.then((response) => response.json())
 				.then((jsonResponse) => {
@@ -142,7 +142,7 @@ const Diagram = ({
 			}
 
 			return fetch(`${pinsEndpoint}products/${queryParam}`, {
-				HEADERS,
+				headers:HEADERS,
 			})
 				.then((response) => response.json())
 				.then((jsonResponse) => {
