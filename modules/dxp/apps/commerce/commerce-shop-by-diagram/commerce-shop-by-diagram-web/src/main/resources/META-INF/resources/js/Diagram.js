@@ -9,20 +9,19 @@
  * distribution rights of the Software.
  */
 
-import {ClayIconSpriteContext} from '@clayui/icon';
-import {fetch} from 'frontend-js-web';
-import {UPDATE_DATASET_DISPLAY} from 'frontend-taglib-clay/data_set_display/utils/eventsDefinitions';
+import { ClayIconSpriteContext } from '@clayui/icon';
+import { fetch } from 'frontend-js-web';
+import { UPDATE_DATASET_DISPLAY } from 'frontend-taglib-clay/data_set_display/utils/eventsDefinitions';
 import PropTypes from 'prop-types';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import AdminTooltip from './AdminTooltip';
 import DiagramFooter from './DiagramFooter';
 import DiagramHeader from './DiagramHeader';
 import ImagePins from './ImagePins';
-import {HEADERS} from './utilities/utilities';
+import { HEADERS } from './utilities/utilities';
 
 import '../css/diagram.scss';
-
 const PRODUCTS = 'products';
 const PINS = 'pins';
 
@@ -52,7 +51,7 @@ const Diagram = ({
 		pin: null,
 	});
 	const [skus, setSkus] = useState([]);
-	const [diagramSizes, setDiagramSizes] = useState({k: 1, x: 0, y: 0});
+	const [diagramSizes, setDiagramSizes] = useState({ k: 1, x: 0, y: 0 });
 	const [resetZoom, setResetZoom] = useState(false);
 	const [zoomInHandler, setZoomInHandler] = useState(false);
 	const [zoomOutHandler, setZoomOutHandler] = useState(false);
@@ -66,13 +65,12 @@ const Diagram = ({
 			cy: 0,
 			id: null,
 			label: '',
-			linkedToSku: 'sku',
+			linked_to_sku: 'sku',
 			quantity: null,
 			sku: '',
 		},
 		tooltip: null,
 	});
-
 	const [addNewPinState, setAddNewPinState] = useState({
 		fill: newPinSettings.colorPicker.selectedColor,
 		radius: newPinSettings.defaultRadius,
@@ -157,12 +155,50 @@ const Diagram = ({
 				headers: HEADERS,
 				method: 'POST',
 			}).then(() => {
-				if (datasetDisplayId) {
+				if (datasetDisplayId?.length > 0) {
 					Liferay.fire(UPDATE_DATASET_DISPLAY, {
 						id: datasetDisplayId,
 					});
 				}
 			});
+		}
+	};
+
+	const searchSkus = (query, linkedValue) => {
+		if (linkedValue === 'sku') {
+			let queryParam = '';
+
+			if (query) {
+				queryParam = `?search=${query}`;
+			}
+
+			return fetch(
+				queryParam
+					? `${pinsEndpoint}skus/${queryParam}`
+					: `${pinsEndpoint}skus`,
+				{
+					headers: HEADERS,
+				}
+			)
+				.then((response) => response.json())
+				.then((jsonResponse) => {
+					setSkus(jsonResponse.items);
+				});
+		}
+		else if (linkedValue === 'diagram') {
+			let queryParam = '';
+
+			if (query) {
+				queryParam = `?filter=productType eq ${linkedValue}`;
+			}
+
+			return fetch(`${pinsEndpoint}skus/${queryParam}`, {
+				headers: HEADERS,
+			})
+				.then((response) => response.json())
+				.then((jsonResponse) => {
+					setSkus(jsonResponse.items);
+				});
 		}
 	};
 
@@ -173,8 +209,8 @@ const Diagram = ({
 				cy: updatedPin.cy,
 				id: updatedPin.id,
 				label: updatedPin.label || '',
-				linkedToSku: updatedPin.linkedToSku || '',
-				quantity: updatedPin.quantity || 1,
+				linked_to_sku: updatedPin.linked_to_sku || '',
+				quantity: updatedPin.quantity || 0,
 				sku: updatedPin.sku,
 			},
 			tooltip: true,
@@ -184,10 +220,6 @@ const Diagram = ({
 	useEffect(() => {
 		loadPins();
 	}, [pinsEndpoint, productId, loadPins]);
-
-	const Tooltip = useMemo(() => (isAdmin ? AdminTooltip : AdminTooltip), [
-		isAdmin,
-	]);
 
 	return imageState ? (
 		<div className="diagram mx-auto">
@@ -217,7 +249,6 @@ const Diagram = ({
 					isAdmin={isAdmin}
 					namespace={namespace}
 					navigationController={navigationController}
-					newPinSettings={newPinSettings}
 					pinClickAction={pinClickAction}
 					pinClickHandler={pinClickHandler}
 					pinsEndpoint={pinsEndpoint}
@@ -243,7 +274,7 @@ const Diagram = ({
 					zoomOutHandler={zoomOutHandler}
 				>
 					{showTooltip.tooltip && (
-						<Tooltip
+						<AdminTooltip
 							deletePin={deletePin}
 							namespace={namespace}
 							pinsEndpoint={pinsEndpoint}
@@ -292,7 +323,7 @@ Diagram.defaultProps = {
 	isAdmin: true,
 	navigationController: {
 		dragStep: 10,
-		enable: false,
+		enable: true,
 		enableDrag: false,
 		position: {
 			bottom: '15px',
@@ -320,7 +351,7 @@ Diagram.defaultProps = {
 			selectedColor: '0B5FFF',
 			useNative: true,
 		},
-		defaultRadius: 10,
+		defaultRadius: 2,
 	},
 	pins: [],
 	pinsEndpoint:
@@ -332,7 +363,7 @@ Diagram.defaultProps = {
 			cy: null,
 			id: null,
 			label: null,
-			linkedToSku: 'sku',
+			linked_to_sku: 'sku',
 			quantity: 1,
 			sku: '',
 		},
@@ -341,7 +372,7 @@ Diagram.defaultProps = {
 	spritemap: './assets/clay/icons.svg',
 	type: 'diagram.type.svg',
 	zoomController: {
-		enable: false,
+		enable: true,
 		position: {
 			bottom: '0px',
 			left: '',
@@ -356,10 +387,11 @@ Diagram.propTypes = {
 		PropTypes.shape({
 			cx: PropTypes.double,
 			cy: PropTypes.double,
+			draggable: PropTypes.bool,
 			fill: PropTypes.string,
 			id: PropTypes.number,
 			label: PropTypes.string,
-			linkedToSku: PropTypes.oneOf(['sku', 'diagram']),
+			linked_to_sku: PropTypes.oneOf(['sku', 'diagram']),
 			quantity: PropTypes.number,
 			r: PropTypes.number,
 			sku: PropTypes.string,
@@ -402,7 +434,7 @@ Diagram.propTypes = {
 			cy: PropTypes.double,
 			id: PropTypes.number,
 			label: PropTypes.string,
-			linkedToSku: PropTypes.oneOf(['sku', 'diagram']),
+			linked_to_sku: PropTypes.oneOf(['sku', 'diagram']),
 			quantity: PropTypes.number,
 			sku: PropTypes.string,
 		}),

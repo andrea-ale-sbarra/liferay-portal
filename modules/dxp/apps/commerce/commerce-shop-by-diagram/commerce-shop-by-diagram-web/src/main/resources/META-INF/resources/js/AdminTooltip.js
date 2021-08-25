@@ -13,11 +13,11 @@ import ClayAutocomplete from '@clayui/autocomplete';
 import ClayButton from '@clayui/button';
 import ClayCard from '@clayui/card';
 import ClayDropDown from '@clayui/drop-down';
-import ClayForm, {ClayInput, ClayRadio, ClayRadioGroup} from '@clayui/form';
+import ClayForm, { ClayInput, ClayRadio, ClayRadioGroup } from '@clayui/form';
 import PropTypes from 'prop-types';
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import {searchDiagrams, searchSkus} from './utilities/utilities';
+import { searchDiagrams, searchSkus } from './utilities/utilities';
 
 const AdminTooltip = ({
 	deletePin,
@@ -43,12 +43,10 @@ const AdminTooltip = ({
 		const getProducts = linkedValue === 'sku' ? searchSkus : searchDiagrams;
 
 		if (query?.length) {
-			getProducts(query, linkedValue).then((jsonResponse) =>
-				setProducts(jsonResponse.items)
-			);
-		}
-		else {
-			setSelectedProduct(showTooltip.details);
+			getProducts(query, linkedValue)
+				.then((jsonResponse) => setProducts(jsonResponse.items))
+		} else {
+			setSelectedProduct(showTooltip.details)
 		}
 	}, [query, linkedValue, showTooltip]);
 
@@ -142,6 +140,7 @@ const AdminTooltip = ({
 
 						<ClayAutocomplete.DropDown active={active && products}>
 							<div ref={dropdownNode}>
+
 								<ClayDropDown.ItemList>
 									{products?.length && (
 										<ClayDropDown.Item disabled>
@@ -250,8 +249,8 @@ const AdminTooltip = ({
 							updatePin({
 								diagramEntry: {
 									diagram: linkedValue === 'sku',
-									productId: selectedProduct.productId,
 									quantity,
+									productId: selectedProduct.productId,
 									sequence: pinPositionLabel,
 									sku: selectedProduct.sku,
 									skuUuid: selectedProduct.id,
