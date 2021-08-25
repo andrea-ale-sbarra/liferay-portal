@@ -198,6 +198,12 @@ const AdminTooltip = ({
 						displayType="primary"
 						onClick={() => {
 							updatePin({
+								diagramEntry: {
+									diagram: linkedValue === 'sku',
+									quantity: quantity,
+									sequence: pinPositionLabel,
+									sku: sku,
+								},
 								id: showTooltip.details.id,
 								positionX: showTooltip.details.cx,
 								positionY: showTooltip.details.cy,
