@@ -120,14 +120,3 @@ CPDefinitionDiagramType cpDefinitionDiagramType = cpDefinitionDiagramSettingDisp
 		</div>
 	</div>
 </aui:form>
-
-<liferay-frontend:component
-	context='<%=
-		HashMapBuilder.<String, Object>put(
-			"currentURL", currentURL
-		).put(
-			"selectType", liferayPortletResponse.getNamespace() + "selectType"
-		).build()
-	%>'
-	module="js/edit_cp_definition_diagram_setting"
-/>

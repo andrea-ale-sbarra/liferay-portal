@@ -101,8 +101,8 @@ public class DiagramEntryResourceImpl extends BaseDiagramEntryResourceImpl {
 		_cpDefinitionDiagramEntryService.updateCPDefinitionDiagramEntry(
 			cpDefinitionDiagramEntry.getCPDefinitionDiagramEntryId(),
 			GetterUtil.get(
-				diagramEntry.getSkuUuid(),
-				cpDefinitionDiagramEntry.getCPInstanceUuid()),
+				diagramEntry.getSkuId(),
+				cpDefinitionDiagramEntry.getCPInstanceId()),
 			GetterUtil.get(
 				diagramEntry.getProductId(),
 				cpDefinitionDiagramEntry.getCProductId()),
@@ -164,7 +164,7 @@ public class DiagramEntryResourceImpl extends BaseDiagramEntryResourceImpl {
 
 		CPDefinitionDiagramEntry cpDefinitionDiagramEntry =
 			_cpDefinitionDiagramEntryService.addCPDefinitionDiagramEntry(
-				cpDefinitionId, GetterUtil.getString(diagramEntry.getSkuUuid()),
+				cpDefinitionId, GetterUtil.getLong(diagramEntry.getSkuId()),
 				GetterUtil.getLong(diagramEntry.getProductId()),
 				GetterUtil.getBoolean(diagramEntry.getDiagram()),
 				GetterUtil.getInteger(diagramEntry.getQuantity()),

@@ -45,7 +45,7 @@ public class CPDefinitionDiagramEntryServiceImpl
 
 	@Override
 	public CPDefinitionDiagramEntry addCPDefinitionDiagramEntry(
-			long cpDefinitionId, String cpInstanceUuid, long cProductId,
+			long cpDefinitionId, long cpInstanceId, long cProductId,
 			boolean diagram, int number, String sequence, String sku,
 			ServiceContext serviceContext)
 		throws PortalException {
@@ -54,7 +54,7 @@ public class CPDefinitionDiagramEntryServiceImpl
 			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionDiagramEntryLocalService.addCPDefinitionDiagramEntry(
-			getUserId(), cpDefinitionId, cpInstanceUuid, cProductId, diagram,
+			getUserId(), cpDefinitionId, cpInstanceId, cProductId, diagram,
 			number, sequence, sku, serviceContext);
 	}
 
@@ -139,7 +139,7 @@ public class CPDefinitionDiagramEntryServiceImpl
 
 	@Override
 	public CPDefinitionDiagramEntry updateCPDefinitionDiagramEntry(
-			long cpDefinitionDiagramEntryId, String cpInstanceUuid,
+			long cpDefinitionDiagramEntryId, long cpInstanceId,
 			long cProductId, boolean diagram, int number, String sku,
 			String sequence, ServiceContext serviceContext)
 		throws PortalException {
@@ -154,7 +154,7 @@ public class CPDefinitionDiagramEntryServiceImpl
 
 		return cpDefinitionDiagramEntryLocalService.
 			updateCPDefinitionDiagramEntry(
-				cpDefinitionDiagramEntryId, cpInstanceUuid, cProductId, diagram,
+				cpDefinitionDiagramEntryId, cpInstanceId, cProductId, diagram,
 				number, sequence, sku, serviceContext);
 	}
 

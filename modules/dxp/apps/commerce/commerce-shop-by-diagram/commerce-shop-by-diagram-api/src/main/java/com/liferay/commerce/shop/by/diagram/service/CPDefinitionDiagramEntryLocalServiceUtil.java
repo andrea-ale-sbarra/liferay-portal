@@ -63,15 +63,15 @@ public class CPDefinitionDiagramEntryLocalServiceUtil {
 	}
 
 	public static CPDefinitionDiagramEntry addCPDefinitionDiagramEntry(
-			long userId, long cpDefinitionId, String cpInstanceUuid,
+			long userId, long cpDefinitionId, long cpInstanceId,
 			long cProductId, boolean diagram, int quantity, String sequence,
 			String sku,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
 		return getService().addCPDefinitionDiagramEntry(
-			userId, cpDefinitionId, cpInstanceUuid, cProductId, diagram,
-			quantity, sequence, sku, serviceContext);
+			userId, cpDefinitionId, cpInstanceId, cProductId, diagram, quantity,
+			sequence, sku, serviceContext);
 	}
 
 	/**
@@ -356,14 +356,13 @@ public class CPDefinitionDiagramEntryLocalServiceUtil {
 	}
 
 	public static CPDefinitionDiagramEntry updateCPDefinitionDiagramEntry(
-			long cpDefinitionDiagramEntryId, String cpInstanceUuid,
-			long cProductId, boolean diagram, int quantity, String sequence,
-			String sku,
+			long cpDefinitionDiagramEntryId, long cpInstanceId, long cProductId,
+			boolean diagram, int quantity, String sequence, String sku,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
 		return getService().updateCPDefinitionDiagramEntry(
-			cpDefinitionDiagramEntryId, cpInstanceUuid, cProductId, diagram,
+			cpDefinitionDiagramEntryId, cpInstanceId, cProductId, diagram,
 			quantity, sequence, sku, serviceContext);
 	}
 

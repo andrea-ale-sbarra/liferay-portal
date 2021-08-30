@@ -53,7 +53,7 @@ public class CPDefinitionDiagramEntryWrapper
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("CPDefinitionId", getCPDefinitionId());
-		attributes.put("CPInstanceUuid", getCPInstanceUuid());
+		attributes.put("CPInstanceId", getCPInstanceId());
 		attributes.put("CProductId", getCProductId());
 		attributes.put("diagram", isDiagram());
 		attributes.put("quantity", getQuantity());
@@ -108,10 +108,10 @@ public class CPDefinitionDiagramEntryWrapper
 			setCPDefinitionId(CPDefinitionId);
 		}
 
-		String CPInstanceUuid = (String)attributes.get("CPInstanceUuid");
+		Long CPInstanceId = (Long)attributes.get("CPInstanceId");
 
-		if (CPInstanceUuid != null) {
-			setCPInstanceUuid(CPInstanceUuid);
+		if (CPInstanceId != null) {
+			setCPInstanceId(CPInstanceId);
 		}
 
 		Long CProductId = (Long)attributes.get("CProductId");
@@ -188,13 +188,13 @@ public class CPDefinitionDiagramEntryWrapper
 	}
 
 	/**
-	 * Returns the cp instance uuid of this cp definition diagram entry.
+	 * Returns the cp instance ID of this cp definition diagram entry.
 	 *
-	 * @return the cp instance uuid of this cp definition diagram entry
+	 * @return the cp instance ID of this cp definition diagram entry
 	 */
 	@Override
-	public String getCPInstanceUuid() {
-		return model.getCPInstanceUuid();
+	public long getCPInstanceId() {
+		return model.getCPInstanceId();
 	}
 
 	/**
@@ -353,13 +353,13 @@ public class CPDefinitionDiagramEntryWrapper
 	}
 
 	/**
-	 * Sets the cp instance uuid of this cp definition diagram entry.
+	 * Sets the cp instance ID of this cp definition diagram entry.
 	 *
-	 * @param CPInstanceUuid the cp instance uuid of this cp definition diagram entry
+	 * @param CPInstanceId the cp instance ID of this cp definition diagram entry
 	 */
 	@Override
-	public void setCPInstanceUuid(String CPInstanceUuid) {
-		model.setCPInstanceUuid(CPInstanceUuid);
+	public void setCPInstanceId(long CPInstanceId) {
+		model.setCPInstanceId(CPInstanceId);
 	}
 
 	/**

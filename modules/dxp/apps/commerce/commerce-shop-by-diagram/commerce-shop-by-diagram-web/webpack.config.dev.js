@@ -23,6 +23,9 @@ module.exports = {
 		openPage: 'index.html',
 		port: 9000,
 		proxy: {
+			'/documents': {
+				target: 'http://localhost:8080/',
+			},
 			'/image': {
 				target: 'http://localhost:8080/',
 			},
@@ -61,7 +64,7 @@ module.exports = {
 										done({
 											file: path.resolve(
 												__dirname,
-												'./../../../../../node_modules/@clayui/css/src/scss/atlas-variables.scss'
+												'./../../../../../../../node_modules/@clayui/css/src/scss/atlas-variables.scss'
 											),
 										});
 									}
@@ -100,6 +103,10 @@ module.exports = {
 			'frontend-js-web': path.resolve(
 				__dirname,
 				'../../../../../node_modules/frontend-js-web/src/main/resources/META-INF/resources/index.es.js'
+			),
+			'frontend-taglib-clay/data_set_display/utils/eventsDefinitions': path.resolve(
+				__dirname,
+				'../../../../../node_modules/frontend-taglib-clay/src/main/resources/META-INF/resources/data_set_display/utils/eventsDefinitions.js'
 			),
 		},
 		extensions: ['.js', '.jsx', '.ts', '.tsx'],

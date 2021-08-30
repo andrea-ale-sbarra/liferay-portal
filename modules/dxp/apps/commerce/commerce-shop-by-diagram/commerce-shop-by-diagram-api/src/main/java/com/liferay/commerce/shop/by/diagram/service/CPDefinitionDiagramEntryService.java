@@ -53,7 +53,7 @@ public interface CPDefinitionDiagramEntryService extends BaseService {
 	 * Never modify this interface directly. Add custom service methods to <code>com.liferay.commerce.shop.by.diagram.service.impl.CPDefinitionDiagramEntryServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the cp definition diagram entry remote service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link CPDefinitionDiagramEntryServiceUtil} if injection and service tracking are not available.
 	 */
 	public CPDefinitionDiagramEntry addCPDefinitionDiagramEntry(
-			long cpDefinitionId, String cpInstanceUuid, long cProductId,
+			long cpDefinitionId, long cpInstanceId, long cProductId,
 			boolean diagram, int number, String sequence, String sku,
 			ServiceContext serviceContext)
 		throws PortalException;
@@ -93,9 +93,9 @@ public interface CPDefinitionDiagramEntryService extends BaseService {
 	public String getOSGiServiceIdentifier();
 
 	public CPDefinitionDiagramEntry updateCPDefinitionDiagramEntry(
-			long cpDefinitionDiagramEntryId, String cpInstanceUuid,
-			long cProductId, boolean diagram, int number, String sku,
-			String sequence, ServiceContext serviceContext)
+			long cpDefinitionDiagramEntryId, long cpInstanceId, long cProductId,
+			boolean diagram, int number, String sku, String sequence,
+			ServiceContext serviceContext)
 		throws PortalException;
 
 }

@@ -13,11 +13,11 @@ import ClayAutocomplete from '@clayui/autocomplete';
 import ClayButton from '@clayui/button';
 import ClayCard from '@clayui/card';
 import ClayDropDown from '@clayui/drop-down';
-import ClayForm, { ClayInput, ClayRadio, ClayRadioGroup } from '@clayui/form';
+import ClayForm, {ClayInput, ClayRadio, ClayRadioGroup} from '@clayui/form';
 import PropTypes from 'prop-types';
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
-import { searchDiagrams, searchSkus } from './utilities/utilities';
+import {searchDiagrams, searchSkus} from './utilities/utilities';
 
 const AdminTooltip = ({
 	deletePin,
@@ -35,7 +35,9 @@ const AdminTooltip = ({
 	const node = useRef();
 	const dropdownNode = useRef();
 	const [query, setQuery] = useState('');
-	const [linkedValue, setLinkedValue] = useState('sku');
+	const [linkedValue, setLinkedValue] = useState(
+		showTooltip.details.linkedToSku
+	);
 	const [selectedProduct, setSelectedProduct] = useState(showTooltip.details);
 	const [quantity, setQuantity] = useState(showTooltip.details.quantity);
 
@@ -43,10 +45,12 @@ const AdminTooltip = ({
 		const getProducts = linkedValue === 'sku' ? searchSkus : searchDiagrams;
 
 		if (query?.length) {
-			getProducts(query, linkedValue)
-				.then((jsonResponse) => setProducts(jsonResponse.items))
-		} else {
-			setSelectedProduct(showTooltip.details)
+			getProducts(query, linkedValue).then((jsonResponse) =>
+				setProducts(jsonResponse.items)
+			);
+		}
+		else {
+			setSelectedProduct(showTooltip.details);
 		}
 	}, [query, linkedValue, showTooltip]);
 
@@ -140,7 +144,6 @@ const AdminTooltip = ({
 
 						<ClayAutocomplete.DropDown active={active && products}>
 							<div ref={dropdownNode}>
-
 								<ClayDropDown.ItemList>
 									{products?.length && (
 										<ClayDropDown.Item disabled>
@@ -207,7 +210,7 @@ const AdminTooltip = ({
 									cy: null,
 									id: null,
 									label: null,
-									linked_to_sku: 'sku',
+									linkedToSku: 'sku',
 									quantity: null,
 									sku: '',
 								},
@@ -232,7 +235,7 @@ const AdminTooltip = ({
 									cy: null,
 									id: null,
 									label: '',
-									linked_to_sku: 'sku',
+									linkedToSku: 'sku',
 									quantity: null,
 									sku: '',
 								},
@@ -249,11 +252,11 @@ const AdminTooltip = ({
 							updatePin({
 								diagramEntry: {
 									diagram: linkedValue === 'sku',
-									quantity,
 									productId: selectedProduct.productId,
+									quantity,
 									sequence: pinPositionLabel,
 									sku: selectedProduct.sku,
-									skuUuid: selectedProduct.id,
+									skuId: selectedProduct.id,
 								},
 								id: showTooltip.details.id,
 								positionX: showTooltip.details.cx,
@@ -266,7 +269,7 @@ const AdminTooltip = ({
 									cy: showTooltip.details.cy,
 									id: showTooltip.details.id,
 									label: pinPositionLabel,
-									linked_to_sku: linkedValue,
+									linkedToSku: linkedValue,
 									quantity,
 									sku: selectedProduct.sku,
 								},
@@ -290,7 +293,6 @@ AdminTooltip.propTypes = {
 			cy: PropTypes.double,
 			id: PropTypes.number,
 			label: PropTypes.string,
-			linked_to_sku: PropTypes.oneOf(['sku', 'diagram']),
 			quantity: PropTypes.number,
 			sku: PropTypes.string,
 		}),

@@ -143,8 +143,7 @@ public class CPDefinitionDiagramEntryPersistenceTest {
 		newCPDefinitionDiagramEntry.setCPDefinitionId(
 			RandomTestUtil.nextLong());
 
-		newCPDefinitionDiagramEntry.setCPInstanceUuid(
-			RandomTestUtil.randomString());
+		newCPDefinitionDiagramEntry.setCPInstanceId(RandomTestUtil.nextLong());
 
 		newCPDefinitionDiagramEntry.setCProductId(RandomTestUtil.nextLong());
 
@@ -189,8 +188,8 @@ public class CPDefinitionDiagramEntryPersistenceTest {
 			existingCPDefinitionDiagramEntry.getCPDefinitionId(),
 			newCPDefinitionDiagramEntry.getCPDefinitionId());
 		Assert.assertEquals(
-			existingCPDefinitionDiagramEntry.getCPInstanceUuid(),
-			newCPDefinitionDiagramEntry.getCPInstanceUuid());
+			existingCPDefinitionDiagramEntry.getCPInstanceId(),
+			newCPDefinitionDiagramEntry.getCPInstanceId());
 		Assert.assertEquals(
 			existingCPDefinitionDiagramEntry.getCProductId(),
 			newCPDefinitionDiagramEntry.getCProductId());
@@ -256,9 +255,9 @@ public class CPDefinitionDiagramEntryPersistenceTest {
 		return OrderByComparatorFactoryUtil.create(
 			"CPDefinitionDiagramEntry", "CPDefinitionDiagramEntryId", true,
 			"companyId", true, "userId", true, "userName", true, "createDate",
-			true, "modifiedDate", true, "CPDefinitionId", true,
-			"CPInstanceUuid", true, "CProductId", true, "diagram", true,
-			"quantity", true, "sequence", true, "sku", true);
+			true, "modifiedDate", true, "CPDefinitionId", true, "CPInstanceId",
+			true, "CProductId", true, "diagram", true, "quantity", true,
+			"sequence", true, "sku", true);
 	}
 
 	@Test
@@ -588,8 +587,7 @@ public class CPDefinitionDiagramEntryPersistenceTest {
 
 		cpDefinitionDiagramEntry.setCPDefinitionId(RandomTestUtil.nextLong());
 
-		cpDefinitionDiagramEntry.setCPInstanceUuid(
-			RandomTestUtil.randomString());
+		cpDefinitionDiagramEntry.setCPInstanceId(RandomTestUtil.nextLong());
 
 		cpDefinitionDiagramEntry.setCProductId(RandomTestUtil.nextLong());
 

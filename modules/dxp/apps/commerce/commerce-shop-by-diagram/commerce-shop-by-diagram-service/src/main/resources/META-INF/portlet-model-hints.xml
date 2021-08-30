@@ -9,7 +9,7 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="CPDefinitionId" type="long" />
-		<field name="CPInstanceUuid" type="String" />
+		<field name="CPInstanceId" type="long" />
 		<field name="CProductId" type="long" />
 		<field name="diagram" type="boolean" />
 		<field name="quantity" type="int" />

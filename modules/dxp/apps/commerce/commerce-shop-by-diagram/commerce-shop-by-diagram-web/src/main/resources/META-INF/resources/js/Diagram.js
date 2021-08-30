@@ -9,23 +9,28 @@
  * distribution rights of the Software.
  */
 
-import { ClayIconSpriteContext } from '@clayui/icon';
-import { fetch } from 'frontend-js-web';
-import { UPDATE_DATASET_DISPLAY } from 'frontend-taglib-clay/data_set_display/utils/eventsDefinitions';
+import {ClayIconSpriteContext} from '@clayui/icon';
+import {fetch} from 'frontend-js-web';
+import {UPDATE_DATASET_DISPLAY} from 'frontend-taglib-clay/data_set_display/utils/eventsDefinitions';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import AdminTooltip from './AdminTooltip';
 import DiagramFooter from './DiagramFooter';
 import DiagramHeader from './DiagramHeader';
 import ImagePins from './ImagePins';
-import { HEADERS } from './utilities/utilities';
+import {HEADERS} from './utilities/utilities';
 
 import '../css/diagram.scss';
+import BuyerTooltip from './BuyerTooltip';
+
 const PRODUCTS = 'products';
 const PINS = 'pins';
 
 const Diagram = ({
+	channelGroupId,
+	channelId,
+	currency,
 	datasetDisplayId,
 	enablePanZoom,
 	enableResetZoom,
@@ -51,7 +56,7 @@ const Diagram = ({
 		pin: null,
 	});
 	const [skus, setSkus] = useState([]);
-	const [diagramSizes, setDiagramSizes] = useState({ k: 1, x: 0, y: 0 });
+	const [diagramSizes, setDiagramSizes] = useState({k: 1, x: 0, y: 0});
 	const [resetZoom, setResetZoom] = useState(false);
 	const [zoomInHandler, setZoomInHandler] = useState(false);
 	const [zoomOutHandler, setZoomOutHandler] = useState(false);
@@ -65,12 +70,13 @@ const Diagram = ({
 			cy: 0,
 			id: null,
 			label: '',
-			linked_to_sku: 'sku',
+			linkedToSku: 'sku',
 			quantity: null,
 			sku: '',
 		},
 		tooltip: null,
 	});
+
 	const [addNewPinState, setAddNewPinState] = useState({
 		fill: newPinSettings.colorPicker.selectedColor,
 		radius: newPinSettings.defaultRadius,
@@ -155,50 +161,12 @@ const Diagram = ({
 				headers: HEADERS,
 				method: 'POST',
 			}).then(() => {
-				if (datasetDisplayId?.length > 0) {
+				if (datasetDisplayId) {
 					Liferay.fire(UPDATE_DATASET_DISPLAY, {
 						id: datasetDisplayId,
 					});
 				}
 			});
-		}
-	};
-
-	const searchSkus = (query, linkedValue) => {
-		if (linkedValue === 'sku') {
-			let queryParam = '';
-
-			if (query) {
-				queryParam = `?search=${query}`;
-			}
-
-			return fetch(
-				queryParam
-					? `${pinsEndpoint}skus/${queryParam}`
-					: `${pinsEndpoint}skus`,
-				{
-					headers: HEADERS,
-				}
-			)
-				.then((response) => response.json())
-				.then((jsonResponse) => {
-					setSkus(jsonResponse.items);
-				});
-		}
-		else if (linkedValue === 'diagram') {
-			let queryParam = '';
-
-			if (query) {
-				queryParam = `?filter=productType eq ${linkedValue}`;
-			}
-
-			return fetch(`${pinsEndpoint}skus/${queryParam}`, {
-				headers: HEADERS,
-			})
-				.then((response) => response.json())
-				.then((jsonResponse) => {
-					setSkus(jsonResponse.items);
-				});
 		}
 	};
 
@@ -209,7 +177,7 @@ const Diagram = ({
 				cy: updatedPin.cy,
 				id: updatedPin.id,
 				label: updatedPin.label || '',
-				linked_to_sku: updatedPin.linked_to_sku || '',
+				linkedToSku: updatedPin.linkedToSku || '',
 				quantity: updatedPin.quantity || 0,
 				sku: updatedPin.sku,
 			},
@@ -220,6 +188,10 @@ const Diagram = ({
 	useEffect(() => {
 		loadPins();
 	}, [pinsEndpoint, productId, loadPins]);
+
+	const Tooltip = useMemo(() => (isAdmin ? AdminTooltip : BuyerTooltip), [
+		isAdmin,
+	]);
 
 	return imageState ? (
 		<div className="diagram mx-auto">
@@ -274,7 +246,7 @@ const Diagram = ({
 					zoomOutHandler={zoomOutHandler}
 				>
 					{showTooltip.tooltip && (
-						<AdminTooltip
+						<Tooltip
 							deletePin={deletePin}
 							namespace={namespace}
 							pinsEndpoint={pinsEndpoint}
@@ -351,7 +323,7 @@ Diagram.defaultProps = {
 			selectedColor: '0B5FFF',
 			useNative: true,
 		},
-		defaultRadius: 2,
+		defaultRadius: 10,
 	},
 	pins: [],
 	pinsEndpoint:
@@ -363,7 +335,7 @@ Diagram.defaultProps = {
 			cy: null,
 			id: null,
 			label: null,
-			linked_to_sku: 'sku',
+			linkedToSku: 'sku',
 			quantity: 1,
 			sku: '',
 		},
@@ -387,16 +359,18 @@ Diagram.propTypes = {
 		PropTypes.shape({
 			cx: PropTypes.double,
 			cy: PropTypes.double,
-			draggable: PropTypes.bool,
 			fill: PropTypes.string,
 			id: PropTypes.number,
 			label: PropTypes.string,
-			linked_to_sku: PropTypes.oneOf(['sku', 'diagram']),
+			linkedToSku: PropTypes.oneOf(['sku', 'diagram']),
 			quantity: PropTypes.number,
 			r: PropTypes.number,
 			sku: PropTypes.string,
 		})
 	),
+	channelId: PropTypes.number,
+	channelGroupId: PropTypes.number,
+	currency: PropTypes.string,
 	enablePanZoom: PropTypes.bool,
 	enableResetZoom: PropTypes.bool,
 	imageSettings: PropTypes.shape({
@@ -434,7 +408,7 @@ Diagram.propTypes = {
 			cy: PropTypes.double,
 			id: PropTypes.number,
 			label: PropTypes.string,
-			linked_to_sku: PropTypes.oneOf(['sku', 'diagram']),
+			linkedToSku: PropTypes.oneOf(['sku', 'diagram']),
 			quantity: PropTypes.number,
 			sku: PropTypes.string,
 		}),

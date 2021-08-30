@@ -21,7 +21,7 @@
 		<!-- Other fields -->
 
 		<column name="CPDefinitionId" type="long" />
-		<column name="CPInstanceUuid" type="String" />
+		<column name="CPInstanceId" type="long" />
 		<column name="CProductId" type="long" />
 		<column name="diagram" type="boolean" />
 		<column name="quantity" type="int" />

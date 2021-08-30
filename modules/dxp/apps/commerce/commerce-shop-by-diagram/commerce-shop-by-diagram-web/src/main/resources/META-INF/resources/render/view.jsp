@@ -1,4 +1,5 @@
-<%--
+<%@ page import="com.liferay.commerce.context.CommerceContext" %>
+<%@ page import="com.liferay.commerce.constants.CommerceWebKeys" %><%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -17,6 +18,9 @@
 <%@ include file="/init.jsp" %>
 
 <%
+CommerceContext commerceContext = (CommerceContext)request.getAttribute(
+		CommerceWebKeys.COMMERCE_CONTEXT);
+
 CPContentHelper cpContentHelper = (CPContentHelper)request.getAttribute(CPContentWebKeys.CP_CONTENT_HELPER);
 
 CPCatalogEntry cpCatalogEntry = cpContentHelper.getCPCatalogEntry(request);
@@ -31,6 +35,12 @@ CSDiagramCPTypeDisplayContext csDiagramCPTypeDisplayContext = (CSDiagramCPTypeDi
 	props='<%=
 		HashMapBuilder.<String, Object>put(
 			"enablePanZoom", true
+		).put(
+			"channelId", commerceContext.getCommerceChannelId()
+		).put(
+			"channelGroupId", commerceContext.getCommerceChannelGroupId()
+		).put(
+			"currency", commerceContext.getCommerceCurrency().getName()
 		).put(
 			"enableResetZoom", true
 		).put(

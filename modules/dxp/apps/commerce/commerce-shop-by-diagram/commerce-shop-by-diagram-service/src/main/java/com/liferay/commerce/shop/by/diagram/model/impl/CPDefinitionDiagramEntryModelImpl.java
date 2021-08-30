@@ -80,7 +80,7 @@ public class CPDefinitionDiagramEntryModelImpl
 		{"companyId", Types.BIGINT}, {"userId", Types.BIGINT},
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
 		{"modifiedDate", Types.TIMESTAMP}, {"CPDefinitionId", Types.BIGINT},
-		{"CPInstanceUuid", Types.VARCHAR}, {"CProductId", Types.BIGINT},
+		{"CPInstanceId", Types.BIGINT}, {"CProductId", Types.BIGINT},
 		{"diagram", Types.BOOLEAN}, {"quantity", Types.INTEGER},
 		{"sequence", Types.VARCHAR}, {"sku", Types.VARCHAR}
 	};
@@ -96,7 +96,7 @@ public class CPDefinitionDiagramEntryModelImpl
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("CPDefinitionId", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("CPInstanceUuid", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("CPInstanceId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("CProductId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("diagram", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("quantity", Types.INTEGER);
@@ -105,7 +105,7 @@ public class CPDefinitionDiagramEntryModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table CPDefinitionDiagramEntry (CPDefinitionDiagramEntryId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,CPDefinitionId LONG,CPInstanceUuid VARCHAR(75) null,CProductId LONG,diagram BOOLEAN,quantity INTEGER,sequence VARCHAR(75) null,sku VARCHAR(75) null)";
+		"create table CPDefinitionDiagramEntry (CPDefinitionDiagramEntryId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,CPDefinitionId LONG,CPInstanceId LONG,CProductId LONG,diagram BOOLEAN,quantity INTEGER,sequence VARCHAR(75) null,sku VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table CPDefinitionDiagramEntry";
@@ -173,7 +173,7 @@ public class CPDefinitionDiagramEntryModelImpl
 		model.setCreateDate(soapModel.getCreateDate());
 		model.setModifiedDate(soapModel.getModifiedDate());
 		model.setCPDefinitionId(soapModel.getCPDefinitionId());
-		model.setCPInstanceUuid(soapModel.getCPInstanceUuid());
+		model.setCPInstanceId(soapModel.getCPInstanceId());
 		model.setCProductId(soapModel.getCProductId());
 		model.setDiagram(soapModel.isDiagram());
 		model.setQuantity(soapModel.getQuantity());
@@ -382,11 +382,11 @@ public class CPDefinitionDiagramEntryModelImpl
 			(BiConsumer<CPDefinitionDiagramEntry, Long>)
 				CPDefinitionDiagramEntry::setCPDefinitionId);
 		attributeGetterFunctions.put(
-			"CPInstanceUuid", CPDefinitionDiagramEntry::getCPInstanceUuid);
+			"CPInstanceId", CPDefinitionDiagramEntry::getCPInstanceId);
 		attributeSetterBiConsumers.put(
-			"CPInstanceUuid",
-			(BiConsumer<CPDefinitionDiagramEntry, String>)
-				CPDefinitionDiagramEntry::setCPInstanceUuid);
+			"CPInstanceId",
+			(BiConsumer<CPDefinitionDiagramEntry, Long>)
+				CPDefinitionDiagramEntry::setCPInstanceId);
 		attributeGetterFunctions.put(
 			"CProductId", CPDefinitionDiagramEntry::getCProductId);
 		attributeSetterBiConsumers.put(
@@ -567,22 +567,17 @@ public class CPDefinitionDiagramEntryModelImpl
 
 	@JSON
 	@Override
-	public String getCPInstanceUuid() {
-		if (_CPInstanceUuid == null) {
-			return "";
-		}
-		else {
-			return _CPInstanceUuid;
-		}
+	public long getCPInstanceId() {
+		return _CPInstanceId;
 	}
 
 	@Override
-	public void setCPInstanceUuid(String CPInstanceUuid) {
+	public void setCPInstanceId(long CPInstanceId) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_CPInstanceUuid = CPInstanceUuid;
+		_CPInstanceId = CPInstanceId;
 	}
 
 	@JSON
@@ -751,7 +746,7 @@ public class CPDefinitionDiagramEntryModelImpl
 		cpDefinitionDiagramEntryImpl.setCreateDate(getCreateDate());
 		cpDefinitionDiagramEntryImpl.setModifiedDate(getModifiedDate());
 		cpDefinitionDiagramEntryImpl.setCPDefinitionId(getCPDefinitionId());
-		cpDefinitionDiagramEntryImpl.setCPInstanceUuid(getCPInstanceUuid());
+		cpDefinitionDiagramEntryImpl.setCPInstanceId(getCPInstanceId());
 		cpDefinitionDiagramEntryImpl.setCProductId(getCProductId());
 		cpDefinitionDiagramEntryImpl.setDiagram(isDiagram());
 		cpDefinitionDiagramEntryImpl.setQuantity(getQuantity());
@@ -782,8 +777,8 @@ public class CPDefinitionDiagramEntryModelImpl
 			this.<Date>getColumnOriginalValue("modifiedDate"));
 		cpDefinitionDiagramEntryImpl.setCPDefinitionId(
 			this.<Long>getColumnOriginalValue("CPDefinitionId"));
-		cpDefinitionDiagramEntryImpl.setCPInstanceUuid(
-			this.<String>getColumnOriginalValue("CPInstanceUuid"));
+		cpDefinitionDiagramEntryImpl.setCPInstanceId(
+			this.<Long>getColumnOriginalValue("CPInstanceId"));
 		cpDefinitionDiagramEntryImpl.setCProductId(
 			this.<Long>getColumnOriginalValue("CProductId"));
 		cpDefinitionDiagramEntryImpl.setDiagram(
@@ -908,14 +903,7 @@ public class CPDefinitionDiagramEntryModelImpl
 
 		cpDefinitionDiagramEntryCacheModel.CPDefinitionId = getCPDefinitionId();
 
-		cpDefinitionDiagramEntryCacheModel.CPInstanceUuid = getCPInstanceUuid();
-
-		String CPInstanceUuid =
-			cpDefinitionDiagramEntryCacheModel.CPInstanceUuid;
-
-		if ((CPInstanceUuid != null) && (CPInstanceUuid.length() == 0)) {
-			cpDefinitionDiagramEntryCacheModel.CPInstanceUuid = null;
-		}
+		cpDefinitionDiagramEntryCacheModel.CPInstanceId = getCPInstanceId();
 
 		cpDefinitionDiagramEntryCacheModel.CProductId = getCProductId();
 
@@ -1041,7 +1029,7 @@ public class CPDefinitionDiagramEntryModelImpl
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
 	private long _CPDefinitionId;
-	private String _CPInstanceUuid;
+	private long _CPInstanceId;
 	private long _CProductId;
 	private boolean _diagram;
 	private int _quantity;
@@ -1083,7 +1071,7 @@ public class CPDefinitionDiagramEntryModelImpl
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("CPDefinitionId", _CPDefinitionId);
-		_columnOriginalValues.put("CPInstanceUuid", _CPInstanceUuid);
+		_columnOriginalValues.put("CPInstanceId", _CPInstanceId);
 		_columnOriginalValues.put("CProductId", _CProductId);
 		_columnOriginalValues.put("diagram", _diagram);
 		_columnOriginalValues.put("quantity", _quantity);
@@ -1116,7 +1104,7 @@ public class CPDefinitionDiagramEntryModelImpl
 
 		columnBitmasks.put("CPDefinitionId", 64L);
 
-		columnBitmasks.put("CPInstanceUuid", 128L);
+		columnBitmasks.put("CPInstanceId", 128L);
 
 		columnBitmasks.put("CProductId", 256L);
 

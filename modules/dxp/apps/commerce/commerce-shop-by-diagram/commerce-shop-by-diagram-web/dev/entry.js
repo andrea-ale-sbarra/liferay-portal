@@ -13,13 +13,47 @@ import {render} from '@liferay/frontend-js-react-web';
 
 import Diagram from '../src/main/resources/META-INF/resources/js/Diagram';
 
+import '../src/main/resources/META-INF/resources/css/diagram.scss';
+
 render(
 	Diagram,
 	{
-		imageURL: './assets/308056.svg',
-		isAdmin: true,
-		namespace: 'portlet_shop_by_diagram_namespace_',
-		spritemap: './assets/clay/icons.svg',
+		componentId:null,
+		enablePanZoom:true,
+		enableResetZoom:true,
+		imageSettings:{
+			height:"500px",
+			width:"100%",
+		},
+		imageURL: "/documents/42431/0/login_portlet_splash.jpg/02131025-6e20-a6ec-e7ee-98cc092dcf50?version=1.0&t=1630308326668&download=true",
+		isAdmin:false,
+		locale:{
+			ISO3Country:"USA",
+			ISO3Language:"eng",
+			country:"US",
+			displayCountry:"United States",
+			displayLanguage:"English",
+			displayName:"English (United States)",
+			displayScript:"",
+			displayVariant:"",
+			extensionKeys:[
+				
+			],
+			language:"en",
+			script:"",
+			unicodeLocaleAttributes:[
+				
+			],
+			unicodeLocaleKeys:[
+				
+			],
+			variant:""
+		},
+		pinsEndpoint:"/o/headless-commerce-admin-catalog/v1.0/",
+		portletId:"com_liferay_commerce_product_content_web_internal_portlet_CPContentPortlet_INSTANCE_minium",
+		portletNamespace:"_com_liferay_commerce_product_content_web_internal_portlet_CPContentPortlet_INSTANCE_minium_",
+		productId:"44603",
+		spritemap:"http://localhost:9000/o/minium-theme/images/clay/icons.svg",
 	},
 	document.getElementById('shop-by-diagram')
 );

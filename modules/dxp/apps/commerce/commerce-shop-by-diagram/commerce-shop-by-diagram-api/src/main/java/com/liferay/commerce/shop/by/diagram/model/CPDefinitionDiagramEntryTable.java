@@ -55,9 +55,9 @@ public class CPDefinitionDiagramEntryTable
 	public final Column<CPDefinitionDiagramEntryTable, Long> CPDefinitionId =
 		createColumn(
 			"CPDefinitionId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
-	public final Column<CPDefinitionDiagramEntryTable, String> CPInstanceUuid =
+	public final Column<CPDefinitionDiagramEntryTable, Long> CPInstanceId =
 		createColumn(
-			"CPInstanceUuid", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+			"CPInstanceId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<CPDefinitionDiagramEntryTable, Long> CProductId =
 		createColumn(
 			"CProductId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);

@@ -6,7 +6,7 @@ create table CPDefinitionDiagramEntry (
 	createDate DATE null,
 	modifiedDate DATE null,
 	CPDefinitionId LONG,
-	CPInstanceUuid VARCHAR(75) null,
+	CPInstanceId LONG,
 	CProductId LONG,
 	diagram BOOLEAN,
 	quantity INTEGER,

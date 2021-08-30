@@ -66,7 +66,7 @@ public class CPDefinitionDiagramEntryServiceSoap {
 	public static
 		com.liferay.commerce.shop.by.diagram.model.CPDefinitionDiagramEntrySoap
 				addCPDefinitionDiagramEntry(
-					long cpDefinitionId, String cpInstanceUuid, long cProductId,
+					long cpDefinitionId, long cpInstanceId, long cProductId,
 					boolean diagram, int number, String sequence, String sku,
 					com.liferay.portal.kernel.service.ServiceContext
 						serviceContext)
@@ -77,7 +77,7 @@ public class CPDefinitionDiagramEntryServiceSoap {
 				returnValue =
 					CPDefinitionDiagramEntryServiceUtil.
 						addCPDefinitionDiagramEntry(
-							cpDefinitionId, cpInstanceUuid, cProductId, diagram,
+							cpDefinitionId, cpInstanceId, cProductId, diagram,
 							number, sequence, sku, serviceContext);
 
 			return com.liferay.commerce.shop.by.diagram.model.
@@ -214,7 +214,7 @@ public class CPDefinitionDiagramEntryServiceSoap {
 	public static
 		com.liferay.commerce.shop.by.diagram.model.CPDefinitionDiagramEntrySoap
 				updateCPDefinitionDiagramEntry(
-					long cpDefinitionDiagramEntryId, String cpInstanceUuid,
+					long cpDefinitionDiagramEntryId, long cpInstanceId,
 					long cProductId, boolean diagram, int number, String sku,
 					String sequence,
 					com.liferay.portal.kernel.service.ServiceContext
@@ -226,7 +226,7 @@ public class CPDefinitionDiagramEntryServiceSoap {
 				returnValue =
 					CPDefinitionDiagramEntryServiceUtil.
 						updateCPDefinitionDiagramEntry(
-							cpDefinitionDiagramEntryId, cpInstanceUuid,
+							cpDefinitionDiagramEntryId, cpInstanceId,
 							cProductId, diagram, number, sku, sequence,
 							serviceContext);
 

@@ -9,15 +9,19 @@
  * distribution rights of the Software.
  */
 
-import {liferayNavigate} from 'commerce-frontend-js/utilities/index';
-import {createPortletURL} from 'frontend-js-web';
+// import {liferayNavigate} from 'commerce-frontend-js/utilities/index';
+// import {createPortletURL} from 'frontend-js-web';
 
 export default function ({currentURL, namespace}) {
-	const portletURL = createPortletURL(currentURL);
+
+	//	const portletURL = createPortletURL(currentURL);
+
 	const type = document.getElementById(`${namespace}type`);
 	const handleSelectChange = () => {
-		portletURL.searchParams.append('type', type.value);
-		liferayNavigate(portletURL.toString());
+
+		// portletURL.searchParams.append('type', type.value);
+		//		liferayNavigate(portletURL.toString());
+
 	};
 
 	type.addEventListener('change', handleSelectChange);

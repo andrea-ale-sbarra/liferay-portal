@@ -60,7 +60,7 @@ public class DiagramEntryDTOConverter
 				quantity = cpDefinitionDiagramEntry.getQuantity();
 				sequence = cpDefinitionDiagramEntry.getSequence();
 				sku = cpDefinitionDiagramEntry.getSku();
-				skuUuid = cpDefinitionDiagramEntry.getCPInstanceUuid();
+				skuId = cpDefinitionDiagramEntry.getCPInstanceId();
 			}
 		};
 	}

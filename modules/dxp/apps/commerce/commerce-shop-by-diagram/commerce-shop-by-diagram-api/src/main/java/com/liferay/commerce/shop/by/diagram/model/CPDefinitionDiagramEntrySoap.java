@@ -44,7 +44,7 @@ public class CPDefinitionDiagramEntrySoap implements Serializable {
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
 		soapModel.setCPDefinitionId(model.getCPDefinitionId());
-		soapModel.setCPInstanceUuid(model.getCPInstanceUuid());
+		soapModel.setCPInstanceId(model.getCPInstanceId());
 		soapModel.setCProductId(model.getCProductId());
 		soapModel.setDiagram(model.isDiagram());
 		soapModel.setQuantity(model.getQuantity());
@@ -169,12 +169,12 @@ public class CPDefinitionDiagramEntrySoap implements Serializable {
 		_CPDefinitionId = CPDefinitionId;
 	}
 
-	public String getCPInstanceUuid() {
-		return _CPInstanceUuid;
+	public long getCPInstanceId() {
+		return _CPInstanceId;
 	}
 
-	public void setCPInstanceUuid(String CPInstanceUuid) {
-		_CPInstanceUuid = CPInstanceUuid;
+	public void setCPInstanceId(long CPInstanceId) {
+		_CPInstanceId = CPInstanceId;
 	}
 
 	public long getCProductId() {
@@ -228,7 +228,7 @@ public class CPDefinitionDiagramEntrySoap implements Serializable {
 	private Date _createDate;
 	private Date _modifiedDate;
 	private long _CPDefinitionId;
-	private String _CPInstanceUuid;
+	private long _CPInstanceId;
 	private long _CProductId;
 	private boolean _diagram;
 	private int _quantity;

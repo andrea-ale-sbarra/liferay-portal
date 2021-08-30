@@ -55,7 +55,7 @@ public class CPDefinitionDiagramEntryServiceHttp {
 		com.liferay.commerce.shop.by.diagram.model.CPDefinitionDiagramEntry
 				addCPDefinitionDiagramEntry(
 					HttpPrincipal httpPrincipal, long cpDefinitionId,
-					String cpInstanceUuid, long cProductId, boolean diagram,
+					long cpInstanceId, long cProductId, boolean diagram,
 					int number, String sequence, String sku,
 					com.liferay.portal.kernel.service.ServiceContext
 						serviceContext)
@@ -68,7 +68,7 @@ public class CPDefinitionDiagramEntryServiceHttp {
 				_addCPDefinitionDiagramEntryParameterTypes0);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, cpDefinitionId, cpInstanceUuid, cProductId, diagram,
+				methodKey, cpDefinitionId, cpInstanceId, cProductId, diagram,
 				number, sequence, sku, serviceContext);
 
 			Object returnObj = null;
@@ -363,7 +363,7 @@ public class CPDefinitionDiagramEntryServiceHttp {
 		com.liferay.commerce.shop.by.diagram.model.CPDefinitionDiagramEntry
 				updateCPDefinitionDiagramEntry(
 					HttpPrincipal httpPrincipal,
-					long cpDefinitionDiagramEntryId, String cpInstanceUuid,
+					long cpDefinitionDiagramEntryId, long cpInstanceId,
 					long cProductId, boolean diagram, int number, String sku,
 					String sequence,
 					com.liferay.portal.kernel.service.ServiceContext
@@ -377,8 +377,8 @@ public class CPDefinitionDiagramEntryServiceHttp {
 				_updateCPDefinitionDiagramEntryParameterTypes7);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, cpDefinitionDiagramEntryId, cpInstanceUuid,
-				cProductId, diagram, number, sku, sequence, serviceContext);
+				methodKey, cpDefinitionDiagramEntryId, cpInstanceId, cProductId,
+				diagram, number, sku, sequence, serviceContext);
 
 			Object returnObj = null;
 
@@ -414,7 +414,7 @@ public class CPDefinitionDiagramEntryServiceHttp {
 
 	private static final Class<?>[]
 		_addCPDefinitionDiagramEntryParameterTypes0 = new Class[] {
-			long.class, String.class, long.class, boolean.class, int.class,
+			long.class, long.class, long.class, boolean.class, int.class,
 			String.class, String.class,
 			com.liferay.portal.kernel.service.ServiceContext.class
 		};
@@ -442,7 +442,7 @@ public class CPDefinitionDiagramEntryServiceHttp {
 		};
 	private static final Class<?>[]
 		_updateCPDefinitionDiagramEntryParameterTypes7 = new Class[] {
-			long.class, String.class, long.class, boolean.class, int.class,
+			long.class, long.class, long.class, boolean.class, int.class,
 			String.class, String.class,
 			com.liferay.portal.kernel.service.ServiceContext.class
 		};

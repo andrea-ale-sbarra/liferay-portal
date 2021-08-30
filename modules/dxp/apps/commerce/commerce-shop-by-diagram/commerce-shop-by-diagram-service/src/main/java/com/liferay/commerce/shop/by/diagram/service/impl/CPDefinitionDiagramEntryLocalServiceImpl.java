@@ -46,7 +46,7 @@ public class CPDefinitionDiagramEntryLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPDefinitionDiagramEntry addCPDefinitionDiagramEntry(
-			long userId, long cpDefinitionId, String cpInstanceUuid,
+			long userId, long cpDefinitionId, long cpInstanceId,
 			long cProductId, boolean diagram, int quantity, String sequence,
 			String sku, ServiceContext serviceContext)
 		throws PortalException {
@@ -65,7 +65,7 @@ public class CPDefinitionDiagramEntryLocalServiceImpl
 		cpDefinitionDiagramEntry.setUserId(user.getUserId());
 		cpDefinitionDiagramEntry.setUserName(user.getFullName());
 		cpDefinitionDiagramEntry.setCPDefinitionId(cpDefinitionId);
-		cpDefinitionDiagramEntry.setCPInstanceUuid(cpInstanceUuid);
+		cpDefinitionDiagramEntry.setCPInstanceId(cpInstanceId);
 		cpDefinitionDiagramEntry.setCProductId(cProductId);
 		cpDefinitionDiagramEntry.setDiagram(diagram);
 		cpDefinitionDiagramEntry.setQuantity(quantity);
@@ -141,7 +141,7 @@ public class CPDefinitionDiagramEntryLocalServiceImpl
 
 	@Override
 	public CPDefinitionDiagramEntry updateCPDefinitionDiagramEntry(
-			long cpDefinitionDiagramEntryId, String cpInstanceUuid,
+			long cpDefinitionDiagramEntryId, long cpInstanceId,
 			long cProductId, boolean diagram, int quantity, String sequence,
 			String sku, ServiceContext serviceContext)
 		throws PortalException {
@@ -154,7 +154,7 @@ public class CPDefinitionDiagramEntryLocalServiceImpl
 			cpDefinitionDiagramEntry,
 			cpDefinitionDiagramEntry.getCPDefinitionId(), sequence);
 
-		cpDefinitionDiagramEntry.setCPInstanceUuid(cpInstanceUuid);
+		cpDefinitionDiagramEntry.setCPInstanceId(cpInstanceId);
 		cpDefinitionDiagramEntry.setCProductId(cProductId);
 		cpDefinitionDiagramEntry.setDiagram(diagram);
 		cpDefinitionDiagramEntry.setQuantity(quantity);

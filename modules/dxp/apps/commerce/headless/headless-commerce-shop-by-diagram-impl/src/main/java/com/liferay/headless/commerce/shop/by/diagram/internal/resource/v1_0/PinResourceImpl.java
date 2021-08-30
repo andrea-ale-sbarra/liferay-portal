@@ -167,7 +167,7 @@ public class PinResourceImpl extends BasePinResourceImpl {
 		}
 
 		_cpDefinitionDiagramEntryService.addCPDefinitionDiagramEntry(
-			cpDefinitionId, GetterUtil.getString(diagramEntry.getSkuUuid()),
+			cpDefinitionId, GetterUtil.getLong(diagramEntry.getSkuId()),
 			GetterUtil.getLong(diagramEntry.getProductId()),
 			GetterUtil.getBoolean(diagramEntry.getDiagram()),
 			GetterUtil.getInteger(diagramEntry.getQuantity()),

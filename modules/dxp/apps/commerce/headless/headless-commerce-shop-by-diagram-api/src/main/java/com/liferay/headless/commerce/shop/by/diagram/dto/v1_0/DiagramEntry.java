@@ -250,21 +250,20 @@ public class DiagramEntry implements Serializable {
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected String sku;
 
+	@DecimalMin("0")
 	@Schema
-	public String getSkuUuid() {
-		return skuUuid;
+	public Long getSkuId() {
+		return skuId;
 	}
 
-	public void setSkuUuid(String skuUuid) {
-		this.skuUuid = skuUuid;
+	public void setSkuId(Long skuId) {
+		this.skuId = skuId;
 	}
 
 	@JsonIgnore
-	public void setSkuUuid(
-		UnsafeSupplier<String, Exception> skuUuidUnsafeSupplier) {
-
+	public void setSkuId(UnsafeSupplier<Long, Exception> skuIdUnsafeSupplier) {
 		try {
-			skuUuid = skuUuidUnsafeSupplier.get();
+			skuId = skuIdUnsafeSupplier.get();
 		}
 		catch (RuntimeException re) {
 			throw re;
@@ -276,7 +275,7 @@ public class DiagramEntry implements Serializable {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected String skuUuid;
+	protected Long skuId;
 
 	@Override
 	public boolean equals(Object object) {
@@ -383,18 +382,14 @@ public class DiagramEntry implements Serializable {
 			sb.append("\"");
 		}
 
-		if (skuUuid != null) {
+		if (skuId != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"skuUuid\": ");
+			sb.append("\"skuId\": ");
 
-			sb.append("\"");
-
-			sb.append(_escape(skuUuid));
-
-			sb.append("\"");
+			sb.append(skuId);
 		}
 
 		sb.append("}");

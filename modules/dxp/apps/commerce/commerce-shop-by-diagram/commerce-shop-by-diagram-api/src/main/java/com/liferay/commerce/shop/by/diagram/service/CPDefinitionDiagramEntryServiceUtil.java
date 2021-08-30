@@ -39,14 +39,14 @@ public class CPDefinitionDiagramEntryServiceUtil {
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.commerce.shop.by.diagram.service.impl.CPDefinitionDiagramEntryServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static CPDefinitionDiagramEntry addCPDefinitionDiagramEntry(
-			long cpDefinitionId, String cpInstanceUuid, long cProductId,
+			long cpDefinitionId, long cpInstanceId, long cProductId,
 			boolean diagram, int number, String sequence, String sku,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
 		return getService().addCPDefinitionDiagramEntry(
-			cpDefinitionId, cpInstanceUuid, cProductId, diagram, number,
-			sequence, sku, serviceContext);
+			cpDefinitionId, cpInstanceId, cProductId, diagram, number, sequence,
+			sku, serviceContext);
 	}
 
 	public static void deleteCPDefinitionDiagramEntry(
@@ -104,14 +104,13 @@ public class CPDefinitionDiagramEntryServiceUtil {
 	}
 
 	public static CPDefinitionDiagramEntry updateCPDefinitionDiagramEntry(
-			long cpDefinitionDiagramEntryId, String cpInstanceUuid,
-			long cProductId, boolean diagram, int number, String sku,
-			String sequence,
+			long cpDefinitionDiagramEntryId, long cpInstanceId, long cProductId,
+			boolean diagram, int number, String sku, String sequence,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
 		return getService().updateCPDefinitionDiagramEntry(
-			cpDefinitionDiagramEntryId, cpInstanceUuid, cProductId, diagram,
+			cpDefinitionDiagramEntryId, cpInstanceId, cProductId, diagram,
 			number, sku, sequence, serviceContext);
 	}
 

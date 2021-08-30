@@ -9,35 +9,33 @@
  * distribution rights of the Software.
  */
 
-import { fetch } from 'frontend-js-web';
+import {fetch} from 'frontend-js-web';
 
 export const HEADERS = new Headers({
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
+	Accept: 'application/json',
+	'Content-Type': 'application/json',
 });
 
-const SKUS_ENDPOINT = "/o/headless-commerce-admin-catalog/v1.0/skus";
-const DIAGRAMS_ENDPOINT = "/o/headless-commerce-admin-catalog/v1.0/products";
+const SKUS_ENDPOINT = '/o/headless-commerce-admin-catalog/v1.0/skus';
+const DIAGRAMS_ENDPOINT = '/o/headless-commerce-admin-catalog/v1.0/products';
 
 export function searchSkus(query) {
-    const url = new URL(SKUS_ENDPOINT, themeDisplay.getPortalURL());
+	const url = new URL(SKUS_ENDPOINT, themeDisplay.getPortalURL());
 
-    url.searchParams.append('search', query);
+	url.searchParams.append('search', query);
 
-    return fetch(url, {
-        headers: HEADERS,
-    })
-        .then((response) => response.json())
-};
+	return fetch(url, {
+		headers: HEADERS,
+	}).then((response) => response.json());
+}
 
 export function searchDiagrams(query) {
-    const url = new URL(DIAGRAMS_ENDPOINT, themeDisplay.getPortalURL());
+	const url = new URL(DIAGRAMS_ENDPOINT, themeDisplay.getPortalURL());
 
-    url.searchParams.append('search', query);
-    url.searchParams.append('filter', `(productType eq 'diagram')`);
+	url.searchParams.append('search', query);
+	url.searchParams.append('filter', `(productType eq 'diagram')`);
 
-    return fetch(url, {
-        headers: HEADERS,
-    })
-        .then((response) => response.json())
-};
+	return fetch(url, {
+		headers: HEADERS,
+	}).then((response) => response.json());
+}

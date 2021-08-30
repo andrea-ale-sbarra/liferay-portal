@@ -81,7 +81,7 @@ public interface CPDefinitionDiagramEntryLocalService
 
 	@Indexable(type = IndexableType.REINDEX)
 	public CPDefinitionDiagramEntry addCPDefinitionDiagramEntry(
-			long userId, long cpDefinitionId, String cpInstanceUuid,
+			long userId, long cpDefinitionId, long cpInstanceId,
 			long cProductId, boolean diagram, int quantity, String sequence,
 			String sku, ServiceContext serviceContext)
 		throws PortalException;
@@ -307,9 +307,9 @@ public interface CPDefinitionDiagramEntryLocalService
 		CPDefinitionDiagramEntry cpDefinitionDiagramEntry);
 
 	public CPDefinitionDiagramEntry updateCPDefinitionDiagramEntry(
-			long cpDefinitionDiagramEntryId, String cpInstanceUuid,
-			long cProductId, boolean diagram, int quantity, String sequence,
-			String sku, ServiceContext serviceContext)
+			long cpDefinitionDiagramEntryId, long cpInstanceId, long cProductId,
+			boolean diagram, int quantity, String sequence, String sku,
+			ServiceContext serviceContext)
 		throws PortalException;
 
 }

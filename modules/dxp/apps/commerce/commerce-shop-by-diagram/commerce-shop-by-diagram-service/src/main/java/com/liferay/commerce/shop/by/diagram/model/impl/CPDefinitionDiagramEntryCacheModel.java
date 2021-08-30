@@ -80,8 +80,8 @@ public class CPDefinitionDiagramEntryCacheModel
 		sb.append(modifiedDate);
 		sb.append(", CPDefinitionId=");
 		sb.append(CPDefinitionId);
-		sb.append(", CPInstanceUuid=");
-		sb.append(CPInstanceUuid);
+		sb.append(", CPInstanceId=");
+		sb.append(CPInstanceId);
 		sb.append(", CProductId=");
 		sb.append(CProductId);
 		sb.append(", diagram=");
@@ -130,14 +130,7 @@ public class CPDefinitionDiagramEntryCacheModel
 		}
 
 		cpDefinitionDiagramEntryImpl.setCPDefinitionId(CPDefinitionId);
-
-		if (CPInstanceUuid == null) {
-			cpDefinitionDiagramEntryImpl.setCPInstanceUuid("");
-		}
-		else {
-			cpDefinitionDiagramEntryImpl.setCPInstanceUuid(CPInstanceUuid);
-		}
-
+		cpDefinitionDiagramEntryImpl.setCPInstanceId(CPInstanceId);
 		cpDefinitionDiagramEntryImpl.setCProductId(CProductId);
 		cpDefinitionDiagramEntryImpl.setDiagram(diagram);
 		cpDefinitionDiagramEntryImpl.setQuantity(quantity);
@@ -173,7 +166,8 @@ public class CPDefinitionDiagramEntryCacheModel
 		modifiedDate = objectInput.readLong();
 
 		CPDefinitionId = objectInput.readLong();
-		CPInstanceUuid = objectInput.readUTF();
+
+		CPInstanceId = objectInput.readLong();
 
 		CProductId = objectInput.readLong();
 
@@ -204,12 +198,7 @@ public class CPDefinitionDiagramEntryCacheModel
 
 		objectOutput.writeLong(CPDefinitionId);
 
-		if (CPInstanceUuid == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(CPInstanceUuid);
-		}
+		objectOutput.writeLong(CPInstanceId);
 
 		objectOutput.writeLong(CProductId);
 
@@ -239,7 +228,7 @@ public class CPDefinitionDiagramEntryCacheModel
 	public long createDate;
 	public long modifiedDate;
 	public long CPDefinitionId;
-	public String CPInstanceUuid;
+	public long CPInstanceId;
 	public long CProductId;
 	public boolean diagram;
 	public int quantity;

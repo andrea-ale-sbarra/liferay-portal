@@ -171,9 +171,11 @@ components:
                 sku:
                     example: SKU01
                     type: string
-                skuUuid:
-                    example: 123e4567-e89b-12d3-a456-426655440001
-                    type: string
+                skuId:
+                    example: 33131
+                    format: int64
+                    minimum: 0
+                    type: integer
             type: object
         Error:
             properties:

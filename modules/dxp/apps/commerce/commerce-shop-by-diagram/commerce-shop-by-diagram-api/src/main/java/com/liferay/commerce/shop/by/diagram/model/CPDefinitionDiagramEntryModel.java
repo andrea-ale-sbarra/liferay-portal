@@ -184,19 +184,18 @@ public interface CPDefinitionDiagramEntryModel
 	public void setCPDefinitionId(long CPDefinitionId);
 
 	/**
-	 * Returns the cp instance uuid of this cp definition diagram entry.
+	 * Returns the cp instance ID of this cp definition diagram entry.
 	 *
-	 * @return the cp instance uuid of this cp definition diagram entry
+	 * @return the cp instance ID of this cp definition diagram entry
 	 */
-	@AutoEscape
-	public String getCPInstanceUuid();
+	public long getCPInstanceId();
 
 	/**
-	 * Sets the cp instance uuid of this cp definition diagram entry.
+	 * Sets the cp instance ID of this cp definition diagram entry.
 	 *
-	 * @param CPInstanceUuid the cp instance uuid of this cp definition diagram entry
+	 * @param CPInstanceId the cp instance ID of this cp definition diagram entry
 	 */
-	public void setCPInstanceUuid(String CPInstanceUuid);
+	public void setCPInstanceId(long CPInstanceId);
 
 	/**
 	 * Returns the c product ID of this cp definition diagram entry.
