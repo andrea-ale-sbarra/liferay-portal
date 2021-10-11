@@ -14,9 +14,12 @@
 
 package com.liferay.commerce.shop.by.diagram.admin.web.internal.type;
 
+import com.liferay.commerce.product.constants.CPPortletKeys;
+import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.portlet.action.ActionHelper;
-import com.liferay.commerce.shop.by.diagram.admin.web.internal.display.context.CSDiagramSettingDisplayContext;
+import com.liferay.commerce.shop.by.diagram.admin.web.internal.util.CSDiagramSettingUtil;
 import com.liferay.commerce.shop.by.diagram.configuration.CSDiagramSettingImageConfiguration;
+import com.liferay.commerce.shop.by.diagram.constants.CSDiagramWebKeys;
 import com.liferay.commerce.shop.by.diagram.model.CSDiagramSetting;
 import com.liferay.commerce.shop.by.diagram.service.CSDiagramSettingService;
 import com.liferay.commerce.shop.by.diagram.type.CSDiagramType;
@@ -26,9 +29,13 @@ import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.theme.PortletDisplay;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -79,11 +86,8 @@ public class DefaultCSDiagramType implements CSDiagramType {
 		throws Exception {
 
 		httpServletRequest.setAttribute(
-			WebKeys.PORTLET_DISPLAY_CONTEXT,
-			new CSDiagramSettingDisplayContext(
-				_actionHelper, httpServletRequest,
-				_csDiagramSettingImageConfiguration, _csDiagramSettingService,
-				_csDiagramTypeRegistry, _dlURLHelper, _itemSelector));
+			CSDiagramWebKeys.CS_DIAGRAM_CP_TYPE_PROPS,
+			_getProps(csDiagramSetting, httpServletRequest));
 
 		_jspRenderer.renderJSP(
 			_servletContext, httpServletRequest, httpServletResponse,
@@ -96,6 +100,39 @@ public class DefaultCSDiagramType implements CSDiagramType {
 		_csDiagramSettingImageConfiguration =
 			ConfigurableUtil.createConfigurable(
 				CSDiagramSettingImageConfiguration.class, properties);
+	}
+
+	private HashMap<String, Object> _getProps(
+			CSDiagramSetting csDiagramSetting,
+			HttpServletRequest httpServletRequest)
+		throws Exception {
+
+		return HashMapBuilder.<String, Object>put(
+			"diagramId", csDiagramSetting.getCSDiagramSettingId()
+		).put(
+			"imageURL",
+			CSDiagramSettingUtil.getImageURL(csDiagramSetting, _dlURLHelper)
+		).put(
+			"isAdmin",
+			() -> {
+				ThemeDisplay themeDisplay =
+					(ThemeDisplay)httpServletRequest.getAttribute(
+						WebKeys.THEME_DISPLAY);
+
+				PortletDisplay portletDisplay =
+					themeDisplay.getPortletDisplay();
+
+				return CPPortletKeys.CP_DEFINITIONS.equals(
+					portletDisplay.getPortletName());
+			}
+		).put(
+			"productId",
+			() -> {
+				CPDefinition cpDefinition = csDiagramSetting.getCPDefinition();
+
+				return cpDefinition.getCProductId();
+			}
+		).build();
 	}
 
 	@Reference
