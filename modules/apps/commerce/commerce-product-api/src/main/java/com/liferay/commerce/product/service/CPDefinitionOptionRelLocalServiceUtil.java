@@ -62,6 +62,11 @@ public class CPDefinitionOptionRelLocalServiceUtil {
 		return getService().addCPDefinitionOptionRel(cpDefinitionOptionRel);
 	}
 
+	/**
+	 * @throws PortalException
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public static CPDefinitionOptionRel addCPDefinitionOptionRel(
 			long cpDefinitionId, long cpOptionId, boolean importOptionValue,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
@@ -69,6 +74,33 @@ public class CPDefinitionOptionRelLocalServiceUtil {
 
 		return getService().addCPDefinitionOptionRel(
 			cpDefinitionId, cpOptionId, importOptionValue, serviceContext);
+	}
+
+	public static CPDefinitionOptionRel addCPDefinitionOptionRel(
+			long userId, long groupId, long cpDefinitionId, long cpOptionId,
+			boolean importOptionValue,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws PortalException {
+
+		return getService().addCPDefinitionOptionRel(
+			userId, groupId, cpDefinitionId, cpOptionId, importOptionValue,
+			serviceContext);
+	}
+
+	public static CPDefinitionOptionRel addCPDefinitionOptionRel(
+			long userId, long groupId, long cpDefinitionId, long cpOptionId,
+			Map<java.util.Locale, String> nameMap,
+			Map<java.util.Locale, String> descriptionMap,
+			String ddmFormFieldTypeName, double priority, boolean facetable,
+			boolean required, boolean skuContributor, boolean importOptionValue,
+			String priceType,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws PortalException {
+
+		return getService().addCPDefinitionOptionRel(
+			userId, groupId, cpDefinitionId, cpOptionId, nameMap,
+			descriptionMap, ddmFormFieldTypeName, priority, facetable, required,
+			skuContributor, importOptionValue, priceType, serviceContext);
 	}
 
 	public static CPDefinitionOptionRel addCPDefinitionOptionRel(
@@ -86,6 +118,11 @@ public class CPDefinitionOptionRelLocalServiceUtil {
 			importOptionValue, serviceContext);
 	}
 
+	/**
+	 * @throws PortalException
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public static CPDefinitionOptionRel addCPDefinitionOptionRel(
 			long cpDefinitionId, long cpOptionId,
 			Map<java.util.Locale, String> nameMap,

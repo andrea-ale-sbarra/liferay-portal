@@ -66,6 +66,14 @@ public interface CPDefinitionOptionRelService extends BaseService {
 	 * Never modify this interface directly. Add custom service methods to <code>com.liferay.commerce.product.service.impl.CPDefinitionOptionRelServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the cp definition option rel remote service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link CPDefinitionOptionRelServiceUtil} if injection and service tracking are not available.
 	 */
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
+			long groupId, long cpDefinitionId, long cpOptionId,
+			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
+			String ddmFormFieldTypeName, double priority, boolean facetable,
+			boolean required, boolean skuContributor, boolean importOptionValue,
+			String priceType, ServiceContext serviceContext)
+		throws PortalException;
+
+	public CPDefinitionOptionRel addCPDefinitionOptionRel(
 			long cpDefinitionId, long cpOptionId, Map<Locale, String> nameMap,
 			Map<Locale, String> descriptionMap, String ddmFormFieldTypeName,
 			double priority, boolean facetable, boolean required,
@@ -73,6 +81,11 @@ public interface CPDefinitionOptionRelService extends BaseService {
 			ServiceContext serviceContext)
 		throws PortalException;
 
+	/**
+	 * @throws PortalException
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
 			long cpDefinitionId, long cpOptionId, Map<Locale, String> nameMap,
 			Map<Locale, String> descriptionMap, String ddmFormFieldTypeName,

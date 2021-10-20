@@ -87,9 +87,28 @@ public interface CPDefinitionOptionRelLocalService
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
 		CPDefinitionOptionRel cpDefinitionOptionRel);
 
+	/**
+	 * @throws PortalException
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
 			long cpDefinitionId, long cpOptionId, boolean importOptionValue,
 			ServiceContext serviceContext)
+		throws PortalException;
+
+	public CPDefinitionOptionRel addCPDefinitionOptionRel(
+			long userId, long groupId, long cpDefinitionId, long cpOptionId,
+			boolean importOptionValue, ServiceContext serviceContext)
+		throws PortalException;
+
+	@Indexable(type = IndexableType.REINDEX)
+	public CPDefinitionOptionRel addCPDefinitionOptionRel(
+			long userId, long groupId, long cpDefinitionId, long cpOptionId,
+			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
+			String ddmFormFieldTypeName, double priority, boolean facetable,
+			boolean required, boolean skuContributor, boolean importOptionValue,
+			String priceType, ServiceContext serviceContext)
 		throws PortalException;
 
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
@@ -100,6 +119,11 @@ public interface CPDefinitionOptionRelLocalService
 			ServiceContext serviceContext)
 		throws PortalException;
 
+	/**
+	 * @throws PortalException
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	@Indexable(type = IndexableType.REINDEX)
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
 			long cpDefinitionId, long cpOptionId, Map<Locale, String> nameMap,

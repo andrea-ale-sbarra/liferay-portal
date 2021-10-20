@@ -53,6 +53,11 @@ public class CPDefinitionOptionRelLocalServiceWrapper
 			cpDefinitionOptionRel);
 	}
 
+	/**
+	 * @throws PortalException
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.commerce.product.model.CPDefinitionOptionRel
 			addCPDefinitionOptionRel(
@@ -62,6 +67,37 @@ public class CPDefinitionOptionRelLocalServiceWrapper
 
 		return _cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
 			cpDefinitionId, cpOptionId, importOptionValue, serviceContext);
+	}
+
+	@Override
+	public com.liferay.commerce.product.model.CPDefinitionOptionRel
+			addCPDefinitionOptionRel(
+				long userId, long groupId, long cpDefinitionId, long cpOptionId,
+				boolean importOptionValue,
+				com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
+			userId, groupId, cpDefinitionId, cpOptionId, importOptionValue,
+			serviceContext);
+	}
+
+	@Override
+	public com.liferay.commerce.product.model.CPDefinitionOptionRel
+			addCPDefinitionOptionRel(
+				long userId, long groupId, long cpDefinitionId, long cpOptionId,
+				java.util.Map<java.util.Locale, String> nameMap,
+				java.util.Map<java.util.Locale, String> descriptionMap,
+				String ddmFormFieldTypeName, double priority, boolean facetable,
+				boolean required, boolean skuContributor,
+				boolean importOptionValue, String priceType,
+				com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
+			userId, groupId, cpDefinitionId, cpOptionId, nameMap,
+			descriptionMap, ddmFormFieldTypeName, priority, facetable, required,
+			skuContributor, importOptionValue, priceType, serviceContext);
 	}
 
 	@Override
@@ -82,6 +118,11 @@ public class CPDefinitionOptionRelLocalServiceWrapper
 			importOptionValue, serviceContext);
 	}
 
+	/**
+	 * @throws PortalException
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.commerce.product.model.CPDefinitionOptionRel
 			addCPDefinitionOptionRel(

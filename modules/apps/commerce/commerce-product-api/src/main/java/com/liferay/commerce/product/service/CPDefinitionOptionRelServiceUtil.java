@@ -41,6 +41,22 @@ public class CPDefinitionOptionRelServiceUtil {
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.commerce.product.service.impl.CPDefinitionOptionRelServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static CPDefinitionOptionRel addCPDefinitionOptionRel(
+			long groupId, long cpDefinitionId, long cpOptionId,
+			Map<java.util.Locale, String> nameMap,
+			Map<java.util.Locale, String> descriptionMap,
+			String ddmFormFieldTypeName, double priority, boolean facetable,
+			boolean required, boolean skuContributor, boolean importOptionValue,
+			String priceType,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws PortalException {
+
+		return getService().addCPDefinitionOptionRel(
+			groupId, cpDefinitionId, cpOptionId, nameMap, descriptionMap,
+			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
+			importOptionValue, priceType, serviceContext);
+	}
+
+	public static CPDefinitionOptionRel addCPDefinitionOptionRel(
 			long cpDefinitionId, long cpOptionId,
 			Map<java.util.Locale, String> nameMap,
 			Map<java.util.Locale, String> descriptionMap,
@@ -55,6 +71,11 @@ public class CPDefinitionOptionRelServiceUtil {
 			importOptionValue, serviceContext);
 	}
 
+	/**
+	 * @throws PortalException
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public static CPDefinitionOptionRel addCPDefinitionOptionRel(
 			long cpDefinitionId, long cpOptionId,
 			Map<java.util.Locale, String> nameMap,
