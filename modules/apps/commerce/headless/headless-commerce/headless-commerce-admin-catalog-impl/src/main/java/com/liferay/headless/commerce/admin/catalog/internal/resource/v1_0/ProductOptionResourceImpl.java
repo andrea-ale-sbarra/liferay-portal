@@ -127,7 +127,7 @@ public class ProductOptionResourceImpl
 		BaseModelSearchResult<CPDefinitionOptionRel>
 			cpDefinitionOptionRelBaseModelSearchResult =
 				_cpDefinitionOptionRelService.searchCPDefinitionOptionRels(
-					cpDefinition.getCompanyId(), cpDefinition.getGroupId(),
+					cpDefinition.getCompanyId(), 0,
 					cpDefinition.getCPDefinitionId(), search,
 					pagination.getStartPosition(), pagination.getEndPosition(),
 					sorts);
