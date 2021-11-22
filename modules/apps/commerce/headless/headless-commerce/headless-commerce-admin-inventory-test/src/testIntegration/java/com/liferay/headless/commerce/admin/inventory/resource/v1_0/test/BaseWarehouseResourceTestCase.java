@@ -31,6 +31,7 @@ import com.liferay.headless.commerce.admin.inventory.client.serdes.v1_0.Warehous
 import com.liferay.petra.function.UnsafeTriConsumer;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
@@ -187,9 +188,7 @@ public abstract class BaseWarehouseResourceTestCase {
 
 		warehouse.setCity(regex);
 		warehouse.setCountryISOCode(regex);
-		warehouse.setDescription(regex);
 		warehouse.setExternalReferenceCode(regex);
-		warehouse.setName(regex);
 		warehouse.setRegionISOCode(regex);
 		warehouse.setStreet1(regex);
 		warehouse.setStreet2(regex);
@@ -205,9 +204,7 @@ public abstract class BaseWarehouseResourceTestCase {
 
 		Assert.assertEquals(regex, warehouse.getCity());
 		Assert.assertEquals(regex, warehouse.getCountryISOCode());
-		Assert.assertEquals(regex, warehouse.getDescription());
 		Assert.assertEquals(regex, warehouse.getExternalReferenceCode());
-		Assert.assertEquals(regex, warehouse.getName());
 		Assert.assertEquals(regex, warehouse.getRegionISOCode());
 		Assert.assertEquals(regex, warehouse.getStreet1());
 		Assert.assertEquals(regex, warehouse.getStreet2());
@@ -217,28 +214,30 @@ public abstract class BaseWarehouseResourceTestCase {
 	}
 
 	@Test
-	public void testDeleteWarehousByExternalReferenceCode() throws Exception {
+	public void testDeleteWarehouseByExternalReferenceCode() throws Exception {
 		@SuppressWarnings("PMD.UnusedLocalVariable")
 		Warehouse warehouse =
-			testDeleteWarehousByExternalReferenceCode_addWarehouse();
+			testDeleteWarehouseByExternalReferenceCode_addWarehouse();
 
 		assertHttpResponseStatusCode(
 			204,
-			warehouseResource.deleteWarehousByExternalReferenceCodeHttpResponse(
+			warehouseResource.
+				deleteWarehouseByExternalReferenceCodeHttpResponse(
+					warehouse.getExternalReferenceCode()));
+
+		assertHttpResponseStatusCode(
+			404,
+			warehouseResource.getWarehouseByExternalReferenceCodeHttpResponse(
 				warehouse.getExternalReferenceCode()));
 
 		assertHttpResponseStatusCode(
 			404,
-			warehouseResource.getWarehousByExternalReferenceCodeHttpResponse(
-				warehouse.getExternalReferenceCode()));
-
-		assertHttpResponseStatusCode(
-			404,
-			warehouseResource.getWarehousByExternalReferenceCodeHttpResponse(
+			warehouseResource.getWarehouseByExternalReferenceCodeHttpResponse(
 				warehouse.getExternalReferenceCode()));
 	}
 
-	protected Warehouse testDeleteWarehousByExternalReferenceCode_addWarehouse()
+	protected Warehouse
+			testDeleteWarehouseByExternalReferenceCode_addWarehouse()
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -246,19 +245,19 @@ public abstract class BaseWarehouseResourceTestCase {
 	}
 
 	@Test
-	public void testGetWarehousByExternalReferenceCode() throws Exception {
+	public void testGetWarehouseByExternalReferenceCode() throws Exception {
 		Warehouse postWarehouse =
-			testGetWarehousByExternalReferenceCode_addWarehouse();
+			testGetWarehouseByExternalReferenceCode_addWarehouse();
 
 		Warehouse getWarehouse =
-			warehouseResource.getWarehousByExternalReferenceCode(
+			warehouseResource.getWarehouseByExternalReferenceCode(
 				postWarehouse.getExternalReferenceCode());
 
 		assertEquals(postWarehouse, getWarehouse);
 		assertValid(getWarehouse);
 	}
 
-	protected Warehouse testGetWarehousByExternalReferenceCode_addWarehouse()
+	protected Warehouse testGetWarehouseByExternalReferenceCode_addWarehouse()
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -266,7 +265,7 @@ public abstract class BaseWarehouseResourceTestCase {
 	}
 
 	@Test
-	public void testGraphQLGetWarehousByExternalReferenceCode()
+	public void testGraphQLGetWarehouseByExternalReferenceCode()
 		throws Exception {
 
 		Warehouse warehouse = testGraphQLWarehouse_addWarehouse();
@@ -278,7 +277,7 @@ public abstract class BaseWarehouseResourceTestCase {
 					JSONUtil.getValueAsString(
 						invokeGraphQLQuery(
 							new GraphQLField(
-								"warehousByExternalReferenceCode",
+								"warehouseByExternalReferenceCode",
 								new HashMap<String, Object>() {
 									{
 										put(
@@ -291,11 +290,11 @@ public abstract class BaseWarehouseResourceTestCase {
 								},
 								getGraphQLFields())),
 						"JSONObject/data",
-						"Object/warehousByExternalReferenceCode"))));
+						"Object/warehouseByExternalReferenceCode"))));
 	}
 
 	@Test
-	public void testGraphQLGetWarehousByExternalReferenceCodeNotFound()
+	public void testGraphQLGetWarehouseByExternalReferenceCodeNotFound()
 		throws Exception {
 
 		String irrelevantExternalReferenceCode =
@@ -306,7 +305,7 @@ public abstract class BaseWarehouseResourceTestCase {
 			JSONUtil.getValueAsString(
 				invokeGraphQLQuery(
 					new GraphQLField(
-						"warehousByExternalReferenceCode",
+						"warehouseByExternalReferenceCode",
 						new HashMap<String, Object>() {
 							{
 								put(
@@ -320,51 +319,80 @@ public abstract class BaseWarehouseResourceTestCase {
 	}
 
 	@Test
-	public void testPatchWarehousByExternalReferenceCode() throws Exception {
+	public void testPatchWarehouseByExternalReferenceCode() throws Exception {
 		Assert.assertTrue(false);
 	}
 
 	@Test
-	public void testDeleteWarehousId() throws Exception {
+	public void testDeleteWarehouse() throws Exception {
 		@SuppressWarnings("PMD.UnusedLocalVariable")
-		Warehouse warehouse = testDeleteWarehousId_addWarehouse();
+		Warehouse warehouse = testDeleteWarehouse_addWarehouse();
 
 		assertHttpResponseStatusCode(
 			204,
-			warehouseResource.deleteWarehousIdHttpResponse(warehouse.getId()));
+			warehouseResource.deleteWarehouseHttpResponse(warehouse.getId()));
 
 		assertHttpResponseStatusCode(
-			404,
-			warehouseResource.getWarehousIdHttpResponse(warehouse.getId()));
+			404, warehouseResource.getWarehouseHttpResponse(warehouse.getId()));
 
 		assertHttpResponseStatusCode(
-			404,
-			warehouseResource.getWarehousIdHttpResponse(warehouse.getId()));
+			404, warehouseResource.getWarehouseHttpResponse(warehouse.getId()));
 	}
 
-	protected Warehouse testDeleteWarehousId_addWarehouse() throws Exception {
+	protected Warehouse testDeleteWarehouse_addWarehouse() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
 	@Test
-	public void testGetWarehousId() throws Exception {
-		Warehouse postWarehouse = testGetWarehousId_addWarehouse();
+	public void testGraphQLDeleteWarehouse() throws Exception {
+		Warehouse warehouse = testGraphQLWarehouse_addWarehouse();
 
-		Warehouse getWarehouse = warehouseResource.getWarehousId(
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"deleteWarehouse",
+						new HashMap<String, Object>() {
+							{
+								put("id", warehouse.getId());
+							}
+						})),
+				"JSONObject/data", "Object/deleteWarehouse"));
+
+		JSONArray errorsJSONArray = JSONUtil.getValueAsJSONArray(
+			invokeGraphQLQuery(
+				new GraphQLField(
+					"warehouse",
+					new HashMap<String, Object>() {
+						{
+							put("id", warehouse.getId());
+						}
+					},
+					new GraphQLField("id"))),
+			"JSONArray/errors");
+
+		Assert.assertTrue(errorsJSONArray.length() > 0);
+	}
+
+	@Test
+	public void testGetWarehouse() throws Exception {
+		Warehouse postWarehouse = testGetWarehouse_addWarehouse();
+
+		Warehouse getWarehouse = warehouseResource.getWarehouse(
 			postWarehouse.getId());
 
 		assertEquals(postWarehouse, getWarehouse);
 		assertValid(getWarehouse);
 	}
 
-	protected Warehouse testGetWarehousId_addWarehouse() throws Exception {
+	protected Warehouse testGetWarehouse_addWarehouse() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
 	@Test
-	public void testGraphQLGetWarehousId() throws Exception {
+	public void testGraphQLGetWarehouse() throws Exception {
 		Warehouse warehouse = testGraphQLWarehouse_addWarehouse();
 
 		Assert.assertTrue(
@@ -374,18 +402,18 @@ public abstract class BaseWarehouseResourceTestCase {
 					JSONUtil.getValueAsString(
 						invokeGraphQLQuery(
 							new GraphQLField(
-								"warehousId",
+								"warehouse",
 								new HashMap<String, Object>() {
 									{
 										put("id", warehouse.getId());
 									}
 								},
 								getGraphQLFields())),
-						"JSONObject/data", "Object/warehousId"))));
+						"JSONObject/data", "Object/warehouse"))));
 	}
 
 	@Test
-	public void testGraphQLGetWarehousIdNotFound() throws Exception {
+	public void testGraphQLGetWarehouseNotFound() throws Exception {
 		Long irrelevantId = RandomTestUtil.randomLong();
 
 		Assert.assertEquals(
@@ -393,7 +421,7 @@ public abstract class BaseWarehouseResourceTestCase {
 			JSONUtil.getValueAsString(
 				invokeGraphQLQuery(
 					new GraphQLField(
-						"warehousId",
+						"warehouse",
 						new HashMap<String, Object>() {
 							{
 								put("id", irrelevantId);
@@ -405,7 +433,7 @@ public abstract class BaseWarehouseResourceTestCase {
 	}
 
 	@Test
-	public void testPatchWarehousId() throws Exception {
+	public void testPatchWarehouse() throws Exception {
 		Assert.assertTrue(false);
 	}
 
@@ -430,6 +458,10 @@ public abstract class BaseWarehouseResourceTestCase {
 		assertContains(warehouse1, (List<Warehouse>)page.getItems());
 		assertContains(warehouse2, (List<Warehouse>)page.getItems());
 		assertValid(page);
+
+		warehouseResource.deleteWarehouse(warehouse1.getId());
+
+		warehouseResource.deleteWarehouse(warehouse2.getId());
 	}
 
 	@Test
@@ -687,17 +719,17 @@ public abstract class BaseWarehouseResourceTestCase {
 	}
 
 	@Test
-	public void testPostWarehous() throws Exception {
+	public void testPostWarehouse() throws Exception {
 		Warehouse randomWarehouse = randomWarehouse();
 
-		Warehouse postWarehouse = testPostWarehous_addWarehouse(
+		Warehouse postWarehouse = testPostWarehouse_addWarehouse(
 			randomWarehouse);
 
 		assertEquals(randomWarehouse, postWarehouse);
 		assertValid(postWarehouse);
 	}
 
-	protected Warehouse testPostWarehous_addWarehouse(Warehouse warehouse)
+	protected Warehouse testPostWarehouse_addWarehouse(Warehouse warehouse)
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -1059,9 +1091,9 @@ public abstract class BaseWarehouseResourceTestCase {
 			}
 
 			if (Objects.equals("description", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(
-						warehouse1.getDescription(),
-						warehouse2.getDescription())) {
+				if (!equals(
+						(Map)warehouse1.getDescription(),
+						(Map)warehouse2.getDescription())) {
 
 					return false;
 				}
@@ -1124,8 +1156,8 @@ public abstract class BaseWarehouseResourceTestCase {
 			}
 
 			if (Objects.equals("name", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(
-						warehouse1.getName(), warehouse2.getName())) {
+				if (!equals(
+						(Map)warehouse1.getName(), (Map)warehouse2.getName())) {
 
 					return false;
 				}
@@ -1329,11 +1361,8 @@ public abstract class BaseWarehouseResourceTestCase {
 		}
 
 		if (entityFieldName.equals("description")) {
-			sb.append("'");
-			sb.append(String.valueOf(warehouse.getDescription()));
-			sb.append("'");
-
-			return sb.toString();
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
 		}
 
 		if (entityFieldName.equals("externalReferenceCode")) {
@@ -1365,11 +1394,8 @@ public abstract class BaseWarehouseResourceTestCase {
 		}
 
 		if (entityFieldName.equals("name")) {
-			sb.append("'");
-			sb.append(String.valueOf(warehouse.getName()));
-			sb.append("'");
-
-			return sb.toString();
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
 		}
 
 		if (entityFieldName.equals("regionISOCode")) {
@@ -1473,14 +1499,11 @@ public abstract class BaseWarehouseResourceTestCase {
 				city = StringUtil.toLowerCase(RandomTestUtil.randomString());
 				countryISOCode = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
-				description = StringUtil.toLowerCase(
-					RandomTestUtil.randomString());
 				externalReferenceCode = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				id = RandomTestUtil.randomLong();
 				latitude = RandomTestUtil.randomDouble();
 				longitude = RandomTestUtil.randomDouble();
-				name = StringUtil.toLowerCase(RandomTestUtil.randomString());
 				regionISOCode = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				street1 = StringUtil.toLowerCase(RandomTestUtil.randomString());
