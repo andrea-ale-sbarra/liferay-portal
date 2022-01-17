@@ -120,20 +120,20 @@ public class CommerceProductInstanceDataSetDataProvider
 
 			skus.add(
 				new Sku(
-					cpInstance.getCPInstanceId(), cpInstance.getSku(),
+					stockQuantity, cpInstance.getCPInstanceId(),
+					LanguageUtil.get(httpServletRequest, discontinued),
 					HtmlUtil.escape(
 						_getOptions(
 							cpInstance.getCPDefinitionId(),
 							keyValuesJSONArray.toString(), locale)),
 					HtmlUtil.escape(_formatPrice(cpInstance, locale)),
-					cpDefinitionName, stockQuantity,
+					cpDefinitionName, cpInstance.getSku(),
 					new LabelField(
 						statusDisplayStyle,
 						LanguageUtil.get(
 							httpServletRequest,
 							WorkflowConstants.getStatusLabel(
-								cpInstance.getStatus()))),
-					LanguageUtil.get(httpServletRequest, discontinued)));
+								cpInstance.getStatus())))));
 		}
 
 		return skus;

@@ -22,18 +22,18 @@ import com.liferay.commerce.frontend.model.LabelField;
 public class Sku {
 
 	public Sku(
-		long cpInstanceId, String sku, String options, String price,
-		String productName, int availableQuantity, LabelField status,
-		String discontinued) {
+		int availableQuantity, long cpInstanceId, String discontinued,
+		String options, String price, String productName, String sku,
+		LabelField status) {
 
+		_availableQuantity = availableQuantity;
 		_cpInstanceId = cpInstanceId;
-		_sku = sku;
+		_discontinued = discontinued;
 		_options = options;
 		_price = price;
 		_productName = productName;
-		_availableQuantity = availableQuantity;
+		_sku = sku;
 		_status = status;
-		_discontinued = discontinued;
 	}
 
 	public int getAvailableQuantity() {
