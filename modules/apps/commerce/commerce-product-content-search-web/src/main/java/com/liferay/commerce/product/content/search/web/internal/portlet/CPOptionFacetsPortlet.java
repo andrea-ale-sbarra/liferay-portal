@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.search.facet.Facet;
 import com.liferay.portal.kernel.search.facet.collector.FacetCollector;
 import com.liferay.portal.kernel.search.facet.collector.TermCollector;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.search.searcher.SearchRequest;
 import com.liferay.portal.search.searcher.SearchResponse;
@@ -110,7 +111,8 @@ public class CPOptionFacetsPortlet extends MVCPortlet {
 
 			CPOptionFacetsDisplayContext cpOptionFacetsDisplayContext =
 				new CPOptionFacetsDisplayContext(
-					_cpOptionLocalService, renderRequest, filledFacets,
+					_cpOptionLocalService,
+					_portal.getHttpServletRequest(renderRequest), filledFacets,
 					getPaginationStartParameterName(
 						portletSharedSearchResponse),
 					portletSharedSearchResponse);
@@ -144,5 +146,8 @@ public class CPOptionFacetsPortlet extends MVCPortlet {
 
 	@Reference
 	private CPOptionLocalService _cpOptionLocalService;
+
+	@Reference
+	private Portal _portal;
 
 }

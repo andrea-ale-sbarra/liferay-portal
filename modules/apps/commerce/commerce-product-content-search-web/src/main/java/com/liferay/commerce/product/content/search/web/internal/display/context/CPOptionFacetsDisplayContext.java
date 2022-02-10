@@ -17,6 +17,7 @@ package com.liferay.commerce.product.content.search.web.internal.display.context
 import com.liferay.commerce.constants.CommerceWebKeys;
 import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.product.content.search.web.internal.util.CPOptionFacetsUtil;
+import com.liferay.commerce.product.display.context.helper.CPRequestHelper;
 import com.liferay.commerce.product.model.CPOption;
 import com.liferay.commerce.product.service.CPOptionLocalService;
 import com.liferay.petra.string.StringPool;
@@ -31,21 +32,28 @@ import java.util.Optional;
 
 import javax.portlet.RenderRequest;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author Marco Leo
  */
 public class CPOptionFacetsDisplayContext {
 
 	public CPOptionFacetsDisplayContext(
-		CPOptionLocalService cpOptionLocalService, RenderRequest renderRequest,
-		List<Facet> facets, String paginationStartParameterName,
-		PortletSharedSearchResponse portletSharedSearchResponse) {
+			CPOptionLocalService cpOptionLocalService,
+			HttpServletRequest httpServletRequest, List<Facet> facets,
+			String paginationStartParameterName,
+			PortletSharedSearchResponse portletSharedSearchResponse)
+		throws PortalException {
 
 		_cpOptionLocalService = cpOptionLocalService;
-		_renderRequest = renderRequest;
 		_facets = facets;
 		_paginationStartParameterName = paginationStartParameterName;
 		_portletSharedSearchResponse = portletSharedSearchResponse;
+
+		_cpRequestHelper = new CPRequestHelper(httpServletRequest);
+
+		_renderRequest = _cpRequestHelper.getRenderRequest();
 
 		_locale = _renderRequest.getLocale();
 	}
@@ -123,6 +131,7 @@ public class CPOptionFacetsDisplayContext {
 	}
 
 	private final CPOptionLocalService _cpOptionLocalService;
+	private final CPRequestHelper _cpRequestHelper;
 	private final List<Facet> _facets;
 	private final Locale _locale;
 	private final String _paginationStartParameterName;
