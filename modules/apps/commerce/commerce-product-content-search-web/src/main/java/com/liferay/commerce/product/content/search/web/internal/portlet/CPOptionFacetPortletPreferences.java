@@ -26,7 +26,7 @@ import javax.portlet.PortletPreferences;
 public class CPOptionFacetPortletPreferences {
 
 	public static final String PREFERENCE_KEY_DISPLAY_STYLE =
-		"categoryFacetDisplayStyle";
+		"cpOptionFacetDisplayStyle";
 
 	public static final String PREFERENCE_KEY_FREQUENCIES_VISIBLE =
 		"frequenciesVisible";

@@ -17,7 +17,11 @@
 <%@ include file="/init.jsp" %>
 
 <%
-CPOptionFacetPortletPreferences cpOptionFacetPortletPreferences = new CPOptionFacetPortletPreferences(java.util.Optional.ofNullable(portletPreferences));
+CPOptionsSearchFacetDisplayContext cpOptionsSearchFacetDisplayContext = new CPOptionsSearchFacetDisplayContext(request);
+
+CPOptionFacetsPortletInstanceConfiguration cpOptionFacetsPortletInstanceConfiguration = cpOptionsSearchFacetDisplayContext.getCPOptionFacetsPortletInstanceConfiguration();
+
+CPOptionFacetPortletPreferences cpOptionFacetPortletPreferences = new CPOptionFacetPortletPreferences(Optional.ofNullable(portletPreferences));
 %>
 
 <liferay-portlet:actionURL portletConfiguration="<%= true %>" var="configurationActionURL" />
@@ -38,7 +42,15 @@ CPOptionFacetPortletPreferences cpOptionFacetPortletPreferences = new CPOptionFa
 				collapsible="<%= true %>"
 				label="display-settings"
 			>
-
+				<div class="display-template">
+					<liferay-template:template-selector
+						className="<%= CPOptionsSearchFacetDisplayContext.class.getName() %>"
+						displayStyle="<%= cpOptionFacetsPortletInstanceConfiguration.displayStyle() %>"
+						displayStyleGroupId="<%= cpOptionsSearchFacetDisplayContext.getDisplayStyleGroupId() %>"
+						refreshURL="<%= configurationRenderURL %>"
+						showEmptyOption="<%= true %>"
+					/>
+				</div>
 			</liferay-frontend:fieldset>
 
 			<liferay-frontend:fieldset

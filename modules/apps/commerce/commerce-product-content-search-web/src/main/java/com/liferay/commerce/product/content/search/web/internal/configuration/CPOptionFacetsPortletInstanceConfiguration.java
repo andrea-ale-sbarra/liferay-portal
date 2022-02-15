@@ -32,10 +32,16 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 )
 public interface CPOptionFacetsPortletInstanceConfiguration {
 
-	@Meta.AD(deflt = "100", name = "max-terms", required = false)
+	@Meta.AD(deflt = "0", name = "display-style-group-id", required = false)
+	public long displayStyleGroupId();
+
+	@Meta.AD(name = "display-style", required = false)
+	public String displayStyle();
+
+	@Meta.AD(deflt = "10", name = "max-terms", required = false)
 	public int getMaxTerms();
 
-	@Meta.AD(deflt = "10", name = "frequency-treshold", required = false)
+	@Meta.AD(deflt = "1", name = "frequency-treshold", required = false)
 	public int getFrequencyThreshold();
 
 	@Meta.AD(deflt = "true", name = "display-frequencies", required = false)

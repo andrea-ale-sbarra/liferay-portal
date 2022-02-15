@@ -16,6 +16,7 @@ package com.liferay.commerce.product.content.search.web.internal.display.context
 
 import com.liferay.commerce.constants.CommerceWebKeys;
 import com.liferay.commerce.context.CommerceContext;
+import com.liferay.commerce.product.content.search.web.internal.configuration.CPOptionFacetsPortletInstanceConfiguration;
 import com.liferay.commerce.product.content.search.web.internal.util.CPOptionFacetsUtil;
 import com.liferay.commerce.product.display.context.helper.CPRequestHelper;
 import com.liferay.commerce.product.model.CPOption;
@@ -23,6 +24,8 @@ import com.liferay.commerce.product.service.CPOptionLocalService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.facet.Facet;
+import com.liferay.portal.kernel.theme.PortletDisplay;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.search.web.portlet.shared.search.PortletSharedSearchResponse;
 
@@ -56,6 +59,14 @@ public class CPOptionFacetsDisplayContext {
 		_renderRequest = _cpRequestHelper.getRenderRequest();
 
 		_locale = _renderRequest.getLocale();
+
+		ThemeDisplay themeDisplay = _cpRequestHelper.getThemeDisplay();
+
+		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
+
+		_cpOptionFacetsPortletInstanceConfiguration =
+			portletDisplay.getPortletInstanceConfiguration(
+				CPOptionFacetsPortletInstanceConfiguration.class);
 	}
 
 	public CPOption getCPOption(long companyId, String fieldName)
@@ -130,6 +141,8 @@ public class CPOptionFacetsDisplayContext {
 		return false;
 	}
 
+	private final CPOptionFacetsPortletInstanceConfiguration
+		_cpOptionFacetsPortletInstanceConfiguration;
 	private final CPOptionLocalService _cpOptionLocalService;
 	private final CPRequestHelper _cpRequestHelper;
 	private final List<Facet> _facets;

@@ -24,6 +24,12 @@
 
 <%
 CPOptionFacetsDisplayContext cpOptionFacetsDisplayContext = (CPOptionFacetsDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
+
+CPOptionsSearchFacetDisplayContext cpOptionsSearchFacetDisplayContext = new CPOptionsSearchFacetDisplayContext(request);
+
+CPOptionFacetPortletPreferences cpOptionFacetPortletPreferences = new CPOptionFacetPortletPreferences(Optional.ofNullable(portletPreferences));
+
+CPOptionFacetsPortletInstanceConfiguration cpOptionFacetsPortletInstanceConfiguration = cpOptionsSearchFacetDisplayContext.getCPOptionFacetsPortletInstanceConfiguration();
 %>
 
 <c:choose>
@@ -51,22 +57,50 @@ CPOptionFacetsDisplayContext cpOptionFacetsDisplayContext = (CPOptionFacetsDispl
 				%>
 
 					<c:if test="<%= !termCollectors.isEmpty() %>">
-
-				<liferay-ui:panel-container
-					extended="<%= true %>"
-					markupView="lexicon"
-					persistState="<%= true %>"
-				>
-					<liferay-ui:panel
-						collapsible="<%= true %>"
-						cssClass="search-facet"
-						markupView="lexicon"
-						persistState="<%= true %>"
-						title="<%= HtmlUtil.escape(cpOptionFacetsDisplayContext.getCPOptionName(companyId, facet.getFieldId())) %>"
-					>
 						<aui:form method="post" name='<%= "assetEntriesFacetForm_" + facet.getFieldName() %>'>
 							<aui:input cssClass="facet-parameter-name" name="facet-parameter-name" type="hidden" value="<%= cpOptionFacetsDisplayContext.getCPOptionKey(companyId, facet.getFieldName()) %>" />
 							<aui:input cssClass="start-parameter-name" name="start-parameter-name" type="hidden" value="<%= cpOptionFacetsDisplayContext.getPaginationStartParameterName() %>" />
+
+							<liferay-ddm:template-renderer
+								className="<%= CPOptionsSearchFacetDisplayContext.class.getName() %>"
+								contextObjects='<%=
+									HashMapBuilder.<String, Object>put(
+										"companyId", companyId
+									).put(
+										"cpOptionFacetsDisplayContext", cpOptionFacetsDisplayContext
+									).put(
+										"cpOptionsSearchFacetDisplayContext", cpOptionsSearchFacetDisplayContext
+									).put(
+										"fieldName", facet.getFieldName()
+									).put(
+										"name", liferayPortletResponse.getNamespace() + "term_" + facet.getFieldName()
+									).put(
+										"namespace", liferayPortletResponse.getNamespace()
+									).put(
+										"showFrequencies", cpOptionFacetPortletPreferences.isFrequenciesVisible()
+									).put(
+										"title", HtmlUtil.escape(cpOptionFacetsDisplayContext.getCPOptionName(companyId, facet.getFieldId()))
+									).build()
+				%>'
+								displayStyle="<%= cpOptionFacetsPortletInstanceConfiguration.displayStyle() %>"
+								displayStyleGroupId="<%= cpOptionsSearchFacetDisplayContext.getDisplayStyleGroupId() %>"
+								entries="<%= termCollectors %>"
+							>
+
+							<liferay-ui:panel-container
+								extended="<%= true %>"
+								id='<%= liferayPortletResponse.getNamespace() + "facetCPOptionsPanelContainer" %>'
+								markupView="lexicon"
+								persistState="<%= true %>"
+							>
+							<liferay-ui:panel
+								collapsible="<%= true %>"
+								cssClass="search-facet"
+								id='<%= liferayPortletResponse.getNamespace() + "facetCPOptionsPanel" %>'
+								markupView="lexicon"
+								persistState="<%= true %>"
+								title="<%= HtmlUtil.escape(cpOptionFacetsDisplayContext.getCPOptionName(companyId, facet.getFieldId())) %>"
+							>
 
 							<aui:fieldset>
 								<ul class="list-unstyled">
@@ -95,9 +129,11 @@ CPOptionFacetsDisplayContext cpOptionFacetsDisplayContext = (CPOptionFacetsDispl
 												<span class="custom-control-label-text"><%= HtmlUtil.escape(termCollector.getTerm()) %></span>
 											</span>
 
-											<small class="term-count">
-												(<%= termCollector.getFrequency() %>)
-											</small>
+											<c:if test="<%= cpOptionFacetPortletPreferences.isFrequenciesVisible() %>">
+												<small class="term-count">
+													(<%= termCollector.getFrequency() %>)
+												</small>
+											</c:if>
 										</label>
 									</div>
 								</li>
@@ -107,10 +143,10 @@ CPOptionFacetsDisplayContext cpOptionFacetsDisplayContext = (CPOptionFacetsDispl
 								%>
 
 							</aui:fieldset>
+							</liferay-ui:panel>
+							</liferay-ui:panel-container>
+							</liferay-ddm:template-renderer>
 						</aui:form>
-					</liferay-ui:panel>
-				</liferay-ui:panel-container>
-
 					</c:if>
 
 				<%

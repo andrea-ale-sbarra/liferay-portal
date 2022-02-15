@@ -32,8 +32,10 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 page import="com.liferay.commerce.product.content.constants.CPContentWebKeys" %><%@
 page import="com.liferay.commerce.product.content.render.list.CPContentListRenderer" %><%@
 page import="com.liferay.commerce.product.content.render.list.entry.CPContentListEntryRenderer" %><%@
+page import="com.liferay.commerce.product.content.search.web.internal.configuration.CPOptionFacetsPortletInstanceConfiguration" %><%@
 page import="com.liferay.commerce.product.content.search.web.internal.constants.CPSearchResultsConstants" %><%@
 page import="com.liferay.commerce.product.content.search.web.internal.display.context.CPOptionFacetsDisplayContext" %><%@
+page import="com.liferay.commerce.product.content.search.web.internal.display.context.CPOptionsSearchFacetDisplayContext" %><%@
 page import="com.liferay.commerce.product.content.search.web.internal.display.context.CPPriceRangeFacetsDisplayContext" %><%@
 page import="com.liferay.commerce.product.content.search.web.internal.display.context.CPSearchResultsDisplayContext" %><%@
 page import="com.liferay.commerce.product.content.search.web.internal.display.context.CPSpecificationOptionFacetsDisplayContext" %><%@
@@ -54,7 +56,8 @@ page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.PortalUtil" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %>
 
-<%@ page import="java.util.List" %>
+<%@ page import="java.util.List" %><%@
+page import="java.util.Optional" %>
 
 <liferay-frontend:defineObjects />
 
