@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.liferay.commerce.constants.CommerceWebKeys" %><%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -19,7 +19,7 @@
 <%
 CommerceAccountEntryDisplay commerceAccountEntryDisplay = CommerceAccountEntryDisplay.of(ParamUtil.getLong(request, "accountEntryId"));
 
-CommercePaymentMethodRegistry commercePaymentMethodRegistry = (CommercePaymentMethodRegistry)request.getAttribute("CommercePaymentMethodRegistry");
+CommercePaymentMethodRegistry commercePaymentMethodRegistry = (CommercePaymentMethodRegistry)request.getAttribute(CommerceWebKeys.COMMERCE_PAYMENT_METHOD_REGISTRY);
 %>
 
 <clay:sheet-section

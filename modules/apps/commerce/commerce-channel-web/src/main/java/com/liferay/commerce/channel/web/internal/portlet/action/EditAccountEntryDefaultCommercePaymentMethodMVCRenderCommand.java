@@ -15,6 +15,7 @@
 package com.liferay.commerce.channel.web.internal.portlet.action;
 
 import com.liferay.account.constants.AccountPortletKeys;
+import com.liferay.commerce.constants.CommerceWebKeys;
 import com.liferay.commerce.payment.method.CommercePaymentMethodRegistry;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.constants.MVCRenderConstants;
@@ -55,7 +56,8 @@ public class EditAccountEntryDefaultCommercePaymentMethodMVCRenderCommand
 				"/dynamic_include/select_default_commerce_payment_method.jsp");
 
 		renderRequest.setAttribute(
-			"CommercePaymentMethodRegistry", _commercePaymentMethodRegistry);
+			CommerceWebKeys.COMMERCE_PAYMENT_METHOD_REGISTRY,
+			_commercePaymentMethodRegistry);
 
 		try {
 			requestDispatcher.include(

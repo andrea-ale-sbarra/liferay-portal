@@ -14,6 +14,7 @@
 
 package com.liferay.commerce.channel.web.internal.servlet.taglib;
 
+import com.liferay.commerce.constants.CommerceWebKeys;
 import com.liferay.commerce.payment.method.CommercePaymentMethodRegistry;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -43,7 +44,8 @@ public class DefaultCommercePaymentMethodsJSPDynamicInclude
 		throws IOException {
 
 		httpServletRequest.setAttribute(
-			"CommercePaymentMethodRegistry", _commercePaymentMethodRegistry);
+			CommerceWebKeys.COMMERCE_PAYMENT_METHOD_REGISTRY,
+			_commercePaymentMethodRegistry);
 
 		super.include(httpServletRequest, httpServletResponse, key);
 	}

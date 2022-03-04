@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.liferay.commerce.constants.CommerceWebKeys" %><%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-CommercePaymentMethodRegistry commercePaymentMethodRegistry = (CommercePaymentMethodRegistry)request.getAttribute("CommercePaymentMethodRegistry");
+CommercePaymentMethodRegistry commercePaymentMethodRegistry = (CommercePaymentMethodRegistry)request.getAttribute(CommerceWebKeys.COMMERCE_PAYMENT_METHOD_REGISTRY);
 
 SearchContainer<CommercePaymentMethodDisplay> accountEntryCommercePaymentMethodDisplaySearchContainer = AccountEntryCommercePaymentMethodDisplaySearchContainerFactory.create(liferayPortletRequest, liferayPortletResponse, commercePaymentMethodRegistry);
 
