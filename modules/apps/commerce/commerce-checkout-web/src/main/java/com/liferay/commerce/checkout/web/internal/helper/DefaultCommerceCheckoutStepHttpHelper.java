@@ -400,13 +400,6 @@ public class DefaultCommerceCheckoutStepHttpHelper
 			}
 		}
 
-		if (!_hasCommerceOrderPermission(
-				CommerceOrderActionKeys.MANAGE_COMMERCE_ORDER_SHIPPING_OPTIONS,
-				commerceOrder, httpServletRequest)) {
-
-			return false;
-		}
-
 		return true;
 	}
 
