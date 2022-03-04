@@ -40,6 +40,7 @@ page import="com.liferay.commerce.channel.web.internal.frontend.CommerceShipping
 page import="com.liferay.commerce.channel.web.internal.frontend.CommerceTaxMethodClayTable" %><%@
 page import="com.liferay.commerce.channel.web.internal.servlet.taglib.ui.constants.CommerceChannelScreenNavigationConstants" %><%@
 page import="com.liferay.commerce.constants.CommerceOrderConstants" %><%@
+page import="com.liferay.commerce.constants.CommerceWebKeys" %><%@
 page import="com.liferay.commerce.currency.model.CommerceCurrency" %><%@
 page import="com.liferay.commerce.payment.method.CommercePaymentMethod" %><%@
 page import="com.liferay.commerce.payment.method.CommercePaymentMethodRegistry" %><%@
