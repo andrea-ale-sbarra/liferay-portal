@@ -197,13 +197,6 @@ public class DefaultCommerceCheckoutStepHttpHelper
 			HttpServletRequest httpServletRequest, CommerceOrder commerceOrder)
 		throws PortalException {
 
-		if (!_hasCommerceOrderPermission(
-				CommerceOrderActionKeys.MANAGE_COMMERCE_ORDER_PAYMENT_METHODS,
-				commerceOrder, httpServletRequest)) {
-
-			return false;
-		}
-
 		long commercePaymentMethodGroupRelsCount =
 			_commercePaymentEngine.getCommercePaymentMethodGroupRelsCount(
 				commerceOrder.getGroupId());
@@ -258,25 +251,57 @@ public class DefaultCommerceCheckoutStepHttpHelper
 			if ((accountEntry != null) &&
 				(accountEntry.getDefaultCPaymentMethodKey() != null)) {
 
-				Stream<CommercePaymentMethod> commercePaymentMethodsStream =
-					commercePaymentMethods.stream();
+				if (Validator.isNull(
+						commerceOrder.getCommercePaymentMethodKey())) {
 
-				CommercePaymentMethod commercePaymentMethod =
-					commercePaymentMethodsStream.filter(
-						cpm -> cpm.getKey(
-						).equals(
-							accountEntry.getDefaultCPaymentMethodKey()
-						)
-					).findFirst(
-					).orElse(
-						commercePaymentMethods.get(0)
-					);
+					Stream<CommercePaymentMethod> commercePaymentMethodsStream =
+						commercePaymentMethods.stream();
 
-				_updateCommerceOrder(
-					httpServletRequest, commerceOrder,
-					commercePaymentMethod.getKey());
+					CommercePaymentMethod commercePaymentMethod =
+						commercePaymentMethodsStream.filter(
+							curCommercePaymentMethod -> {
+								String key = curCommercePaymentMethod.getKey();
 
-				return false;
+								return key.equals(
+									accountEntry.getDefaultCPaymentMethodKey());
+							}
+						).findFirst(
+						).orElse(
+							commercePaymentMethods.get(0)
+						);
+
+					_updateCommerceOrder(
+						httpServletRequest, commerceOrder,
+						commercePaymentMethod.getKey());
+				}
+
+				if (!_hasCommerceOrderPermission(
+						CommerceOrderActionKeys.
+							MANAGE_COMMERCE_ORDER_PAYMENT_METHODS,
+						commerceOrder, httpServletRequest)) {
+
+					return false;
+				}
+			}
+			else {
+				if (Validator.isNull(
+						commerceOrder.getCommercePaymentMethodKey())) {
+
+					CommercePaymentMethod commercePaymentMethod =
+						commercePaymentMethods.get(0);
+
+					_updateCommerceOrder(
+						httpServletRequest, commerceOrder,
+						commercePaymentMethod.getKey());
+				}
+
+				if (!_hasCommerceOrderPermission(
+						CommerceOrderActionKeys.
+							MANAGE_COMMERCE_ORDER_PAYMENT_METHODS,
+						commerceOrder, httpServletRequest)) {
+
+					return false;
+				}
 			}
 		}
 
@@ -377,7 +402,8 @@ public class DefaultCommerceCheckoutStepHttpHelper
 
 		if (!_hasCommerceOrderPermission(
 				CommerceOrderActionKeys.MANAGE_COMMERCE_ORDER_SHIPPING_OPTIONS,
-				commerceOrder, httpServletRequest)){
+				commerceOrder, httpServletRequest)) {
+
 			return false;
 		}
 
