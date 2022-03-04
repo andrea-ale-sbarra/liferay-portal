@@ -334,10 +334,7 @@ public class DefaultCommerceCheckoutStepHttpHelper
 			(CommerceOrder)httpServletRequest.getAttribute(
 				CommerceCheckoutWebKeys.COMMERCE_ORDER);
 
-		if (!_hasCommerceOrderPermission(
-				CommerceOrderActionKeys.MANAGE_COMMERCE_ORDER_SHIPPING_OPTIONS,
-				commerceOrder, httpServletRequest) ||
-			!_commerceShippingHelper.isShippable(commerceOrder) ||
+		if (!_commerceShippingHelper.isShippable(commerceOrder) ||
 			_commerceShippingHelper.isFreeShipping(commerceOrder)) {
 
 			return false;
@@ -376,6 +373,12 @@ public class DefaultCommerceCheckoutStepHttpHelper
 
 				return false;
 			}
+		}
+
+		if (!_hasCommerceOrderPermission(
+				CommerceOrderActionKeys.MANAGE_COMMERCE_ORDER_SHIPPING_OPTIONS,
+				commerceOrder, httpServletRequest)){
+			return false;
 		}
 
 		return true;
