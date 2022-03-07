@@ -512,6 +512,7 @@ public class CommercePaymentEngineImpl implements CommercePaymentEngine {
 								getCommercePaymentMethodGroupRelId());
 
 			if ((commerceOrderTypeId > 0) &&
+				ListUtil.isNotEmpty(commercePaymentMethodGroupRelQualifiers) &&
 				!ListUtil.exists(
 					commercePaymentMethodGroupRelQualifiers,
 					commercePaymentMethodGroupRelQualifier -> {
