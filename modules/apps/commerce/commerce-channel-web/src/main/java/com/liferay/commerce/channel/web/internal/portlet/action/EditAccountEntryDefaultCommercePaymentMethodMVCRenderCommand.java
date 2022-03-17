@@ -78,7 +78,7 @@ public class EditAccountEntryDefaultCommercePaymentMethodMVCRenderCommand
 	private Portal _portal;
 
 	@Reference(
-		target = "(osgi.web.symbolicname=com.liferay.commerce.channel.web)"
+		target = "(osgi.web.symbolicname=com.liferay.commerce.payment.web)"
 	)
 	private ServletContext _servletContext;
 
