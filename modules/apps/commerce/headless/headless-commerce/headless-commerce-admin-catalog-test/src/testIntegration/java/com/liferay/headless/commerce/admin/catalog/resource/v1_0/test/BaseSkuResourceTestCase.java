@@ -1122,14 +1122,6 @@ public abstract class BaseSkuResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("options", additionalAssertFieldName)) {
-				if (sku.getOptions() == null) {
-					valid = false;
-				}
-
-				continue;
-			}
-
 			if (Objects.equals("price", additionalAssertFieldName)) {
 				if (sku.getPrice() == null) {
 					valid = false;
@@ -1199,6 +1191,14 @@ public abstract class BaseSkuResourceTestCase {
 
 			if (Objects.equals("sku", additionalAssertFieldName)) {
 				if (sku.getSku() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("skuOptions", additionalAssertFieldName)) {
+				if (sku.getSkuOptions() == null) {
 					valid = false;
 				}
 
@@ -1447,14 +1447,6 @@ public abstract class BaseSkuResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("options", additionalAssertFieldName)) {
-				if (!equals((Map)sku1.getOptions(), (Map)sku2.getOptions())) {
-					return false;
-				}
-
-				continue;
-			}
-
 			if (Objects.equals("price", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(sku1.getPrice(), sku2.getPrice())) {
 					return false;
@@ -1541,6 +1533,16 @@ public abstract class BaseSkuResourceTestCase {
 
 			if (Objects.equals("sku", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(sku1.getSku(), sku2.getSku())) {
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("skuOptions", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						sku1.getSkuOptions(), sku2.getSkuOptions())) {
+
 					return false;
 				}
 
@@ -1823,11 +1825,6 @@ public abstract class BaseSkuResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
-		if (entityFieldName.equals("options")) {
-			throw new IllegalArgumentException(
-				"Invalid entity field " + entityFieldName);
-		}
-
 		if (entityFieldName.equals("price")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -1878,6 +1875,11 @@ public abstract class BaseSkuResourceTestCase {
 			sb.append("'");
 
 			return sb.toString();
+		}
+
+		if (entityFieldName.equals("skuOptions")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
 		}
 
 		if (entityFieldName.equals("unspsc")) {
