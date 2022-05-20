@@ -149,7 +149,7 @@ Map<String, String> contextParams = HashMapBuilder.<String, String>put(
 
 				<div class="mb-4" id="autocomplete-root"></div>
 
-				<aui:select label="price-type" name="priceDisplayType">
+				<aui:select label="price-type" name="priceDisplayType" >
 
 					<%
 					String priceDisplayType = commerceChannel.getPriceDisplayType();
@@ -161,7 +161,7 @@ Map<String, String> contextParams = HashMapBuilder.<String, String>put(
 
 				<aui:select label="discounts-target-price-type" name="discountsTargetNetPrice">
 					<aui:option label="net-price" selected="<%= commerceChannel.isDiscountsTargetNetPrice() %>" value="true" />
-					<aui:option label="gross-price" selected="<%= commerceChannel.isDiscountsTargetNetPrice() %>" value="false" />
+					<aui:option label="gross-price" selected="<%= !commerceChannel.isDiscountsTargetNetPrice() %>" value="false" />
 				</aui:select>
 			</commerce-ui:panel>
 		</div>
