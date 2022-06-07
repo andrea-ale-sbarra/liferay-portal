@@ -10,7 +10,7 @@
 		'info quantity price delete'
 		'errors errors errors errors';
 	grid-template-columns: auto 90px minmax(min-content, 100px) min-content;
-	overflow: visible;
+	overflow: hidden;
 	position: relative;
 	transition: height 0.2s ease-in, padding 0.1s ease-in;
 	width: 100%;
@@ -41,13 +41,13 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-		width: 100%;
+		width: 250px;
 
 		& *:not(& .child-items-quantity) {
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
-			width: 100%;
+			width: 250px;
 		}
 
 		&.has-options {
