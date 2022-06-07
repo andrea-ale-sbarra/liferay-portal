@@ -37,6 +37,7 @@ import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -87,7 +88,7 @@ public class CustomFieldsUtil {
 		Locale locale) {
 
 		if (customFields == null) {
-			return null;
+			return Collections.emptyMap();
 		}
 
 		ExpandoBridge expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(
