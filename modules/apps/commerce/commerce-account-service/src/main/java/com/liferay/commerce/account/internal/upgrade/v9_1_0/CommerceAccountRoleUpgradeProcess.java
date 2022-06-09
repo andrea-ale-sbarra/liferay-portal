@@ -162,12 +162,18 @@ public class CommerceAccountRoleUpgradeProcess extends UpgradeProcess {
 	private boolean _hasNonaccountEntryGroup(long roleId) throws Exception {
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
 				StringBundler.concat(
-					"select count(distinct UserGroupRole.groupId) from ",
-					"UserGroupRole inner join Group_ on Group_.classNameId != ",
-					"'",
+					"select count(*) from (select distinct ",
+					"UserGroupRole.groupId from UserGroupRole inner join ",
+					"Group_ on Group_.classNameId != '",
 					_classNameLocalService.getClassNameId(AccountEntry.class),
 					"' and Group_.groupId = UserGroupRole.groupId where ",
-					"UserGroupRole.roleId = ", roleId))) {
+					"UserGroupRole.roleId = ", roleId, " union select ",
+					"distinct UserGroupGroupRole.groupId from ",
+					"UserGroupGroupRole inner join Group_ on ",
+					"Group_.classNameId != '",
+					_classNameLocalService.getClassNameId(AccountEntry.class),
+					"' and Group_.groupId = UserGroupGroupRole.groupId where ",
+					"UserGroupGroupRole.roleId = ", roleId, ") as count"))) {
 
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				while (resultSet.next()) {
