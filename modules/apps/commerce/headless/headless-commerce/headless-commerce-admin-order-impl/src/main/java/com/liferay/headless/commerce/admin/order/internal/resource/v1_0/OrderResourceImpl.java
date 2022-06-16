@@ -55,6 +55,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
@@ -74,6 +75,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import javax.ws.rs.HttpMethod;
@@ -485,7 +487,7 @@ public class OrderResourceImpl
 
 		return stream.map(
 			OrderItem::getExternalReferenceCode
-		).distinct(
+		).filter(Objects::nonNull).distinct(
 		).toArray(
 			String[]::new
 		);
@@ -496,7 +498,8 @@ public class OrderResourceImpl
 
 		return stream.map(
 			OrderItem::getId
-		).distinct(
+		).filter(Objects::nonNull)
+			.distinct(
 		).toArray(
 			Long[]::new
 		);
@@ -524,10 +527,21 @@ public class OrderResourceImpl
 		OrderItem[] orderItems = order.getOrderItems();
 
 		if (orderItems != null) {
+			Long[] longs = _getOrderItemIds(orderItems);
+			String[] strings = _getOrderItemExternalReferenceCodes(orderItems);
+
+			if (ArrayUtil.isEmpty(longs)) {
+				longs = new Long[]{0L};
+			}
+
+			if (ArrayUtil.isEmpty(strings)) {
+				strings = null;
+			}
+
 			_commerceOrderItemService.deleteMissingCommerceOrderItems(
 				commerceOrder.getCommerceOrderId(),
-				_getOrderItemIds(orderItems),
-				_getOrderItemExternalReferenceCodes(orderItems));
+				longs,
+				strings);
 
 			for (OrderItem orderItem : orderItems) {
 				OrderItemUtil.addOrUpdateCommerceOrderItem(

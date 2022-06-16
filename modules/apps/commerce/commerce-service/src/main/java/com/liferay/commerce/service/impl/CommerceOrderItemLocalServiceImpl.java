@@ -111,9 +111,9 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem addCommerceOrderItem(
-			long commerceOrderId, long cpInstanceId, String json, int quantity,
-			int shippedQuantity, CommerceContext commerceContext,
-			ServiceContext serviceContext)
+		long commerceOrderId, long cpInstanceId, String json, int quantity,
+		int shippedQuantity, CommerceContext commerceContext,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		if (Validator.isBlank(json)) {
@@ -198,9 +198,9 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceOrderItem addOrUpdateCommerceOrderItem(
-			long commerceOrderId, long cpInstanceId, int quantity,
-			int shippedQuantity, CommerceContext commerceContext,
-			ServiceContext serviceContext)
+		long commerceOrderId, long cpInstanceId, int quantity,
+		int shippedQuantity, CommerceContext commerceContext,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		String cpInstanceOptionValueRelJSONString =
@@ -213,9 +213,9 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceOrderItem addOrUpdateCommerceOrderItem(
-			long commerceOrderId, long cpInstanceId, String json, int quantity,
-			int shippedQuantity, CommerceContext commerceContext,
-			ServiceContext serviceContext)
+		long commerceOrderId, long cpInstanceId, String json, int quantity,
+		int shippedQuantity, CommerceContext commerceContext,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		List<CommerceOrderItem> commerceOrderItems = getCommerceOrderItems(
@@ -247,7 +247,7 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public CommerceOrderItem deleteCommerceOrderItem(
-			CommerceOrderItem commerceOrderItem)
+		CommerceOrderItem commerceOrderItem)
 		throws PortalException {
 
 		validateParentCommerceOrderId(commerceOrderItem);
@@ -258,8 +258,8 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public CommerceOrderItem deleteCommerceOrderItem(
-			CommerceOrderItem commerceOrderItem,
-			CommerceContext commerceContext)
+		CommerceOrderItem commerceOrderItem,
+		CommerceContext commerceContext)
 		throws PortalException {
 
 		// Commerce order item
@@ -324,8 +324,8 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public void deleteMissingCommerceOrderItems(
-			long commerceOrderId, Long[] commerceOrderItemIds,
-			String[] externalReferenceCodes)
+		long commerceOrderId, Long[] commerceOrderItemIds,
+		String[] externalReferenceCodes)
 		throws PortalException {
 
 		List<Long> commerceOrderItemIdsList = dslQuery(
@@ -350,9 +350,15 @@ public class CommerceOrderItemLocalServiceImpl
 									commerceOrderItemId.in(
 										commerceOrderItemIds
 									).or(
-										CommerceOrderItemTable.INSTANCE.
-											externalReferenceCode.in(
-												externalReferenceCodes)
+										() -> {
+											if (externalReferenceCodes == null) {
+												return null;
+											}
+
+											return CommerceOrderItemTable.INSTANCE.
+												externalReferenceCode.in(
+													externalReferenceCodes);
+										}
 									)
 							)
 						))
@@ -402,7 +408,7 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public int getCommerceInventoryWarehouseItemQuantity(
-			long commerceOrderItemId, long commerceInventoryWarehouseId)
+		long commerceOrderItemId, long commerceInventoryWarehouseId)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -501,10 +507,10 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem importCommerceOrderItem(
-			String externalReferenceCode, long commerceOrderItemId,
-			long commerceOrderId, long cpInstanceId,
-			String cpMeasurementUnitKey, BigDecimal decimalQuantity,
-			int quantity, int shippedQuantity, ServiceContext serviceContext)
+		String externalReferenceCode, long commerceOrderItemId,
+		long commerceOrderId, long cpInstanceId,
+		String cpMeasurementUnitKey, BigDecimal decimalQuantity,
+		int quantity, int shippedQuantity, ServiceContext serviceContext)
 		throws PortalException {
 
 		CommerceOrder commerceOrder =
@@ -554,7 +560,7 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceOrderItem incrementShippedQuantity(
-			long commerceOrderItemId, int shippedQuantity)
+		long commerceOrderItemId, int shippedQuantity)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -574,8 +580,8 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public BaseModelSearchResult<CommerceOrderItem> searchCommerceOrderItems(
-			long commerceOrderId, long parentCommerceOrderItemId,
-			String keywords, int start, int end, Sort sort)
+		long commerceOrderId, long parentCommerceOrderItemId,
+		String keywords, int start, int end, Sort sort)
 		throws PortalException {
 
 		SearchContext searchContext = buildSearchContext(
@@ -588,8 +594,8 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public BaseModelSearchResult<CommerceOrderItem> searchCommerceOrderItems(
-			long commerceOrderId, String keywords, int start, int end,
-			Sort sort)
+		long commerceOrderId, String keywords, int start, int end,
+		Sort sort)
 		throws PortalException {
 
 		SearchContext searchContext = buildSearchContext(
@@ -602,8 +608,8 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public BaseModelSearchResult<CommerceOrderItem> searchCommerceOrderItems(
-			long commerceOrderId, String name, String sku, boolean andOperator,
-			int start, int end, Sort sort)
+		long commerceOrderId, String name, String sku, boolean andOperator,
+		int start, int end, Sort sort)
 		throws PortalException {
 
 		SearchContext searchContext = buildSearchContext(
@@ -618,8 +624,8 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceOrderItem updateCommerceOrderItem(
-			long commerceOrderItemId, int quantity,
-			CommerceContext commerceContext, ServiceContext serviceContext)
+		long commerceOrderItemId, int quantity,
+		CommerceContext commerceContext, ServiceContext serviceContext)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -632,7 +638,7 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceOrderItem updateCommerceOrderItem(
-			long commerceOrderItemId, long bookedQuantityId)
+		long commerceOrderItemId, long bookedQuantityId)
 		throws NoSuchOrderItemException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -645,8 +651,8 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceOrderItem updateCommerceOrderItem(
-			long commerceOrderItemId, long cpMeasurementUnitId, int quantity,
-			CommerceContext commerceContext, ServiceContext serviceContext)
+		long commerceOrderItemId, long cpMeasurementUnitId, int quantity,
+		CommerceContext commerceContext, ServiceContext serviceContext)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -665,8 +671,8 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceOrderItem updateCommerceOrderItem(
-			long commerceOrderItemId, long cpMeasurementUnitId, int quantity,
-			ServiceContext serviceContext)
+		long commerceOrderItemId, long cpMeasurementUnitId, int quantity,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -686,8 +692,8 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem updateCommerceOrderItem(
-			long commerceOrderItemId, String json, int quantity,
-			CommerceContext commerceContext, ServiceContext serviceContext)
+		long commerceOrderItemId, String json, int quantity,
+		CommerceContext commerceContext, ServiceContext serviceContext)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -709,7 +715,7 @@ public class CommerceOrderItemLocalServiceImpl
 			_commerceOptionValueHelper.toCommerceOptionValues(json);
 
 		for (CommerceOrderItem childCommerceOrderItem :
-				childCommerceOrderItems) {
+			childCommerceOrderItems) {
 
 			CommerceOptionValue commerceOptionValue =
 				_commerceOptionValueHelper.toCommerceOptionValue(
@@ -755,8 +761,8 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem updateCommerceOrderItem(
-			long commerceOrderItemId, String json, int quantity,
-			ServiceContext serviceContext)
+		long commerceOrderItemId, String json, int quantity,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -777,7 +783,7 @@ public class CommerceOrderItemLocalServiceImpl
 			_commerceOptionValueHelper.toCommerceOptionValues(json);
 
 		for (CommerceOrderItem childCommerceOrderItem :
-				childCommerceOrderItems) {
+			childCommerceOrderItems) {
 
 			CommerceOptionValue commerceOptionValue =
 				_commerceOptionValueHelper.toCommerceOptionValue(
@@ -806,7 +812,7 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem updateCommerceOrderItemDeliveryDate(
-			long commerceOrderItemId, Date requestedDeliveryDate)
+		long commerceOrderItemId, Date requestedDeliveryDate)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -820,8 +826,8 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem updateCommerceOrderItemInfo(
-			long commerceOrderItemId, long shippingAddressId,
-			String deliveryGroup, String printedNote)
+		long commerceOrderItemId, long shippingAddressId,
+		String deliveryGroup, String printedNote)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -837,10 +843,10 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem updateCommerceOrderItemInfo(
-			long commerceOrderItemId, long shippingAddressId,
-			String deliveryGroup, String printedNote,
-			int requestedDeliveryDateMonth, int requestedDeliveryDateDay,
-			int requestedDeliveryDateYear)
+		long commerceOrderItemId, long shippingAddressId,
+		String deliveryGroup, String printedNote,
+		int requestedDeliveryDateMonth, int requestedDeliveryDateDay,
+		int requestedDeliveryDateYear)
 		throws PortalException {
 
 		Date requestedDeliveryDate = PortalUtil.getDate(
@@ -864,11 +870,11 @@ public class CommerceOrderItemLocalServiceImpl
 	@Deprecated
 	@Override
 	public CommerceOrderItem updateCommerceOrderItemInfo(
-			long commerceOrderItemId, String deliveryGroup,
-			long shippingAddressId, String printedNote,
-			int requestedDeliveryDateMonth, int requestedDeliveryDateDay,
-			int requestedDeliveryDateYear, int requestedDeliveryDateHour,
-			int requestedDeliveryDateMinute, ServiceContext serviceContext)
+		long commerceOrderItemId, String deliveryGroup,
+		long shippingAddressId, String printedNote,
+		int requestedDeliveryDateMonth, int requestedDeliveryDateDay,
+		int requestedDeliveryDateYear, int requestedDeliveryDateHour,
+		int requestedDeliveryDateMinute, ServiceContext serviceContext)
 		throws PortalException {
 
 		return commerceOrderItemLocalService.updateCommerceOrderItemInfo(
@@ -880,7 +886,7 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem updateCommerceOrderItemPrice(
-			long commerceOrderItemId, CommerceContext commerceContext)
+		long commerceOrderItemId, CommerceContext commerceContext)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -903,7 +909,7 @@ public class CommerceOrderItemLocalServiceImpl
 				commerceOrderItemId);
 
 		for (CommerceOrderItem childCommerceOrderItem :
-				childCommerceOrderItems) {
+			childCommerceOrderItems) {
 
 			CommerceOptionValue commerceOptionValue =
 				_commerceOptionValueHelper.toCommerceOptionValue(
@@ -939,12 +945,12 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem updateCommerceOrderItemPrices(
-			long commerceOrderItemId, BigDecimal discountAmount,
-			BigDecimal discountPercentageLevel1,
-			BigDecimal discountPercentageLevel2,
-			BigDecimal discountPercentageLevel3,
-			BigDecimal discountPercentageLevel4, BigDecimal finalPrice,
-			BigDecimal promoPrice, BigDecimal unitPrice)
+		long commerceOrderItemId, BigDecimal discountAmount,
+		BigDecimal discountPercentageLevel1,
+		BigDecimal discountPercentageLevel2,
+		BigDecimal discountPercentageLevel3,
+		BigDecimal discountPercentageLevel4, BigDecimal finalPrice,
+		BigDecimal promoPrice, BigDecimal unitPrice)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -952,15 +958,15 @@ public class CommerceOrderItemLocalServiceImpl
 
 		validateParentCommerceOrderId(commerceOrderItem);
 
-		commerceOrderItem.setDiscountAmount(discountAmount);
-		commerceOrderItem.setDiscountPercentageLevel1(discountPercentageLevel1);
-		commerceOrderItem.setDiscountPercentageLevel2(discountPercentageLevel2);
-		commerceOrderItem.setDiscountPercentageLevel3(discountPercentageLevel3);
-		commerceOrderItem.setDiscountPercentageLevel4(discountPercentageLevel4);
-		commerceOrderItem.setFinalPrice(finalPrice);
+		commerceOrderItem.setDiscountAmount(_getNonNullValue(discountAmount));
+		commerceOrderItem.setDiscountPercentageLevel1(_getNonNullValue(discountPercentageLevel1));
+		commerceOrderItem.setDiscountPercentageLevel2(_getNonNullValue(discountPercentageLevel2));
+		commerceOrderItem.setDiscountPercentageLevel3(_getNonNullValue(discountPercentageLevel3));
+		commerceOrderItem.setDiscountPercentageLevel4(_getNonNullValue(discountPercentageLevel4));
+		commerceOrderItem.setFinalPrice(_getNonNullValue(finalPrice));
 		commerceOrderItem.setManuallyAdjusted(true);
-		commerceOrderItem.setPromoPrice(promoPrice);
-		commerceOrderItem.setUnitPrice(unitPrice);
+		commerceOrderItem.setPromoPrice(_getNonNullValue(promoPrice));
+		commerceOrderItem.setUnitPrice(_getNonNullValue(unitPrice));
 
 		return commerceOrderItemPersistence.update(commerceOrderItem);
 	}
@@ -968,47 +974,55 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem updateCommerceOrderItemPrices(
-			long commerceOrderItemId, BigDecimal discountAmount,
-			BigDecimal discountAmountWithTaxAmount,
-			BigDecimal discountPercentageLevel1,
-			BigDecimal discountPercentageLevel1WithTaxAmount,
-			BigDecimal discountPercentageLevel2,
-			BigDecimal discountPercentageLevel2WithTaxAmount,
-			BigDecimal discountPercentageLevel3,
-			BigDecimal discountPercentageLevel3WithTaxAmount,
-			BigDecimal discountPercentageLevel4,
-			BigDecimal discountPercentageLevel4WithTaxAmount,
-			BigDecimal finalPrice, BigDecimal finalPriceWithTaxAmount,
-			BigDecimal promoPrice, BigDecimal promoPriceWithTaxAmount,
-			BigDecimal unitPrice, BigDecimal unitPriceWithTaxAmount)
+		long commerceOrderItemId, BigDecimal discountAmount,
+		BigDecimal discountAmountWithTaxAmount,
+		BigDecimal discountPercentageLevel1,
+		BigDecimal discountPercentageLevel1WithTaxAmount,
+		BigDecimal discountPercentageLevel2,
+		BigDecimal discountPercentageLevel2WithTaxAmount,
+		BigDecimal discountPercentageLevel3,
+		BigDecimal discountPercentageLevel3WithTaxAmount,
+		BigDecimal discountPercentageLevel4,
+		BigDecimal discountPercentageLevel4WithTaxAmount,
+		BigDecimal finalPrice, BigDecimal finalPriceWithTaxAmount,
+		BigDecimal promoPrice, BigDecimal promoPriceWithTaxAmount,
+		BigDecimal unitPrice, BigDecimal unitPriceWithTaxAmount)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
 			commerceOrderItemPersistence.findByPrimaryKey(commerceOrderItemId);
 
-		commerceOrderItem.setDiscountAmount(discountAmount);
-		commerceOrderItem.setDiscountPercentageLevel1(discountPercentageLevel1);
-		commerceOrderItem.setDiscountPercentageLevel2(discountPercentageLevel2);
-		commerceOrderItem.setDiscountPercentageLevel3(discountPercentageLevel3);
-		commerceOrderItem.setDiscountPercentageLevel4(discountPercentageLevel4);
+		commerceOrderItem.setDiscountAmount(_getNonNullValue(discountAmount));
+		commerceOrderItem.setDiscountPercentageLevel1(_getNonNullValue(discountPercentageLevel1));
+		commerceOrderItem.setDiscountPercentageLevel2(_getNonNullValue(discountPercentageLevel2));
+		commerceOrderItem.setDiscountPercentageLevel3(_getNonNullValue(discountPercentageLevel3));
+		commerceOrderItem.setDiscountPercentageLevel4(_getNonNullValue(discountPercentageLevel4));
 		commerceOrderItem.setDiscountPercentageLevel1WithTaxAmount(
-			discountPercentageLevel1WithTaxAmount);
+			_getNonNullValue(discountPercentageLevel1WithTaxAmount));
 		commerceOrderItem.setDiscountPercentageLevel2WithTaxAmount(
-			discountPercentageLevel2WithTaxAmount);
+			_getNonNullValue(discountPercentageLevel2WithTaxAmount));
 		commerceOrderItem.setDiscountPercentageLevel3WithTaxAmount(
-			discountPercentageLevel3WithTaxAmount);
+			_getNonNullValue(discountPercentageLevel3WithTaxAmount));
 		commerceOrderItem.setDiscountPercentageLevel4WithTaxAmount(
-			discountPercentageLevel4WithTaxAmount);
-		commerceOrderItem.setDiscountWithTaxAmount(discountAmountWithTaxAmount);
-		commerceOrderItem.setFinalPrice(finalPrice);
-		commerceOrderItem.setFinalPriceWithTaxAmount(finalPriceWithTaxAmount);
+			_getNonNullValue(discountPercentageLevel4WithTaxAmount));
+		commerceOrderItem.setDiscountWithTaxAmount(_getNonNullValue(discountAmountWithTaxAmount));
+		commerceOrderItem.setFinalPrice(_getNonNullValue(finalPrice));
+		commerceOrderItem.setFinalPriceWithTaxAmount(_getNonNullValue(finalPriceWithTaxAmount));
 		commerceOrderItem.setManuallyAdjusted(true);
-		commerceOrderItem.setPromoPrice(promoPrice);
-		commerceOrderItem.setPromoPriceWithTaxAmount(promoPriceWithTaxAmount);
-		commerceOrderItem.setUnitPrice(unitPrice);
-		commerceOrderItem.setUnitPriceWithTaxAmount(unitPriceWithTaxAmount);
+		commerceOrderItem.setPromoPrice(_getNonNullValue(promoPrice));
+		commerceOrderItem.setPromoPriceWithTaxAmount(_getNonNullValue(promoPriceWithTaxAmount));
+		commerceOrderItem.setUnitPrice(_getNonNullValue(unitPrice));
+		commerceOrderItem.setUnitPriceWithTaxAmount(_getNonNullValue(unitPriceWithTaxAmount));
 
 		return commerceOrderItemPersistence.update(commerceOrderItem);
+	}
+
+	private BigDecimal _getNonNullValue(BigDecimal value) {
+		if (value != null) {
+			return value;
+		}
+
+		return BigDecimal.ZERO;
 	}
 
 	/**
@@ -1017,7 +1031,7 @@ public class CommerceOrderItemLocalServiceImpl
 	@Deprecated
 	@Override
 	public CommerceOrderItem updateCommerceOrderItemUnitPrice(
-			long commerceOrderItemId, BigDecimal unitPrice)
+		long commerceOrderItemId, BigDecimal unitPrice)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -1030,8 +1044,8 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceOrderItem updateCommerceOrderItemUnitPrice(
-			long userId, long commerceOrderItemId, BigDecimal decimalQuantity,
-			BigDecimal unitPrice)
+		long userId, long commerceOrderItemId, BigDecimal decimalQuantity,
+		BigDecimal unitPrice)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -1050,8 +1064,8 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceOrderItem updateCommerceOrderItemUnitPrice(
-			long userId, long commerceOrderItemId, int quantity,
-			BigDecimal unitPrice)
+		long userId, long commerceOrderItemId, int quantity,
+		BigDecimal unitPrice)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -1071,7 +1085,7 @@ public class CommerceOrderItemLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem updateCustomFields(
-			long commerceOrderItemId, ServiceContext serviceContext)
+		long commerceOrderItemId, ServiceContext serviceContext)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -1086,7 +1100,7 @@ public class CommerceOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceOrderItem updateExternalReferenceCode(
-			long commerceOrderItemId, String externalReferenceCode)
+		long commerceOrderItemId, String externalReferenceCode)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -1099,8 +1113,8 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	protected SearchContext buildSearchContext(
-			long commerceOrderId, Long parentCommerceOrderItemId, int start,
-			int end, Sort sort)
+		long commerceOrderId, Long parentCommerceOrderItemId, int start,
+		int end, Sort sort)
 		throws PortalException {
 
 		SearchContext searchContext = new SearchContext();
@@ -1161,7 +1175,7 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	protected BaseModelSearchResult<CommerceOrderItem> searchCommerceOrderItems(
-			SearchContext searchContext)
+		SearchContext searchContext)
 		throws PortalException {
 
 		Indexer<CommerceOrderItem> indexer =
@@ -1184,7 +1198,7 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	protected CommerceOrder updateWorkflow(
-			CommerceOrder commerceOrder, ServiceContext serviceContext)
+		CommerceOrder commerceOrder, ServiceContext serviceContext)
 		throws PortalException {
 
 		WorkflowDefinitionLink workflowDefinitionLink =
@@ -1204,8 +1218,8 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	protected void validate(
-			Locale locale, CommerceOrder commerceOrder,
-			CPDefinition cpDefinition, CPInstance cpInstance, int quantity)
+		Locale locale, CommerceOrder commerceOrder,
+		CPDefinition cpDefinition, CPInstance cpInstance, int quantity)
 		throws PortalException {
 
 		if (commerceOrder.getUserId() == 0) {
@@ -1213,7 +1227,7 @@ public class CommerceOrderItemLocalServiceImpl
 				commerceOrder.getCommerceOrderId());
 
 			if (count >=
-					_commerceOrderConfiguration.guestCartItemMaxAllowed()) {
+				_commerceOrderConfiguration.guestCartItemMaxAllowed()) {
 
 				throw new GuestCartItemMaxAllowedException();
 			}
@@ -1221,7 +1235,7 @@ public class CommerceOrderItemLocalServiceImpl
 
 		if ((cpDefinition != null) && (cpInstance != null) &&
 			(cpDefinition.getCPDefinitionId() !=
-				cpInstance.getCPDefinitionId())) {
+			 cpInstance.getCPDefinitionId())) {
 
 			throw new NoSuchCPInstanceException(
 				StringBundler.concat(
@@ -1243,7 +1257,7 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	protected void validateParentCommerceOrderId(
-			CommerceOrderItem commerceOrderItem)
+		CommerceOrderItem commerceOrderItem)
 		throws PortalException {
 
 		if (commerceOrderItem.getParentCommerceOrderItemId() != 0) {
@@ -1257,10 +1271,10 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private CommerceOrderItem _createCommerceOrderItem(
-			long groupId, User user, CommerceOrder commerceOrder,
-			CPInstance cpInstance, long parentCommerceOrderItemId, String json,
-			int quantity, int shippedQuantity, CommerceContext commerceContext,
-			ServiceContext serviceContext)
+		long groupId, User user, CommerceOrder commerceOrder,
+		CPInstance cpInstance, long parentCommerceOrderItemId, String json,
+		int quantity, int shippedQuantity, CommerceContext commerceContext,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinition cpDefinition = _cpDefinitionLocalService.getCPDefinition(
@@ -1334,7 +1348,7 @@ public class CommerceOrderItemLocalServiceImpl
 				commerceOrderItemId);
 
 		for (CommerceOrderItem childCommerceOrderItem :
-				childCommerceOrderItems) {
+			childCommerceOrderItems) {
 
 			childCommerceOrderItem.setParentCommerceOrderItemId(0);
 
@@ -1344,7 +1358,7 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private CommerceOrderItem _deleteCommerceOrderItem(
-			CommerceOrderItem commerceOrderItem)
+		CommerceOrderItem commerceOrderItem)
 		throws PortalException {
 
 		// Bundle order items
@@ -1384,8 +1398,8 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private CommerceProductPrice _getCommerceProductPrice(
-			long cpDefinitionId, long cpInstanceId, String json, int quantity,
-			CommerceContext commerceContext)
+		long cpDefinitionId, long cpInstanceId, String json, int quantity,
+		CommerceContext commerceContext)
 		throws PortalException {
 
 		CommerceProductPriceRequest commerceProductPriceRequest =
@@ -1404,7 +1418,7 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private BigDecimal _getConvertedPrice(
-			long cpInstanceId, BigDecimal price, CommerceOrder commerceOrder)
+		long cpInstanceId, BigDecimal price, CommerceOrder commerceOrder)
 		throws PortalException {
 
 		return CommercePriceConverterUtil.getConvertedPrice(
@@ -1426,8 +1440,8 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private CommerceProductPrice _getStaticCommerceProductPrice(
-			long cpInstanceId, int quantity, BigDecimal optionValuePrice,
-			CommerceOrder commerceOrder, CommerceCurrency commerceCurrency)
+		long cpInstanceId, int quantity, BigDecimal optionValuePrice,
+		CommerceOrder commerceOrder, CommerceCurrency commerceCurrency)
 		throws PortalException {
 
 		CommerceProductPriceImpl commerceProductPriceImpl =
@@ -1478,7 +1492,7 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private List<CommerceOptionValue> _getStaticOptionValuesNotLinkedToSku(
-			long cpDefinitionId, String jsonArrayString)
+		long cpDefinitionId, String jsonArrayString)
 		throws PortalException {
 
 		List<CommerceOptionValue> commerceOptionValues =
@@ -1499,7 +1513,7 @@ public class CommerceOrderItemLocalServiceImpl
 
 	private boolean _isStaticPriceType(Object value) {
 		if (Objects.equals(
-				value, CPConstants.PRODUCT_OPTION_PRICE_TYPE_STATIC)) {
+			value, CPConstants.PRODUCT_OPTION_PRICE_TYPE_STATIC)) {
 
 			return true;
 		}
@@ -1651,9 +1665,9 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private void _setCommerceOrderItemPrice(
-			CommerceOrderItem commerceOrderItem,
-			CommerceProductPrice commerceProductPrice,
-			CommerceContext commerceContext)
+		CommerceOrderItem commerceOrderItem,
+		CommerceProductPrice commerceProductPrice,
+		CommerceContext commerceContext)
 		throws PortalException {
 
 		CPInstance cpInstance = commerceOrderItem.fetchCPInstance();
@@ -1681,7 +1695,7 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private void _setDimensions(
-			CommerceOrderItem commerceOrderItem, CPInstance cpInstance)
+		CommerceOrderItem commerceOrderItem, CPInstance cpInstance)
 		throws PortalException {
 
 		CPDefinition cpDefinition = _cpDefinitionLocalService.getCPDefinition(
@@ -1713,7 +1727,7 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private void _setSubscriptionInfo(
-			CommerceOrderItem commerceOrderItem, CPInstance cpInstance)
+		CommerceOrderItem commerceOrderItem, CPInstance cpInstance)
 		throws PortalException {
 
 		if (cpInstance.isOverrideSubscriptionInfo()) {
@@ -1769,8 +1783,8 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private void _updateBookedQuantity(
-			long userId, CommerceOrderItem commerceOrderItem,
-			long bookedQuantityId, int quantity, int oldQuantity)
+		long userId, CommerceOrderItem commerceOrderItem,
+		long bookedQuantityId, int quantity, int oldQuantity)
 		throws PortalException {
 
 		if ((oldQuantity != quantity) && (bookedQuantityId > 0)) {
@@ -1800,9 +1814,9 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private CommerceOrderItem _updateCommerceOrderItem(
-			CommerceOrderItem commerceOrderItem, String externalReferenceCode,
-			User user, CommerceOrder commerceOrder, CPInstance cpInstance,
-			int quantity, int shippedQuantity, ServiceContext serviceContext)
+		CommerceOrderItem commerceOrderItem, String externalReferenceCode,
+		User user, CommerceOrder commerceOrder, CPInstance cpInstance,
+		int quantity, int shippedQuantity, ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinition cpDefinition = _cpDefinitionLocalService.getCPDefinition(
@@ -1862,9 +1876,9 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private CommerceOrderItem _updateCommerceOrderItem(
-			long commerceOrderItemId, int quantity, String json,
-			CommerceProductPrice commerceProductPrice,
-			CommerceContext commerceContext, ServiceContext serviceContext)
+		long commerceOrderItemId, int quantity, String json,
+		CommerceProductPrice commerceProductPrice,
+		CommerceContext commerceContext, ServiceContext serviceContext)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
@@ -1920,8 +1934,8 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private CommerceOrderItem _updateCommerceOrderItem(
-			long commerceOrderItemId, int quantity, String json,
-			ServiceContext serviceContext)
+		long commerceOrderItemId, int quantity, String json,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		CommerceOrderItem commerceOrderItem =
