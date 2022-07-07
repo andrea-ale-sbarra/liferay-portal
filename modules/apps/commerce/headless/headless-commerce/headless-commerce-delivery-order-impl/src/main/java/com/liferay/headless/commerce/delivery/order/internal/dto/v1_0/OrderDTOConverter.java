@@ -20,6 +20,7 @@ import com.liferay.commerce.currency.model.CommerceMoney;
 import com.liferay.commerce.currency.util.CommercePriceFormatter;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderType;
+import com.liferay.commerce.model.CommerceShippingMethod;
 import com.liferay.commerce.payment.engine.CommercePaymentEngine;
 import com.liferay.commerce.pricing.constants.CommercePricingConstants;
 import com.liferay.commerce.product.model.CommerceChannel;
@@ -131,7 +132,20 @@ public class OrderDTOConverter implements DTOConverter<CommerceOrder, Order> {
 				paymentStatusLabel = commerceOrderPaymentStatusLabel;
 				printedNote = commerceOrder.getPrintedNote();
 				purchaseOrderNumber = commerceOrder.getPurchaseOrderNumber();
+
+				setShippingMethod(
+					() -> {
+						CommerceShippingMethod commerceShippingMethod =
+							commerceOrder.getCommerceShippingMethod();
+
+						if (commerceShippingMethod == null) {
+							return null;
+						}
+
+						return commerceShippingMethod.getEngineKey();
+					});
 				shippingAddressId = commerceOrder.getShippingAddressId();
+				shippingOption = commerceOrder.getShippingOptionName();
 				status = commerceOrderWorkflowStatusLabel;
 				summary = _getSummary(commerceOrder, locale);
 				workflowStatusInfo = _toStatus(
