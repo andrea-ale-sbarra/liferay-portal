@@ -697,6 +697,14 @@ public abstract class BaseOrderResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("shipmentInfos", additionalAssertFieldName)) {
+				if (order.getShipmentInfos() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("shippingAddress", additionalAssertFieldName)) {
 				if (order.getShippingAddress() == null) {
 					valid = false;
@@ -1155,6 +1163,16 @@ public abstract class BaseOrderResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("shipmentInfos", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						order1.getShipmentInfos(), order2.getShipmentInfos())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("shippingAddress", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
 						order1.getShippingAddress(),
@@ -1597,6 +1615,11 @@ public abstract class BaseOrderResourceTestCase {
 			sb.append("'");
 
 			return sb.toString();
+		}
+
+		if (entityFieldName.equals("shipmentInfos")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
 		}
 
 		if (entityFieldName.equals("shippingAddress")) {

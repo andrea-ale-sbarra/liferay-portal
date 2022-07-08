@@ -17,6 +17,7 @@ package com.liferay.headless.commerce.delivery.order.client.serdes.v1_0;
 import com.liferay.headless.commerce.delivery.order.client.dto.v1_0.Order;
 import com.liferay.headless.commerce.delivery.order.client.dto.v1_0.OrderComment;
 import com.liferay.headless.commerce.delivery.order.client.dto.v1_0.OrderItem;
+import com.liferay.headless.commerce.delivery.order.client.dto.v1_0.ShipmentInfo;
 import com.liferay.headless.commerce.delivery.order.client.json.BaseJSONParser;
 
 import java.text.DateFormat;
@@ -423,6 +424,26 @@ public class OrderSerDes {
 			sb.append("\"");
 		}
 
+		if (order.getShipmentInfos() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"shipmentInfos\": ");
+
+			sb.append("[");
+
+			for (int i = 0; i < order.getShipmentInfos().length; i++) {
+				sb.append(String.valueOf(order.getShipmentInfos()[i]));
+
+				if ((i + 1) < order.getShipmentInfos().length) {
+					sb.append(", ");
+				}
+			}
+
+			sb.append("]");
+		}
+
 		if (order.getShippingAddress() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -755,6 +776,13 @@ public class OrderSerDes {
 				String.valueOf(order.getPurchaseOrderNumber()));
 		}
 
+		if (order.getShipmentInfos() == null) {
+			map.put("shipmentInfos", null);
+		}
+		else {
+			map.put("shipmentInfos", String.valueOf(order.getShipmentInfos()));
+		}
+
 		if (order.getShippingAddress() == null) {
 			map.put("shippingAddress", null);
 		}
@@ -1015,6 +1043,18 @@ public class OrderSerDes {
 
 				if (jsonParserFieldValue != null) {
 					order.setPurchaseOrderNumber((String)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "shipmentInfos")) {
+				if (jsonParserFieldValue != null) {
+					order.setShipmentInfos(
+						Stream.of(
+							toStrings((Object[])jsonParserFieldValue)
+						).map(
+							object -> ShipmentInfoSerDes.toDTO((String)object)
+						).toArray(
+							size -> new ShipmentInfo[size]
+						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "shippingAddress")) {

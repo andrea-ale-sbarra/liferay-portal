@@ -20,6 +20,7 @@ import com.liferay.headless.commerce.delivery.order.resource.v1_0.AddressResourc
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.OrderCommentResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.OrderItemResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.OrderResource;
+import com.liferay.headless.commerce.delivery.order.resource.v1_0.ShipmentInfoResource;
 import com.liferay.portal.vulcan.graphql.servlet.ServletData;
 
 import javax.annotation.Generated;
@@ -49,6 +50,8 @@ public class ServletDataImpl implements ServletData {
 			_orderCommentResourceComponentServiceObjects);
 		Query.setOrderItemResourceComponentServiceObjects(
 			_orderItemResourceComponentServiceObjects);
+		Query.setShipmentInfoResourceComponentServiceObjects(
+			_shipmentInfoResourceComponentServiceObjects);
 	}
 
 	@Override
@@ -81,5 +84,9 @@ public class ServletDataImpl implements ServletData {
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<OrderItemResource>
 		_orderItemResourceComponentServiceObjects;
+
+	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
+	private ComponentServiceObjects<ShipmentInfoResource>
+		_shipmentInfoResourceComponentServiceObjects;
 
 }

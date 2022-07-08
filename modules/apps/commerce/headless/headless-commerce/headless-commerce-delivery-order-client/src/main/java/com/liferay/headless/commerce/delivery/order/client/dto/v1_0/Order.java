@@ -605,6 +605,27 @@ public class Order implements Cloneable, Serializable {
 
 	protected String purchaseOrderNumber;
 
+	public ShipmentInfo[] getShipmentInfos() {
+		return shipmentInfos;
+	}
+
+	public void setShipmentInfos(ShipmentInfo[] shipmentInfos) {
+		this.shipmentInfos = shipmentInfos;
+	}
+
+	public void setShipmentInfos(
+		UnsafeSupplier<ShipmentInfo[], Exception> shipmentInfosUnsafeSupplier) {
+
+		try {
+			shipmentInfos = shipmentInfosUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected ShipmentInfo[] shipmentInfos;
+
 	public Address getShippingAddress() {
 		return shippingAddress;
 	}

@@ -18,10 +18,12 @@ import com.liferay.headless.commerce.delivery.order.dto.v1_0.Address;
 import com.liferay.headless.commerce.delivery.order.dto.v1_0.Order;
 import com.liferay.headless.commerce.delivery.order.dto.v1_0.OrderComment;
 import com.liferay.headless.commerce.delivery.order.dto.v1_0.OrderItem;
+import com.liferay.headless.commerce.delivery.order.dto.v1_0.ShipmentInfo;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.AddressResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.OrderCommentResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.OrderItemResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.OrderResource;
+import com.liferay.headless.commerce.delivery.order.resource.v1_0.ShipmentInfoResource;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.search.Sort;
@@ -86,6 +88,14 @@ public class Query {
 			orderItemResourceComponentServiceObjects;
 	}
 
+	public static void setShipmentInfoResourceComponentServiceObjects(
+		ComponentServiceObjects<ShipmentInfoResource>
+			shipmentInfoResourceComponentServiceObjects) {
+
+		_shipmentInfoResourceComponentServiceObjects =
+			shipmentInfoResourceComponentServiceObjects;
+	}
+
 	/**
 	 * Invoke this method with the command line:
 	 *
@@ -142,7 +152,7 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {order(orderId: ___){account, accountId, author, billingAddress, billingAddressId, channelId, couponCode, createDate, currencyCode, customFields, errorMessages, id, lastPriceUpdateDate, modifiedDate, orderComments, orderItems, orderStatusInfo, orderTypeExternalReferenceCode, orderTypeId, orderUUID, paymentMethod, paymentMethodLabel, paymentStatus, paymentStatusInfo, paymentStatusLabel, printedNote, purchaseOrderNumber, shippingAddress, shippingAddressId, shippingMethod, shippingOption, status, summary, useAsBilling, valid, workflowStatusInfo}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {order(orderId: ___){account, accountId, author, billingAddress, billingAddressId, channelId, couponCode, createDate, currencyCode, customFields, errorMessages, id, lastPriceUpdateDate, modifiedDate, orderComments, orderItems, orderStatusInfo, orderTypeExternalReferenceCode, orderTypeId, orderUUID, paymentMethod, paymentMethodLabel, paymentStatus, paymentStatusInfo, paymentStatusLabel, printedNote, purchaseOrderNumber, shipmentInfos, shippingAddress, shippingAddressId, shippingMethod, shippingOption, status, summary, useAsBilling, valid, workflowStatusInfo}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField(description = "Retrive information of the given Order.")
 	public Order order(@GraphQLName("orderId") Long orderId) throws Exception {
@@ -243,6 +253,43 @@ public class Query {
 					orderId, skuId, Pagination.of(page, pageSize))));
 	}
 
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {orderShipmentInfos(orderId: ___, page: ___, pageSize: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
+	 */
+	@GraphQLField(description = "Retrive order shipments of a Order.")
+	public ShipmentInfoPage orderShipmentInfos(
+			@GraphQLName("orderId") Long orderId,
+			@GraphQLName("pageSize") int pageSize,
+			@GraphQLName("page") int page)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_shipmentInfoResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			shipmentInfoResource -> new ShipmentInfoPage(
+				shipmentInfoResource.getOrderShipmentInfosPage(
+					orderId, Pagination.of(page, pageSize))));
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {shipmentInfo(shipmentInfoId: ___){accountId, carrier, createDate, expectedDate, id, modifiedDate, orderId, shippingAddressId, shippingDate, shippingMethodId, shippingOptionName, status, trackingNumber, userName}}"}' -u 'test@liferay.com:test'
+	 */
+	@GraphQLField
+	public ShipmentInfo shipmentInfo(
+			@GraphQLName("shipmentInfoId") Long shipmentInfoId)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_shipmentInfoResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			shipmentInfoResource -> shipmentInfoResource.getShipmentInfo(
+				shipmentInfoId));
+	}
+
 	@GraphQLTypeExtension(Order.class)
 	public class GetOrderShippingAddresTypeExtension {
 
@@ -263,11 +310,11 @@ public class Query {
 
 	}
 
-	@GraphQLTypeExtension(OrderComment.class)
+	@GraphQLTypeExtension(ShipmentInfo.class)
 	public class GetOrderTypeExtension {
 
-		public GetOrderTypeExtension(OrderComment orderComment) {
-			_orderComment = orderComment;
+		public GetOrderTypeExtension(ShipmentInfo shipmentInfo) {
+			_shipmentInfo = shipmentInfo;
 		}
 
 		@GraphQLField(description = "Retrive information of the given Order.")
@@ -276,10 +323,10 @@ public class Query {
 				_orderResourceComponentServiceObjects,
 				Query.this::_populateResourceContext,
 				orderResource -> orderResource.getOrder(
-					_orderComment.getOrderId()));
+					_shipmentInfo.getOrderId()));
 		}
 
-		private OrderComment _orderComment;
+		private ShipmentInfo _shipmentInfo;
 
 	}
 
@@ -508,6 +555,39 @@ public class Query {
 
 	}
 
+	@GraphQLName("ShipmentInfoPage")
+	public class ShipmentInfoPage {
+
+		public ShipmentInfoPage(Page shipmentInfoPage) {
+			actions = shipmentInfoPage.getActions();
+
+			items = shipmentInfoPage.getItems();
+			lastPage = shipmentInfoPage.getLastPage();
+			page = shipmentInfoPage.getPage();
+			pageSize = shipmentInfoPage.getPageSize();
+			totalCount = shipmentInfoPage.getTotalCount();
+		}
+
+		@GraphQLField
+		protected Map<String, Map> actions;
+
+		@GraphQLField
+		protected java.util.Collection<ShipmentInfo> items;
+
+		@GraphQLField
+		protected long lastPage;
+
+		@GraphQLField
+		protected long page;
+
+		@GraphQLField
+		protected long pageSize;
+
+		@GraphQLField
+		protected long totalCount;
+
+	}
+
 	@GraphQLTypeExtension(OrderItem.class)
 	public class ParentOrderItemOrderItemIdTypeExtension {
 
@@ -605,6 +685,21 @@ public class Query {
 		orderItemResource.setRoleLocalService(_roleLocalService);
 	}
 
+	private void _populateResourceContext(
+			ShipmentInfoResource shipmentInfoResource)
+		throws Exception {
+
+		shipmentInfoResource.setContextAcceptLanguage(_acceptLanguage);
+		shipmentInfoResource.setContextCompany(_company);
+		shipmentInfoResource.setContextHttpServletRequest(_httpServletRequest);
+		shipmentInfoResource.setContextHttpServletResponse(
+			_httpServletResponse);
+		shipmentInfoResource.setContextUriInfo(_uriInfo);
+		shipmentInfoResource.setContextUser(_user);
+		shipmentInfoResource.setGroupLocalService(_groupLocalService);
+		shipmentInfoResource.setRoleLocalService(_roleLocalService);
+	}
+
 	private static ComponentServiceObjects<AddressResource>
 		_addressResourceComponentServiceObjects;
 	private static ComponentServiceObjects<OrderResource>
@@ -613,6 +708,8 @@ public class Query {
 		_orderCommentResourceComponentServiceObjects;
 	private static ComponentServiceObjects<OrderItemResource>
 		_orderItemResourceComponentServiceObjects;
+	private static ComponentServiceObjects<ShipmentInfoResource>
+		_shipmentInfoResourceComponentServiceObjects;
 
 	private AcceptLanguage _acceptLanguage;
 	private com.liferay.portal.kernel.model.Company _company;

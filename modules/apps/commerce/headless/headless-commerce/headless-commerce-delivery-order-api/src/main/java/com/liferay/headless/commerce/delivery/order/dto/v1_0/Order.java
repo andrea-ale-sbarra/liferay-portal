@@ -828,6 +828,35 @@ public class Order implements Serializable {
 
 	@Schema
 	@Valid
+	public ShipmentInfo[] getShipmentInfos() {
+		return shipmentInfos;
+	}
+
+	public void setShipmentInfos(ShipmentInfo[] shipmentInfos) {
+		this.shipmentInfos = shipmentInfos;
+	}
+
+	@JsonIgnore
+	public void setShipmentInfos(
+		UnsafeSupplier<ShipmentInfo[], Exception> shipmentInfosUnsafeSupplier) {
+
+		try {
+			shipmentInfos = shipmentInfosUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected ShipmentInfo[] shipmentInfos;
+
+	@Schema
+	@Valid
 	public Address getShippingAddress() {
 		return shippingAddress;
 	}
@@ -1469,6 +1498,26 @@ public class Order implements Serializable {
 			sb.append(_escape(purchaseOrderNumber));
 
 			sb.append("\"");
+		}
+
+		if (shipmentInfos != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"shipmentInfos\": ");
+
+			sb.append("[");
+
+			for (int i = 0; i < shipmentInfos.length; i++) {
+				sb.append(String.valueOf(shipmentInfos[i]));
+
+				if ((i + 1) < shipmentInfos.length) {
+					sb.append(", ");
+				}
+			}
+
+			sb.append("]");
 		}
 
 		if (shippingAddress != null) {

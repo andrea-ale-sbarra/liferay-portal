@@ -89,6 +89,8 @@ public class OpenAPIResourceImpl {
 
 			add(OrderItemResourceImpl.class);
 
+			add(ShipmentInfoResourceImpl.class);
+
 			add(OpenAPIResourceImpl.class);
 		}
 	};
