@@ -25,6 +25,7 @@ import com.liferay.commerce.inventory.util.comparator.CommerceInventoryWarehouse
 import com.liferay.commerce.inventory.util.comparator.CommerceInventoryWarehouseNameComparator;
 import com.liferay.commerce.model.CommerceAddress;
 import com.liferay.commerce.model.CommerceAddressRestriction;
+import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceShipment;
 import com.liferay.commerce.model.CommerceShipmentItem;
 import com.liferay.commerce.util.comparator.CommerceAddressCreateDateComparator;
@@ -63,6 +64,14 @@ public class CommerceUtil {
 		CommerceAccount commerceAccount = commerceContext.getCommerceAccount();
 
 		if (commerceAccount != null) {
+			return commerceAccount.getCommerceAccountId();
+		}
+
+		CommerceOrder commerceOrder = commerceContext.getCommerceOrder();
+
+		if (commerceOrder != null) {
+			commerceAccount = commerceOrder.getCommerceAccount();
+
 			return commerceAccount.getCommerceAccountId();
 		}
 

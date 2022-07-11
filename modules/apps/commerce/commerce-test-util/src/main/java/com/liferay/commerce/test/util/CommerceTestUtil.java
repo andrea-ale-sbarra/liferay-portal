@@ -322,7 +322,8 @@ public class CommerceTestUtil {
 
 		CommerceContext commerceContext = new TestCommerceContext(
 			commerceOrder.getCommerceCurrency(), null, null,
-			serviceContext.getScopeGroup(), null, commerceOrder);
+			serviceContext.getScopeGroup(), commerceOrder.getCommerceAccount(),
+			commerceOrder);
 
 		return addCommerceOrderItem(
 			commerceOrderId, cpInstanceId, quantity, commerceContext);
