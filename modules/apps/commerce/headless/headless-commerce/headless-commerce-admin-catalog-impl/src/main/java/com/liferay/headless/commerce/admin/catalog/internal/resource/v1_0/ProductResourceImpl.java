@@ -200,6 +200,16 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 	}
 
 	@Override
+	public void deleteProductByVersion(Long id, Integer version) throws Exception {
+		CPDefinition cpDefinition =
+			_cpDefinitionService.getCProductCPDefinition(
+				id, version);
+
+		_cpDefinitionService.deleteCPDefinition(
+			cpDefinition.getCPDefinitionId());
+	}
+
+	@Override
 	public EntityModel getEntityModel(MultivaluedMap multivaluedMap) {
 		return _entityModel;
 	}
@@ -232,6 +242,15 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 				"Unable to find product with external reference code " +
 					externalReferenceCode);
 		}
+
+		return _toProduct(cpDefinition.getCPDefinitionId());
+	}
+
+	@Override
+	public Product getProductByVersion(Long id, Integer version) throws Exception {
+		CPDefinition cpDefinition =
+			_cpDefinitionService.getCProductCPDefinition(
+				id, version);
 
 		return _toProduct(cpDefinition.getCPDefinitionId());
 	}

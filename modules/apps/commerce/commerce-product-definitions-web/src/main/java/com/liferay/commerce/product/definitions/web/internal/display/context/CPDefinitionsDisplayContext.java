@@ -46,7 +46,10 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
@@ -61,6 +64,7 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -358,6 +362,13 @@ public class CPDefinitionsDisplayContext
 	public List<FDSActionDropdownItem> getFDSActionDropdownItems()
 		throws PortalException {
 
+		StringBundler sb = new StringBundler(
+			"/o/headless-commerce-admin-catalog/v1.0/products/{productId}");
+
+		if (_isVersioningEnabled()) {
+			sb.append("/by-version/{version}");
+		}
+
 		return ListUtil.fromArray(
 			new FDSActionDropdownItem(
 				PortletURLBuilder.create(
@@ -375,8 +386,7 @@ public class CPDefinitionsDisplayContext
 				"view", "view", LanguageUtil.get(httpServletRequest, "view"),
 				"get", null, null),
 			new FDSActionDropdownItem(
-				"/o/headless-commerce-admin-catalog/v1.0/products/{productId}",
-				"trash", "delete",
+				sb.toString(), "trash", "delete",
 				LanguageUtil.get(httpServletRequest, "delete"), "delete",
 				"delete", "async"),
 			new FDSActionDropdownItem(
@@ -521,6 +531,28 @@ public class CPDefinitionsDisplayContext
 
 		return false;
 	}
+
+	private boolean _isVersioningEnabled() {
+		try {
+			CProductVersionConfiguration cProductVersionConfiguration =
+				ConfigurationProviderUtil.getConfiguration(
+					CProductVersionConfiguration.class,
+					new SystemSettingsLocator(
+						CProductVersionConfiguration.class.getName()));
+
+			if (cProductVersionConfiguration.enabled()) {
+				return true;
+			}
+		}
+		catch (PortalException portalException) {
+			_log.error(portalException);
+		}
+
+		return false;
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		CPDefinitionsDisplayContext.class);
 
 	private final CommerceAccountGroupRelService
 		_commerceAccountGroupRelService;

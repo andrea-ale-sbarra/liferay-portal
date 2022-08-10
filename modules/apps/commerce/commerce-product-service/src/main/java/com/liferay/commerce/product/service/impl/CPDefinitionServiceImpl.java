@@ -340,6 +340,18 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 	}
 
 	@Override
+	public CPDefinition getCProductCPDefinition(long cProductId, int version)
+		throws PortalException {
+
+		CProduct cProduct = cProductLocalService.getCProduct(cProductId);
+
+		_checkCommerceCatalog(cProduct.getGroupId(), ActionKeys.VIEW);
+
+		return cpDefinitionLocalService.getCProductCPDefinition(
+			cProductId, version);
+	}
+
+	@Override
 	public List<CPDefinition> getCProductCPDefinitions(
 			long cProductId, int status, int start, int end)
 		throws PortalException {

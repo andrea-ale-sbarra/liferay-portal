@@ -1336,6 +1336,13 @@ public class CPDefinitionLocalServiceImpl
 	}
 
 	@Override
+	public CPDefinition getCProductCPDefinition(long cProductId, int version)
+		throws PortalException {
+
+		return cpDefinitionPersistence.findByC_V(cProductId, version);
+	}
+
+	@Override
 	public List<CPDefinition> getCProductCPDefinitions(
 		long cProductId, int status, int start, int end) {
 
