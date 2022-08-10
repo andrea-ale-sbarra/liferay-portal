@@ -732,6 +732,14 @@ public class CPDefinitionLocalServiceWrapper
 	}
 
 	@Override
+	public CPDefinition getCProductCPDefinition(long cProductId, int version)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpDefinitionLocalService.getCProductCPDefinition(
+			cProductId, version);
+	}
+
+	@Override
 	public java.util.List<CPDefinition> getCProductCPDefinitions(
 		long cProductId, int status, int start, int end) {
 

@@ -287,6 +287,13 @@ public class CPDefinitionServiceUtil {
 		return getService().getCPDefinitionsCount(groupId, status);
 	}
 
+	public static CPDefinition getCProductCPDefinition(
+			long cProductId, int version)
+		throws PortalException {
+
+		return getService().getCProductCPDefinition(cProductId, version);
+	}
+
 	public static List<CPDefinition> getCProductCPDefinitions(
 			long cProductId, int status, int start, int end)
 		throws PortalException {
