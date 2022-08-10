@@ -94,6 +94,12 @@ public interface ProductResource {
 
 	public Response patchProduct(Long id, Product product) throws Exception;
 
+	public void deleteProductByVersion(Long id, Integer version)
+		throws Exception;
+
+	public Product getProductByVersion(Long id, Integer version)
+		throws Exception;
+
 	public Product postProductClone(Long id, Long catalogId) throws Exception;
 
 	public default void setContextAcceptLanguage(

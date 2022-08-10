@@ -1097,6 +1097,20 @@ public class Mutation {
 	}
 
 	@GraphQLField
+	public boolean deleteProductByVersion(
+			@GraphQLName("id") Long id, @GraphQLName("version") Integer version)
+		throws Exception {
+
+		_applyVoidComponentServiceObjects(
+			_productResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			productResource -> productResource.deleteProductByVersion(
+				id, version));
+
+		return true;
+	}
+
+	@GraphQLField
 	public Product createProductClone(
 			@GraphQLName("id") Long id,
 			@GraphQLName("catalogId") Long catalogId)
