@@ -655,11 +655,26 @@ public class CPDefinitionLocalServiceUtil {
 		return getService().getCPDefinitionShortDescriptionMap(cpDefinitionId);
 	}
 
+	public static CPDefinition getCProductCPDefinition(
+			long cProductId, int version)
+		throws PortalException {
+
+		return getService().getCProductCPDefinition(cProductId, version);
+	}
+
 	public static List<CPDefinition> getCProductCPDefinitions(
 		long cProductId, int status, int start, int end) {
 
 		return getService().getCProductCPDefinitions(
 			cProductId, status, start, end);
+	}
+
+	public static List<CPDefinition> getCProductCPDefinitions(
+		long cProductId, int status, int start, int end,
+		OrderByComparator<CPDefinition> orderByComparator) {
+
+		return getService().getCProductCPDefinitions(
+			cProductId, status, start, end, orderByComparator);
 	}
 
 	public static com.liferay.commerce.product.model.CPAttachmentFileEntry
