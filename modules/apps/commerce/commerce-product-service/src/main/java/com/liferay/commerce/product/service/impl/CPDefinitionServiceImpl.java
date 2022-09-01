@@ -243,14 +243,15 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 
 	@Override
 	public void deleteAssetCategoryCPDefinition(
-			long cpDefinitionId, long categoryId, ServiceContext serviceContext)
+			long userId, long cpDefinitionId, long categoryId,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
 		cpDefinitionLocalService.deleteAssetCategoryCPDefinition(
-			cpDefinitionId, categoryId, serviceContext);
+			userId, cpDefinitionId, categoryId, serviceContext);
 	}
 
 	@Override
@@ -459,7 +460,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 
 	@Override
 	public CPDefinition updateCPDefinition(
-			long cpDefinitionId, Map<Locale, String> nameMap,
+			long userId, long cpDefinitionId, Map<Locale, String> nameMap,
 			Map<Locale, String> shortDescriptionMap,
 			Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
 			Map<Locale, String> metaTitleMap,
@@ -477,13 +478,13 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateCPDefinition(
-			cpDefinitionId, nameMap, shortDescriptionMap, descriptionMap,
-			urlTitleMap, metaTitleMap, metaDescriptionMap, metaKeywordsMap,
-			ignoreSKUCombinations, ddmStructureKey, published, displayDateMonth,
-			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
-			expirationDateMonth, expirationDateDay, expirationDateYear,
-			expirationDateHour, expirationDateMinute, neverExpire,
-			serviceContext);
+			userId, cpDefinitionId, nameMap, shortDescriptionMap,
+			descriptionMap, urlTitleMap, metaTitleMap, metaDescriptionMap,
+			metaKeywordsMap, ignoreSKUCombinations, ddmStructureKey, published,
+			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
+			displayDateMinute, expirationDateMonth, expirationDateDay,
+			expirationDateYear, expirationDateHour, expirationDateMinute,
+			neverExpire, serviceContext);
 	}
 
 	@Override
@@ -500,14 +501,14 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 
 	@Override
 	public CPDefinition updateCPDefinitionCategorization(
-			long cpDefinitionId, ServiceContext serviceContext)
+			long userId, long cpDefinitionId, ServiceContext serviceContext)
 		throws PortalException {
 
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateCPDefinitionCategorization(
-			cpDefinitionId, serviceContext);
+			userId, cpDefinitionId, serviceContext);
 	}
 
 	@Override
@@ -554,17 +555,17 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 
 	@Override
 	public CPDefinition updateShippingInfo(
-			long cpDefinitionId, boolean shippable, boolean freeShipping,
-			boolean shipSeparately, double shippingExtraPrice, double width,
-			double height, double depth, double weight,
-			ServiceContext serviceContext)
+			long userId, long cpDefinitionId, boolean shippable,
+			boolean freeShipping, boolean shipSeparately,
+			double shippingExtraPrice, double width, double height,
+			double depth, double weight, ServiceContext serviceContext)
 		throws PortalException {
 
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateShippingInfo(
-			cpDefinitionId, shippable, freeShipping, shipSeparately,
+			userId, cpDefinitionId, shippable, freeShipping, shipSeparately,
 			shippingExtraPrice, width, height, depth, weight, serviceContext);
 	}
 
@@ -584,7 +585,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 
 	@Override
 	public CPDefinition updateSubscriptionInfo(
-			long cpDefinitionId, boolean subscriptionEnabled,
+			long userId, long cpDefinitionId, boolean subscriptionEnabled,
 			int subscriptionLength, String subscriptionType,
 			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
 			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
@@ -597,7 +598,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateSubscriptionInfo(
-			cpDefinitionId, subscriptionEnabled, subscriptionLength,
+			userId, cpDefinitionId, subscriptionEnabled, subscriptionLength,
 			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
 			maxSubscriptionCycles, deliverySubscriptionEnabled,
 			deliverySubscriptionLength, deliverySubscriptionType,
@@ -611,7 +612,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 	@Deprecated
 	@Override
 	public CPDefinition updateSubscriptionInfo(
-			long cpDefinitionId, boolean subscriptionEnabled,
+			long userId, long cpDefinitionId, boolean subscriptionEnabled,
 			int subscriptionLength, String subscriptionType,
 			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
 			long maxSubscriptionCycles, ServiceContext serviceContext)
@@ -621,22 +622,23 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateSubscriptionInfo(
-			cpDefinitionId, subscriptionEnabled, subscriptionLength,
+			userId, cpDefinitionId, subscriptionEnabled, subscriptionLength,
 			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
 			maxSubscriptionCycles, serviceContext);
 	}
 
 	@Override
 	public CPDefinition updateTaxCategoryInfo(
-			long cpDefinitionId, long cpTaxCategoryId, boolean taxExempt,
-			boolean telcoOrElectronics)
+			long userId, long cpDefinitionId, long cpTaxCategoryId,
+			boolean taxExempt, boolean telcoOrElectronics)
 		throws PortalException {
 
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateTaxCategoryInfo(
-			cpDefinitionId, cpTaxCategoryId, taxExempt, telcoOrElectronics);
+			userId, cpDefinitionId, cpTaxCategoryId, taxExempt,
+			telcoOrElectronics);
 	}
 
 	private void _checkCommerceCatalog(long groupId, String actionId)

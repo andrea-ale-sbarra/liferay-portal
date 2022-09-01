@@ -175,6 +175,9 @@ public class EditCPInstanceMVCActionCommand extends BaseMVCActionCommand {
 
 		long cpInstanceId = ParamUtil.getLong(actionRequest, "cpInstanceId");
 
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			CPInstance.class.getName(), actionRequest);
+
 		boolean overrideSubscriptionInfo = ParamUtil.getBoolean(
 			actionRequest, "overrideSubscriptionInfo");
 		boolean subscriptionEnabled = ParamUtil.getBoolean(
@@ -201,8 +204,8 @@ public class EditCPInstanceMVCActionCommand extends BaseMVCActionCommand {
 			actionRequest, "deliveryMaxSubscriptionCycles");
 
 		_cpInstanceService.updateSubscriptionInfo(
-			cpInstanceId, overrideSubscriptionInfo, subscriptionEnabled,
-			subscriptionLength, subscriptionType,
+			serviceContext.getUserId(), cpInstanceId, overrideSubscriptionInfo,
+			subscriptionEnabled, subscriptionLength, subscriptionType,
 			subscriptionTypeSettingsUnicodeProperties, maxSubscriptionCycles,
 			deliverySubscriptionEnabled, deliverySubscriptionLength,
 			deliverySubscriptionType,
@@ -219,7 +222,8 @@ public class EditCPInstanceMVCActionCommand extends BaseMVCActionCommand {
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			CPInstance.class.getName(), actionRequest);
 
-		_cpInstanceService.buildCPInstances(cpDefinitionId, serviceContext);
+		_cpInstanceService.buildCPInstances(
+			serviceContext.getUserId(), cpDefinitionId, serviceContext);
 	}
 
 	private void _deleteCPInstances(ActionRequest actionRequest)
@@ -409,15 +413,15 @@ public class EditCPInstanceMVCActionCommand extends BaseMVCActionCommand {
 
 		if (cpInstanceId > 0) {
 			cpInstance = _cpInstanceService.updateCPInstance(
-				cpInstanceId, sku, gtin, manufacturerPartNumber, purchasable,
-				width, height, depth, weight, price, promoPrice, cost,
-				published, displayDateMonth, displayDateDay, displayDateYear,
-				displayDateHour, displayDateMinute, expirationDateMonth,
-				expirationDateDay, expirationDateYear, expirationDateHour,
-				expirationDateMinute, neverExpire, unspsc, discontinued,
-				replacementCPInstanceUuid, replacementCProductId,
-				discontinuedDateMonth, discontinuedDateDay,
-				discontinuedDateYear, serviceContext);
+				serviceContext.getUserId(), cpInstanceId, sku, gtin,
+				manufacturerPartNumber, purchasable, width, height, depth,
+				weight, price, promoPrice, cost, published, displayDateMonth,
+				displayDateDay, displayDateYear, displayDateHour,
+				displayDateMinute, expirationDateMonth, expirationDateDay,
+				expirationDateYear, expirationDateHour, expirationDateMinute,
+				neverExpire, unspsc, discontinued, replacementCPInstanceUuid,
+				replacementCProductId, discontinuedDateMonth,
+				discontinuedDateDay, discontinuedDateYear, serviceContext);
 		}
 		else {
 			long cpDefinitionId = ParamUtil.getLong(
@@ -427,8 +431,9 @@ public class EditCPInstanceMVCActionCommand extends BaseMVCActionCommand {
 				_cpDefinitionLocalService.getCPDefinition(cpDefinitionId);
 
 			cpInstance = _cpInstanceService.addCPInstance(
-				StringPool.BLANK, cpDefinitionId, cpDefinition.getGroupId(),
-				sku, gtin, manufacturerPartNumber, purchasable,
+				serviceContext.getUserId(), StringPool.BLANK, cpDefinitionId,
+				cpDefinition.getGroupId(), sku, gtin, manufacturerPartNumber,
+				purchasable,
 				_cpDefinitionOptionRelLocalService.
 					getCPDefinitionOptionRelCPDefinitionOptionValueRelIds(
 						cpDefinitionId,

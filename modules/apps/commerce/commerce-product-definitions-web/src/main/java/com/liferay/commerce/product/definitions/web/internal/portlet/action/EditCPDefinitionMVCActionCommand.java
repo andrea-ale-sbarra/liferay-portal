@@ -282,8 +282,9 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 		double weight = ParamUtil.getDouble(actionRequest, "weight");
 
 		_cpDefinitionService.updateShippingInfo(
-			cpDefinitionId, shippable, freeShipping, shipSeparately,
-			shippingExtraPrice, width, height, depth, weight, serviceContext);
+			serviceContext.getUserId(), cpDefinitionId, shippable, freeShipping,
+			shipSeparately, shippingExtraPrice, width, height, depth, weight,
+			serviceContext);
 	}
 
 	protected void updateSubscriptionInfo(
@@ -318,7 +319,7 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 			actionRequest, "deliveryMaxSubscriptionCycles");
 
 		_cpDefinitionService.updateSubscriptionInfo(
-			cpDefinition.getCPDefinitionId(), subscriptionEnabled,
+			serviceContext.getUserId(), cpDefinitionId, subscriptionEnabled,
 			subscriptionLength, subscriptionType,
 			subscriptionTypeSettingsUnicodeProperties, maxSubscriptionCycles,
 			deliverySubscriptionEnabled, deliverySubscriptionLength,
@@ -565,10 +566,11 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 		}
 		else {
 			cpDefinition = _cpDefinitionService.updateCPDefinition(
-				cpDefinition.getCPDefinitionId(), nameMap, shortDescriptionMap,
-				descriptionMap, urlTitleMap, metaTitleMap, metaDescriptionMap,
-				metaKeywordsMap, cpDefinition.isIgnoreSKUCombinations(), null,
-				published, displayDateMonth, displayDateDay, displayDateYear,
+				serviceContext.getUserId(), cpDefinitionId, nameMap,
+				shortDescriptionMap, descriptionMap, urlTitleMap, metaTitleMap,
+				metaDescriptionMap, metaKeywordsMap,
+				oldCPDefinition.isIgnoreSKUCombinations(), null, published,
+				displayDateMonth, displayDateDay, displayDateYear,
 				displayDateHour, displayDateMinute, expirationDateMonth,
 				expirationDateDay, expirationDateYear, expirationDateHour,
 				expirationDateMinute, neverExpire, serviceContext);
