@@ -93,7 +93,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPInstance addCPInstance(
-			String externalReferenceCode, long cpDefinitionId, long groupId,
+			long userId, String externalReferenceCode, long cpDefinitionId, long groupId,
 			String sku, String gtin, String manufacturerPartNumber,
 			boolean purchasable,
 			Map<Long, List<Long>>
@@ -149,7 +149,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 		if (cpDefinitionLocalService.isVersionable(cpDefinitionId)) {
 			CPDefinition newCPDefinition =
-				cpDefinitionLocalService.copyCPDefinition(cpDefinitionId);
+				cpDefinitionLocalService.copyCPDefinition(userId, cpDefinitionId);
 
 			cpDefinitionId = newCPDefinition.getCPDefinitionId();
 		}
@@ -267,7 +267,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 	@Override
 	public CPInstance addOrUpdateCPInstance(
-			String externalReferenceCode, long cpDefinitionId, long groupId,
+			long userId, String externalReferenceCode, long cpDefinitionId, long groupId,
 			String sku, String gtin, String manufacturerPartNumber,
 			boolean purchasable, String json, double width, double height,
 			double depth, double weight, BigDecimal price,
@@ -291,7 +291,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 			if (cpInstance != null) {
 				return cpInstanceLocalService.updateCPInstance(
-					cpInstance.getCPInstanceId(), sku, gtin,
+					userId, cpInstance.getCPInstanceId(), sku, gtin,
 					manufacturerPartNumber, purchasable, width, height, depth,
 					weight, price, promoPrice, cost, published,
 					displayDateMonth, displayDateDay, displayDateYear,
@@ -305,7 +305,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		}
 
 		return cpInstanceLocalService.addCPInstance(
-			externalReferenceCode, cpDefinitionId, groupId, sku, gtin,
+			userId, externalReferenceCode, cpDefinitionId, groupId, sku, gtin,
 			manufacturerPartNumber, purchasable,
 			cpDefinitionOptionRelLocalService.
 				getCPDefinitionOptionRelCPDefinitionOptionValueRelIds(
@@ -323,7 +323,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 	@Override
 	public void buildCPInstances(
-			long cpDefinitionId, ServiceContext serviceContext)
+			long userId, long cpDefinitionId, ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinition cpDefinition = cpDefinitionLocalService.getCPDefinition(
@@ -353,7 +353,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 			}
 
 			addCPInstance(
-				cpDefinitionId, cpDefinition.getGroupId(), sku,
+				userId, cpDefinitionId, cpDefinition.getGroupId(), sku,
 				StringPool.BLANK, StringPool.BLANK, true,
 				_toCpDefinitionOptionRelIdCPDefinitionOptionValueRelIds(
 					cpDefinitionOptionValueRels),
@@ -421,7 +421,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPInstance deleteCPInstance(CPInstance cpInstance)
+	public CPInstance deleteCPInstance(long userId, CPInstance cpInstance)
 		throws PortalException {
 
 		if (cpDefinitionLocalService.isVersionable(
@@ -429,7 +429,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 			CPDefinition newCPDefinition =
 				cpDefinitionLocalService.copyCPDefinition(
-					cpInstance.getCPDefinitionId());
+					userId, cpInstance.getCPDefinitionId());
 
 			cpInstance = cpInstancePersistence.findByC_C(
 				newCPDefinition.getCPDefinitionId(),
@@ -752,7 +752,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPInstance updateCPInstance(
-			long cpInstanceId, String sku, String gtin,
+			long userId, long cpInstanceId, String sku, String gtin,
 			String manufacturerPartNumber, boolean purchasable, double width,
 			double height, double depth, double weight, BigDecimal price,
 			BigDecimal promoPrice, BigDecimal cost, boolean published,
@@ -776,14 +776,14 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		_validateReplacementCPInstance(
 			cpInstance, replacementCPInstanceUuid, replacementCProductId);
 
-		User user = userLocalService.getUser(serviceContext.getUserId());
+		User user = userLocalService.getUser(userId);
 
 		if (cpDefinitionLocalService.isVersionable(
 				cpInstance.getCPDefinitionId())) {
 
 			CPDefinition newCPDefinition =
 				cpDefinitionLocalService.copyCPDefinition(
-					cpInstance.getCPDefinitionId());
+					userId, cpInstance.getCPDefinitionId());
 
 			cpInstance = cpInstancePersistence.findByC_C(
 				newCPDefinition.getCPDefinitionId(),
@@ -878,7 +878,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 	@Override
 	public CPInstance updatePricingInfo(
-			long cpInstanceId, BigDecimal price, BigDecimal promoPrice,
+			long userId, long cpInstanceId, BigDecimal price, BigDecimal promoPrice,
 			BigDecimal cost, ServiceContext serviceContext)
 		throws PortalException {
 
@@ -899,7 +899,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 			CPDefinition newCPDefinition =
 				cpDefinitionLocalService.copyCPDefinition(
-					cpInstance.getCPDefinitionId());
+					userId, cpInstance.getCPDefinitionId());
 
 			cpInstance = cpInstancePersistence.findByC_C(
 				newCPDefinition.getCPDefinitionId(),
@@ -915,7 +915,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 	@Override
 	public CPInstance updateShippingInfo(
-			long cpInstanceId, double width, double height, double depth,
+			long userId, long cpInstanceId, double width, double height, double depth,
 			double weight, ServiceContext serviceContext)
 		throws PortalException {
 
@@ -927,7 +927,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 			CPDefinition newCPDefinition =
 				cpDefinitionLocalService.copyCPDefinition(
-					cpInstance.getCPDefinitionId());
+					userId, cpInstance.getCPDefinitionId());
 
 			cpInstance = cpInstancePersistence.findByC_C(
 				newCPDefinition.getCPDefinitionId(),
@@ -1000,7 +1000,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPInstance updateSubscriptionInfo(
-			long cpInstanceId, boolean overrideSubscriptionInfo,
+			long userId, long cpInstanceId, boolean overrideSubscriptionInfo,
 			boolean subscriptionEnabled, int subscriptionLength,
 			String subscriptionType,
 			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
@@ -1018,7 +1018,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 			CPDefinition newCPDefinition =
 				cpDefinitionLocalService.copyCPDefinition(
-					cpInstance.getCPDefinitionId());
+					userId, cpInstance.getCPDefinitionId());
 
 			cpInstance = cpInstancePersistence.findByC_C(
 				newCPDefinition.getCPDefinitionId(),
@@ -1044,7 +1044,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	}
 
 	protected CPInstance addCPInstance(
-			long cpDefinitionId, long groupId, String sku, String gtin,
+			long userId, long cpDefinitionId, long groupId, String sku, String gtin,
 			String manufacturerPartNumber, boolean purchasable,
 			Map<Long, List<Long>>
 				cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds,
@@ -1055,14 +1055,14 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		throws PortalException {
 
 		return addCPInstance(
-			cpDefinitionId, groupId, sku, gtin, manufacturerPartNumber,
+			userId, cpDefinitionId, groupId, sku, gtin, manufacturerPartNumber,
 			purchasable, cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds,
 			width, height, depth, weight, price, promoPrice, cost, published,
 			displayDate, expirationDate, neverExpire, null, serviceContext);
 	}
 
 	protected CPInstance addCPInstance(
-			long cpDefinitionId, long groupId, String sku, String gtin,
+			long userId, long cpDefinitionId, long groupId, String sku, String gtin,
 			String manufacturerPartNumber, boolean purchasable,
 			Map<Long, List<Long>>
 				cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds,
@@ -1102,7 +1102,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		}
 
 		return cpInstanceLocalService.addCPInstance(
-			StringPool.BLANK, cpDefinitionId, groupId, sku, gtin,
+			userId, StringPool.BLANK, cpDefinitionId, groupId, sku, gtin,
 			manufacturerPartNumber, purchasable,
 			cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds, width, height,
 			depth, weight, price, promoPrice, cost, published, displayDateMonth,

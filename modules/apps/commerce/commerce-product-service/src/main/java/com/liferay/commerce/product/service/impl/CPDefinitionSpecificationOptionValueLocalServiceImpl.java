@@ -44,14 +44,14 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 	@Override
 	public CPDefinitionSpecificationOptionValue
 			addCPDefinitionSpecificationOptionValue(
-				long cpDefinitionId, long cpSpecificationOptionId,
+			long userId, long cpDefinitionId, long cpSpecificationOptionId,
 				long cpOptionCategoryId, Map<Locale, String> valueMap,
 				double priority, ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinition cpDefinition = cpDefinitionPersistence.findByPrimaryKey(
 			cpDefinitionId);
-		User user = userLocalService.getUser(serviceContext.getUserId());
+		User user = userLocalService.getUser(userId);
 
 		long cpDefinitionSpecificationOptionValueId =
 			counterLocalService.increment();
@@ -63,7 +63,7 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 
 		if (cpDefinitionLocalService.isVersionable(cpDefinitionId)) {
 			cpDefinition = cpDefinitionLocalService.copyCPDefinition(
-				cpDefinitionId);
+				userId, cpDefinitionId);
 
 			cpDefinitionId = cpDefinition.getCPDefinitionId();
 		}
@@ -99,7 +99,7 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPDefinitionSpecificationOptionValue
 			deleteCPDefinitionSpecificationOptionValue(
-				CPDefinitionSpecificationOptionValue
+				long userId, CPDefinitionSpecificationOptionValue
 					cpDefinitionSpecificationOptionValue)
 		throws PortalException {
 
@@ -109,7 +109,7 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 			try {
 				CPDefinition newCPDefinition =
 					cpDefinitionLocalService.copyCPDefinition(
-						cpDefinitionSpecificationOptionValue.
+						userId, cpDefinitionSpecificationOptionValue.
 							getCPDefinitionId());
 
 				cpDefinitionSpecificationOptionValue =
@@ -283,7 +283,7 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 	@Override
 	public CPDefinitionSpecificationOptionValue
 			updateCPDefinitionSpecificationOptionValue(
-				long cpDefinitionSpecificationOptionValueId,
+				long userId, long cpDefinitionSpecificationOptionValueId,
 				long cpOptionCategoryId, Map<Locale, String> valueMap,
 				double priority, ServiceContext serviceContext)
 		throws PortalException {
@@ -300,7 +300,7 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				cpDefinitionLocalService.copyCPDefinition(
-					cpDefinitionSpecificationOptionValue.getCPDefinitionId());
+					userId, cpDefinitionSpecificationOptionValue.getCPDefinitionId());
 
 			cpDefinitionSpecificationOptionValue =
 				cpDefinitionSpecificationOptionValuePersistence.findByC_CSOVI(
@@ -330,7 +330,7 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 
 	@Override
 	public CPDefinitionSpecificationOptionValue updateCPOptionCategoryId(
-			long cpDefinitionSpecificationOptionValueId,
+			long userId, long cpDefinitionSpecificationOptionValueId,
 			long cpOptionCategoryId)
 		throws PortalException {
 
@@ -346,7 +346,7 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				cpDefinitionLocalService.copyCPDefinition(
-					cpDefinitionSpecificationOptionValue.getCPDefinitionId());
+					userId, cpDefinitionSpecificationOptionValue.getCPDefinitionId());
 
 			cpDefinitionSpecificationOptionValue =
 				cpDefinitionSpecificationOptionValuePersistence.findByC_CSOVI(

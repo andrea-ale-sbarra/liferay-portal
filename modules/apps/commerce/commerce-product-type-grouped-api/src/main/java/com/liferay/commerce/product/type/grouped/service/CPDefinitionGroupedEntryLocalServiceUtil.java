@@ -141,8 +141,10 @@ public class CPDefinitionGroupedEntryLocalServiceUtil {
 		return getService().createPersistedModel(primaryKeyObj);
 	}
 
-	public static void deleteCPDefinitionGroupedEntries(long cpDefinitionId) {
-		getService().deleteCPDefinitionGroupedEntries(cpDefinitionId);
+	public static void deleteCPDefinitionGroupedEntries(
+		long userId, long cpDefinitionId) {
+
+		getService().deleteCPDefinitionGroupedEntries(userId, cpDefinitionId);
 	}
 
 	/**
@@ -490,11 +492,12 @@ public class CPDefinitionGroupedEntryLocalServiceUtil {
 	}
 
 	public static CPDefinitionGroupedEntry updateCPDefinitionGroupedEntry(
-			long cpDefinitionGroupedEntryId, double priority, int quantity)
+			long userId, long cpDefinitionGroupedEntryId, double priority,
+			int quantity)
 		throws PortalException {
 
 		return getService().updateCPDefinitionGroupedEntry(
-			cpDefinitionGroupedEntryId, priority, quantity);
+			userId, cpDefinitionGroupedEntryId, priority, quantity);
 	}
 
 	public static CPDefinitionGroupedEntryLocalService getService() {

@@ -539,7 +539,7 @@ public class CPDefinitionsImporter {
 		else {
 			try {
 				_cpInstanceLocalService.buildCPInstances(
-					cpDefinition.getCPDefinitionId(), serviceContext);
+					serviceContext.getUserId(), cpDefinition.getCPDefinitionId(), serviceContext);
 			}
 			catch (NoSuchSkuContributorCPDefinitionOptionRelException
 						noSuchSkuContributorCPDefinitionOptionRelException) {
@@ -753,7 +753,7 @@ public class CPDefinitionsImporter {
 		try {
 			cpDefinitionOptionRel =
 				_cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-					cpDefinitionId, cpOption.getCPOptionId(), importOptionValue,
+					serviceContext.getUserId(), cpDefinitionId, cpOption.getCPOptionId(), importOptionValue,
 					serviceContext);
 		}
 		finally {
@@ -790,7 +790,7 @@ public class CPDefinitionsImporter {
 
 		return _cpDefinitionOptionValueRelLocalService.
 			addCPDefinitionOptionValueRel(
-				cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
+				serviceContext.getUserId(), cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 				_cpOptionValueLocalService.getCPOptionValue(
 					cpDefinitionOptionRel.getCPOptionId(),
 					_friendlyURLNormalizer.normalize(key)),
@@ -828,7 +828,7 @@ public class CPDefinitionsImporter {
 
 		return _cpDefinitionSpecificationOptionValueLocalService.
 			addCPDefinitionSpecificationOptionValue(
-				cpDefinitionId,
+				serviceContext.getUserId(), cpDefinitionId,
 				cpSpecificationOption.getCPSpecificationOptionId(),
 				cpOptionCategoryId, valueMap, priority, serviceContext);
 	}
@@ -931,7 +931,7 @@ public class CPDefinitionsImporter {
 		}
 
 		CPInstance cpInstance = _cpInstanceLocalService.addCPInstance(
-			externalReferenceCode, cpDefinitionId, cpDefinition.getGroupId(),
+			serviceContext.getUserId(), externalReferenceCode, cpDefinitionId, cpDefinition.getGroupId(),
 			sku, null, manufacturerPartNumber, true,
 			_cpDefinitionOptionRelLocalService.
 				getCPDefinitionOptionRelCPDefinitionOptionValueRelIds(

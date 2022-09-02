@@ -42,7 +42,7 @@ public class CPDefinitionLinkLocalServiceImpl
 
 	@Override
 	public CPDefinitionLink addCPDefinitionLinkByCProductId(
-			long cpDefinitionId, long cProductId, double priority, String type,
+			long userId, long cpDefinitionId, long cProductId, double priority, String type,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -50,7 +50,7 @@ public class CPDefinitionLinkLocalServiceImpl
 
 		if (cpDefinitionLocalService.isVersionable(cpDefinitionId)) {
 			cpDefinition = cpDefinitionLocalService.copyCPDefinition(
-				cpDefinitionId);
+				userId, cpDefinitionId);
 
 			cpDefinitionId = cpDefinition.getCPDefinitionId();
 		}
@@ -90,7 +90,7 @@ public class CPDefinitionLinkLocalServiceImpl
 	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPDefinitionLink deleteCPDefinitionLink(
-			CPDefinitionLink cpDefinitionLink)
+			long userId, CPDefinitionLink cpDefinitionLink)
 		throws PortalException {
 
 		if (cpDefinitionLocalService.isVersionable(
@@ -99,7 +99,7 @@ public class CPDefinitionLinkLocalServiceImpl
 			try {
 				CPDefinition newCPDefinition =
 					cpDefinitionLocalService.copyCPDefinition(
-						cpDefinitionLink.getCPDefinitionId());
+						userId, cpDefinitionLink.getCPDefinitionId());
 
 				cpDefinitionLink = cpDefinitionLinkPersistence.findByC_C_T(
 					newCPDefinition.getCPDefinitionId(),
@@ -224,7 +224,7 @@ public class CPDefinitionLinkLocalServiceImpl
 
 	@Override
 	public CPDefinitionLink updateCPDefinitionLink(
-			long cpDefinitionLinkId, double priority,
+			long userId, long cpDefinitionLinkId, double priority,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -236,7 +236,7 @@ public class CPDefinitionLinkLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				cpDefinitionLocalService.copyCPDefinition(
-					cpDefinitionLink.getCPDefinitionId());
+					userId, cpDefinitionLink.getCPDefinitionId());
 
 			cpDefinitionLink = cpDefinitionLinkPersistence.findByC_C_T(
 				newCPDefinition.getCPDefinitionId(),
@@ -260,7 +260,7 @@ public class CPDefinitionLinkLocalServiceImpl
 
 	@Override
 	public void updateCPDefinitionLinkCProductIds(
-			long cpDefinitionId, long[] cProductIds, String type,
+			long userId, long cpDefinitionId, long[] cProductIds, String type,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -292,7 +292,7 @@ public class CPDefinitionLinkLocalServiceImpl
 				if (cpDefinitionLink == null) {
 					cpDefinitionLinkLocalService.
 						addCPDefinitionLinkByCProductId(
-							cpDefinitionId, cProductId, 0, type,
+							userId, cpDefinitionId, cProductId, 0, type,
 							serviceContext);
 				}
 			}

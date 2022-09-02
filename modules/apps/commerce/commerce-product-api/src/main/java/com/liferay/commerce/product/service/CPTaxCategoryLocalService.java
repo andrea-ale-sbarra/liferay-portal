@@ -121,12 +121,9 @@ public interface CPTaxCategoryLocalService
 	 *
 	 * @param cpTaxCategory the cp tax category
 	 * @return the cp tax category that was removed
-	 * @throws PortalException
 	 */
 	@Indexable(type = IndexableType.DELETE)
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPTaxCategory deleteCPTaxCategory(CPTaxCategory cpTaxCategory)
-		throws PortalException;
+	public CPTaxCategory deleteCPTaxCategory(CPTaxCategory cpTaxCategory);
 
 	/**
 	 * Deletes the cp tax category with the primary key from the database. Also notifies the appropriate model listeners.
@@ -141,6 +138,11 @@ public interface CPTaxCategoryLocalService
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	public CPTaxCategory deleteCPTaxCategory(long CPTaxCategoryId)
+		throws PortalException;
+
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
+	public CPTaxCategory deleteCPTaxCategory(
+			long userId, CPTaxCategory cpTaxCategory)
 		throws PortalException;
 
 	/**

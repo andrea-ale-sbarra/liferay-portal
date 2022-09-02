@@ -46,7 +46,7 @@ public class CPDefinitionLinkServiceImpl
 		_checkCommerceCatalog(cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLinkLocalService.addCPDefinitionLinkByCProductId(
-			cpDefinitionId, cProductId, priority, type, serviceContext);
+			getUserId(), cpDefinitionId, cProductId, priority, type, serviceContext);
 	}
 
 	@Override
@@ -203,7 +203,7 @@ public class CPDefinitionLinkServiceImpl
 			cProduct.getPublishedCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpDefinitionLinkLocalService.updateCPDefinitionLink(
-			cpDefinitionLinkId, priority, serviceContext);
+			getUserId(), cpDefinitionLinkId, priority, serviceContext);
 	}
 
 	@Override
@@ -228,7 +228,7 @@ public class CPDefinitionLinkServiceImpl
 		}
 
 		cpDefinitionLinkLocalService.updateCPDefinitionLinkCProductIds(
-			cpDefinitionId, cProductIds, type, serviceContext);
+			getUserId(), cpDefinitionId, cProductIds, type, serviceContext);
 	}
 
 	private void _checkCommerceCatalog(long cpDefinitionId, String actionId)

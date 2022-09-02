@@ -157,9 +157,11 @@ public class CPDefinitionGroupedEntryLocalServiceWrapper
 	}
 
 	@Override
-	public void deleteCPDefinitionGroupedEntries(long cpDefinitionId) {
+	public void deleteCPDefinitionGroupedEntries(
+		long userId, long cpDefinitionId) {
+
 		_cpDefinitionGroupedEntryLocalService.deleteCPDefinitionGroupedEntries(
-			cpDefinitionId);
+			userId, cpDefinitionId);
 	}
 
 	/**
@@ -596,13 +598,13 @@ public class CPDefinitionGroupedEntryLocalServiceWrapper
 	public
 		com.liferay.commerce.product.type.grouped.model.CPDefinitionGroupedEntry
 				updateCPDefinitionGroupedEntry(
-					long cpDefinitionGroupedEntryId, double priority,
-					int quantity)
+					long userId, long cpDefinitionGroupedEntryId,
+					double priority, int quantity)
 			throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _cpDefinitionGroupedEntryLocalService.
 			updateCPDefinitionGroupedEntry(
-				cpDefinitionGroupedEntryId, priority, quantity);
+				userId, cpDefinitionGroupedEntryId, priority, quantity);
 	}
 
 	@Override

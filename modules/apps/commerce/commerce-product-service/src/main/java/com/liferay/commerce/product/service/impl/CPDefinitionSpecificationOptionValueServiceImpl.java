@@ -50,7 +50,7 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 
 		return cpDefinitionSpecificationOptionValueLocalService.
 			addCPDefinitionSpecificationOptionValue(
-				cpDefinitionId, cpSpecificationOptionId, cpOptionCategoryId,
+				getUserId(), cpDefinitionId, cpSpecificationOptionId, cpOptionCategoryId,
 				valueMap, priority, serviceContext);
 	}
 
@@ -180,7 +180,7 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 
 		return cpDefinitionSpecificationOptionValueLocalService.
 			updateCPDefinitionSpecificationOptionValue(
-				cpDefinitionSpecificationOptionValueId, cpOptionCategoryId,
+				getUserId(), cpDefinitionSpecificationOptionValueId, cpOptionCategoryId,
 				valueMap, priority, serviceContext);
 	}
 

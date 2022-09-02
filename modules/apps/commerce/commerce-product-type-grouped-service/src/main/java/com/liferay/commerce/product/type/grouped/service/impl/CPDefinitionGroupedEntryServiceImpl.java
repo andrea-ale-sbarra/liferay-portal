@@ -136,7 +136,7 @@ public class CPDefinitionGroupedEntryServiceImpl
 
 		return cpDefinitionGroupedEntryLocalService.
 			updateCPDefinitionGroupedEntry(
-				cpDefinitionGroupedEntryId, priority, quantity);
+				getUserId(), cpDefinitionGroupedEntryId, priority, quantity);
 	}
 
 	@Reference

@@ -120,7 +120,7 @@ public class CPDefinitionGroupedEntryLocalServiceImpl
 
 		if (_cpDefinitionLocalService.isVersionable(cpDefinitionId)) {
 			cpDefinition = _cpDefinitionLocalService.copyCPDefinition(
-				cpDefinitionId);
+				user.getUserId(), cpDefinitionId);
 		}
 		else {
 			cpDefinition = _cpDefinitionLocalService.getCPDefinition(
@@ -166,11 +166,11 @@ public class CPDefinitionGroupedEntryLocalServiceImpl
 	}
 
 	@Override
-	public void deleteCPDefinitionGroupedEntries(long cpDefinitionId) {
+	public void deleteCPDefinitionGroupedEntries(long userId, long cpDefinitionId) {
 		if (_cpDefinitionLocalService.isVersionable(cpDefinitionId)) {
 			try {
 				CPDefinition newCPDefinition =
-					_cpDefinitionLocalService.copyCPDefinition(cpDefinitionId);
+					_cpDefinitionLocalService.copyCPDefinition(userId, cpDefinitionId);
 
 				cpDefinitionId = newCPDefinition.getCPDefinitionId();
 			}
@@ -244,7 +244,7 @@ public class CPDefinitionGroupedEntryLocalServiceImpl
 
 	@Override
 	public CPDefinitionGroupedEntry updateCPDefinitionGroupedEntry(
-			long cpDefinitionGroupedEntryId, double priority, int quantity)
+			long userId, long cpDefinitionGroupedEntryId, double priority, int quantity)
 		throws PortalException {
 
 		CPDefinitionGroupedEntry cpDefinitionGroupedEntry =
@@ -256,7 +256,7 @@ public class CPDefinitionGroupedEntryLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					cpDefinitionGroupedEntry.getCPDefinitionId());
+					userId, cpDefinitionGroupedEntry.getCPDefinitionId());
 
 			cpDefinitionGroupedEntry =
 				cpDefinitionGroupedEntryPersistence.findByC_E(

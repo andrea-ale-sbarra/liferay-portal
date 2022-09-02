@@ -114,7 +114,7 @@ public class CPOptionCategoryLocalServiceImpl
 	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPOptionCategory deleteCPOptionCategory(
-			CPOptionCategory cpOptionCategory)
+			long userId, CPOptionCategory cpOptionCategory)
 		throws PortalException {
 
 		// Commerce product option category
@@ -154,7 +154,7 @@ public class CPOptionCategoryLocalServiceImpl
 
 			cpDefinitionSpecificationOptionValueLocalService.
 				updateCPOptionCategoryId(
-					cpDefinitionSpecificationOptionValue.
+					userId, cpDefinitionSpecificationOptionValue.
 						getCPDefinitionSpecificationOptionValueId(),
 					CPOptionCategoryConstants.DEFAULT_CP_OPTION_CATEGORY_ID);
 		}

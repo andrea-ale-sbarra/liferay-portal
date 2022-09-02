@@ -127,7 +127,7 @@ public class CPTestUtil {
 
 		for (long cpDefinitionId : cpDefinitionIds) {
 			CPDefinitionLocalServiceUtil.updateCPDefinitionCategorization(
-				cpDefinitionId, serviceContext);
+				serviceContext.getUserId(), cpDefinitionId, serviceContext);
 		}
 
 		return assetCategory;
@@ -228,7 +228,7 @@ public class CPTestUtil {
 		}
 
 		return CPInstanceLocalServiceUtil.addCPInstance(
-			null, cpDefinition.getCPDefinitionId(), cpDefinition.getGroupId(),
+			serviceContext.getUserId(), null, cpDefinition.getCPDefinitionId(), cpDefinition.getGroupId(),
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
 			RandomTestUtil.randomString(), true,
 			cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds, 19.77, 19.77,
@@ -288,7 +288,7 @@ public class CPTestUtil {
 		throws PortalException {
 
 		return CPDefinitionOptionRelLocalServiceUtil.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, true,
+			ServiceContextTestUtil.getServiceContext(groupId).getUserId(), cpDefinitionId, cpOptionId, true,
 			ServiceContextTestUtil.getServiceContext(groupId));
 	}
 
@@ -307,7 +307,7 @@ public class CPTestUtil {
 		if (cpDefinitionOptionRel == null) {
 			cpDefinitionOptionRel =
 				CPDefinitionOptionRelLocalServiceUtil.addCPDefinitionOptionRel(
-					cpDefinitionId, cpOptionId,
+					serviceContext.getUserId(), cpDefinitionId, cpOptionId,
 					RandomTestUtil.randomLocaleStringMap(),
 					RandomTestUtil.randomLocaleStringMap(),
 					getDefaultDDMFormFieldType(true),
@@ -318,7 +318,7 @@ public class CPTestUtil {
 		CPDefinitionOptionValueRel cpDefinitionOptionValueRel =
 			CPDefinitionOptionValueRelLocalServiceUtil.
 				addCPDefinitionOptionValueRel(
-					cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
+					serviceContext.getUserId(), cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 					RandomTestUtil.randomLocaleStringMap(),
 					RandomTestUtil.randomDouble(),
 					RandomTestUtil.randomString(), serviceContext);
@@ -332,7 +332,7 @@ public class CPTestUtil {
 
 		return CPDefinitionOptionValueRelLocalServiceUtil.
 			updateCPDefinitionOptionValueRel(
-				cpDefinitionOptionValueRel.getCPDefinitionOptionValueRelId(),
+				serviceContext.getUserId(), cpDefinitionOptionValueRel.getCPDefinitionOptionValueRelId(),
 				cpDefinitionOptionValueRel.getNameMap(),
 				cpDefinitionOptionValueRel.getPriority(),
 				cpDefinitionOptionValueRel.getKey(), cpInstanceId, quantity,
@@ -640,6 +640,7 @@ public class CPTestUtil {
 		throws PortalException {
 
 		CPInstanceLocalServiceUtil.buildCPInstances(
+			ServiceContextTestUtil.getServiceContext(cpDefinition.getGroupId()).getUserId(),
 			cpDefinition.getCPDefinitionId(),
 			ServiceContextTestUtil.getServiceContext(
 				cpDefinition.getGroupId()));
@@ -1189,7 +1190,7 @@ public class CPTestUtil {
 
 		CPDefinitionOptionRel cpDefinitionOptionRel =
 			CPDefinitionOptionRelLocalServiceUtil.addCPDefinitionOptionRel(
-				parentCPDefinition.getCPDefinitionId(),
+				serviceContext.getUserId(), parentCPDefinition.getCPDefinitionId(),
 				priceableCPOption.getCPOptionId(),
 				RandomTestUtil.randomLocaleStringMap(),
 				RandomTestUtil.randomLocaleStringMap(),
@@ -1200,7 +1201,7 @@ public class CPTestUtil {
 			CPDefinitionOptionValueRel cpInstanceOptionValueRel =
 				CPDefinitionOptionValueRelLocalServiceUtil.
 					addCPDefinitionOptionValueRel(
-						cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
+						serviceContext.getUserId(), cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 						RandomTestUtil.randomLocaleStringMap(),
 						RandomTestUtil.nextDouble(),
 						RandomTestUtil.randomString(), serviceContext);
@@ -1216,7 +1217,7 @@ public class CPTestUtil {
 			cpDefinitionOptionValueRels.add(
 				CPDefinitionOptionValueRelLocalServiceUtil.
 					updateCPDefinitionOptionValueRel(
-						cpInstanceOptionValueRel.
+						serviceContext.getUserId(), cpInstanceOptionValueRel.
 							getCPDefinitionOptionValueRelId(),
 						cpInstanceOptionValueRel.getNameMap(),
 						cpInstanceOptionValueRel.getPriority(),

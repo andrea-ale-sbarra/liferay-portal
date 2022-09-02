@@ -127,7 +127,8 @@ public interface CPDefinitionGroupedEntryLocalService
 	public PersistedModel createPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
 
-	public void deleteCPDefinitionGroupedEntries(long cpDefinitionId);
+	public void deleteCPDefinitionGroupedEntries(
+		long userId, long cpDefinitionId);
 
 	/**
 	 * Deletes the cp definition grouped entry from the database. Also notifies the appropriate model listeners.
@@ -398,7 +399,8 @@ public interface CPDefinitionGroupedEntryLocalService
 		CPDefinitionGroupedEntry cpDefinitionGroupedEntry);
 
 	public CPDefinitionGroupedEntry updateCPDefinitionGroupedEntry(
-			long cpDefinitionGroupedEntryId, double priority, int quantity)
+			long userId, long cpDefinitionGroupedEntryId, double priority,
+			int quantity)
 		throws PortalException;
 
 }
