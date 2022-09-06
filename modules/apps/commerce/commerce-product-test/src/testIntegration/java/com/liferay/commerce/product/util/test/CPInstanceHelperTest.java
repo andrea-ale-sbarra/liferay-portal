@@ -144,6 +144,7 @@ public class CPInstanceHelperTest {
 			cpOptionsCount, cpOptionValuesCount);
 
 		_cpInstanceLocalService.buildCPInstances(
+			cpDefinition.getUserId(),
 			cpDefinition.getCPDefinitionId(),
 			ServiceContextTestUtil.getServiceContext(
 				cpDefinition.getGroupId()));

@@ -122,6 +122,7 @@ public class CPInstanceOptionValueRelLocalServiceTest {
 			cpOptionsCount, cpOptionValuesCount);
 
 		_cpInstanceLocalService.buildCPInstances(
+			cpDefinition.getUserId(),
 			cpDefinition.getCPDefinitionId(),
 			ServiceContextTestUtil.getServiceContext(
 				cpDefinition.getGroupId()));
@@ -174,6 +175,7 @@ public class CPInstanceOptionValueRelLocalServiceTest {
 			cpOptionsCount, cpOptionValuesCount);
 
 		_cpInstanceLocalService.buildCPInstances(
+			cpDefinition.getUserId(),
 			cpDefinition.getCPDefinitionId(),
 			ServiceContextTestUtil.getServiceContext(
 				cpDefinition.getGroupId()));

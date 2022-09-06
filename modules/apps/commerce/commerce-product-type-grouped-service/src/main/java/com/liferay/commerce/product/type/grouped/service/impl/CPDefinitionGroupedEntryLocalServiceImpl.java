@@ -53,7 +53,7 @@ public class CPDefinitionGroupedEntryLocalServiceImpl
 	@Deprecated
 	@Override
 	public void addCPDefinitionGroupedEntries(
-			long cpDefinitionId, long[] entryCPDefinitionIds,
+			long userId, long cpDefinitionId, long[] entryCPDefinitionIds,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -63,21 +63,21 @@ public class CPDefinitionGroupedEntryLocalServiceImpl
 
 			cpDefinitionGroupedEntryLocalService.
 				addCPDefinitionGroupedEntryByEntryCProductId(
-					cpDefinitionId, cpDefinition.getCProductId(), 0, 1,
+					userId, cpDefinitionId, cpDefinition.getCProductId(), 0, 1,
 					serviceContext);
 		}
 	}
 
 	@Override
 	public void addCPDefinitionGroupedEntriesByEntryCProductIds(
-			long cpDefinitionId, long[] entryCProductIds,
+			long userId, long cpDefinitionId, long[] entryCProductIds,
 			ServiceContext serviceContext)
 		throws PortalException {
 
 		for (long entryCProductId : entryCProductIds) {
 			cpDefinitionGroupedEntryLocalService.
 				addCPDefinitionGroupedEntryByEntryCProductId(
-					cpDefinitionId, entryCProductId, 0, 1, serviceContext);
+					userId, cpDefinitionId, entryCProductId, 0, 1, serviceContext);
 		}
 	}
 
@@ -87,7 +87,7 @@ public class CPDefinitionGroupedEntryLocalServiceImpl
 	@Deprecated
 	@Override
 	public CPDefinitionGroupedEntry addCPDefinitionGroupedEntry(
-			long cpDefinitionId, long entryCPDefinitionId, double priority,
+			long userId, long cpDefinitionId, long entryCPDefinitionId, double priority,
 			int quantity, ServiceContext serviceContext)
 		throws PortalException {
 
@@ -96,19 +96,19 @@ public class CPDefinitionGroupedEntryLocalServiceImpl
 
 		return cpDefinitionGroupedEntryLocalService.
 			addCPDefinitionGroupedEntryByEntryCProductId(
-				cpDefinitionId, cpDefinition.getCProductId(), priority,
+				userId, cpDefinitionId, cpDefinition.getCProductId(), priority,
 				quantity, serviceContext);
 	}
 
 	@Override
 	public CPDefinitionGroupedEntry
 			addCPDefinitionGroupedEntryByEntryCProductId(
-				long cpDefinitionId, long entryCProductId, double priority,
+				long userId, long cpDefinitionId, long entryCProductId, double priority,
 				int quantity, ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinition cpDefinition = null;
-		User user = userLocalService.getUser(serviceContext.getUserId());
+		User user = userLocalService.getUser(userId);
 
 		validate(cpDefinitionId, entryCProductId, quantity);
 

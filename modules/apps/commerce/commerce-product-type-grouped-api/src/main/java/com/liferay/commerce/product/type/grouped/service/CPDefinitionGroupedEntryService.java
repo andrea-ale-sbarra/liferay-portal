@@ -58,6 +58,12 @@ public interface CPDefinitionGroupedEntryService extends BaseService {
 			ServiceContext serviceContext)
 		throws PortalException;
 
+	public void cloneCPDefinitionGroupedEntries(
+		long cpDefinitionId, long newCPDefinitionId);
+
+	public void deleteCPDefinitionGroupedEntries(long cpDefinitionId)
+		throws PortalException;
+
 	public CPDefinitionGroupedEntry deleteCPDefinitionGroupedEntry(
 			long cpDefinitionGroupedEntryId)
 		throws PortalException;

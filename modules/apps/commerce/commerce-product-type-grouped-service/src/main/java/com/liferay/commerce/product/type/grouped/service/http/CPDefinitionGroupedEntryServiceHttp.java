@@ -135,6 +135,73 @@ public class CPDefinitionGroupedEntryServiceHttp {
 		}
 	}
 
+	public static void deleteCPDefinitionGroupedEntries(
+			HttpPrincipal httpPrincipal, long cpDefinitionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CPDefinitionGroupedEntryServiceUtil.class,
+				"deleteCPDefinitionGroupedEntries",
+				_deleteCPDefinitionGroupedEntriesParameterTypes2);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, cpDefinitionId);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static void cloneCPDefinitionGroupedEntries(
+		HttpPrincipal httpPrincipal, long cpDefinitionId,
+		long newCPDefinitionId) {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CPDefinitionGroupedEntryServiceUtil.class,
+				"cloneCPDefinitionGroupedEntries",
+				_cloneCPDefinitionGroupedEntriesParameterTypes3);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, cpDefinitionId, newCPDefinitionId);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
 	public static java.util.List
 		<com.liferay.commerce.product.type.grouped.model.
 			CPDefinitionGroupedEntry> getCPDefinitionGroupedEntries(
@@ -149,7 +216,7 @@ public class CPDefinitionGroupedEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPDefinitionGroupedEntryServiceUtil.class,
 				"getCPDefinitionGroupedEntries",
-				_getCPDefinitionGroupedEntriesParameterTypes2);
+				_getCPDefinitionGroupedEntriesParameterTypes4);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cpDefinitionId, start, end, orderByComparator);
@@ -192,7 +259,7 @@ public class CPDefinitionGroupedEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPDefinitionGroupedEntryServiceUtil.class,
 				"getCPDefinitionGroupedEntriesCount",
-				_getCPDefinitionGroupedEntriesCountParameterTypes3);
+				_getCPDefinitionGroupedEntriesCountParameterTypes5);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cpDefinitionId);
@@ -236,7 +303,7 @@ public class CPDefinitionGroupedEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPDefinitionGroupedEntryServiceUtil.class,
 				"getCPDefinitionGroupedEntry",
-				_getCPDefinitionGroupedEntryParameterTypes4);
+				_getCPDefinitionGroupedEntryParameterTypes6);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cpDefinitionGroupedEntryId);
@@ -282,7 +349,7 @@ public class CPDefinitionGroupedEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPDefinitionGroupedEntryServiceUtil.class,
 				"updateCPDefinitionGroupedEntry",
-				_updateCPDefinitionGroupedEntryParameterTypes5);
+				_updateCPDefinitionGroupedEntryParameterTypes7);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cpDefinitionGroupedEntryId, priority, quantity);
@@ -329,18 +396,26 @@ public class CPDefinitionGroupedEntryServiceHttp {
 			long.class
 		};
 	private static final Class<?>[]
-		_getCPDefinitionGroupedEntriesParameterTypes2 = new Class[] {
+		_deleteCPDefinitionGroupedEntriesParameterTypes2 = new Class[] {
+			long.class
+		};
+	private static final Class<?>[]
+		_cloneCPDefinitionGroupedEntriesParameterTypes3 = new Class[] {
+			long.class, long.class
+		};
+	private static final Class<?>[]
+		_getCPDefinitionGroupedEntriesParameterTypes4 = new Class[] {
 			long.class, int.class, int.class,
 			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
 	private static final Class<?>[]
-		_getCPDefinitionGroupedEntriesCountParameterTypes3 = new Class[] {
+		_getCPDefinitionGroupedEntriesCountParameterTypes5 = new Class[] {
 			long.class
 		};
 	private static final Class<?>[]
-		_getCPDefinitionGroupedEntryParameterTypes4 = new Class[] {long.class};
+		_getCPDefinitionGroupedEntryParameterTypes6 = new Class[] {long.class};
 	private static final Class<?>[]
-		_updateCPDefinitionGroupedEntryParameterTypes5 = new Class[] {
+		_updateCPDefinitionGroupedEntryParameterTypes7 = new Class[] {
 			long.class, double.class, int.class
 		};
 

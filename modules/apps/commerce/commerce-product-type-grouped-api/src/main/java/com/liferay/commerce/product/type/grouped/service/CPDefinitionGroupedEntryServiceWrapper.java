@@ -48,6 +48,22 @@ public class CPDefinitionGroupedEntryServiceWrapper
 	}
 
 	@Override
+	public void cloneCPDefinitionGroupedEntries(
+		long cpDefinitionId, long newCPDefinitionId) {
+
+		_cpDefinitionGroupedEntryService.cloneCPDefinitionGroupedEntries(
+			cpDefinitionId, newCPDefinitionId);
+	}
+
+	@Override
+	public void deleteCPDefinitionGroupedEntries(long cpDefinitionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_cpDefinitionGroupedEntryService.deleteCPDefinitionGroupedEntries(
+			cpDefinitionId);
+	}
+
+	@Override
 	public
 		com.liferay.commerce.product.type.grouped.model.CPDefinitionGroupedEntry
 				deleteCPDefinitionGroupedEntry(long cpDefinitionGroupedEntryId)

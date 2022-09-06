@@ -70,7 +70,7 @@ public class CPDefinitionLinkTableReferenceDefinitionTest
 	@Override
 	protected CTModel<?> addCTModel() throws Exception {
 		return _cpDefinitionLinkLocalService.addCPDefinitionLinkByCProductId(
-			_cpDefinition.getCPDefinitionId(), _cpDefinition.getCProductId(),
+			_cpDefinition.getUserId(), _cpDefinition.getCPDefinitionId(), _cpDefinition.getCProductId(),
 			0D, SimpleCPTypeConstants.NAME,
 			ServiceContextTestUtil.getServiceContext(group.getGroupId()));
 	}

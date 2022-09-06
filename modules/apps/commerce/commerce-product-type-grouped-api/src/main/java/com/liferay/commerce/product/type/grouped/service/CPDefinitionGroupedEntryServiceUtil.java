@@ -48,6 +48,19 @@ public class CPDefinitionGroupedEntryServiceUtil {
 			cpDefinitionId, entryCPDefinitionIds, serviceContext);
 	}
 
+	public static void cloneCPDefinitionGroupedEntries(
+		long cpDefinitionId, long newCPDefinitionId) {
+
+		getService().cloneCPDefinitionGroupedEntries(
+			cpDefinitionId, newCPDefinitionId);
+	}
+
+	public static void deleteCPDefinitionGroupedEntries(long cpDefinitionId)
+		throws PortalException {
+
+		getService().deleteCPDefinitionGroupedEntries(cpDefinitionId);
+	}
+
 	public static CPDefinitionGroupedEntry deleteCPDefinitionGroupedEntry(
 			long cpDefinitionGroupedEntryId)
 		throws PortalException {

@@ -97,7 +97,7 @@ public class CPDefinitionSpecificationOptionValueTableReferenceDefinitionTest
 	protected CTModel<?> addCTModel() throws Exception {
 		return _cpDefinitionSpecificationOptionValueLocalService.
 			addCPDefinitionSpecificationOptionValue(
-				_cpDefinition.getCPDefinitionId(),
+				_cpDefinition.getUserId(), _cpDefinition.getCPDefinitionId(),
 				_cpSpecificationOption.getCPSpecificationOptionId(),
 				_cpOptionCategory.getCPOptionCategoryId(),
 				RandomTestUtil.randomLocaleStringMap(),

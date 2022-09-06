@@ -123,6 +123,7 @@ public class SpecificationOptionFacetsTest {
 
 		_cpDefinitionSpecificationOptionValueLocalService.
 			addCPDefinitionSpecificationOptionValue(
+				cpDefinition.getUserId(),
 				cpDefinition.getCPDefinitionId(),
 				cpSpecificationOption.getCPSpecificationOptionId(),
 				cpOptionCategory.getCPOptionCategoryId(),
@@ -200,6 +201,7 @@ public class SpecificationOptionFacetsTest {
 
 		_cpDefinitionSpecificationOptionValueLocalService.
 			addCPDefinitionSpecificationOptionValue(
+				cpDefinition.getUserId(),
 				cpDefinition.getCPDefinitionId(),
 				cpSpecificationOption.getCPSpecificationOptionId(),
 				cpOptionCategory.getCPOptionCategoryId(),

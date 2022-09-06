@@ -70,12 +70,12 @@ public interface CPDefinitionGroupedEntryLocalService
 	 */
 	@Deprecated
 	public void addCPDefinitionGroupedEntries(
-			long cpDefinitionId, long[] entryCPDefinitionIds,
+			long userId, long cpDefinitionId, long[] entryCPDefinitionIds,
 			ServiceContext serviceContext)
 		throws PortalException;
 
 	public void addCPDefinitionGroupedEntriesByEntryCProductIds(
-			long cpDefinitionId, long[] entryCProductIds,
+			long userId, long cpDefinitionId, long[] entryCProductIds,
 			ServiceContext serviceContext)
 		throws PortalException;
 
@@ -98,14 +98,14 @@ public interface CPDefinitionGroupedEntryLocalService
 	 */
 	@Deprecated
 	public CPDefinitionGroupedEntry addCPDefinitionGroupedEntry(
-			long cpDefinitionId, long entryCPDefinitionId, double priority,
-			int quantity, ServiceContext serviceContext)
+			long userId, long cpDefinitionId, long entryCPDefinitionId,
+			double priority, int quantity, ServiceContext serviceContext)
 		throws PortalException;
 
 	public CPDefinitionGroupedEntry
 			addCPDefinitionGroupedEntryByEntryCProductId(
-				long cpDefinitionId, long entryCProductId, double priority,
-				int quantity, ServiceContext serviceContext)
+				long userId, long cpDefinitionId, long entryCProductId,
+				double priority, int quantity, ServiceContext serviceContext)
 		throws PortalException;
 
 	public void cloneCPDefinitionGroupedEntries(

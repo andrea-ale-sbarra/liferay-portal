@@ -50,21 +50,21 @@ public class CPDefinitionGroupedEntryLocalServiceUtil {
 	 */
 	@Deprecated
 	public static void addCPDefinitionGroupedEntries(
-			long cpDefinitionId, long[] entryCPDefinitionIds,
+			long userId, long cpDefinitionId, long[] entryCPDefinitionIds,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
 		getService().addCPDefinitionGroupedEntries(
-			cpDefinitionId, entryCPDefinitionIds, serviceContext);
+			userId, cpDefinitionId, entryCPDefinitionIds, serviceContext);
 	}
 
 	public static void addCPDefinitionGroupedEntriesByEntryCProductIds(
-			long cpDefinitionId, long[] entryCProductIds,
+			long userId, long cpDefinitionId, long[] entryCProductIds,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
 		getService().addCPDefinitionGroupedEntriesByEntryCProductIds(
-			cpDefinitionId, entryCProductIds, serviceContext);
+			userId, cpDefinitionId, entryCProductIds, serviceContext);
 	}
 
 	/**
@@ -89,25 +89,25 @@ public class CPDefinitionGroupedEntryLocalServiceUtil {
 	 */
 	@Deprecated
 	public static CPDefinitionGroupedEntry addCPDefinitionGroupedEntry(
-			long cpDefinitionId, long entryCPDefinitionId, double priority,
-			int quantity,
+			long userId, long cpDefinitionId, long entryCPDefinitionId,
+			double priority, int quantity,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
 		return getService().addCPDefinitionGroupedEntry(
-			cpDefinitionId, entryCPDefinitionId, priority, quantity,
+			userId, cpDefinitionId, entryCPDefinitionId, priority, quantity,
 			serviceContext);
 	}
 
 	public static CPDefinitionGroupedEntry
 			addCPDefinitionGroupedEntryByEntryCProductId(
-				long cpDefinitionId, long entryCProductId, double priority,
-				int quantity,
+				long userId, long cpDefinitionId, long entryCProductId,
+				double priority, int quantity,
 				com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
 		return getService().addCPDefinitionGroupedEntryByEntryCProductId(
-			cpDefinitionId, entryCProductId, priority, quantity,
+			userId, cpDefinitionId, entryCProductId, priority, quantity,
 			serviceContext);
 	}
 

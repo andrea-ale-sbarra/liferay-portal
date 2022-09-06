@@ -25,12 +25,12 @@ import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 public class GroupedCPTypeTestUtil {
 
 	public static CPDefinitionGroupedEntry addCPDefinitionGroupedEntry(
-			long groupId, long cpDefinitionId, long entryCPDefinitionId)
+			long userId, long groupId, long cpDefinitionId, long entryCPDefinitionId)
 		throws Exception {
 
 		return CPDefinitionGroupedEntryLocalServiceUtil.
 			addCPDefinitionGroupedEntry(
-				cpDefinitionId, entryCPDefinitionId,
+				userId, cpDefinitionId, entryCPDefinitionId,
 				RandomTestUtil.randomDouble(), RandomTestUtil.randomInt(),
 				ServiceContextTestUtil.getServiceContext(groupId));
 	}

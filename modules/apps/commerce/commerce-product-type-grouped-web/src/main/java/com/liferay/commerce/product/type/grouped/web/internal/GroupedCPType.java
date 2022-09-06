@@ -17,6 +17,7 @@ package com.liferay.commerce.product.type.grouped.web.internal;
 import com.liferay.commerce.product.type.CPType;
 import com.liferay.commerce.product.type.grouped.constants.GroupedCPTypeConstants;
 import com.liferay.commerce.product.type.grouped.service.CPDefinitionGroupedEntryLocalService;
+import com.liferay.commerce.product.type.grouped.service.CPDefinitionGroupedEntryService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
@@ -43,7 +44,7 @@ public class GroupedCPType implements CPType {
 
 	@Override
 	public void deleteCPDefinition(long cpDefinitionId) throws PortalException {
-		_cpDefinitionGroupedEntryLocalService.deleteCPDefinitionGroupedEntries(
+		_cpDefinitionGroupedEntryService.deleteCPDefinitionGroupedEntries(
 			cpDefinitionId);
 	}
 
@@ -61,8 +62,8 @@ public class GroupedCPType implements CPType {
 	}
 
 	@Reference
-	private CPDefinitionGroupedEntryLocalService
-		_cpDefinitionGroupedEntryLocalService;
+	private CPDefinitionGroupedEntryService
+		_cpDefinitionGroupedEntryService;
 
 	@Reference
 	private Language _language;

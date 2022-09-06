@@ -14,9 +14,10 @@
 
 package com.liferay.commerce.product.type.grouped.internal.util;
 
-import com.liferay.commerce.product.type.grouped.service.CPDefinitionGroupedEntryLocalService;
+import com.liferay.commerce.product.type.grouped.service.CPDefinitionGroupedEntryService;
 import com.liferay.commerce.product.util.CPVersionContributor;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -30,19 +31,19 @@ public class CPDefinitionGroupedEntryCPVersionContributor
 	implements CPVersionContributor {
 
 	@Override
-	public void onDelete(long cpDefinitionId) {
-		_cpDefinitionGroupedEntryLocalService.deleteCPDefinitionGroupedEntries(
+	public void onDelete(long cpDefinitionId) throws PortalException {
+		_cpDefinitionGroupedEntryService.deleteCPDefinitionGroupedEntries(
 			cpDefinitionId);
 	}
 
 	@Override
-	public void onUpdate(long oldCPDefinitionId, long newCPDefinitionId) {
-		_cpDefinitionGroupedEntryLocalService.cloneCPDefinitionGroupedEntries(
+	public void onUpdate(long oldCPDefinitionId, long newCPDefinitionId){
+		_cpDefinitionGroupedEntryService.cloneCPDefinitionGroupedEntries(
 			oldCPDefinitionId, newCPDefinitionId);
 	}
 
 	@Reference
-	private CPDefinitionGroupedEntryLocalService
-		_cpDefinitionGroupedEntryLocalService;
+	private CPDefinitionGroupedEntryService
+		_cpDefinitionGroupedEntryService;
 
 }

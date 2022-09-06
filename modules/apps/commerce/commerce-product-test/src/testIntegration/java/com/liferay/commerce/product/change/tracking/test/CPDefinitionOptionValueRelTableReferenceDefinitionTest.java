@@ -79,6 +79,7 @@ public class CPDefinitionOptionValueRelTableReferenceDefinitionTest
 	protected CTModel<?> addCTModel() throws Exception {
 		return _cpDefinitionOptionValueRelLocalService.
 			addCPDefinitionOptionValueRel(
+				_cpDefinitionOptionRel.getUserId(),
 				_cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 				RandomTestUtil.randomLocaleStringMap(),
 				RandomTestUtil.nextDouble(),

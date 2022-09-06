@@ -436,7 +436,7 @@ public class CPDefinitionLocalServiceTest {
 
 		CPDefinition duplicateCPDefinition =
 			_cpDefinitionLocalService.copyCPDefinition(
-				cpInstance.getCPDefinitionId());
+				cpInstance.getUserId(), cpInstance.getCPDefinitionId());
 
 		CPInstance duplicateCPInstance = _cpInstanceLocalService.getCPInstance(
 			duplicateCPDefinition.getCPDefinitionId(), cpInstance.getSku());

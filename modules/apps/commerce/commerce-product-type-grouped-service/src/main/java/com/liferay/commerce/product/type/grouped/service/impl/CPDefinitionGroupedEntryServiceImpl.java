@@ -61,7 +61,7 @@ public class CPDefinitionGroupedEntryServiceImpl
 		}
 
 		cpDefinitionGroupedEntryLocalService.addCPDefinitionGroupedEntries(
-			cpDefinitionId, entryCPDefinitionIds, serviceContext);
+			getUserId(), cpDefinitionId, entryCPDefinitionIds, serviceContext);
 	}
 
 	@Override
@@ -78,6 +78,25 @@ public class CPDefinitionGroupedEntryServiceImpl
 
 		return cpDefinitionGroupedEntryLocalService.
 			deleteCPDefinitionGroupedEntry(cpDefinitionGroupedEntry);
+	}
+
+	@Override
+	public void deleteCPDefinitionGroupedEntries(
+		long cpDefinitionId)
+		throws PortalException {
+
+		_checkCommerceCatalog(cpDefinitionId, ActionKeys.UPDATE);
+
+		cpDefinitionGroupedEntryLocalService.
+			deleteCPDefinitionGroupedEntries(getUserId(), cpDefinitionId);
+	}
+
+	@Override
+	public void cloneCPDefinitionGroupedEntries(
+		long cpDefinitionId, long newCPDefinitionId){
+
+		cpDefinitionGroupedEntryLocalService.
+			cloneCPDefinitionGroupedEntries(cpDefinitionId, newCPDefinitionId);
 	}
 
 	@Override

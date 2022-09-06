@@ -119,6 +119,7 @@ public class CPDefinitionOptionRelLocalServiceTest {
 
 		cpDefinitionOptionRel =
 			_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
+				cpDefinitionOptionRel.getUserId(),
 				cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 				cpDefinitionOptionRel.getCPOptionId(),
 				cpDefinitionOptionRel.getNameMap(),
@@ -139,7 +140,7 @@ public class CPDefinitionOptionRelLocalServiceTest {
 			"No approved instances", cpDefinitionApprovedCPInstances.isEmpty());
 
 		_cpInstanceLocalService.buildCPInstances(
-			cpDefinition.getCPDefinitionId(), _serviceContext);
+			cpDefinition.getUserId(), cpDefinition.getCPDefinitionId(), _serviceContext);
 
 		cpDefinitionOptionRel = CPTestUtil.addCPDefinitionOptionRel(
 			_commerceCatalog.getGroupId(), cpDefinition.getCPDefinitionId(),
@@ -163,7 +164,7 @@ public class CPDefinitionOptionRelLocalServiceTest {
 			"No approved instances", cpDefinitionApprovedCPInstances.isEmpty());
 
 		_cpInstanceLocalService.buildCPInstances(
-			cpDefinition.getCPDefinitionId(), _serviceContext);
+			cpDefinition.getUserId(), cpDefinition.getCPDefinitionId(), _serviceContext);
 
 		cpDefinitionApprovedCPInstances =
 			_cpInstanceLocalService.getCPDefinitionApprovedCPInstances(
@@ -174,6 +175,7 @@ public class CPDefinitionOptionRelLocalServiceTest {
 			cpDefinitionApprovedCPInstances.isEmpty());
 
 		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
+			cpDefinitionOptionRel.getUserId(),
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
 			cpDefinitionOptionRel.getNameMap(),
@@ -456,6 +458,7 @@ public class CPDefinitionOptionRelLocalServiceTest {
 		throws Exception {
 
 		return _cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
+			cpDefinitionOptionRel.getUserId(),
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
 			cpDefinitionOptionRel.getNameMap(),

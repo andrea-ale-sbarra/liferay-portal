@@ -131,6 +131,7 @@ public class CPInstanceLocalServiceTest {
 		CPDefinitionOptionValueRel newCPDefinitionOptionValueRel =
 			CPDefinitionOptionValueRelLocalServiceUtil.
 				addCPDefinitionOptionValueRel(
+					cpDefinitionOptionRel.getUserId(),
 					cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 					cpOptionValue,
 					ServiceContextTestUtil.getServiceContext(
@@ -150,7 +151,7 @@ public class CPInstanceLocalServiceTest {
 			newCPDefinitionOptionValueRel, cpDefinitionInstances);
 
 		CPInstanceLocalServiceUtil.buildCPInstances(
-			cpDefinition.getCPDefinitionId(),
+			cpDefinition.getUserId(), cpDefinition.getCPDefinitionId(),
 			ServiceContextTestUtil.getServiceContext(
 				_commerceCatalog.getGroupId()));
 
@@ -509,6 +510,7 @@ public class CPInstanceLocalServiceTest {
 
 		cpDefinitionOptionRel =
 			CPDefinitionOptionRelLocalServiceUtil.updateCPDefinitionOptionRel(
+				cpDefinitionOptionRel.getUserId(),
 				cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 				cpDefinitionOptionRel.getCPOptionId(),
 				cpDefinitionOptionRel.getNameMap(),
@@ -526,6 +528,7 @@ public class CPInstanceLocalServiceTest {
 		_assertApprovedCPInstancesCount(cpDefinition.getCPDefinitionId(), 0);
 
 		_cpInstanceLocalService.buildCPInstances(
+			cpDefinition.getUserId(),
 			cpDefinition.getCPDefinitionId(),
 			ServiceContextTestUtil.getServiceContext(
 				_commerceCatalog.getGroupId()));
@@ -535,6 +538,7 @@ public class CPInstanceLocalServiceTest {
 
 		cpDefinitionOptionRel =
 			CPDefinitionOptionRelLocalServiceUtil.updateCPDefinitionOptionRel(
+				cpDefinitionOptionRel.getUserId(),
 				cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 				cpDefinitionOptionRel.getCPOptionId(),
 				cpDefinitionOptionRel.getNameMap(),
@@ -639,8 +643,12 @@ public class CPInstanceLocalServiceTest {
 			_commerceCatalog.getGroupId(), cpDefinitionId, cpOptionsCount,
 			cpOptionValuesCount);
 
+		CPDefinition cpDefinition = _cpDefinitionLocalService.getCPDefinition(cpDefinitionId);
+
 		_cpInstanceLocalService.buildCPInstances(
-			cpDefinitionId, ServiceContextTestUtil.getServiceContext(groupId));
+			cpDefinition.getUserId(),
+			cpDefinitionId,
+			ServiceContextTestUtil.getServiceContext(groupId));
 
 		_assertApprovedCPInstancesCount(
 			cpDefinitionId, (int)Math.pow(cpOptionValuesCount, cpOptionsCount));
