@@ -16,6 +16,7 @@ package com.liferay.frontend.data.set.taglib.servlet.taglib;
 
 import com.liferay.frontend.data.set.model.FDSPaginationEntry;
 import com.liferay.frontend.data.set.taglib.internal.js.loader.modules.extender.npm.NPMResolverProvider;
+import com.liferay.frontend.data.set.taglib.internal.servlet.ServletContextUtil;
 import com.liferay.frontend.data.set.taglib.internal.util.ServicesProvider;
 import com.liferay.frontend.js.loader.modules.extender.npm.NPMResolvedPackageNameUtil;
 import com.liferay.frontend.js.loader.modules.extender.npm.NPMResolver;
@@ -23,6 +24,8 @@ import com.liferay.frontend.js.module.launcher.JSModuleResolver;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.PortalPreferences;
+import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.Validator;
@@ -221,6 +224,8 @@ public class BaseDisplayTag extends AttributesTagSupport {
 				return null;
 			}
 		).put(
+			"customViews", _getCustomViews()
+		).put(
 			"namespace", getNamespace()
 		).put(
 			"pagination",
@@ -291,6 +296,18 @@ public class BaseDisplayTag extends AttributesTagSupport {
 	}
 
 	protected void setAttributes(HttpServletRequest httpServletRequest) {
+	}
+
+	private String _getCustomViews() {
+		HttpServletRequest httpServletRequest = getRequest();
+
+		PortalPreferences portalPreferences =
+			PortletPreferencesFactoryUtil.getPortalPreferences(
+				httpServletRequest);
+
+		return portalPreferences.getValue(
+			ServletContextUtil.getFDSSettingsNamespace(httpServletRequest, _id),
+			"customViews", "{}");
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(BaseDisplayTag.class);
