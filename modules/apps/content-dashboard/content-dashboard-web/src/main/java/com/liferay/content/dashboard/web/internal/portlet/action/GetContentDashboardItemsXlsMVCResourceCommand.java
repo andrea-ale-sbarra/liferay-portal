@@ -185,12 +185,7 @@ public class GetContentDashboardItemsXlsMVCResourceCommand
 
 		workbookBuilder.cell(_toString(specificInformation, "extension"));
 
-		if (contentDashboardItem.getClipboard() != null) {
-			ContentDashboardItem.Clipboard clipboard =
-				contentDashboardItem.getClipboard();
-
-			workbookBuilder.cell(_toString(clipboard.getName()));
-		}
+		workbookBuilder.cell(_toString(specificInformation, "file-name"));
 
 		workbookBuilder.cell(
 			_toString(specificInformation, "size")

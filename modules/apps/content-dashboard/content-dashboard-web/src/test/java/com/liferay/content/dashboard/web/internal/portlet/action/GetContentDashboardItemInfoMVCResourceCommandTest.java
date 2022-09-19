@@ -697,12 +697,6 @@ public class GetContentDashboardItemInfoMVCResourceCommandTest {
 				}
 
 				@Override
-				public Clipboard getClipboard() {
-					return new Clipboard(
-						"name", "www.previewURL.url.com/previewURL");
-				}
-
-				@Override
 				public List<ContentDashboardItemAction>
 					getContentDashboardItemActions(
 						HttpServletRequest httpServletRequest,

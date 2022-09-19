@@ -134,8 +134,6 @@ public class GetContentDashboardItemInfoMVCResourceCommand
 				).put(
 					"classPK", _getClassPK(contentDashboardItem)
 				).put(
-					"clipboard", _getClipboardJSONObject(contentDashboardItem)
-				).put(
 					"createDate",
 					_toString(contentDashboardItem.getCreateDate())
 				).put(
@@ -311,18 +309,6 @@ public class GetContentDashboardItemInfoMVCResourceCommand
 			contentDashboardItem.getInfoItemReference();
 
 		return infoItemReference.getClassPK();
-	}
-
-	private JSONObject _getClipboardJSONObject(
-		ContentDashboardItem contentDashboardItem) {
-
-		return Optional.ofNullable(
-			contentDashboardItem.getClipboard()
-		).map(
-			ContentDashboardItem.Clipboard::toJSONObject
-		).orElse(
-			null
-		);
 	}
 
 	private String _getDownloadURL(

@@ -176,11 +176,6 @@ public class JournalArticleContentDashboardItem
 	}
 
 	@Override
-	public Clipboard getClipboard() {
-		return Clipboard.EMPTY;
-	}
-
-	@Override
 	public List<ContentDashboardItemAction> getContentDashboardItemActions(
 		HttpServletRequest httpServletRequest,
 		ContentDashboardItemAction.Type... types) {
