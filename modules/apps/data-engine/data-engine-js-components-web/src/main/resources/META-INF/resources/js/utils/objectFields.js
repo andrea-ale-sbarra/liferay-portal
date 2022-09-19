@@ -38,8 +38,13 @@ const getURL = (path, params) => {
 };
 
 const fetchObjectFields = (objectDefinitionId) => {
+	const pathContext = themeDisplay.getPathContext();
+
 	return fetch(
-		getURL(`/o/object-admin/v1.0/object-definitions/${objectDefinitionId}`),
+		getURL(
+			pathContext +
+				`/o/object-admin/v1.0/object-definitions/${objectDefinitionId}`
+		),
 		{
 			headers: HEADERS,
 			method: 'GET',
