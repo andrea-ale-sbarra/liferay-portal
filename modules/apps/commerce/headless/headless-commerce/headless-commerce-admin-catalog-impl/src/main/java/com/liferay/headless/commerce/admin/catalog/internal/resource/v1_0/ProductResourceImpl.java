@@ -1074,8 +1074,8 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 
 				_commerceAccountGroupRelService.addCommerceAccountGroupRel(
 					CPDefinition.class.getName(),
-					cpDefinition.getCPDefinitionId(), accountGroupId,
-					serviceContext);
+					cpDefinition.getCPDefinitionId(), accountGroupId
+				);
 			}
 		}
 

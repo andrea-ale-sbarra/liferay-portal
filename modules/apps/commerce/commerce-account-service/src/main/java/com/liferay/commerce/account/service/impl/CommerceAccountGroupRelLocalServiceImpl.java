@@ -23,7 +23,6 @@ import com.liferay.commerce.account.model.impl.CommerceAccountGroupRelImpl;
 import com.liferay.commerce.account.service.base.CommerceAccountGroupRelLocalServiceBaseImpl;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
@@ -52,8 +51,7 @@ public class CommerceAccountGroupRelLocalServiceImpl
 
 	@Override
 	public CommerceAccountGroupRel addCommerceAccountGroupRel(
-			String className, long classPK, long commerceAccountGroupId,
-			ServiceContext serviceContext)
+			String className, long classPK, long commerceAccountGroupId)
 		throws PortalException {
 
 		try {

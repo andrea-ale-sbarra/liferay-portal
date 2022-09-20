@@ -21,7 +21,6 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import java.util.List;
@@ -45,15 +44,14 @@ public class CommerceAccountGroupRelServiceImpl
 
 	@Override
 	public CommerceAccountGroupRel addCommerceAccountGroupRel(
-			String className, long classPK, long commerceAccountGroupId,
-			ServiceContext serviceContext)
+			String className, long classPK, long commerceAccountGroupId)
 		throws PortalException {
 
 		_commerceAccountGroupModelResourcePermission.check(
 			getPermissionChecker(), commerceAccountGroupId, ActionKeys.UPDATE);
 
 		return commerceAccountGroupRelLocalService.addCommerceAccountGroupRel(
-			className, classPK, commerceAccountGroupId, serviceContext);
+			className, classPK, commerceAccountGroupId);
 	}
 
 	@Override

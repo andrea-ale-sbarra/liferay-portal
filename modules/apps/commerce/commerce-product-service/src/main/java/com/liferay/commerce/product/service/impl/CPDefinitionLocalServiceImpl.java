@@ -108,10 +108,10 @@ import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.facet.Facet;
 import com.liferay.portal.kernel.search.facet.MultiValueFacet;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalService;
 import com.liferay.portal.kernel.service.WorkflowInstanceLinkLocalService;
@@ -870,8 +870,8 @@ public class CPDefinitionLocalServiceImpl
 					QueryUtil.ALL_POS, null)) {
 
 			_commerceChannelRelLocalService.addCommerceChannelRel(
-				newCPDefinition.getModelClassName(), newCPDefinitionId,
-				commerceChannelRel.getCommerceChannelId(), serviceContext);
+				userId, newCPDefinition.getModelClassName(), newCPDefinitionId,
+				commerceChannelRel.getCommerceChannelId());
 		}
 
 		for (CommerceAccountGroupRel commerceAccountGroupRel :
@@ -883,8 +883,8 @@ public class CPDefinitionLocalServiceImpl
 
 			_commerceAccountGroupRelLocalService.addCommerceAccountGroupRel(
 				newCPDefinition.getModelClassName(), newCPDefinitionId,
-				commerceAccountGroupRel.getCommerceAccountGroupId(),
-				serviceContext);
+				commerceAccountGroupRel.getCommerceAccountGroupId()
+			);
 		}
 
 		List<CPVersionContributor> cpVersionContributors =
@@ -917,10 +917,7 @@ public class CPDefinitionLocalServiceImpl
 			long cpDefinitionId, long groupId, int status)
 		throws PortalException {
 
-		ServiceContext serviceContext =
-			ServiceContextThreadLocal.getServiceContext();
-
-		User user = _userLocalService.getUser(serviceContext.getUserId());
+		User user = _userLocalService.getUser(PrincipalThreadLocal.getUserId());
 
 		CPDefinition originalCPDefinition =
 			cpDefinitionLocalService.getCPDefinition(cpDefinitionId);
@@ -1256,8 +1253,9 @@ public class CPDefinitionLocalServiceImpl
 					QueryUtil.ALL_POS, null)) {
 
 			_commerceChannelRelLocalService.addCommerceChannelRel(
+				PrincipalThreadLocal.getUserId(),
 				newCPDefinition.getModelClassName(), newCPDefinitionId,
-				commerceChannelRel.getCommerceChannelId(), serviceContext);
+				commerceChannelRel.getCommerceChannelId());
 		}
 
 		for (CommerceAccountGroupRel commerceAccountGroupRel :
@@ -1269,8 +1267,8 @@ public class CPDefinitionLocalServiceImpl
 
 			_commerceAccountGroupRelLocalService.addCommerceAccountGroupRel(
 				newCPDefinition.getModelClassName(), newCPDefinitionId,
-				commerceAccountGroupRel.getCommerceAccountGroupId(),
-				serviceContext);
+				commerceAccountGroupRel.getCommerceAccountGroupId()
+			);
 		}
 
 		List<CPVersionContributor> cpVersionContributors =
