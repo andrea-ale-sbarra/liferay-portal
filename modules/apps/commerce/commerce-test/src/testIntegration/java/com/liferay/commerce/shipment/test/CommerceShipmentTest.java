@@ -63,6 +63,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
 import com.liferay.portal.kernel.settings.ModifiableSettings;
@@ -1038,17 +1039,18 @@ public class CommerceShipmentTest {
 	private CommerceInventoryWarehouse _createCommerceInventoryWarehouse(
 			long commerceChannelId, boolean active)
 		throws Exception {
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext(_group.getGroupId());
 
 		CommerceInventoryWarehouse commerceInventoryWarehouse =
 			CommerceInventoryTestUtil.addCommerceInventoryWarehouse(
-				active,
-				ServiceContextTestUtil.getServiceContext(_group.getGroupId()));
+				active, serviceContext);
 
 		_commerceChannelRelLocalService.addCommerceChannelRel(
+			serviceContext.getUserId(),
 			CommerceInventoryWarehouse.class.getName(),
 			commerceInventoryWarehouse.getCommerceInventoryWarehouseId(),
-			commerceChannelId,
-			ServiceContextTestUtil.getServiceContext(_group.getGroupId()));
+			commerceChannelId);
 
 		return commerceInventoryWarehouse;
 	}

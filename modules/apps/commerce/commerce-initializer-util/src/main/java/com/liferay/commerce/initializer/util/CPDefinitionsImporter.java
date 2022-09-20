@@ -714,8 +714,8 @@ public class CPDefinitionsImporter {
 						addCommerceAccountGroupRel(
 							CPDefinition.class.getName(),
 							cpDefinition.getCPDefinitionId(),
-							commerceAccountGroup.getCommerceAccountGroupId(),
-							serviceContext);
+							commerceAccountGroup.getCommerceAccountGroupId()
+						);
 				}
 			}
 		}
