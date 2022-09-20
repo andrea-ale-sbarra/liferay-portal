@@ -425,8 +425,8 @@ public class CPDefinitionsImporter {
 				cpDefinition, jsonObject.getJSONArray("customFields"));
 
 			_commerceChannelRelLocalService.addCommerceChannelRel(
-				CPDefinition.class.getName(), cpDefinition.getCPDefinitionId(),
-				commerceChannelId, serviceContext);
+				serviceContext.getUserId(), CPDefinition.class.getName(),
+				cpDefinition.getCPDefinitionId(), commerceChannelId);
 
 			Indexer<CPDefinition> indexer =
 				IndexerRegistryUtil.nullSafeGetIndexer(CPDefinition.class);
@@ -686,8 +686,8 @@ public class CPDefinitionsImporter {
 			cpDefinition.getCPDefinitionId(), true);
 
 		_commerceChannelRelLocalService.addCommerceChannelRel(
-			CPDefinition.class.getName(), cpDefinition.getCPDefinitionId(),
-			commerceChannelId, serviceContext);
+			serviceContext.getUserId(), CPDefinition.class.getName(),
+			cpDefinition.getCPDefinitionId(), commerceChannelId);
 
 		// Filter account groups
 

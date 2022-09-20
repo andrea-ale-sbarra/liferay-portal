@@ -18,7 +18,6 @@ import com.liferay.commerce.account.model.CommerceAccountGroupRel;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.service.BaseLocalService;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -54,8 +53,7 @@ public interface CommerceAccountGroupRelLocalService extends BaseLocalService {
 		CommerceAccountGroupRel commerceAccountGroupRel);
 
 	public CommerceAccountGroupRel addCommerceAccountGroupRel(
-			String className, long classPK, long commerceAccountGroupId,
-			ServiceContext serviceContext)
+			String className, long classPK, long commerceAccountGroupId)
 		throws PortalException;
 
 	public CommerceAccountGroupRel deleteCommerceAccountGroupRel(

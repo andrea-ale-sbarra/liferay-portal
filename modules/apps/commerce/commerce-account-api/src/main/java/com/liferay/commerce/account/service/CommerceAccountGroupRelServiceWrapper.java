@@ -40,12 +40,11 @@ public class CommerceAccountGroupRelServiceWrapper
 	@Override
 	public com.liferay.commerce.account.model.CommerceAccountGroupRel
 			addCommerceAccountGroupRel(
-				String className, long classPK, long commerceAccountGroupId,
-				com.liferay.portal.kernel.service.ServiceContext serviceContext)
+				String className, long classPK, long commerceAccountGroupId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _commerceAccountGroupRelService.addCommerceAccountGroupRel(
-			className, classPK, commerceAccountGroupId, serviceContext);
+			className, classPK, commerceAccountGroupId);
 	}
 
 	@Override

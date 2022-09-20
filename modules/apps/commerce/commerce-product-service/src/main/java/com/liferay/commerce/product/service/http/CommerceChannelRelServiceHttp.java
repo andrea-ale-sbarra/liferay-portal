@@ -53,8 +53,7 @@ public class CommerceChannelRelServiceHttp {
 	public static com.liferay.commerce.product.model.CommerceChannelRel
 			addCommerceChannelRel(
 				HttpPrincipal httpPrincipal, String className, long classPK,
-				long commerceChannelId,
-				com.liferay.portal.kernel.service.ServiceContext serviceContext)
+				long commerceChannelId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
@@ -63,8 +62,7 @@ public class CommerceChannelRelServiceHttp {
 				_addCommerceChannelRelParameterTypes0);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, className, classPK, commerceChannelId,
-				serviceContext);
+				methodKey, className, classPK, commerceChannelId);
 
 			Object returnObj = null;
 
@@ -474,10 +472,7 @@ public class CommerceChannelRelServiceHttp {
 		CommerceChannelRelServiceHttp.class);
 
 	private static final Class<?>[] _addCommerceChannelRelParameterTypes0 =
-		new Class[] {
-			String.class, long.class, long.class,
-			com.liferay.portal.kernel.service.ServiceContext.class
-		};
+		new Class[] {String.class, long.class, long.class};
 	private static final Class<?>[] _deleteCommerceChannelRelParameterTypes1 =
 		new Class[] {long.class};
 	private static final Class<?>[] _deleteCommerceChannelRelsParameterTypes2 =

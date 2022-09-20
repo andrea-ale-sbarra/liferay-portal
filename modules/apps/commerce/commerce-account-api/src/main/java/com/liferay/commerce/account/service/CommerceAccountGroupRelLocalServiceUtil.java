@@ -51,7 +51,7 @@ public class CommerceAccountGroupRelLocalServiceUtil {
 		throws PortalException {
 
 		return getService().addCommerceAccountGroupRel(
-			className, classPK, commerceAccountGroupId, serviceContext);
+			className, classPK, commerceAccountGroupId);
 	}
 
 	public static CommerceAccountGroupRel deleteCommerceAccountGroupRel(

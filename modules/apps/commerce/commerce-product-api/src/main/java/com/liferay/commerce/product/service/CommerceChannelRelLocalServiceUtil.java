@@ -62,12 +62,11 @@ public class CommerceChannelRelLocalServiceUtil {
 	}
 
 	public static CommerceChannelRel addCommerceChannelRel(
-			String className, long classPK, long commerceChannelId,
-			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+			long userId, String className, long classPK, long commerceChannelId)
 		throws PortalException {
 
 		return getService().addCommerceChannelRel(
-			className, classPK, commerceChannelId, serviceContext);
+			userId, className, classPK, commerceChannelId);
 	}
 
 	/**
