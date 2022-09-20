@@ -1344,7 +1344,8 @@ public class ObjectDefinitionLocalServiceTest {
 		}
 
 		_assertSystemObjectFields(
-			new ObjectFieldBuilder().businessType(
+			new ObjectFieldBuilder(
+			).businessType(
 				ObjectFieldConstants.BUSINESS_TYPE_DATE
 			).dbColumnName(
 				objectEntryTable.createDate.getName()
@@ -1363,7 +1364,8 @@ public class ObjectDefinitionLocalServiceTest {
 		Assert.assertTrue(iterator.hasNext());
 
 		_assertSystemObjectFields(
-			new ObjectFieldBuilder().businessType(
+			new ObjectFieldBuilder(
+			).businessType(
 				ObjectFieldConstants.BUSINESS_TYPE_TEXT
 			).dbColumnName(
 				objectEntryTable.userName.getName()
@@ -1383,7 +1385,8 @@ public class ObjectDefinitionLocalServiceTest {
 			Assert.assertTrue(iterator.hasNext());
 
 			_assertSystemObjectFields(
-				new ObjectFieldBuilder().businessType(
+				new ObjectFieldBuilder(
+				).businessType(
 					ObjectFieldConstants.BUSINESS_TYPE_TEXT
 				).dbColumnName(
 					objectEntryTable.externalReferenceCode.getName()
@@ -1404,7 +1407,8 @@ public class ObjectDefinitionLocalServiceTest {
 		Assert.assertTrue(iterator.hasNext());
 
 		_assertSystemObjectFields(
-			new ObjectFieldBuilder().businessType(
+			new ObjectFieldBuilder(
+			).businessType(
 				ObjectFieldConstants.BUSINESS_TYPE_LONG_INTEGER
 			).dbColumnName(
 				dbColumnName
@@ -1427,7 +1431,8 @@ public class ObjectDefinitionLocalServiceTest {
 		Assert.assertTrue(iterator.hasNext());
 
 		_assertSystemObjectFields(
-			new ObjectFieldBuilder().businessType(
+			new ObjectFieldBuilder(
+			).businessType(
 				ObjectFieldConstants.BUSINESS_TYPE_DATE
 			).dbColumnName(
 				objectEntryTable.modifiedDate.getName()
@@ -1446,7 +1451,8 @@ public class ObjectDefinitionLocalServiceTest {
 		Assert.assertTrue(iterator.hasNext());
 
 		_assertSystemObjectFields(
-			new ObjectFieldBuilder().businessType(
+			new ObjectFieldBuilder(
+			).businessType(
 				ObjectFieldConstants.BUSINESS_TYPE_TEXT
 			).dbColumnName(
 				objectEntryTable.status.getName()
