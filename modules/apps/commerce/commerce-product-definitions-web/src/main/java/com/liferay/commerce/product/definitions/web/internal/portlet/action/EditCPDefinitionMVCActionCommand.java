@@ -665,7 +665,7 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 
 			_commerceAccountGroupRelService.addCommerceAccountGroupRel(
 				CPDefinition.class.getName(), cpDefinitionId,
-				commerceAccountGroupId, serviceContext);
+				commerceAccountGroupId);
 		}
 
 		// Commerce channel rels
