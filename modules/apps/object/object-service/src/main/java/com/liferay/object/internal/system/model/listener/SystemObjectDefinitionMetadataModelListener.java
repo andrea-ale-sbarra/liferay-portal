@@ -260,10 +260,10 @@ public class SystemObjectDefinitionMetadataModelListener<T extends BaseModel<T>>
 		return (Long)function.apply(baseModel);
 	}
 
-	private Map<String, Object> _toDTO(T baseModel, long userId)
-		throws PortalException {
-
+	private Map<String, Object> _toDTO(T baseModel, long userId) {
 		DTOConverter<T, ?> dtoConverter = _getDTOConverter();
+
+		Map<String, Object> modelAttributes = baseModel.getModelAttributes();
 
 		if (dtoConverter == null) {
 			if (_log.isWarnEnabled()) {
@@ -271,7 +271,7 @@ public class SystemObjectDefinitionMetadataModelListener<T extends BaseModel<T>>
 					"No DTO converter found for " + _modelClass.getName());
 			}
 
-			return baseModel.getModelAttributes();
+			return modelAttributes;
 		}
 
 		User user = _userLocalService.fetchUser(userId);
@@ -281,7 +281,7 @@ public class SystemObjectDefinitionMetadataModelListener<T extends BaseModel<T>>
 				_log.warn("No user found with user ID " + userId);
 			}
 
-			return baseModel.getModelAttributes();
+			return modelAttributes;
 		}
 
 		DefaultDTOConverterContext defaultDTOConverterContext =
@@ -294,13 +294,17 @@ public class SystemObjectDefinitionMetadataModelListener<T extends BaseModel<T>>
 				defaultDTOConverterContext, baseModel);
 
 			if (object == null) {
-				return baseModel.getModelAttributes();
+				return modelAttributes;
 			}
 
 			JSONObject jsonObject = _jsonFactory.createJSONObject(
 				_jsonFactory.looseSerializeDeep(object));
 
-			return jsonObject.toMap();
+			return jsonObject.put(
+				"createDate", modelAttributes.get("createDate")
+			).put(
+				"userName", user.getFullName()
+			).toMap();
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
