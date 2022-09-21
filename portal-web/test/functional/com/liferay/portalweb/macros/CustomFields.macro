@@ -195,7 +195,7 @@ definition {
 
 		var key_customFieldName = "${customFieldName}";
 
-		AssertElementNotPresent(locator1 = "CustomFieldsEditResource#CUSTOM_FIELDS_TABLE_NAME");
+		WaitForElementNotPresent(locator1 = "CustomFieldsEditResource#CUSTOM_FIELDS_TABLE_NAME");
 	}
 
 	macro viewCPIsPresent {
@@ -207,7 +207,7 @@ definition {
 
 		var key_customFieldName = "${customFieldName}";
 
-		AssertElementPresent(locator1 = "CustomFieldsEditResource#CUSTOM_FIELDS_TABLE_NAME");
+		WaitForElementPresent(locator1 = "CustomFieldsEditResource#CUSTOM_FIELDS_TABLE_NAME");
 	}
 
 }
