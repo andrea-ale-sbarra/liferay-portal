@@ -33,13 +33,12 @@ public class CommerceInventoryWarehouseUpgradeProcess extends UpgradeProcess {
 	@Override
 	protected void doUpgrade() throws Exception {
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
-			"update CIWarehouse set description = ?, name = ? where " +
-				"CIWarehouseId = ?");
-
-			 Statement statement = connection.createStatement();
-			 ResultSet resultSet = statement.executeQuery(
-				 "select CIWarehouseId, companyId, description, name from " +
-					 "CIWarehouse")) {
+				"update CIWarehouse set description = ?, name = ? where " +
+					"CIWarehouseId = ?");
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(
+				"select CIWarehouseId, companyId, description, name from " +
+					"CIWarehouse")) {
 
 			while (resultSet.next()) {
 				long companyId = resultSet.getLong("companyId");

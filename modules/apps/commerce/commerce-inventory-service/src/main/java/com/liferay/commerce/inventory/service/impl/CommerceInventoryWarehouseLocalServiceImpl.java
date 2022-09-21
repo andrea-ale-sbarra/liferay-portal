@@ -91,14 +91,11 @@ public class CommerceInventoryWarehouseLocalServiceImpl
 			0, user.getCompanyId(), externalReferenceCode);
 
 		_validateNameMap(nameMap);
-
 		_validateActive(active, latitude, longitude);
-
-		long commerceInventoryWarehouseId = counterLocalService.increment();
 
 		CommerceInventoryWarehouse commerceInventoryWarehouse =
 			commerceInventoryWarehousePersistence.create(
-				commerceInventoryWarehouseId);
+				counterLocalService.increment());
 
 		commerceInventoryWarehouse.setExternalReferenceCode(
 			externalReferenceCode);
@@ -123,8 +120,6 @@ public class CommerceInventoryWarehouseLocalServiceImpl
 		commerceInventoryWarehouse =
 			commerceInventoryWarehousePersistence.update(
 				commerceInventoryWarehouse);
-
-		// Resources
 
 		Company company = _companyLocalService.getCompany(user.getCompanyId());
 

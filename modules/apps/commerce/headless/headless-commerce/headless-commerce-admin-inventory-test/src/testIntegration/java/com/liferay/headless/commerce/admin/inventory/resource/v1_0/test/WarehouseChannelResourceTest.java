@@ -53,14 +53,14 @@ public class WarehouseChannelResourceTest
 	public void setUp() throws Exception {
 		super.setUp();
 
+		_commerceCurrency = CommerceCurrencyTestUtil.addCommerceCurrency(
+			testGroup.getCompanyId());
+
 		_user = UserTestUtil.addUser(testCompany);
 
 		_serviceContext = ServiceContextTestUtil.getServiceContext(
 			testCompany.getCompanyId(), testGroup.getGroupId(),
 			_user.getUserId());
-
-		_commerceCurrency = CommerceCurrencyTestUtil.addCommerceCurrency(
-			testGroup.getCompanyId());
 
 		_commerceInventoryWarehouse =
 			CommerceInventoryTestUtil.addCommerceInventoryWarehouse(

@@ -49,14 +49,14 @@ public class OrderTypeResourceTest extends BaseOrderTypeResourceTestCase {
 
 		_user = UserTestUtil.addUser(testCompany);
 
-		_serviceContext = ServiceContextTestUtil.getServiceContext(
-			testCompany.getCompanyId(), testGroup.getGroupId(),
-			_user.getUserId());
-
 		DateConfig displayDateConfig = DateConfig.toDisplayDateConfig(
 			RandomTestUtil.nextDate(), _user.getTimeZone());
 		DateConfig expirationDateConfig = DateConfig.toExpirationDateConfig(
 			RandomTestUtil.nextDate(), _user.getTimeZone());
+
+		_serviceContext = ServiceContextTestUtil.getServiceContext(
+			testCompany.getCompanyId(), testGroup.getGroupId(),
+			_user.getUserId());
 
 		_commerceOrderType =
 			CommerceOrderTypeLocalServiceUtil.addCommerceOrderType(
