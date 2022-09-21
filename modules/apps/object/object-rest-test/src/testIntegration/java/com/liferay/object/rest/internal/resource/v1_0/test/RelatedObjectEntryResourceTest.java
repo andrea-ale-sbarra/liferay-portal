@@ -55,7 +55,6 @@ import java.io.Serializable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -109,7 +108,8 @@ public class RelatedObjectEntryResourceTest {
 				getSystemObjectDefinitionMetadata("User");
 
 		ObjectDefinition userSystemObjectDefinition =
-			_getSystemObjectDefinition(_userSystemObjectDefinitionMetadata);
+			_objectDefinitionLocalService.fetchSystemObjectDefinition(
+				_userSystemObjectDefinitionMetadata.getName());
 
 		_objectRelationship =
 			ObjectRelationshipLocalServiceUtil.addObjectRelationship(
@@ -199,26 +199,6 @@ public class RelatedObjectEntryResourceTest {
 				_OBJECT_FIELD_NAME, objectFieldValue
 			).build(),
 			ServiceContextTestUtil.getServiceContext());
-	}
-
-	private ObjectDefinition _getSystemObjectDefinition(
-		SystemObjectDefinitionMetadata systemObjectDefinitionMetadata) {
-
-		List<ObjectDefinition> systemObjectDefinitions =
-			_objectDefinitionLocalService.getSystemObjectDefinitions();
-
-		for (ObjectDefinition systemObjectDefinition :
-				systemObjectDefinitions) {
-
-			if (Objects.equals(
-					systemObjectDefinition.getName(),
-					systemObjectDefinitionMetadata.getName())) {
-
-				return systemObjectDefinition;
-			}
-		}
-
-		return null;
 	}
 
 	private JSONObject _invoke(String endpoint, Http.Method httpMethod)

@@ -227,21 +227,8 @@ public class RelatedObjectEntryResourceImpl
 	private ObjectDefinition _getSystemObjectDefinition(
 		SystemObjectDefinitionMetadata systemObjectDefinitionMetadata) {
 
-		List<ObjectDefinition> systemObjectDefinitions =
-			_objectDefinitionLocalService.getSystemObjectDefinitions();
-
-		for (ObjectDefinition systemObjectDefinition :
-				systemObjectDefinitions) {
-
-			if (Objects.equals(
-					systemObjectDefinition.getName(),
-					systemObjectDefinitionMetadata.getName())) {
-
-				return systemObjectDefinition;
-			}
-		}
-
-		return null;
+		return _objectDefinitionLocalService.fetchSystemObjectDefinition(
+			systemObjectDefinitionMetadata.getName());
 	}
 
 	private SystemObjectDefinitionMetadata _getSystemObjectDefinitionMetadata(
