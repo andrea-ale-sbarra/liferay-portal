@@ -203,19 +203,6 @@ public class RelatedObjectEntryResourceImpl
 			objectRelationship.getObjectDefinitionId2());
 	}
 
-	private String _getRESTContextPath(ObjectDefinition objectDefinition) {
-		if (objectDefinition.isSystem()) {
-			SystemObjectDefinitionMetadata systemObjectDefinitionMetadata =
-				_systemObjectDefinitionMetadataTracker.
-					getSystemObjectDefinitionMetadata(
-						objectDefinition.getName());
-
-			return systemObjectDefinitionMetadata.getRESTContextPath();
-		}
-
-		return objectDefinition.getRESTContextPath();
-	}
-
 	private String _getRESTContextPath(String previousPath) {
 		URI uri = _uriInfo.getBaseUri();
 
