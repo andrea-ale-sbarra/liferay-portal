@@ -36,9 +36,6 @@ import com.liferay.portal.vulcan.pagination.Pagination;
 
 import java.net.URI;
 
-import java.util.List;
-import java.util.Objects;
-
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -214,8 +211,17 @@ public class RelatedObjectEntryResourceImpl
 	private ObjectDefinition _getSystemObjectDefinition(
 		SystemObjectDefinitionMetadata systemObjectDefinitionMetadata) {
 
-		return _objectDefinitionLocalService.fetchSystemObjectDefinition(
-			systemObjectDefinitionMetadata.getName());
+		ObjectDefinition systemObjectDefinition =
+			_objectDefinitionLocalService.fetchSystemObjectDefinition(
+				systemObjectDefinitionMetadata.getName());
+
+		if (systemObjectDefinition != null) {
+			return systemObjectDefinition;
+		}
+
+		throw new NotFoundException(
+			"No system object definition metadata for name \"" +
+				systemObjectDefinitionMetadata.getName() + "\"");
 	}
 
 	private SystemObjectDefinitionMetadata _getSystemObjectDefinitionMetadata(
@@ -238,8 +244,8 @@ public class RelatedObjectEntryResourceImpl
 		}
 
 		throw new NotFoundException(
-			"No system object definition metadata for \"" + restContextPath +
-				"\"");
+			"No system object definition metadata for REST context path \"" +
+				restContextPath + "\"");
 	}
 
 	@Reference
