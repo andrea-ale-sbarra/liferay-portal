@@ -96,49 +96,49 @@ public interface CPInstanceLocalService
 
 	@Indexable(type = IndexableType.REINDEX)
 	public CPInstance addCPInstance(
-			String externalReferenceCode, long cpDefinitionId, long groupId,
-			String sku, String gtin, String manufacturerPartNumber,
-			boolean purchasable,
-			Map<Long, List<Long>>
+		long userId, String externalReferenceCode, long cpDefinitionId, long groupId,
+		String sku, String gtin, String manufacturerPartNumber,
+		boolean purchasable,
+		Map<Long, List<Long>>
 				cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds,
-			double width, double height, double depth, double weight,
-			BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
-			boolean published, int displayDateMonth, int displayDateDay,
-			int displayDateYear, int displayDateHour, int displayDateMinute,
-			int expirationDateMonth, int expirationDateDay,
-			int expirationDateYear, int expirationDateHour,
-			int expirationDateMinute, boolean neverExpire,
-			boolean overrideSubscriptionInfo, boolean subscriptionEnabled,
-			int subscriptionLength, String subscriptionType,
-			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
-			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
-			int deliverySubscriptionLength, String deliverySubscriptionType,
-			UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
-			long deliveryMaxSubscriptionCycles, String unspsc,
-			boolean discontinued, String replacementCPInstanceUuid,
-			long replacementCProductId, int discontinuedDateMonth,
-			int discontinuedDateDay, int discontinuedDateYear,
-			ServiceContext serviceContext)
+		double width, double height, double depth, double weight,
+		BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
+		boolean published, int displayDateMonth, int displayDateDay,
+		int displayDateYear, int displayDateHour, int displayDateMinute,
+		int expirationDateMonth, int expirationDateDay,
+		int expirationDateYear, int expirationDateHour,
+		int expirationDateMinute, boolean neverExpire,
+		boolean overrideSubscriptionInfo, boolean subscriptionEnabled,
+		int subscriptionLength, String subscriptionType,
+		UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
+		long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
+		int deliverySubscriptionLength, String deliverySubscriptionType,
+		UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
+		long deliveryMaxSubscriptionCycles, String unspsc,
+		boolean discontinued, String replacementCPInstanceUuid,
+		long replacementCProductId, int discontinuedDateMonth,
+		int discontinuedDateDay, int discontinuedDateYear,
+		ServiceContext serviceContext)
 		throws PortalException;
 
 	public CPInstance addOrUpdateCPInstance(
-			String externalReferenceCode, long cpDefinitionId, long groupId,
-			String sku, String gtin, String manufacturerPartNumber,
-			boolean purchasable, String json, double width, double height,
-			double depth, double weight, BigDecimal price,
-			BigDecimal promoPrice, BigDecimal cost, boolean published,
-			int displayDateMonth, int displayDateDay, int displayDateYear,
-			int displayDateHour, int displayDateMinute, int expirationDateMonth,
-			int expirationDateDay, int expirationDateYear,
-			int expirationDateHour, int expirationDateMinute,
-			boolean neverExpire, String unspsc, boolean discontinued,
-			String replacementCPInstanceUuid, long replacementCProductId,
-			int discontinuedDateMonth, int discontinuedDateDay,
-			int discontinuedDateYear, ServiceContext serviceContext)
+		long userId, String externalReferenceCode, long cpDefinitionId, long groupId,
+		String sku, String gtin, String manufacturerPartNumber,
+		boolean purchasable, String json, double width, double height,
+		double depth, double weight, BigDecimal price,
+		BigDecimal promoPrice, BigDecimal cost, boolean published,
+		int displayDateMonth, int displayDateDay, int displayDateYear,
+		int displayDateHour, int displayDateMinute, int expirationDateMonth,
+		int expirationDateDay, int expirationDateYear,
+		int expirationDateHour, int expirationDateMinute,
+		boolean neverExpire, String unspsc, boolean discontinued,
+		String replacementCPInstanceUuid, long replacementCProductId,
+		int discontinuedDateMonth, int discontinuedDateDay,
+		int discontinuedDateYear, ServiceContext serviceContext)
 		throws PortalException;
 
 	public void buildCPInstances(
-			long cpDefinitionId, ServiceContext serviceContext)
+		long userId, long cpDefinitionId, ServiceContext serviceContext)
 		throws PortalException;
 
 	public void checkCPInstances(long cpDefinitionId) throws PortalException;
@@ -531,28 +531,28 @@ public interface CPInstanceLocalService
 
 	@Indexable(type = IndexableType.REINDEX)
 	public CPInstance updateCPInstance(
-			long cpInstanceId, String sku, String gtin,
-			String manufacturerPartNumber, boolean purchasable, double width,
-			double height, double depth, double weight, BigDecimal price,
-			BigDecimal promoPrice, BigDecimal cost, boolean published,
-			int displayDateMonth, int displayDateDay, int displayDateYear,
-			int displayDateHour, int displayDateMinute, int expirationDateMonth,
-			int expirationDateDay, int expirationDateYear,
-			int expirationDateHour, int expirationDateMinute,
-			boolean neverExpire, String unspsc, boolean discontinued,
-			String replacementCPInstanceUuid, long replacementCProductId,
-			int discontinuedDateMonth, int discontinuedDateDay,
-			int discontinuedDateYear, ServiceContext serviceContext)
+		long userId, long cpInstanceId, String sku, String gtin,
+		String manufacturerPartNumber, boolean purchasable, double width,
+		double height, double depth, double weight, BigDecimal price,
+		BigDecimal promoPrice, BigDecimal cost, boolean published,
+		int displayDateMonth, int displayDateDay, int displayDateYear,
+		int displayDateHour, int displayDateMinute, int expirationDateMonth,
+		int expirationDateDay, int expirationDateYear,
+		int expirationDateHour, int expirationDateMinute,
+		boolean neverExpire, String unspsc, boolean discontinued,
+		String replacementCPInstanceUuid, long replacementCProductId,
+		int discontinuedDateMonth, int discontinuedDateDay,
+		int discontinuedDateYear, ServiceContext serviceContext)
 		throws PortalException;
 
 	public CPInstance updatePricingInfo(
-			long cpInstanceId, BigDecimal price, BigDecimal promoPrice,
-			BigDecimal cost, ServiceContext serviceContext)
+		long userId, long cpInstanceId, BigDecimal price, BigDecimal promoPrice,
+		BigDecimal cost, ServiceContext serviceContext)
 		throws PortalException;
 
 	public CPInstance updateShippingInfo(
-			long cpInstanceId, double width, double height, double depth,
-			double weight, ServiceContext serviceContext)
+		long userId, long cpInstanceId, double width, double height, double depth,
+		double weight, ServiceContext serviceContext)
 		throws PortalException;
 
 	@Indexable(type = IndexableType.REINDEX)
@@ -561,14 +561,14 @@ public interface CPInstanceLocalService
 
 	@Indexable(type = IndexableType.REINDEX)
 	public CPInstance updateSubscriptionInfo(
-			long cpInstanceId, boolean overrideSubscriptionInfo,
-			boolean subscriptionEnabled, int subscriptionLength,
-			String subscriptionType,
-			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
-			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
-			int deliverySubscriptionLength, String deliverySubscriptionType,
-			UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
-			long deliveryMaxSubscriptionCycles)
+		long userId, long cpInstanceId, boolean overrideSubscriptionInfo,
+		boolean subscriptionEnabled, int subscriptionLength,
+		String subscriptionType,
+		UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
+		long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
+		int deliverySubscriptionLength, String deliverySubscriptionType,
+		UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
+		long deliveryMaxSubscriptionCycles)
 		throws PortalException;
 
 	@Override

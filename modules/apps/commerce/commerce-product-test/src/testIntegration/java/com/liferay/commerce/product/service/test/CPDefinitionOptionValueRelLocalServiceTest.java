@@ -124,15 +124,16 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		CPDefinitionOptionRel cpDefinitionOptionRel1 =
 			cpDefinitionOptionValueRel1.getCPDefinitionOptionRel();
 
-		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
+		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(,
 			cpDefinitionOptionRel1.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel1.getCPOptionId(),
 			cpDefinitionOptionRel1.getNameMap(),
 			cpDefinitionOptionRel1.getDescriptionMap(),
 			cpDefinitionOptionRel1.getDDMFormFieldTypeName(),
 			cpDefinitionOptionRel1.getPriority(),
-			cpDefinitionOptionRel1.isFacetable(), false, false,
-			CPConstants.PRODUCT_OPTION_PRICE_TYPE_STATIC, _serviceContext);
+			cpDefinitionOptionRel1.isFacetable(), false,
+			false, CPConstants.PRODUCT_OPTION_PRICE_TYPE_STATIC,
+			_serviceContext);
 
 		CPDefinitionOptionValueRel cpDefinitionOptionValueRel2 =
 			_addCPDefinitionWithOptionValue();
@@ -140,15 +141,16 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		CPDefinitionOptionRel cpDefinitionOptionRel2 =
 			cpDefinitionOptionValueRel2.getCPDefinitionOptionRel();
 
-		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
+		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(,
 			cpDefinitionOptionRel2.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel2.getCPOptionId(),
 			cpDefinitionOptionRel2.getNameMap(),
 			cpDefinitionOptionRel2.getDescriptionMap(),
 			cpDefinitionOptionRel2.getDDMFormFieldTypeName(),
 			cpDefinitionOptionRel2.getPriority(),
-			cpDefinitionOptionRel2.isFacetable(), false, false,
-			CPConstants.PRODUCT_OPTION_PRICE_TYPE_STATIC, _serviceContext);
+			cpDefinitionOptionRel2.isFacetable(), false,
+			false, CPConstants.PRODUCT_OPTION_PRICE_TYPE_STATIC,
+			_serviceContext);
 
 		CPInstance cpDefinitionCPInstance2 = _getCPInstance(
 			cpDefinitionOptionRel2.getCPDefinitionId());
@@ -201,7 +203,7 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		CPDefinitionOptionRel cpDefinitionOptionRel =
 			cpDefinitionOptionValueRel.getCPDefinitionOptionRel();
 
-		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
+		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(,
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
 			cpDefinitionOptionRel.getNameMap(),
@@ -282,7 +284,7 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		CPDefinitionOptionRel cpDefinitionOptionRel =
 			cpDefinitionOptionValueRel.getCPDefinitionOptionRel();
 
-		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
+		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(,
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
 			cpDefinitionOptionRel.getNameMap(),
@@ -434,7 +436,7 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		CPDefinitionOptionRel cpDefinitionOptionRel =
 			cpDefinitionOptionValueRel.getCPDefinitionOptionRel();
 
-		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
+		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(,
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
 			cpDefinitionOptionRel.getNameMap(),
@@ -636,7 +638,7 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		CPDefinitionOptionRel cpDefinitionOptionRel =
 			cpDefinitionOptionValueRel.getCPDefinitionOptionRel();
 
-		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
+		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(,
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
 			cpDefinitionOptionRel.getNameMap(),
@@ -676,7 +678,7 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		CPDefinitionOptionRel cpDefinitionOptionRel =
 			cpDefinitionOptionValueRel.getCPDefinitionOptionRel();
 
-		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
+		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(,
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
 			cpDefinitionOptionRel.getNameMap(),
@@ -762,11 +764,11 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 
 		CPDefinitionOptionValueRel newCPDefinitionOptionValueRel =
 			_cpDefinitionOptionValueRelLocalService.
-				addCPDefinitionOptionValueRel(
+				addCPDefinitionOptionValueRel(,
 					cpDefinitionOptionValueRel.getCPDefinitionOptionRelId(),
 					RandomTestUtil.randomLocaleStringMap(),
-					RandomTestUtil.nextDouble(), RandomTestUtil.randomString(),
-					_serviceContext);
+					RandomTestUtil.nextDouble(),
+					RandomTestUtil.randomString(), _serviceContext);
 
 		CPInstance cpInstance = cpDefinitionOptionValueRel.fetchCPInstance();
 
@@ -809,7 +811,7 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		CPDefinitionOptionRel cpDefinitionOptionRel =
 			cpDefinitionOptionValueRel.getCPDefinitionOptionRel();
 
-		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
+		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(,
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
 			cpDefinitionOptionRel.getNameMap(),
@@ -877,9 +879,9 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 			cpDefinitionOptionRels.get(0);
 
 		return _cpDefinitionOptionValueRelLocalService.
-			addCPDefinitionOptionValueRel(
-				cpDefinitionOptionRel.getCPDefinitionOptionRelId(), null, 0,
-				"cpInstance-option-value", _serviceContext);
+			addCPDefinitionOptionValueRel(,
+				cpDefinitionOptionRel.getCPDefinitionOptionRelId(), null,
+				0, "cpInstance-option-value", _serviceContext);
 	}
 
 	private void _assertValidateCPDefinitionOptionValueRelCPInstanceLinkFail(
@@ -903,11 +905,11 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 
 		CPDefinitionOptionValueRel newCPDefinitionOptionValueRel =
 			_cpDefinitionOptionValueRelLocalService.
-				addCPDefinitionOptionValueRel(
+				addCPDefinitionOptionValueRel(,
 					cpDefinitionOptionValueRel.getCPDefinitionOptionRelId(),
 					RandomTestUtil.randomLocaleStringMap(),
-					RandomTestUtil.nextDouble(), RandomTestUtil.randomString(),
-					_serviceContext);
+					RandomTestUtil.nextDouble(),
+					RandomTestUtil.randomString(), _serviceContext);
 
 		CPInstance cpInstance = cpDefinitionOptionValueRel.fetchCPInstance();
 
@@ -946,12 +948,12 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		throws Exception {
 
 		return _cpDefinitionOptionValueRelLocalService.
-			updateCPDefinitionOptionValueRel(
+			updateCPDefinitionOptionValueRel(,
 				cpDefinitionOptionValueRel.getCPDefinitionOptionValueRelId(),
 				cpDefinitionOptionValueRel.getNameMap(),
 				cpDefinitionOptionValueRel.getPriority(),
-				cpDefinitionOptionValueRel.getKey(), cpInstanceId, quantity,
-				preselected, price, _serviceContext);
+				cpDefinitionOptionValueRel.getKey(), cpInstanceId,
+				quantity, preselected, price, _serviceContext);
 	}
 
 	private static User _user;

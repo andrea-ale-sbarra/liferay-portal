@@ -525,9 +525,8 @@ public class CPInstanceLocalServiceTest {
 
 		_assertApprovedCPInstancesCount(cpDefinition.getCPDefinitionId(), 0);
 
-		_cpInstanceLocalService.buildCPInstances(
-			cpDefinition.getCPDefinitionId(),
-			ServiceContextTestUtil.getServiceContext(
+		_cpInstanceLocalService.buildCPInstances(,
+			cpDefinition.getCPDefinitionId(), ServiceContextTestUtil.getServiceContext(
 				_commerceCatalog.getGroupId()));
 
 		_assertApprovedCPInstancesCount(
@@ -639,7 +638,7 @@ public class CPInstanceLocalServiceTest {
 			_commerceCatalog.getGroupId(), cpDefinitionId, cpOptionsCount,
 			cpOptionValuesCount);
 
-		_cpInstanceLocalService.buildCPInstances(
+		_cpInstanceLocalService.buildCPInstances(,
 			cpDefinitionId, ServiceContextTestUtil.getServiceContext(groupId));
 
 		_assertApprovedCPInstancesCount(

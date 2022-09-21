@@ -119,13 +119,15 @@ public interface CPTaxCategoryLocalService
 	 * <strong>Important:</strong> Inspect CPTaxCategoryLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
+	 * @param userId
 	 * @param cpTaxCategory the cp tax category
 	 * @return the cp tax category that was removed
 	 * @throws PortalException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPTaxCategory deleteCPTaxCategory(CPTaxCategory cpTaxCategory)
+	public CPTaxCategory deleteCPTaxCategory(
+		long userId, CPTaxCategory cpTaxCategory)
 		throws PortalException;
 
 	/**
@@ -135,12 +137,13 @@ public interface CPTaxCategoryLocalService
 	 * <strong>Important:</strong> Inspect CPTaxCategoryLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
+	 * @param userId
 	 * @param CPTaxCategoryId the primary key of the cp tax category
 	 * @return the cp tax category that was removed
 	 * @throws PortalException if a cp tax category with the primary key could not be found
 	 */
 	@Indexable(type = IndexableType.DELETE)
-	public CPTaxCategory deleteCPTaxCategory(long CPTaxCategoryId)
+	public CPTaxCategory deleteCPTaxCategory(long userId, long CPTaxCategoryId)
 		throws PortalException;
 
 	/**

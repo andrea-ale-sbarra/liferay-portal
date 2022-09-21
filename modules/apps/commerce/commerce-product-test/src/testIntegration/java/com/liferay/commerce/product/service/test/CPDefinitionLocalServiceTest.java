@@ -435,7 +435,7 @@ public class CPDefinitionLocalServiceTest {
 		BigDecimal promoPrice = new BigDecimal(0);
 
 		CPDefinition duplicateCPDefinition =
-			_cpDefinitionLocalService.copyCPDefinition(
+			_cpDefinitionLocalService.copyCPDefinition(,
 				cpInstance.getCPDefinitionId());
 
 		CPInstance duplicateCPInstance = _cpInstanceLocalService.getCPInstance(

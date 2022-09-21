@@ -48,7 +48,7 @@ public class CPDefinitionLinkServiceImpl
 
 		_checkCommerceCatalog(cpDefinitionId, ActionKeys.UPDATE);
 
-		return cpDefinitionLinkLocalService.addCPDefinitionLinkByCProductId(
+		return cpDefinitionLinkLocalService.addCPDefinitionLinkByCProductId(getUserId(),
 			cpDefinitionId, cProductId, priority, type, serviceContext);
 	}
 
@@ -205,14 +205,14 @@ public class CPDefinitionLinkServiceImpl
 		_checkCommerceCatalog(
 			cProduct.getPublishedCPDefinitionId(), ActionKeys.UPDATE);
 
-		return cpDefinitionLinkLocalService.updateCPDefinitionLink(
+		return cpDefinitionLinkLocalService.updateCPDefinitionLink(getUserId(),
 			cpDefinitionLinkId, priority, serviceContext);
 	}
 
 	@Override
 	public void updateCPDefinitionLinks(
-			long cpDefinitionId, long[] cpDefinitionIds2, String type,
-			ServiceContext serviceContext)
+		long userId, long cpDefinitionId, long[] cpDefinitionIds2, String type,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		_checkCommerceCatalog(cpDefinitionId, ActionKeys.UPDATE);
@@ -231,7 +231,7 @@ public class CPDefinitionLinkServiceImpl
 			cProductIds[i] = cpDefinition.getCProductId();
 		}
 
-		cpDefinitionLinkLocalService.updateCPDefinitionLinkCProductIds(
+		cpDefinitionLinkLocalService.updateCPDefinitionLinkCProductIds(userId,
 			cpDefinitionId, cProductIds, type, serviceContext);
 	}
 
