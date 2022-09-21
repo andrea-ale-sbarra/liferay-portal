@@ -451,10 +451,10 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			return;
 		}
 
+		PoshiRunnerWarningException poshiRunnerWarningException = null;
+
 		List<JavaScriptError> javaScriptErrors = JavaScriptError.readErrors(
 			getWrappedWebDriver("//body"));
-
-		PoshiRunnerWarningException poshiRunnerWarningException = null;
 
 		for (JavaScriptError javaScriptError : javaScriptErrors) {
 			String javaScriptErrorValue = javaScriptError.toString();

@@ -78,6 +78,8 @@ public class LiferaySeleniumUtil {
 			return;
 		}
 
+		PoshiRunnerWarningException poshiRunnerWarningException = null;
+
 		SAXReader saxReader = new SAXReader();
 
 		content = "<log4j>" + content + "</log4j>";
@@ -91,8 +93,6 @@ public class LiferaySeleniumUtil {
 		Element rootElement = document.getRootElement();
 
 		List<Element> eventElements = rootElement.elements("event");
-
-		PoshiRunnerWarningException poshiRunnerWarningException = null;
 
 		for (Element eventElement : eventElements) {
 			String level = eventElement.attributeValue("level");
