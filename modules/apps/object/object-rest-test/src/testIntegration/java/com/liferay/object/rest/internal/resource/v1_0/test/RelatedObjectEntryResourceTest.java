@@ -102,7 +102,7 @@ public class RelatedObjectEntryResourceTest {
 					"Text", "String", true, true, null,
 					RandomTestUtil.randomString(), _OBJECT_FIELD_NAME, false)));
 
-		_objectEntry = _createObjectEntry(_OBJECT_FIELD_VALUE);
+		_objectEntry = _addObjectEntry(_OBJECT_FIELD_VALUE);
 
 		_userSystemObjectDefinitionMetadata =
 			_systemObjectDefinitionMetadataTracker.
@@ -164,7 +164,7 @@ public class RelatedObjectEntryResourceTest {
 	public void testPutSystemObjectRelatedObject() throws Exception {
 		String objectFieldValue = RandomTestUtil.randomString();
 
-		ObjectEntry objectEntry = _createObjectEntry(objectFieldValue);
+		ObjectEntry objectEntry = _addObjectEntry(objectFieldValue);
 
 		JSONObject jsonObject = _invoke(
 			StringBundler.concat(
@@ -189,7 +189,7 @@ public class RelatedObjectEntryResourceTest {
 		Assert.assertEquals(2, itemsJSONArray.length());
 	}
 
-	private ObjectEntry _createObjectEntry(String objectFieldValue)
+	private ObjectEntry _addObjectEntry(String objectFieldValue)
 		throws Exception {
 
 		return ObjectEntryLocalServiceUtil.addObjectEntry(
