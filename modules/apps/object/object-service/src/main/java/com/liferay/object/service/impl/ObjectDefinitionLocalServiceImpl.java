@@ -465,10 +465,7 @@ public class ObjectDefinitionLocalServiceImpl
 		for (ObjectDefinition systemObjectDefinition :
 				getSystemObjectDefinitions()) {
 
-			if (Objects.equals(
-					systemObjectDefinition.getName(),
-					systemObjectDefinitionMetadata.getName())) {
-
+			if (Objects.equals(systemObjectDefinition.getName(), name)) {
 				return systemObjectDefinition;
 			}
 		}
