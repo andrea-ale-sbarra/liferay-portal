@@ -67,7 +67,8 @@ public class CPTaxCategoryServiceImpl extends CPTaxCategoryServiceBaseImpl {
 			getPermissionChecker(), null,
 			CPActionKeys.MANAGE_COMMERCE_PRODUCT_TAX_CATEGORIES);
 
-		cpTaxCategoryLocalService.deleteCPTaxCategory(cpTaxCategoryId);
+		cpTaxCategoryLocalService.deleteCPTaxCategory(
+			cpTaxCategoryId, getUserId());
 	}
 
 	@Override

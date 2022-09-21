@@ -841,9 +841,10 @@ public class MiniumSiteInitializer implements SiteInitializer {
 			CPDefinition cpDefinition = _getCPDefinitionByName(name);
 
 			_cpDefinitionLinkLocalService.updateCPDefinitionLinkCProductIds(
+				serviceContext.getUserId(),
 				cpDefinition.getCPDefinitionId(),
-				_getCProductIds(relatedProductsJSONArray), "related",
-				serviceContext);
+				_getCProductIds(relatedProductsJSONArray),
+				"related", serviceContext);
 		}
 	}
 

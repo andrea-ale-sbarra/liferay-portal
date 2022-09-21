@@ -73,9 +73,9 @@ public class CPDefinitionSpecificationOptionValueLocalServiceUtil {
 				com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().addCPDefinitionSpecificationOptionValue(
-			cpDefinitionId, cpSpecificationOptionId, cpOptionCategoryId,
-			valueMap, priority, serviceContext);
+		return getService().addCPDefinitionSpecificationOptionValue(,
+			cpDefinitionId, cpSpecificationOptionId,
+			cpOptionCategoryId, valueMap, priority, serviceContext);
 	}
 
 	/**
@@ -524,9 +524,9 @@ public class CPDefinitionSpecificationOptionValueLocalServiceUtil {
 				com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().updateCPDefinitionSpecificationOptionValue(
-			cpDefinitionSpecificationOptionValueId, cpOptionCategoryId,
-			valueMap, priority, serviceContext);
+		return getService().updateCPDefinitionSpecificationOptionValue(,
+			cpDefinitionSpecificationOptionValueId,
+			cpOptionCategoryId, valueMap, priority, serviceContext);
 	}
 
 	public static CPDefinitionSpecificationOptionValue updateCPOptionCategoryId(

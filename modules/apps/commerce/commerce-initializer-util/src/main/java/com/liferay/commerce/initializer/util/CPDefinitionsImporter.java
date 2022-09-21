@@ -539,6 +539,7 @@ public class CPDefinitionsImporter {
 		else {
 			try {
 				_cpInstanceLocalService.buildCPInstances(
+					serviceContext.getUserId(),
 					cpDefinition.getCPDefinitionId(), serviceContext);
 			}
 			catch (NoSuchSkuContributorCPDefinitionOptionRelException
@@ -752,9 +753,9 @@ public class CPDefinitionsImporter {
 
 		try {
 			cpDefinitionOptionRel =
-				_cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-					cpDefinitionId, cpOption.getCPOptionId(), importOptionValue,
-					serviceContext);
+				_cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(serviceContext.getUserId(),
+					cpDefinitionId, cpOption.getCPOptionId(),
+					importOptionValue, serviceContext);
 		}
 		finally {
 			serviceContext.setScopeGroupId(scopeGroupId);
@@ -827,7 +828,7 @@ public class CPDefinitionsImporter {
 		double priority = jsonObject.getDouble("priority", defaultPriority);
 
 		return _cpDefinitionSpecificationOptionValueLocalService.
-			addCPDefinitionSpecificationOptionValue(
+			addCPDefinitionSpecificationOptionValue(serviceContext.getUserId(),
 				cpDefinitionId,
 				cpSpecificationOption.getCPSpecificationOptionId(),
 				cpOptionCategoryId, valueMap, priority, serviceContext);
@@ -931,23 +932,25 @@ public class CPDefinitionsImporter {
 		}
 
 		CPInstance cpInstance = _cpInstanceLocalService.addCPInstance(
-			externalReferenceCode, cpDefinitionId, cpDefinition.getGroupId(),
-			sku, null, manufacturerPartNumber, true,
+			serviceContext.getUserId(), externalReferenceCode, cpDefinitionId,
+			cpDefinition.getGroupId(), sku, null, manufacturerPartNumber,
+			true,
 			_cpDefinitionOptionRelLocalService.
 				getCPDefinitionOptionRelCPDefinitionOptionValueRelIds(
-					cpDefinitionId, optionsJSON),
-			cpDefinition.getWidth(), cpDefinition.getHeight(),
-			cpDefinition.getDepth(), cpDefinition.getWeight(),
-			BigDecimal.valueOf(price), BigDecimal.valueOf(promoPrice),
-			BigDecimal.valueOf(0), true, calendar.get(Calendar.MONTH),
-			calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR),
-			calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
-			0, 0, 0, 0, 0, true, overrideSubscriptionInfo, subscriptionEnabled,
-			subscriptionLength, subscriptionType,
+					cpDefinitionId, optionsJSON), cpDefinition.getWidth(),
+			cpDefinition.getHeight(), cpDefinition.getDepth(),
+			cpDefinition.getWeight(), BigDecimal.valueOf(price),
+			BigDecimal.valueOf(promoPrice), BigDecimal.valueOf(0), true,
+			calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+			calendar.get(Calendar.YEAR), calendar.get(Calendar.HOUR_OF_DAY),
+			calendar.get(Calendar.MINUTE), 0, 0, 0, 0, 0, true,
+			overrideSubscriptionInfo,
+			subscriptionEnabled, subscriptionLength,
+			subscriptionType,
 			_getSubscriptionTypeSettingsUnicodeProperties(
-				subscriptionInfoJSONObject),
-			maxSubscriptionCycles, false, 1, null, null, 0, null, false, null,
-			0, 0, 0, 0, serviceContext);
+				subscriptionInfoJSONObject), maxSubscriptionCycles, false, 1,
+			null, null, 0, null, false,
+			null, 0, 0, 0, 0, serviceContext);
 
 		_addWarehouseQuantities(
 			skuJSONObject, commerceInventoryWarehouseIds, serviceContext,

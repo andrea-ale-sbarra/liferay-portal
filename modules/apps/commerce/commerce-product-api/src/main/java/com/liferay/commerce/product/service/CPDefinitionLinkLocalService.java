@@ -88,8 +88,8 @@ public interface CPDefinitionLinkLocalService
 		CPDefinitionLink cpDefinitionLink);
 
 	public CPDefinitionLink addCPDefinitionLinkByCProductId(
-			long cpDefinitionId, long cProductId, double priority, String type,
-			ServiceContext serviceContext)
+		long userId, long cpDefinitionId, long cProductId, double priority, String type,
+		ServiceContext serviceContext)
 		throws PortalException;
 
 	/**
@@ -380,13 +380,13 @@ public interface CPDefinitionLinkLocalService
 		CPDefinitionLink cpDefinitionLink);
 
 	public CPDefinitionLink updateCPDefinitionLink(
-			long cpDefinitionLinkId, double priority,
-			ServiceContext serviceContext)
+		long userId, long cpDefinitionLinkId, double priority,
+		ServiceContext serviceContext)
 		throws PortalException;
 
 	public void updateCPDefinitionLinkCProductIds(
-			long cpDefinitionId, long[] cProductIds, String type,
-			ServiceContext serviceContext)
+		long userId, long cpDefinitionId, long[] cProductIds, String type,
+		ServiceContext serviceContext)
 		throws PortalException;
 
 	@Override

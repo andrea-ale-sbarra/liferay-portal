@@ -78,7 +78,7 @@ public class CPDefinitionOptionValueRelTableReferenceDefinitionTest
 	@Override
 	protected CTModel<?> addCTModel() throws Exception {
 		return _cpDefinitionOptionValueRelLocalService.
-			addCPDefinitionOptionValueRel(
+			addCPDefinitionOptionValueRel(,
 				_cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 				RandomTestUtil.randomLocaleStringMap(),
 				RandomTestUtil.nextDouble(),

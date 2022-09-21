@@ -98,17 +98,17 @@ public class CPDefinitionOptionValueRelLocalServiceImpl
 		throws PortalException {
 
 		return cpDefinitionOptionValueRelLocalService.
-			addCPDefinitionOptionValueRel(
-				cpDefinitionOptionRelId, cpOptionValue.getNameMap(),
-				cpOptionValue.getPriority(), cpOptionValue.getKey(),
-				serviceContext);
+			addCPDefinitionOptionValueRel(,
+				cpDefinitionOptionRelId,
+				cpOptionValue.getNameMap(), cpOptionValue.getPriority(),
+				cpOptionValue.getKey(), serviceContext);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPDefinitionOptionValueRel addCPDefinitionOptionValueRel(
-			long cpDefinitionOptionRelId, Map<Locale, String> nameMap,
-			double priority, String key, ServiceContext serviceContext)
+		long userId, long cpDefinitionOptionRelId, Map<Locale, String> nameMap,
+		double priority, String key, ServiceContext serviceContext)
 		throws PortalException {
 
 		// Commerce product definition option value rel
@@ -135,6 +135,7 @@ public class CPDefinitionOptionValueRelLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
+					userId,
 					cpDefinitionOptionRel.getCPDefinitionId());
 
 			cpDefinitionOptionRel = _cpDefinitionOptionRelPersistence.findByC_C(
@@ -190,7 +191,7 @@ public class CPDefinitionOptionValueRelLocalServiceImpl
 				cpDefinitionOptionRel.getCPDefinitionId())) {
 
 			CPDefinition newCPDefinition =
-				_cpDefinitionLocalService.copyCPDefinition(
+				_cpDefinitionLocalService.copyCPDefinition(,
 					cpDefinitionOptionRel.getCPDefinitionId());
 
 			cpDefinitionOptionRel = _cpDefinitionOptionRelPersistence.findByC_C(
@@ -557,10 +558,10 @@ public class CPDefinitionOptionValueRelLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPDefinitionOptionValueRel updateCPDefinitionOptionValueRel(
-			long cpDefinitionOptionValueRelId, Map<Locale, String> nameMap,
-			double priority, String key, long cpInstanceId, int quantity,
-			boolean preselected, BigDecimal price,
-			ServiceContext serviceContext)
+		long userId, long cpDefinitionOptionValueRelId, Map<Locale, String> nameMap,
+		double priority, String key, long cpInstanceId, int quantity,
+		boolean preselected, BigDecimal price,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		// Commerce product definition option value rel
@@ -584,6 +585,7 @@ public class CPDefinitionOptionValueRelLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
+					userId,
 					cpDefinitionOptionRel.getCPDefinitionId());
 
 			cpDefinitionOptionRel = _cpDefinitionOptionRelPersistence.findByC_C(
