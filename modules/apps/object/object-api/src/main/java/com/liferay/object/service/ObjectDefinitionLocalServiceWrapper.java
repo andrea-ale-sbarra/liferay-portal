@@ -373,6 +373,13 @@ public class ObjectDefinitionLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.object.model.ObjectDefinition
+		fetchSystemObjectDefinition(String name) {
+
+		return _objectDefinitionLocalService.fetchSystemObjectDefinition(name);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
