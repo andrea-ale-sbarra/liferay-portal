@@ -16,6 +16,7 @@ package com.liferay.commerce.product.service;
 
 import com.liferay.commerce.product.model.CPDefinitionLink;
 import com.liferay.petra.function.UnsafeFunction;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.service.persistence.change.tracking.CTPersistence;
 
@@ -60,11 +61,11 @@ public class CPDefinitionLinkLocalServiceWrapper
 
 	@Override
 	public CPDefinitionLink addCPDefinitionLinkByCProductId(
-			long cpDefinitionId, long cProductId, double priority, String type,
-			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		long userId, long cpDefinitionId, long cProductId, double priority, String type,
+		ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpDefinitionLinkLocalService.addCPDefinitionLinkByCProductId(
+		return _cpDefinitionLinkLocalService.addCPDefinitionLinkByCProductId(,
 			cpDefinitionId, cProductId, priority, type, serviceContext);
 	}
 
@@ -508,21 +509,21 @@ public class CPDefinitionLinkLocalServiceWrapper
 
 	@Override
 	public CPDefinitionLink updateCPDefinitionLink(
-			long cpDefinitionLinkId, double priority,
-			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		long userId, long cpDefinitionLinkId, double priority,
+		ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpDefinitionLinkLocalService.updateCPDefinitionLink(
+		return _cpDefinitionLinkLocalService.updateCPDefinitionLink(,
 			cpDefinitionLinkId, priority, serviceContext);
 	}
 
 	@Override
 	public void updateCPDefinitionLinkCProductIds(
-			long cpDefinitionId, long[] cProductIds, String type,
-			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		long userId, long cpDefinitionId, long[] cProductIds, String type,
+		ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		_cpDefinitionLinkLocalService.updateCPDefinitionLinkCProductIds(
+		_cpDefinitionLinkLocalService.updateCPDefinitionLinkCProductIds(,
 			cpDefinitionId, cProductIds, type, serviceContext);
 	}
 

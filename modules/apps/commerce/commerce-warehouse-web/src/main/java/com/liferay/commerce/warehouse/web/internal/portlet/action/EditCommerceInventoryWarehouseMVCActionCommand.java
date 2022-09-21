@@ -230,8 +230,7 @@ public class EditCommerceInventoryWarehouseMVCActionCommand
 			if (commerceChannelId != 0) {
 				_commerceChannelRelService.addCommerceChannelRel(
 					CommerceInventoryWarehouse.class.getName(),
-					commerceInventoryWarehouseId, commerceChannelId,
-					serviceContext);
+					commerceInventoryWarehouseId, commerceChannelId);
 			}
 		}
 	}

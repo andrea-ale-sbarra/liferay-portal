@@ -123,7 +123,7 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 			_cpDefinitionLocalService.isVersionable(classPK)) {
 
 			CPDefinition newCPDefinition =
-				_cpDefinitionLocalService.copyCPDefinition(
+				_cpDefinitionLocalService.copyCPDefinition(,
 					cpDefinitionVirtualSetting.getClassPK());
 
 			classPK = newCPDefinition.getCPDefinitionId();
@@ -136,7 +136,7 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 					cpInstance.getCPDefinitionId())) {
 
 				CPDefinition newCPDefinition =
-					_cpDefinitionLocalService.copyCPDefinition(
+					_cpDefinitionLocalService.copyCPDefinition(,
 						cpInstance.getCPDefinitionId());
 
 				CPInstance newCPInstance =
@@ -232,7 +232,7 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 				_cpDefinitionLocalService.isVersionable(classPK)) {
 
 				CPDefinition newCPDefinition =
-					_cpDefinitionLocalService.copyCPDefinition(classPK);
+					_cpDefinitionLocalService.copyCPDefinition(, classPK);
 
 				cpDefinitionVirtualSetting =
 					cpDefinitionVirtualSettingPersistence.findByC_C(
@@ -246,7 +246,7 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 						cpInstance.getCPDefinitionId())) {
 
 					CPDefinition newCPDefinition =
-						_cpDefinitionLocalService.copyCPDefinition(
+						_cpDefinitionLocalService.copyCPDefinition(,
 							cpInstance.getCPDefinitionId());
 
 					CPInstance newCPInstance =
@@ -348,7 +348,7 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 				cpDefinitionVirtualSetting.getClassPK())) {
 
 			CPDefinition newCPDefinition =
-				_cpDefinitionLocalService.copyCPDefinition(
+				_cpDefinitionLocalService.copyCPDefinition(,
 					cpDefinitionVirtualSetting.getClassPK());
 
 			cpDefinitionVirtualSetting =
@@ -366,7 +366,7 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 					cpInstance.getCPDefinitionId())) {
 
 				CPDefinition newCPDefinition =
-					_cpDefinitionLocalService.copyCPDefinition(
+					_cpDefinitionLocalService.copyCPDefinition(,
 						cpInstance.getCPDefinitionId());
 
 				CPInstance newCPInstance =

@@ -123,13 +123,14 @@ public abstract class CPTaxCategoryLocalServiceBaseImpl
 	 * <strong>Important:</strong> Inspect CPTaxCategoryLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
+	 * @param userId
 	 * @param CPTaxCategoryId the primary key of the cp tax category
 	 * @return the cp tax category that was removed
 	 * @throws PortalException if a cp tax category with the primary key could not be found
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
-	public CPTaxCategory deleteCPTaxCategory(long CPTaxCategoryId)
+	public CPTaxCategory deleteCPTaxCategory(long userId, long CPTaxCategoryId)
 		throws PortalException {
 
 		return cpTaxCategoryPersistence.remove(CPTaxCategoryId);
@@ -142,13 +143,15 @@ public abstract class CPTaxCategoryLocalServiceBaseImpl
 	 * <strong>Important:</strong> Inspect CPTaxCategoryLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
+	 * @param userId
 	 * @param cpTaxCategory the cp tax category
 	 * @return the cp tax category that was removed
 	 * @throws PortalException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
-	public CPTaxCategory deleteCPTaxCategory(CPTaxCategory cpTaxCategory)
+	public CPTaxCategory deleteCPTaxCategory(
+		long userId, CPTaxCategory cpTaxCategory)
 		throws PortalException {
 
 		return cpTaxCategoryPersistence.remove(cpTaxCategory);
@@ -463,7 +466,7 @@ public abstract class CPTaxCategoryLocalServiceBaseImpl
 		}
 
 		return cpTaxCategoryLocalService.deleteCPTaxCategory(
-			(CPTaxCategory)persistedModel);
+			(CPTaxCategory)persistedModel, );
 	}
 
 	@Override

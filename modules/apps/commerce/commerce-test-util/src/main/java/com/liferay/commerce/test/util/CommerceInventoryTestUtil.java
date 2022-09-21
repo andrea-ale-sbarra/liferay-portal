@@ -149,9 +149,10 @@ public class CommerceInventoryTestUtil {
 			addCommerceInventoryWarehouse(serviceContext);
 
 		CommerceChannelRelLocalServiceUtil.addCommerceChannelRel(
+			serviceContext.getUserId(),
 			CommerceInventoryWarehouse.class.getName(),
 			commerceInventoryWarehouse.getCommerceInventoryWarehouseId(),
-			commerceChannelId, serviceContext);
+			commerceChannelId);
 
 		return CommerceInventoryWarehouseItemLocalServiceUtil.
 			addCommerceInventoryWarehouseItem(

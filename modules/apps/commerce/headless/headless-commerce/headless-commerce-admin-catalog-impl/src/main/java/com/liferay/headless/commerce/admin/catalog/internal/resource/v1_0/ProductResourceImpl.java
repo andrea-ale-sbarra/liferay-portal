@@ -1010,8 +1010,7 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 
 				_commerceChannelRelService.addCommerceChannelRel(
 					CPDefinition.class.getName(),
-					cpDefinition.getCPDefinitionId(), commerceChannelId,
-					serviceContext);
+					cpDefinition.getCPDefinitionId(), commerceChannelId);
 			}
 		}
 

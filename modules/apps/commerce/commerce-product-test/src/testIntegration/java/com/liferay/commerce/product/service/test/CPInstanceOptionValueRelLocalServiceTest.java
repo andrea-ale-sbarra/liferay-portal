@@ -121,9 +121,8 @@ public class CPInstanceOptionValueRelLocalServiceTest {
 			_commerceCatalog.getGroupId(), cpDefinition.getCPDefinitionId(),
 			cpOptionsCount, cpOptionValuesCount);
 
-		_cpInstanceLocalService.buildCPInstances(
-			cpDefinition.getCPDefinitionId(),
-			ServiceContextTestUtil.getServiceContext(
+		_cpInstanceLocalService.buildCPInstances(,
+			cpDefinition.getCPDefinitionId(), ServiceContextTestUtil.getServiceContext(
 				cpDefinition.getGroupId()));
 
 		List<CPInstance> cpDefinitionInstances =
@@ -173,9 +172,8 @@ public class CPInstanceOptionValueRelLocalServiceTest {
 			_commerceCatalog.getGroupId(), cpDefinition.getCPDefinitionId(),
 			cpOptionsCount, cpOptionValuesCount);
 
-		_cpInstanceLocalService.buildCPInstances(
-			cpDefinition.getCPDefinitionId(),
-			ServiceContextTestUtil.getServiceContext(
+		_cpInstanceLocalService.buildCPInstances(,
+			cpDefinition.getCPDefinitionId(), ServiceContextTestUtil.getServiceContext(
 				cpDefinition.getGroupId()));
 
 		List<CPInstanceOptionValueRel> cpDefinitionCPInstanceOptionValueRels =
