@@ -65,8 +65,7 @@ public class RelatedObjectEntryResourceImpl
 		}
 
 		ObjectDefinition systemObjectDefinition = _getSystemObjectDefinition(
-			_getSystemObjectDefinitionMetadata(
-				_getRESTContextPath(previousPath)));
+			previousPath);
 
 		ObjectRelationship objectRelationship =
 			_objectRelationshipLocalService.
@@ -106,8 +105,7 @@ public class RelatedObjectEntryResourceImpl
 		}
 
 		ObjectDefinition systemObjectDefinition = _getSystemObjectDefinition(
-			_getSystemObjectDefinitionMetadata(
-				_getRESTContextPath(previousPath)));
+			previousPath);
 
 		ObjectRelationship objectRelationship =
 			_objectRelationshipLocalService.
@@ -200,16 +198,9 @@ public class RelatedObjectEntryResourceImpl
 			objectRelationship.getObjectDefinitionId2());
 	}
 
-	private String _getRESTContextPath(String previousPath) {
-		URI uri = _uriInfo.getBaseUri();
-
-		String path = uri.getPath();
-
-		return path.split("/")[2] + "/v1.0/" + previousPath;
-	}
-
-	private ObjectDefinition _getSystemObjectDefinition(
-		SystemObjectDefinitionMetadata systemObjectDefinitionMetadata) {
+	private ObjectDefinition _getSystemObjectDefinition(String previousPath) {
+		SystemObjectDefinitionMetadata systemObjectDefinitionMetadata =
+			_getSystemObjectDefinitionMetadata(previousPath);
 
 		ObjectDefinition systemObjectDefinition =
 			_objectDefinitionLocalService.fetchSystemObjectDefinition(
@@ -225,7 +216,13 @@ public class RelatedObjectEntryResourceImpl
 	}
 
 	private SystemObjectDefinitionMetadata _getSystemObjectDefinitionMetadata(
-		String restContextPath) {
+		String previousPath) {
+
+		URI uri = _uriInfo.getBaseUri();
+
+		String path = uri.getPath();
+
+		String restContextPath = path.split("/")[2] + "/v1.0/" + previousPath;
 
 		for (ObjectDefinition systemObjectDefinition :
 				_objectDefinitionLocalService.getSystemObjectDefinitions()) {
