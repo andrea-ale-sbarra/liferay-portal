@@ -84,6 +84,7 @@ public class RolesAdminPortletDataHandler extends BasePortletDataHandler {
 						NAMESPACE, "system-roles", true, false)
 				},
 				Role.class.getName(), StagedModelType.REFERRER_CLASS_NAME_ALL));
+
 		Collections.addAll(
 			_allSystemRoleNames, _portal.getSystemOrganizationRoles());
 		Collections.addAll(_allSystemRoleNames, _portal.getSystemRoles());
