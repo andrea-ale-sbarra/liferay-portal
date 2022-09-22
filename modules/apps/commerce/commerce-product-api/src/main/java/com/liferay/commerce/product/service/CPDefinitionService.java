@@ -181,6 +181,9 @@ public interface CPDefinitionService extends BaseService {
 			long cpDefinitionId, long groupId, ServiceContext serviceContext)
 		throws PortalException;
 
+	public CPDefinition copyCPDefinition(long cpDefinitionId)
+		throws PortalException;
+
 	public CPDefinition copyCPDefinition(
 			long cpDefinitionId, long groupId, int status)
 		throws PortalException;

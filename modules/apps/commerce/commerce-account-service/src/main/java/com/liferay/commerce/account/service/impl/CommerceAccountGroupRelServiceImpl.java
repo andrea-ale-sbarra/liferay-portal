@@ -53,7 +53,7 @@ public class CommerceAccountGroupRelServiceImpl
 			getPermissionChecker(), commerceAccountGroupId, ActionKeys.UPDATE);
 
 		return commerceAccountGroupRelLocalService.addCommerceAccountGroupRel(
-			className, classPK, commerceAccountGroupId, serviceContext);
+			className, classPK, commerceAccountGroupId);
 	}
 
 	@Override

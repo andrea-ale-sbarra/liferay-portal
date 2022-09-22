@@ -233,6 +233,12 @@ public class CPDefinitionServiceUtil {
 			cpDefinitionId, groupId, serviceContext);
 	}
 
+	public static CPDefinition copyCPDefinition(long cpDefinitionId)
+		throws PortalException {
+
+		return getService().copyCPDefinition(cpDefinitionId);
+	}
+
 	public static CPDefinition copyCPDefinition(
 			long cpDefinitionId, long groupId, int status)
 		throws PortalException {

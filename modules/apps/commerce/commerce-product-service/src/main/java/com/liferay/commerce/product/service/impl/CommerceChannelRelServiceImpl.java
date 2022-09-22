@@ -45,7 +45,7 @@ public class CommerceChannelRelServiceImpl
 			getPermissionChecker(), commerceChannelId, ActionKeys.UPDATE);
 
 		return commerceChannelRelLocalService.addCommerceChannelRel(
-			className, classPK, commerceChannelId, serviceContext);
+			getUserId(), className, classPK, commerceChannelId);
 	}
 
 	@Override

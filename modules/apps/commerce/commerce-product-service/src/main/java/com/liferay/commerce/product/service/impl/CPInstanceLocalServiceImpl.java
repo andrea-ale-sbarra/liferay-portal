@@ -99,31 +99,30 @@ import java.util.Map;
 public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 	@Indexable(type = IndexableType.REINDEX)
-	@Override
 	public CPInstance addCPInstance(
-			String externalReferenceCode, long cpDefinitionId, long groupId,
-			String sku, String gtin, String manufacturerPartNumber,
-			boolean purchasable,
-			Map<Long, List<Long>>
+		long userId, String externalReferenceCode, long cpDefinitionId, long groupId,
+		String sku, String gtin, String manufacturerPartNumber,
+		boolean purchasable,
+		Map<Long, List<Long>>
 				cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds,
-			double width, double height, double depth, double weight,
-			BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
-			boolean published, int displayDateMonth, int displayDateDay,
-			int displayDateYear, int displayDateHour, int displayDateMinute,
-			int expirationDateMonth, int expirationDateDay,
-			int expirationDateYear, int expirationDateHour,
-			int expirationDateMinute, boolean neverExpire,
-			boolean overrideSubscriptionInfo, boolean subscriptionEnabled,
-			int subscriptionLength, String subscriptionType,
-			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
-			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
-			int deliverySubscriptionLength, String deliverySubscriptionType,
-			UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
-			long deliveryMaxSubscriptionCycles, String unspsc,
-			boolean discontinued, String replacementCPInstanceUuid,
-			long replacementCProductId, int discontinuedDateMonth,
-			int discontinuedDateDay, int discontinuedDateYear,
-			ServiceContext serviceContext)
+		double width, double height, double depth, double weight,
+		BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
+		boolean published, int displayDateMonth, int displayDateDay,
+		int displayDateYear, int displayDateHour, int displayDateMinute,
+		int expirationDateMonth, int expirationDateDay,
+		int expirationDateYear, int expirationDateHour,
+		int expirationDateMinute, boolean neverExpire,
+		boolean overrideSubscriptionInfo, boolean subscriptionEnabled,
+		int subscriptionLength, String subscriptionType,
+		UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
+		long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
+		int deliverySubscriptionLength, String deliverySubscriptionType,
+		UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
+		long deliveryMaxSubscriptionCycles, String unspsc,
+		boolean discontinued, String replacementCPInstanceUuid,
+		long replacementCProductId, int discontinuedDateMonth,
+		int discontinuedDateDay, int discontinuedDateYear,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		_validateSku(cpDefinitionId, 0, sku);
@@ -157,7 +156,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 		if (_cpDefinitionLocalService.isVersionable(cpDefinitionId)) {
 			CPDefinition newCPDefinition =
-				_cpDefinitionLocalService.copyCPDefinition(cpDefinitionId);
+				_cpDefinitionLocalService.copyCPDefinition(userId, cpDefinitionId);
 
 			cpDefinitionId = newCPDefinition.getCPDefinitionId();
 		}
@@ -273,21 +272,20 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		return cpInstance;
 	}
 
-	@Override
 	public CPInstance addOrUpdateCPInstance(
-			String externalReferenceCode, long cpDefinitionId, long groupId,
-			String sku, String gtin, String manufacturerPartNumber,
-			boolean purchasable, String json, double width, double height,
-			double depth, double weight, BigDecimal price,
-			BigDecimal promoPrice, BigDecimal cost, boolean published,
-			int displayDateMonth, int displayDateDay, int displayDateYear,
-			int displayDateHour, int displayDateMinute, int expirationDateMonth,
-			int expirationDateDay, int expirationDateYear,
-			int expirationDateHour, int expirationDateMinute,
-			boolean neverExpire, String unspsc, boolean discontinued,
-			String replacementCPInstanceUuid, long replacementCProductId,
-			int discontinuedDateMonth, int discontinuedDateDay,
-			int discontinuedDateYear, ServiceContext serviceContext)
+		long userId, String externalReferenceCode, long cpDefinitionId, long groupId,
+		String sku, String gtin, String manufacturerPartNumber,
+		boolean purchasable, String json, double width, double height,
+		double depth, double weight, BigDecimal price,
+		BigDecimal promoPrice, BigDecimal cost, boolean published,
+		int displayDateMonth, int displayDateDay, int displayDateYear,
+		int displayDateHour, int displayDateMinute, int expirationDateMonth,
+		int expirationDateDay, int expirationDateYear,
+		int expirationDateHour, int expirationDateMinute,
+		boolean neverExpire, String unspsc, boolean discontinued,
+		String replacementCPInstanceUuid, long replacementCProductId,
+		int discontinuedDateMonth, int discontinuedDateDay,
+		int discontinuedDateYear, ServiceContext serviceContext)
 		throws PortalException {
 
 		if (Validator.isBlank(externalReferenceCode)) {
@@ -299,7 +297,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 			if (cpInstance != null) {
 				return cpInstanceLocalService.updateCPInstance(
-					cpInstance.getCPInstanceId(), sku, gtin,
+					userId, cpInstance.getCPInstanceId(), sku, gtin,
 					manufacturerPartNumber, purchasable, width, height, depth,
 					weight, price, promoPrice, cost, published,
 					displayDateMonth, displayDateDay, displayDateYear,
@@ -313,7 +311,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		}
 
 		return cpInstanceLocalService.addCPInstance(
-			externalReferenceCode, cpDefinitionId, groupId, sku, gtin,
+			userId, externalReferenceCode, cpDefinitionId, groupId, sku, gtin,
 			manufacturerPartNumber, purchasable,
 			_cpDefinitionOptionRelLocalService.
 				getCPDefinitionOptionRelCPDefinitionOptionValueRelIds(
@@ -329,9 +327,8 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 			serviceContext);
 	}
 
-	@Override
 	public void buildCPInstances(
-			long cpDefinitionId, ServiceContext serviceContext)
+		long userId, long cpDefinitionId, ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinition cpDefinition = _cpDefinitionLocalService.getCPDefinition(
@@ -360,16 +357,17 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 				continue;
 			}
 
-			addCPInstance(
-				cpDefinitionId, cpDefinition.getGroupId(), sku,
-				StringPool.BLANK, StringPool.BLANK, true,
+			addCPInstance(userId,
+				cpDefinitionId, cpDefinition.getGroupId(),
+				sku, StringPool.BLANK, StringPool.BLANK,
+				true,
 				_toCpDefinitionOptionRelIdCPDefinitionOptionValueRelIds(
-					cpDefinitionOptionValueRels),
-				cpDefinition.getWidth(), cpDefinition.getHeight(),
-				cpDefinition.getDepth(), cpDefinition.getWeight(),
-				BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, true,
-				cpDefinition.getDisplayDate(), cpDefinition.getExpirationDate(),
-				neverExpire, serviceContext);
+					cpDefinitionOptionValueRels), cpDefinition.getWidth(),
+				cpDefinition.getHeight(), cpDefinition.getDepth(),
+				cpDefinition.getWeight(), BigDecimal.ZERO, BigDecimal.ZERO,
+				BigDecimal.ZERO,
+				true, cpDefinition.getDisplayDate(),
+				cpDefinition.getExpirationDate(), neverExpire, serviceContext);
 		}
 	}
 
@@ -427,18 +425,16 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	}
 
 	@Indexable(type = IndexableType.DELETE)
-	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPInstance deleteCPInstance(CPInstance cpInstance)
+	public CPInstance deleteCPInstance(long userId, CPInstance cpInstance)
 		throws PortalException {
 
-		return cpInstanceLocalService.deleteCPInstance(cpInstance, true);
+		return cpInstanceLocalService.deleteCPInstance(userId, cpInstance, true);
 	}
 
 	@Indexable(type = IndexableType.DELETE)
-	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPInstance deleteCPInstance(CPInstance cpInstance, boolean makeCopy)
+	public CPInstance deleteCPInstance(long userId, CPInstance cpInstance, boolean makeCopy)
 		throws PortalException {
 
 		if (makeCopy &&
@@ -446,7 +442,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 				cpInstance.getCPDefinitionId())) {
 
 			_cpDefinitionLocalService.copyCPDefinition(
-				cpInstance.getCPDefinitionId());
+				userId, cpInstance.getCPDefinitionId());
 		}
 
 		// Commerce product instance
@@ -485,13 +481,12 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		return cpInstanceLocalService.deleteCPInstance(cpInstance);
 	}
 
-	@Override
-	public void deleteCPInstances(long cpDefinitionId) throws PortalException {
+	public void deleteCPInstances(long userId, long cpDefinitionId) throws PortalException {
 		List<CPInstance> cpInstances =
 			cpInstancePersistence.findByCPDefinitionId(cpDefinitionId);
 
 		for (CPInstance cpInstance : cpInstances) {
-			cpInstanceLocalService.deleteCPInstance(cpInstance, false);
+			cpInstanceLocalService.deleteCPInstance(userId, cpInstance, false);
 		}
 	}
 
@@ -768,20 +763,19 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
-	@Override
 	public CPInstance updateCPInstance(
-			long cpInstanceId, String sku, String gtin,
-			String manufacturerPartNumber, boolean purchasable, double width,
-			double height, double depth, double weight, BigDecimal price,
-			BigDecimal promoPrice, BigDecimal cost, boolean published,
-			int displayDateMonth, int displayDateDay, int displayDateYear,
-			int displayDateHour, int displayDateMinute, int expirationDateMonth,
-			int expirationDateDay, int expirationDateYear,
-			int expirationDateHour, int expirationDateMinute,
-			boolean neverExpire, String unspsc, boolean discontinued,
-			String replacementCPInstanceUuid, long replacementCProductId,
-			int discontinuedDateMonth, int discontinuedDateDay,
-			int discontinuedDateYear, ServiceContext serviceContext)
+		long userId, long cpInstanceId, String sku, String gtin,
+		String manufacturerPartNumber, boolean purchasable, double width,
+		double height, double depth, double weight, BigDecimal price,
+		BigDecimal promoPrice, BigDecimal cost, boolean published,
+		int displayDateMonth, int displayDateDay, int displayDateYear,
+		int displayDateHour, int displayDateMinute, int expirationDateMonth,
+		int expirationDateDay, int expirationDateYear,
+		int expirationDateHour, int expirationDateMinute,
+		boolean neverExpire, String unspsc, boolean discontinued,
+		String replacementCPInstanceUuid, long replacementCProductId,
+		int discontinuedDateMonth, int discontinuedDateDay,
+		int discontinuedDateYear, ServiceContext serviceContext)
 		throws PortalException {
 
 		// Commerce product instance
@@ -794,14 +788,14 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		_validateReplacementCPInstance(
 			cpInstance, replacementCPInstanceUuid, replacementCProductId);
 
-		User user = _userLocalService.getUser(serviceContext.getUserId());
+		User user = _userLocalService.getUser(userId);
 
 		if (_cpDefinitionLocalService.isVersionable(
 				cpInstance.getCPDefinitionId())) {
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					cpInstance.getCPDefinitionId());
+					userId, cpInstance.getCPDefinitionId());
 
 			cpInstance = cpInstancePersistence.findByC_C(
 				newCPDefinition.getCPDefinitionId(),
@@ -894,10 +888,9 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		return cpInstance;
 	}
 
-	@Override
 	public CPInstance updatePricingInfo(
-			long cpInstanceId, BigDecimal price, BigDecimal promoPrice,
-			BigDecimal cost, ServiceContext serviceContext)
+		long userId, long cpInstanceId, BigDecimal price, BigDecimal promoPrice,
+		BigDecimal cost, ServiceContext serviceContext)
 		throws PortalException {
 
 		BigDecimal maxValue = BigDecimal.valueOf(
@@ -917,7 +910,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					cpInstance.getCPDefinitionId());
+					userId, cpInstance.getCPDefinitionId());
 
 			cpInstance = cpInstancePersistence.findByC_C(
 				newCPDefinition.getCPDefinitionId(),
@@ -931,10 +924,9 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		return cpInstancePersistence.update(cpInstance);
 	}
 
-	@Override
 	public CPInstance updateShippingInfo(
-			long cpInstanceId, double width, double height, double depth,
-			double weight, ServiceContext serviceContext)
+		long userId, long cpInstanceId, double width, double height, double depth,
+		double weight, ServiceContext serviceContext)
 		throws PortalException {
 
 		CPInstance cpInstance = cpInstancePersistence.findByPrimaryKey(
@@ -945,7 +937,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					cpInstance.getCPDefinitionId());
+					userId, cpInstance.getCPDefinitionId());
 
 			cpInstance = cpInstancePersistence.findByC_C(
 				newCPDefinition.getCPDefinitionId(),
@@ -1016,16 +1008,15 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
-	@Override
 	public CPInstance updateSubscriptionInfo(
-			long cpInstanceId, boolean overrideSubscriptionInfo,
-			boolean subscriptionEnabled, int subscriptionLength,
-			String subscriptionType,
-			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
-			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
-			int deliverySubscriptionLength, String deliverySubscriptionType,
-			UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
-			long deliveryMaxSubscriptionCycles)
+		long userId, long cpInstanceId, boolean overrideSubscriptionInfo,
+		boolean subscriptionEnabled, int subscriptionLength,
+		String subscriptionType,
+		UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
+		long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
+		int deliverySubscriptionLength, String deliverySubscriptionType,
+		UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
+		long deliveryMaxSubscriptionCycles)
 		throws PortalException {
 
 		CPInstance cpInstance = cpInstancePersistence.findByPrimaryKey(
@@ -1036,7 +1027,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					cpInstance.getCPDefinitionId());
+					userId, cpInstance.getCPDefinitionId());
 
 			cpInstance = cpInstancePersistence.findByC_C(
 				newCPDefinition.getCPDefinitionId(),
@@ -1062,32 +1053,34 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	}
 
 	protected CPInstance addCPInstance(
-			long cpDefinitionId, long groupId, String sku, String gtin,
-			String manufacturerPartNumber, boolean purchasable,
-			Map<Long, List<Long>>
+		long userId, long cpDefinitionId, long groupId, String sku, String gtin,
+		String manufacturerPartNumber, boolean purchasable,
+		Map<Long, List<Long>>
 				cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds,
-			double width, double height, double depth, double weight,
-			BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
-			boolean published, Date displayDate, Date expirationDate,
-			boolean neverExpire, ServiceContext serviceContext)
+		double width, double height, double depth, double weight,
+		BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
+		boolean published, Date displayDate, Date expirationDate,
+		boolean neverExpire, ServiceContext serviceContext)
 		throws PortalException {
 
-		return addCPInstance(
-			cpDefinitionId, groupId, sku, gtin, manufacturerPartNumber,
-			purchasable, cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds,
-			width, height, depth, weight, price, promoPrice, cost, published,
-			displayDate, expirationDate, neverExpire, null, serviceContext);
+		return addCPInstance(userId,
+			cpDefinitionId, groupId, sku, gtin,
+			manufacturerPartNumber, purchasable,
+			cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds, width, height,
+			depth, weight, price, promoPrice, cost,
+			published, displayDate, expirationDate, neverExpire, null,
+			serviceContext);
 	}
 
 	protected CPInstance addCPInstance(
-			long cpDefinitionId, long groupId, String sku, String gtin,
-			String manufacturerPartNumber, boolean purchasable,
-			Map<Long, List<Long>>
+		long userId, long cpDefinitionId, long groupId, String sku, String gtin,
+		String manufacturerPartNumber, boolean purchasable,
+		Map<Long, List<Long>>
 				cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds,
-			double width, double height, double depth, double weight,
-			BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
-			boolean published, Date displayDate, Date expirationDate,
-			boolean neverExpire, String unspsc, ServiceContext serviceContext)
+		double width, double height, double depth, double weight,
+		BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
+		boolean published, Date displayDate, Date expirationDate,
+		boolean neverExpire, String unspsc, ServiceContext serviceContext)
 		throws PortalException {
 
 		User user = _userLocalService.getUser(serviceContext.getUserId());
@@ -1120,7 +1113,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		}
 
 		return cpInstanceLocalService.addCPInstance(
-			StringPool.BLANK, cpDefinitionId, groupId, sku, gtin,
+			userId, StringPool.BLANK, cpDefinitionId, groupId, sku, gtin,
 			manufacturerPartNumber, purchasable,
 			cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds, width, height,
 			depth, weight, price, promoPrice, cost, published, displayDateMonth,

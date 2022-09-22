@@ -158,13 +158,10 @@ public abstract class CPDefinitionLocalServiceBaseImpl
 	 *
 	 * @param cpDefinition the cp definition
 	 * @return the cp definition that was removed
-	 * @throws PortalException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
-	public CPDefinition deleteCPDefinition(CPDefinition cpDefinition)
-		throws PortalException {
-
+	public CPDefinition deleteCPDefinition(CPDefinition cpDefinition) {
 		return cpDefinitionPersistence.remove(cpDefinition);
 	}
 

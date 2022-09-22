@@ -81,7 +81,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.addCPInstance(
-			externalReferenceCode, cpDefinitionId, groupId, sku, gtin,
+			getUserId(), externalReferenceCode, cpDefinitionId, groupId, sku, gtin,
 			manufacturerPartNumber, purchasable,
 			cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds, width, height,
 			depth, weight, price, promoPrice, cost, published, displayDateMonth,
@@ -119,7 +119,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		_checkCommerceCatalog(groupId, ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.addOrUpdateCPInstance(
-			externalReferenceCode, cpDefinitionId, groupId, sku, gtin,
+			getUserId(), externalReferenceCode, cpDefinitionId, groupId, sku, gtin,
 			manufacturerPartNumber, purchasable, json, width, height, depth,
 			weight, price, promoPrice, cost, published, displayDateMonth,
 			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
@@ -138,7 +138,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
-		cpInstanceLocalService.buildCPInstances(cpDefinitionId, serviceContext);
+		cpInstanceLocalService.buildCPInstances(getUserId(), cpDefinitionId, serviceContext);
 	}
 
 	@Override
@@ -355,7 +355,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.updateCPInstance(
-			cpInstanceId, sku, gtin, manufacturerPartNumber, purchasable, width,
+			getUserId(), cpInstanceId, sku, gtin, manufacturerPartNumber, purchasable, width,
 			height, depth, weight, price, promoPrice, cost, published,
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, expirationDateMonth, expirationDateDay,
@@ -378,7 +378,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.updatePricingInfo(
-			cpInstanceId, price, promoPrice, cost, serviceContext);
+			getUserId(), cpInstanceId, price, promoPrice, cost, serviceContext);
 	}
 
 	@Override
@@ -394,7 +394,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.updateShippingInfo(
-			cpInstanceId, width, height, depth, weight, serviceContext);
+			getUserId(), cpInstanceId, width, height, depth, weight, serviceContext);
 	}
 
 	@Override
@@ -416,7 +416,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.updateSubscriptionInfo(
-			cpInstanceId, overrideSubscriptionInfo, subscriptionEnabled,
+			getUserId(), cpInstanceId, overrideSubscriptionInfo, subscriptionEnabled,
 			subscriptionLength, subscriptionType,
 			subscriptionTypeSettingsUnicodeProperties, maxSubscriptionCycles,
 			deliverySubscriptionEnabled, deliverySubscriptionLength,

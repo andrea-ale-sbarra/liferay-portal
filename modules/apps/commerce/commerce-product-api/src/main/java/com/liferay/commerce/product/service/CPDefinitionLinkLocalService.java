@@ -88,8 +88,8 @@ public interface CPDefinitionLinkLocalService
 		CPDefinitionLink cpDefinitionLink);
 
 	public CPDefinitionLink addCPDefinitionLinkByCProductId(
-			long cpDefinitionId, long cProductId, double priority, String type,
-			ServiceContext serviceContext)
+			long userId, long cpDefinitionId, long cProductId, double priority,
+			String type, ServiceContext serviceContext)
 		throws PortalException;
 
 	/**
@@ -116,13 +116,10 @@ public interface CPDefinitionLinkLocalService
 	 *
 	 * @param cpDefinitionLink the cp definition link
 	 * @return the cp definition link that was removed
-	 * @throws PortalException
 	 */
 	@Indexable(type = IndexableType.DELETE)
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPDefinitionLink deleteCPDefinitionLink(
-			CPDefinitionLink cpDefinitionLink)
-		throws PortalException;
+		CPDefinitionLink cpDefinitionLink);
 
 	/**
 	 * Deletes the cp definition link with the primary key from the database. Also notifies the appropriate model listeners.
@@ -137,6 +134,11 @@ public interface CPDefinitionLinkLocalService
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	public CPDefinitionLink deleteCPDefinitionLink(long CPDefinitionLinkId)
+		throws PortalException;
+
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
+	public CPDefinitionLink deleteCPDefinitionLink(
+			long userId, CPDefinitionLink cpDefinitionLink)
 		throws PortalException;
 
 	public void deleteCPDefinitionLinksByCPDefinitionId(long cpDefinitionId)
@@ -380,12 +382,12 @@ public interface CPDefinitionLinkLocalService
 		CPDefinitionLink cpDefinitionLink);
 
 	public CPDefinitionLink updateCPDefinitionLink(
-			long cpDefinitionLinkId, double priority,
+			long userId, long cpDefinitionLinkId, double priority,
 			ServiceContext serviceContext)
 		throws PortalException;
 
 	public void updateCPDefinitionLinkCProductIds(
-			long cpDefinitionId, long[] cProductIds, String type,
+			long userId, long cpDefinitionId, long[] cProductIds, String type,
 			ServiceContext serviceContext)
 		throws PortalException;
 

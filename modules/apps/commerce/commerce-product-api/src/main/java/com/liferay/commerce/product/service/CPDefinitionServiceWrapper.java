@@ -232,6 +232,13 @@ public class CPDefinitionServiceWrapper
 	}
 
 	@Override
+	public CPDefinition copyCPDefinition(long cpDefinitionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpDefinitionService.copyCPDefinition(cpDefinitionId);
+	}
+
+	@Override
 	public CPDefinition copyCPDefinition(
 			long cpDefinitionId, long groupId, int status)
 		throws com.liferay.portal.kernel.exception.PortalException {

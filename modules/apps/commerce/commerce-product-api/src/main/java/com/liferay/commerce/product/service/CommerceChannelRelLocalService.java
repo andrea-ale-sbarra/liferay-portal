@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.change.tracking.CTService;
 import com.liferay.portal.kernel.service.persistence.change.tracking.CTPersistence;
 import com.liferay.portal.kernel.transaction.Isolation;
@@ -84,8 +83,7 @@ public interface CommerceChannelRelLocalService
 		CommerceChannelRel commerceChannelRel);
 
 	public CommerceChannelRel addCommerceChannelRel(
-			String className, long classPK, long commerceChannelId,
-			ServiceContext serviceContext)
+			long userId, String className, long classPK, long commerceChannelId)
 		throws PortalException;
 
 	/**

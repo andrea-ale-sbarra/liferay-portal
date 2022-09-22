@@ -93,7 +93,7 @@ public interface CPDefinitionSpecificationOptionValueLocalService
 
 	public CPDefinitionSpecificationOptionValue
 			addCPDefinitionSpecificationOptionValue(
-				long cpDefinitionId, long cpSpecificationOptionId,
+				long userId, long cpDefinitionId, long cpSpecificationOptionId,
 				long cpOptionCategoryId, Map<Locale, String> valueMap,
 				double priority, ServiceContext serviceContext)
 		throws PortalException;
@@ -124,23 +124,12 @@ public interface CPDefinitionSpecificationOptionValueLocalService
 	 *
 	 * @param cpDefinitionSpecificationOptionValue the cp definition specification option value
 	 * @return the cp definition specification option value that was removed
-	 * @throws PortalException
 	 */
 	@Indexable(type = IndexableType.DELETE)
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPDefinitionSpecificationOptionValue
-			deleteCPDefinitionSpecificationOptionValue(
-				CPDefinitionSpecificationOptionValue
-					cpDefinitionSpecificationOptionValue)
-		throws PortalException;
-
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPDefinitionSpecificationOptionValue
-			deleteCPDefinitionSpecificationOptionValue(
-				CPDefinitionSpecificationOptionValue
-					cpDefinitionSpecificationOptionValue,
-				boolean makeCopy)
-		throws PortalException;
+		deleteCPDefinitionSpecificationOptionValue(
+			CPDefinitionSpecificationOptionValue
+				cpDefinitionSpecificationOptionValue);
 
 	/**
 	 * Deletes the cp definition specification option value with the primary key from the database. Also notifies the appropriate model listeners.
@@ -159,11 +148,29 @@ public interface CPDefinitionSpecificationOptionValueLocalService
 				long CPDefinitionSpecificationOptionValueId)
 		throws PortalException;
 
-	public void deleteCPDefinitionSpecificationOptionValues(long cpDefinitionId)
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
+	public CPDefinitionSpecificationOptionValue
+			deleteCPDefinitionSpecificationOptionValue(
+				long userId,
+				CPDefinitionSpecificationOptionValue
+					cpDefinitionSpecificationOptionValue)
+		throws PortalException;
+
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
+	public CPDefinitionSpecificationOptionValue
+			deleteCPDefinitionSpecificationOptionValue(
+				long userId,
+				CPDefinitionSpecificationOptionValue
+					cpDefinitionSpecificationOptionValue,
+				boolean makeCopy)
 		throws PortalException;
 
 	public void deleteCPDefinitionSpecificationOptionValues(
-			long cpDefinitionId, boolean makeCopy)
+			long userId, long cpDefinitionId)
+		throws PortalException;
+
+	public void deleteCPDefinitionSpecificationOptionValues(
+			long userId, long cpDefinitionId, boolean makeCopy)
 		throws PortalException;
 
 	public void deleteCPSpecificationOptionDefinitionValues(
@@ -427,13 +434,13 @@ public interface CPDefinitionSpecificationOptionValueLocalService
 
 	public CPDefinitionSpecificationOptionValue
 			updateCPDefinitionSpecificationOptionValue(
-				long cpDefinitionSpecificationOptionValueId,
+				long userId, long cpDefinitionSpecificationOptionValueId,
 				long cpOptionCategoryId, Map<Locale, String> valueMap,
 				double priority, ServiceContext serviceContext)
 		throws PortalException;
 
 	public CPDefinitionSpecificationOptionValue updateCPOptionCategoryId(
-			long cpDefinitionSpecificationOptionValueId,
+			long userId, long cpDefinitionSpecificationOptionValueId,
 			long cpOptionCategoryId)
 		throws PortalException;
 

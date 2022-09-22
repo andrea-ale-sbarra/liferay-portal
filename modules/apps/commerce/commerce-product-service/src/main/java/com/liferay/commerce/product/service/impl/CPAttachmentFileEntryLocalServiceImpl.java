@@ -163,7 +163,7 @@ public class CPAttachmentFileEntryLocalServiceImpl
 			_cpDefinitionLocalService.isVersionable(classPK)) {
 
 			CPDefinition newCPDefinition =
-				_cpDefinitionLocalService.copyCPDefinition(classPK);
+				_cpDefinitionLocalService.copyCPDefinition(userId, classPK);
 
 			classPK = newCPDefinition.getCPDefinitionId();
 		}
@@ -320,10 +320,9 @@ public class CPAttachmentFileEntryLocalServiceImpl
 	}
 
 	@Indexable(type = IndexableType.DELETE)
-	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPAttachmentFileEntry deleteCPAttachmentFileEntry(
-			CPAttachmentFileEntry cpAttachmentFileEntry)
+		long userId, CPAttachmentFileEntry cpAttachmentFileEntry)
 		throws PortalException {
 
 		long cpDefinitionClassNameId = _classNameLocalService.getClassNameId(
@@ -336,7 +335,7 @@ public class CPAttachmentFileEntryLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					cpAttachmentFileEntry.getClassPK());
+					userId, cpAttachmentFileEntry.getClassPK());
 
 			if (cpAttachmentFileEntry.isCDNEnabled()) {
 				cpAttachmentFileEntry =
@@ -624,7 +623,7 @@ public class CPAttachmentFileEntryLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					cpAttachmentFileEntry.getClassPK());
+					userId, cpAttachmentFileEntry.getClassPK());
 
 			if (cdnEnabled) {
 				cpAttachmentFileEntry =

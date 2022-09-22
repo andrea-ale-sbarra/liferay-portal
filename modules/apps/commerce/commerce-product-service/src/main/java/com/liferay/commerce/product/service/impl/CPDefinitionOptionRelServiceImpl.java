@@ -57,7 +57,7 @@ public class CPDefinitionOptionRelServiceImpl
 		_checkCommerceCatalog(cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, nameMap, descriptionMap,
+			getUserId(), cpDefinitionId, cpOptionId, nameMap, descriptionMap,
 			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
 			importOptionValue, serviceContext);
 	}
@@ -74,7 +74,7 @@ public class CPDefinitionOptionRelServiceImpl
 		_checkCommerceCatalog(cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, nameMap, descriptionMap,
+			getUserId(), cpDefinitionId, cpOptionId, nameMap, descriptionMap,
 			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
 			importOptionValue, priceType, serviceContext);
 	}
@@ -87,7 +87,7 @@ public class CPDefinitionOptionRelServiceImpl
 		_checkCommerceCatalog(cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, true, serviceContext);
+			getUserId(), cpDefinitionId, cpOptionId, true, serviceContext);
 	}
 
 	@Override
@@ -274,7 +274,7 @@ public class CPDefinitionOptionRelServiceImpl
 			cpDefinitionOptionRel.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
-			cpDefinitionOptionRel.getCPDefinitionOptionRelId(), cpOptionId,
+			getUserId(), cpDefinitionOptionRel.getCPDefinitionOptionRelId(), cpOptionId,
 			nameMap, descriptionMap, ddmFormFieldTypeName, priority, facetable,
 			required, skuContributor, serviceContext);
 	}
@@ -296,7 +296,7 @@ public class CPDefinitionOptionRelServiceImpl
 			cpDefinitionOptionRel.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
-			cpDefinitionOptionRel.getCPDefinitionOptionRelId(), cpOptionId,
+			getUserId(), cpDefinitionOptionRel.getCPDefinitionOptionRelId(), cpOptionId,
 			nameMap, descriptionMap, ddmFormFieldTypeName, priority, facetable,
 			required, skuContributor, priceType, serviceContext);
 	}

@@ -92,44 +92,41 @@ import javax.servlet.http.HttpServletRequest;
 public class CPDefinitionOptionRelLocalServiceImpl
 	extends CPDefinitionOptionRelLocalServiceBaseImpl {
 
-	@Override
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
-			long cpDefinitionId, long cpOptionId, boolean importOptionValue,
-			ServiceContext serviceContext)
+		long userId, long cpDefinitionId, long cpOptionId, boolean importOptionValue,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		CPOption cpOption = _cpOptionLocalService.getCPOption(cpOptionId);
 
 		return cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, cpOption.getNameMap(),
+			userId, cpDefinitionId, cpOptionId, cpOption.getNameMap(),
 			cpOption.getDescriptionMap(), cpOption.getDDMFormFieldTypeName(), 0,
 			cpOption.isFacetable(), cpOption.isRequired(),
 			cpOption.isSkuContributor(), importOptionValue, serviceContext);
 	}
 
-	@Override
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
-			long cpDefinitionId, long cpOptionId, Map<Locale, String> nameMap,
-			Map<Locale, String> descriptionMap, String ddmFormFieldTypeName,
-			double priority, boolean facetable, boolean required,
-			boolean skuContributor, boolean importOptionValue,
-			ServiceContext serviceContext)
+		long userId, long cpDefinitionId, long cpOptionId, Map<Locale, String> nameMap,
+		Map<Locale, String> descriptionMap, String ddmFormFieldTypeName,
+		double priority, boolean facetable, boolean required,
+		boolean skuContributor, boolean importOptionValue,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		return cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, nameMap, descriptionMap,
+			userId, cpDefinitionId, cpOptionId, nameMap, descriptionMap,
 			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
 			importOptionValue, null, serviceContext);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
-	@Override
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
-			long cpDefinitionId, long cpOptionId, Map<Locale, String> nameMap,
-			Map<Locale, String> descriptionMap, String ddmFormFieldTypeName,
-			double priority, boolean facetable, boolean required,
-			boolean skuContributor, boolean importOptionValue, String priceType,
-			ServiceContext serviceContext)
+		long userId, long cpDefinitionId, long cpOptionId, Map<Locale, String> nameMap,
+		Map<Locale, String> descriptionMap, String ddmFormFieldTypeName,
+		double priority, boolean facetable, boolean required,
+		boolean skuContributor, boolean importOptionValue, String priceType,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		// Commerce product definition option rel
@@ -140,7 +137,7 @@ public class CPDefinitionOptionRelLocalServiceImpl
 
 		_validateCPDefinitionOptionKey(cpDefinitionId, cpOption.getKey());
 
-		User user = _userLocalService.getUser(serviceContext.getUserId());
+		User user = _userLocalService.getUser(userId);
 		long groupId = serviceContext.getScopeGroupId();
 
 		long cpDefinitionOptionRelId = counterLocalService.increment();
@@ -154,7 +151,7 @@ public class CPDefinitionOptionRelLocalServiceImpl
 				cpDefinitionId, serviceContext.getRequest())) {
 
 			CPDefinition newCPDefinition =
-				_cpDefinitionLocalService.copyCPDefinition(cpDefinitionId);
+				_cpDefinitionLocalService.copyCPDefinition(userId, cpDefinitionId);
 
 			cpDefinitionId = newCPDefinition.getCPDefinitionId();
 
@@ -189,7 +186,7 @@ public class CPDefinitionOptionRelLocalServiceImpl
 		if (importOptionValue) {
 			_cpDefinitionOptionValueRelLocalService.
 				importCPDefinitionOptionRels(
-					cpDefinitionOptionRelId, serviceContext);
+					userId, cpDefinitionOptionRelId, serviceContext);
 		}
 
 		// Commerce product instances
@@ -207,20 +204,18 @@ public class CPDefinitionOptionRelLocalServiceImpl
 		return cpDefinitionOptionRel;
 	}
 
-	@Override
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
-			long cpDefinitionId, long cpOptionId, ServiceContext serviceContext)
+		long userId, long cpDefinitionId, long cpOptionId, ServiceContext serviceContext)
 		throws PortalException {
 
 		return cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, true, serviceContext);
+			userId, cpDefinitionId, cpOptionId, true, serviceContext);
 	}
 
 	@Indexable(type = IndexableType.DELETE)
-	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPDefinitionOptionRel deleteCPDefinitionOptionRel(
-			CPDefinitionOptionRel cpDefinitionOptionRel)
+		long userId, CPDefinitionOptionRel cpDefinitionOptionRel)
 		throws PortalException {
 
 		if (_cpDefinitionLocalService.isVersionable(
@@ -228,7 +223,7 @@ public class CPDefinitionOptionRelLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					cpDefinitionOptionRel.getCPDefinitionId());
+					userId, cpDefinitionOptionRel.getCPDefinitionId());
 
 			cpDefinitionOptionRel = cpDefinitionOptionRelPersistence.findByC_C(
 				newCPDefinition.getCPDefinitionId(),
@@ -633,29 +628,27 @@ public class CPDefinitionOptionRelLocalServiceImpl
 		return searchCPDefinitionOptionRelsCount(searchContext);
 	}
 
-	@Override
 	public CPDefinitionOptionRel updateCPDefinitionOptionRel(
-			long cpDefinitionOptionRelId, long cpOptionId,
-			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
-			String ddmFormFieldTypeName, double priority, boolean facetable,
-			boolean required, boolean skuContributor,
-			ServiceContext serviceContext)
+		long userId, long cpDefinitionOptionRelId, long cpOptionId,
+		Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
+		String ddmFormFieldTypeName, double priority, boolean facetable,
+		boolean required, boolean skuContributor,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		return cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
-			cpDefinitionOptionRelId, cpOptionId, nameMap, descriptionMap,
+			userId, cpDefinitionOptionRelId, cpOptionId, nameMap, descriptionMap,
 			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
 			null, serviceContext);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
-	@Override
 	public CPDefinitionOptionRel updateCPDefinitionOptionRel(
-			long cpDefinitionOptionRelId, long cpOptionId,
-			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
-			String ddmFormFieldTypeName, double priority, boolean facetable,
-			boolean required, boolean skuContributor, String priceType,
-			ServiceContext serviceContext)
+		long userId, long cpDefinitionOptionRelId, long cpOptionId,
+		Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
+		String ddmFormFieldTypeName, double priority, boolean facetable,
+		boolean required, boolean skuContributor, String priceType,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		_validateDDMFormFieldTypeName(ddmFormFieldTypeName, skuContributor);
@@ -672,7 +665,7 @@ public class CPDefinitionOptionRelLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					cpDefinitionOptionRel.getCPDefinitionId());
+					userId, cpDefinitionOptionRel.getCPDefinitionId());
 
 			cpDefinitionOptionRel = cpDefinitionOptionRelPersistence.findByC_C(
 				newCPDefinition.getCPDefinitionId(),
