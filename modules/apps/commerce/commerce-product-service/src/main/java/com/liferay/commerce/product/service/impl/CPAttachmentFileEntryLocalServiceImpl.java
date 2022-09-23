@@ -78,6 +78,7 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
@@ -208,6 +209,36 @@ public class CPAttachmentFileEntryLocalServiceImpl
 	}
 
 	@Override
+	private void cloneCPAttachmentFileEntry(long oldCPDefinitionId, long newCPDefinitionId){
+		long cpDefinitionClassNameId = _classNameLocalService.getClassNameId(
+			CPDefinition.class);
+
+		List<CPAttachmentFileEntry> cpAttachmentFileEntries =
+			cpAttachmentFileEntryPersistence.findByC_C(
+				cpDefinitionClassNameId, oldCPDefinitionId);
+
+		for (CPAttachmentFileEntry cpAttachmentFileEntry :
+			cpAttachmentFileEntries) {
+
+			CPAttachmentFileEntry newCPAttachmentFileEntry =
+				(CPAttachmentFileEntry)cpAttachmentFileEntry.clone();
+
+			newCPAttachmentFileEntry.setUuid(PortalUUIDUtil.generate());
+
+			long cpAttachmentFileEntryId = counterLocalService.increment();
+
+			newCPAttachmentFileEntry.setExternalReferenceCode(
+				String.valueOf(cpAttachmentFileEntryId));
+			newCPAttachmentFileEntry.setCPAttachmentFileEntryId(
+				cpAttachmentFileEntryId);
+
+			newCPAttachmentFileEntry.setClassPK(newCPDefinitionId);
+
+			cpAttachmentFileEntryPersistence.update(newCPAttachmentFileEntry);
+		}
+	}
+
+	@Override
 	public CPAttachmentFileEntry addOrUpdateCPAttachmentFileEntry(
 			String externalReferenceCode, long userId, long groupId,
 			long classNameId, long classPK, long cpAttachmentFileEntryId,
@@ -304,6 +335,22 @@ public class CPAttachmentFileEntryLocalServiceImpl
 	}
 
 	@Override
+	public void deleteCPAttachmentFileEntries(long userId, String className, long classPK)
+		throws PortalException {
+
+		List<CPAttachmentFileEntry> cpAttachmentFileEntries =
+			cpAttachmentFileEntryPersistence.findByC_C(
+				_classNameLocalService.getClassNameId(className), classPK);
+
+		for (CPAttachmentFileEntry cpAttachmentFileEntry :
+			cpAttachmentFileEntries) {
+
+			cpAttachmentFileEntryLocalService.deleteCPAttachmentFileEntry(
+				cpAttachmentFileEntry);
+		}
+	}
+
+	@Override
 	public void deleteCPAttachmentFileEntries(String className, long classPK)
 		throws PortalException {
 
@@ -323,19 +370,19 @@ public class CPAttachmentFileEntryLocalServiceImpl
 	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPAttachmentFileEntry deleteCPAttachmentFileEntry(
-			CPAttachmentFileEntry cpAttachmentFileEntry)
+		long userId, CPAttachmentFileEntry cpAttachmentFileEntry)
 		throws PortalException {
 
 		long cpDefinitionClassNameId = _classNameLocalService.getClassNameId(
 			CPDefinition.class);
 
 		if ((cpAttachmentFileEntry.getClassNameId() ==
-				cpDefinitionClassNameId) &&
+			 cpDefinitionClassNameId) &&
 			_cpDefinitionLocalService.isVersionable(
 				cpAttachmentFileEntry.getClassPK())) {
 
 			CPDefinition newCPDefinition =
-				_cpDefinitionLocalService.copyCPDefinition(,
+				_cpDefinitionLocalService.copyCPDefinition(userId,
 					cpAttachmentFileEntry.getClassPK());
 
 			if (cpAttachmentFileEntry.isCDNEnabled()) {
@@ -354,11 +401,26 @@ public class CPAttachmentFileEntryLocalServiceImpl
 			}
 		}
 
-		// Commerce product attachment file entry
-
 		cpAttachmentFileEntryPersistence.remove(cpAttachmentFileEntry);
 
-		// Expando
+		_expandoRowLocalService.deleteRows(
+			cpAttachmentFileEntry.getCPAttachmentFileEntryId());
+
+		reindex(
+			cpAttachmentFileEntry.getClassNameId(),
+			cpAttachmentFileEntry.getClassPK());
+
+		return cpAttachmentFileEntry;
+	}
+
+	@Indexable(type = IndexableType.DELETE)
+	@Override
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
+	public CPAttachmentFileEntry deleteCPAttachmentFileEntry(
+			CPAttachmentFileEntry cpAttachmentFileEntry)
+		throws PortalException {
+
+		cpAttachmentFileEntryPersistence.remove(cpAttachmentFileEntry);
 
 		_expandoRowLocalService.deleteRows(
 			cpAttachmentFileEntry.getCPAttachmentFileEntryId());

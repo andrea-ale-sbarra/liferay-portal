@@ -101,34 +101,17 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 	}
 
 	@Override
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPDefinitionSpecificationOptionValue
-			deleteCPDefinitionSpecificationOptionValue(
-				CPDefinitionSpecificationOptionValue
-					cpDefinitionSpecificationOptionValue)
-		throws PortalException {
+	deleteCPDefinitionSpecificationOptionValue(
+		long userId, CPDefinitionSpecificationOptionValue
+			cpDefinitionSpecificationOptionValue) throws PortalException {
 
-		return cpDefinitionSpecificationOptionValueLocalService.
-			deleteCPDefinitionSpecificationOptionValue(
-				cpDefinitionSpecificationOptionValue, true);
-	}
-
-	@Override
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPDefinitionSpecificationOptionValue
-			deleteCPDefinitionSpecificationOptionValue(
-				CPDefinitionSpecificationOptionValue
-					cpDefinitionSpecificationOptionValue,
-				boolean makeCopy)
-		throws PortalException {
-
-		if (makeCopy &&
-			_cpDefinitionLocalService.isVersionable(
+		if (_cpDefinitionLocalService.isVersionable(
 				cpDefinitionSpecificationOptionValue.getCPDefinitionId())) {
 
 			try {
 				CPDefinition newCPDefinition =
-					_cpDefinitionLocalService.copyCPDefinition(,
+					_cpDefinitionLocalService.copyCPDefinition(userId,
 						cpDefinitionSpecificationOptionValue.
 							getCPDefinitionId());
 
@@ -144,12 +127,22 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 			}
 		}
 
-		// Commerce product definition specification option value
+		return cpDefinitionSpecificationOptionValueLocalService.
+			deleteCPDefinitionSpecificationOptionValue(
+				cpDefinitionSpecificationOptionValue);
+	}
+
+
+	@Override
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
+	public CPDefinitionSpecificationOptionValue
+			deleteCPDefinitionSpecificationOptionValue(
+				CPDefinitionSpecificationOptionValue
+					cpDefinitionSpecificationOptionValue)
+		throws PortalException {
 
 		cpDefinitionSpecificationOptionValuePersistence.remove(
 			cpDefinitionSpecificationOptionValue);
-
-		// Expando
 
 		_expandoRowLocalService.deleteRows(
 			cpDefinitionSpecificationOptionValue.
@@ -177,16 +170,34 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 				cpDefinitionSpecificationOptionValue);
 	}
 
+
 	@Override
-	public void deleteCPDefinitionSpecificationOptionValues(long cpDefinitionId)
+	public void deleteCPDefinitionSpecificationOptionValues(long userId,long cpDefinitionId)
 		throws PortalException {
 
-		cpDefinitionSpecificationOptionValueLocalService.
-			deleteCPDefinitionSpecificationOptionValues(cpDefinitionId, true);
+		List<CPDefinitionSpecificationOptionValue>
+			cpDefinitionSpecificationOptionValues =
+			getCPDefinitionSpecificationOptionValues(
+				cpDefinitionId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+
+		// Commerce product definition specification option value
+
+		for (CPDefinitionSpecificationOptionValue
+			cpDefinitionSpecificationOptionValue :
+			cpDefinitionSpecificationOptionValues) {
+
+			cpDefinitionSpecificationOptionValueLocalService.
+				deleteCPDefinitionSpecificationOptionValue(userId,
+					cpDefinitionSpecificationOptionValue);
+		}
+
+		// Commerce product definition
+
+		reindexCPDefinition(cpDefinitionId);
 	}
 
-	public void deleteCPDefinitionSpecificationOptionValues(
-			long cpDefinitionId, boolean makeCopy)
+	@Override
+	public void deleteCPDefinitionSpecificationOptionValues(long cpDefinitionId)
 		throws PortalException {
 
 		List<CPDefinitionSpecificationOptionValue>
@@ -202,7 +213,7 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 
 			cpDefinitionSpecificationOptionValueLocalService.
 				deleteCPDefinitionSpecificationOptionValue(
-					cpDefinitionSpecificationOptionValue, makeCopy);
+					cpDefinitionSpecificationOptionValue);
 		}
 
 		// Commerce product definition
