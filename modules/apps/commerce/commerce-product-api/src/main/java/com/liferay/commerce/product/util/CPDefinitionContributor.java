@@ -19,10 +19,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 /**
  * @author Ethan Bustad
  */
-public interface CPVersionContributor {
+public interface CPDefinitionContributor {
 
 	public void onDelete(long cpDefinitionId) throws PortalException;
 
-	public void onUpdate(long oldCPDefinitionId, long newCPDefinitionId);
+	public void contribute(long oldCPDefinitionId, long newCPDefinitionId);
 
 }

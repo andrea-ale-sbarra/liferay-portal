@@ -12,10 +12,10 @@
  * details.
  */
 
-package com.liferay.commerce.product.type.grouped.internal.util;
+package com.liferay.commerce.internal.util;
 
-import com.liferay.commerce.product.type.grouped.service.CPDefinitionGroupedEntryLocalService;
-import com.liferay.commerce.product.util.CPVersionContributor;
+import com.liferay.commerce.product.util.CPDefinitionContributor;
+import com.liferay.commerce.service.CPDefinitionInventoryLocalService;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -24,25 +24,25 @@ import org.osgi.service.component.annotations.Reference;
  * @author Ethan Bustad
  */
 @Component(
-	enabled = false, immediate = true, service = CPVersionContributor.class
+	enabled = false, immediate = true, service = CPDefinitionContributor.class
 )
-public class CPDefinitionGroupedEntryCPVersionContributor
-	implements CPVersionContributor {
+public class CPDefinitionInventoryCPDefinitionContributor
+	implements CPDefinitionContributor {
 
 	@Override
 	public void onDelete(long cpDefinitionId) {
-		_cpDefinitionGroupedEntryLocalService.deleteCPDefinitionGroupedEntries(
-			cpDefinitionId);
+		_cpDefinitionInventoryLocalService.
+			deleteCPDefinitionInventoryByCPDefinitionId(cpDefinitionId);
 	}
 
 	@Override
-	public void onUpdate(long oldCPDefinitionId, long newCPDefinitionId) {
-		_cpDefinitionGroupedEntryLocalService.cloneCPDefinitionGroupedEntries(
+	public void contribute(long oldCPDefinitionId, long newCPDefinitionId) {
+		_cpDefinitionInventoryLocalService.cloneCPDefinitionInventory(
 			oldCPDefinitionId, newCPDefinitionId);
 	}
 
 	@Reference
-	private CPDefinitionGroupedEntryLocalService
-		_cpDefinitionGroupedEntryLocalService;
+	private CPDefinitionInventoryLocalService
+		_cpDefinitionInventoryLocalService;
 
 }
