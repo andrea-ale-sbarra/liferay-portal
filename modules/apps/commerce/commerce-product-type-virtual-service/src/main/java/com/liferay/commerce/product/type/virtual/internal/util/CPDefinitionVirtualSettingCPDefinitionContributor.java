@@ -16,7 +16,7 @@ package com.liferay.commerce.product.type.virtual.internal.util;
 
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingLocalService;
-import com.liferay.commerce.product.util.CPVersionContributor;
+import com.liferay.commerce.product.util.CPDefinitionContributor;
 import com.liferay.portal.kernel.exception.PortalException;
 
 import org.osgi.service.component.annotations.Component;
@@ -26,10 +26,10 @@ import org.osgi.service.component.annotations.Reference;
  * @author Ethan Bustad
  */
 @Component(
-	enabled = false, immediate = true, service = CPVersionContributor.class
+	enabled = false, immediate = true, service = CPDefinitionContributor.class
 )
-public class CPDefinitionVirtualSettingCPVersionContributor
-	implements CPVersionContributor {
+public class CPDefinitionVirtualSettingCPDefinitionContributor
+	implements CPDefinitionContributor {
 
 	@Override
 	public void onDelete(long cpDefinitionId) throws PortalException {
@@ -39,7 +39,7 @@ public class CPDefinitionVirtualSettingCPVersionContributor
 	}
 
 	@Override
-	public void onUpdate(long oldCPDefinitionId, long newCPDefinitionId) {
+	public void contribute(long oldCPDefinitionId, long newCPDefinitionId) {
 		_cpDefinitionVirtualSettingLocalService.cloneCPDefinitionVirtualSetting(
 			oldCPDefinitionId, newCPDefinitionId);
 	}
