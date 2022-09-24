@@ -138,15 +138,15 @@ public class ModulesJUnitBatchTestClassGroup extends JUnitBatchTestClassGroup {
 		Set<File> modifiedModuleDirsSet = new HashSet<>();
 
 		List<File> modifiedPoshiModulesList = new ArrayList<>();
-		List<File> modifiedNonPoshiModulesList = new ArrayList<>();
+		List<File> modifiedNonposhiModulesList = new ArrayList<>();
 
 		try {
 			modifiedModuleDirsSet.addAll(
 				portalGitWorkingDirectory.getModifiedModuleDirsList());
 			modifiedPoshiModulesList =
 				portalGitWorkingDirectory.getModifiedPoshiModules();
-			modifiedNonPoshiModulesList =
-				portalGitWorkingDirectory.getModifiedNonPoshiModules();
+			modifiedNonposhiModulesList =
+				portalGitWorkingDirectory.getModifiedNonposhiModules();
 		}
 		catch (IOException ioException) {
 			File workingDirectory =
@@ -177,7 +177,7 @@ public class ModulesJUnitBatchTestClassGroup extends JUnitBatchTestClassGroup {
 
 		for (File modifiedModuleDir : modifiedModuleDirsSet) {
 			if (modifiedPoshiModulesList.contains(modifiedModuleDir) &&
-				!modifiedNonPoshiModulesList.contains(modifiedModuleDir)) {
+				!modifiedNonposhiModulesList.contains(modifiedModuleDir)) {
 
 				continue;
 			}

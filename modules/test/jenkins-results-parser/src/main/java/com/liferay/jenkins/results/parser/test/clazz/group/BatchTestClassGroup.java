@@ -899,13 +899,13 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 		List<File> moduleDirs, List<File> requiredModuleDirs) {
 
 		List<File> modifiedPoshiModulesList = new ArrayList<>();
-		List<File> modifiedNonPoshiModulesList = new ArrayList<>();
+		List<File> modifiedNonposhiModulesList = new ArrayList<>();
 
 		try {
 			modifiedPoshiModulesList =
 				portalGitWorkingDirectory.getModifiedPoshiModules();
-			modifiedNonPoshiModulesList =
-				portalGitWorkingDirectory.getModifiedNonPoshiModules();
+			modifiedNonposhiModulesList =
+				portalGitWorkingDirectory.getModifiedNonposhiModules();
 		}
 		catch (IOException ioException) {
 			File workingDirectory =
@@ -925,7 +925,7 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 		for (File moduleDir : moduleDirs) {
 			if (testRelevantChanges &&
 				modifiedPoshiModulesList.contains(moduleDir) &&
-				!modifiedNonPoshiModulesList.contains(moduleDir)) {
+				!modifiedNonposhiModulesList.contains(moduleDir)) {
 
 				continue;
 			}

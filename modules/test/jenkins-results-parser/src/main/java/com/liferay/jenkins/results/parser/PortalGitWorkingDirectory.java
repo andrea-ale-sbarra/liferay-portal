@@ -70,19 +70,19 @@ public class PortalGitWorkingDirectory extends GitWorkingDirectory {
 			getModifiedFilesList());
 	}
 
-	public List<File> getModifiedNonPoshiModules() throws IOException {
+	public List<File> getModifiedNonposhiModules() throws IOException {
 		List<File> modifiedFilesList = getModifiedFilesList();
 
-		List<File> modifiedNonPoshiFilesList = new ArrayList<>();
+		List<File> modifiedNonposhiFilesList = new ArrayList<>();
 
 		for (File modifiedFile : modifiedFilesList) {
 			if (!JenkinsResultsParserUtil.isPoshiFile(modifiedFile)) {
-				modifiedNonPoshiFilesList.add(modifiedFile);
+				modifiedNonposhiFilesList.add(modifiedFile);
 			}
 		}
 
 		return JenkinsResultsParserUtil.getDirectoriesContainingFiles(
-			getModuleDirsList(null, null), modifiedNonPoshiFilesList);
+			getModuleDirsList(null, null), modifiedNonposhiFilesList);
 	}
 
 	public List<File> getModifiedNPMTestModuleDirsList() throws IOException {
