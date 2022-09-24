@@ -150,16 +150,16 @@ public class DEDataDefinitionFieldLinkStagedModelDataHandler
 			portletDataContext.getImportDataStagedModelElement(
 				deDataDefinitionFieldLink);
 
-		String className = deDataDefinitionFieldLinkElement.attributeValue(
-			"link-class-name");
-
 		importedDEDataDefinitionFieldLink.setGroupId(
 			portletDataContext.getScopeGroupId());
 		importedDEDataDefinitionFieldLink.setCompanyId(
 			portletDataContext.getCompanyId());
+
+		String className = deDataDefinitionFieldLinkElement.attributeValue(
+			"link-class-name");
+
 		importedDEDataDefinitionFieldLink.setClassNameId(
 			_portal.getClassNameId(className));
-		importedDEDataDefinitionFieldLink.setDdmStructureId(ddmStructureId);
 
 		if (className.equals(DDMStructureLayout.class.getName())) {
 			long layoutDDMStructureId = GetterUtil.getLong(
@@ -193,6 +193,8 @@ public class DEDataDefinitionFieldLinkStagedModelDataHandler
 					newPrimaryKeysMap, deDataDefinitionFieldLink.getClassPK(),
 					deDataDefinitionFieldLink.getClassPK()));
 		}
+
+		importedDEDataDefinitionFieldLink.setDdmStructureId(ddmStructureId);
 
 		DEDataDefinitionFieldLink existingDEDataDefinitionFieldLink =
 			_stagedModelRepository.fetchStagedModelByUuidAndGroupId(
