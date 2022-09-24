@@ -136,17 +136,16 @@ public class ModulesJUnitBatchTestClassGroup extends JUnitBatchTestClassGroup {
 		}
 
 		Set<File> modifiedModuleDirsSet = new HashSet<>();
-
-		List<File> modifiedPoshiModulesList = new ArrayList<>();
 		List<File> modifiedNonposhiModulesList = new ArrayList<>();
+		List<File> modifiedPoshiModulesList = new ArrayList<>();
 
 		try {
 			modifiedModuleDirsSet.addAll(
 				portalGitWorkingDirectory.getModifiedModuleDirsList());
-			modifiedPoshiModulesList =
-				portalGitWorkingDirectory.getModifiedPoshiModules();
 			modifiedNonposhiModulesList =
 				portalGitWorkingDirectory.getModifiedNonposhiModules();
+			modifiedPoshiModulesList =
+				portalGitWorkingDirectory.getModifiedPoshiModules();
 		}
 		catch (IOException ioException) {
 			File workingDirectory =
@@ -165,11 +164,11 @@ public class ModulesJUnitBatchTestClassGroup extends JUnitBatchTestClassGroup {
 					Lists.newArrayList(modifiedModuleDirsSet)));
 		}
 
-		Matcher matcher = _singleModuleBatchNamePattern.matcher(batchName);
+		Set<JobProperty> includesJobProperties = new HashSet<>();
 
 		String moduleName = null;
 
-		Set<JobProperty> includesJobProperties = new HashSet<>();
+		Matcher matcher = _singleModuleBatchNamePattern.matcher(batchName);
 
 		if (matcher.find()) {
 			moduleName = matcher.group("moduleName");
