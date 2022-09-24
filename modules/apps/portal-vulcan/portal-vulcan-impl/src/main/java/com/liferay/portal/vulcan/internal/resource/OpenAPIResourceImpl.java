@@ -165,10 +165,10 @@ public class OpenAPIResourceImpl implements OpenAPIResource {
 			openAPIContributor.contribute(openAPI, uriInfo);
 		}
 
-		for (OpenAPIContributor externalOpenAPIContributor :
-				_openAPIContributors) {
+		for (OpenAPIContributor trackedOpenAPIContributor :
+				_trackedOpenAPIContributors) {
 
-			externalOpenAPIContributor.contribute(openAPI, uriInfo);
+			trackedOpenAPIContributor.contribute(openAPI, uriInfo);
 		}
 
 		if (StringUtil.equalsIgnoreCase("yaml", type)) {
@@ -217,13 +217,13 @@ public class OpenAPIResourceImpl implements OpenAPIResource {
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		_openAPIContributors = ServiceTrackerListFactory.open(
+		_trackedOpenAPIContributors = ServiceTrackerListFactory.open(
 			bundleContext, OpenAPIContributor.class);
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		_openAPIContributors.close();
+		_trackedOpenAPIContributors.close();
 	}
 
 	private String _getBasePath(UriInfo uriInfo) {
@@ -921,6 +921,6 @@ public class OpenAPIResourceImpl implements OpenAPIResource {
 	@Reference
 	private JaxRsResourceRegistry _jaxRsResourceRegistry;
 
-	private ServiceTrackerList<OpenAPIContributor> _openAPIContributors;
+	private ServiceTrackerList<OpenAPIContributor> _trackedOpenAPIContributors;
 
 }
