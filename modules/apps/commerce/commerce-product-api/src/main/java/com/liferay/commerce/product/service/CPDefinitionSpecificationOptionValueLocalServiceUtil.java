@@ -67,15 +67,22 @@ public class CPDefinitionSpecificationOptionValueLocalServiceUtil {
 
 	public static CPDefinitionSpecificationOptionValue
 			addCPDefinitionSpecificationOptionValue(
-				long cpDefinitionId, long cpSpecificationOptionId,
+				long userId, long cpDefinitionId, long cpSpecificationOptionId,
 				long cpOptionCategoryId, Map<java.util.Locale, String> valueMap,
 				double priority,
 				com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().addCPDefinitionSpecificationOptionValue(,
-			cpDefinitionId, cpSpecificationOptionId,
-			cpOptionCategoryId, valueMap, priority, serviceContext);
+		return getService().addCPDefinitionSpecificationOptionValue(
+			userId, cpDefinitionId, cpSpecificationOptionId, cpOptionCategoryId,
+			valueMap, priority, serviceContext);
+	}
+
+	public static void cloneCPDefinitionSpecificationOptionValue(
+		long oldCPDefinitionId, long newCPDefinitionId) {
+
+		getService().cloneCPDefinitionSpecificationOptionValue(
+			oldCPDefinitionId, newCPDefinitionId);
 	}
 
 	/**
@@ -123,17 +130,6 @@ public class CPDefinitionSpecificationOptionValueLocalServiceUtil {
 			cpDefinitionSpecificationOptionValue);
 	}
 
-	public static CPDefinitionSpecificationOptionValue
-			deleteCPDefinitionSpecificationOptionValue(
-				CPDefinitionSpecificationOptionValue
-					cpDefinitionSpecificationOptionValue,
-				boolean makeCopy)
-		throws PortalException {
-
-		return getService().deleteCPDefinitionSpecificationOptionValue(
-			cpDefinitionSpecificationOptionValue, makeCopy);
-	}
-
 	/**
 	 * Deletes the cp definition specification option value with the primary key from the database. Also notifies the appropriate model listeners.
 	 *
@@ -154,6 +150,17 @@ public class CPDefinitionSpecificationOptionValueLocalServiceUtil {
 			CPDefinitionSpecificationOptionValueId);
 	}
 
+	public static CPDefinitionSpecificationOptionValue
+			deleteCPDefinitionSpecificationOptionValue(
+				long userId,
+				CPDefinitionSpecificationOptionValue
+					cpDefinitionSpecificationOptionValue)
+		throws PortalException {
+
+		return getService().deleteCPDefinitionSpecificationOptionValue(
+			userId, cpDefinitionSpecificationOptionValue);
+	}
+
 	public static void deleteCPDefinitionSpecificationOptionValues(
 			long cpDefinitionId)
 		throws PortalException {
@@ -163,11 +170,11 @@ public class CPDefinitionSpecificationOptionValueLocalServiceUtil {
 	}
 
 	public static void deleteCPDefinitionSpecificationOptionValues(
-			long cpDefinitionId, boolean makeCopy)
+			long userId, long cpDefinitionId)
 		throws PortalException {
 
 		getService().deleteCPDefinitionSpecificationOptionValues(
-			cpDefinitionId, makeCopy);
+			userId, cpDefinitionId);
 	}
 
 	public static void deleteCPSpecificationOptionDefinitionValues(
@@ -518,15 +525,15 @@ public class CPDefinitionSpecificationOptionValueLocalServiceUtil {
 
 	public static CPDefinitionSpecificationOptionValue
 			updateCPDefinitionSpecificationOptionValue(
-				long cpDefinitionSpecificationOptionValueId,
+				long userId, long cpDefinitionSpecificationOptionValueId,
 				long cpOptionCategoryId, Map<java.util.Locale, String> valueMap,
 				double priority,
 				com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().updateCPDefinitionSpecificationOptionValue(,
-			cpDefinitionSpecificationOptionValueId,
-			cpOptionCategoryId, valueMap, priority, serviceContext);
+		return getService().updateCPDefinitionSpecificationOptionValue(
+			userId, cpDefinitionSpecificationOptionValueId, cpOptionCategoryId,
+			valueMap, priority, serviceContext);
 	}
 
 	public static CPDefinitionSpecificationOptionValue updateCPOptionCategoryId(

@@ -16,13 +16,8 @@ package com.liferay.commerce.product.service;
 
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.petra.function.UnsafeFunction;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.service.persistence.change.tracking.CTPersistence;
-import com.liferay.portal.kernel.util.UnicodeProperties;
-
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * Provides a wrapper for {@link CPDefinitionLocalService}.
@@ -264,19 +259,28 @@ public class CPDefinitionLocalServiceWrapper
 	}
 
 	@Override
+	public void cloneCPDefinitionLocalization(
+		long oldCPDefinitionId, long newCPDefinitionId) {
+
+		_cpDefinitionLocalService.cloneCPDefinitionLocalization(
+			oldCPDefinitionId, newCPDefinitionId);
+	}
+
+	@Override
 	public CPDefinition copyCPDefinition(long userId, long cpDefinitionId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpDefinitionLocalService.copyCPDefinition(, cpDefinitionId);
+		return _cpDefinitionLocalService.copyCPDefinition(
+			userId, cpDefinitionId);
 	}
 
 	@Override
 	public CPDefinition copyCPDefinition(
-		long userId, long cpDefinitionId, long groupId, int status)
+			long userId, long cpDefinitionId, long groupId, int status)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpDefinitionLocalService.copyCPDefinition(,
-			cpDefinitionId, groupId, status);
+		return _cpDefinitionLocalService.copyCPDefinition(
+			userId, cpDefinitionId, groupId, status);
 	}
 
 	/**
@@ -303,12 +307,12 @@ public class CPDefinitionLocalServiceWrapper
 
 	@Override
 	public void deleteAssetCategoryCPDefinition(
-		long userId, long cpDefinitionId, long categoryId,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionId, long categoryId,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		_cpDefinitionLocalService.deleteAssetCategoryCPDefinition(,
-			cpDefinitionId, categoryId, serviceContext);
+		_cpDefinitionLocalService.deleteAssetCategoryCPDefinition(
+			userId, cpDefinitionId, categoryId, serviceContext);
 	}
 
 	/**
@@ -955,30 +959,30 @@ public class CPDefinitionLocalServiceWrapper
 
 	@Override
 	public CPDefinition updateCPDefinition(
-		long userId, long cpDefinitionId,
-		Map<Locale, String> nameMap,
-		Map<Locale, String> shortDescriptionMap,
-		Map<Locale, String> descriptionMap,
-		Map<Locale, String> urlTitleMap,
-		Map<Locale, String> metaTitleMap,
-		Map<Locale, String> metaDescriptionMap,
-		Map<Locale, String> metaKeywordsMap,
-		boolean ignoreSKUCombinations, boolean shippable,
-		boolean freeShipping, boolean shipSeparately,
-		double shippingExtraPrice, double width, double height,
-		double depth, double weight, long cpTaxCategoryId,
-		boolean taxExempt, boolean telcoOrElectronics,
-		String ddmStructureKey, boolean published, int displayDateMonth,
-		int displayDateDay, int displayDateYear, int displayDateHour,
-		int displayDateMinute, int expirationDateMonth,
-		int expirationDateDay, int expirationDateYear,
-		int expirationDateHour, int expirationDateMinute,
-		boolean neverExpire,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionId,
+			java.util.Map<java.util.Locale, String> nameMap,
+			java.util.Map<java.util.Locale, String> shortDescriptionMap,
+			java.util.Map<java.util.Locale, String> descriptionMap,
+			java.util.Map<java.util.Locale, String> urlTitleMap,
+			java.util.Map<java.util.Locale, String> metaTitleMap,
+			java.util.Map<java.util.Locale, String> metaDescriptionMap,
+			java.util.Map<java.util.Locale, String> metaKeywordsMap,
+			boolean ignoreSKUCombinations, boolean shippable,
+			boolean freeShipping, boolean shipSeparately,
+			double shippingExtraPrice, double width, double height,
+			double depth, double weight, long cpTaxCategoryId,
+			boolean taxExempt, boolean telcoOrElectronics,
+			String ddmStructureKey, boolean published, int displayDateMonth,
+			int displayDateDay, int displayDateYear, int displayDateHour,
+			int displayDateMinute, int expirationDateMonth,
+			int expirationDateDay, int expirationDateYear,
+			int expirationDateHour, int expirationDateMinute,
+			boolean neverExpire,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpDefinitionLocalService.updateCPDefinition(,
-			cpDefinitionId, nameMap, shortDescriptionMap,
+		return _cpDefinitionLocalService.updateCPDefinition(
+			userId, cpDefinitionId, nameMap, shortDescriptionMap,
 			descriptionMap, urlTitleMap, metaTitleMap, metaDescriptionMap,
 			metaKeywordsMap, ignoreSKUCombinations, shippable, freeShipping,
 			shipSeparately, shippingExtraPrice, width, height, depth, weight,
@@ -991,25 +995,25 @@ public class CPDefinitionLocalServiceWrapper
 
 	@Override
 	public CPDefinition updateCPDefinition(
-		long userId, long cpDefinitionId,
-		Map<Locale, String> nameMap,
-		Map<Locale, String> shortDescriptionMap,
-		Map<Locale, String> descriptionMap,
-		Map<Locale, String> urlTitleMap,
-		Map<Locale, String> metaTitleMap,
-		Map<Locale, String> metaDescriptionMap,
-		Map<Locale, String> metaKeywordsMap,
-		boolean ignoreSKUCombinations, String ddmStructureKey,
-		boolean published, int displayDateMonth, int displayDateDay,
-		int displayDateYear, int displayDateHour, int displayDateMinute,
-		int expirationDateMonth, int expirationDateDay,
-		int expirationDateYear, int expirationDateHour,
-		int expirationDateMinute, boolean neverExpire,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionId,
+			java.util.Map<java.util.Locale, String> nameMap,
+			java.util.Map<java.util.Locale, String> shortDescriptionMap,
+			java.util.Map<java.util.Locale, String> descriptionMap,
+			java.util.Map<java.util.Locale, String> urlTitleMap,
+			java.util.Map<java.util.Locale, String> metaTitleMap,
+			java.util.Map<java.util.Locale, String> metaDescriptionMap,
+			java.util.Map<java.util.Locale, String> metaKeywordsMap,
+			boolean ignoreSKUCombinations, String ddmStructureKey,
+			boolean published, int displayDateMonth, int displayDateDay,
+			int displayDateYear, int displayDateHour, int displayDateMinute,
+			int expirationDateMonth, int expirationDateDay,
+			int expirationDateYear, int expirationDateHour,
+			int expirationDateMinute, boolean neverExpire,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpDefinitionLocalService.updateCPDefinition(,
-			cpDefinitionId, nameMap, shortDescriptionMap,
+		return _cpDefinitionLocalService.updateCPDefinition(
+			userId, cpDefinitionId, nameMap, shortDescriptionMap,
 			descriptionMap, urlTitleMap, metaTitleMap, metaDescriptionMap,
 			metaKeywordsMap, ignoreSKUCombinations, ddmStructureKey, published,
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
@@ -1029,12 +1033,12 @@ public class CPDefinitionLocalServiceWrapper
 
 	@Override
 	public CPDefinition updateCPDefinitionCategorization(
-		long userId, long cpDefinitionId,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionId,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpDefinitionLocalService.updateCPDefinitionCategorization(,
-			cpDefinitionId, serviceContext);
+		return _cpDefinitionLocalService.updateCPDefinitionCategorization(
+			userId, cpDefinitionId, serviceContext);
 	}
 
 	@Override
@@ -1089,11 +1093,12 @@ public class CPDefinitionLocalServiceWrapper
 	}
 
 	@Override
-	public void updateCPDefinitionsByCPTaxCategoryId(long userId, long cpTaxCategoryId)
+	public void updateCPDefinitionsByCPTaxCategoryId(
+			long userId, long cpTaxCategoryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		_cpDefinitionLocalService.updateCPDefinitionsByCPTaxCategoryId(,
-			cpTaxCategoryId);
+		_cpDefinitionLocalService.updateCPDefinitionsByCPTaxCategoryId(
+			userId, cpTaxCategoryId);
 	}
 
 	@Override
@@ -1107,16 +1112,16 @@ public class CPDefinitionLocalServiceWrapper
 
 	@Override
 	public CPDefinition updateShippingInfo(
-		long userId, long cpDefinitionId, boolean shippable, boolean freeShipping,
-		boolean shipSeparately, double shippingExtraPrice, double width,
-		double height, double depth, double weight,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionId, boolean shippable,
+			boolean freeShipping, boolean shipSeparately,
+			double shippingExtraPrice, double width, double height,
+			double depth, double weight,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpDefinitionLocalService.updateShippingInfo(,
-			cpDefinitionId, shippable, freeShipping,
-			shipSeparately, shippingExtraPrice, width, height, depth, weight,
-			serviceContext);
+		return _cpDefinitionLocalService.updateShippingInfo(
+			userId, cpDefinitionId, shippable, freeShipping, shipSeparately,
+			shippingExtraPrice, width, height, depth, weight, serviceContext);
 	}
 
 	@Override
@@ -1132,35 +1137,35 @@ public class CPDefinitionLocalServiceWrapper
 
 	@Override
 	public CPDefinition updateSubscriptionInfo(
-		long userId, long cpDefinitionId, boolean subscriptionEnabled,
-		int subscriptionLength, String subscriptionType,
-		UnicodeProperties
+			long userId, long cpDefinitionId, boolean subscriptionEnabled,
+			int subscriptionLength, String subscriptionType,
+			com.liferay.portal.kernel.util.UnicodeProperties
 				subscriptionTypeSettingsUnicodeProperties,
-		long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
-		int deliverySubscriptionLength, String deliverySubscriptionType,
-		UnicodeProperties
+			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
+			int deliverySubscriptionLength, String deliverySubscriptionType,
+			com.liferay.portal.kernel.util.UnicodeProperties
 				deliverySubscriptionTypeSettingsUnicodeProperties,
-		long deliveryMaxSubscriptionCycles)
+			long deliveryMaxSubscriptionCycles)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpDefinitionLocalService.updateSubscriptionInfo(,
-			cpDefinitionId, subscriptionEnabled,
-			subscriptionLength, subscriptionType,
-			subscriptionTypeSettingsUnicodeProperties, maxSubscriptionCycles,
-			deliverySubscriptionEnabled, deliverySubscriptionLength,
-			deliverySubscriptionType,
+		return _cpDefinitionLocalService.updateSubscriptionInfo(
+			userId, cpDefinitionId, subscriptionEnabled, subscriptionLength,
+			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
+			maxSubscriptionCycles, deliverySubscriptionEnabled,
+			deliverySubscriptionLength, deliverySubscriptionType,
 			deliverySubscriptionTypeSettingsUnicodeProperties,
 			deliveryMaxSubscriptionCycles);
 	}
 
 	@Override
 	public CPDefinition updateTaxCategoryInfo(
-		long userId, long cpDefinitionId, long cpTaxCategoryId, boolean taxExempt,
-		boolean telcoOrElectronics)
+			long userId, long cpDefinitionId, long cpTaxCategoryId,
+			boolean taxExempt, boolean telcoOrElectronics)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpDefinitionLocalService.updateTaxCategoryInfo(,
-			cpDefinitionId, cpTaxCategoryId, taxExempt, telcoOrElectronics);
+		return _cpDefinitionLocalService.updateTaxCategoryInfo(
+			userId, cpDefinitionId, cpTaxCategoryId, taxExempt,
+			telcoOrElectronics);
 	}
 
 	@Override

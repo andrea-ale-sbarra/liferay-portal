@@ -15,7 +15,6 @@
 package com.liferay.commerce.product.service;
 
 import com.liferay.commerce.product.model.CPDefinitionLink;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -155,12 +154,13 @@ public class CPDefinitionLinkServiceWrapper
 
 	@Override
 	public void updateCPDefinitionLinks(
-		long userId, long cpDefinitionId, long[] cpDefinitionIds2, String type,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionId, long[] cpDefinitionIds2,
+			String type,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		_cpDefinitionLinkService.updateCPDefinitionLinks(,
-			cpDefinitionId, cpDefinitionIds2, type, serviceContext);
+		_cpDefinitionLinkService.updateCPDefinitionLinks(
+			userId, cpDefinitionId, cpDefinitionIds2, type, serviceContext);
 	}
 
 	@Override

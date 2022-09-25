@@ -209,7 +209,7 @@ public class CPAttachmentFileEntryLocalServiceImpl
 	}
 
 	@Override
-	private void cloneCPAttachmentFileEntry(long oldCPDefinitionId, long newCPDefinitionId){
+	public void cloneCPAttachmentFileEntry(long oldCPDefinitionId, long newCPDefinitionId){
 		long cpDefinitionClassNameId = _classNameLocalService.getClassNameId(
 			CPDefinition.class);
 

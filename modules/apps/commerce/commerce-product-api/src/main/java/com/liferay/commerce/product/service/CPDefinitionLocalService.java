@@ -212,12 +212,15 @@ public interface CPDefinitionLocalService
 			ServiceContext serviceContext)
 		throws PortalException;
 
+	public void cloneCPDefinitionLocalization(
+		long oldCPDefinitionId, long newCPDefinitionId);
+
 	public CPDefinition copyCPDefinition(long userId, long cpDefinitionId)
 		throws PortalException;
 
 	@Indexable(type = IndexableType.REINDEX)
 	public CPDefinition copyCPDefinition(
-		long userId, long cpDefinitionId, long groupId, int status)
+			long userId, long cpDefinitionId, long groupId, int status)
 		throws PortalException;
 
 	/**
@@ -236,7 +239,8 @@ public interface CPDefinitionLocalService
 		throws PortalException;
 
 	public void deleteAssetCategoryCPDefinition(
-		long userId, long cpDefinitionId, long categoryId, ServiceContext serviceContext)
+			long userId, long cpDefinitionId, long categoryId,
+			ServiceContext serviceContext)
 		throws PortalException;
 
 	/**
@@ -632,37 +636,37 @@ public interface CPDefinitionLocalService
 
 	@Indexable(type = IndexableType.REINDEX)
 	public CPDefinition updateCPDefinition(
-		long userId, long cpDefinitionId, Map<Locale, String> nameMap,
-		Map<Locale, String> shortDescriptionMap,
-		Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
-		Map<Locale, String> metaTitleMap,
-		Map<Locale, String> metaDescriptionMap,
-		Map<Locale, String> metaKeywordsMap, boolean ignoreSKUCombinations,
-		boolean shippable, boolean freeShipping, boolean shipSeparately,
-		double shippingExtraPrice, double width, double height,
-		double depth, double weight, long cpTaxCategoryId,
-		boolean taxExempt, boolean telcoOrElectronics,
-		String ddmStructureKey, boolean published, int displayDateMonth,
-		int displayDateDay, int displayDateYear, int displayDateHour,
-		int displayDateMinute, int expirationDateMonth,
-		int expirationDateDay, int expirationDateYear,
-		int expirationDateHour, int expirationDateMinute,
-		boolean neverExpire, ServiceContext serviceContext)
+			long userId, long cpDefinitionId, Map<Locale, String> nameMap,
+			Map<Locale, String> shortDescriptionMap,
+			Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
+			Map<Locale, String> metaTitleMap,
+			Map<Locale, String> metaDescriptionMap,
+			Map<Locale, String> metaKeywordsMap, boolean ignoreSKUCombinations,
+			boolean shippable, boolean freeShipping, boolean shipSeparately,
+			double shippingExtraPrice, double width, double height,
+			double depth, double weight, long cpTaxCategoryId,
+			boolean taxExempt, boolean telcoOrElectronics,
+			String ddmStructureKey, boolean published, int displayDateMonth,
+			int displayDateDay, int displayDateYear, int displayDateHour,
+			int displayDateMinute, int expirationDateMonth,
+			int expirationDateDay, int expirationDateYear,
+			int expirationDateHour, int expirationDateMinute,
+			boolean neverExpire, ServiceContext serviceContext)
 		throws PortalException;
 
 	public CPDefinition updateCPDefinition(
-		long userId, long cpDefinitionId, Map<Locale, String> nameMap,
-		Map<Locale, String> shortDescriptionMap,
-		Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
-		Map<Locale, String> metaTitleMap,
-		Map<Locale, String> metaDescriptionMap,
-		Map<Locale, String> metaKeywordsMap, boolean ignoreSKUCombinations,
-		String ddmStructureKey, boolean published, int displayDateMonth,
-		int displayDateDay, int displayDateYear, int displayDateHour,
-		int displayDateMinute, int expirationDateMonth,
-		int expirationDateDay, int expirationDateYear,
-		int expirationDateHour, int expirationDateMinute,
-		boolean neverExpire, ServiceContext serviceContext)
+			long userId, long cpDefinitionId, Map<Locale, String> nameMap,
+			Map<Locale, String> shortDescriptionMap,
+			Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
+			Map<Locale, String> metaTitleMap,
+			Map<Locale, String> metaDescriptionMap,
+			Map<Locale, String> metaKeywordsMap, boolean ignoreSKUCombinations,
+			String ddmStructureKey, boolean published, int displayDateMonth,
+			int displayDateDay, int displayDateYear, int displayDateHour,
+			int displayDateMinute, int expirationDateMonth,
+			int expirationDateDay, int expirationDateYear,
+			int expirationDateHour, int expirationDateMinute,
+			boolean neverExpire, ServiceContext serviceContext)
 		throws PortalException;
 
 	@Indexable(type = IndexableType.REINDEX)
@@ -672,7 +676,7 @@ public interface CPDefinitionLocalService
 
 	@Indexable(type = IndexableType.REINDEX)
 	public CPDefinition updateCPDefinitionCategorization(
-		long userId, long cpDefinitionId, ServiceContext serviceContext)
+			long userId, long cpDefinitionId, ServiceContext serviceContext)
 		throws PortalException;
 
 	@Indexable(type = IndexableType.REINDEX)
@@ -701,7 +705,8 @@ public interface CPDefinitionLocalService
 			Map<String, String> metaKeywordsMap)
 		throws PortalException;
 
-	public void updateCPDefinitionsByCPTaxCategoryId(long userId, long cpTaxCategoryId)
+	public void updateCPDefinitionsByCPTaxCategoryId(
+			long userId, long cpTaxCategoryId)
 		throws PortalException;
 
 	public CPDefinition updateExternalReferenceCode(
@@ -710,10 +715,10 @@ public interface CPDefinitionLocalService
 
 	@Indexable(type = IndexableType.REINDEX)
 	public CPDefinition updateShippingInfo(
-		long userId, long cpDefinitionId, boolean shippable, boolean freeShipping,
-		boolean shipSeparately, double shippingExtraPrice, double width,
-		double height, double depth, double weight,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionId, boolean shippable,
+			boolean freeShipping, boolean shipSeparately,
+			double shippingExtraPrice, double width, double height,
+			double depth, double weight, ServiceContext serviceContext)
 		throws PortalException;
 
 	@Indexable(type = IndexableType.REINDEX)
@@ -725,18 +730,18 @@ public interface CPDefinitionLocalService
 
 	@Indexable(type = IndexableType.REINDEX)
 	public CPDefinition updateSubscriptionInfo(
-		long userId, long cpDefinitionId, boolean subscriptionEnabled,
-		int subscriptionLength, String subscriptionType,
-		UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
-		long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
-		int deliverySubscriptionLength, String deliverySubscriptionType,
-		UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
-		long deliveryMaxSubscriptionCycles)
+			long userId, long cpDefinitionId, boolean subscriptionEnabled,
+			int subscriptionLength, String subscriptionType,
+			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
+			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
+			int deliverySubscriptionLength, String deliverySubscriptionType,
+			UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
+			long deliveryMaxSubscriptionCycles)
 		throws PortalException;
 
 	public CPDefinition updateTaxCategoryInfo(
-		long userId, long cpDefinitionId, long cpTaxCategoryId, boolean taxExempt,
-		boolean telcoOrElectronics)
+			long userId, long cpDefinitionId, long cpTaxCategoryId,
+			boolean taxExempt, boolean telcoOrElectronics)
 		throws PortalException;
 
 	@Override

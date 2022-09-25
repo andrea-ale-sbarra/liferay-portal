@@ -114,11 +114,10 @@ public interface CProductLocalService
 	 *
 	 * @param cProduct the c product
 	 * @return the c product that was removed
-	 * @throws PortalException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CProduct deleteCProduct(CProduct cProduct) throws PortalException;
+	public CProduct deleteCProduct(CProduct cProduct);
 
 	/**
 	 * Deletes the c product with the primary key from the database. Also notifies the appropriate model listeners.
