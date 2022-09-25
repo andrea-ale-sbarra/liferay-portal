@@ -38,8 +38,8 @@ public class CPDefinitionOptionRelCPDefinitionContributor
 
 	@Override
 	public void contribute(long oldCPDefinitionId, long newCPDefinitionId) {
-
-
+		_cpDefinitionOptionRelLocalService.cloneCPDefinitionOptionRels(
+			oldCPDefinitionId, newCPDefinitionId);
 	}
 
 	@Reference

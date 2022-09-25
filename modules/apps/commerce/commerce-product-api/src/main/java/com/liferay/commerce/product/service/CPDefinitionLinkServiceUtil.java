@@ -137,12 +137,13 @@ public class CPDefinitionLinkServiceUtil {
 	}
 
 	public static void updateCPDefinitionLinks(
-			long cpDefinitionId, long[] cpDefinitionIds2, String type,
+			long userId, long cpDefinitionId, long[] cpDefinitionIds2,
+			String type,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		getService().updateCPDefinitionLinks(,
-			cpDefinitionId, cpDefinitionIds2, type, serviceContext);
+		getService().updateCPDefinitionLinks(
+			userId, cpDefinitionId, cpDefinitionIds2, type, serviceContext);
 	}
 
 	public static CPDefinitionLinkService getService() {

@@ -39,8 +39,8 @@ public class CPDefinitionSpecificationOptionValueCPDefinitionContributor
 
 	@Override
 	public void contribute(long oldCPDefinitionId, long newCPDefinitionId) {
-
-
+		_cpDefinitionSpecificationOptionValueLocalService.cloneCPDefinitionSpecificationOptionValue(
+			oldCPDefinitionId, newCPDefinitionId);
 	}
 
 	@Reference

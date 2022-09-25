@@ -118,6 +118,13 @@ public class CPAttachmentFileEntryLocalServiceUtil {
 			classNameId, classPK);
 	}
 
+	public static void cloneCPAttachmentFileEntry(
+		long oldCPDefinitionId, long newCPDefinitionId) {
+
+		getService().cloneCPAttachmentFileEntry(
+			oldCPDefinitionId, newCPDefinitionId);
+	}
+
 	/**
 	 * Creates a new cp attachment file entry with the primary key. Does not add the cp attachment file entry to the database.
 	 *
@@ -139,6 +146,13 @@ public class CPAttachmentFileEntryLocalServiceUtil {
 		throws PortalException {
 
 		return getService().createPersistedModel(primaryKeyObj);
+	}
+
+	public static void deleteCPAttachmentFileEntries(
+			long userId, String className, long classPK)
+		throws PortalException {
+
+		getService().deleteCPAttachmentFileEntries(userId, className, classPK);
 	}
 
 	public static void deleteCPAttachmentFileEntries(
@@ -183,6 +197,14 @@ public class CPAttachmentFileEntryLocalServiceUtil {
 
 		return getService().deleteCPAttachmentFileEntry(
 			CPAttachmentFileEntryId);
+	}
+
+	public static CPAttachmentFileEntry deleteCPAttachmentFileEntry(
+			long userId, CPAttachmentFileEntry cpAttachmentFileEntry)
+		throws PortalException {
+
+		return getService().deleteCPAttachmentFileEntry(
+			userId, cpAttachmentFileEntry);
 	}
 
 	/**

@@ -16,13 +16,8 @@ package com.liferay.commerce.product.service;
 
 import com.liferay.commerce.product.model.CPDefinitionOptionValueRel;
 import com.liferay.petra.function.UnsafeFunction;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.service.persistence.change.tracking.CTPersistence;
-
-import java.math.BigDecimal;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * Provides a wrapper for {@link CPDefinitionOptionValueRelLocalService}.
@@ -79,16 +74,16 @@ public class CPDefinitionOptionValueRelLocalServiceWrapper
 
 	@Override
 	public CPDefinitionOptionValueRel addCPDefinitionOptionValueRel(
-		long userId, long cpDefinitionOptionRelId,
-		Map<Locale, String> nameMap, double priority,
-		String key,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionOptionRelId,
+			java.util.Map<java.util.Locale, String> nameMap, double priority,
+			String key,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _cpDefinitionOptionValueRelLocalService.
-			addCPDefinitionOptionValueRel(,
-				cpDefinitionOptionRelId, nameMap, priority,
-				key, serviceContext);
+			addCPDefinitionOptionValueRel(
+				userId, cpDefinitionOptionRelId, nameMap, priority, key,
+				serviceContext);
 	}
 
 	/**
@@ -648,17 +643,17 @@ public class CPDefinitionOptionValueRelLocalServiceWrapper
 
 	@Override
 	public CPDefinitionOptionValueRel updateCPDefinitionOptionValueRel(
-		long userId, long cpDefinitionOptionValueRelId,
-		Map<Locale, String> nameMap, double priority,
-		String key, long cpInstanceId, int quantity, boolean preselected,
-		BigDecimal price,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionOptionValueRelId,
+			java.util.Map<java.util.Locale, String> nameMap, double priority,
+			String key, long cpInstanceId, int quantity, boolean preselected,
+			java.math.BigDecimal price,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _cpDefinitionOptionValueRelLocalService.
-			updateCPDefinitionOptionValueRel(,
-				cpDefinitionOptionValueRelId, nameMap, priority,
-				key, cpInstanceId, quantity, preselected, price, serviceContext);
+			updateCPDefinitionOptionValueRel(
+				userId, cpDefinitionOptionValueRelId, nameMap, priority, key,
+				cpInstanceId, quantity, preselected, price, serviceContext);
 	}
 
 	@Override
