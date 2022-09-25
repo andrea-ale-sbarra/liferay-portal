@@ -88,8 +88,8 @@ public interface CPDefinitionLinkLocalService
 		CPDefinitionLink cpDefinitionLink);
 
 	public CPDefinitionLink addCPDefinitionLinkByCProductId(
-		long userId, long cpDefinitionId, long cProductId, double priority, String type,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionId, long cProductId, double priority,
+			String type, ServiceContext serviceContext)
 		throws PortalException;
 
 	/**
@@ -139,10 +139,12 @@ public interface CPDefinitionLinkLocalService
 	public CPDefinitionLink deleteCPDefinitionLink(long CPDefinitionLinkId)
 		throws PortalException;
 
-	public void deleteCPDefinitionLinksByCPDefinitionId(long cpDefinitionId)
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
+	public CPDefinitionLink deleteCPDefinitionLink(
+			long userId, CPDefinitionLink cpDefinitionLink)
 		throws PortalException;
 
-	public void deleteCPDefinitionLinksByCProductId(long cProductId)
+	public void deleteCPDefinitionLinksByCPDefinitionId(long cpDefinitionId)
 		throws PortalException;
 
 	/**
@@ -380,13 +382,13 @@ public interface CPDefinitionLinkLocalService
 		CPDefinitionLink cpDefinitionLink);
 
 	public CPDefinitionLink updateCPDefinitionLink(
-		long userId, long cpDefinitionLinkId, double priority,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionLinkId, double priority,
+			ServiceContext serviceContext)
 		throws PortalException;
 
 	public void updateCPDefinitionLinkCProductIds(
-		long userId, long cpDefinitionId, long[] cProductIds, String type,
-		ServiceContext serviceContext)
+			long userId, long cpDefinitionId, long[] cProductIds, String type,
+			ServiceContext serviceContext)
 		throws PortalException;
 
 	@Override

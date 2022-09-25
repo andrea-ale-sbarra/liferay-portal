@@ -38,8 +38,8 @@ public class CPInstanceCPDefinitionContributor
 
 	@Override
 	public void contribute(long oldCPDefinitionId, long newCPDefinitionId) {
-
-
+		_cpInstanceLocalService.cloneCPInstances(
+			oldCPDefinitionId, newCPDefinitionId);
 	}
 
 	@Reference

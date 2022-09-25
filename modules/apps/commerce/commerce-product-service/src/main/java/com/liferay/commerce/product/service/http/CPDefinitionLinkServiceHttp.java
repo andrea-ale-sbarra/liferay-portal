@@ -561,7 +561,7 @@ public class CPDefinitionLinkServiceHttp {
 	}
 
 	public static void updateCPDefinitionLinks(
-			HttpPrincipal httpPrincipal, long cpDefinitionId,
+			HttpPrincipal httpPrincipal, long userId, long cpDefinitionId,
 			long[] cpDefinitionIds2, String type,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -572,7 +572,7 @@ public class CPDefinitionLinkServiceHttp {
 				_updateCPDefinitionLinksParameterTypes12);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, cpDefinitionId, cpDefinitionIds2, type,
+				methodKey, userId, cpDefinitionId, cpDefinitionIds2, type,
 				serviceContext);
 
 			try {
@@ -637,7 +637,7 @@ public class CPDefinitionLinkServiceHttp {
 		};
 	private static final Class<?>[] _updateCPDefinitionLinksParameterTypes12 =
 		new Class[] {
-			long.class, long[].class, String.class,
+			long.class, long.class, long[].class, String.class,
 			com.liferay.portal.kernel.service.ServiceContext.class
 		};
 
