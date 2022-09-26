@@ -97,15 +97,15 @@ public class CPDefinitionLinkLocalServiceImpl
 	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPDefinitionLink deleteCPDefinitionLink(
-		long userId, CPDefinitionLink cpDefinitionLink)
+			CPDefinitionLink cpDefinitionLink)
 		throws PortalException {
 
 		if (_cpDefinitionLocalService.isVersionable(
-			cpDefinitionLink.getCPDefinitionId())) {
+				cpDefinitionLink.getCPDefinitionId())) {
 
 			try {
 				CPDefinition newCPDefinition =
-					_cpDefinitionLocalService.copyCPDefinition(userId,
+					_cpDefinitionLocalService.copyCPDefinition(,
 						cpDefinitionLink.getCPDefinitionId());
 
 				cpDefinitionLink = cpDefinitionLinkPersistence.findByC_C_T(
@@ -118,16 +118,11 @@ public class CPDefinitionLinkLocalServiceImpl
 			}
 		}
 
-		return cpDefinitionLinkLocalService.deleteCPDefinitionLink(cpDefinitionLink);
-	}
-
-	@Override
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPDefinitionLink deleteCPDefinitionLink(
-			CPDefinitionLink cpDefinitionLink)
-		throws PortalException {
+		// Commerce product definition link
 
 		cpDefinitionLinkPersistence.remove(cpDefinitionLink);
+
+		// Expando
 
 		_expandoRowLocalService.deleteRows(
 			cpDefinitionLink.getCPDefinitionLinkId());
@@ -166,6 +161,18 @@ public class CPDefinitionLinkLocalServiceImpl
 		}
 	}
 
+	@Override
+	public void deleteCPDefinitionLinksByCProductId(long cProductId)
+		throws PortalException {
+
+		List<CPDefinitionLink> cpDefinitionLinks =
+			cpDefinitionLinkPersistence.findByCProductId(cProductId);
+
+		for (CPDefinitionLink cpDefinitionLink : cpDefinitionLinks) {
+			cpDefinitionLinkLocalService.deleteCPDefinitionLink(
+				cpDefinitionLink);
+		}
+	}
 
 	@Override
 	public CPDefinitionLink fetchCPDefinitionLink(
@@ -276,7 +283,7 @@ public class CPDefinitionLinkLocalServiceImpl
 			if (!ArrayUtil.contains(
 					cProductIds, cpDefinitionLink.getCProductId())) {
 
-				cpDefinitionLinkLocalService.deleteCPDefinitionLink( userId,
+				cpDefinitionLinkLocalService.deleteCPDefinitionLink(
 					cpDefinitionLink);
 			}
 		}

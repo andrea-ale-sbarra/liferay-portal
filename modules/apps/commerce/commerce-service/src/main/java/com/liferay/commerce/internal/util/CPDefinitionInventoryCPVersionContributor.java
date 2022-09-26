@@ -12,38 +12,37 @@
  * details.
  */
 
+package com.liferay.commerce.internal.util;
 
-package com.liferay.commerce.product.internal.util;
+import com.liferay.commerce.product.util.CPVersionContributor;
+import com.liferay.commerce.service.CPDefinitionInventoryLocalService;
 
-import com.liferay.commerce.product.service.CPInstanceLocalService;
-import com.liferay.commerce.product.util.CPDefinitionContributor;
-import com.liferay.portal.kernel.exception.PortalException;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Andrea Sbarra
+ * @author Ethan Bustad
  */
 @Component(
-	enabled = false, immediate = true, service = CPDefinitionContributor.class
+	enabled = false, immediate = true, service = CPVersionContributor.class
 )
-public class CPInstanceCPDefinitionContributor
-	implements CPDefinitionContributor {
+public class CPDefinitionInventoryCPVersionContributor
+	implements CPVersionContributor {
 
 	@Override
-	public void onDelete(long cpDefinitionId) throws PortalException {
-		_cpInstanceLocalService.deleteCPInstances(
-			cpDefinitionId);
+	public void onDelete(long cpDefinitionId) {
+		_cpDefinitionInventoryLocalService.
+			deleteCPDefinitionInventoryByCPDefinitionId(cpDefinitionId);
 	}
 
 	@Override
-	public void contribute(long oldCPDefinitionId, long newCPDefinitionId) {
-
-
+	public void onUpdate(long oldCPDefinitionId, long newCPDefinitionId) {
+		_cpDefinitionInventoryLocalService.cloneCPDefinitionInventory(
+			oldCPDefinitionId, newCPDefinitionId);
 	}
 
 	@Reference
-	private CPInstanceLocalService
-		_cpInstanceLocalService;
+	private CPDefinitionInventoryLocalService
+		_cpDefinitionInventoryLocalService;
 
 }

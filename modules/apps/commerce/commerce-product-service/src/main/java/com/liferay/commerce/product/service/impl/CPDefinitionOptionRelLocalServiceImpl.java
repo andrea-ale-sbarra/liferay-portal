@@ -217,16 +217,18 @@ public class CPDefinitionOptionRelLocalServiceImpl
 			cpDefinitionId, cpOptionId, true, serviceContext);
 	}
 
+	@Indexable(type = IndexableType.DELETE)
 	@Override
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPDefinitionOptionRel deleteCPDefinitionOptionRel(
-		long userid, CPDefinitionOptionRel cpDefinitionOptionRel)
+			CPDefinitionOptionRel cpDefinitionOptionRel)
 		throws PortalException {
 
 		if (_cpDefinitionLocalService.isVersionable(
-			cpDefinitionOptionRel.getCPDefinitionId())) {
+				cpDefinitionOptionRel.getCPDefinitionId())) {
 
 			CPDefinition newCPDefinition =
-				_cpDefinitionLocalService.copyCPDefinition(userid,
+				_cpDefinitionLocalService.copyCPDefinition(,
 					cpDefinitionOptionRel.getCPDefinitionId());
 
 			cpDefinitionOptionRel = cpDefinitionOptionRelPersistence.findByC_C(
@@ -234,15 +236,7 @@ public class CPDefinitionOptionRelLocalServiceImpl
 				cpDefinitionOptionRel.getCPOptionId());
 		}
 
-		return cpDefinitionOptionRelLocalService.deleteCPDefinitionOptionRel(cpDefinitionOptionRel);
-	}
-
-	@Indexable(type = IndexableType.DELETE)
-	@Override
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPDefinitionOptionRel deleteCPDefinitionOptionRel(
-			CPDefinitionOptionRel cpDefinitionOptionRel)
-		throws PortalException {
+		// Commerce product definition option value rels
 
 		List<CPDefinitionOptionValueRel> cpDefinitionOptionValueRels =
 			_cpDefinitionOptionValueRelLocalService.
@@ -260,10 +254,16 @@ public class CPDefinitionOptionRelLocalServiceImpl
 				cpDefinitionOptionValueRel.getCPDefinitionOptionValueRelId());
 		}
 
+		// Commerce product definition option rel
+
 		cpDefinitionOptionRelPersistence.remove(cpDefinitionOptionRel);
+
+		// Expando
 
 		_expandoRowLocalService.deleteRows(
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId());
+
+		// Commerce product instances
 
 		_cpInstanceLocalService.inactivateCPDefinitionOptionRelCPInstances(
 			PrincipalThreadLocal.getUserId(),

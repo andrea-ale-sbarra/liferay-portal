@@ -24,25 +24,25 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Ethan Bustad
  */
-public class CPDefinitionContributorRegistryUtil {
+public class CPVersionContributorRegistryUtil {
 
-	public static CPDefinitionContributor getCPDefinitionContributor(String key) {
-		CPDefinitionContributorRegistry cpDefinitionContributorRegistry =
+	public static CPVersionContributor getCPVersionContributor(String key) {
+		CPVersionContributorRegistry cpVersionContributorRegistry =
 			_serviceTracker.getService();
 
-		return cpDefinitionContributorRegistry.getCPDefinitionContributor(key);
+		return cpVersionContributorRegistry.getCPVersionContributor(key);
 	}
 
-	public static List<CPDefinitionContributor> getCPDefinitionContributors() {
-		CPDefinitionContributorRegistry cpDefinitionContributorRegistry =
+	public static List<CPVersionContributor> getCPVersionContributors() {
+		CPVersionContributorRegistry cpVersionContributorRegistry =
 			_serviceTracker.getService();
 
-		return cpDefinitionContributorRegistry.getCPDefinitionContributors();
+		return cpVersionContributorRegistry.getCPVersionContributors();
 	}
 
-	private static final ServiceTracker<?, CPDefinitionContributorRegistry>
+	private static final ServiceTracker<?, CPVersionContributorRegistry>
 		_serviceTracker = ServiceTrackerFactory.open(
-			FrameworkUtil.getBundle(CPDefinitionContributorRegistry.class),
-			CPDefinitionContributorRegistry.class);
+			FrameworkUtil.getBundle(CPVersionContributorRegistryUtil.class),
+			CPVersionContributorRegistry.class);
 
 }

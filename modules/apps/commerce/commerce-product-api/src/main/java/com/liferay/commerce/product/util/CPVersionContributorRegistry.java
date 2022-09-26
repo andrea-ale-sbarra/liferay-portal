@@ -19,10 +19,10 @@ import java.util.List;
 /**
  * @author Ethan Bustad
  */
-public interface CPDefinitionContributorRegistry {
+public interface CPVersionContributorRegistry {
 
-	public CPDefinitionContributor getCPDefinitionContributor(String key);
+	public CPVersionContributor getCPVersionContributor(String key);
 
-	public List<CPDefinitionContributor> getCPDefinitionContributors();
+	public List<CPVersionContributor> getCPVersionContributors();
 
 }

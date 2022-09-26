@@ -14,8 +14,8 @@
 
 package com.liferay.commerce.product.internal.util;
 
-import com.liferay.commerce.product.util.CPDefinitionContributor;
-import com.liferay.commerce.product.util.CPDefinitionContributorRegistry;
+import com.liferay.commerce.product.util.CPVersionContributor;
+import com.liferay.commerce.product.util.CPVersionContributorRegistry;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerCustomizerFactory;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerCustomizerFactory.ServiceWrapper;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
@@ -39,18 +39,18 @@ import org.osgi.service.component.annotations.Deactivate;
  */
 @Component(
 	enabled = false, immediate = true,
-	service = CPDefinitionContributorRegistry.class
+	service = CPVersionContributorRegistry.class
 )
-public class CPDefinitionContributorRegistryImpl
-	implements CPDefinitionContributorRegistry {
+public class CPVersionContributorRegistryImpl
+	implements CPVersionContributorRegistry {
 
 	@Override
-	public CPDefinitionContributor getCPDefinitionContributor(String key) {
+	public CPVersionContributor getCPVersionContributor(String key) {
 		if (Validator.isNull(key)) {
 			return null;
 		}
 
-		ServiceWrapper<CPDefinitionContributor>
+		ServiceWrapper<CPVersionContributor>
 			cpVersionContributorServiceWrapper = _serviceTrackerMap.getService(
 				key);
 
@@ -68,31 +68,31 @@ public class CPDefinitionContributorRegistryImpl
 	}
 
 	@Override
-	public List<CPDefinitionContributor> getCPDefinitionContributors() {
-		Collection<ServiceWrapper<CPDefinitionContributor>>
+	public List<CPVersionContributor> getCPVersionContributors() {
+		Collection<ServiceWrapper<CPVersionContributor>>
 			cpVersionContributorServiceWrappers = _serviceTrackerMap.values();
 
-		List<CPDefinitionContributor> cpDefinitionContributors = new ArrayList<>(
+		List<CPVersionContributor> cpVersionContributors = new ArrayList<>(
 			cpVersionContributorServiceWrappers.size());
 
-		for (ServiceWrapper<CPDefinitionContributor>
+		for (ServiceWrapper<CPVersionContributor>
 				cpVersionContributorServiceWrapper :
 					cpVersionContributorServiceWrappers) {
 
-			cpDefinitionContributors.add(
+			cpVersionContributors.add(
 				cpVersionContributorServiceWrapper.getService());
 		}
 
-		return Collections.unmodifiableList(cpDefinitionContributors);
+		return Collections.unmodifiableList(cpVersionContributors);
 	}
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, CPDefinitionContributor.class,
+			bundleContext, CPVersionContributor.class,
 			"commerce.product.content.contributor.name",
 			ServiceTrackerCustomizerFactory.
-				<CPDefinitionContributor>serviceWrapper(bundleContext));
+				<CPVersionContributor>serviceWrapper(bundleContext));
 	}
 
 	@Deactivate
@@ -101,9 +101,9 @@ public class CPDefinitionContributorRegistryImpl
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		CPDefinitionContributorRegistryImpl.class);
+		CPVersionContributorRegistryImpl.class);
 
-	private ServiceTrackerMap<String, ServiceWrapper<CPDefinitionContributor>>
+	private ServiceTrackerMap<String, ServiceWrapper<CPVersionContributor>>
 		_serviceTrackerMap;
 
 }

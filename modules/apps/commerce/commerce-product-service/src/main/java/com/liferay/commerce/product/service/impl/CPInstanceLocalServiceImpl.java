@@ -438,27 +438,19 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		return cpInstanceLocalService.deleteCPInstance(cpInstance, true);
 	}
 
-	@Override
-	public CPInstance deleteCPInstance(long userId, CPInstance cpInstance)
-		throws PortalException {
-
-		if (
-			_cpDefinitionLocalService.isVersionable(
-				cpInstance.getCPDefinitionId())) {
-
-			_cpDefinitionLocalService.copyCPDefinition(userId,
-				cpInstance.getCPDefinitionId());
-		}
-
-		return cpInstanceLocalService.deleteCPInstance(cpInstance);
-	}
-
-
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPInstance deleteCPInstance(CPInstance cpInstance)
+	public CPInstance deleteCPInstance(CPInstance cpInstance, boolean makeCopy)
 		throws PortalException {
+
+		if (makeCopy &&
+			_cpDefinitionLocalService.isVersionable(
+				cpInstance.getCPDefinitionId())) {
+
+			_cpDefinitionLocalService.copyCPDefinition(,
+				cpInstance.getCPDefinitionId());
+		}
 
 		// Commerce product instance
 
@@ -494,16 +486,6 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 			cpInstanceId);
 
 		return cpInstanceLocalService.deleteCPInstance(cpInstance);
-	}
-
-	@Override
-	public void deleteCPInstances(long userId, long cpDefinitionId) throws PortalException {
-		List<CPInstance> cpInstances =
-			cpInstancePersistence.findByCPDefinitionId(cpDefinitionId);
-
-		for (CPInstance cpInstance : cpInstances) {
-			cpInstanceLocalService.deleteCPInstance(cpInstance, false);
-		}
 	}
 
 	@Override
