@@ -67,7 +67,7 @@ public class CPDefinitionOptionRelLocalServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().addCPDefinitionOptionRel(,
+		return getService().addCPDefinitionOptionRel(
 			cpDefinitionId, cpOptionId, importOptionValue, serviceContext);
 	}
 
@@ -80,10 +80,10 @@ public class CPDefinitionOptionRelLocalServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().addCPDefinitionOptionRel(,
-			cpDefinitionId, cpOptionId, nameMap,
-			descriptionMap, ddmFormFieldTypeName, priority, facetable, required,
-			skuContributor, importOptionValue, serviceContext);
+		return getService().addCPDefinitionOptionRel(
+			cpDefinitionId, cpOptionId, nameMap, descriptionMap,
+			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
+			importOptionValue, serviceContext);
 	}
 
 	public static CPDefinitionOptionRel addCPDefinitionOptionRel(
@@ -96,10 +96,10 @@ public class CPDefinitionOptionRelLocalServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().addCPDefinitionOptionRel(,
-			cpDefinitionId, cpOptionId, nameMap,
-			descriptionMap, ddmFormFieldTypeName, priority, facetable, required,
-			skuContributor, importOptionValue, priceType, serviceContext);
+		return getService().addCPDefinitionOptionRel(
+			cpDefinitionId, cpOptionId, nameMap, descriptionMap,
+			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
+			importOptionValue, priceType, serviceContext);
 	}
 
 	public static CPDefinitionOptionRel addCPDefinitionOptionRel(
@@ -107,7 +107,7 @@ public class CPDefinitionOptionRelLocalServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().addCPDefinitionOptionRel(,
+		return getService().addCPDefinitionOptionRel(
 			cpDefinitionId, cpOptionId, serviceContext);
 	}
 
@@ -576,10 +576,10 @@ public class CPDefinitionOptionRelLocalServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().updateCPDefinitionOptionRel(,
-			cpDefinitionOptionRelId, cpOptionId, nameMap,
-			descriptionMap, ddmFormFieldTypeName, priority, facetable, required,
-			skuContributor, serviceContext);
+		return getService().updateCPDefinitionOptionRel(
+			cpDefinitionOptionRelId, cpOptionId, nameMap, descriptionMap,
+			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
+			serviceContext);
 	}
 
 	public static CPDefinitionOptionRel updateCPDefinitionOptionRel(
@@ -591,10 +591,10 @@ public class CPDefinitionOptionRelLocalServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().updateCPDefinitionOptionRel(,
-			cpDefinitionOptionRelId, cpOptionId, nameMap,
-			descriptionMap, ddmFormFieldTypeName, priority, facetable, required,
-			skuContributor, priceType, serviceContext);
+		return getService().updateCPDefinitionOptionRel(
+			cpDefinitionOptionRelId, cpOptionId, nameMap, descriptionMap,
+			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
+			priceType, serviceContext);
 	}
 
 	public static CPDefinitionOptionRelLocalService getService() {

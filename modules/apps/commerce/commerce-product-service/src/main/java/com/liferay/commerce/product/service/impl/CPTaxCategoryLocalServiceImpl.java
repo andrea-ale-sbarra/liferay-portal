@@ -79,8 +79,7 @@ public class CPTaxCategoryLocalServiceImpl
 
 	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPTaxCategory deleteCPTaxCategory(
-		long userId, CPTaxCategory cpTaxCategory)
+	public CPTaxCategory deleteCPTaxCategory(CPTaxCategory cpTaxCategory)
 		throws PortalException {
 
 		// Commerce product tax category
@@ -89,21 +88,20 @@ public class CPTaxCategoryLocalServiceImpl
 
 		// Commerce product definitions
 
-		_cpDefinitionLocalService.updateCPDefinitionsByCPTaxCategoryId(userId,
+		_cpDefinitionLocalService.updateCPDefinitionsByCPTaxCategoryId(
 			cpTaxCategory.getCPTaxCategoryId());
 
 		return cpTaxCategory;
 	}
 
 	@Override
-	public CPTaxCategory deleteCPTaxCategory(long userId, long cpTaxCategoryId)
+	public CPTaxCategory deleteCPTaxCategory(long cpTaxCategoryId)
 		throws PortalException {
 
 		CPTaxCategory cpTaxCategory = cpTaxCategoryPersistence.findByPrimaryKey(
 			cpTaxCategoryId);
 
-		return cpTaxCategoryLocalService.deleteCPTaxCategory(userId,
-			cpTaxCategory);
+		return cpTaxCategoryLocalService.deleteCPTaxCategory(cpTaxCategory);
 	}
 
 	@Override

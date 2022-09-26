@@ -163,7 +163,7 @@ public class CPAttachmentFileEntryLocalServiceImpl
 			_cpDefinitionLocalService.isVersionable(classPK)) {
 
 			CPDefinition newCPDefinition =
-				_cpDefinitionLocalService.copyCPDefinition(userId, classPK);
+				_cpDefinitionLocalService.copyCPDefinition(classPK);
 
 			classPK = newCPDefinition.getCPDefinitionId();
 		}
@@ -335,7 +335,7 @@ public class CPAttachmentFileEntryLocalServiceImpl
 				cpAttachmentFileEntry.getClassPK())) {
 
 			CPDefinition newCPDefinition =
-				_cpDefinitionLocalService.copyCPDefinition(,
+				_cpDefinitionLocalService.copyCPDefinition(
 					cpAttachmentFileEntry.getClassPK());
 
 			if (cpAttachmentFileEntry.isCDNEnabled()) {
@@ -624,7 +624,6 @@ public class CPAttachmentFileEntryLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					userId,
 					cpAttachmentFileEntry.getClassPK());
 
 			if (cdnEnabled) {

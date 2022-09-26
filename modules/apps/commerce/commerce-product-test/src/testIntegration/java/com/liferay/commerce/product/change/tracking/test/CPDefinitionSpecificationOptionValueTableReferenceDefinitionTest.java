@@ -96,7 +96,7 @@ public class CPDefinitionSpecificationOptionValueTableReferenceDefinitionTest
 	@Override
 	protected CTModel<?> addCTModel() throws Exception {
 		return _cpDefinitionSpecificationOptionValueLocalService.
-			addCPDefinitionSpecificationOptionValue(,
+			addCPDefinitionSpecificationOptionValue(
 				_cpDefinition.getCPDefinitionId(),
 				_cpSpecificationOption.getCPSpecificationOptionId(),
 				_cpOptionCategory.getCPOptionCategoryId(),

@@ -204,7 +204,8 @@ public class EditCommerceCountryMVCActionCommand extends BaseMVCActionCommand {
 			}
 
 			_commerceChannelRelService.addCommerceChannelRel(
-				Country.class.getName(), countryId, commerceChannelId );
+				Country.class.getName(), countryId, commerceChannelId,
+				serviceContext);
 		}
 
 		_countryService.updateGroupFilterEnabled(

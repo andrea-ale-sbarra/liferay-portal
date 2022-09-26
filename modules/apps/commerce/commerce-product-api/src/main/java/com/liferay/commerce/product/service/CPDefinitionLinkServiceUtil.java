@@ -141,7 +141,7 @@ public class CPDefinitionLinkServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		getService().updateCPDefinitionLinks(,
+		getService().updateCPDefinitionLinks(
 			cpDefinitionId, cpDefinitionIds2, type, serviceContext);
 	}
 

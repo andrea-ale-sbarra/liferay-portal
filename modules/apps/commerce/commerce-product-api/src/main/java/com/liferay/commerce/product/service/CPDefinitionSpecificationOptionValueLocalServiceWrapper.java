@@ -16,12 +16,8 @@ package com.liferay.commerce.product.service;
 
 import com.liferay.commerce.product.model.CPDefinitionSpecificationOptionValue;
 import com.liferay.petra.function.UnsafeFunction;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.service.persistence.change.tracking.CTPersistence;
-
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * Provides a wrapper for {@link CPDefinitionSpecificationOptionValueLocalService}.
@@ -71,17 +67,17 @@ public class CPDefinitionSpecificationOptionValueLocalServiceWrapper
 	@Override
 	public CPDefinitionSpecificationOptionValue
 			addCPDefinitionSpecificationOptionValue(
-		long userId, long cpDefinitionId, long cpSpecificationOptionId,
-		long cpOptionCategoryId,
-		Map<Locale, String> valueMap,
-		double priority,
-		ServiceContext serviceContext)
+				long cpDefinitionId, long cpSpecificationOptionId,
+				long cpOptionCategoryId,
+				java.util.Map<java.util.Locale, String> valueMap,
+				double priority,
+				com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _cpDefinitionSpecificationOptionValueLocalService.
-			addCPDefinitionSpecificationOptionValue(,
-				cpDefinitionId, cpSpecificationOptionId,
-				cpOptionCategoryId, valueMap, priority, serviceContext);
+			addCPDefinitionSpecificationOptionValue(
+				cpDefinitionId, cpSpecificationOptionId, cpOptionCategoryId,
+				valueMap, priority, serviceContext);
 	}
 
 	/**
@@ -600,17 +596,17 @@ public class CPDefinitionSpecificationOptionValueLocalServiceWrapper
 	@Override
 	public CPDefinitionSpecificationOptionValue
 			updateCPDefinitionSpecificationOptionValue(
-		long userId, long cpDefinitionSpecificationOptionValueId,
-		long cpOptionCategoryId,
-		Map<Locale, String> valueMap,
-		double priority,
-		ServiceContext serviceContext)
+				long cpDefinitionSpecificationOptionValueId,
+				long cpOptionCategoryId,
+				java.util.Map<java.util.Locale, String> valueMap,
+				double priority,
+				com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _cpDefinitionSpecificationOptionValueLocalService.
-			updateCPDefinitionSpecificationOptionValue(,
-				cpDefinitionSpecificationOptionValueId,
-				cpOptionCategoryId, valueMap, priority, serviceContext);
+			updateCPDefinitionSpecificationOptionValue(
+				cpDefinitionSpecificationOptionValueId, cpOptionCategoryId,
+				valueMap, priority, serviceContext);
 	}
 
 	@Override

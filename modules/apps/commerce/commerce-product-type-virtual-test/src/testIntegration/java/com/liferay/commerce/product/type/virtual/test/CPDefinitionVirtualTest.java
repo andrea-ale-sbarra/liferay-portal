@@ -132,29 +132,25 @@ public class CPDefinitionVirtualTest {
 		Date displayDate = cpDefinition.getDisplayDate();
 		Date expirationDate = cpDefinition.getExpirationDate();
 
-		_cpDefinitionLocalService.updateCPDefinition(,
-			cpDefinitionId,
-			cpDefinition.getNameMap(),
+		_cpDefinitionLocalService.updateCPDefinition(
+			cpDefinitionId, cpDefinition.getNameMap(),
 			cpDefinition.getShortDescriptionMap(),
-			cpDefinition.getDescriptionMap(),
-			cpDefinition.getUrlTitleMap(),
+			cpDefinition.getDescriptionMap(), cpDefinition.getUrlTitleMap(),
 			cpDefinition.getMetaTitleMap(),
 			cpDefinition.getMetaDescriptionMap(),
 			cpDefinition.getMetaKeywordsMap(),
-			cpDefinition.isIgnoreSKUCombinations(), true, true,
-			true, cpDefinition.getShippingExtraPrice(),
-			cpDefinition.getWidth(), cpDefinition.getHeight(),
-			cpDefinition.getDepth(), cpDefinition.getWeight(),
-			cpDefinition.getCPTaxCategoryId(), cpDefinition.isTaxExempt(),
-			cpDefinition.isTelcoOrElectronics(),
-			cpDefinition.getDDMStructureKey(),
-			cpDefinition.isPublished(), displayDate.getMonth(),
-			displayDate.getDay(),
-			displayDate.getYear(), displayDate.getHours(),
-			displayDate.getMinutes(), expirationDate.getMonth(),
-			expirationDate.getDay(), expirationDate.getYear(),
-			expirationDate.getHours(), expirationDate.getMinutes(),
-			true, ServiceContextTestUtil.getServiceContext());
+			cpDefinition.isIgnoreSKUCombinations(), true, true, true,
+			cpDefinition.getShippingExtraPrice(), cpDefinition.getWidth(),
+			cpDefinition.getHeight(), cpDefinition.getDepth(),
+			cpDefinition.getWeight(), cpDefinition.getCPTaxCategoryId(),
+			cpDefinition.isTaxExempt(), cpDefinition.isTelcoOrElectronics(),
+			cpDefinition.getDDMStructureKey(), cpDefinition.isPublished(),
+			displayDate.getMonth(), displayDate.getDay(), displayDate.getYear(),
+			displayDate.getHours(), displayDate.getMinutes(),
+			expirationDate.getMonth(), expirationDate.getDay(),
+			expirationDate.getYear(), expirationDate.getHours(),
+			expirationDate.getMinutes(), true,
+			ServiceContextTestUtil.getServiceContext());
 
 		cpDefinition = _cpDefinitionLocalService.getCPDefinition(
 			cpDefinitionId);

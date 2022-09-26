@@ -293,12 +293,9 @@ public class CommerceTestUtil {
 			long groupId, long commerceChannelId, long warehouseId)
 		throws Exception {
 
-		ServiceContext serviceContext =
-			ServiceContextTestUtil.getServiceContext(groupId);
-
 		return CommerceChannelRelLocalServiceUtil.addCommerceChannelRel(
-			serviceContext.getUserId(), RandomTestUtil.randomString(),
-			warehouseId, commerceChannelId);
+			RandomTestUtil.randomString(), warehouseId, commerceChannelId,
+			ServiceContextTestUtil.getServiceContext(groupId));
 	}
 
 	public static CommerceOrderItem addCommerceOrderItem(
@@ -433,14 +430,11 @@ public class CommerceTestUtil {
 			CommerceChannelLocalServiceUtil.getCommerceChannel(
 				commerceChannelId);
 
-		ServiceContext serviceContext =
-			ServiceContextTestUtil.getServiceContext(
-				commerceChannel.getGroupId());
-
 		return CommerceChannelRelLocalServiceUtil.addCommerceChannelRel(
-			serviceContext.getUserId(),
 			CommerceInventoryWarehouse.class.getName(), warehouseId,
-			commerceChannelId );
+			commerceChannelId,
+			ServiceContextTestUtil.getServiceContext(
+				commerceChannel.getGroupId()));
 	}
 
 	public static CommerceOrder createCommerceOrderForShipping(

@@ -107,17 +107,15 @@ public class CPTaxCategoryLocalServiceWrapper
 	 * <strong>Important:</strong> Inspect CPTaxCategoryLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
-	 * @param userId
 	 * @param cpTaxCategory the cp tax category
 	 * @return the cp tax category that was removed
 	 * @throws PortalException
 	 */
 	@Override
-	public CPTaxCategory deleteCPTaxCategory(
-		long userId, CPTaxCategory cpTaxCategory)
+	public CPTaxCategory deleteCPTaxCategory(CPTaxCategory cpTaxCategory)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpTaxCategoryLocalService.deleteCPTaxCategory(cpTaxCategory, );
+		return _cpTaxCategoryLocalService.deleteCPTaxCategory(cpTaxCategory);
 	}
 
 	/**
@@ -127,16 +125,15 @@ public class CPTaxCategoryLocalServiceWrapper
 	 * <strong>Important:</strong> Inspect CPTaxCategoryLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
-	 * @param userId
 	 * @param CPTaxCategoryId the primary key of the cp tax category
 	 * @return the cp tax category that was removed
 	 * @throws PortalException if a cp tax category with the primary key could not be found
 	 */
 	@Override
-	public CPTaxCategory deleteCPTaxCategory(long userId, long CPTaxCategoryId)
+	public CPTaxCategory deleteCPTaxCategory(long CPTaxCategoryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cpTaxCategoryLocalService.deleteCPTaxCategory(CPTaxCategoryId, );
+		return _cpTaxCategoryLocalService.deleteCPTaxCategory(CPTaxCategoryId);
 	}
 
 	/**

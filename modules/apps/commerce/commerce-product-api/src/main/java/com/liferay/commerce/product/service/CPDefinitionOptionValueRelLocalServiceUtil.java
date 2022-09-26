@@ -79,7 +79,7 @@ public class CPDefinitionOptionValueRelLocalServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().addCPDefinitionOptionValueRel(,
+		return getService().addCPDefinitionOptionValueRel(
 			cpDefinitionOptionRelId, nameMap, priority, key, serviceContext);
 	}
 
@@ -568,9 +568,9 @@ public class CPDefinitionOptionValueRelLocalServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().updateCPDefinitionOptionValueRel(,
-			cpDefinitionOptionValueRelId, nameMap, priority, key,
-			cpInstanceId, quantity, preselected, price, serviceContext);
+		return getService().updateCPDefinitionOptionValueRel(
+			cpDefinitionOptionValueRelId, nameMap, priority, key, cpInstanceId,
+			quantity, preselected, price, serviceContext);
 	}
 
 	public static CPDefinitionOptionValueRel

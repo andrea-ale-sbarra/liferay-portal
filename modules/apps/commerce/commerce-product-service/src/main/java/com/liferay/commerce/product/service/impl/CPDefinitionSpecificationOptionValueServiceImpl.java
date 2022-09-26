@@ -52,9 +52,9 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 		_checkCommerceCatalog(cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionSpecificationOptionValueLocalService.
-			addCPDefinitionSpecificationOptionValue(getUserId(),
-				cpDefinitionId, cpSpecificationOptionId,
-				cpOptionCategoryId, valueMap, priority, serviceContext);
+			addCPDefinitionSpecificationOptionValue(
+				cpDefinitionId, cpSpecificationOptionId, cpOptionCategoryId,
+				valueMap, priority, serviceContext);
 	}
 
 	@Override
@@ -182,9 +182,9 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 			ActionKeys.UPDATE);
 
 		return cpDefinitionSpecificationOptionValueLocalService.
-			updateCPDefinitionSpecificationOptionValue(getUserId(),
-				cpDefinitionSpecificationOptionValueId,
-				cpOptionCategoryId, valueMap, priority, serviceContext);
+			updateCPDefinitionSpecificationOptionValue(
+				cpDefinitionSpecificationOptionValueId, cpOptionCategoryId,
+				valueMap, priority, serviceContext);
 	}
 
 	private void _checkCommerceCatalog(long cpDefinitionId, String actionId)

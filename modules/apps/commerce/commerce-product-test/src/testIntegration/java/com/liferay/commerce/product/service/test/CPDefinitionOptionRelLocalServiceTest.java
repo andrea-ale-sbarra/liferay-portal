@@ -118,7 +118,7 @@ public class CPDefinitionOptionRelLocalServiceTest {
 			"SKU contributor value", cpDefinitionOptionRel.isSkuContributor());
 
 		cpDefinitionOptionRel =
-			_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(,
+			_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 				cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 				cpDefinitionOptionRel.getCPOptionId(),
 				cpDefinitionOptionRel.getNameMap(),
@@ -138,7 +138,7 @@ public class CPDefinitionOptionRelLocalServiceTest {
 		Assert.assertTrue(
 			"No approved instances", cpDefinitionApprovedCPInstances.isEmpty());
 
-		_cpInstanceLocalService.buildCPInstances(,
+		_cpInstanceLocalService.buildCPInstances(
 			cpDefinition.getCPDefinitionId(), _serviceContext);
 
 		cpDefinitionOptionRel = CPTestUtil.addCPDefinitionOptionRel(
@@ -162,7 +162,7 @@ public class CPDefinitionOptionRelLocalServiceTest {
 		Assert.assertTrue(
 			"No approved instances", cpDefinitionApprovedCPInstances.isEmpty());
 
-		_cpInstanceLocalService.buildCPInstances(,
+		_cpInstanceLocalService.buildCPInstances(
 			cpDefinition.getCPDefinitionId(), _serviceContext);
 
 		cpDefinitionApprovedCPInstances =
@@ -173,7 +173,7 @@ public class CPDefinitionOptionRelLocalServiceTest {
 			"Approved instances exist",
 			cpDefinitionApprovedCPInstances.isEmpty());
 
-		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(,
+		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
 			cpDefinitionOptionRel.getNameMap(),
@@ -455,7 +455,7 @@ public class CPDefinitionOptionRelLocalServiceTest {
 			CPDefinitionOptionRel cpDefinitionOptionRel, String priceType)
 		throws Exception {
 
-		return _cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(,
+		return _cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
 			cpDefinitionOptionRel.getNameMap(),
@@ -464,8 +464,8 @@ public class CPDefinitionOptionRelLocalServiceTest {
 			cpDefinitionOptionRel.getPriority(),
 			cpDefinitionOptionRel.isFacetable(),
 			cpDefinitionOptionRel.isRequired(),
-			cpDefinitionOptionRel.isSkuContributor(),
-			priceType, ServiceContextTestUtil.getServiceContext(
+			cpDefinitionOptionRel.isSkuContributor(), priceType,
+			ServiceContextTestUtil.getServiceContext(
 				cpDefinitionOptionRel.getGroupId()));
 	}
 

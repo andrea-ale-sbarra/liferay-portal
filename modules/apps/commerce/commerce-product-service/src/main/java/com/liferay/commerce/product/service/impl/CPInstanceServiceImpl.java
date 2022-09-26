@@ -80,25 +80,23 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
-		return cpInstanceLocalService.addCPInstance(getUserId(),
-			externalReferenceCode, cpDefinitionId, groupId, sku,
-			gtin, manufacturerPartNumber,
-			purchasable, cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds,
-			width,
-			height, depth, weight, price, promoPrice, cost, published,
-			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
-			displayDateMinute, expirationDateMonth, expirationDateDay,
-			expirationDateYear, expirationDateHour, expirationDateMinute,
-			neverExpire, overrideSubscriptionInfo, subscriptionEnabled,
-			subscriptionLength, subscriptionType,
-			subscriptionTypeSettingsUnicodeProperties, maxSubscriptionCycles,
-			deliverySubscriptionEnabled, deliverySubscriptionLength,
-			deliverySubscriptionType,
+		return cpInstanceLocalService.addCPInstance(
+			externalReferenceCode, cpDefinitionId, groupId, sku, gtin,
+			manufacturerPartNumber, purchasable,
+			cpDefinitionOptionRelIdCPDefinitionOptionValueRelIds, width, height,
+			depth, weight, price, promoPrice, cost, published, displayDateMonth,
+			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
+			expirationDateMonth, expirationDateDay, expirationDateYear,
+			expirationDateHour, expirationDateMinute, neverExpire,
+			overrideSubscriptionInfo, subscriptionEnabled, subscriptionLength,
+			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
+			maxSubscriptionCycles, deliverySubscriptionEnabled,
+			deliverySubscriptionLength, deliverySubscriptionType,
 			deliverySubscriptionTypeSettingsUnicodeProperties,
-			deliveryMaxSubscriptionCycles, unspsc,
-			discontinued, replacementCPInstanceUuid,
-			replacementCProductId, discontinuedDateMonth, discontinuedDateDay,
-			discontinuedDateYear, serviceContext);
+			deliveryMaxSubscriptionCycles, unspsc, discontinued,
+			replacementCPInstanceUuid, replacementCProductId,
+			discontinuedDateMonth, discontinuedDateDay, discontinuedDateYear,
+			serviceContext);
 	}
 
 	@Override
@@ -120,17 +118,16 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 
 		_checkCommerceCatalog(groupId, ActionKeys.UPDATE);
 
-		return cpInstanceLocalService.addOrUpdateCPInstance(getUserId(),
-			externalReferenceCode, cpDefinitionId, groupId, sku,
-			gtin, manufacturerPartNumber, purchasable, json, width, height,
-			depth, weight, price, promoPrice, cost, published,
-			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
-			displayDateMinute, expirationDateMonth, expirationDateDay,
-			expirationDateYear, expirationDateHour, expirationDateMinute,
-			neverExpire,
-			unspsc, discontinued, replacementCPInstanceUuid,
-			replacementCProductId, discontinuedDateMonth, discontinuedDateDay,
-			discontinuedDateYear, serviceContext);
+		return cpInstanceLocalService.addOrUpdateCPInstance(
+			externalReferenceCode, cpDefinitionId, groupId, sku, gtin,
+			manufacturerPartNumber, purchasable, json, width, height, depth,
+			weight, price, promoPrice, cost, published, displayDateMonth,
+			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
+			expirationDateMonth, expirationDateDay, expirationDateYear,
+			expirationDateHour, expirationDateMinute, neverExpire, unspsc,
+			discontinued, replacementCPInstanceUuid, replacementCProductId,
+			discontinuedDateMonth, discontinuedDateDay, discontinuedDateYear,
+			serviceContext);
 	}
 
 	@Override
@@ -141,8 +138,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
-		cpInstanceLocalService.buildCPInstances(
-			getUserId(), cpDefinitionId, serviceContext);
+		cpInstanceLocalService.buildCPInstances(cpDefinitionId, serviceContext);
 	}
 
 	@Override
@@ -358,16 +354,15 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
-		return cpInstanceLocalService.updateCPInstance(getUserId(),
-			cpInstanceId, sku, gtin, manufacturerPartNumber, purchasable,
-			width, height, depth, weight, price, promoPrice, cost,
-			published, displayDateMonth, displayDateDay, displayDateYear,
-			displayDateHour, displayDateMinute, expirationDateMonth,
-			expirationDateDay, expirationDateYear, expirationDateHour,
-			expirationDateMinute, neverExpire, unspsc, discontinued,
-			replacementCPInstanceUuid, replacementCProductId,
-			discontinuedDateMonth,
-			discontinuedDateDay, discontinuedDateYear, serviceContext);
+		return cpInstanceLocalService.updateCPInstance(
+			cpInstanceId, sku, gtin, manufacturerPartNumber, purchasable, width,
+			height, depth, weight, price, promoPrice, cost, published,
+			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
+			displayDateMinute, expirationDateMonth, expirationDateDay,
+			expirationDateYear, expirationDateHour, expirationDateMinute,
+			neverExpire, unspsc, discontinued, replacementCPInstanceUuid,
+			replacementCProductId, discontinuedDateMonth, discontinuedDateDay,
+			discontinuedDateYear, serviceContext);
 	}
 
 	@Override
@@ -382,7 +377,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
-		return cpInstanceLocalService.updatePricingInfo(getUserId(),
+		return cpInstanceLocalService.updatePricingInfo(
 			cpInstanceId, price, promoPrice, cost, serviceContext);
 	}
 
@@ -398,7 +393,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
-		return cpInstanceLocalService.updateShippingInfo(getUserId(),
+		return cpInstanceLocalService.updateShippingInfo(
 			cpInstanceId, width, height, depth, weight, serviceContext);
 	}
 
@@ -420,12 +415,11 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
-		return cpInstanceLocalService.updateSubscriptionInfo(getUserId(),
-			cpInstanceId, overrideSubscriptionInfo,
-			subscriptionEnabled, subscriptionLength,
-			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
-			maxSubscriptionCycles, deliverySubscriptionEnabled,
-			deliverySubscriptionLength,
+		return cpInstanceLocalService.updateSubscriptionInfo(
+			cpInstanceId, overrideSubscriptionInfo, subscriptionEnabled,
+			subscriptionLength, subscriptionType,
+			subscriptionTypeSettingsUnicodeProperties, maxSubscriptionCycles,
+			deliverySubscriptionEnabled, deliverySubscriptionLength,
 			deliverySubscriptionType,
 			deliverySubscriptionTypeSettingsUnicodeProperties,
 			deliveryMaxSubscriptionCycles);

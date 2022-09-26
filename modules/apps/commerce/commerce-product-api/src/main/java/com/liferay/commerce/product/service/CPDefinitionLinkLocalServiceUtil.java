@@ -66,7 +66,7 @@ public class CPDefinitionLinkLocalServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().addCPDefinitionLinkByCProductId(,
+		return getService().addCPDefinitionLinkByCProductId(
 			cpDefinitionId, cProductId, priority, type, serviceContext);
 	}
 
@@ -451,7 +451,7 @@ public class CPDefinitionLinkLocalServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().updateCPDefinitionLink(,
+		return getService().updateCPDefinitionLink(
 			cpDefinitionLinkId, priority, serviceContext);
 	}
 
@@ -460,7 +460,7 @@ public class CPDefinitionLinkLocalServiceUtil {
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		getService().updateCPDefinitionLinkCProductIds(,
+		getService().updateCPDefinitionLinkCProductIds(
 			cpDefinitionId, cProductIds, type, serviceContext);
 	}
 

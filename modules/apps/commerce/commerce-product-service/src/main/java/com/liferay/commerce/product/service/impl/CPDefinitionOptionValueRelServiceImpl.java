@@ -61,9 +61,9 @@ public class CPDefinitionOptionValueRelServiceImpl
 			cpDefinitionOptionRel.getCPDefinitionId(), ActionKeys.VIEW);
 
 		return cpDefinitionOptionValueRelLocalService.
-			addCPDefinitionOptionValueRel(getUserId(),
-				cpDefinitionOptionRelId, nameMap, priority,
-				key, serviceContext);
+			addCPDefinitionOptionValueRel(
+				cpDefinitionOptionRelId, nameMap, priority, key,
+				serviceContext);
 	}
 
 	@Override
@@ -291,9 +291,9 @@ public class CPDefinitionOptionValueRelServiceImpl
 			cpDefinitionOptionRel.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpDefinitionOptionValueRelLocalService.
-			updateCPDefinitionOptionValueRel(getUserId(),
-				cpDefinitionOptionValueRelId, nameMap, priority,
-				key, cpInstanceId, quantity, preselected, price, serviceContext);
+			updateCPDefinitionOptionValueRel(
+				cpDefinitionOptionValueRelId, nameMap, priority, key,
+				cpInstanceId, quantity, preselected, price, serviceContext);
 	}
 
 	@Override

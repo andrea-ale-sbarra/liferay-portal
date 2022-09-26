@@ -65,7 +65,7 @@ public class DiscountChannelUtil {
 		return commerceChannelRelService.addCommerceChannelRel(
 			CommerceDiscount.class.getName(),
 			commerceDiscount.getCommerceDiscountId(),
-			commerceChannel.getCommerceChannelId());
+			commerceChannel.getCommerceChannelId(), serviceContext);
 	}
 
 }

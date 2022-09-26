@@ -125,8 +125,8 @@ public interface CPDefinitionLinkService extends BaseService {
 		throws PortalException;
 
 	public void updateCPDefinitionLinks(
-		long userId, long cpDefinitionId, long[] cpDefinitionIds2, String type,
-		ServiceContext serviceContext)
+			long cpDefinitionId, long[] cpDefinitionIds2, String type,
+			ServiceContext serviceContext)
 		throws PortalException;
 
 }

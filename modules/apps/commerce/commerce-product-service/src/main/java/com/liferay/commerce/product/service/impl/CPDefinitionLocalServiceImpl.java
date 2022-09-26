@@ -307,20 +307,17 @@ public class CPDefinitionLocalServiceImpl
 			cpInstanceServiceContext.setScopeGroupId(groupId);
 			cpInstanceServiceContext.setUserId(userId);
 
-			_cpInstanceLocalService.addCPInstance(userId,
-				externalReferenceCode, cpDefinitionId, groupId,
-				defaultSku, null, null, published, null,
-				cpDefinition.getWidth(), cpDefinition.getHeight(),
-				cpDefinition.getDepth(), cpDefinition.getWeight(),
-				BigDecimal.ZERO,
-				BigDecimal.ZERO, BigDecimal.ZERO, published, displayDateMonth,
-				displayDateDay, displayDateYear, displayDateHour,
-				displayDateMinute, expirationDateMonth, expirationDateDay,
-				expirationDateYear, expirationDateHour, expirationDateMinute,
-				neverExpire,
-				false, false, 1, StringPool.BLANK, null, 0, false, 1, null,
-				null,
-				0, null, false, null, 0, 0, 0, 0, cpInstanceServiceContext);
+			_cpInstanceLocalService.addCPInstance(
+				externalReferenceCode, cpDefinitionId, groupId, defaultSku,
+				null, null, published, null, cpDefinition.getWidth(),
+				cpDefinition.getHeight(), cpDefinition.getDepth(),
+				cpDefinition.getWeight(), BigDecimal.ZERO, BigDecimal.ZERO,
+				BigDecimal.ZERO, published, displayDateMonth, displayDateDay,
+				displayDateYear, displayDateHour, displayDateMinute,
+				expirationDateMonth, expirationDateDay, expirationDateYear,
+				expirationDateHour, expirationDateMinute, neverExpire, false,
+				false, 1, StringPool.BLANK, null, 0, false, 1, null, null, 0,
+				null, false, null, 0, 0, 0, 0, cpInstanceServiceContext);
 		}
 
 		// Friendly URL
@@ -446,29 +443,26 @@ public class CPDefinitionLocalServiceImpl
 
 			if (cProduct != null) {
 				CPDefinition cpDefinition =
-					cpDefinitionLocalService.updateCPDefinition(userId,
-						cProduct.getPublishedCPDefinitionId(),
-						nameMap, shortDescriptionMap, descriptionMap,
-						urlTitleMap, metaTitleMap, metaDescriptionMap,
-						metaKeywordsMap, ignoreSKUCombinations, shippable,
-						freeShipping, shipSeparately, shippingExtraPrice, width,
-						height, depth, weight, cpTaxCategoryId,
-						taxExempt, telcoOrElectronics, ddmStructureKey,
-						published, displayDateMonth, displayDateDay,
-						displayDateYear, displayDateHour, displayDateMinute,
-						expirationDateMonth, expirationDateDay,
-						expirationDateYear, expirationDateHour,
-						expirationDateMinute,
-						neverExpire, serviceContext);
+					cpDefinitionLocalService.updateCPDefinition(
+						cProduct.getPublishedCPDefinitionId(), nameMap,
+						shortDescriptionMap, descriptionMap, urlTitleMap,
+						metaTitleMap, metaDescriptionMap, metaKeywordsMap,
+						ignoreSKUCombinations, shippable, freeShipping,
+						shipSeparately, shippingExtraPrice, width, height,
+						depth, weight, cpTaxCategoryId, taxExempt,
+						telcoOrElectronics, ddmStructureKey, published,
+						displayDateMonth, displayDateDay, displayDateYear,
+						displayDateHour, displayDateMinute, expirationDateMonth,
+						expirationDateDay, expirationDateYear,
+						expirationDateHour, expirationDateMinute, neverExpire,
+						serviceContext);
 
-				return cpDefinitionLocalService.updateSubscriptionInfo(userId,
-					cpDefinition.getCPDefinitionId(),
-					subscriptionEnabled, subscriptionLength,
-					subscriptionType,
+				return cpDefinitionLocalService.updateSubscriptionInfo(
+					cpDefinition.getCPDefinitionId(), subscriptionEnabled,
+					subscriptionLength, subscriptionType,
 					subscriptionTypeSettingsUnicodeProperties,
-					maxSubscriptionCycles,
-					deliverySubscriptionEnabled, deliverySubscriptionLength,
-					deliverySubscriptionType,
+					maxSubscriptionCycles, deliverySubscriptionEnabled,
+					deliverySubscriptionLength, deliverySubscriptionType,
 					deliverySubscriptionTypeSettingsUnicodeProperties,
 					deliveryMaxSubscriptionCycles);
 			}
@@ -906,24 +900,24 @@ public class CPDefinitionLocalServiceImpl
 	}
 
 	@Override
-	public CPDefinition copyCPDefinition(long userId, long cpDefinitionId)
+	public CPDefinition copyCPDefinition(long cpDefinitionId)
 		throws PortalException {
 
 		CPDefinition cpDefinition = cpDefinitionLocalService.getCPDefinition(
 			cpDefinitionId);
 
-		return cpDefinitionLocalService.copyCPDefinition(userId,
-			cpDefinitionId,
-			cpDefinition.getGroupId(), WorkflowConstants.STATUS_DRAFT);
+		return cpDefinitionLocalService.copyCPDefinition(
+			cpDefinitionId, cpDefinition.getGroupId(),
+			WorkflowConstants.STATUS_DRAFT);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPDefinition copyCPDefinition(
-		long userId, long cpDefinitionId, long groupId, int status)
+			long cpDefinitionId, long groupId, int status)
 		throws PortalException {
 
-		User user = _userLocalService.getUser(userId);
+		User user = _userLocalService.getUser(PrincipalThreadLocal.getUserId());
 
 		CPDefinition originalCPDefinition =
 			cpDefinitionLocalService.getCPDefinition(cpDefinitionId);
@@ -960,21 +954,20 @@ public class CPDefinitionLocalServiceImpl
 				publishedCPDefinition = cpDefinitionPersistence.update(
 					publishedCPDefinition);
 
-				originalCProduct =	_cProductLocalService.updatePublishedCPDefinitionId(
+				_cProductLocalService.updatePublishedCPDefinitionId(
 					publishedCPDefinition.getCProductId(),
 					newCPDefinition.getCPDefinitionId());
 
+				long cProductId = publishedCPDefinition.getCProductId();
+
+				TransactionCommitCallbackUtil.registerCallback(
+					() -> {
+						cpDefinitionLocalService.maintainVersionThreshold(
+							cProductId);
+
+						return null;
+					});
 			}
-
-			long cProductId = originalCProduct.getCProductId();
-
-			TransactionCommitCallbackUtil.registerCallback(
-				() -> {
-					cpDefinitionLocalService.maintainVersionThreshold(
-						cProductId);
-
-					return null;
-				});
 		}
 
 		newCPDefinition.setStatus(status);
@@ -1292,7 +1285,7 @@ public class CPDefinitionLocalServiceImpl
 
 	@Override
 	public void deleteAssetCategoryCPDefinition(
-		long userId, long cpDefinitionId, long categoryId, ServiceContext serviceContext)
+			long cpDefinitionId, long categoryId, ServiceContext serviceContext)
 		throws PortalException {
 
 		AssetEntry assetEntry = _assetEntryLocalService.getEntry(
@@ -1305,7 +1298,7 @@ public class CPDefinitionLocalServiceImpl
 
 		serviceContext.setAssetTagNames(assetEntry.getTagNames());
 
-		cpDefinitionLocalService.updateCPDefinitionCategorization(userId,
+		cpDefinitionLocalService.updateCPDefinitionCategorization(
 			cpDefinitionId, serviceContext);
 	}
 
@@ -2125,22 +2118,22 @@ public class CPDefinitionLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPDefinition updateCPDefinition(
-		long userId, long cpDefinitionId, Map<Locale, String> nameMap,
-		Map<Locale, String> shortDescriptionMap,
-		Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
-		Map<Locale, String> metaTitleMap,
-		Map<Locale, String> metaDescriptionMap,
-		Map<Locale, String> metaKeywordsMap, boolean ignoreSKUCombinations,
-		boolean shippable, boolean freeShipping, boolean shipSeparately,
-		double shippingExtraPrice, double width, double height,
-		double depth, double weight, long cpTaxCategoryId,
-		boolean taxExempt, boolean telcoOrElectronics,
-		String ddmStructureKey, boolean published, int displayDateMonth,
-		int displayDateDay, int displayDateYear, int displayDateHour,
-		int displayDateMinute, int expirationDateMonth,
-		int expirationDateDay, int expirationDateYear,
-		int expirationDateHour, int expirationDateMinute,
-		boolean neverExpire, ServiceContext serviceContext)
+			long cpDefinitionId, Map<Locale, String> nameMap,
+			Map<Locale, String> shortDescriptionMap,
+			Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
+			Map<Locale, String> metaTitleMap,
+			Map<Locale, String> metaDescriptionMap,
+			Map<Locale, String> metaKeywordsMap, boolean ignoreSKUCombinations,
+			boolean shippable, boolean freeShipping, boolean shipSeparately,
+			double shippingExtraPrice, double width, double height,
+			double depth, double weight, long cpTaxCategoryId,
+			boolean taxExempt, boolean telcoOrElectronics,
+			String ddmStructureKey, boolean published, int displayDateMonth,
+			int displayDateDay, int displayDateYear, int displayDateHour,
+			int displayDateMinute, int expirationDateMonth,
+			int expirationDateDay, int expirationDateYear,
+			int expirationDateHour, int expirationDateMinute,
+			boolean neverExpire, ServiceContext serviceContext)
 		throws PortalException {
 
 		// Commerce product definition
@@ -2182,7 +2175,7 @@ public class CPDefinitionLocalServiceImpl
 				WorkflowConstants.ACTION_PUBLISH)) {
 
 			if (!cpDefinition.isDraft()) {
-				cpDefinition = cpDefinitionLocalService.copyCPDefinition(userId,
+				cpDefinition = cpDefinitionLocalService.copyCPDefinition(
 					cpDefinitionId, groupId, WorkflowConstants.STATUS_APPROVED);
 			}
 			else if (cpDefinition.getCPDefinitionId() !=
@@ -2306,39 +2299,37 @@ public class CPDefinitionLocalServiceImpl
 
 	@Override
 	public CPDefinition updateCPDefinition(
-		long userId, long cpDefinitionId, Map<Locale, String> nameMap,
-		Map<Locale, String> shortDescriptionMap,
-		Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
-		Map<Locale, String> metaTitleMap,
-		Map<Locale, String> metaDescriptionMap,
-		Map<Locale, String> metaKeywordsMap, boolean ignoreSKUCombinations,
-		String ddmStructureKey, boolean published, int displayDateMonth,
-		int displayDateDay, int displayDateYear, int displayDateHour,
-		int displayDateMinute, int expirationDateMonth,
-		int expirationDateDay, int expirationDateYear,
-		int expirationDateHour, int expirationDateMinute,
-		boolean neverExpire, ServiceContext serviceContext)
+			long cpDefinitionId, Map<Locale, String> nameMap,
+			Map<Locale, String> shortDescriptionMap,
+			Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
+			Map<Locale, String> metaTitleMap,
+			Map<Locale, String> metaDescriptionMap,
+			Map<Locale, String> metaKeywordsMap, boolean ignoreSKUCombinations,
+			String ddmStructureKey, boolean published, int displayDateMonth,
+			int displayDateDay, int displayDateYear, int displayDateHour,
+			int displayDateMinute, int expirationDateMonth,
+			int expirationDateDay, int expirationDateYear,
+			int expirationDateHour, int expirationDateMinute,
+			boolean neverExpire, ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinition cpDefinition = cpDefinitionPersistence.findByPrimaryKey(
 			cpDefinitionId);
 
-		return cpDefinitionLocalService.updateCPDefinition(userId,
-			cpDefinitionId, nameMap, shortDescriptionMap,
-			descriptionMap, urlTitleMap, metaTitleMap, metaDescriptionMap,
-			metaKeywordsMap, ignoreSKUCombinations,
-			cpDefinition.isShippable(), cpDefinition.isFreeShipping(),
-			cpDefinition.isShipSeparately(),
-			cpDefinition.getShippingExtraPrice(),
-			cpDefinition.getWidth(), cpDefinition.getHeight(),
-			cpDefinition.getDepth(), cpDefinition.getWeight(),
-			cpDefinition.getCPTaxCategoryId(), cpDefinition.isTaxExempt(),
-			cpDefinition.isTelcoOrElectronics(), ddmStructureKey, published,
-			displayDateMonth,
-			displayDateDay, displayDateYear, displayDateHour,
-			displayDateMinute, expirationDateMonth, expirationDateDay,
-			expirationDateYear, expirationDateHour, expirationDateMinute,
-			neverExpire, serviceContext);
+		return cpDefinitionLocalService.updateCPDefinition(
+			cpDefinitionId, nameMap, shortDescriptionMap, descriptionMap,
+			urlTitleMap, metaTitleMap, metaDescriptionMap, metaKeywordsMap,
+			ignoreSKUCombinations, cpDefinition.isShippable(),
+			cpDefinition.isFreeShipping(), cpDefinition.isShipSeparately(),
+			cpDefinition.getShippingExtraPrice(), cpDefinition.getWidth(),
+			cpDefinition.getHeight(), cpDefinition.getDepth(),
+			cpDefinition.getWeight(), cpDefinition.getCPTaxCategoryId(),
+			cpDefinition.isTaxExempt(), cpDefinition.isTelcoOrElectronics(),
+			ddmStructureKey, published, displayDateMonth, displayDateDay,
+			displayDateYear, displayDateHour, displayDateMinute,
+			expirationDateMonth, expirationDateDay, expirationDateYear,
+			expirationDateHour, expirationDateMinute, neverExpire,
+			serviceContext);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
@@ -2358,14 +2349,14 @@ public class CPDefinitionLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPDefinition updateCPDefinitionCategorization(
-		long userId, long cpDefinitionId, ServiceContext serviceContext)
+			long cpDefinitionId, ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinition cpDefinition = cpDefinitionPersistence.findByPrimaryKey(
 			cpDefinitionId);
 
 		if (cpDefinitionLocalService.isVersionable(cpDefinition)) {
-			cpDefinition = cpDefinitionLocalService.copyCPDefinition(userId,
+			cpDefinition = cpDefinitionLocalService.copyCPDefinition(
 				cpDefinitionId);
 
 			cpDefinitionId = cpDefinition.getCPDefinitionId();
@@ -2423,16 +2414,16 @@ public class CPDefinitionLocalServiceImpl
 	}
 
 	@Override
-	public void updateCPDefinitionsByCPTaxCategoryId(long userId, long cpTaxCategoryId)
+	public void updateCPDefinitionsByCPTaxCategoryId(long cpTaxCategoryId)
 		throws PortalException {
 
 		List<CPDefinition> cpDefinitions =
 			cpDefinitionPersistence.findByCPTaxCategoryId(cpTaxCategoryId);
 
 		for (CPDefinition cpDefinition : cpDefinitions) {
-			updateTaxCategoryInfo(userId,
-				cpDefinition.getCPDefinitionId(), 0,
-				cpDefinition.isTaxExempt(), cpDefinition.isTelcoOrElectronics());
+			updateTaxCategoryInfo(
+				cpDefinition.getCPDefinitionId(), 0, cpDefinition.isTaxExempt(),
+				cpDefinition.isTelcoOrElectronics());
 		}
 	}
 
@@ -2453,17 +2444,17 @@ public class CPDefinitionLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPDefinition updateShippingInfo(
-		long userId, long cpDefinitionId, boolean shippable, boolean freeShipping,
-		boolean shipSeparately, double shippingExtraPrice, double width,
-		double height, double depth, double weight,
-		ServiceContext serviceContext)
+			long cpDefinitionId, boolean shippable, boolean freeShipping,
+			boolean shipSeparately, double shippingExtraPrice, double width,
+			double height, double depth, double weight,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinition cpDefinition = cpDefinitionPersistence.findByPrimaryKey(
 			cpDefinitionId);
 
 		if (cpDefinitionLocalService.isVersionable(cpDefinition)) {
-			cpDefinition = cpDefinitionLocalService.copyCPDefinition(userId,
+			cpDefinition = cpDefinitionLocalService.copyCPDefinition(
 				cpDefinitionId);
 		}
 
@@ -2555,20 +2546,20 @@ public class CPDefinitionLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPDefinition updateSubscriptionInfo(
-		long userId, long cpDefinitionId, boolean subscriptionEnabled,
-		int subscriptionLength, String subscriptionType,
-		UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
-		long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
-		int deliverySubscriptionLength, String deliverySubscriptionType,
-		UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
-		long deliveryMaxSubscriptionCycles)
+			long cpDefinitionId, boolean subscriptionEnabled,
+			int subscriptionLength, String subscriptionType,
+			UnicodeProperties subscriptionTypeSettingsUnicodeProperties,
+			long maxSubscriptionCycles, boolean deliverySubscriptionEnabled,
+			int deliverySubscriptionLength, String deliverySubscriptionType,
+			UnicodeProperties deliverySubscriptionTypeSettingsUnicodeProperties,
+			long deliveryMaxSubscriptionCycles)
 		throws PortalException {
 
 		CPDefinition cpDefinition = cpDefinitionPersistence.findByPrimaryKey(
 			cpDefinitionId);
 
 		if (cpDefinitionLocalService.isVersionable(cpDefinition)) {
-			cpDefinition = cpDefinitionLocalService.copyCPDefinition(userId,
+			cpDefinition = cpDefinitionLocalService.copyCPDefinition(
 				cpDefinitionId);
 		}
 
@@ -2592,15 +2583,15 @@ public class CPDefinitionLocalServiceImpl
 
 	@Override
 	public CPDefinition updateTaxCategoryInfo(
-		long userId, long cpDefinitionId, long cpTaxCategoryId, boolean taxExempt,
-		boolean telcoOrElectronics)
+			long cpDefinitionId, long cpTaxCategoryId, boolean taxExempt,
+			boolean telcoOrElectronics)
 		throws PortalException {
 
 		CPDefinition cpDefinition = cpDefinitionPersistence.findByPrimaryKey(
 			cpDefinitionId);
 
 		if (cpDefinitionLocalService.isVersionable(cpDefinition)) {
-			cpDefinition = cpDefinitionLocalService.copyCPDefinition(userId,
+			cpDefinition = cpDefinitionLocalService.copyCPDefinition(
 				cpDefinitionId);
 		}
 

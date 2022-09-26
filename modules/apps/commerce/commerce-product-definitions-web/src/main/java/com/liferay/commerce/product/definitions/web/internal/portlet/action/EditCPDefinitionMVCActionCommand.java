@@ -679,7 +679,8 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 			}
 
 			_commerceChannelRelService.addCommerceChannelRel(
-				CPDefinition.class.getName(), cpDefinitionId, commerceChannelId);
+				CPDefinition.class.getName(), cpDefinitionId, commerceChannelId,
+				serviceContext);
 		}
 
 		// Filters

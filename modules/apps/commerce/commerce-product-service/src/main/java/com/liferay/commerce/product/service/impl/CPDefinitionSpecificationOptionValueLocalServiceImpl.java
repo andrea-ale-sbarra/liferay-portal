@@ -48,9 +48,9 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 	@Override
 	public CPDefinitionSpecificationOptionValue
 			addCPDefinitionSpecificationOptionValue(
-		long userId, long cpDefinitionId, long cpSpecificationOptionId,
-		long cpOptionCategoryId, Map<Locale, String> valueMap,
-		double priority, ServiceContext serviceContext)
+				long cpDefinitionId, long cpSpecificationOptionId,
+				long cpOptionCategoryId, Map<Locale, String> valueMap,
+				double priority, ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinition cpDefinition = _cpDefinitionPersistence.findByPrimaryKey(
@@ -67,7 +67,6 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 
 		if (_cpDefinitionLocalService.isVersionable(cpDefinitionId)) {
 			cpDefinition = _cpDefinitionLocalService.copyCPDefinition(
-				userId,
 				cpDefinitionId);
 
 			cpDefinitionId = cpDefinition.getCPDefinitionId();
@@ -128,7 +127,7 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 
 			try {
 				CPDefinition newCPDefinition =
-					_cpDefinitionLocalService.copyCPDefinition(,
+					_cpDefinitionLocalService.copyCPDefinition(
 						cpDefinitionSpecificationOptionValue.
 							getCPDefinitionId());
 
@@ -311,9 +310,9 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 	@Override
 	public CPDefinitionSpecificationOptionValue
 			updateCPDefinitionSpecificationOptionValue(
-		long userId, long cpDefinitionSpecificationOptionValueId,
-		long cpOptionCategoryId, Map<Locale, String> valueMap,
-		double priority, ServiceContext serviceContext)
+				long cpDefinitionSpecificationOptionValueId,
+				long cpOptionCategoryId, Map<Locale, String> valueMap,
+				double priority, ServiceContext serviceContext)
 		throws PortalException {
 
 		// Commerce product definition specification option value
@@ -328,7 +327,6 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					userId,
 					cpDefinitionSpecificationOptionValue.getCPDefinitionId());
 
 			cpDefinitionSpecificationOptionValue =
@@ -375,7 +373,6 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					,
 					cpDefinitionSpecificationOptionValue.getCPDefinitionId());
 
 			cpDefinitionSpecificationOptionValue =

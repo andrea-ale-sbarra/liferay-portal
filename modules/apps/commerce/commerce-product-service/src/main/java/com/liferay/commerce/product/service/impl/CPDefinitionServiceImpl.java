@@ -252,7 +252,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 
 		_checkCommerceCatalog(groupId, ActionKeys.UPDATE);
 
-		return cpDefinitionLocalService.copyCPDefinition(getUserId(),
+		return cpDefinitionLocalService.copyCPDefinition(
 			cpDefinitionId, groupId, status);
 	}
 
@@ -264,7 +264,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
-		cpDefinitionLocalService.deleteAssetCategoryCPDefinition(getUserId(),
+		cpDefinitionLocalService.deleteAssetCategoryCPDefinition(
 			cpDefinitionId, categoryId, serviceContext);
 	}
 
@@ -490,14 +490,14 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
-		return cpDefinitionLocalService.updateCPDefinition(getUserId(),
-			cpDefinitionId, nameMap, shortDescriptionMap,
-			descriptionMap, urlTitleMap, metaTitleMap, metaDescriptionMap,
-			metaKeywordsMap, ignoreSKUCombinations, ddmStructureKey, published,
-			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
-			displayDateMinute, expirationDateMonth, expirationDateDay,
-			expirationDateYear, expirationDateHour, expirationDateMinute,
-			neverExpire, serviceContext);
+		return cpDefinitionLocalService.updateCPDefinition(
+			cpDefinitionId, nameMap, shortDescriptionMap, descriptionMap,
+			urlTitleMap, metaTitleMap, metaDescriptionMap, metaKeywordsMap,
+			ignoreSKUCombinations, ddmStructureKey, published, displayDateMonth,
+			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
+			expirationDateMonth, expirationDateDay, expirationDateYear,
+			expirationDateHour, expirationDateMinute, neverExpire,
+			serviceContext);
 	}
 
 	@Override
@@ -520,7 +520,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
-		return cpDefinitionLocalService.updateCPDefinitionCategorization(getUserId(),
+		return cpDefinitionLocalService.updateCPDefinitionCategorization(
 			cpDefinitionId, serviceContext);
 	}
 
@@ -559,7 +559,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
-		return cpDefinitionLocalService.updateShippingInfo(getUserId(),
+		return cpDefinitionLocalService.updateShippingInfo(
 			cpDefinitionId, shippable, freeShipping, shipSeparately,
 			shippingExtraPrice, width, height, depth, weight, serviceContext);
 	}
@@ -592,12 +592,11 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
-		return cpDefinitionLocalService.updateSubscriptionInfo(getUserId(),
-			cpDefinitionId, subscriptionEnabled,
-			subscriptionLength, subscriptionType,
-			subscriptionTypeSettingsUnicodeProperties, maxSubscriptionCycles,
-			deliverySubscriptionEnabled, deliverySubscriptionLength,
-			deliverySubscriptionType,
+		return cpDefinitionLocalService.updateSubscriptionInfo(
+			cpDefinitionId, subscriptionEnabled, subscriptionLength,
+			subscriptionType, subscriptionTypeSettingsUnicodeProperties,
+			maxSubscriptionCycles, deliverySubscriptionEnabled,
+			deliverySubscriptionLength, deliverySubscriptionType,
 			deliverySubscriptionTypeSettingsUnicodeProperties,
 			deliveryMaxSubscriptionCycles);
 	}
@@ -611,7 +610,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 		_checkCommerceCatalogByCPDefinitionId(
 			cpDefinitionId, ActionKeys.UPDATE);
 
-		return cpDefinitionLocalService.updateTaxCategoryInfo(getUserId(),
+		return cpDefinitionLocalService.updateTaxCategoryInfo(
 			cpDefinitionId, cpTaxCategoryId, taxExempt, telcoOrElectronics);
 	}
 

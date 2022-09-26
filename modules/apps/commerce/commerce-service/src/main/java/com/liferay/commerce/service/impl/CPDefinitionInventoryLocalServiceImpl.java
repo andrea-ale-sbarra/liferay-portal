@@ -55,7 +55,7 @@ public class CPDefinitionInventoryLocalServiceImpl
 			cpDefinitionId);
 
 		if (_cpDefinitionLocalService.isVersionable(cpDefinitionId)) {
-			cpDefinition = _cpDefinitionLocalService.copyCPDefinition(,
+			cpDefinition = _cpDefinitionLocalService.copyCPDefinition(
 				cpDefinitionId);
 		}
 
@@ -112,7 +112,7 @@ public class CPDefinitionInventoryLocalServiceImpl
 
 			try {
 				CPDefinition newCPDefinition =
-					_cpDefinitionLocalService.copyCPDefinition(,
+					_cpDefinitionLocalService.copyCPDefinition(
 						cpDefinitionInventory.getCPDefinitionId());
 
 				cpDefinitionInventory =
@@ -179,7 +179,7 @@ public class CPDefinitionInventoryLocalServiceImpl
 				cpDefinitionInventory.getCPDefinitionId())) {
 
 			CPDefinition newCPDefinition =
-				_cpDefinitionLocalService.copyCPDefinition(,
+				_cpDefinitionLocalService.copyCPDefinition(
 					cpDefinitionInventory.getCPDefinitionId());
 
 			cpDefinitionInventory =

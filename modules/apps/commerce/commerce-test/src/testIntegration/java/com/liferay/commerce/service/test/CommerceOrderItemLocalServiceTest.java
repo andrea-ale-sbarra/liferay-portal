@@ -1211,7 +1211,7 @@ public class CommerceOrderItemLocalServiceTest {
 				CPConstants.PRODUCT_OPTION_PRICE_TYPE_DYNAMIC,
 				BigDecimal.valueOf(100), 1, true, true, _serviceContext));
 
-		_cpInstanceLocalService.buildCPInstances(,
+		_cpInstanceLocalService.buildCPInstances(
 			bundleCPDefinition.getCPDefinitionId(), _serviceContext);
 
 		List<CPInstance> bundleCPInstances =
@@ -1536,7 +1536,7 @@ public class CommerceOrderItemLocalServiceTest {
 			long cpDefinitionId, String key)
 		throws Exception {
 
-		_cpInstanceLocalService.buildCPInstances(,
+		_cpInstanceLocalService.buildCPInstances(
 			cpDefinitionId, _serviceContext);
 
 		List<CPInstance> bundleCPDefinitionApprovedCPInstances =

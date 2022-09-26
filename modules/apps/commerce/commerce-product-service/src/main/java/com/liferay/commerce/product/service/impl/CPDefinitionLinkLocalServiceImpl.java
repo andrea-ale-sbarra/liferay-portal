@@ -48,15 +48,14 @@ public class CPDefinitionLinkLocalServiceImpl
 
 	@Override
 	public CPDefinitionLink addCPDefinitionLinkByCProductId(
-		long userId, long cpDefinitionId, long cProductId, double priority, String type,
-		ServiceContext serviceContext)
+			long cpDefinitionId, long cProductId, double priority, String type,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinition cpDefinition;
 
 		if (_cpDefinitionLocalService.isVersionable(cpDefinitionId)) {
 			cpDefinition = _cpDefinitionLocalService.copyCPDefinition(
-				userId,
 				cpDefinitionId);
 
 			cpDefinitionId = cpDefinition.getCPDefinitionId();
@@ -105,7 +104,7 @@ public class CPDefinitionLinkLocalServiceImpl
 
 			try {
 				CPDefinition newCPDefinition =
-					_cpDefinitionLocalService.copyCPDefinition(,
+					_cpDefinitionLocalService.copyCPDefinition(
 						cpDefinitionLink.getCPDefinitionId());
 
 				cpDefinitionLink = cpDefinitionLinkPersistence.findByC_C_T(
@@ -231,8 +230,8 @@ public class CPDefinitionLinkLocalServiceImpl
 
 	@Override
 	public CPDefinitionLink updateCPDefinitionLink(
-		long userId, long cpDefinitionLinkId, double priority,
-		ServiceContext serviceContext)
+			long cpDefinitionLinkId, double priority,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinitionLink cpDefinitionLink =
@@ -243,7 +242,6 @@ public class CPDefinitionLinkLocalServiceImpl
 
 			CPDefinition newCPDefinition =
 				_cpDefinitionLocalService.copyCPDefinition(
-					userId,
 					cpDefinitionLink.getCPDefinitionId());
 
 			cpDefinitionLink = cpDefinitionLinkPersistence.findByC_C_T(
@@ -268,8 +266,8 @@ public class CPDefinitionLinkLocalServiceImpl
 
 	@Override
 	public void updateCPDefinitionLinkCProductIds(
-		long userId, long cpDefinitionId, long[] cProductIds, String type,
-		ServiceContext serviceContext)
+			long cpDefinitionId, long[] cProductIds, String type,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		if (cProductIds == null) {
@@ -299,9 +297,9 @@ public class CPDefinitionLinkLocalServiceImpl
 
 				if (cpDefinitionLink == null) {
 					cpDefinitionLinkLocalService.
-						addCPDefinitionLinkByCProductId(userId,
-							cpDefinitionId, cProductId, 0,
-							type, serviceContext);
+						addCPDefinitionLinkByCProductId(
+							cpDefinitionId, cProductId, 0, type,
+							serviceContext);
 				}
 			}
 

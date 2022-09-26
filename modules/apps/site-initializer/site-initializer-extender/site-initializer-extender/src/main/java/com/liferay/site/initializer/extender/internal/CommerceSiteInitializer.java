@@ -547,7 +547,7 @@ public class CommerceSiteInitializer {
 					}
 				});
 
-			_cpInstanceLocalService.buildCPInstances(serviceContext.getUserId(),
+			_cpInstanceLocalService.buildCPInstances(
 				cpDefinition.getCPDefinitionId(), serviceContext);
 
 			JSONArray cpInstancePropertiesJSONArray =
@@ -736,12 +736,11 @@ public class CommerceSiteInitializer {
 					"subscriptionTypeSettings");
 
 			_cpInstanceLocalService.updateSubscriptionInfo(
-				serviceContext.getUserId(),
 				cpInstance.getCPInstanceId(),
 				cpInstancePropertiesJSONObject.getBoolean(
 					"overrideSubscriptionInfo"),
 				cpInstancePropertiesJSONObject.getBoolean(
-				"subscriptionEnabled"),
+					"subscriptionEnabled"),
 				cpInstancePropertiesJSONObject.getInt("subscriptionLength"),
 				cpInstancePropertiesJSONObject.getString("subscriptionType"),
 				UnicodePropertiesBuilder.create(
@@ -752,10 +751,11 @@ public class CommerceSiteInitializer {
 				cpInstancePropertiesJSONObject.getBoolean(
 					"deliverySubscriptionEnabled"),
 				cpInstancePropertiesJSONObject.getInt(
-				"deliverySubscriptionLength"),
+					"deliverySubscriptionLength"),
 				cpInstancePropertiesJSONObject.getString(
-				"deliverySubscriptionType"),
-				new UnicodeProperties(), cpInstancePropertiesJSONObject.getLong(
+					"deliverySubscriptionType"),
+				new UnicodeProperties(),
+				cpInstancePropertiesJSONObject.getLong(
 					"deliveryMaxSubscriptionCycles"));
 		}
 		else if (StringUtil.equals(propertyType, "UPDATE_PRICE")) {
