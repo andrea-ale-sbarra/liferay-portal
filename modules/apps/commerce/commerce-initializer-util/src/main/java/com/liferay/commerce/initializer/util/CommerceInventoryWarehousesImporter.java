@@ -144,9 +144,9 @@ public class CommerceInventoryWarehousesImporter {
 
 		if (commerceChannel != null) {
 			_commerceChannelRelLocalService.addCommerceChannelRel(
-				serviceContext.getUserId(), CommerceInventoryWarehouse.class.getName(),
+				CommerceInventoryWarehouse.class.getName(),
 				commerceInventoryWarehouse.getCommerceInventoryWarehouseId(),
-				commerceChannel.getCommerceChannelId());
+				commerceChannel.getCommerceChannelId(), serviceContext);
 		}
 
 		return commerceInventoryWarehouse;

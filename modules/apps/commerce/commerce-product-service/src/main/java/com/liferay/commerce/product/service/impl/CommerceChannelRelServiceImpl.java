@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import java.util.List;
@@ -34,15 +35,17 @@ import java.util.List;
 public class CommerceChannelRelServiceImpl
 	extends CommerceChannelRelServiceBaseImpl {
 
+	@Override
 	public CommerceChannelRel addCommerceChannelRel(
-			String className, long classPK, long commerceChannelId)
+			String className, long classPK, long commerceChannelId,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		_commerceChannelModelResourcePermission.check(
 			getPermissionChecker(), commerceChannelId, ActionKeys.UPDATE);
 
 		return commerceChannelRelLocalService.addCommerceChannelRel(
-			getUserId(), className, classPK, commerceChannelId);
+			className, classPK, commerceChannelId, serviceContext);
 	}
 
 	@Override
