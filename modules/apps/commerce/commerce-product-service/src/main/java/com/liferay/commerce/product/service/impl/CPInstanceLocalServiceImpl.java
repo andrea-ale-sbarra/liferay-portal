@@ -15,11 +15,6 @@
 package com.liferay.commerce.product.service.impl;
 
 import com.liferay.commerce.constants.CommercePriceConstants;
-import com.liferay.commerce.price.list.constants.CommercePriceListConstants;
-import com.liferay.commerce.price.list.model.CommercePriceEntry;
-import com.liferay.commerce.price.list.model.CommercePriceList;
-import com.liferay.commerce.price.list.service.CommercePriceEntryLocalServiceUtil;
-import com.liferay.commerce.price.list.service.CommercePriceListLocalServiceUtil;
 import com.liferay.commerce.product.constants.CPField;
 import com.liferay.commerce.product.exception.CPInstanceDisplayDateException;
 import com.liferay.commerce.product.exception.CPInstanceExpirationDateException;
@@ -32,7 +27,6 @@ import com.liferay.commerce.product.internal.util.SKUCombinationsIterator;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPDefinitionOptionRel;
 import com.liferay.commerce.product.model.CPDefinitionOptionValueRel;
-import com.liferay.commerce.product.model.CPDefinitionSpecificationOptionValue;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CPInstanceOptionValueRel;
 import com.liferay.commerce.product.model.CProduct;
@@ -42,9 +36,7 @@ import com.liferay.commerce.product.service.CPDefinitionOptionValueRelLocalServi
 import com.liferay.commerce.product.service.CPInstanceOptionValueRelLocalService;
 import com.liferay.commerce.product.service.CProductLocalService;
 import com.liferay.commerce.product.service.base.CPInstanceLocalServiceBaseImpl;
-import com.liferay.commerce.product.service.persistence.CPDefinitionOptionRelPersistence;
 import com.liferay.commerce.product.service.persistence.CPInstanceOptionValueRelPersistence;
-import com.liferay.commerce.product.service.persistence.CPInstancePersistence;
 import com.liferay.expando.kernel.service.ExpandoRowLocalService;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -98,8 +90,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * @author Marco Leo
@@ -436,116 +426,6 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 			cpInstanceLocalService.updateStatus(
 				userId, cpInstance.getCPInstanceId(),
 				WorkflowConstants.STATUS_APPROVED);
-		}
-	}
-
-	@Override
-	public void cloneCPInstances(long oldCPDefinitionId, long newCPDefinitionId){
-
-		List<CPInstance> cpInstances =
-			_cpInstancePersistence.findByCPDefinitionId(oldCPDefinitionId);
-
-		for (CPInstance cpInstance : cpInstances) {
-			CPInstance newCPInstance = (CPInstance)cpInstance.clone();
-
-			newCPInstance.setUuid(PortalUUIDUtil.generate());
-
-			long cpInstanceId = counterLocalService.increment();
-
-			newCPInstance.setExternalReferenceCode(
-				String.valueOf(cpInstanceId));
-			newCPInstance.setCPInstanceId(cpInstanceId);
-
-			newCPInstance.setCPDefinitionId(newCPDefinitionId);
-			newCPInstance.setCPInstanceUuid(PortalUUIDUtil.generate());
-
-			List<CPInstanceOptionValueRel> cpInstanceOptionValueRels =
-				_cpInstanceOptionValueRelPersistence.findByCPInstanceId(
-					cpInstance.getCPInstanceId());
-
-			for (CPInstanceOptionValueRel cpInstanceOptionValueRel :
-				cpInstanceOptionValueRels) {
-
-				CPInstanceOptionValueRel newCPInstanceOptionValueRel =
-					(CPInstanceOptionValueRel)cpInstanceOptionValueRel.clone();
-
-				newCPInstanceOptionValueRel.setUuid(PortalUUIDUtil.generate());
-				newCPInstanceOptionValueRel.setCPInstanceOptionValueRelId(
-					counterLocalService.increment());
-				newCPInstanceOptionValueRel.setCPInstanceId(
-					newCPInstance.getCPInstanceId());
-
-				CPDefinitionOptionRel cpDefinitionOptionRel =
-					_cpDefinitionOptionRelPersistence.findByPrimaryKey(
-						cpInstanceOptionValueRel.getCPDefinitionOptionRelId());
-
-				List<CPDefinitionOptionRel> newCPDefinitionOptionRels =
-					_cpDefinitionOptionRelPersistence.findByCPDefinitionId(
-						newCPDefinitionId);
-
-				Stream<CPDefinitionOptionRel> cpDefinitionOptionRelStream =
-					newCPDefinitionOptionRels.stream();
-
-				Optional<CPDefinitionOptionRel> cpDefinitionOptionRelOptional =
-					cpDefinitionOptionRelStream.filter(
-						curCPDefinitionOptionRel ->
-							cpDefinitionOptionRel.getCPOptionId() ==
-							curCPDefinitionOptionRel.getCPOptionId()
-					).findFirst();
-
-				if (cpDefinitionOptionRelOptional.isPresent()) {
-					CPDefinitionOptionRel newCPDefinitionOptionRel =
-						cpDefinitionOptionRelOptional.get();
-
-					long cpDefinitionOptionRelId =
-						newCPDefinitionOptionRel.getCPDefinitionOptionRelId();
-
-					newCPInstanceOptionValueRel.setCPDefinitionOptionRelId(
-						cpDefinitionOptionRelId);
-
-					List<CPDefinitionOptionValueRel>
-						cpDefinitionOptionValueRels =
-						cpDefinitionOptionRel.
-							getCPDefinitionOptionValueRels();
-
-					Stream<CPDefinitionOptionValueRel>
-						cpDefinitionOptionValueRelsStream =
-						cpDefinitionOptionValueRels.stream();
-
-					Optional<CPDefinitionOptionValueRel>
-						cpDefinitionOptionValueRelOptional =
-						cpDefinitionOptionValueRelsStream.filter(
-							curCPDefinitionOptionValueRel ->
-								cpDefinitionOptionRelId ==
-								curCPDefinitionOptionValueRel.
-									getCPDefinitionOptionRelId()
-						).findFirst();
-
-					if (cpDefinitionOptionValueRelOptional.isPresent()) {
-						CPDefinitionOptionValueRel cpDefinitionOptionValueRel =
-							cpDefinitionOptionValueRelOptional.get();
-
-						newCPInstanceOptionValueRel.
-							setCPInstanceOptionValueRelId(
-								cpDefinitionOptionValueRel.
-									getCPDefinitionOptionValueRelId());
-					}
-				}
-
-				_cpInstanceOptionValueRelLocalService.
-					updateCPInstanceOptionValueRel(newCPInstanceOptionValueRel);
-			}
-
-			serviceContext.setWorkflowAction(WorkflowConstants.ACTION_PUBLISH);
-
-			_addCommercePriceEntry(
-				newCPInstance, cpInstance.getCPInstanceUuid(),
-				CommercePriceListConstants.TYPE_PRICE_LIST, serviceContext);
-			_addCommercePriceEntry(
-				newCPInstance, cpInstance.getCPInstanceUuid(),
-				CommercePriceListConstants.TYPE_PROMOTION, serviceContext);
-
-			_cpInstancePersistence.update(newCPInstance);
 		}
 	}
 
@@ -1515,32 +1395,6 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 			cpInstance, serviceContext, workflowContext);
 	}
 
-	private void _addCommercePriceEntry(
-		CPInstance cpInstance, String cpInstanceUuid, String type,
-		ServiceContext serviceContext)
-		throws PortalException {
-
-		CommercePriceList commercePriceList =
-			CommercePriceListLocalServiceUtil.
-				getCatalogBaseCommercePriceListByType(
-					cpInstance.getGroupId(), type);
-
-		CommercePriceEntry commercePriceEntry =
-			CommercePriceEntryLocalServiceUtil.fetchCommercePriceEntry(
-				commercePriceList.getCommercePriceListId(), cpInstanceUuid);
-
-		if (commercePriceEntry == null) {
-			return;
-		}
-
-		CPDefinition cpDefinition = cpInstance.getCPDefinition();
-
-		CommercePriceEntryLocalServiceUtil.addCommercePriceEntry(
-			cpDefinition.getCProductId(), cpInstance.getCPInstanceUuid(),
-			commercePriceList.getCommercePriceListId(),
-			commercePriceEntry.getPrice(), null, serviceContext);
-	}
-
 	private void _checkReplacementCPInstance(
 			String cpInstanceUuid, long cProductId,
 			String replacementCPInstanceUuid, long replacementCProductId)
@@ -1854,9 +1708,6 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	@BeanReference(type = CPDefinitionLocalService.class)
 	private CPDefinitionLocalService _cpDefinitionLocalService;
 
-	@BeanReference(type = CPDefinitionOptionRelPersistence.class)
-	private CPDefinitionOptionRelPersistence _cpDefinitionOptionRelPersistence;
-
 	@BeanReference(type = CPDefinitionOptionRelLocalService.class)
 	private CPDefinitionOptionRelLocalService
 		_cpDefinitionOptionRelLocalService;
@@ -1864,9 +1715,6 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	@BeanReference(type = CPDefinitionOptionValueRelLocalService.class)
 	private CPDefinitionOptionValueRelLocalService
 		_cpDefinitionOptionValueRelLocalService;
-
-	@BeanReference(type = CPInstancePersistence.class)
-	private CPInstancePersistence _cpInstancePersistence;
 
 	@BeanReference(type = CPInstanceOptionValueRelLocalService.class)
 	private CPInstanceOptionValueRelLocalService

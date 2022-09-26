@@ -15,13 +15,10 @@
 package com.liferay.commerce.product.service.impl;
 
 import com.liferay.commerce.product.model.CPDefinition;
-import com.liferay.commerce.product.model.CPDefinitionOptionRel;
-import com.liferay.commerce.product.model.CPDefinitionOptionValueRel;
 import com.liferay.commerce.product.model.CPDefinitionSpecificationOptionValue;
 import com.liferay.commerce.product.service.CPDefinitionLocalService;
 import com.liferay.commerce.product.service.base.CPDefinitionSpecificationOptionValueLocalServiceBaseImpl;
 import com.liferay.commerce.product.service.persistence.CPDefinitionPersistence;
-import com.liferay.commerce.product.service.persistence.CPDefinitionSpecificationOptionValuePersistence;
 import com.liferay.expando.kernel.service.ExpandoRowLocalService;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -35,10 +32,8 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -106,50 +101,6 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 	}
 
 	@Override
-	public void cloneCPDefinitionSpecificationOptionValue(long oldCPDefinitionId, long newCPDefinitionId){
-
-		List<CPDefinitionSpecificationOptionValue>
-			cpDefinitionSpecificationOptionValues =
-			_cpDefinitionSpecificationOptionValuePersistence.
-				findByCPDefinitionId(oldCPDefinitionId);
-
-		for (CPDefinitionSpecificationOptionValue
-			cpDefinitionSpecificationOptionValue :
-			cpDefinitionSpecificationOptionValues) {
-
-			CPDefinitionSpecificationOptionValue
-				newCPDefinitionSpecificationOptionValue =
-				(CPDefinitionSpecificationOptionValue)
-					cpDefinitionSpecificationOptionValue.clone();
-
-			newCPDefinitionSpecificationOptionValue.setUuid(
-				PortalUUIDUtil.generate());
-			newCPDefinitionSpecificationOptionValue.
-				setCPDefinitionSpecificationOptionValueId(
-					counterLocalService.increment());
-			newCPDefinitionSpecificationOptionValue.setCPDefinitionId(
-				newCPDefinitionId);
-
-			_cpDefinitionSpecificationOptionValuePersistence.update(
-				newCPDefinitionSpecificationOptionValue);
-		}
-	}
-
-	@Override
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPDefinitionSpecificationOptionValue
-			deleteCPDefinitionSpecificationOptionValue(
-				CPDefinitionSpecificationOptionValue
-					cpDefinitionSpecificationOptionValue)
-		throws PortalException {
-
-		return cpDefinitionSpecificationOptionValueLocalService.
-			deleteCPDefinitionSpecificationOptionValue(
-				cpDefinitionSpecificationOptionValue);
-	}
-
-	@Override
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPDefinitionSpecificationOptionValue
 	deleteCPDefinitionSpecificationOptionValue(
 		long userId, CPDefinitionSpecificationOptionValue
@@ -468,10 +419,6 @@ public class CPDefinitionSpecificationOptionValueLocalServiceImpl
 
 		indexer.reindex(CPDefinition.class.getName(), cpDefinitionId);
 	}
-
-	@BeanReference(type = CPDefinitionSpecificationOptionValuePersistence.class)
-	private CPDefinitionSpecificationOptionValuePersistence
-		_cpDefinitionSpecificationOptionValuePersistence;
 
 	@BeanReference(type = CPDefinitionLocalService.class)
 	private CPDefinitionLocalService _cpDefinitionLocalService;

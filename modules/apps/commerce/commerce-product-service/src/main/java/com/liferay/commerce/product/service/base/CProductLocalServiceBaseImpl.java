@@ -141,10 +141,11 @@ public abstract class CProductLocalServiceBaseImpl
 	 *
 	 * @param cProduct the c product
 	 * @return the c product that was removed
+	 * @throws PortalException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
-	public CProduct deleteCProduct(CProduct cProduct) {
+	public CProduct deleteCProduct(CProduct cProduct) throws PortalException {
 		return cProductPersistence.remove(cProduct);
 	}
 

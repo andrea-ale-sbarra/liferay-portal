@@ -95,9 +95,12 @@ public class CProductLocalServiceWrapper
 	 *
 	 * @param cProduct the c product
 	 * @return the c product that was removed
+	 * @throws PortalException
 	 */
 	@Override
-	public CProduct deleteCProduct(CProduct cProduct) {
+	public CProduct deleteCProduct(CProduct cProduct)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
 		return _cProductLocalService.deleteCProduct(cProduct);
 	}
 

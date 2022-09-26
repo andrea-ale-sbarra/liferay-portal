@@ -74,14 +74,13 @@ public class CPDefinitionOptionValueRelLocalServiceUtil {
 	}
 
 	public static CPDefinitionOptionValueRel addCPDefinitionOptionValueRel(
-			long userId, long cpDefinitionOptionRelId,
-			Map<java.util.Locale, String> nameMap, double priority, String key,
+			long cpDefinitionOptionRelId, Map<java.util.Locale, String> nameMap,
+			double priority, String key,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().addCPDefinitionOptionValueRel(
-			userId, cpDefinitionOptionRelId, nameMap, priority, key,
-			serviceContext);
+		return getService().addCPDefinitionOptionValueRel(,
+			cpDefinitionOptionRelId, nameMap, priority, key, serviceContext);
 	}
 
 	/**
@@ -562,15 +561,15 @@ public class CPDefinitionOptionValueRelLocalServiceUtil {
 	}
 
 	public static CPDefinitionOptionValueRel updateCPDefinitionOptionValueRel(
-			long userId, long cpDefinitionOptionValueRelId,
+			long cpDefinitionOptionValueRelId,
 			Map<java.util.Locale, String> nameMap, double priority, String key,
 			long cpInstanceId, int quantity, boolean preselected,
 			java.math.BigDecimal price,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().updateCPDefinitionOptionValueRel(
-			userId, cpDefinitionOptionValueRelId, nameMap, priority, key,
+		return getService().updateCPDefinitionOptionValueRel(,
+			cpDefinitionOptionValueRelId, nameMap, priority, key,
 			cpInstanceId, quantity, preselected, price, serviceContext);
 	}
 

@@ -121,9 +121,6 @@ public interface CPAttachmentFileEntryLocalService
 			long classNameId, long classPK)
 		throws PortalException;
 
-	public void cloneCPAttachmentFileEntry(
-		long oldCPDefinitionId, long newCPDefinitionId);
-
 	/**
 	 * Creates a new cp attachment file entry with the primary key. Does not add the cp attachment file entry to the database.
 	 *
@@ -138,10 +135,6 @@ public interface CPAttachmentFileEntryLocalService
 	 * @throws PortalException
 	 */
 	public PersistedModel createPersistedModel(Serializable primaryKeyObj)
-		throws PortalException;
-
-	public void deleteCPAttachmentFileEntries(
-			long userId, String className, long classPK)
 		throws PortalException;
 
 	public void deleteCPAttachmentFileEntries(String className, long classPK)
@@ -178,12 +171,6 @@ public interface CPAttachmentFileEntryLocalService
 	@Indexable(type = IndexableType.DELETE)
 	public CPAttachmentFileEntry deleteCPAttachmentFileEntry(
 			long CPAttachmentFileEntryId)
-		throws PortalException;
-
-	@Indexable(type = IndexableType.DELETE)
-	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-	public CPAttachmentFileEntry deleteCPAttachmentFileEntry(
-			long userId, CPAttachmentFileEntry cpAttachmentFileEntry)
 		throws PortalException;
 
 	/**

@@ -124,14 +124,6 @@ public class CPAttachmentFileEntryLocalServiceWrapper
 			checkCPAttachmentFileEntriesByDisplayDate(classNameId, classPK);
 	}
 
-	@Override
-	public void cloneCPAttachmentFileEntry(
-		long oldCPDefinitionId, long newCPDefinitionId) {
-
-		_cpAttachmentFileEntryLocalService.cloneCPAttachmentFileEntry(
-			oldCPDefinitionId, newCPDefinitionId);
-	}
-
 	/**
 	 * Creates a new cp attachment file entry with the primary key. Does not add the cp attachment file entry to the database.
 	 *
@@ -156,15 +148,6 @@ public class CPAttachmentFileEntryLocalServiceWrapper
 
 		return _cpAttachmentFileEntryLocalService.createPersistedModel(
 			primaryKeyObj);
-	}
-
-	@Override
-	public void deleteCPAttachmentFileEntries(
-			long userId, String className, long classPK)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		_cpAttachmentFileEntryLocalService.deleteCPAttachmentFileEntries(
-			userId, className, classPK);
 	}
 
 	@Override
@@ -213,15 +196,6 @@ public class CPAttachmentFileEntryLocalServiceWrapper
 
 		return _cpAttachmentFileEntryLocalService.deleteCPAttachmentFileEntry(
 			CPAttachmentFileEntryId);
-	}
-
-	@Override
-	public CPAttachmentFileEntry deleteCPAttachmentFileEntry(
-			long userId, CPAttachmentFileEntry cpAttachmentFileEntry)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _cpAttachmentFileEntryLocalService.deleteCPAttachmentFileEntry(
-			userId, cpAttachmentFileEntry);
 	}
 
 	/**

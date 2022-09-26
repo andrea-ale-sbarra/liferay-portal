@@ -97,8 +97,11 @@ public class CProductLocalServiceUtil {
 	 *
 	 * @param cProduct the c product
 	 * @return the c product that was removed
+	 * @throws PortalException
 	 */
-	public static CProduct deleteCProduct(CProduct cProduct) {
+	public static CProduct deleteCProduct(CProduct cProduct)
+		throws PortalException {
+
 		return getService().deleteCProduct(cProduct);
 	}
 

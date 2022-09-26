@@ -62,13 +62,12 @@ public class CPDefinitionLinkLocalServiceUtil {
 	}
 
 	public static CPDefinitionLink addCPDefinitionLinkByCProductId(
-			long userId, long cpDefinitionId, long cProductId, double priority,
-			String type,
+			long cpDefinitionId, long cProductId, double priority, String type,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().addCPDefinitionLinkByCProductId(
-			userId, cpDefinitionId, cProductId, priority, type, serviceContext);
+		return getService().addCPDefinitionLinkByCProductId(,
+			cpDefinitionId, cProductId, priority, type, serviceContext);
 	}
 
 	/**
@@ -129,18 +128,17 @@ public class CPDefinitionLinkLocalServiceUtil {
 		return getService().deleteCPDefinitionLink(CPDefinitionLinkId);
 	}
 
-	public static CPDefinitionLink deleteCPDefinitionLink(
-			long userId, CPDefinitionLink cpDefinitionLink)
-		throws PortalException {
-
-		return getService().deleteCPDefinitionLink(userId, cpDefinitionLink);
-	}
-
 	public static void deleteCPDefinitionLinksByCPDefinitionId(
 			long cpDefinitionId)
 		throws PortalException {
 
 		getService().deleteCPDefinitionLinksByCPDefinitionId(cpDefinitionId);
+	}
+
+	public static void deleteCPDefinitionLinksByCProductId(long cProductId)
+		throws PortalException {
+
+		getService().deleteCPDefinitionLinksByCProductId(cProductId);
 	}
 
 	/**
@@ -449,21 +447,21 @@ public class CPDefinitionLinkLocalServiceUtil {
 	}
 
 	public static CPDefinitionLink updateCPDefinitionLink(
-			long userId, long cpDefinitionLinkId, double priority,
+			long cpDefinitionLinkId, double priority,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		return getService().updateCPDefinitionLink(
-			userId, cpDefinitionLinkId, priority, serviceContext);
+		return getService().updateCPDefinitionLink(,
+			cpDefinitionLinkId, priority, serviceContext);
 	}
 
 	public static void updateCPDefinitionLinkCProductIds(
-			long userId, long cpDefinitionId, long[] cProductIds, String type,
+			long cpDefinitionId, long[] cProductIds, String type,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
-		getService().updateCPDefinitionLinkCProductIds(
-			userId, cpDefinitionId, cProductIds, type, serviceContext);
+		getService().updateCPDefinitionLinkCProductIds(,
+			cpDefinitionId, cProductIds, type, serviceContext);
 	}
 
 	public static CPDefinitionLinkLocalService getService() {
