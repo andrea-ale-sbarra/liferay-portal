@@ -12,26 +12,17 @@
  * details.
  */
 
-package com.liferay.commerce.product.option;
-
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSONException;
+package com.liferay.commerce.product.data.source;
 
 import java.util.List;
 
 /**
- * @author Igor Beslic
+ * @author Andrea Sbarra
  */
-public interface CommerceOptionValueHelper {
+public interface CommerceOptionValueDataSourceRegistry {
 
-	public List<CommerceOptionValue> getCPDefinitionCommerceOptionValues(
-		long companyId, long commerceChannelGroupId, long cpDefinitionId, String json)
-		throws PortalException;
+	public CommerceOptionValueDataSource getCommerceOptionValueDataSource(String key);
 
-	public CommerceOptionValue toCommerceOptionValue(String json)
-		throws PortalException;
-
-	public List<CommerceOptionValue> toCommerceOptionValues(String json)
-		throws JSONException;
+	public List<CommerceOptionValueDataSource> getCommerceOptionValueDataSources();
 
 }

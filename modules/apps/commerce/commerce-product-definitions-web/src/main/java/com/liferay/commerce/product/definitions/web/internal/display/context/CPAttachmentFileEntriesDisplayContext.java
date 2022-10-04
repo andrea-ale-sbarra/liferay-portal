@@ -14,6 +14,8 @@
 
 package com.liferay.commerce.product.definitions.web.internal.display.context;
 
+import com.liferay.commerce.constants.CommerceWebKeys;
+import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.product.configuration.AttachmentsConfiguration;
 import com.liferay.commerce.product.constants.CPAttachmentFileEntryConstants;
 import com.liferay.commerce.product.ddm.DDMHelper;
@@ -286,11 +288,16 @@ public class CPAttachmentFileEntriesDisplayContext
 			json = cpAttachmentFileEntry.getJson();
 		}
 
+		CommerceContext commerceContext =
+			(CommerceContext)httpServletRequest.getAttribute(
+				CommerceWebKeys.COMMERCE_CONTEXT);
+
+
 		return _ddmHelper.renderCPAttachmentFileEntryOptions(
 			getCPDefinitionId(), json, pageContext, renderRequest,
 			renderResponse,
-			_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(
-				getCPDefinitionId(), true, false));
+			_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(cpRequestHelper.getCompanyId(), commerceContext.getCommerceChannelGroupId()
+				, getCPDefinitionId(), true, false));
 	}
 
 	private String _getTypeLabel(int type) {

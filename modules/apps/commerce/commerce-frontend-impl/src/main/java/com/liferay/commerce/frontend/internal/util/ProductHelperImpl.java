@@ -109,11 +109,16 @@ public class ProductHelperImpl implements ProductHelper {
 		CommerceProductPriceRequest commerceProductPriceRequest =
 			new CommerceProductPriceRequest();
 
+		CPInstance cpInstance =
+			_cpInstanceLocalService.getCPInstance(cpInstanceId);
+
 		commerceProductPriceRequest.setCpInstanceId(cpInstanceId);
 		commerceProductPriceRequest.setQuantity(quantity);
 		commerceProductPriceRequest.setCommerceContext(commerceContext);
 		commerceProductPriceRequest.setCommerceOptionValues(
-			_getCommerceOptionValues(cpInstanceId, commerceOptionValuesJSON));
+			_getCommerceOptionValues(cpInstance.getCompanyId(),
+				commerceContext.getCommerceChannelGroupId(), cpInstanceId,
+				commerceOptionValuesJSON));
 		commerceProductPriceRequest.setSecure(true);
 
 		boolean taxIncludedInPrice = _isTaxIncludedInPrice(
@@ -200,7 +205,7 @@ public class ProductHelperImpl implements ProductHelper {
 	}
 
 	private List<CommerceOptionValue> _getCommerceOptionValues(
-			long cpInstanceId, String ddmFormValues)
+		long companyId, long commerceChannelGroupId, long cpInstanceId, String ddmFormValues)
 		throws PortalException {
 
 		if (Validator.isNull(ddmFormValues)) {
@@ -211,7 +216,8 @@ public class ProductHelperImpl implements ProductHelper {
 			cpInstanceId);
 
 		return _commerceOptionValueHelper.getCPDefinitionCommerceOptionValues(
-			cpInstance.getCPDefinitionId(), ddmFormValues);
+			companyId, commerceChannelGroupId, cpInstance.getCPDefinitionId(),
+			ddmFormValues);
 	}
 
 	private String[] _getFormattedDiscountPercentages(

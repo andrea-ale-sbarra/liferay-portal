@@ -23,6 +23,8 @@ import com.liferay.commerce.product.model.CPDefinitionOptionRel;
 import com.liferay.commerce.product.model.CPDefinitionOptionValueRel;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CPInstanceOptionValueRel;
+import com.liferay.commerce.product.option.CommerceOption;
+import com.liferay.commerce.product.option.CommerceOptionValue;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.util.KeyValuePair;
@@ -68,8 +70,9 @@ public interface CPInstanceHelper {
 		throws Exception;
 
 	public Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>>
-		getCPDefinitionOptionValueRelsMap(
-			long cpDefinitionId, boolean skuContributor, boolean publicStore);
+	getCPDefinitionOptionValueRelsMap(
+		long companyId, long scopeGroupId, long cpDefinitionId, boolean skuContributor, boolean publicStore)
+		throws PortalException;
 
 	public Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>>
 			getCPDefinitionOptionValueRelsMap(long cpDefinitionId, String json)

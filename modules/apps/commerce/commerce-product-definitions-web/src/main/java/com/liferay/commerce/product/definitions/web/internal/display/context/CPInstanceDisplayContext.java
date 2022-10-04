@@ -14,6 +14,8 @@
 
 package com.liferay.commerce.product.definitions.web.internal.display.context;
 
+import com.liferay.commerce.constants.CommerceWebKeys;
+import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.currency.model.CommerceMoney;
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
@@ -334,11 +336,15 @@ public class CPInstanceDisplayContext extends BaseCPDefinitionsDisplayContext {
 
 		CPDefinition cpDefinition = getCPDefinition();
 
+		CommerceContext commerceContext =
+			(CommerceContext)httpServletRequest.getAttribute(
+				CommerceWebKeys.COMMERCE_CONTEXT);
+
 		return _ddmHelper.renderCPInstanceOptions(
 			getCPDefinitionId(), null, cpDefinition.isIgnoreSKUCombinations(),
 			renderRequest, renderResponse,
-			_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(
-				getCPDefinitionId(), true, false));
+			_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(cpRequestHelper.getCompanyId(), commerceContext.getCommerceChannelGroupId()
+				, getCPDefinitionId(), true, false));
 	}
 
 	public BigDecimal round(BigDecimal value) throws PortalException {

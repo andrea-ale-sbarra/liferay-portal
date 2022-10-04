@@ -87,6 +87,7 @@ public class PriceCPContentContributor implements CPContentContributor {
 
 		List<CommerceOptionValue> commerceOptionValues =
 			_commerceOptionValueHelper.getCPDefinitionCommerceOptionValues(
+				commerceChannel.getCompanyId(), commerceChannel.getGroupId(),
 				cpInstance.getCPDefinitionId(), ddmFormValues);
 
 		CPDefinitionInventory cpDefinitionInventory =

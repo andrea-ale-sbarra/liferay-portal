@@ -48,6 +48,8 @@ import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CPInstanceOptionValueRel;
 import com.liferay.commerce.product.model.CPOptionCategory;
 import com.liferay.commerce.product.model.CProduct;
+import com.liferay.commerce.product.option.CommerceOption;
+import com.liferay.commerce.product.option.CommerceOptionValue;
 import com.liferay.commerce.product.permission.CommerceProductViewPermission;
 import com.liferay.commerce.product.service.CPAttachmentFileEntryLocalService;
 import com.liferay.commerce.product.service.CPDefinitionLocalService;
@@ -103,6 +105,7 @@ import javax.portlet.ResourceURL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import jdk.nashorn.internal.ir.CallNode;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -765,13 +768,20 @@ public class CPContentHelperImpl implements CPContentHelper {
 			return StringPool.BLANK;
 		}
 
+		HttpServletRequest httpServletRequest = _portal.getHttpServletRequest(renderRequest);
+
+		CommerceContext commerceContext =
+			(CommerceContext)httpServletRequest.getAttribute(
+				CommerceWebKeys.COMMERCE_CONTEXT);
+
 		return _ddmHelper.renderPublicStoreOptions(
 			cpCatalogEntry.getCPDefinitionId(), null,
 			cpCatalogEntry.isIgnoreSKUCombinations(), renderRequest,
 			renderResponse,
 			_filterByInventoryAvailability(
 				_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(
-					cpCatalogEntry.getCPDefinitionId(), false, true)));
+					_portal.getCompanyId(httpServletRequest), commerceContext.getCommerceChannelGroupId()
+					, cpCatalogEntry.getCPDefinitionId(), false, true)));
 	}
 
 	private Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>>

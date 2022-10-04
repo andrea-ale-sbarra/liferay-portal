@@ -341,6 +341,8 @@ public class OrderSummaryCheckoutStepDisplayContext {
 
 		List<CommerceOptionValue> cpDefinitionCommerceOptionValues =
 			_commerceOptionValueHelper.getCPDefinitionCommerceOptionValues(
+				commerceOrderItem.getCompanyId(),
+				commerceContext.getCommerceChannelGroupId(),
 				commerceOrderItem.getCPDefinitionId(),
 				commerceOrderItem.getJson());
 

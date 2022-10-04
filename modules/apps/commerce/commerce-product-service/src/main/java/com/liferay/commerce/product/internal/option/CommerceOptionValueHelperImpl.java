@@ -14,13 +14,19 @@
 
 package com.liferay.commerce.product.internal.option;
 
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSource;
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSourceRegistry;
+import com.liferay.commerce.product.internal.data.source.AssetCategoriesCommerceOptionValueDataSourceImpl;
+import com.liferay.commerce.product.internal.util.comparator.CPDefinitionOptionRelComparator;
 import com.liferay.commerce.product.model.CPDefinitionOptionRel;
 import com.liferay.commerce.product.model.CPDefinitionOptionValueRel;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.option.CommerceOptionValue;
 import com.liferay.commerce.product.option.CommerceOptionValueHelper;
+import com.liferay.commerce.product.service.CPDefinitionLocalService;
 import com.liferay.commerce.product.service.CPDefinitionOptionRelLocalService;
 import com.liferay.commerce.product.service.CPDefinitionOptionValueRelLocalService;
+import com.liferay.commerce.product.util.CPDefinitionHelper;
 import com.liferay.commerce.product.util.JsonHelper;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -34,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -49,8 +56,12 @@ public class CommerceOptionValueHelperImpl
 
 	@Override
 	public List<CommerceOptionValue> getCPDefinitionCommerceOptionValues(
-			long cpDefinitionId, String json)
+		long companyId, long commerceChannelGroupId, long cpDefinitionId, String json)
 		throws PortalException {
+
+		List<CommerceOptionValue> commerceOptionValues = new ArrayList<>();
+
+		_filterDataSource(_dataSource(companyId, commerceChannelGroupId, cpDefinitionId), json, commerceOptionValues);
 
 		Map<Long, List<Long>>
 			cpDefinitionOptionRelCPDefinitionOptionValueRelIds =
@@ -58,11 +69,9 @@ public class CommerceOptionValueHelperImpl
 					getCPDefinitionOptionRelCPDefinitionOptionValueRelIds(
 						cpDefinitionId, json);
 
-		if (cpDefinitionOptionRelCPDefinitionOptionValueRelIds.isEmpty()) {
+		if (cpDefinitionOptionRelCPDefinitionOptionValueRelIds.isEmpty() && commerceOptionValues.isEmpty()) {
 			return Collections.emptyList();
 		}
-
-		List<CommerceOptionValue> commerceOptionValues = new ArrayList<>();
 
 		for (Map.Entry<Long, List<Long>> entry :
 				cpDefinitionOptionRelCPDefinitionOptionValueRelIds.entrySet()) {
@@ -129,6 +138,90 @@ public class CommerceOptionValueHelperImpl
 		}
 
 		return commerceOptionValues;
+	}
+
+	private void _filterDataSource(
+		Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>> dataSource, String json, List<CommerceOptionValue> commerceOptionValues)
+		throws JSONException {
+
+		if (_jsonHelper.isEmpty(json)) {
+			return ;
+		}
+
+		JSONArray jsonArray = _jsonFactory.createJSONArray();
+
+		if (_jsonHelper.isArray(json)) {
+			jsonArray = _jsonFactory.createJSONArray(json);
+		}
+		else {
+			jsonArray.put(_jsonFactory.createJSONObject(json));
+		}
+
+		CommerceOptionValue.Builder commerceOptionValueBuilder =
+			new CommerceOptionValue.Builder();
+
+		for(Map.Entry<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>> entry :dataSource.entrySet()) {
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				CPDefinitionOptionRel cpDefinitionOptionRel = entry.getKey();
+				if (cpDefinitionOptionRel.getKey().equals(
+					jsonObject.getString("key"))) {
+					JSONArray valueJSONArray = _jsonHelper.getValueAsJSONArray(
+						"value", jsonObject);
+					for (int j = 0; j < valueJSONArray.length(); j++) {
+						for (CPDefinitionOptionValueRel cpDefinitionOptionValueRel : entry.getValue()) {
+							if (cpDefinitionOptionValueRel.getKey().equals(
+								valueJSONArray.getString(j))) {
+
+
+								commerceOptionValueBuilder.optionKey(
+									cpDefinitionOptionRel.getKey());
+								commerceOptionValueBuilder.optionValueKey(
+									cpDefinitionOptionValueRel.getKey());
+
+								commerceOptionValueBuilder.priceType(
+									cpDefinitionOptionRel.getPriceType());
+
+								commerceOptionValueBuilder.price(
+									cpDefinitionOptionValueRel.getPrice());
+								commerceOptionValueBuilder.quantity(
+									cpDefinitionOptionValueRel.getQuantity());
+
+								CPInstance
+									cpDefinitionOptionValueRelCPInstance =
+									cpDefinitionOptionValueRel.fetchCPInstance();
+
+								if (cpDefinitionOptionValueRelCPInstance !=
+									null) {
+									commerceOptionValueBuilder.cpInstanceId(
+										cpDefinitionOptionValueRelCPInstance.getCPInstanceId());
+
+									if (cpDefinitionOptionRel.isPriceTypeDynamic()) {
+										commerceOptionValueBuilder.price(
+											cpDefinitionOptionValueRelCPInstance.getPrice());
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		commerceOptionValues.add(commerceOptionValueBuilder.build());
+	}
+
+	private Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>> _dataSource(
+		long companyId, long commerceChannelGroupId, long cpDefinitionId) throws PortalException {
+
+		String dataSourceName =
+			AssetCategoriesCommerceOptionValueDataSourceImpl.NAME;
+
+		CommerceOptionValueDataSource commerceOptionValueDataSource = _commerceOptionValueDataSourceRegistry.getCommerceOptionValueDataSource(
+			dataSourceName);
+
+		return commerceOptionValueDataSource.getCPDefinitionOptionValueRelsMap(companyId, commerceChannelGroupId, cpDefinitionId, -1 ,-1);
+
 	}
 
 	@Override
@@ -209,6 +302,12 @@ public class CommerceOptionValueHelperImpl
 	}
 
 	@Reference
+	protected CPDefinitionHelper cpDefinitionHelper;
+	
+	@Reference
+	private CPDefinitionLocalService _cpDefinitionLocalService;
+	
+	@Reference
 	private CPDefinitionOptionRelLocalService
 		_cpDefinitionOptionRelLocalService;
 
@@ -218,6 +317,10 @@ public class CommerceOptionValueHelperImpl
 
 	@Reference
 	private JSONFactory _jsonFactory;
+
+	@Reference
+	private CommerceOptionValueDataSourceRegistry
+		_commerceOptionValueDataSourceRegistry;
 
 	@Reference
 	private JsonHelper _jsonHelper;

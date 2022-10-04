@@ -84,6 +84,7 @@ public class CommerceOptionValueHelperTest {
 			ServiceContextTestUtil.getServiceContext(_company.getGroupId()));
 	}
 
+	/*
 	@Test
 	public void testGetCPDefinitionCommerceOptionValues() throws Exception {
 		frutillaRule.scenario(
@@ -111,8 +112,8 @@ public class CommerceOptionValueHelperTest {
 				bundleCPDefinition.getCPDefinitionId());
 
 		List<CommerceOptionValue> commerceOptionValues =
-			_commerceOptionValueHelper.getCPDefinitionCommerceOptionValues(
-				bundleCPDefinition.getCPDefinitionId(), jsonString);
+			_commerceOptionValueHelper.getCPDefinitionCommerceOptionValues(,
+				, bundleCPDefinition.getCPDefinitionId(), jsonString);
 
 		Assert.assertEquals(
 			"commerce option value entries count", 5,
@@ -123,6 +124,8 @@ public class CommerceOptionValueHelperTest {
 
 		_testToCommerceOptionValues(jsonString, commerceOptionValues);
 	}
+	*/
+
 
 	@Rule
 	public final FrutillaRule frutillaRule = new FrutillaRule();

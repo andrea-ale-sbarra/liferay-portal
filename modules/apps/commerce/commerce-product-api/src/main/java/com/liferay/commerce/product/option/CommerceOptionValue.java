@@ -27,12 +27,18 @@ public interface CommerceOptionValue {
 
 	public long getCPInstanceId();
 
+	public String getCPInstanceUuid();
+
+	public long getCProductId();
+
 	public CommerceOptionValue getFirstMatch(
 		List<CommerceOptionValue> commerceOptionValues);
 
 	public String getOptionKey();
 
 	public String getOptionValueKey();
+
+	public String getOptionValueLabel();
 
 	public BigDecimal getPrice();
 
@@ -52,6 +58,16 @@ public interface CommerceOptionValue {
 				@Override
 				public long getCPInstanceId() {
 					return _cpInstanceId;
+				}
+
+				@Override
+				public String getCPInstanceUuid() {
+					return _cpInstanceUuid;
+				}
+
+				@Override
+				public long getCProductId(){
+					return _cProuctId;
 				}
 
 				@Override
@@ -78,6 +94,9 @@ public interface CommerceOptionValue {
 				public String getOptionValueKey() {
 					return _optionValueKey;
 				}
+
+				@Override
+				public String getOptionValueLabel(){return _optionValueLabel;}
 
 				@Override
 				public BigDecimal getPrice() {
@@ -122,9 +141,13 @@ public interface CommerceOptionValue {
 				}
 
 				private final long _cpInstanceId = Builder.this._cpInstanceId;
+				private final long _cProuctId = Builder.this._cProductId;
 				private final String _optionKey = Builder.this._optionKey;
 				private final String _optionValueKey =
 					Builder.this._optionValueKey;
+
+				private final String _optionValueLabel =
+					Builder.this._optionValueLabel;
 				private final BigDecimal _price = Builder.this._price;
 				private final String _priceType = Builder.this._priceType;
 				private final int _quantity = Builder.this._quantity;
@@ -138,6 +161,18 @@ public interface CommerceOptionValue {
 			return this;
 		}
 
+		public Builder cpInstanceUuid(String cpInstanceUuid) {
+			_cpInstanceUuid = cpInstanceUuid;
+
+			return this;
+		}
+
+		public Builder cProductId(long cProductId){
+			_cProductId = cProductId;
+
+			return this;
+		}
+
 		public Builder optionKey(String optionKey) {
 			_optionKey = optionKey;
 
@@ -146,6 +181,12 @@ public interface CommerceOptionValue {
 
 		public Builder optionValueKey(String optionValueKey) {
 			_optionValueKey = optionValueKey;
+
+			return this;
+		}
+
+		public Builder optionValueLabel(String optionValueLabel) {
+			_optionValueLabel = optionValueLabel;
 
 			return this;
 		}
@@ -173,8 +214,12 @@ public interface CommerceOptionValue {
 				"\"priceType\":\"%s\", \"quantity\":%d, \"value\":\"%s\"}";
 
 		private long _cpInstanceId;
+		private String _cpInstanceUuid;
+
+		private long _cProductId;
 		private String _optionKey;
 		private String _optionValueKey;
+		private String _optionValueLabel;
 		private BigDecimal _price;
 		private String _priceType;
 		private int _quantity;

@@ -15,6 +15,7 @@
 package com.liferay.commerce.product.internal.util;
 
 import com.liferay.adaptive.media.image.html.AMImageHTMLTagFactory;
+import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.commerce.account.util.CommerceAccountHelper;
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngine;
 import com.liferay.commerce.media.CommerceMediaProvider;
@@ -23,9 +24,12 @@ import com.liferay.commerce.product.availability.CPAvailabilityChecker;
 import com.liferay.commerce.product.catalog.CPCatalogEntry;
 import com.liferay.commerce.product.catalog.CPSku;
 import com.liferay.commerce.product.constants.CPAttachmentFileEntryConstants;
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSource;
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSourceRegistry;
 import com.liferay.commerce.product.exception.CPDefinitionIgnoreSKUCombinationsException;
 import com.liferay.commerce.product.exception.NoSuchCPInstanceException;
 import com.liferay.commerce.product.internal.catalog.CPSkuImpl;
+import com.liferay.commerce.product.internal.data.source.AssetCategoriesCommerceOptionValueDataSourceImpl;
 import com.liferay.commerce.product.internal.util.comparator.CPDefinitionOptionRelComparator;
 import com.liferay.commerce.product.model.CPAttachmentFileEntry;
 import com.liferay.commerce.product.model.CPDefinition;
@@ -33,6 +37,8 @@ import com.liferay.commerce.product.model.CPDefinitionOptionRel;
 import com.liferay.commerce.product.model.CPDefinitionOptionValueRel;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CPInstanceOptionValueRel;
+import com.liferay.commerce.product.option.CommerceOption;
+import com.liferay.commerce.product.option.CommerceOptionValue;
 import com.liferay.commerce.product.permission.CommerceProductViewPermission;
 import com.liferay.commerce.product.service.CPAttachmentFileEntryLocalService;
 import com.liferay.commerce.product.service.CPDefinitionLocalService;
@@ -41,6 +47,7 @@ import com.liferay.commerce.product.service.CPDefinitionOptionValueRelLocalServi
 import com.liferay.commerce.product.service.CPInstanceLocalService;
 import com.liferay.commerce.product.service.CPInstanceOptionValueRelLocalService;
 import com.liferay.commerce.product.service.CommerceChannelLocalService;
+import com.liferay.commerce.product.util.CPDefinitionHelper;
 import com.liferay.commerce.product.util.CPInstanceHelper;
 import com.liferay.commerce.product.util.DDMFormValuesHelper;
 import com.liferay.commerce.product.util.JsonHelper;
@@ -200,10 +207,10 @@ public class CPInstanceHelperImpl implements CPInstanceHelper {
 			cpDefinitionId, serializedDDMFormValues, type, start, end);
 	}
 
-	@Override
 	public Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>>
 		getCPDefinitionOptionValueRelsMap(
-			long cpDefinitionId, boolean skuContributor, boolean publicStore) {
+		long companyId, long scopeGroupId, long cpDefinitionId, boolean skuContributor, boolean publicStore)
+		throws PortalException {
 
 		List<CPDefinitionOptionRel> cpDefinitionOptionRels;
 
@@ -213,18 +220,29 @@ public class CPInstanceHelperImpl implements CPInstanceHelper {
 					cpDefinitionId, true);
 		}
 		else {
+
 			cpDefinitionOptionRels =
 				_cpDefinitionOptionRelLocalService.getCPDefinitionOptionRels(
 					cpDefinitionId);
+
 		}
 
-		if (cpDefinitionOptionRels.isEmpty()) {
+		String dataSourceName =
+			AssetCategoriesCommerceOptionValueDataSourceImpl.NAME;
+
+		CommerceOptionValueDataSource commerceOptionValueDataSource = _commerceOptionValueDataSourceRegistry.getCommerceOptionValueDataSource(
+			dataSourceName);
+
+		if (cpDefinitionOptionRels.isEmpty() && commerceOptionValueDataSource == null) {
 			return Collections.emptyMap();
 		}
 
 		Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>>
 			cpDefinitionOptionRelsMap = new TreeMap<>(
 				new CPDefinitionOptionRelComparator());
+
+		cpDefinitionOptionRelsMap.putAll(commerceOptionValueDataSource.getCPDefinitionOptionValueRelsMap(
+			companyId, scopeGroupId, cpDefinitionId, -1, -1));
 
 		for (CPDefinitionOptionRel cpDefinitionOptionRel :
 				cpDefinitionOptionRels) {
@@ -243,6 +261,8 @@ public class CPInstanceHelperImpl implements CPInstanceHelper {
 				cpDefinitionOptionRel,
 				cpDefinitionOptionRel.getCPDefinitionOptionValueRels());
 		}
+
+
 
 		return cpDefinitionOptionRelsMap;
 	}
@@ -819,6 +839,10 @@ public class CPInstanceHelperImpl implements CPInstanceHelper {
 	private CommerceMediaResolver _commerceMediaResolver;
 
 	@Reference
+	private CommerceOptionValueDataSourceRegistry _commerceOptionValueDataSourceRegistry;
+
+
+	@Reference
 	private CommerceProductViewPermission _commerceProductViewPermission;
 
 	@Reference
@@ -830,6 +854,9 @@ public class CPInstanceHelperImpl implements CPInstanceHelper {
 
 	@Reference
 	private CPDefinitionInventoryEngine _cpDefinitionInventoryEngine;
+
+	@Reference
+	protected CPDefinitionHelper cpDefinitionHelper;
 
 	@Reference
 	private CPDefinitionLocalService _cpDefinitionLocalService;
@@ -866,5 +893,9 @@ public class CPInstanceHelperImpl implements CPInstanceHelper {
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private AssetEntryLocalService _assetEntryLocalService;
+
 
 }

@@ -408,8 +408,8 @@ public class CPInstanceHelperTest {
 
 		Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>>
 			cpDefinitionOptionValueRelsMap =
-				_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(
-					cpDefinition.getCPDefinitionId(), true, true);
+				_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(0, 0
+					, cpDefinition.getCPDefinitionId(), true, true);
 
 		Assert.assertNotNull(cpDefinitionOptionValueRelsMap);
 		Assert.assertEquals(
@@ -465,8 +465,8 @@ public class CPInstanceHelperTest {
 
 		Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>>
 			cpDefinitionOptionValueRelsMap =
-				_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(
-					cpDefinition.getCPDefinitionId(), true, true);
+				_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(0, 0
+					, cpDefinition.getCPDefinitionId(), true, true);
 
 		Assert.assertNotNull(cpDefinitionOptionValueRelsMap);
 		Assert.assertEquals(

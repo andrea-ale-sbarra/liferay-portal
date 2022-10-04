@@ -144,6 +144,8 @@ public class CommerceOrderItemLocalServiceImpl
 
 		List<CommerceOptionValue> commerceOptionValues =
 			_commerceOptionValueHelper.getCPDefinitionCommerceOptionValues(
+				commerceOrder.getCompanyId(),
+				commerceContext.getCommerceChannelGroupId(),
 				cpInstance.getCPDefinitionId(), json);
 
 		for (CommerceOptionValue commerceOptionValue : commerceOptionValues) {
@@ -1258,6 +1260,7 @@ public class CommerceOrderItemLocalServiceImpl
 		if (!ExportImportThreadLocal.isImportInProcess()) {
 			CommerceProductPrice commerceProductPrice =
 				_getCommerceProductPrice(
+					commerceOrderItem.getCompanyId(),
 					cpInstance.getCPDefinitionId(),
 					cpInstance.getCPInstanceId(), json, quantity,
 					commerceContext);
@@ -1376,8 +1379,8 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private CommerceProductPrice _getCommerceProductPrice(
-			long cpDefinitionId, long cpInstanceId, String json, int quantity,
-			CommerceContext commerceContext)
+		long companyId, long cpDefinitionId, long cpInstanceId, String json, int quantity,
+		CommerceContext commerceContext)
 		throws PortalException {
 
 		CommerceProductPriceRequest commerceProductPriceRequest =
@@ -1388,7 +1391,9 @@ public class CommerceOrderItemLocalServiceImpl
 		commerceProductPriceRequest.setSecure(false);
 		commerceProductPriceRequest.setCommerceContext(commerceContext);
 		commerceProductPriceRequest.setCommerceOptionValues(
-			_getStaticOptionValuesNotLinkedToSku(cpDefinitionId, json));
+			_getStaticOptionValuesNotLinkedToSku(companyId,
+				commerceContext.getCommerceChannelGroupId(), cpDefinitionId,
+				json));
 		commerceProductPriceRequest.setCalculateTax(true);
 
 		return _commerceProductPriceCalculation.getCommerceProductPrice(
@@ -1500,12 +1505,13 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	private List<CommerceOptionValue> _getStaticOptionValuesNotLinkedToSku(
-			long cpDefinitionId, String jsonArrayString)
+		long companyId, long commerceChannelGroupId, long cpDefinitionId, String jsonArrayString)
 		throws PortalException {
 
 		List<CommerceOptionValue> commerceOptionValues =
 			_commerceOptionValueHelper.getCPDefinitionCommerceOptionValues(
-				cpDefinitionId, jsonArrayString);
+				companyId, commerceChannelGroupId, cpDefinitionId,
+				jsonArrayString);
 
 		Stream<CommerceOptionValue> commerceOptionValuesStream =
 			commerceOptionValues.stream();
@@ -1919,6 +1925,7 @@ public class CommerceOrderItemLocalServiceImpl
 
 		if (commerceProductPrice == null) {
 			commerceProductPrice = _getCommerceProductPrice(
+				commerceOrderItem.getCompanyId(),
 				commerceOrderItem.getCPDefinitionId(),
 				commerceOrderItem.getCPInstanceId(),
 				commerceOrderItem.getJson(), commerceOrderItem.getQuantity(),
@@ -2084,6 +2091,7 @@ public class CommerceOrderItemLocalServiceImpl
 		if (!ExportImportThreadLocal.isImportInProcess()) {
 			CommerceProductPrice commerceProductPrice =
 				_getCommerceProductPrice(
+					commerceOrderItem.getCompanyId(),
 					cpInstance.getCPDefinitionId(),
 					cpInstance.getCPInstanceId(), commerceOrderItem.getJson(),
 					quantity, null);
@@ -2149,6 +2157,7 @@ public class CommerceOrderItemLocalServiceImpl
 		if (commerceOrder.isOpen()) {
 			if (commerceProductPrice == null) {
 				commerceProductPrice = _getCommerceProductPrice(
+					commerceOrderItem.getCompanyId(),
 					commerceOrderItem.getCPDefinitionId(),
 					commerceOrderItem.getCPInstanceId(),
 					commerceOrderItem.getJson(), quantity, commerceContext);
