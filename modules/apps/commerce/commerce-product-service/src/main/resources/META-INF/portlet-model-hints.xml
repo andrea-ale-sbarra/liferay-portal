@@ -443,6 +443,7 @@
 		<field localized="true" name="description" type="String">
 			<hint-collection name="TEXTAREA" />
 		</field>
+		<field name="COValueDataSource" type="String" />
 		<field name="DDMFormFieldTypeName" type="String">
 			<validator name="required" />
 		</field>
@@ -453,6 +454,7 @@
 			<validator name="required" />
 		</field>
 		<field name="lastPublishDate" type="Date" />
+		<field name="typeSettings" type="String" />
 	</model>
 	<model name="com.liferay.commerce.product.model.CPOptionCategory">
 		<field name="mvccVersion" type="long" />

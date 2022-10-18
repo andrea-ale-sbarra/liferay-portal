@@ -333,6 +333,14 @@ public class CommerceProductServiceUpgradeStepRegistrator
 			new com.liferay.commerce.product.internal.upgrade.v4_0_1.
 				CommerceChannelUpgradeProcess(_groupLocalService));
 
+		registry.register(
+			"4.0.1", "4.1.0",
+			UpgradeProcessFactory.addColumns(
+				"CPOption", "COValueDataSource VARCHAR(75)"),
+			UpgradeProcessFactory.addColumns(
+				"CPOption", "typeSettings TEXT"));
+
+
 		if (_log.isInfoEnabled()) {
 			_log.info("Commerce product upgrade step registrator finished");
 		}

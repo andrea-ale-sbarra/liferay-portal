@@ -58,6 +58,8 @@ public class CPOptionTable extends BaseTable<CPOptionTable> {
 		"name", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<CPOptionTable, String> description = createColumn(
 		"description", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<CPOptionTable, String> COValueDataSource = createColumn(
+		"COValueDataSource", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<CPOptionTable, String> DDMFormFieldTypeName =
 		createColumn(
 			"DDMFormFieldTypeName", String.class, Types.VARCHAR,
@@ -72,6 +74,8 @@ public class CPOptionTable extends BaseTable<CPOptionTable> {
 		"key_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<CPOptionTable, Date> lastPublishDate = createColumn(
 		"lastPublishDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
+	public final Column<CPOptionTable, String> typeSettings = createColumn(
+		"typeSettings", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 
 	private CPOptionTable() {
 		super("CPOption", CPOptionTable::new);

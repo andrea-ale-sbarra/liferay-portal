@@ -323,12 +323,14 @@ create table CPOption (
 	modifiedDate DATE null,
 	name STRING null,
 	description STRING null,
+	COValueDataSource VARCHAR(75) null,
 	DDMFormFieldTypeName VARCHAR(75) null,
 	facetable BOOLEAN,
 	required BOOLEAN,
 	skuContributor BOOLEAN,
 	key_ VARCHAR(75) null,
 	lastPublishDate DATE null,
+	typeSettings VARCHAR(75) null,
 	primary key (CPOptionId, ctCollectionId)
 );
 

@@ -897,12 +897,14 @@
 
 		<column localized="true" name="name" type="String" />
 		<column localized="true" name="description" type="String" />
+		<column name="COValueDataSource" type="String" />
 		<column name="DDMFormFieldTypeName" type="String" />
 		<column name="facetable" type="boolean" />
 		<column name="required" type="boolean" />
 		<column name="skuContributor" type="boolean" />
 		<column name="key" type="String" />
 		<column name="lastPublishDate" type="Date" />
+		<column name="typeSettings" type="String" />
 
 		<!-- Order -->
 
