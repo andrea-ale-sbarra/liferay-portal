@@ -1,4 +1,6 @@
-<%--
+<%@ page import="com.liferay.commerce.product.data.source.CPDataSource" %>
+<%@ page
+	import="com.liferay.commerce.product.data.source.CommerceOptionValueDataSource" %><%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -102,6 +104,17 @@ else {
 				<aui:input checked="<%= (cpOption == null) ? false : cpOption.isSkuContributor() %>" name="skuContributor" type="toggle-switch" />
 
 				<aui:input helpMessage="key-help" name="key" />
+
+				<%
+					for (CommerceOptionValueDataSource commerceOptionValueDataSource : cpOptionDisplayContext.getCOValueDataSources()) {
+						String selectedDataSource = cpOptionDisplayContext.getDataSource();
+				%>
+
+				<aui:option label="<%= HtmlUtil.escape(commerceOptionValueDataSource.getLabel(locale)) %>" selected="<%= selectedDataSource.equals(commerceOptionValueDataSource.getName()) %>" value="<%= commerceOptionValueDataSource.getName() %>" />
+
+				<%
+					}
+				%>
 			</aui:fieldset>
 
 			<c:if test="<%= CustomAttributesUtil.hasCustomAttributes(company.getCompanyId(), CPOption.class.getName(), cpOptionId, null) %>">

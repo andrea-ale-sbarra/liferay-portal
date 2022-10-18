@@ -17,6 +17,8 @@ package com.liferay.commerce.product.options.web.internal.display.context;
 import com.liferay.commerce.frontend.model.HeaderActionModel;
 import com.liferay.commerce.product.configuration.CPOptionConfiguration;
 import com.liferay.commerce.product.constants.CPConstants;
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSource;
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSourceRegistry;
 import com.liferay.commerce.product.display.context.helper.CPRequestHelper;
 import com.liferay.commerce.product.model.CPOption;
 import com.liferay.commerce.product.servlet.taglib.ui.CPDefinitionScreenNavigationConstants;
@@ -61,12 +63,14 @@ import javax.servlet.http.HttpServletRequest;
 public class CPOptionDisplayContext {
 
 	public CPOptionDisplayContext(
-			ConfigurationProvider configurationProvider, CPOption cpOption,
-			DDMFormFieldTypeServicesTracker ddmFormFieldTypeServicesTracker,
-			PortletResourcePermission portletResourcePermission,
-			HttpServletRequest httpServletRequest)
+		CommerceOptionValueDataSourceRegistry commerceOptionValueDataSourceRegistry,
+		ConfigurationProvider configurationProvider, CPOption cpOption,
+		DDMFormFieldTypeServicesTracker ddmFormFieldTypeServicesTracker,
+		PortletResourcePermission portletResourcePermission,
+		HttpServletRequest httpServletRequest)
 		throws PortalException {
 
+		_commerceOptionValueDataSourceRegistry = commerceOptionValueDataSourceRegistry;
 		_configurationProvider = configurationProvider;
 		_cpOption = cpOption;
 		_ddmFormFieldTypeServicesTracker = ddmFormFieldTypeServicesTracker;
@@ -147,6 +151,10 @@ public class CPOptionDisplayContext {
 
 		return DDMFormFieldTypeUtil.getDDMFormFieldTypesAllowed(
 			ddmFormFieldTypes, ddmFormFieldTypesAllowed);
+	}
+
+	public List<CommerceOptionValueDataSource> getCOValueDataSources() {
+		return _commerceOptionValueDataSourceRegistry.getCommerceOptionValueDataSources();
 	}
 
 	public List<HeaderActionModel> getHeaderActionModels() {
@@ -318,5 +326,6 @@ public class CPOptionDisplayContext {
 	private final DDMFormFieldTypeServicesTracker
 		_ddmFormFieldTypeServicesTracker;
 	private final PortletResourcePermission _portletResourcePermission;
+	private final CommerceOptionValueDataSourceRegistry _commerceOptionValueDataSourceRegistry;
 
 }

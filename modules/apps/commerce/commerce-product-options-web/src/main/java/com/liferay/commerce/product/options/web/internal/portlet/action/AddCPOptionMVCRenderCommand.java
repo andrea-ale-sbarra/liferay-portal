@@ -16,6 +16,7 @@ package com.liferay.commerce.product.options.web.internal.portlet.action;
 
 import com.liferay.commerce.product.constants.CPConstants;
 import com.liferay.commerce.product.constants.CPPortletKeys;
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSourceRegistry;
 import com.liferay.commerce.product.options.web.internal.display.context.CPOptionDisplayContext;
 import com.liferay.commerce.product.service.CPOptionService;
 import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldTypeServicesTracker;
@@ -52,8 +53,9 @@ public class AddCPOptionMVCRenderCommand implements MVCRenderCommand {
 
 		try {
 			CPOptionDisplayContext cpOptionDisplayContext =
-				new CPOptionDisplayContext(
-					_configurationProvider, null,
+				new CPOptionDisplayContext(_commerceOptionValueDataSourceRegistry,
+					_configurationProvider,
+					null,
 					_ddmFormFieldTypeServicesTracker,
 					_portletResourcePermission,
 					_portal.getHttpServletRequest(renderRequest));
@@ -67,6 +69,10 @@ public class AddCPOptionMVCRenderCommand implements MVCRenderCommand {
 
 		return "/option/add_cp_option.jsp";
 	}
+
+	@Reference
+	private CommerceOptionValueDataSourceRegistry
+		_commerceOptionValueDataSourceRegistry;
 
 	@Reference
 	private ConfigurationProvider _configurationProvider;

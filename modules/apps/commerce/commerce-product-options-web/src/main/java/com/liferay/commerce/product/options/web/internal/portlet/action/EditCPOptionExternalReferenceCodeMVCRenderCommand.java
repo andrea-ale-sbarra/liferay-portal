@@ -16,6 +16,7 @@ package com.liferay.commerce.product.options.web.internal.portlet.action;
 
 import com.liferay.commerce.product.constants.CPConstants;
 import com.liferay.commerce.product.constants.CPPortletKeys;
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSourceRegistry;
 import com.liferay.commerce.product.model.CPOption;
 import com.liferay.commerce.product.options.web.internal.display.context.CPOptionDisplayContext;
 import com.liferay.commerce.product.service.CPOptionService;
@@ -59,8 +60,9 @@ public class EditCPOptionExternalReferenceCodeMVCRenderCommand
 			CPOption cpOption = _cpOptionService.fetchCPOption(cpOptionId);
 
 			CPOptionDisplayContext cpOptionDisplayContext =
-				new CPOptionDisplayContext(
-					_configurationProvider, cpOption,
+				new CPOptionDisplayContext(_commerceOptionValueDataSourceRegistry,
+					_configurationProvider,
+					cpOption,
 					_ddmFormFieldTypeServicesTracker,
 					_portletResourcePermission,
 					_portal.getHttpServletRequest(renderRequest));
@@ -74,6 +76,10 @@ public class EditCPOptionExternalReferenceCodeMVCRenderCommand
 
 		return "/option/external_reference_code.jsp";
 	}
+
+	@Reference
+	private CommerceOptionValueDataSourceRegistry
+		_commerceOptionValueDataSourceRegistry;
 
 	@Reference
 	private ConfigurationProvider _configurationProvider;

@@ -16,6 +16,7 @@ package com.liferay.commerce.product.options.web.internal.portlet;
 
 import com.liferay.commerce.product.constants.CPConstants;
 import com.liferay.commerce.product.constants.CPPortletKeys;
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSourceRegistry;
 import com.liferay.commerce.product.options.web.internal.display.context.CPOptionDisplayContext;
 import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldTypeServicesTracker;
 import com.liferay.frontend.js.loader.modules.extender.npm.NPMResolver;
@@ -71,8 +72,9 @@ public class CPOptionsPortlet extends MVCPortlet {
 
 		try {
 			CPOptionDisplayContext cpOptionDisplayContext =
-				new CPOptionDisplayContext(
-					_configurationProvider, null,
+				new CPOptionDisplayContext(_commerceOptionValueDataSourceRegistry,
+					_configurationProvider,
+					null,
 					_ddmFormFieldTypeServicesTracker,
 					_portletResourcePermission,
 					_portal.getHttpServletRequest(renderRequest));
@@ -92,6 +94,8 @@ public class CPOptionsPortlet extends MVCPortlet {
 	@Reference
 	private ConfigurationProvider _configurationProvider;
 
+	@Reference
+	private CommerceOptionValueDataSourceRegistry _commerceOptionValueDataSourceRegistry;
 	@Reference
 	private DDMFormFieldTypeServicesTracker _ddmFormFieldTypeServicesTracker;
 
