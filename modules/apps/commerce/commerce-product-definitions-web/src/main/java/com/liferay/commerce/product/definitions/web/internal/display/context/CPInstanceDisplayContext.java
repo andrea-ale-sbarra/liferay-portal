@@ -343,8 +343,10 @@ public class CPInstanceDisplayContext extends BaseCPDefinitionsDisplayContext {
 		return _ddmHelper.renderCPInstanceOptions(
 			getCPDefinitionId(), null, cpDefinition.isIgnoreSKUCombinations(),
 			renderRequest, renderResponse,
-			_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(cpRequestHelper.getCompanyId(), commerceContext.getCommerceChannelGroupId()
-				, getCPDefinitionId(), true, false));
+			_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(
+				cpRequestHelper.getCompanyId(),
+				commerceContext.getCommerceChannelGroupId(),
+				getCPDefinitionId(), true, false));
 	}
 
 	public BigDecimal round(BigDecimal value) throws PortalException {

@@ -171,9 +171,10 @@ public interface CPDefinitionOptionRelService extends BaseService {
 
 	public CPDefinitionOptionRel updateCPDefinitionOptionRel(
 			long cpDefinitionOptionRelId, long cpOptionId,
-			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
-			String ddmFormFieldTypeName, double priority, boolean facetable,
-			boolean required, boolean skuContributor, String priceType,
+			Map<Locale, String> nameMap, String covDataSource,
+			Map<Locale, String> descriptionMap, String ddmFormFieldTypeName,
+			double priority, boolean facetable, boolean required,
+			boolean skuContributor, String priceType,
 			ServiceContext serviceContext)
 		throws PortalException;
 

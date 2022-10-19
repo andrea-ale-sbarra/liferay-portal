@@ -4264,14 +4264,12 @@ public class CPOptionPersistenceImpl
 		ctIgnoreColumnNames.add("modifiedDate");
 		ctStrictColumnNames.add("name");
 		ctStrictColumnNames.add("description");
-		ctStrictColumnNames.add("COValueDataSource");
 		ctStrictColumnNames.add("DDMFormFieldTypeName");
 		ctStrictColumnNames.add("facetable");
 		ctStrictColumnNames.add("required");
 		ctStrictColumnNames.add("skuContributor");
 		ctStrictColumnNames.add("key_");
 		ctStrictColumnNames.add("lastPublishDate");
-		ctStrictColumnNames.add("typeSettings");
 
 		_ctColumnNamesMap.put(
 			CTColumnResolutionType.CONTROL, ctControlColumnNames);

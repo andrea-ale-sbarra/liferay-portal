@@ -76,7 +76,7 @@ public class CPOptionCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(41);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -102,8 +102,6 @@ public class CPOptionCacheModel
 		sb.append(name);
 		sb.append(", description=");
 		sb.append(description);
-		sb.append(", COValueDataSource=");
-		sb.append(COValueDataSource);
 		sb.append(", DDMFormFieldTypeName=");
 		sb.append(DDMFormFieldTypeName);
 		sb.append(", facetable=");
@@ -116,8 +114,6 @@ public class CPOptionCacheModel
 		sb.append(key);
 		sb.append(", lastPublishDate=");
 		sb.append(lastPublishDate);
-		sb.append(", typeSettings=");
-		sb.append(typeSettings);
 		sb.append("}");
 
 		return sb.toString();
@@ -183,13 +179,6 @@ public class CPOptionCacheModel
 			cpOptionImpl.setDescription(description);
 		}
 
-		if (COValueDataSource == null) {
-			cpOptionImpl.setCOValueDataSource("");
-		}
-		else {
-			cpOptionImpl.setCOValueDataSource(COValueDataSource);
-		}
-
 		if (DDMFormFieldTypeName == null) {
 			cpOptionImpl.setDDMFormFieldTypeName("");
 		}
@@ -215,13 +204,6 @@ public class CPOptionCacheModel
 			cpOptionImpl.setLastPublishDate(new Date(lastPublishDate));
 		}
 
-		if (typeSettings == null) {
-			cpOptionImpl.setTypeSettings("");
-		}
-		else {
-			cpOptionImpl.setTypeSettings(typeSettings);
-		}
-
 		cpOptionImpl.resetOriginalValues();
 
 		return cpOptionImpl;
@@ -245,7 +227,6 @@ public class CPOptionCacheModel
 		modifiedDate = objectInput.readLong();
 		name = objectInput.readUTF();
 		description = objectInput.readUTF();
-		COValueDataSource = objectInput.readUTF();
 		DDMFormFieldTypeName = objectInput.readUTF();
 
 		facetable = objectInput.readBoolean();
@@ -255,7 +236,6 @@ public class CPOptionCacheModel
 		skuContributor = objectInput.readBoolean();
 		key = objectInput.readUTF();
 		lastPublishDate = objectInput.readLong();
-		typeSettings = objectInput.readUTF();
 	}
 
 	@Override
@@ -308,13 +288,6 @@ public class CPOptionCacheModel
 			objectOutput.writeUTF(description);
 		}
 
-		if (COValueDataSource == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(COValueDataSource);
-		}
-
 		if (DDMFormFieldTypeName == null) {
 			objectOutput.writeUTF("");
 		}
@@ -336,13 +309,6 @@ public class CPOptionCacheModel
 		}
 
 		objectOutput.writeLong(lastPublishDate);
-
-		if (typeSettings == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(typeSettings);
-		}
 	}
 
 	public long mvccVersion;
@@ -357,13 +323,11 @@ public class CPOptionCacheModel
 	public long modifiedDate;
 	public String name;
 	public String description;
-	public String COValueDataSource;
 	public String DDMFormFieldTypeName;
 	public boolean facetable;
 	public boolean required;
 	public boolean skuContributor;
 	public String key;
 	public long lastPublishDate;
-	public String typeSettings;
 
 }

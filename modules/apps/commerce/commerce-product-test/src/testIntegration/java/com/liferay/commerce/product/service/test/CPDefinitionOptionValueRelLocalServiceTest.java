@@ -127,8 +127,8 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel1.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel1.getCPOptionId(),
-			cpDefinitionOptionRel1.getNameMap(),
-			cpDefinitionOptionRel1.getDescriptionMap(),
+			cpDefinitionOptionRel1.getNameMap(), cpDefinitionOptionRel1.getCOValueDataSource()
+			, cpDefinitionOptionRel1.getDescriptionMap(),
 			cpDefinitionOptionRel1.getDDMFormFieldTypeName(),
 			cpDefinitionOptionRel1.getPriority(),
 			cpDefinitionOptionRel1.isFacetable(), false, false,
@@ -143,8 +143,8 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel2.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel2.getCPOptionId(),
-			cpDefinitionOptionRel2.getNameMap(),
-			cpDefinitionOptionRel2.getDescriptionMap(),
+			cpDefinitionOptionRel2.getNameMap(), cpDefinitionOptionRel2.getCOValueDataSource()
+			, cpDefinitionOptionRel2.getDescriptionMap(),
 			cpDefinitionOptionRel2.getDDMFormFieldTypeName(),
 			cpDefinitionOptionRel2.getPriority(),
 			cpDefinitionOptionRel2.isFacetable(), false, false,
@@ -204,8 +204,8 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
-			cpDefinitionOptionRel.getNameMap(),
-			cpDefinitionOptionRel.getDescriptionMap(),
+			cpDefinitionOptionRel.getNameMap(), cpDefinitionOptionRel.getCOValueDataSource()
+			, cpDefinitionOptionRel.getDescriptionMap(),
 			cpDefinitionOptionRel.getDDMFormFieldTypeName(),
 			cpDefinitionOptionRel.getPriority(),
 			cpDefinitionOptionRel.isFacetable(),
@@ -285,8 +285,8 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
-			cpDefinitionOptionRel.getNameMap(),
-			cpDefinitionOptionRel.getDescriptionMap(),
+			cpDefinitionOptionRel.getNameMap(), cpDefinitionOptionRel.getCOValueDataSource()
+			, cpDefinitionOptionRel.getDescriptionMap(),
 			cpDefinitionOptionRel.getDDMFormFieldTypeName(),
 			cpDefinitionOptionRel.getPriority(),
 			cpDefinitionOptionRel.isFacetable(),
@@ -437,8 +437,8 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
-			cpDefinitionOptionRel.getNameMap(),
-			cpDefinitionOptionRel.getDescriptionMap(),
+			cpDefinitionOptionRel.getNameMap(), cpDefinitionOptionRel.getCOValueDataSource()
+			, cpDefinitionOptionRel.getDescriptionMap(),
 			cpDefinitionOptionRel.getDDMFormFieldTypeName(),
 			cpDefinitionOptionRel.getPriority(),
 			cpDefinitionOptionRel.isFacetable(),
@@ -639,8 +639,8 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
-			cpDefinitionOptionRel.getNameMap(),
-			cpDefinitionOptionRel.getDescriptionMap(),
+			cpDefinitionOptionRel.getNameMap(), cpDefinitionOptionRel.getCOValueDataSource()
+			, cpDefinitionOptionRel.getDescriptionMap(),
 			cpDefinitionOptionRel.getDDMFormFieldTypeName(),
 			cpDefinitionOptionRel.getPriority(),
 			cpDefinitionOptionRel.isFacetable(),
@@ -679,8 +679,8 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
-			cpDefinitionOptionRel.getNameMap(),
-			cpDefinitionOptionRel.getDescriptionMap(),
+			cpDefinitionOptionRel.getNameMap(), cpDefinitionOptionRel.getCOValueDataSource()
+			, cpDefinitionOptionRel.getDescriptionMap(),
 			cpDefinitionOptionRel.getDDMFormFieldTypeName(),
 			cpDefinitionOptionRel.getPriority(),
 			cpDefinitionOptionRel.isFacetable(),
@@ -812,8 +812,8 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		_cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
-			cpDefinitionOptionRel.getNameMap(),
-			cpDefinitionOptionRel.getDescriptionMap(),
+			cpDefinitionOptionRel.getNameMap(), cpDefinitionOptionRel.getCOValueDataSource()
+			, cpDefinitionOptionRel.getDescriptionMap(),
 			cpDefinitionOptionRel.getDDMFormFieldTypeName(),
 			cpDefinitionOptionRel.getPriority(),
 			cpDefinitionOptionRel.isFacetable(),

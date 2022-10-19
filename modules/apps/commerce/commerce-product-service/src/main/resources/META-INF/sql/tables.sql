@@ -168,6 +168,7 @@ create table CPDefinitionOptionRel (
 	CPDefinitionId LONG,
 	CPOptionId LONG,
 	name STRING null,
+	COValueDataSource VARCHAR(75) null,
 	description STRING null,
 	DDMFormFieldTypeName VARCHAR(75) null,
 	priority DOUBLE,
@@ -176,6 +177,7 @@ create table CPDefinitionOptionRel (
 	skuContributor BOOLEAN,
 	key_ VARCHAR(75) null,
 	priceType VARCHAR(75) null,
+	typeSettings VARCHAR(75) null,
 	primary key (CPDefinitionOptionRelId, ctCollectionId)
 );
 
@@ -323,14 +325,12 @@ create table CPOption (
 	modifiedDate DATE null,
 	name STRING null,
 	description STRING null,
-	COValueDataSource VARCHAR(75) null,
 	DDMFormFieldTypeName VARCHAR(75) null,
 	facetable BOOLEAN,
 	required BOOLEAN,
 	skuContributor BOOLEAN,
 	key_ VARCHAR(75) null,
 	lastPublishDate DATE null,
-	typeSettings VARCHAR(75) null,
 	primary key (CPOptionId, ctCollectionId)
 );
 

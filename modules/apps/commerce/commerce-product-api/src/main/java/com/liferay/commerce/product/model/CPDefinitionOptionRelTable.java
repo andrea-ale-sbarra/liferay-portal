@@ -70,6 +70,10 @@ public class CPDefinitionOptionRelTable
 			"CPOptionId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<CPDefinitionOptionRelTable, String> name = createColumn(
 		"name", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<CPDefinitionOptionRelTable, String> COValueDataSource =
+		createColumn(
+			"COValueDataSource", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
 	public final Column<CPDefinitionOptionRelTable, String> description =
 		createColumn(
 			"description", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
@@ -95,6 +99,9 @@ public class CPDefinitionOptionRelTable
 	public final Column<CPDefinitionOptionRelTable, String> priceType =
 		createColumn(
 			"priceType", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<CPDefinitionOptionRelTable, String> typeSettings =
+		createColumn(
+			"typeSettings", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 
 	private CPDefinitionOptionRelTable() {
 		super("CPDefinitionOptionRel", CPDefinitionOptionRelTable::new);

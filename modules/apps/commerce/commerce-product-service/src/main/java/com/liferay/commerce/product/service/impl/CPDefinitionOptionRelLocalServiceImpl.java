@@ -34,6 +34,7 @@ import com.liferay.commerce.product.service.persistence.CPDefinitionOptionValueR
 import com.liferay.commerce.product.service.persistence.CPInstanceOptionValueRelPersistence;
 import com.liferay.commerce.product.util.JsonHelper;
 import com.liferay.expando.kernel.service.ExpandoRowLocalService;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -643,7 +644,7 @@ public class CPDefinitionOptionRelLocalServiceImpl
 		throws PortalException {
 
 		return cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
-			cpDefinitionOptionRelId, cpOptionId, nameMap, descriptionMap,
+			cpDefinitionOptionRelId, cpOptionId, nameMap, StringPool.BLANK, descriptionMap,
 			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
 			null, serviceContext);
 	}
@@ -651,11 +652,11 @@ public class CPDefinitionOptionRelLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPDefinitionOptionRel updateCPDefinitionOptionRel(
-			long cpDefinitionOptionRelId, long cpOptionId,
-			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
-			String ddmFormFieldTypeName, double priority, boolean facetable,
-			boolean required, boolean skuContributor, String priceType,
-			ServiceContext serviceContext)
+		long cpDefinitionOptionRelId, long cpOptionId,
+		Map<Locale, String> nameMap, String covDataSource, Map<Locale, String> descriptionMap,
+		String ddmFormFieldTypeName, double priority, boolean facetable,
+		boolean required, boolean skuContributor, String priceType,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		_validateDDMFormFieldTypeName(ddmFormFieldTypeName, skuContributor);
@@ -681,6 +682,7 @@ public class CPDefinitionOptionRelLocalServiceImpl
 
 		cpDefinitionOptionRel.setCPOptionId(cpOptionId);
 		cpDefinitionOptionRel.setNameMap(nameMap);
+		cpDefinitionOptionRel.setCOValueDataSource(covDataSource);
 		cpDefinitionOptionRel.setDescriptionMap(descriptionMap);
 		cpDefinitionOptionRel.setDDMFormFieldTypeName(ddmFormFieldTypeName);
 		cpDefinitionOptionRel.setPriority(priority);

@@ -5564,6 +5564,7 @@ public class CPDefinitionOptionRelPersistenceImpl
 		ctStrictColumnNames.add("CPDefinitionId");
 		ctStrictColumnNames.add("CPOptionId");
 		ctStrictColumnNames.add("name");
+		ctStrictColumnNames.add("COValueDataSource");
 		ctStrictColumnNames.add("description");
 		ctStrictColumnNames.add("DDMFormFieldTypeName");
 		ctStrictColumnNames.add("priority");
@@ -5572,6 +5573,7 @@ public class CPDefinitionOptionRelPersistenceImpl
 		ctStrictColumnNames.add("skuContributor");
 		ctStrictColumnNames.add("key_");
 		ctStrictColumnNames.add("priceType");
+		ctStrictColumnNames.add("typeSettings");
 
 		_ctColumnNamesMap.put(
 			CTColumnResolutionType.CONTROL, ctControlColumnNames);

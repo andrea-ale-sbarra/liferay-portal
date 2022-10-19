@@ -292,12 +292,13 @@ public class CPAttachmentFileEntriesDisplayContext
 			(CommerceContext)httpServletRequest.getAttribute(
 				CommerceWebKeys.COMMERCE_CONTEXT);
 
-
 		return _ddmHelper.renderCPAttachmentFileEntryOptions(
 			getCPDefinitionId(), json, pageContext, renderRequest,
 			renderResponse,
-			_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(cpRequestHelper.getCompanyId(), commerceContext.getCommerceChannelGroupId()
-				, getCPDefinitionId(), true, false));
+			_cpInstanceHelper.getCPDefinitionOptionValueRelsMap(
+				cpRequestHelper.getCompanyId(),
+				commerceContext.getCommerceChannelGroupId(),
+				getCPDefinitionId(), true, false));
 	}
 
 	private String _getTypeLabel(int type) {

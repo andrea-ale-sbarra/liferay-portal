@@ -281,11 +281,11 @@ public class CPDefinitionOptionRelServiceImpl
 
 	@Override
 	public CPDefinitionOptionRel updateCPDefinitionOptionRel(
-			long cpDefinitionOptionRelId, long cpOptionId,
-			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
-			String ddmFormFieldTypeName, double priority, boolean facetable,
-			boolean required, boolean skuContributor, String priceType,
-			ServiceContext serviceContext)
+		long cpDefinitionOptionRelId, long cpOptionId,
+		Map<Locale, String> nameMap, String covDataSource, Map<Locale, String> descriptionMap,
+		String ddmFormFieldTypeName, double priority, boolean facetable,
+		boolean required, boolean skuContributor, String priceType,
+		ServiceContext serviceContext)
 		throws PortalException {
 
 		CPDefinitionOptionRel cpDefinitionOptionRel =
@@ -297,7 +297,7 @@ public class CPDefinitionOptionRelServiceImpl
 
 		return cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(), cpOptionId,
-			nameMap, descriptionMap, ddmFormFieldTypeName, priority, facetable,
+			nameMap, covDataSource, descriptionMap, ddmFormFieldTypeName, priority, facetable,
 			required, skuContributor, priceType, serviceContext);
 	}
 

@@ -1,3 +1,5 @@
+<%@ page import="com.liferay.commerce.product.data.source.CommerceOptionValueDataSource" %>
+
 <%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
@@ -93,6 +95,23 @@ String defaultLanguageId = cpDefinitionOptionRelDisplayContext.getCatalogDefault
 					<aui:select name="priceType" showEmptyOption="<%= true %>">
 						<aui:option label="static" selected="<%= (cpDefinitionOptionRel != null) && cpDefinitionOptionRel.isPriceTypeStatic() %>" value="<%= CPConstants.PRODUCT_OPTION_PRICE_TYPE_STATIC %>" />
 						<aui:option label="dynamic" selected="<%= (cpDefinitionOptionRel != null) && cpDefinitionOptionRel.isPriceTypeDynamic() %>" value="<%= CPConstants.PRODUCT_OPTION_PRICE_TYPE_DYNAMIC %>" />
+					</aui:select>
+				</div>
+
+				<div class="col-12">
+					<aui:select name="commerceOptionValueDataSource" showEmptyOption="<%= true %>">
+
+						<%
+						for (CommerceOptionValueDataSource commerceOptionValueDataSource : cpDefinitionOptionRelDisplayContext.getCOValueDataSources()) {
+							String selectedDataSource = cpDefinitionOptionRelDisplayContext.getDataSource();
+						%>
+
+							<aui:option label="<%= HtmlUtil.escape(commerceOptionValueDataSource.getLabel(locale)) %>" selected="<%= selectedDataSource.equals(commerceOptionValueDataSource.getName()) %>" value="<%= commerceOptionValueDataSource.getName() %>" />
+
+						<%
+						}
+						%>
+
 					</aui:select>
 				</div>
 			</div>

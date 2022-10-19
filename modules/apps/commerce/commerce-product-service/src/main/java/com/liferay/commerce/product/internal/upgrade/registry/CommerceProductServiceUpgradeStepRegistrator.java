@@ -336,9 +336,9 @@ public class CommerceProductServiceUpgradeStepRegistrator
 		registry.register(
 			"4.0.1", "4.1.0",
 			UpgradeProcessFactory.addColumns(
-				"CPOption", "COValueDataSource VARCHAR(75)"),
+				"CPDefinitionOptionRel", "COValueDataSource VARCHAR(75)"),
 			UpgradeProcessFactory.addColumns(
-				"CPOption", "typeSettings TEXT"));
+				"CPDefinitionOptionRel", "typeSettings TEXT"));
 
 
 		if (_log.isInfoEnabled()) {

@@ -156,12 +156,15 @@ public class EditCPDefinitionOptionRelMVCActionCommand
 		boolean skuContributor = ParamUtil.getBoolean(
 			actionRequest, "skuContributor");
 		String priceType = ParamUtil.getString(actionRequest, "priceType");
+		String commerceOptionValueDataSource = ParamUtil.getString(
+			actionRequest, "commerceOptionValueDataSource");
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			CPDefinitionOptionRel.class.getName(), actionRequest);
 
 		return _cpDefinitionOptionRelService.updateCPDefinitionOptionRel(
-			cpDefinitionOptionRelId, cpOptionId, nameMap, descriptionMap,
+			cpDefinitionOptionRelId, cpOptionId, nameMap,
+			commerceOptionValueDataSource, descriptionMap,
 			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
 			priceType, serviceContext);
 	}

@@ -146,8 +146,6 @@ public class CPOptionPersistenceTest {
 
 		newCPOption.setDescription(RandomTestUtil.randomString());
 
-		newCPOption.setCOValueDataSource(RandomTestUtil.randomString());
-
 		newCPOption.setDDMFormFieldTypeName(RandomTestUtil.randomString());
 
 		newCPOption.setFacetable(RandomTestUtil.randomBoolean());
@@ -159,8 +157,6 @@ public class CPOptionPersistenceTest {
 		newCPOption.setKey(RandomTestUtil.randomString());
 
 		newCPOption.setLastPublishDate(RandomTestUtil.nextDate());
-
-		newCPOption.setTypeSettings(RandomTestUtil.randomString());
 
 		_cpOptions.add(_persistence.update(newCPOption));
 
@@ -194,9 +190,6 @@ public class CPOptionPersistenceTest {
 		Assert.assertEquals(
 			existingCPOption.getDescription(), newCPOption.getDescription());
 		Assert.assertEquals(
-			existingCPOption.getCOValueDataSource(),
-			newCPOption.getCOValueDataSource());
-		Assert.assertEquals(
 			existingCPOption.getDDMFormFieldTypeName(),
 			newCPOption.getDDMFormFieldTypeName());
 		Assert.assertEquals(
@@ -210,8 +203,6 @@ public class CPOptionPersistenceTest {
 		Assert.assertEquals(
 			Time.getShortTimestamp(existingCPOption.getLastPublishDate()),
 			Time.getShortTimestamp(newCPOption.getLastPublishDate()));
-		Assert.assertEquals(
-			existingCPOption.getTypeSettings(), newCPOption.getTypeSettings());
 	}
 
 	@Test
@@ -286,9 +277,8 @@ public class CPOptionPersistenceTest {
 			true, "externalReferenceCode", true, "CPOptionId", true,
 			"companyId", true, "userId", true, "userName", true, "createDate",
 			true, "modifiedDate", true, "name", true, "description", true,
-			"COValueDataSource", true, "DDMFormFieldTypeName", true,
-			"facetable", true, "required", true, "skuContributor", true, "key",
-			true, "lastPublishDate", true, "typeSettings", true);
+			"DDMFormFieldTypeName", true, "facetable", true, "required", true,
+			"skuContributor", true, "key", true, "lastPublishDate", true);
 	}
 
 	@Test
@@ -598,8 +588,6 @@ public class CPOptionPersistenceTest {
 
 		cpOption.setDescription(RandomTestUtil.randomString());
 
-		cpOption.setCOValueDataSource(RandomTestUtil.randomString());
-
 		cpOption.setDDMFormFieldTypeName(RandomTestUtil.randomString());
 
 		cpOption.setFacetable(RandomTestUtil.randomBoolean());
@@ -611,8 +599,6 @@ public class CPOptionPersistenceTest {
 		cpOption.setKey(RandomTestUtil.randomString());
 
 		cpOption.setLastPublishDate(RandomTestUtil.nextDate());
-
-		cpOption.setTypeSettings(RandomTestUtil.randomString());
 
 		_cpOptions.add(_persistence.update(cpOption));
 

@@ -584,7 +584,7 @@ public class CPDefinitionOptionRelLocalServiceUtil {
 
 	public static CPDefinitionOptionRel updateCPDefinitionOptionRel(
 			long cpDefinitionOptionRelId, long cpOptionId,
-			Map<java.util.Locale, String> nameMap,
+			Map<java.util.Locale, String> nameMap, String covDataSource,
 			Map<java.util.Locale, String> descriptionMap,
 			String ddmFormFieldTypeName, double priority, boolean facetable,
 			boolean required, boolean skuContributor, String priceType,
@@ -592,9 +592,9 @@ public class CPDefinitionOptionRelLocalServiceUtil {
 		throws PortalException {
 
 		return getService().updateCPDefinitionOptionRel(
-			cpDefinitionOptionRelId, cpOptionId, nameMap, descriptionMap,
-			ddmFormFieldTypeName, priority, facetable, required, skuContributor,
-			priceType, serviceContext);
+			cpDefinitionOptionRelId, cpOptionId, nameMap, covDataSource,
+			descriptionMap, ddmFormFieldTypeName, priority, facetable, required,
+			skuContributor, priceType, serviceContext);
 	}
 
 	public static CPDefinitionOptionRelLocalService getService() {

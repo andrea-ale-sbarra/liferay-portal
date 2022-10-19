@@ -16,6 +16,8 @@ package com.liferay.commerce.product.definitions.web.internal.display.context;
 
 import com.liferay.commerce.product.configuration.CPOptionConfiguration;
 import com.liferay.commerce.product.constants.CPConstants;
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSource;
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSourceRegistry;
 import com.liferay.commerce.product.display.context.BaseCPDefinitionsDisplayContext;
 import com.liferay.commerce.product.item.selector.criterion.CPOptionItemSelectorCriterion;
 import com.liferay.commerce.product.model.CPDefinitionOptionRel;
@@ -41,6 +43,7 @@ import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.settings.SystemSettingsLocator;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -54,6 +57,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.portlet.PortletPreferences;
 import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,13 +73,33 @@ public class CPDefinitionOptionRelDisplayContext
 		ActionHelper actionHelper, HttpServletRequest httpServletRequest,
 		ConfigurationProvider configurationProvider,
 		DDMFormFieldTypeServicesTracker ddmFormFieldTypeServicesTracker,
-		ItemSelector itemSelector) {
+		ItemSelector itemSelector,
+		CommerceOptionValueDataSourceRegistry
+			commerceOptionValueDataSourceRegistry) {
 
 		super(actionHelper, httpServletRequest);
 
 		_configurationProvider = configurationProvider;
 		_ddmFormFieldTypeServicesTracker = ddmFormFieldTypeServicesTracker;
 		_itemSelector = itemSelector;
+		_commerceOptionValueDataSourceRegistry =
+			commerceOptionValueDataSourceRegistry;
+	}
+
+	public List<CommerceOptionValueDataSource> getCOValueDataSources() {
+		return _commerceOptionValueDataSourceRegistry.
+			getCommerceOptionValueDataSources();
+	}
+
+	public String getDataSource() throws PortalException {
+		CPDefinitionOptionRel cpDefinitionOptionRel =
+			getCPDefinitionOptionRel();
+
+		if(Validator.isNotNull(cpDefinitionOptionRel.getCOValueDataSource())){
+			_dataSource = cpDefinitionOptionRel.getCOValueDataSource();
+		}
+
+		return _dataSource;
 	}
 
 	public CPDefinitionOptionRel getCPDefinitionOptionRel()
@@ -227,6 +251,10 @@ public class CPDefinitionOptionRelDisplayContext
 	private static final Log _log = LogFactoryUtil.getLog(
 		CPDefinitionOptionRelDisplayContext.class);
 
+	private String _dataSource = StringPool.BLANK;
+
+	private final CommerceOptionValueDataSourceRegistry
+		_commerceOptionValueDataSourceRegistry;
 	private final ConfigurationProvider _configurationProvider;
 	private CPDefinitionOptionRel _cpDefinitionOptionRel;
 	private final DDMFormFieldTypeServicesTracker

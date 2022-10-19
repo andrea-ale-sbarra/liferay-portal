@@ -443,21 +443,6 @@ public interface CPOptionModel
 		Map<Locale, String> descriptionMap, Locale defaultLocale);
 
 	/**
-	 * Returns the co value data source of this cp option.
-	 *
-	 * @return the co value data source of this cp option
-	 */
-	@AutoEscape
-	public String getCOValueDataSource();
-
-	/**
-	 * Sets the co value data source of this cp option.
-	 *
-	 * @param COValueDataSource the co value data source of this cp option
-	 */
-	public void setCOValueDataSource(String COValueDataSource);
-
-	/**
 	 * Returns the ddm form field type name of this cp option.
 	 *
 	 * @return the ddm form field type name of this cp option
@@ -563,21 +548,6 @@ public interface CPOptionModel
 	 * @param lastPublishDate the last publish date of this cp option
 	 */
 	public void setLastPublishDate(Date lastPublishDate);
-
-	/**
-	 * Returns the type settings of this cp option.
-	 *
-	 * @return the type settings of this cp option
-	 */
-	@AutoEscape
-	public String getTypeSettings();
-
-	/**
-	 * Sets the type settings of this cp option.
-	 *
-	 * @param typeSettings the type settings of this cp option
-	 */
-	public void setTypeSettings(String typeSettings);
 
 	@Override
 	public String[] getAvailableLanguageIds();

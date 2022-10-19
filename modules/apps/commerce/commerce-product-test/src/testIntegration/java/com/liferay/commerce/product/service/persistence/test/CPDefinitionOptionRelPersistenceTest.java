@@ -153,6 +153,9 @@ public class CPDefinitionOptionRelPersistenceTest {
 
 		newCPDefinitionOptionRel.setName(RandomTestUtil.randomString());
 
+		newCPDefinitionOptionRel.setCOValueDataSource(
+			RandomTestUtil.randomString());
+
 		newCPDefinitionOptionRel.setDescription(RandomTestUtil.randomString());
 
 		newCPDefinitionOptionRel.setDDMFormFieldTypeName(
@@ -170,6 +173,8 @@ public class CPDefinitionOptionRelPersistenceTest {
 		newCPDefinitionOptionRel.setKey(RandomTestUtil.randomString());
 
 		newCPDefinitionOptionRel.setPriceType(RandomTestUtil.randomString());
+
+		newCPDefinitionOptionRel.setTypeSettings(RandomTestUtil.randomString());
 
 		_cpDefinitionOptionRels.add(
 			_persistence.update(newCPDefinitionOptionRel));
@@ -220,6 +225,9 @@ public class CPDefinitionOptionRelPersistenceTest {
 			existingCPDefinitionOptionRel.getName(),
 			newCPDefinitionOptionRel.getName());
 		Assert.assertEquals(
+			existingCPDefinitionOptionRel.getCOValueDataSource(),
+			newCPDefinitionOptionRel.getCOValueDataSource());
+		Assert.assertEquals(
 			existingCPDefinitionOptionRel.getDescription(),
 			newCPDefinitionOptionRel.getDescription());
 		Assert.assertEquals(
@@ -243,6 +251,9 @@ public class CPDefinitionOptionRelPersistenceTest {
 		Assert.assertEquals(
 			existingCPDefinitionOptionRel.getPriceType(),
 			newCPDefinitionOptionRel.getPriceType());
+		Assert.assertEquals(
+			existingCPDefinitionOptionRel.getTypeSettings(),
+			newCPDefinitionOptionRel.getTypeSettings());
 	}
 
 	@Test
@@ -358,10 +369,10 @@ public class CPDefinitionOptionRelPersistenceTest {
 			true, "uuid", true, "CPDefinitionOptionRelId", true, "groupId",
 			true, "companyId", true, "userId", true, "userName", true,
 			"createDate", true, "modifiedDate", true, "CPDefinitionId", true,
-			"CPOptionId", true, "name", true, "description", true,
-			"DDMFormFieldTypeName", true, "priority", true, "facetable", true,
-			"required", true, "skuContributor", true, "key", true, "priceType",
-			true);
+			"CPOptionId", true, "name", true, "COValueDataSource", true,
+			"description", true, "DDMFormFieldTypeName", true, "priority", true,
+			"facetable", true, "required", true, "skuContributor", true, "key",
+			true, "priceType", true, "typeSettings", true);
 	}
 
 	@Test
@@ -722,6 +733,9 @@ public class CPDefinitionOptionRelPersistenceTest {
 
 		cpDefinitionOptionRel.setName(RandomTestUtil.randomString());
 
+		cpDefinitionOptionRel.setCOValueDataSource(
+			RandomTestUtil.randomString());
+
 		cpDefinitionOptionRel.setDescription(RandomTestUtil.randomString());
 
 		cpDefinitionOptionRel.setDDMFormFieldTypeName(
@@ -738,6 +752,8 @@ public class CPDefinitionOptionRelPersistenceTest {
 		cpDefinitionOptionRel.setKey(RandomTestUtil.randomString());
 
 		cpDefinitionOptionRel.setPriceType(RandomTestUtil.randomString());
+
+		cpDefinitionOptionRel.setTypeSettings(RandomTestUtil.randomString());
 
 		_cpDefinitionOptionRels.add(_persistence.update(cpDefinitionOptionRel));
 

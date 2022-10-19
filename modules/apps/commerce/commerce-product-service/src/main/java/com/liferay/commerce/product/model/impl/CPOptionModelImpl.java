@@ -86,11 +86,9 @@ public class CPOptionModelImpl
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"name", Types.VARCHAR}, {"description", Types.VARCHAR},
-		{"COValueDataSource", Types.VARCHAR},
 		{"DDMFormFieldTypeName", Types.VARCHAR}, {"facetable", Types.BOOLEAN},
 		{"required", Types.BOOLEAN}, {"skuContributor", Types.BOOLEAN},
-		{"key_", Types.VARCHAR}, {"lastPublishDate", Types.TIMESTAMP},
-		{"typeSettings", Types.VARCHAR}
+		{"key_", Types.VARCHAR}, {"lastPublishDate", Types.TIMESTAMP}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -109,18 +107,16 @@ public class CPOptionModelImpl
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("name", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("description", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("COValueDataSource", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("DDMFormFieldTypeName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("facetable", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("required", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("skuContributor", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("key_", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("lastPublishDate", Types.TIMESTAMP);
-		TABLE_COLUMNS_MAP.put("typeSettings", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table CPOption (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,externalReferenceCode VARCHAR(75) null,CPOptionId LONG not null,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name STRING null,description STRING null,COValueDataSource VARCHAR(75) null,DDMFormFieldTypeName VARCHAR(75) null,facetable BOOLEAN,required BOOLEAN,skuContributor BOOLEAN,key_ VARCHAR(75) null,lastPublishDate DATE null,typeSettings VARCHAR(75) null,primary key (CPOptionId, ctCollectionId))";
+		"create table CPOption (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,externalReferenceCode VARCHAR(75) null,CPOptionId LONG not null,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name STRING null,description STRING null,DDMFormFieldTypeName VARCHAR(75) null,facetable BOOLEAN,required BOOLEAN,skuContributor BOOLEAN,key_ VARCHAR(75) null,lastPublishDate DATE null,primary key (CPOptionId, ctCollectionId))";
 
 	public static final String TABLE_SQL_DROP = "drop table CPOption";
 
@@ -326,11 +322,6 @@ public class CPOptionModelImpl
 			"description",
 			(BiConsumer<CPOption, String>)CPOption::setDescription);
 		attributeGetterFunctions.put(
-			"COValueDataSource", CPOption::getCOValueDataSource);
-		attributeSetterBiConsumers.put(
-			"COValueDataSource",
-			(BiConsumer<CPOption, String>)CPOption::setCOValueDataSource);
-		attributeGetterFunctions.put(
 			"DDMFormFieldTypeName", CPOption::getDDMFormFieldTypeName);
 		attributeSetterBiConsumers.put(
 			"DDMFormFieldTypeName",
@@ -354,10 +345,6 @@ public class CPOptionModelImpl
 		attributeSetterBiConsumers.put(
 			"lastPublishDate",
 			(BiConsumer<CPOption, Date>)CPOption::setLastPublishDate);
-		attributeGetterFunctions.put("typeSettings", CPOption::getTypeSettings);
-		attributeSetterBiConsumers.put(
-			"typeSettings",
-			(BiConsumer<CPOption, String>)CPOption::setTypeSettings);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -801,26 +788,6 @@ public class CPOptionModelImpl
 
 	@JSON
 	@Override
-	public String getCOValueDataSource() {
-		if (_COValueDataSource == null) {
-			return "";
-		}
-		else {
-			return _COValueDataSource;
-		}
-	}
-
-	@Override
-	public void setCOValueDataSource(String COValueDataSource) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_COValueDataSource = COValueDataSource;
-	}
-
-	@JSON
-	@Override
 	public String getDDMFormFieldTypeName() {
 		if (_DDMFormFieldTypeName == null) {
 			return "";
@@ -944,26 +911,6 @@ public class CPOptionModelImpl
 		}
 
 		_lastPublishDate = lastPublishDate;
-	}
-
-	@JSON
-	@Override
-	public String getTypeSettings() {
-		if (_typeSettings == null) {
-			return "";
-		}
-		else {
-			return _typeSettings;
-		}
-	}
-
-	@Override
-	public void setTypeSettings(String typeSettings) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_typeSettings = typeSettings;
 	}
 
 	@Override
@@ -1128,14 +1075,12 @@ public class CPOptionModelImpl
 		cpOptionImpl.setModifiedDate(getModifiedDate());
 		cpOptionImpl.setName(getName());
 		cpOptionImpl.setDescription(getDescription());
-		cpOptionImpl.setCOValueDataSource(getCOValueDataSource());
 		cpOptionImpl.setDDMFormFieldTypeName(getDDMFormFieldTypeName());
 		cpOptionImpl.setFacetable(isFacetable());
 		cpOptionImpl.setRequired(isRequired());
 		cpOptionImpl.setSkuContributor(isSkuContributor());
 		cpOptionImpl.setKey(getKey());
 		cpOptionImpl.setLastPublishDate(getLastPublishDate());
-		cpOptionImpl.setTypeSettings(getTypeSettings());
 
 		cpOptionImpl.resetOriginalValues();
 
@@ -1167,8 +1112,6 @@ public class CPOptionModelImpl
 		cpOptionImpl.setName(this.<String>getColumnOriginalValue("name"));
 		cpOptionImpl.setDescription(
 			this.<String>getColumnOriginalValue("description"));
-		cpOptionImpl.setCOValueDataSource(
-			this.<String>getColumnOriginalValue("COValueDataSource"));
 		cpOptionImpl.setDDMFormFieldTypeName(
 			this.<String>getColumnOriginalValue("DDMFormFieldTypeName"));
 		cpOptionImpl.setFacetable(
@@ -1180,8 +1123,6 @@ public class CPOptionModelImpl
 		cpOptionImpl.setKey(this.<String>getColumnOriginalValue("key_"));
 		cpOptionImpl.setLastPublishDate(
 			this.<Date>getColumnOriginalValue("lastPublishDate"));
-		cpOptionImpl.setTypeSettings(
-			this.<String>getColumnOriginalValue("typeSettings"));
 
 		return cpOptionImpl;
 	}
@@ -1327,14 +1268,6 @@ public class CPOptionModelImpl
 			cpOptionCacheModel.description = null;
 		}
 
-		cpOptionCacheModel.COValueDataSource = getCOValueDataSource();
-
-		String COValueDataSource = cpOptionCacheModel.COValueDataSource;
-
-		if ((COValueDataSource != null) && (COValueDataSource.length() == 0)) {
-			cpOptionCacheModel.COValueDataSource = null;
-		}
-
 		cpOptionCacheModel.DDMFormFieldTypeName = getDDMFormFieldTypeName();
 
 		String DDMFormFieldTypeName = cpOptionCacheModel.DDMFormFieldTypeName;
@@ -1366,14 +1299,6 @@ public class CPOptionModelImpl
 		}
 		else {
 			cpOptionCacheModel.lastPublishDate = Long.MIN_VALUE;
-		}
-
-		cpOptionCacheModel.typeSettings = getTypeSettings();
-
-		String typeSettings = cpOptionCacheModel.typeSettings;
-
-		if ((typeSettings != null) && (typeSettings.length() == 0)) {
-			cpOptionCacheModel.typeSettings = null;
 		}
 
 		return cpOptionCacheModel;
@@ -1452,14 +1377,12 @@ public class CPOptionModelImpl
 	private String _nameCurrentLanguageId;
 	private String _description;
 	private String _descriptionCurrentLanguageId;
-	private String _COValueDataSource;
 	private String _DDMFormFieldTypeName;
 	private boolean _facetable;
 	private boolean _required;
 	private boolean _skuContributor;
 	private String _key;
 	private Date _lastPublishDate;
-	private String _typeSettings;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1503,7 +1426,6 @@ public class CPOptionModelImpl
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("name", _name);
 		_columnOriginalValues.put("description", _description);
-		_columnOriginalValues.put("COValueDataSource", _COValueDataSource);
 		_columnOriginalValues.put(
 			"DDMFormFieldTypeName", _DDMFormFieldTypeName);
 		_columnOriginalValues.put("facetable", _facetable);
@@ -1511,7 +1433,6 @@ public class CPOptionModelImpl
 		_columnOriginalValues.put("skuContributor", _skuContributor);
 		_columnOriginalValues.put("key_", _key);
 		_columnOriginalValues.put("lastPublishDate", _lastPublishDate);
-		_columnOriginalValues.put("typeSettings", _typeSettings);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1560,21 +1481,17 @@ public class CPOptionModelImpl
 
 		columnBitmasks.put("description", 2048L);
 
-		columnBitmasks.put("COValueDataSource", 4096L);
+		columnBitmasks.put("DDMFormFieldTypeName", 4096L);
 
-		columnBitmasks.put("DDMFormFieldTypeName", 8192L);
+		columnBitmasks.put("facetable", 8192L);
 
-		columnBitmasks.put("facetable", 16384L);
+		columnBitmasks.put("required", 16384L);
 
-		columnBitmasks.put("required", 32768L);
+		columnBitmasks.put("skuContributor", 32768L);
 
-		columnBitmasks.put("skuContributor", 65536L);
+		columnBitmasks.put("key_", 65536L);
 
-		columnBitmasks.put("key_", 131072L);
-
-		columnBitmasks.put("lastPublishDate", 262144L);
-
-		columnBitmasks.put("typeSettings", 524288L);
+		columnBitmasks.put("lastPublishDate", 131072L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

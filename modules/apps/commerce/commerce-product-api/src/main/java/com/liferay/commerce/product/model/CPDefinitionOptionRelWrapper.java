@@ -60,6 +60,7 @@ public class CPDefinitionOptionRelWrapper
 		attributes.put("CPDefinitionId", getCPDefinitionId());
 		attributes.put("CPOptionId", getCPOptionId());
 		attributes.put("name", getName());
+		attributes.put("COValueDataSource", getCOValueDataSource());
 		attributes.put("description", getDescription());
 		attributes.put("DDMFormFieldTypeName", getDDMFormFieldTypeName());
 		attributes.put("priority", getPriority());
@@ -68,6 +69,7 @@ public class CPDefinitionOptionRelWrapper
 		attributes.put("skuContributor", isSkuContributor());
 		attributes.put("key", getKey());
 		attributes.put("priceType", getPriceType());
+		attributes.put("typeSettings", getTypeSettings());
 
 		return attributes;
 	}
@@ -153,6 +155,12 @@ public class CPDefinitionOptionRelWrapper
 			setName(name);
 		}
 
+		String COValueDataSource = (String)attributes.get("COValueDataSource");
+
+		if (COValueDataSource != null) {
+			setCOValueDataSource(COValueDataSource);
+		}
+
 		String description = (String)attributes.get("description");
 
 		if (description != null) {
@@ -201,6 +209,12 @@ public class CPDefinitionOptionRelWrapper
 		if (priceType != null) {
 			setPriceType(priceType);
 		}
+
+		String typeSettings = (String)attributes.get("typeSettings");
+
+		if (typeSettings != null) {
+			setTypeSettings(typeSettings);
+		}
 	}
 
 	@Override
@@ -228,6 +242,16 @@ public class CPDefinitionOptionRelWrapper
 	@Override
 	public long getCompanyId() {
 		return model.getCompanyId();
+	}
+
+	/**
+	 * Returns the co value data source of this cp definition option rel.
+	 *
+	 * @return the co value data source of this cp definition option rel
+	 */
+	@Override
+	public String getCOValueDataSource() {
+		return model.getCOValueDataSource();
 	}
 
 	@Override
@@ -574,6 +598,16 @@ public class CPDefinitionOptionRelWrapper
 	}
 
 	/**
+	 * Returns the type settings of this cp definition option rel.
+	 *
+	 * @return the type settings of this cp definition option rel
+	 */
+	@Override
+	public String getTypeSettings() {
+		return model.getTypeSettings();
+	}
+
+	/**
 	 * Returns the user ID of this cp definition option rel.
 	 *
 	 * @return the user ID of this cp definition option rel
@@ -686,6 +720,16 @@ public class CPDefinitionOptionRelWrapper
 	@Override
 	public void setCompanyId(long companyId) {
 		model.setCompanyId(companyId);
+	}
+
+	/**
+	 * Sets the co value data source of this cp definition option rel.
+	 *
+	 * @param COValueDataSource the co value data source of this cp definition option rel
+	 */
+	@Override
+	public void setCOValueDataSource(String COValueDataSource) {
+		model.setCOValueDataSource(COValueDataSource);
 	}
 
 	/**
@@ -976,6 +1020,16 @@ public class CPDefinitionOptionRelWrapper
 	@Override
 	public void setSkuContributor(boolean skuContributor) {
 		model.setSkuContributor(skuContributor);
+	}
+
+	/**
+	 * Sets the type settings of this cp definition option rel.
+	 *
+	 * @param typeSettings the type settings of this cp definition option rel
+	 */
+	@Override
+	public void setTypeSettings(String typeSettings) {
+		model.setTypeSettings(typeSettings);
 	}
 
 	/**

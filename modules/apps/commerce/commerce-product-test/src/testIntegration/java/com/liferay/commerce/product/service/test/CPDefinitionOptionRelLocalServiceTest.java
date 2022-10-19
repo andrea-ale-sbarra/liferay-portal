@@ -458,8 +458,8 @@ public class CPDefinitionOptionRelLocalServiceTest {
 		return _cpDefinitionOptionRelLocalService.updateCPDefinitionOptionRel(
 			cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 			cpDefinitionOptionRel.getCPOptionId(),
-			cpDefinitionOptionRel.getNameMap(),
-			cpDefinitionOptionRel.getDescriptionMap(),
+			cpDefinitionOptionRel.getNameMap(), cpDefinitionOptionRel.getCOValueDataSource()
+			, cpDefinitionOptionRel.getDescriptionMap(),
 			cpDefinitionOptionRel.getDDMFormFieldTypeName(),
 			cpDefinitionOptionRel.getPriority(),
 			cpDefinitionOptionRel.isFacetable(),

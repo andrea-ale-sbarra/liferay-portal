@@ -107,7 +107,7 @@ else {
 
 				<%
 					for (CommerceOptionValueDataSource commerceOptionValueDataSource : cpOptionDisplayContext.getCOValueDataSources()) {
-						String selectedDataSource = cpOptionDisplayContext.getDataSource();
+						String selectedDataSource = "";
 				%>
 
 				<aui:option label="<%= HtmlUtil.escape(commerceOptionValueDataSource.getLabel(locale)) %>" selected="<%= selectedDataSource.equals(commerceOptionValueDataSource.getName()) %>" value="<%= commerceOptionValueDataSource.getName() %>" />

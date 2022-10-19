@@ -373,6 +373,21 @@ public interface CPDefinitionOptionRelModel
 	public void setNameMap(Map<Locale, String> nameMap, Locale defaultLocale);
 
 	/**
+	 * Returns the co value data source of this cp definition option rel.
+	 *
+	 * @return the co value data source of this cp definition option rel
+	 */
+	@AutoEscape
+	public String getCOValueDataSource();
+
+	/**
+	 * Sets the co value data source of this cp definition option rel.
+	 *
+	 * @param COValueDataSource the co value data source of this cp definition option rel
+	 */
+	public void setCOValueDataSource(String COValueDataSource);
+
+	/**
 	 * Returns the description of this cp definition option rel.
 	 *
 	 * @return the description of this cp definition option rel
@@ -594,6 +609,21 @@ public interface CPDefinitionOptionRelModel
 	 * @param priceType the price type of this cp definition option rel
 	 */
 	public void setPriceType(String priceType);
+
+	/**
+	 * Returns the type settings of this cp definition option rel.
+	 *
+	 * @return the type settings of this cp definition option rel
+	 */
+	@AutoEscape
+	public String getTypeSettings();
+
+	/**
+	 * Sets the type settings of this cp definition option rel.
+	 *
+	 * @param typeSettings the type settings of this cp definition option rel
+	 */
+	public void setTypeSettings(String typeSettings);
 
 	@Override
 	public String[] getAvailableLanguageIds();

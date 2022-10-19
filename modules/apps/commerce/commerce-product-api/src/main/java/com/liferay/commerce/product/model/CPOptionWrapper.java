@@ -57,14 +57,12 @@ public class CPOptionWrapper
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("name", getName());
 		attributes.put("description", getDescription());
-		attributes.put("COValueDataSource", getCOValueDataSource());
 		attributes.put("DDMFormFieldTypeName", getDDMFormFieldTypeName());
 		attributes.put("facetable", isFacetable());
 		attributes.put("required", isRequired());
 		attributes.put("skuContributor", isSkuContributor());
 		attributes.put("key", getKey());
 		attributes.put("lastPublishDate", getLastPublishDate());
-		attributes.put("typeSettings", getTypeSettings());
 
 		return attributes;
 	}
@@ -144,12 +142,6 @@ public class CPOptionWrapper
 			setDescription(description);
 		}
 
-		String COValueDataSource = (String)attributes.get("COValueDataSource");
-
-		if (COValueDataSource != null) {
-			setCOValueDataSource(COValueDataSource);
-		}
-
 		String DDMFormFieldTypeName = (String)attributes.get(
 			"DDMFormFieldTypeName");
 
@@ -186,12 +178,6 @@ public class CPOptionWrapper
 		if (lastPublishDate != null) {
 			setLastPublishDate(lastPublishDate);
 		}
-
-		String typeSettings = (String)attributes.get("typeSettings");
-
-		if (typeSettings != null) {
-			setTypeSettings(typeSettings);
-		}
 	}
 
 	@Override
@@ -212,16 +198,6 @@ public class CPOptionWrapper
 	@Override
 	public long getCompanyId() {
 		return model.getCompanyId();
-	}
-
-	/**
-	 * Returns the co value data source of this cp option.
-	 *
-	 * @return the co value data source of this cp option
-	 */
-	@Override
-	public String getCOValueDataSource() {
-		return model.getCOValueDataSource();
 	}
 
 	/**
@@ -517,16 +493,6 @@ public class CPOptionWrapper
 	}
 
 	/**
-	 * Returns the type settings of this cp option.
-	 *
-	 * @return the type settings of this cp option
-	 */
-	@Override
-	public String getTypeSettings() {
-		return model.getTypeSettings();
-	}
-
-	/**
 	 * Returns the user ID of this cp option.
 	 *
 	 * @return the user ID of this cp option
@@ -624,16 +590,6 @@ public class CPOptionWrapper
 	@Override
 	public void setCompanyId(long companyId) {
 		model.setCompanyId(companyId);
-	}
-
-	/**
-	 * Sets the co value data source of this cp option.
-	 *
-	 * @param COValueDataSource the co value data source of this cp option
-	 */
-	@Override
-	public void setCOValueDataSource(String COValueDataSource) {
-		model.setCOValueDataSource(COValueDataSource);
 	}
 
 	/**
@@ -894,16 +850,6 @@ public class CPOptionWrapper
 	@Override
 	public void setSkuContributor(boolean skuContributor) {
 		model.setSkuContributor(skuContributor);
-	}
-
-	/**
-	 * Sets the type settings of this cp option.
-	 *
-	 * @param typeSettings the type settings of this cp option
-	 */
-	@Override
-	public void setTypeSettings(String typeSettings) {
-		model.setTypeSettings(typeSettings);
 	}
 
 	/**

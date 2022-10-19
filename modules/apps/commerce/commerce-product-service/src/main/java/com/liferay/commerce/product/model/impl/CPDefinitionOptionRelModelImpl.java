@@ -87,11 +87,12 @@ public class CPDefinitionOptionRelModelImpl
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"CPDefinitionId", Types.BIGINT}, {"CPOptionId", Types.BIGINT},
-		{"name", Types.VARCHAR}, {"description", Types.VARCHAR},
-		{"DDMFormFieldTypeName", Types.VARCHAR}, {"priority", Types.DOUBLE},
-		{"facetable", Types.BOOLEAN}, {"required", Types.BOOLEAN},
-		{"skuContributor", Types.BOOLEAN}, {"key_", Types.VARCHAR},
-		{"priceType", Types.VARCHAR}
+		{"name", Types.VARCHAR}, {"COValueDataSource", Types.VARCHAR},
+		{"description", Types.VARCHAR}, {"DDMFormFieldTypeName", Types.VARCHAR},
+		{"priority", Types.DOUBLE}, {"facetable", Types.BOOLEAN},
+		{"required", Types.BOOLEAN}, {"skuContributor", Types.BOOLEAN},
+		{"key_", Types.VARCHAR}, {"priceType", Types.VARCHAR},
+		{"typeSettings", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -111,6 +112,7 @@ public class CPDefinitionOptionRelModelImpl
 		TABLE_COLUMNS_MAP.put("CPDefinitionId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("CPOptionId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("name", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("COValueDataSource", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("description", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("DDMFormFieldTypeName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("priority", Types.DOUBLE);
@@ -119,10 +121,11 @@ public class CPDefinitionOptionRelModelImpl
 		TABLE_COLUMNS_MAP.put("skuContributor", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("key_", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("priceType", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("typeSettings", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table CPDefinitionOptionRel (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,CPDefinitionOptionRelId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,CPDefinitionId LONG,CPOptionId LONG,name STRING null,description STRING null,DDMFormFieldTypeName VARCHAR(75) null,priority DOUBLE,facetable BOOLEAN,required BOOLEAN,skuContributor BOOLEAN,key_ VARCHAR(75) null,priceType VARCHAR(75) null,primary key (CPDefinitionOptionRelId, ctCollectionId))";
+		"create table CPDefinitionOptionRel (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,CPDefinitionOptionRelId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,CPDefinitionId LONG,CPOptionId LONG,name STRING null,COValueDataSource VARCHAR(75) null,description STRING null,DDMFormFieldTypeName VARCHAR(75) null,priority DOUBLE,facetable BOOLEAN,required BOOLEAN,skuContributor BOOLEAN,key_ VARCHAR(75) null,priceType VARCHAR(75) null,typeSettings VARCHAR(75) null,primary key (CPDefinitionOptionRelId, ctCollectionId))";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table CPDefinitionOptionRel";
@@ -395,6 +398,12 @@ public class CPDefinitionOptionRelModelImpl
 			(BiConsumer<CPDefinitionOptionRel, String>)
 				CPDefinitionOptionRel::setName);
 		attributeGetterFunctions.put(
+			"COValueDataSource", CPDefinitionOptionRel::getCOValueDataSource);
+		attributeSetterBiConsumers.put(
+			"COValueDataSource",
+			(BiConsumer<CPDefinitionOptionRel, String>)
+				CPDefinitionOptionRel::setCOValueDataSource);
+		attributeGetterFunctions.put(
 			"description", CPDefinitionOptionRel::getDescription);
 		attributeSetterBiConsumers.put(
 			"description",
@@ -442,6 +451,12 @@ public class CPDefinitionOptionRelModelImpl
 			"priceType",
 			(BiConsumer<CPDefinitionOptionRel, String>)
 				CPDefinitionOptionRel::setPriceType);
+		attributeGetterFunctions.put(
+			"typeSettings", CPDefinitionOptionRel::getTypeSettings);
+		attributeSetterBiConsumers.put(
+			"typeSettings",
+			(BiConsumer<CPDefinitionOptionRel, String>)
+				CPDefinitionOptionRel::setTypeSettings);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -818,6 +833,26 @@ public class CPDefinitionOptionRelModelImpl
 
 	@JSON
 	@Override
+	public String getCOValueDataSource() {
+		if (_COValueDataSource == null) {
+			return "";
+		}
+		else {
+			return _COValueDataSource;
+		}
+	}
+
+	@Override
+	public void setCOValueDataSource(String COValueDataSource) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_COValueDataSource = COValueDataSource;
+	}
+
+	@JSON
+	@Override
 	public String getDescription() {
 		if (_description == null) {
 			return "";
@@ -1095,6 +1130,26 @@ public class CPDefinitionOptionRelModelImpl
 		_priceType = priceType;
 	}
 
+	@JSON
+	@Override
+	public String getTypeSettings() {
+		if (_typeSettings == null) {
+			return "";
+		}
+		else {
+			return _typeSettings;
+		}
+	}
+
+	@Override
+	public void setTypeSettings(String typeSettings) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_typeSettings = typeSettings;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
@@ -1261,6 +1316,7 @@ public class CPDefinitionOptionRelModelImpl
 		cpDefinitionOptionRelImpl.setCPDefinitionId(getCPDefinitionId());
 		cpDefinitionOptionRelImpl.setCPOptionId(getCPOptionId());
 		cpDefinitionOptionRelImpl.setName(getName());
+		cpDefinitionOptionRelImpl.setCOValueDataSource(getCOValueDataSource());
 		cpDefinitionOptionRelImpl.setDescription(getDescription());
 		cpDefinitionOptionRelImpl.setDDMFormFieldTypeName(
 			getDDMFormFieldTypeName());
@@ -1270,6 +1326,7 @@ public class CPDefinitionOptionRelModelImpl
 		cpDefinitionOptionRelImpl.setSkuContributor(isSkuContributor());
 		cpDefinitionOptionRelImpl.setKey(getKey());
 		cpDefinitionOptionRelImpl.setPriceType(getPriceType());
+		cpDefinitionOptionRelImpl.setTypeSettings(getTypeSettings());
 
 		cpDefinitionOptionRelImpl.resetOriginalValues();
 
@@ -1307,6 +1364,8 @@ public class CPDefinitionOptionRelModelImpl
 			this.<Long>getColumnOriginalValue("CPOptionId"));
 		cpDefinitionOptionRelImpl.setName(
 			this.<String>getColumnOriginalValue("name"));
+		cpDefinitionOptionRelImpl.setCOValueDataSource(
+			this.<String>getColumnOriginalValue("COValueDataSource"));
 		cpDefinitionOptionRelImpl.setDescription(
 			this.<String>getColumnOriginalValue("description"));
 		cpDefinitionOptionRelImpl.setDDMFormFieldTypeName(
@@ -1323,6 +1382,8 @@ public class CPDefinitionOptionRelModelImpl
 			this.<String>getColumnOriginalValue("key_"));
 		cpDefinitionOptionRelImpl.setPriceType(
 			this.<String>getColumnOriginalValue("priceType"));
+		cpDefinitionOptionRelImpl.setTypeSettings(
+			this.<String>getColumnOriginalValue("typeSettings"));
 
 		return cpDefinitionOptionRelImpl;
 	}
@@ -1468,6 +1529,16 @@ public class CPDefinitionOptionRelModelImpl
 			cpDefinitionOptionRelCacheModel.name = null;
 		}
 
+		cpDefinitionOptionRelCacheModel.COValueDataSource =
+			getCOValueDataSource();
+
+		String COValueDataSource =
+			cpDefinitionOptionRelCacheModel.COValueDataSource;
+
+		if ((COValueDataSource != null) && (COValueDataSource.length() == 0)) {
+			cpDefinitionOptionRelCacheModel.COValueDataSource = null;
+		}
+
 		cpDefinitionOptionRelCacheModel.description = getDescription();
 
 		String description = cpDefinitionOptionRelCacheModel.description;
@@ -1510,6 +1581,14 @@ public class CPDefinitionOptionRelModelImpl
 
 		if ((priceType != null) && (priceType.length() == 0)) {
 			cpDefinitionOptionRelCacheModel.priceType = null;
+		}
+
+		cpDefinitionOptionRelCacheModel.typeSettings = getTypeSettings();
+
+		String typeSettings = cpDefinitionOptionRelCacheModel.typeSettings;
+
+		if ((typeSettings != null) && (typeSettings.length() == 0)) {
+			cpDefinitionOptionRelCacheModel.typeSettings = null;
 		}
 
 		return cpDefinitionOptionRelCacheModel;
@@ -1589,6 +1668,7 @@ public class CPDefinitionOptionRelModelImpl
 	private long _CPOptionId;
 	private String _name;
 	private String _nameCurrentLanguageId;
+	private String _COValueDataSource;
 	private String _description;
 	private String _descriptionCurrentLanguageId;
 	private String _DDMFormFieldTypeName;
@@ -1598,6 +1678,7 @@ public class CPDefinitionOptionRelModelImpl
 	private boolean _skuContributor;
 	private String _key;
 	private String _priceType;
+	private String _typeSettings;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1642,6 +1723,7 @@ public class CPDefinitionOptionRelModelImpl
 		_columnOriginalValues.put("CPDefinitionId", _CPDefinitionId);
 		_columnOriginalValues.put("CPOptionId", _CPOptionId);
 		_columnOriginalValues.put("name", _name);
+		_columnOriginalValues.put("COValueDataSource", _COValueDataSource);
 		_columnOriginalValues.put("description", _description);
 		_columnOriginalValues.put(
 			"DDMFormFieldTypeName", _DDMFormFieldTypeName);
@@ -1651,6 +1733,7 @@ public class CPDefinitionOptionRelModelImpl
 		_columnOriginalValues.put("skuContributor", _skuContributor);
 		_columnOriginalValues.put("key_", _key);
 		_columnOriginalValues.put("priceType", _priceType);
+		_columnOriginalValues.put("typeSettings", _typeSettings);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1701,21 +1784,25 @@ public class CPDefinitionOptionRelModelImpl
 
 		columnBitmasks.put("name", 4096L);
 
-		columnBitmasks.put("description", 8192L);
+		columnBitmasks.put("COValueDataSource", 8192L);
 
-		columnBitmasks.put("DDMFormFieldTypeName", 16384L);
+		columnBitmasks.put("description", 16384L);
 
-		columnBitmasks.put("priority", 32768L);
+		columnBitmasks.put("DDMFormFieldTypeName", 32768L);
 
-		columnBitmasks.put("facetable", 65536L);
+		columnBitmasks.put("priority", 65536L);
 
-		columnBitmasks.put("required", 131072L);
+		columnBitmasks.put("facetable", 131072L);
 
-		columnBitmasks.put("skuContributor", 262144L);
+		columnBitmasks.put("required", 262144L);
 
-		columnBitmasks.put("key_", 524288L);
+		columnBitmasks.put("skuContributor", 524288L);
 
-		columnBitmasks.put("priceType", 1048576L);
+		columnBitmasks.put("key_", 1048576L);
+
+		columnBitmasks.put("priceType", 2097152L);
+
+		columnBitmasks.put("typeSettings", 4194304L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

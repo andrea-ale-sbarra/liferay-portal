@@ -78,7 +78,7 @@ public class CPDefinitionOptionRelCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(47);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -106,6 +106,8 @@ public class CPDefinitionOptionRelCacheModel
 		sb.append(CPOptionId);
 		sb.append(", name=");
 		sb.append(name);
+		sb.append(", COValueDataSource=");
+		sb.append(COValueDataSource);
 		sb.append(", description=");
 		sb.append(description);
 		sb.append(", DDMFormFieldTypeName=");
@@ -122,6 +124,8 @@ public class CPDefinitionOptionRelCacheModel
 		sb.append(key);
 		sb.append(", priceType=");
 		sb.append(priceType);
+		sb.append(", typeSettings=");
+		sb.append(typeSettings);
 		sb.append("}");
 
 		return sb.toString();
@@ -179,6 +183,13 @@ public class CPDefinitionOptionRelCacheModel
 			cpDefinitionOptionRelImpl.setName(name);
 		}
 
+		if (COValueDataSource == null) {
+			cpDefinitionOptionRelImpl.setCOValueDataSource("");
+		}
+		else {
+			cpDefinitionOptionRelImpl.setCOValueDataSource(COValueDataSource);
+		}
+
 		if (description == null) {
 			cpDefinitionOptionRelImpl.setDescription("");
 		}
@@ -213,6 +224,13 @@ public class CPDefinitionOptionRelCacheModel
 			cpDefinitionOptionRelImpl.setPriceType(priceType);
 		}
 
+		if (typeSettings == null) {
+			cpDefinitionOptionRelImpl.setTypeSettings("");
+		}
+		else {
+			cpDefinitionOptionRelImpl.setTypeSettings(typeSettings);
+		}
+
 		cpDefinitionOptionRelImpl.resetOriginalValues();
 
 		return cpDefinitionOptionRelImpl;
@@ -240,6 +258,7 @@ public class CPDefinitionOptionRelCacheModel
 
 		CPOptionId = objectInput.readLong();
 		name = objectInput.readUTF();
+		COValueDataSource = objectInput.readUTF();
 		description = objectInput.readUTF();
 		DDMFormFieldTypeName = objectInput.readUTF();
 
@@ -252,6 +271,7 @@ public class CPDefinitionOptionRelCacheModel
 		skuContributor = objectInput.readBoolean();
 		key = objectInput.readUTF();
 		priceType = objectInput.readUTF();
+		typeSettings = objectInput.readUTF();
 	}
 
 	@Override
@@ -296,6 +316,13 @@ public class CPDefinitionOptionRelCacheModel
 			objectOutput.writeUTF(name);
 		}
 
+		if (COValueDataSource == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(COValueDataSource);
+		}
+
 		if (description == null) {
 			objectOutput.writeUTF("");
 		}
@@ -331,6 +358,13 @@ public class CPDefinitionOptionRelCacheModel
 		else {
 			objectOutput.writeUTF(priceType);
 		}
+
+		if (typeSettings == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(typeSettings);
+		}
 	}
 
 	public long mvccVersion;
@@ -346,6 +380,7 @@ public class CPDefinitionOptionRelCacheModel
 	public long CPDefinitionId;
 	public long CPOptionId;
 	public String name;
+	public String COValueDataSource;
 	public String description;
 	public String DDMFormFieldTypeName;
 	public double priority;
@@ -354,5 +389,6 @@ public class CPDefinitionOptionRelCacheModel
 	public boolean skuContributor;
 	public String key;
 	public String priceType;
+	public String typeSettings;
 
 }

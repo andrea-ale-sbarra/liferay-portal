@@ -14,6 +14,7 @@
 
 package com.liferay.commerce.product.definitions.web.internal.frontend.taglib.servlet.taglib;
 
+import com.liferay.commerce.product.data.source.CommerceOptionValueDataSourceRegistry;
 import com.liferay.commerce.product.definitions.web.internal.display.context.CPDefinitionOptionRelDisplayContext;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CommerceCatalog;
@@ -123,7 +124,8 @@ public class CPDefinitionOptionsScreenNavigationCategory
 			cpDefinitionOptionRelDisplayContext =
 				new CPDefinitionOptionRelDisplayContext(
 					_actionHelper, httpServletRequest, _configurationProvider,
-					_ddmFormFieldTypeServicesTracker, _itemSelector);
+					_ddmFormFieldTypeServicesTracker, _itemSelector,
+					_commerceOptionValueDataSourceRegistry);
 
 		httpServletRequest.setAttribute(
 			WebKeys.PORTLET_DISPLAY_CONTEXT,
@@ -145,6 +147,10 @@ public class CPDefinitionOptionsScreenNavigationCategory
 	)
 	private ModelResourcePermission<CommerceCatalog>
 		_commerceCatalogModelResourcePermission;
+
+	@Reference
+	private CommerceOptionValueDataSourceRegistry
+		_commerceOptionValueDataSourceRegistry;
 
 	@Reference
 	private ConfigurationProvider _configurationProvider;

@@ -459,6 +459,7 @@
 		<column name="CPDefinitionId" type="long" />
 		<column name="CPOptionId" type="long" />
 		<column localized="true" name="name" type="String" />
+		<column name="COValueDataSource" type="String" />
 		<column localized="true" name="description" type="String" />
 		<column name="DDMFormFieldTypeName" type="String" />
 		<column name="priority" type="double" />
@@ -467,6 +468,7 @@
 		<column name="skuContributor" type="boolean" />
 		<column name="key" type="String" />
 		<column name="priceType" type="String" />
+		<column name="typeSettings" type="String" />
 
 		<!-- Order -->
 
@@ -897,14 +899,12 @@
 
 		<column localized="true" name="name" type="String" />
 		<column localized="true" name="description" type="String" />
-		<column name="COValueDataSource" type="String" />
 		<column name="DDMFormFieldTypeName" type="String" />
 		<column name="facetable" type="boolean" />
 		<column name="required" type="boolean" />
 		<column name="skuContributor" type="boolean" />
 		<column name="key" type="String" />
 		<column name="lastPublishDate" type="Date" />
-		<column name="typeSettings" type="String" />
 
 		<!-- Order -->
 
