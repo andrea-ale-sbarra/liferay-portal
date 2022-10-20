@@ -227,25 +227,16 @@ public class CPInstanceHelperImpl implements CPInstanceHelper {
 
 		}
 
-		String dataSourceName =
-			AssetCategoriesCommerceOptionValueDataSourceImpl.NAME;
-
-		CommerceOptionValueDataSource commerceOptionValueDataSource = _commerceOptionValueDataSourceRegistry.getCommerceOptionValueDataSource(
-			dataSourceName);
-
-		if (cpDefinitionOptionRels.isEmpty() && commerceOptionValueDataSource == null) {
+		if (cpDefinitionOptionRels.isEmpty()) {
 			return Collections.emptyMap();
 		}
 
 		Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>>
 			cpDefinitionOptionRelsMap = new TreeMap<>(
 				new CPDefinitionOptionRelComparator());
-
-		cpDefinitionOptionRelsMap.putAll(commerceOptionValueDataSource.getCPDefinitionOptionValueRelsMap(
-			companyId, scopeGroupId, cpDefinitionId, -1, -1));
-
+		
 		for (CPDefinitionOptionRel cpDefinitionOptionRel :
-				cpDefinitionOptionRels) {
+			cpDefinitionOptionRels) {
 
 			if (cpDefinitionOptionRel.isSkuContributor() && publicStore) {
 				cpDefinitionOptionRelsMap.put(
@@ -253,6 +244,20 @@ public class CPInstanceHelperImpl implements CPInstanceHelper {
 					getCPInstanceCPDefinitionOptionValueRels(
 						cpDefinitionId,
 						cpDefinitionOptionRel.getCPDefinitionOptionRelId()));
+
+				continue;
+			}
+
+			String dataSourceName  = cpDefinitionOptionRel.getCOValueDataSource();
+
+			if(!Validator.isBlank(dataSourceName)){
+				CommerceOptionValueDataSource commerceOptionValueDataSource =
+					_commerceOptionValueDataSourceRegistry.
+						getCommerceOptionValueDataSource(dataSourceName);
+
+				cpDefinitionOptionRelsMap.putAll(commerceOptionValueDataSource.
+					getCPDefinitionOptionValueRelsMap(companyId, scopeGroupId,
+						cpDefinitionId, -1, -1));
 
 				continue;
 			}

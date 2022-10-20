@@ -1,4 +1,5 @@
 <%@ page import="com.liferay.commerce.product.data.source.CommerceOptionValueDataSource" %>
+<%@ page import="com.liferay.taglib.servlet.PipingServletResponseFactory" %>
 
 <%--
 /**
@@ -102,8 +103,8 @@ String defaultLanguageId = cpDefinitionOptionRelDisplayContext.getCatalogDefault
 					<aui:select name="commerceOptionValueDataSource" showEmptyOption="<%= true %>">
 
 						<%
+						String selectedDataSource = cpDefinitionOptionRelDisplayContext.getDataSource();
 						for (CommerceOptionValueDataSource commerceOptionValueDataSource : cpDefinitionOptionRelDisplayContext.getCOValueDataSources()) {
-							String selectedDataSource = cpDefinitionOptionRelDisplayContext.getDataSource();
 						%>
 
 							<aui:option label="<%= HtmlUtil.escape(commerceOptionValueDataSource.getLabel(locale)) %>" selected="<%= selectedDataSource.equals(commerceOptionValueDataSource.getName()) %>" value="<%= commerceOptionValueDataSource.getName() %>" />
@@ -114,6 +115,17 @@ String defaultLanguageId = cpDefinitionOptionRelDisplayContext.getCatalogDefault
 
 					</aui:select>
 				</div>
+				<%
+					COValueDataSourceJSPContributor coValueDataSourceJSPContributor = cpDefinitionOptionRelDisplayContext.getCOValueDataSourceJSPContributor(selectedDataSource);
+				%>
+
+				<c:if test="<%= coValueDataSourceJSPContributor != null %>">
+
+					<%
+						coValueDataSourceJSPContributor.render(corEntryId, request, PipingServletResponseFactory.createPipingServletResponse(pageContext));
+					%>
+
+				</c:if>
 			</div>
 		</commerce-ui:panel>
 

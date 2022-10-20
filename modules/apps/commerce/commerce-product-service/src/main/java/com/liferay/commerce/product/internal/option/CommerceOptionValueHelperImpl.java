@@ -42,6 +42,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -214,14 +216,25 @@ public class CommerceOptionValueHelperImpl
 	private Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>> _dataSource(
 		long companyId, long commerceChannelGroupId, long cpDefinitionId) throws PortalException {
 
-		String dataSourceName =
-			AssetCategoriesCommerceOptionValueDataSourceImpl.NAME;
+		List<CPDefinitionOptionRel> cpDefinitionOptionRels =
+			_cpDefinitionOptionRelLocalService.getCPDefinitionOptionRels(
+				cpDefinitionId);
 
-		CommerceOptionValueDataSource commerceOptionValueDataSource = _commerceOptionValueDataSourceRegistry.getCommerceOptionValueDataSource(
-			dataSourceName);
+		for (CPDefinitionOptionRel cpDefinitionOptionRel :
+			cpDefinitionOptionRels) {
+			String dataSourceName  = cpDefinitionOptionRel.getCOValueDataSource();
 
-		return commerceOptionValueDataSource.getCPDefinitionOptionValueRelsMap(companyId, commerceChannelGroupId, cpDefinitionId, -1 ,-1);
+			if(!Validator.isBlank(dataSourceName)) {
+				CommerceOptionValueDataSource commerceOptionValueDataSource =
+					_commerceOptionValueDataSourceRegistry.
+						getCommerceOptionValueDataSource(dataSourceName);
 
+				return commerceOptionValueDataSource.
+					getCPDefinitionOptionValueRelsMap(companyId,
+						commerceChannelGroupId, cpDefinitionId, -1 ,-1);
+			}
+		}
+		return Collections.emptyMap();
 	}
 
 	@Override
