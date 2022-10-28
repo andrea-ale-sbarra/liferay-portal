@@ -27,7 +27,6 @@ import com.liferay.commerce.price.list.model.CommercePriceList;
 import com.liferay.commerce.price.list.service.CommercePriceListService;
 import com.liferay.commerce.product.constants.CommerceChannelAccountEntryRelConstants;
 import com.liferay.commerce.product.exception.CommerceChannelAccountEntryRelTypeException;
-import com.liferay.commerce.product.exception.NoSuchChannelAccountEntryRelException;
 import com.liferay.commerce.product.model.CommerceChannel;
 import com.liferay.commerce.product.model.CommerceChannelAccountEntryRel;
 import com.liferay.commerce.product.service.CommerceChannelAccountEntryRelService;
@@ -72,7 +71,7 @@ public class AccountChannelEntryResourceImpl
 	@Override
 	public void deleteAccountChannelBillingAddressId(Long id) throws Exception {
 		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
+			_getCommerceChannelAccountEntryRel(
 				id,
 				CommerceChannelAccountEntryRelConstants.TYPE_BILLING_ADDRESS);
 
@@ -85,7 +84,7 @@ public class AccountChannelEntryResourceImpl
 	@Override
 	public void deleteAccountChannelCurrencyId(Long id) throws Exception {
 		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
+			_getCommerceChannelAccountEntryRel(
 				id, CommerceChannelAccountEntryRelConstants.TYPE_CURRENCY);
 
 		_commerceChannelAccountEntryRelService.
@@ -97,7 +96,7 @@ public class AccountChannelEntryResourceImpl
 	@Override
 	public void deleteAccountChannelDeliveryTermId(Long id) throws Exception {
 		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
+			_getCommerceChannelAccountEntryRel(
 				id, CommerceChannelAccountEntryRelConstants.TYPE_DELIVERY_TERM);
 
 		_commerceChannelAccountEntryRelService.
@@ -109,7 +108,7 @@ public class AccountChannelEntryResourceImpl
 	@Override
 	public void deleteAccountChannelDiscountId(Long id) throws Exception {
 		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
+			_getCommerceChannelAccountEntryRel(
 				id, CommerceChannelAccountEntryRelConstants.TYPE_DISCOUNT);
 
 		_commerceChannelAccountEntryRelService.
@@ -121,7 +120,7 @@ public class AccountChannelEntryResourceImpl
 	@Override
 	public void deleteAccountChannelPaymentTermId(Long id) throws Exception {
 		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
+			_getCommerceChannelAccountEntryRel(
 				id, CommerceChannelAccountEntryRelConstants.TYPE_PAYMENT_TERM);
 
 		_commerceChannelAccountEntryRelService.
@@ -133,7 +132,7 @@ public class AccountChannelEntryResourceImpl
 	@Override
 	public void deleteAccountChannelPriceListId(Long id) throws Exception {
 		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
+			_getCommerceChannelAccountEntryRel(
 				id, CommerceChannelAccountEntryRelConstants.TYPE_PRICE_LIST);
 
 		_commerceChannelAccountEntryRelService.
@@ -147,7 +146,7 @@ public class AccountChannelEntryResourceImpl
 		throws Exception {
 
 		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
+			_getCommerceChannelAccountEntryRel(
 				id,
 				CommerceChannelAccountEntryRelConstants.TYPE_SHIPPING_ADDRESS);
 
@@ -160,7 +159,7 @@ public class AccountChannelEntryResourceImpl
 	@Override
 	public void deleteAccountChannelUserId(Long id) throws Exception {
 		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
+			_getCommerceChannelAccountEntryRel(
 				id, CommerceChannelAccountEntryRelConstants.TYPE_USER);
 
 		_commerceChannelAccountEntryRelService.
@@ -330,106 +329,75 @@ public class AccountChannelEntryResourceImpl
 	public AccountChannelEntry getAccountChannelBillingAddressId(Long id)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id,
-				CommerceChannelAccountEntryRelConstants.TYPE_BILLING_ADDRESS);
-
 		return _toAccountChannelEntry(
-			commerceChannelAccountEntryRel.
-				getCommerceChannelAccountEntryRelId());
+			_getCommerceChannelAccountEntryRel(
+				id,
+				CommerceChannelAccountEntryRelConstants.TYPE_BILLING_ADDRESS));
 	}
 
 	@Override
 	public AccountChannelEntry getAccountChannelCurrencyId(Long id)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_CURRENCY);
-
 		return _toAccountChannelEntry(
-			commerceChannelAccountEntryRel.
-				getCommerceChannelAccountEntryRelId());
+			_getCommerceChannelAccountEntryRel(
+				id, CommerceChannelAccountEntryRelConstants.TYPE_CURRENCY));
 	}
 
 	@Override
 	public AccountChannelEntry getAccountChannelDeliveryTermId(Long id)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_DELIVERY_TERM);
-
 		return _toAccountChannelEntry(
-			commerceChannelAccountEntryRel.
-				getCommerceChannelAccountEntryRelId());
+			_getCommerceChannelAccountEntryRel(
+				id,
+				CommerceChannelAccountEntryRelConstants.TYPE_DELIVERY_TERM));
 	}
 
 	@Override
 	public AccountChannelEntry getAccountChannelDiscountId(Long id)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_DISCOUNT);
-
 		return _toAccountChannelEntry(
-			commerceChannelAccountEntryRel.
-				getCommerceChannelAccountEntryRelId());
+			_getCommerceChannelAccountEntryRel(
+				id, CommerceChannelAccountEntryRelConstants.TYPE_DISCOUNT));
 	}
 
 	@Override
 	public AccountChannelEntry getAccountChannelPaymentTermId(Long id)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_PAYMENT_TERM);
-
 		return _toAccountChannelEntry(
-			commerceChannelAccountEntryRel.
-				getCommerceChannelAccountEntryRelId());
+			_getCommerceChannelAccountEntryRel(
+				id, CommerceChannelAccountEntryRelConstants.TYPE_PAYMENT_TERM));
 	}
 
 	@Override
 	public AccountChannelEntry getAccountChannelPriceListId(Long id)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_PRICE_LIST);
-
 		return _toAccountChannelEntry(
-			commerceChannelAccountEntryRel.
-				getCommerceChannelAccountEntryRelId());
+			_getCommerceChannelAccountEntryRel(
+				id, CommerceChannelAccountEntryRelConstants.TYPE_PRICE_LIST));
 	}
 
 	@Override
 	public AccountChannelEntry getAccountChannelShippingAddressId(Long id)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id,
-				CommerceChannelAccountEntryRelConstants.TYPE_SHIPPING_ADDRESS);
-
 		return _toAccountChannelEntry(
-			commerceChannelAccountEntryRel.
-				getCommerceChannelAccountEntryRelId());
+			_getCommerceChannelAccountEntryRel(
+				id,
+				CommerceChannelAccountEntryRelConstants.TYPE_SHIPPING_ADDRESS));
 	}
 
 	@Override
 	public AccountChannelEntry getAccountChannelUserId(Long id)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_USER);
-
 		return _toAccountChannelEntry(
-			commerceChannelAccountEntryRel.
-				getCommerceChannelAccountEntryRelId());
+			_getCommerceChannelAccountEntryRel(
+				id, CommerceChannelAccountEntryRelConstants.TYPE_USER));
 	}
 
 	@Override
@@ -519,13 +487,11 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id,
-				CommerceChannelAccountEntryRelConstants.TYPE_BILLING_ADDRESS);
-
 		return _patchAccountChannelEntry(
-			accountChannelEntry, commerceChannelAccountEntryRel,
+			accountChannelEntry,
+			_getCommerceChannelAccountEntryRel(
+				id,
+				CommerceChannelAccountEntryRelConstants.TYPE_BILLING_ADDRESS),
 			CommerceChannelAccountEntryRelConstants.TYPE_BILLING_ADDRESS);
 	}
 
@@ -534,12 +500,10 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_CURRENCY);
-
 		return _patchAccountChannelEntry(
-			accountChannelEntry, commerceChannelAccountEntryRel,
+			accountChannelEntry,
+			_getCommerceChannelAccountEntryRel(
+				id, CommerceChannelAccountEntryRelConstants.TYPE_CURRENCY),
 			CommerceChannelAccountEntryRelConstants.TYPE_CURRENCY);
 	}
 
@@ -548,12 +512,10 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_DELIVERY_TERM);
-
 		return _patchAccountChannelEntry(
-			accountChannelEntry, commerceChannelAccountEntryRel,
+			accountChannelEntry,
+			_getCommerceChannelAccountEntryRel(
+				id, CommerceChannelAccountEntryRelConstants.TYPE_DELIVERY_TERM),
 			CommerceChannelAccountEntryRelConstants.TYPE_DELIVERY_TERM);
 	}
 
@@ -562,12 +524,10 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_DISCOUNT);
-
 		return _patchAccountChannelEntry(
-			accountChannelEntry, commerceChannelAccountEntryRel,
+			accountChannelEntry,
+			_getCommerceChannelAccountEntryRel(
+				id, CommerceChannelAccountEntryRelConstants.TYPE_DISCOUNT),
 			CommerceChannelAccountEntryRelConstants.TYPE_DISCOUNT);
 	}
 
@@ -576,12 +536,10 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_PAYMENT_TERM);
-
 		return _patchAccountChannelEntry(
-			accountChannelEntry, commerceChannelAccountEntryRel,
+			accountChannelEntry,
+			_getCommerceChannelAccountEntryRel(
+				id, CommerceChannelAccountEntryRelConstants.TYPE_PAYMENT_TERM),
 			CommerceChannelAccountEntryRelConstants.TYPE_PAYMENT_TERM);
 	}
 
@@ -590,12 +548,10 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_PRICE_LIST);
-
 		return _patchAccountChannelEntry(
-			accountChannelEntry, commerceChannelAccountEntryRel,
+			accountChannelEntry,
+			_getCommerceChannelAccountEntryRel(
+				id, CommerceChannelAccountEntryRelConstants.TYPE_PRICE_LIST),
 			CommerceChannelAccountEntryRelConstants.TYPE_PRICE_LIST);
 	}
 
@@ -604,13 +560,11 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id,
-				CommerceChannelAccountEntryRelConstants.TYPE_SHIPPING_ADDRESS);
-
 		return _patchAccountChannelEntry(
-			accountChannelEntry, commerceChannelAccountEntryRel,
+			accountChannelEntry,
+			_getCommerceChannelAccountEntryRel(
+				id,
+				CommerceChannelAccountEntryRelConstants.TYPE_SHIPPING_ADDRESS),
 			CommerceChannelAccountEntryRelConstants.TYPE_SHIPPING_ADDRESS);
 	}
 
@@ -619,14 +573,25 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_fetchCommerceChannelAccountEntryRel(
-				id, CommerceChannelAccountEntryRelConstants.TYPE_USER);
+		int type = CommerceChannelAccountEntryRelConstants.TYPE_USER;
 
-		_checkUser(
-			_getClassPK(
-				accountChannelEntry,
-				CommerceChannelAccountEntryRelConstants.TYPE_USER));
+		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
+			_getCommerceChannelAccountEntryRel(id, type);
+
+		long classPK = commerceChannelAccountEntryRel.getClassPK();
+
+		if (accountChannelEntry.getEntryId() != null || accountChannelEntry.getEntryExternalReferenceCode() != null) {
+			try {
+				classPK = _getClassPK(accountChannelEntry, type);
+			}
+			catch (Exception exception) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(exception);
+				}
+			}
+		}
+
+		_checkPermission(_userService.getUserById(classPK));
 
 		return _patchAccountChannelEntry(
 			accountChannelEntry, commerceChannelAccountEntryRel,
@@ -640,16 +605,10 @@ public class AccountChannelEntryResourceImpl
 				AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry =
-			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
-				contextCompany.getCompanyId(), externalReferenceCode);
-
-		if (accountEntry == null) {
-			throw new NoSuchEntryException();
-		}
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry,
+			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
+				contextCompany.getCompanyId(), externalReferenceCode),
 			Address.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_BILLING_ADDRESS);
 	}
@@ -661,16 +620,10 @@ public class AccountChannelEntryResourceImpl
 				AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry =
-			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
-				contextCompany.getCompanyId(), externalReferenceCode);
-
-		if (accountEntry == null) {
-			throw new NoSuchEntryException();
-		}
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry,
+			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
+				contextCompany.getCompanyId(), externalReferenceCode),
 			CommerceCurrency.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_CURRENCY);
 	}
@@ -682,16 +635,10 @@ public class AccountChannelEntryResourceImpl
 				AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry =
-			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
-				contextCompany.getCompanyId(), externalReferenceCode);
-
-		if (accountEntry == null) {
-			throw new NoSuchEntryException();
-		}
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry,
+			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
+				contextCompany.getCompanyId(), externalReferenceCode),
 			CommerceTermEntry.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_DELIVERY_TERM);
 	}
@@ -703,16 +650,10 @@ public class AccountChannelEntryResourceImpl
 				AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry =
-			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
-				contextCompany.getCompanyId(), externalReferenceCode);
-
-		if (accountEntry == null) {
-			throw new NoSuchEntryException();
-		}
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry,
+			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
+				contextCompany.getCompanyId(), externalReferenceCode),
 			CommerceDiscount.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_DISCOUNT);
 	}
@@ -724,16 +665,10 @@ public class AccountChannelEntryResourceImpl
 				AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry =
-			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
-				contextCompany.getCompanyId(), externalReferenceCode);
-
-		if (accountEntry == null) {
-			throw new NoSuchEntryException();
-		}
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry,
+			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
+				contextCompany.getCompanyId(), externalReferenceCode),
 			CommerceTermEntry.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_PAYMENT_TERM);
 	}
@@ -745,16 +680,10 @@ public class AccountChannelEntryResourceImpl
 				AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry =
-			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
-				contextCompany.getCompanyId(), externalReferenceCode);
-
-		if (accountEntry == null) {
-			throw new NoSuchEntryException();
-		}
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry,
+			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
+				contextCompany.getCompanyId(), externalReferenceCode),
 			CommercePriceList.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_PRICE_LIST);
 	}
@@ -766,16 +695,10 @@ public class AccountChannelEntryResourceImpl
 				AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry =
-			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
-				contextCompany.getCompanyId(), externalReferenceCode);
-
-		if (accountEntry == null) {
-			throw new NoSuchEntryException();
-		}
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry,
+			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
+				contextCompany.getCompanyId(), externalReferenceCode),
 			Address.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_SHIPPING_ADDRESS);
 	}
@@ -787,21 +710,16 @@ public class AccountChannelEntryResourceImpl
 				AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry =
-			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
-				contextCompany.getCompanyId(), externalReferenceCode);
-
-		if (accountEntry == null) {
-			throw new NoSuchEntryException();
-		}
-
-		_checkUser(
-			_getClassPK(
-				accountChannelEntry,
-				CommerceChannelAccountEntryRelConstants.TYPE_USER));
+		_checkPermission(
+			_userService.getUserById(
+				_getClassPK(
+					accountChannelEntry,
+					CommerceChannelAccountEntryRelConstants.TYPE_USER)));
 
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry,
+			_accountEntryService.fetchAccountEntryByExternalReferenceCode(
+				contextCompany.getCompanyId(), externalReferenceCode),
 			User.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_USER);
 	}
@@ -811,10 +729,8 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry = _accountEntryService.getAccountEntry(id);
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry, _accountEntryService.getAccountEntry(id),
 			Address.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_BILLING_ADDRESS);
 	}
@@ -824,10 +740,8 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry = _accountEntryService.getAccountEntry(id);
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry, _accountEntryService.getAccountEntry(id),
 			CommerceCurrency.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_CURRENCY);
 	}
@@ -837,10 +751,8 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry = _accountEntryService.getAccountEntry(id);
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry, _accountEntryService.getAccountEntry(id),
 			CommerceTermEntry.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_DELIVERY_TERM);
 	}
@@ -850,10 +762,8 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry = _accountEntryService.getAccountEntry(id);
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry, _accountEntryService.getAccountEntry(id),
 			CommerceDiscount.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_DISCOUNT);
 	}
@@ -863,10 +773,8 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry = _accountEntryService.getAccountEntry(id);
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry, _accountEntryService.getAccountEntry(id),
 			CommerceTermEntry.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_PAYMENT_TERM);
 	}
@@ -876,10 +784,8 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry = _accountEntryService.getAccountEntry(id);
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry, _accountEntryService.getAccountEntry(id),
 			CommercePriceList.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_PRICE_LIST);
 	}
@@ -889,10 +795,8 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry = _accountEntryService.getAccountEntry(id);
-
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry, _accountEntryService.getAccountEntry(id),
 			Address.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_SHIPPING_ADDRESS);
 	}
@@ -902,45 +806,23 @@ public class AccountChannelEntryResourceImpl
 			Long id, AccountChannelEntry accountChannelEntry)
 		throws Exception {
 
-		AccountEntry accountEntry = _accountEntryService.getAccountEntry(id);
-
-		_checkUser(
-			_getClassPK(
-				accountChannelEntry,
-				CommerceChannelAccountEntryRelConstants.TYPE_USER));
+		_checkPermission(
+			_userService.getUserById(
+				_getClassPK(
+					accountChannelEntry,
+					CommerceChannelAccountEntryRelConstants.TYPE_USER)));
 
 		return _postAccountChannelEntry(
-			accountChannelEntry, accountEntry.getAccountEntryId(),
+			accountChannelEntry, _accountEntryService.getAccountEntry(id),
 			User.class.getName(),
 			CommerceChannelAccountEntryRelConstants.TYPE_USER);
 	}
 
-	private void _checkUser(long userId) throws Exception {
-		User user = _userService.getUserById(userId);
-
+	private void _checkPermission(User user) throws Exception {
 		_accountEntryModelResourcePermission.contains(
 			PermissionCheckerFactoryUtil.create(user), 0,
 			CommerceAccountActionKeys.
 				MANAGE_AVAILABLE_ACCOUNTS_VIA_USER_CHANNEL_REL);
-	}
-
-	private CommerceChannelAccountEntryRel _fetchCommerceChannelAccountEntryRel(
-			Long id, int type)
-		throws Exception {
-
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			_commerceChannelAccountEntryRelService.
-				fetchCommerceChannelAccountEntryRel(id);
-
-		if (commerceChannelAccountEntryRel == null) {
-			throw new NoSuchChannelAccountEntryRelException();
-		}
-
-		if (type != commerceChannelAccountEntryRel.getType()) {
-			throw new CommerceChannelAccountEntryRelTypeException();
-		}
-
-		return commerceChannelAccountEntryRel;
 	}
 
 	private Page<AccountChannelEntry> _getAccountChannelEntryPage(
@@ -968,8 +850,16 @@ public class AccountChannelEntryResourceImpl
 		if (type ==
 				CommerceChannelAccountEntryRelConstants.TYPE_BILLING_ADDRESS) {
 
-			Address address = _addressService.getAddress(
-				GetterUtil.getLong(accountChannelEntry.getEntryId()));
+			Address address =
+				_addressService.fetchAddressByExternalReferenceCode(
+					contextCompany.getCompanyId(),
+					GetterUtil.getString(
+						accountChannelEntry.getEntryExternalReferenceCode()));
+
+			if (address == null) {
+				address = _addressService.getAddress(
+					GetterUtil.getLong(accountChannelEntry.getEntryId()));
+			}
 
 			ListType listType = address.getListType();
 
@@ -996,8 +886,16 @@ public class AccountChannelEntryResourceImpl
 						TYPE_DELIVERY_TERM) {
 
 			CommerceTermEntry commerceTermEntry =
-				_commerceTermEntryService.getCommerceTermEntry(
-					GetterUtil.getLong(accountChannelEntry.getEntryId()));
+				_commerceTermEntryService.fetchByExternalReferenceCode(
+					contextCompany.getCompanyId(),
+					GetterUtil.getString(
+						accountChannelEntry.getEntryExternalReferenceCode()));
+
+			if (commerceTermEntry == null) {
+				commerceTermEntry =
+					_commerceTermEntryService.getCommerceTermEntry(
+						GetterUtil.getLong(accountChannelEntry.getEntryId()));
+			}
 
 			return commerceTermEntry.getCommerceTermEntryId();
 		}
@@ -1005,8 +903,15 @@ public class AccountChannelEntryResourceImpl
 					CommerceChannelAccountEntryRelConstants.TYPE_DISCOUNT) {
 
 			CommerceDiscount commerceDiscount =
-				_commerceDiscountService.getCommerceDiscount(
+				_commerceDiscountService.fetchByExternalReferenceCode(
+					GetterUtil.getString(
+						accountChannelEntry.getEntryExternalReferenceCode()),
+					contextCompany.getCompanyId());
+
+			if (commerceDiscount == null) {
+				commerceDiscount = _commerceDiscountService.getCommerceDiscount(
 					GetterUtil.getLong(accountChannelEntry.getEntryId()));
+			}
 
 			return commerceDiscount.getCommerceDiscountId();
 		}
@@ -1014,8 +919,16 @@ public class AccountChannelEntryResourceImpl
 					CommerceChannelAccountEntryRelConstants.TYPE_PAYMENT_TERM) {
 
 			CommerceTermEntry commerceTermEntry =
-				_commerceTermEntryService.getCommerceTermEntry(
-					GetterUtil.getLong(accountChannelEntry.getEntryId()));
+				_commerceTermEntryService.fetchByExternalReferenceCode(
+					contextCompany.getCompanyId(),
+					GetterUtil.getString(
+						accountChannelEntry.getEntryExternalReferenceCode()));
+
+			if (commerceTermEntry == null) {
+				commerceTermEntry =
+					_commerceTermEntryService.getCommerceTermEntry(
+						GetterUtil.getLong(accountChannelEntry.getEntryId()));
+			}
 
 			return commerceTermEntry.getCommerceTermEntryId();
 		}
@@ -1023,8 +936,16 @@ public class AccountChannelEntryResourceImpl
 					CommerceChannelAccountEntryRelConstants.TYPE_PRICE_LIST) {
 
 			CommercePriceList commercePriceList =
-				_commercePriceListService.getCommercePriceList(
-					GetterUtil.getLong(accountChannelEntry.getEntryId()));
+				_commercePriceListService.fetchByExternalReferenceCode(
+					GetterUtil.getString(
+						accountChannelEntry.getEntryExternalReferenceCode()),
+					contextCompany.getCompanyId());
+
+			if (commercePriceList == null) {
+				commercePriceList =
+					_commercePriceListService.getCommercePriceList(
+						GetterUtil.getLong(accountChannelEntry.getEntryId()));
+			}
 
 			return commercePriceList.getCommercePriceListId();
 		}
@@ -1032,8 +953,16 @@ public class AccountChannelEntryResourceImpl
 					CommerceChannelAccountEntryRelConstants.
 						TYPE_SHIPPING_ADDRESS) {
 
-			Address address = _addressService.getAddress(
-				GetterUtil.getLong(accountChannelEntry.getEntryId()));
+			Address address =
+				_addressService.fetchAddressByExternalReferenceCode(
+					contextCompany.getCompanyId(),
+					GetterUtil.getString(
+						accountChannelEntry.getEntryExternalReferenceCode()));
+
+			if (address == null) {
+				address = _addressService.getAddress(
+					GetterUtil.getLong(accountChannelEntry.getEntryId()));
+			}
 
 			ListType listType = address.getListType();
 
@@ -1047,13 +976,34 @@ public class AccountChannelEntryResourceImpl
 			}
 		}
 		else if (type == CommerceChannelAccountEntryRelConstants.TYPE_USER) {
-			User user = _userService.getUserById(
-				GetterUtil.getLong(accountChannelEntry.getEntryId()));
+			User user = _userService.fetchUserByExternalReferenceCode(
+				contextCompany.getCompanyId(),
+				accountChannelEntry.getEntryExternalReferenceCode());
+
+			if (user == null) {
+				user = _userService.getUserById(
+					GetterUtil.getLong(accountChannelEntry.getEntryId()));
+			}
 
 			return user.getUserId();
 		}
 
 		throw new CommerceChannelAccountEntryRelTypeException();
+	}
+
+	private CommerceChannelAccountEntryRel _getCommerceChannelAccountEntryRel(
+			Long id, int type)
+		throws Exception {
+
+		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
+			_commerceChannelAccountEntryRelService.
+				getCommerceChannelAccountEntryRel(id);
+
+		if (type != commerceChannelAccountEntryRel.getType()) {
+			throw new CommerceChannelAccountEntryRelTypeException();
+		}
+
+		return commerceChannelAccountEntryRel;
 	}
 
 	private long _getCommerceChannelId(AccountChannelEntry accountChannelEntry)
@@ -1086,23 +1036,29 @@ public class AccountChannelEntryResourceImpl
 		long commerceChannelId =
 			commerceChannelAccountEntryRel.getCommerceChannelId();
 
-		try {
-			commerceChannelId = _getCommerceChannelId(accountChannelEntry);
-		}
-		catch (Exception exception) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(exception);
+		if (accountChannelEntry.getChannelId() != null) {
+			try {
+				commerceChannelId = _getCommerceChannelId(accountChannelEntry);
+			}
+			catch (Exception exception) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(exception);
+				}
 			}
 		}
 
 		long classPK = commerceChannelAccountEntryRel.getClassPK();
 
-		try {
-			classPK = _getClassPK(accountChannelEntry, type);
-		}
-		catch (Exception exception) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(exception);
+		if ((accountChannelEntry.getEntryId() != null) ||
+			(accountChannelEntry.getEntryExternalReferenceCode() != null)) {
+
+			try {
+				classPK = _getClassPK(accountChannelEntry, type);
+			}
+			catch (Exception exception) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(exception);
+				}
 			}
 		}
 
@@ -1121,14 +1077,18 @@ public class AccountChannelEntryResourceImpl
 	}
 
 	private AccountChannelEntry _postAccountChannelEntry(
-			AccountChannelEntry accountChannelEntry, long accountEntryId,
+			AccountChannelEntry accountChannelEntry, AccountEntry accountEntry,
 			String className, int type)
 		throws Exception {
+
+		if (accountEntry == null) {
+			throw new NoSuchEntryException();
+		}
 
 		return _toAccountChannelEntry(
 			_commerceChannelAccountEntryRelService.
 				addCommerceChannelAccountEntryRel(
-					accountEntryId, className,
+					accountEntry.getAccountEntryId(), className,
 					_getClassPK(accountChannelEntry, type),
 					_getCommerceChannelId(accountChannelEntry),
 					GetterUtil.getBoolean(
@@ -1141,19 +1101,12 @@ public class AccountChannelEntryResourceImpl
 			CommerceChannelAccountEntryRel commerceChannelAccountEntryRel)
 		throws Exception {
 
-		return _toAccountChannelEntry(
-			commerceChannelAccountEntryRel.
-				getCommerceChannelAccountEntryRelId());
-	}
-
-	private AccountChannelEntry _toAccountChannelEntry(
-			long commerceChannelAccountEntryRelId)
-		throws Exception {
-
 		return _accountChannelEntryDTOConverter.toDTO(
 			new DefaultDTOConverterContext(
 				contextAcceptLanguage.isAcceptAllLanguages(), null,
-				_dtoConverterRegistry, commerceChannelAccountEntryRelId,
+				_dtoConverterRegistry,
+				commerceChannelAccountEntryRel.
+					getCommerceChannelAccountEntryRelId(),
 				contextAcceptLanguage.getPreferredLocale(), contextUriInfo,
 				contextUser));
 	}
