@@ -26,6 +26,8 @@ import com.liferay.headless.commerce.delivery.catalog.resource.v1_0.ProductResou
 import com.liferay.headless.commerce.delivery.catalog.resource.v1_0.ProductSpecificationResource;
 import com.liferay.headless.commerce.delivery.catalog.resource.v1_0.RelatedProductResource;
 import com.liferay.headless.commerce.delivery.catalog.resource.v1_0.SkuResource;
+import com.liferay.headless.commerce.delivery.catalog.resource.v1_0.WishListItemResource;
+import com.liferay.headless.commerce.delivery.catalog.resource.v1_0.WishListResource;
 import com.liferay.portal.vulcan.graphql.servlet.ServletData;
 
 import javax.annotation.Generated;
@@ -47,6 +49,9 @@ public class ServletDataImpl implements ServletData {
 
 	@Activate
 	public void activate(BundleContext bundleContext) {
+		Mutation.setWishListResourceComponentServiceObjects(
+			_wishListResourceComponentServiceObjects);
+
 		Query.setAttachmentResourceComponentServiceObjects(
 			_attachmentResourceComponentServiceObjects);
 		Query.setCategoryResourceComponentServiceObjects(
@@ -67,6 +72,10 @@ public class ServletDataImpl implements ServletData {
 			_relatedProductResourceComponentServiceObjects);
 		Query.setSkuResourceComponentServiceObjects(
 			_skuResourceComponentServiceObjects);
+		Query.setWishListResourceComponentServiceObjects(
+			_wishListResourceComponentServiceObjects);
+		Query.setWishListItemResourceComponentServiceObjects(
+			_wishListItemResourceComponentServiceObjects);
 	}
 
 	@Override
@@ -83,6 +92,10 @@ public class ServletDataImpl implements ServletData {
 	public Query getQuery() {
 		return new Query();
 	}
+
+	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
+	private ComponentServiceObjects<WishListResource>
+		_wishListResourceComponentServiceObjects;
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<AttachmentResource>
@@ -123,5 +136,9 @@ public class ServletDataImpl implements ServletData {
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<SkuResource>
 		_skuResourceComponentServiceObjects;
+
+	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
+	private ComponentServiceObjects<WishListItemResource>
+		_wishListItemResourceComponentServiceObjects;
 
 }

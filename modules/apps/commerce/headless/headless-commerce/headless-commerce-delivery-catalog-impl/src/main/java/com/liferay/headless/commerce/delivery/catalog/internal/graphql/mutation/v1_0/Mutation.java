@@ -14,12 +14,17 @@
 
 package com.liferay.headless.commerce.delivery.catalog.internal.graphql.mutation.v1_0;
 
+import com.liferay.headless.commerce.delivery.catalog.dto.v1_0.WishList;
+import com.liferay.headless.commerce.delivery.catalog.resource.v1_0.WishListResource;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
+import com.liferay.portal.vulcan.batch.engine.resource.VulcanBatchEngineImportTaskResource;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLField;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLName;
 
 import java.util.function.BiFunction;
 
@@ -28,6 +33,7 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.osgi.service.component.ComponentServiceObjects;
@@ -38,6 +44,65 @@ import org.osgi.service.component.ComponentServiceObjects;
  */
 @Generated("")
 public class Mutation {
+
+	public static void setWishListResourceComponentServiceObjects(
+		ComponentServiceObjects<WishListResource>
+			wishListResourceComponentServiceObjects) {
+
+		_wishListResourceComponentServiceObjects =
+			wishListResourceComponentServiceObjects;
+	}
+
+	@GraphQLField
+	public WishList patchChannelWishList(
+			@GraphQLName("channelId") Long channelId,
+			@GraphQLName("accountId") Long accountId,
+			@GraphQLName("wishList") WishList wishList)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_wishListResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			wishListResource -> wishListResource.patchChannelWishList(
+				channelId, accountId, wishList));
+	}
+
+	@GraphQLField
+	public WishList createChannelWishList(
+			@GraphQLName("channelId") Long channelId,
+			@GraphQLName("accountId") Long accountId,
+			@GraphQLName("wishList") WishList wishList)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_wishListResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			wishListResource -> wishListResource.postChannelWishList(
+				channelId, accountId, wishList));
+	}
+
+	@GraphQLField(description = "Deletes a wishlist by wishListId.")
+	public Response deleteWishList(@GraphQLName("wishListId") Long wishListId)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_wishListResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			wishListResource -> wishListResource.deleteWishList(wishListId));
+	}
+
+	@GraphQLField
+	public Response deleteWishListBatch(
+			@GraphQLName("callbackURL") String callbackURL,
+			@GraphQLName("object") Object object)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_wishListResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			wishListResource -> wishListResource.deleteWishListBatch(
+				callbackURL, object));
+	}
 
 	private <T, R, E1 extends Throwable, E2 extends Throwable> R
 			_applyComponentServiceObjects(
@@ -77,6 +142,25 @@ public class Mutation {
 		}
 	}
 
+	private void _populateResourceContext(WishListResource wishListResource)
+		throws Exception {
+
+		wishListResource.setContextAcceptLanguage(_acceptLanguage);
+		wishListResource.setContextCompany(_company);
+		wishListResource.setContextHttpServletRequest(_httpServletRequest);
+		wishListResource.setContextHttpServletResponse(_httpServletResponse);
+		wishListResource.setContextUriInfo(_uriInfo);
+		wishListResource.setContextUser(_user);
+		wishListResource.setGroupLocalService(_groupLocalService);
+		wishListResource.setRoleLocalService(_roleLocalService);
+
+		wishListResource.setVulcanBatchEngineImportTaskResource(
+			_vulcanBatchEngineImportTaskResource);
+	}
+
+	private static ComponentServiceObjects<WishListResource>
+		_wishListResourceComponentServiceObjects;
+
 	private AcceptLanguage _acceptLanguage;
 	private com.liferay.portal.kernel.model.Company _company;
 	private GroupLocalService _groupLocalService;
@@ -86,5 +170,7 @@ public class Mutation {
 	private BiFunction<Object, String, Sort[]> _sortsBiFunction;
 	private UriInfo _uriInfo;
 	private com.liferay.portal.kernel.model.User _user;
+	private VulcanBatchEngineImportTaskResource
+		_vulcanBatchEngineImportTaskResource;
 
 }
