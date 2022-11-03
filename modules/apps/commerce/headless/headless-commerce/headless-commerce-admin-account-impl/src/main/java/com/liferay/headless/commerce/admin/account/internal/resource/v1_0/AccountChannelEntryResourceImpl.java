@@ -14,15 +14,19 @@
 
 package com.liferay.headless.commerce.admin.account.internal.resource.v1_0;
 
-import com.liferay.account.constants.AccountListTypeConstants;
 import com.liferay.account.exception.NoSuchEntryException;
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.service.AccountEntryService;
 import com.liferay.commerce.account.constants.CommerceAccountActionKeys;
+import com.liferay.commerce.constants.CommerceAddressConstants;
+import com.liferay.commerce.currency.exception.NoSuchCurrencyException;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.currency.service.CommerceCurrencyService;
+import com.liferay.commerce.discount.exception.NoSuchDiscountException;
 import com.liferay.commerce.discount.model.CommerceDiscount;
 import com.liferay.commerce.discount.service.CommerceDiscountService;
+import com.liferay.commerce.model.CommerceAddress;
+import com.liferay.commerce.price.list.exception.NoSuchPriceListException;
 import com.liferay.commerce.price.list.model.CommercePriceList;
 import com.liferay.commerce.price.list.service.CommercePriceListService;
 import com.liferay.commerce.product.constants.CommerceChannelAccountEntryRelConstants;
@@ -31,26 +35,26 @@ import com.liferay.commerce.product.model.CommerceChannel;
 import com.liferay.commerce.product.model.CommerceChannelAccountEntryRel;
 import com.liferay.commerce.product.service.CommerceChannelAccountEntryRelService;
 import com.liferay.commerce.product.service.CommerceChannelService;
+import com.liferay.commerce.service.CommerceAddressService;
+import com.liferay.commerce.term.exception.NoSuchTermEntryException;
 import com.liferay.commerce.term.model.CommerceTermEntry;
 import com.liferay.commerce.term.service.CommerceTermEntryService;
 import com.liferay.headless.commerce.admin.account.dto.v1_0.AccountChannelEntry;
 import com.liferay.headless.commerce.admin.account.internal.dto.v1_0.converter.AccountChannelEntryDTOConverter;
 import com.liferay.headless.commerce.admin.account.resource.v1_0.AccountChannelEntryResource;
+import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Address;
-import com.liferay.portal.kernel.model.ListType;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.service.AddressService;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterRegistry;
 import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
-import com.liferay.portal.vulcan.util.TransformUtil;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -580,7 +584,9 @@ public class AccountChannelEntryResourceImpl
 
 		long classPK = commerceChannelAccountEntryRel.getClassPK();
 
-		if (accountChannelEntry.getEntryId() != null || accountChannelEntry.getEntryExternalReferenceCode() != null) {
+		if ((accountChannelEntry.getEntryId() != null) ||
+			(accountChannelEntry.getEntryExternalReferenceCode() != null)) {
+
 			try {
 				classPK = _getClassPK(accountChannelEntry, type);
 			}
@@ -819,10 +825,14 @@ public class AccountChannelEntryResourceImpl
 	}
 
 	private void _checkPermission(User user) throws Exception {
-		_accountEntryModelResourcePermission.contains(
-			PermissionCheckerFactoryUtil.create(user), 0,
-			CommerceAccountActionKeys.
-				MANAGE_AVAILABLE_ACCOUNTS_VIA_USER_CHANNEL_REL);
+		if (!_accountEntryModelResourcePermission.contains(
+				PermissionCheckerFactoryUtil.create(user), 0,
+				CommerceAccountActionKeys.
+					MANAGE_AVAILABLE_ACCOUNTS_VIA_USER_CHANNEL_REL)) {
+
+			throw new CommerceChannelAccountEntryRelTypeException(
+				"The user can not be set as account manager");
+		}
 	}
 
 	private Page<AccountChannelEntry> _getAccountChannelEntryPage(
@@ -830,7 +840,7 @@ public class AccountChannelEntryResourceImpl
 		throws Exception {
 
 		return Page.of(
-			TransformUtil.transform(
+			transform(
 				_commerceChannelAccountEntryRelService.
 					getCommerceChannelAccountEntryRels(
 						accountEntryId, accountEntryType,
@@ -850,26 +860,25 @@ public class AccountChannelEntryResourceImpl
 		if (type ==
 				CommerceChannelAccountEntryRelConstants.TYPE_BILLING_ADDRESS) {
 
-			Address address =
-				_addressService.fetchAddressByExternalReferenceCode(
-					contextCompany.getCompanyId(),
+			CommerceAddress commerceAddress =
+				_commerceAddressService.fetchByExternalReferenceCode(
 					GetterUtil.getString(
-						accountChannelEntry.getEntryExternalReferenceCode()));
+						accountChannelEntry.getEntryExternalReferenceCode()),
+					contextCompany.getCompanyId());
 
-			if (address == null) {
-				address = _addressService.getAddress(
+			if (commerceAddress == null) {
+				commerceAddress = _commerceAddressService.getCommerceAddress(
 					GetterUtil.getLong(accountChannelEntry.getEntryId()));
 			}
 
-			ListType listType = address.getListType();
+			int commerceAddressType = commerceAddress.getType();
 
-			if (AccountListTypeConstants.ACCOUNT_ENTRY_ADDRESS_TYPE_BILLING.
-					equals(listType.getType()) ||
-				AccountListTypeConstants.
-					ACCOUNT_ENTRY_ADDRESS_TYPE_BILLING_AND_SHIPPING.equals(
-						listType.getType())) {
+			if ((CommerceAddressConstants.ADDRESS_TYPE_BILLING ==
+					commerceAddressType) ||
+				(CommerceAddressConstants.ADDRESS_TYPE_BILLING_AND_SHIPPING ==
+					commerceAddressType)) {
 
-				return address.getAddressId();
+				return commerceAddress.getCommerceAddressId();
 			}
 		}
 		else if (type ==
@@ -878,6 +887,10 @@ public class AccountChannelEntryResourceImpl
 			CommerceCurrency commerceCurrency =
 				_commerceCurrencyService.getCommerceCurrency(
 					GetterUtil.getLong(accountChannelEntry.getEntryId()));
+
+			if (!commerceCurrency.isActive()) {
+				throw new NoSuchCurrencyException();
+			}
 
 			return commerceCurrency.getCommerceCurrencyId();
 		}
@@ -897,6 +910,10 @@ public class AccountChannelEntryResourceImpl
 						GetterUtil.getLong(accountChannelEntry.getEntryId()));
 			}
 
+			if (!commerceTermEntry.isActive()) {
+				throw new NoSuchTermEntryException();
+			}
+
 			return commerceTermEntry.getCommerceTermEntryId();
 		}
 		else if (type ==
@@ -911,6 +928,10 @@ public class AccountChannelEntryResourceImpl
 			if (commerceDiscount == null) {
 				commerceDiscount = _commerceDiscountService.getCommerceDiscount(
 					GetterUtil.getLong(accountChannelEntry.getEntryId()));
+			}
+
+			if (!commerceDiscount.isActive()) {
+				throw new NoSuchDiscountException();
 			}
 
 			return commerceDiscount.getCommerceDiscountId();
@@ -930,6 +951,10 @@ public class AccountChannelEntryResourceImpl
 						GetterUtil.getLong(accountChannelEntry.getEntryId()));
 			}
 
+			if (!commerceTermEntry.isActive()) {
+				throw new NoSuchTermEntryException();
+			}
+
 			return commerceTermEntry.getCommerceTermEntryId();
 		}
 		else if (type ==
@@ -947,32 +972,35 @@ public class AccountChannelEntryResourceImpl
 						GetterUtil.getLong(accountChannelEntry.getEntryId()));
 			}
 
+			if (commercePriceList.isInactive()) {
+				throw new NoSuchPriceListException();
+			}
+
 			return commercePriceList.getCommercePriceListId();
 		}
 		else if (type ==
 					CommerceChannelAccountEntryRelConstants.
 						TYPE_SHIPPING_ADDRESS) {
 
-			Address address =
-				_addressService.fetchAddressByExternalReferenceCode(
-					contextCompany.getCompanyId(),
+			CommerceAddress commerceAddress =
+				_commerceAddressService.fetchByExternalReferenceCode(
 					GetterUtil.getString(
-						accountChannelEntry.getEntryExternalReferenceCode()));
+						accountChannelEntry.getEntryExternalReferenceCode()),
+					contextCompany.getCompanyId());
 
-			if (address == null) {
-				address = _addressService.getAddress(
+			if (commerceAddress == null) {
+				commerceAddress = _commerceAddressService.getCommerceAddress(
 					GetterUtil.getLong(accountChannelEntry.getEntryId()));
 			}
 
-			ListType listType = address.getListType();
+			int commerceAddressType = commerceAddress.getType();
 
-			if (AccountListTypeConstants.ACCOUNT_ENTRY_ADDRESS_TYPE_SHIPPING.
-					equals(listType.getType()) ||
-				AccountListTypeConstants.
-					ACCOUNT_ENTRY_ADDRESS_TYPE_BILLING_AND_SHIPPING.equals(
-						listType.getType())) {
+			if ((CommerceAddressConstants.ADDRESS_TYPE_SHIPPING ==
+					commerceAddressType) ||
+				(CommerceAddressConstants.ADDRESS_TYPE_BILLING_AND_SHIPPING ==
+					commerceAddressType)) {
 
-				return address.getAddressId();
+				return commerceAddress.getCommerceAddressId();
 			}
 		}
 		else if (type == CommerceChannelAccountEntryRelConstants.TYPE_USER) {
@@ -985,10 +1013,15 @@ public class AccountChannelEntryResourceImpl
 					GetterUtil.getLong(accountChannelEntry.getEntryId()));
 			}
 
+			if (!user.isActive()) {
+				throw new NoSuchUserException();
+			}
+
 			return user.getUserId();
 		}
 
-		throw new CommerceChannelAccountEntryRelTypeException();
+		throw new CommerceChannelAccountEntryRelTypeException(
+			"Type is undefined");
 	}
 
 	private CommerceChannelAccountEntryRel _getCommerceChannelAccountEntryRel(
@@ -1000,7 +1033,8 @@ public class AccountChannelEntryResourceImpl
 				getCommerceChannelAccountEntryRel(id);
 
 		if (type != commerceChannelAccountEntryRel.getType()) {
-			throw new CommerceChannelAccountEntryRelTypeException();
+			throw new CommerceChannelAccountEntryRelTypeException(
+				"Type mismatch");
 		}
 
 		return commerceChannelAccountEntryRel;
@@ -1129,7 +1163,7 @@ public class AccountChannelEntryResourceImpl
 	private AccountEntryService _accountEntryService;
 
 	@Reference
-	private AddressService _addressService;
+	private CommerceAddressService _commerceAddressService;
 
 	@Reference
 	private CommerceChannelAccountEntryRelService
