@@ -17,7 +17,6 @@
 	notifications_text = languageUtil.get(locale, "notifications")
 	notification_url = commerceThemeMiniumHttpHelper.getNotificationsURL(request)
 	notification_count = commerceThemeMiniumHttpHelper.getNotificationsCount(themeDisplay)
-	back_url = paramUtil.getString(request, "p_r_p_backURL")
 	minium_content_css_class = "minium-content"
 />
 
