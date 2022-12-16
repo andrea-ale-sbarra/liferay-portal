@@ -74,6 +74,8 @@ export default function CartQuickAdd() {
 
 			const channels = await channelsResponse.json();
 
+			console.log(cartState.channel.channel.id);
+
 			channelIdRef.current = channels.items[0].id;
 
 			const productsApiURL = new URL(
