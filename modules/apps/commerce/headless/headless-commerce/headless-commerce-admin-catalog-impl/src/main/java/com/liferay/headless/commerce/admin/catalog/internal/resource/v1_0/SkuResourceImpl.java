@@ -20,6 +20,8 @@ import com.liferay.commerce.product.exception.NoSuchCPDefinitionException;
 import com.liferay.commerce.product.exception.NoSuchCPInstanceException;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
+import com.liferay.commerce.product.service.CPDefinitionOptionRelService;
+import com.liferay.commerce.product.service.CPDefinitionOptionValueRelService;
 import com.liferay.commerce.product.service.CPDefinitionService;
 import com.liferay.commerce.product.service.CPInstanceService;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Product;
@@ -254,7 +256,9 @@ public class SkuResourceImpl
 			cpDefinition.getGroupId());
 
 		CPInstance cpInstance = SkuUtil.addOrUpdateCPInstance(
-			_cpInstanceService, sku, cpDefinition, serviceContext);
+			_cpInstanceService, sku, cpDefinition,
+			_cpDefinitionOptionValueRelService, _cpDefinitionOptionRelService,
+			serviceContext);
 
 		SkuUtil.updateCommercePriceEntries(
 			_commercePriceEntryLocalService, _commercePriceListLocalService,
@@ -390,6 +394,13 @@ public class SkuResourceImpl
 
 	@Reference
 	private ConfigurationProvider _configurationProvider;
+
+	@Reference
+	private CPDefinitionOptionRelService _cpDefinitionOptionRelService;
+
+	@Reference
+	private CPDefinitionOptionValueRelService
+		_cpDefinitionOptionValueRelService;
 
 	@Reference
 	private CPDefinitionService _cpDefinitionService;
