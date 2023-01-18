@@ -1534,17 +1534,19 @@ components:
         SkuOption:
             properties:
                 key:
+                    type: string
+                optionId:
                     example: 31130
                     format: int64
                     minimum: 0
-                    readOnly: true
+                    type: integer
+                optionValueId:
+                    example: 31130
+                    format: int64
+                    minimum: 0
                     type: integer
                 value:
-                    example: 31130
-                    format: int64
-                    minimum: 0
-                    readOnly: true
-                    type: integer
+                    type: string
             type: object
         Specification:
             properties:
@@ -1618,7 +1620,7 @@ info:
         name: Commerce Team
     description:
         "Liferay Commerce Admin Catalog API. A Java client JAR is available for use with the group ID 'com.liferay',
-        artifact ID 'com.liferay.headless.commerce.admin.catalog.client', and version '4.0.24'."
+        artifact ID 'com.liferay.headless.commerce.admin.catalog.client', and version '4.0.26'."
     license:
         name: "Apache 2.0"
         url: "http://www.apache.org/licenses/LICENSE-2.0.html"
