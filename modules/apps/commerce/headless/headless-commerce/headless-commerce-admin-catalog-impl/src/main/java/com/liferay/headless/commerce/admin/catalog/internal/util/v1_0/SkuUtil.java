@@ -212,7 +212,7 @@ public class SkuUtil {
 				JSONUtil.put(
 					"key",
 					() -> {
-						if (skuOption.getKey() == null) {
+						if (Validator.isNull(skuOption.getKey())) {
 							CPDefinitionOptionRel cpDefinitionOptionRel =
 								cpDefinitionOptionRelService.
 									getCPDefinitionOptionRel(
@@ -227,7 +227,7 @@ public class SkuUtil {
 					"value",
 					JSONUtil.put(
 						() -> {
-							if (skuOption.getValue() == null) {
+							if (Validator.isNull(skuOption.getValue())) {
 								CPDefinitionOptionValueRel
 									cpDefinitionOptionValueRel =
 										cpDefinitionOptionValueRelService.
