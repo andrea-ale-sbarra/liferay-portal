@@ -323,7 +323,7 @@ public class CPDefinitionLocalServiceImpl
 				displayDateYear, displayDateHour, displayDateMinute,
 				expirationDateMonth, expirationDateDay, expirationDateYear,
 				expirationDateHour, expirationDateMinute, neverExpire, false,
-				false, 1, StringPool.BLANK, null, 1, false, 1, null, null, 1,
+				subscriptionEnabled, subscriptionLength, subscriptionType, subscriptionTypeSettingsUnicodeProperties, maxSubscriptionCycles, deliverySubscriptionEnabled, deliverySubscriptionLength, deliverySubscriptionType, deliverySubscriptionTypeSettingsUnicodeProperties, deliveryMaxSubscriptionCycles,
 				null, false, null, 0, 0, 0, 0, cpInstanceServiceContext);
 		}
 

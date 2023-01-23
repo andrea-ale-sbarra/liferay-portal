@@ -831,6 +831,8 @@ components:
                 defaultSku:
                     example: Blue handle, 00001l, 70cm, lifetime warranty
                     type: string
+                deliverySubscriptionConfiguration:
+                    $ref: "#/components/schemas/ProductSubscriptionConfiguration"
                 description:
                     type: object
                     additionalProperties:
@@ -1618,7 +1620,7 @@ info:
         name: Commerce Team
     description:
         "Liferay Commerce Admin Catalog API. A Java client JAR is available for use with the group ID 'com.liferay',
-        artifact ID 'com.liferay.headless.commerce.admin.catalog.client', and version '4.0.24'."
+        artifact ID 'com.liferay.headless.commerce.admin.catalog.client', and version '4.0.26'."
     license:
         name: "Apache 2.0"
         url: "http://www.apache.org/licenses/LICENSE-2.0.html"

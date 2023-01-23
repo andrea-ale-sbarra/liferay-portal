@@ -209,6 +209,17 @@ public class ProductSerDes {
 			sb.append("\"");
 		}
 
+		if (product.getDeliverySubscriptionConfiguration() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"deliverySubscriptionConfiguration\": ");
+
+			sb.append(
+				String.valueOf(product.getDeliverySubscriptionConfiguration()));
+		}
+
 		if (product.getDescription() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -834,6 +845,15 @@ public class ProductSerDes {
 			map.put("defaultSku", String.valueOf(product.getDefaultSku()));
 		}
 
+		if (product.getDeliverySubscriptionConfiguration() == null) {
+			map.put("deliverySubscriptionConfiguration", null);
+		}
+		else {
+			map.put(
+				"deliverySubscriptionConfiguration",
+				String.valueOf(product.getDeliverySubscriptionConfiguration()));
+		}
+
 		if (product.getDescription() == null) {
 			map.put("description", null);
 		}
@@ -1240,6 +1260,16 @@ public class ProductSerDes {
 			else if (Objects.equals(jsonParserFieldName, "defaultSku")) {
 				if (jsonParserFieldValue != null) {
 					product.setDefaultSku((String)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(
+						jsonParserFieldName,
+						"deliverySubscriptionConfiguration")) {
+
+				if (jsonParserFieldValue != null) {
+					product.setDeliverySubscriptionConfiguration(
+						ProductSubscriptionConfigurationSerDes.toDTO(
+							(String)jsonParserFieldValue));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "description")) {

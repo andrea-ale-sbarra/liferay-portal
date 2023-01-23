@@ -357,6 +357,43 @@ public class Product implements Serializable {
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected String defaultSku;
 
+	@Schema
+	@Valid
+	public ProductSubscriptionConfiguration
+		getDeliverySubscriptionConfiguration() {
+
+		return deliverySubscriptionConfiguration;
+	}
+
+	public void setDeliverySubscriptionConfiguration(
+		ProductSubscriptionConfiguration deliverySubscriptionConfiguration) {
+
+		this.deliverySubscriptionConfiguration =
+			deliverySubscriptionConfiguration;
+	}
+
+	@JsonIgnore
+	public void setDeliverySubscriptionConfiguration(
+		UnsafeSupplier<ProductSubscriptionConfiguration, Exception>
+			deliverySubscriptionConfigurationUnsafeSupplier) {
+
+		try {
+			deliverySubscriptionConfiguration =
+				deliverySubscriptionConfigurationUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected ProductSubscriptionConfiguration
+		deliverySubscriptionConfiguration;
+
 	@Schema(
 		example = "{hu_HU=Product Description HU, hr_HR=Product Description HR, en_US=Professional hand stainless steel saw for wood. Made to last and saw forever. Made of best steel}"
 	)
@@ -1679,6 +1716,16 @@ public class Product implements Serializable {
 			sb.append(_escape(defaultSku));
 
 			sb.append("\"");
+		}
+
+		if (deliverySubscriptionConfiguration != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"deliverySubscriptionConfiguration\": ");
+
+			sb.append(String.valueOf(deliverySubscriptionConfiguration));
 		}
 
 		if (description != null) {

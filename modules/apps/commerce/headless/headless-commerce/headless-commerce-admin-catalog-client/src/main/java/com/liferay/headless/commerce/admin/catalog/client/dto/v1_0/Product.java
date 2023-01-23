@@ -248,6 +248,35 @@ public class Product implements Cloneable, Serializable {
 
 	protected String defaultSku;
 
+	public ProductSubscriptionConfiguration
+		getDeliverySubscriptionConfiguration() {
+
+		return deliverySubscriptionConfiguration;
+	}
+
+	public void setDeliverySubscriptionConfiguration(
+		ProductSubscriptionConfiguration deliverySubscriptionConfiguration) {
+
+		this.deliverySubscriptionConfiguration =
+			deliverySubscriptionConfiguration;
+	}
+
+	public void setDeliverySubscriptionConfiguration(
+		UnsafeSupplier<ProductSubscriptionConfiguration, Exception>
+			deliverySubscriptionConfigurationUnsafeSupplier) {
+
+		try {
+			deliverySubscriptionConfiguration =
+				deliverySubscriptionConfigurationUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected ProductSubscriptionConfiguration
+		deliverySubscriptionConfiguration;
+
 	public Map<String, String> getDescription() {
 		return description;
 	}

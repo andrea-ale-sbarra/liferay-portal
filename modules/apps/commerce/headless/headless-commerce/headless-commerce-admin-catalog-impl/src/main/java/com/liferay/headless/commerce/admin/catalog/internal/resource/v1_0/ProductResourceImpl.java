@@ -483,6 +483,9 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 			_getProductShippingConfiguration(product);
 		ProductSubscriptionConfiguration subscriptionConfiguration =
 			_getProductSubscriptionConfiguration(product);
+		ProductSubscriptionConfiguration deliverySubscriptionConfiguration =
+			_getProductDeliverySubscriptionConfiguration(product);
+
 		ProductTaxConfiguration taxConfiguration = _getProductTaxConfiguration(
 			product);
 
@@ -610,6 +613,13 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 			null,
 			GetterUtil.getLong(
 				subscriptionConfiguration.getNumberOfLength(), 1),
+			GetterUtil.getBoolean(deliverySubscriptionConfiguration.getEnable()),
+			GetterUtil.getInteger(deliverySubscriptionConfiguration.getLength(), 1),
+			GetterUtil.getString(
+				deliverySubscriptionConfiguration.getSubscriptionTypeAsString()),
+			null,
+			GetterUtil.getLong(
+				deliverySubscriptionConfiguration.getNumberOfLength(), 1),
 			productStatus, serviceContext);
 
 		if ((product.getActive() != null) && !product.getActive()) {
@@ -746,6 +756,19 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 
 		if (subscriptionConfiguration != null) {
 			return subscriptionConfiguration;
+		}
+
+		return new ProductSubscriptionConfiguration();
+	}
+
+	private ProductSubscriptionConfiguration
+	_getProductDeliverySubscriptionConfiguration(Product product) {
+
+		ProductSubscriptionConfiguration deliverySubscriptionConfiguration =
+			product.getDeliverySubscriptionConfiguration();
+
+		if (deliverySubscriptionConfiguration != null) {
+			return deliverySubscriptionConfiguration;
 		}
 
 		return new ProductSubscriptionConfiguration();
