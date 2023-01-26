@@ -1684,7 +1684,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			updateStatus(
 				userId, kbArticle.getResourcePrimKey(),
 				WorkflowConstants.STATUS_EXPIRED,
-				_getMinimalServiceContext(company, kbArticle));
+				_getServiceContext(company, kbArticle));
 		}
 	}
 
@@ -1870,21 +1870,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			new GroupServiceSettingsLocator(groupId, KBConstants.SERVICE_NAME));
 	}
 
-	private ServiceContext _getMinimalServiceContext(
-			Company company, KBArticle kbArticle)
-		throws PortalException {
-
-		ServiceContext serviceContext = new ServiceContext();
-
-		serviceContext.setPlid(LayoutConstants.DEFAULT_PLID);
-		serviceContext.setPortalURL(
-			company.getPortalURL(kbArticle.getGroupId()));
-		serviceContext.setPortletId(KBPortletKeys.KNOWLEDGE_BASE_ADMIN);
-		serviceContext.setScopeGroupId(kbArticle.getGroupId());
-
-		return serviceContext;
-	}
-
 	private int _getNotificationType(String action) {
 		if (Objects.equals(action, Constants.ADD)) {
 			return UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY;
@@ -1946,6 +1931,21 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		}
 
 		return resourcePrimKey;
+	}
+
+	private ServiceContext _getServiceContext(
+			Company company, KBArticle kbArticle)
+		throws PortalException {
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setPlid(LayoutConstants.DEFAULT_PLID);
+		serviceContext.setPortalURL(
+			company.getPortalURL(kbArticle.getGroupId()));
+		serviceContext.setPortletId(KBPortletKeys.KNOWLEDGE_BASE_ADMIN);
+		serviceContext.setScopeGroupId(kbArticle.getGroupId());
+
+		return serviceContext;
 	}
 
 	private String _getSubject(
@@ -2195,7 +2195,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 					_NOTIFICATION_RECEIVER_OWNER,
 					_NOTIFICATION_RECEIVER_SUBSCRIBER),
 				userId, kbArticle, _NOTIFICATION_ACTION_REVIEW,
-				_getMinimalServiceContext(company, kbArticle));
+				_getServiceContext(company, kbArticle));
 		}
 	}
 
