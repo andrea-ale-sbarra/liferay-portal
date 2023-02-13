@@ -316,6 +316,9 @@ components:
                 valid:
                     readOnly: true
                     type: boolean
+                virtualItemURL:
+                    readOnly: true
+                    type: string
             type: object
         PlacedOrderItemShipment:
             properties:

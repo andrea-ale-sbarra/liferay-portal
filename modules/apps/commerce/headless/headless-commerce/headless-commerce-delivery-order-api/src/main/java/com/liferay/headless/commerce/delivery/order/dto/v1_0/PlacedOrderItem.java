@@ -596,6 +596,34 @@ public class PlacedOrderItem implements Serializable {
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	protected Boolean valid;
 
+	@Schema
+	public String getVirtualItemURL() {
+		return virtualItemURL;
+	}
+
+	public void setVirtualItemURL(String virtualItemURL) {
+		this.virtualItemURL = virtualItemURL;
+	}
+
+	@JsonIgnore
+	public void setVirtualItemURL(
+		UnsafeSupplier<String, Exception> virtualItemURLUnsafeSupplier) {
+
+		try {
+			virtualItemURL = virtualItemURLUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	protected String virtualItemURL;
+
 	@Override
 	public boolean equals(Object object) {
 		if (this == object) {
@@ -865,6 +893,20 @@ public class PlacedOrderItem implements Serializable {
 			sb.append("\"valid\": ");
 
 			sb.append(valid);
+		}
+
+		if (virtualItemURL != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"virtualItemURL\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(virtualItemURL));
+
+			sb.append("\"");
 		}
 
 		sb.append("}");

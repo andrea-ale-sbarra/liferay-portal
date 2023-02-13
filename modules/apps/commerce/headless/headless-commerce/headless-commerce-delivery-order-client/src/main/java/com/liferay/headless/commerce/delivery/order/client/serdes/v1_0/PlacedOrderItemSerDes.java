@@ -313,6 +313,20 @@ public class PlacedOrderItemSerDes {
 			sb.append(placedOrderItem.getValid());
 		}
 
+		if (placedOrderItem.getVirtualItemURL() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"virtualItemURL\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(placedOrderItem.getVirtualItemURL()));
+
+			sb.append("\"");
+		}
+
 		sb.append("}");
 
 		return sb.toString();
@@ -483,6 +497,15 @@ public class PlacedOrderItemSerDes {
 			map.put("valid", String.valueOf(placedOrderItem.getValid()));
 		}
 
+		if (placedOrderItem.getVirtualItemURL() == null) {
+			map.put("virtualItemURL", null);
+		}
+		else {
+			map.put(
+				"virtualItemURL",
+				String.valueOf(placedOrderItem.getVirtualItemURL()));
+		}
+
 		return map;
 	}
 
@@ -631,6 +654,12 @@ public class PlacedOrderItemSerDes {
 			else if (Objects.equals(jsonParserFieldName, "valid")) {
 				if (jsonParserFieldValue != null) {
 					placedOrderItem.setValid((Boolean)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "virtualItemURL")) {
+				if (jsonParserFieldValue != null) {
+					placedOrderItem.setVirtualItemURL(
+						(String)jsonParserFieldValue);
 				}
 			}
 		}

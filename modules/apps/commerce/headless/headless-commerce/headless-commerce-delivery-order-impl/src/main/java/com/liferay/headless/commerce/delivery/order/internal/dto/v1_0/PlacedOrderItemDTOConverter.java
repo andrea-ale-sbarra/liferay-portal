@@ -26,6 +26,8 @@ import com.liferay.commerce.price.CommerceOrderPriceCalculation;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.service.CPDefinitionLocalService;
 import com.liferay.commerce.product.service.CPInstanceLocalService;
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem;
+import com.liferay.commerce.product.type.virtual.order.service.CommerceVirtualOrderItemLocalService;
 import com.liferay.commerce.product.util.CPInstanceHelper;
 import com.liferay.commerce.service.CPDefinitionInventoryLocalService;
 import com.liferay.commerce.service.CommerceOrderItemService;
@@ -100,6 +102,26 @@ public class PlacedOrderItemDTOConverter
 						commerceOrderItem.getCPDefinitionId()));
 				quantity = commerceOrderItem.getQuantity();
 				settings = _getSettings(commerceOrderItem.getCPInstanceId());
+
+				setVirtualItemURL(
+					() -> {
+
+						//TODO checkPermission su DOWNLOAD action
+
+						CommerceVirtualOrderItem commerceVirtualOrderItem =
+							_commerceVirtualOrderItemLocalService.
+								fetchCommerceVirtualOrderItemByCommerceOrderItemId(
+									commerceOrderItem.getCommerceOrderItemId());
+
+						if(commerceVirtualOrderItem == null){
+							return null;
+						}
+
+						//TODO download URL nel caso non ci sia URL commerceVirtualOrderItem.getFileEntryId()
+
+						return commerceVirtualOrderItem.getUrl();
+					});
+
 				sku = commerceOrderItem.getSku();
 				skuId = commerceOrderItem.getCPInstanceId();
 				subscription = commerceOrderItem.isSubscription();
@@ -267,6 +289,10 @@ public class PlacedOrderItemDTOConverter
 
 	@Reference
 	private CommercePriceFormatter _commercePriceFormatter;
+
+	@Reference
+	private CommerceVirtualOrderItemLocalService
+		_commerceVirtualOrderItemLocalService;
 
 	@Reference
 	private CPDefinitionInventoryLocalService

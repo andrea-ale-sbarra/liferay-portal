@@ -185,6 +185,7 @@ public abstract class BasePlacedOrderItemResourceTestCase {
 		placedOrderItem.setOptions(regex);
 		placedOrderItem.setSku(regex);
 		placedOrderItem.setThumbnail(regex);
+		placedOrderItem.setVirtualItemURL(regex);
 
 		String json = PlacedOrderItemSerDes.toJSON(placedOrderItem);
 
@@ -198,6 +199,7 @@ public abstract class BasePlacedOrderItemResourceTestCase {
 		Assert.assertEquals(regex, placedOrderItem.getOptions());
 		Assert.assertEquals(regex, placedOrderItem.getSku());
 		Assert.assertEquals(regex, placedOrderItem.getThumbnail());
+		Assert.assertEquals(regex, placedOrderItem.getVirtualItemURL());
 	}
 
 	@Test
@@ -634,6 +636,14 @@ public abstract class BasePlacedOrderItemResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("virtualItemURL", additionalAssertFieldName)) {
+				if (placedOrderItem.getVirtualItemURL() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			throw new IllegalArgumentException(
 				"Invalid additional assert field name " +
 					additionalAssertFieldName);
@@ -941,6 +951,17 @@ public abstract class BasePlacedOrderItemResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("virtualItemURL", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						placedOrderItem1.getVirtualItemURL(),
+						placedOrderItem2.getVirtualItemURL())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
 			throw new IllegalArgumentException(
 				"Invalid additional assert field name " +
 					additionalAssertFieldName);
@@ -1151,6 +1172,14 @@ public abstract class BasePlacedOrderItemResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
+		if (entityFieldName.equals("virtualItemURL")) {
+			sb.append("'");
+			sb.append(String.valueOf(placedOrderItem.getVirtualItemURL()));
+			sb.append("'");
+
+			return sb.toString();
+		}
+
 		throw new IllegalArgumentException(
 			"Invalid entity field " + entityFieldName);
 	}
@@ -1209,6 +1238,8 @@ public abstract class BasePlacedOrderItemResourceTestCase {
 				thumbnail = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				valid = RandomTestUtil.randomBoolean();
+				virtualItemURL = StringUtil.toLowerCase(
+					RandomTestUtil.randomString());
 			}
 		};
 	}
