@@ -53,9 +53,6 @@ public class ProductSpecificationDTOConverter
 					getCPDefinitionSpecificationOptionValue(
 						(Long)dtoConverterContext.getId());
 
-		String languageId = _language.getLanguageId(
-			dtoConverterContext.getLocale());
-
 		CPDefinition cpDefinition =
 			cpDefinitionSpecificationOptionValue.getCPDefinition();
 
@@ -64,6 +61,9 @@ public class ProductSpecificationDTOConverter
 
 		CPOptionCategory cpOptionCategory =
 			cpSpecificationOption.getCPOptionCategory();
+
+		String languageId = _language.getLanguageId(
+			dtoConverterContext.getLocale());
 
 		return new ProductSpecification() {
 			{
