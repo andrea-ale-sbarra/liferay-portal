@@ -20,13 +20,13 @@ package com.liferay.sharepoint.rest.repository.internal.search.kql;
 public interface KQLQuery {
 
 	public static KQLQuery and(KQLQuery... kqlQueries) {
-		KQLQuery finalKQLQuery = NullKQLQuery.INSTANCE;
+		KQLQuery kqlQuery = NullKQLQuery.INSTANCE;
 
-		for (KQLQuery kqlQuery : kqlQueries) {
-			finalKQLQuery = finalKQLQuery.and(kqlQuery);
+		for (KQLQuery curKQLQuery : kqlQueries) {
+			kqlQuery = kqlQuery.and(curKQLQuery);
 		}
 
-		return finalKQLQuery;
+		return kqlQuery;
 	}
 
 	public static KQLQuery eq(String field, String value) {
