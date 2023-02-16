@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.layout.utility.page.terms.of.use.internal.struts;
+package com.liferay.layout.utility.page.terms.of.use.internal;
 
 import com.liferay.layout.utility.page.kernel.LayoutUtilityPageEntryViewRenderer;
 import com.liferay.layout.utility.page.kernel.constants.LayoutUtilityPageEntryConstants;
