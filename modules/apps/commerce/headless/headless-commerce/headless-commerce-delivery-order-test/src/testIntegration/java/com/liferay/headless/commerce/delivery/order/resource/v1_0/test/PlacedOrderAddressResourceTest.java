@@ -160,7 +160,7 @@ public class PlacedOrderAddressResourceTest
 			testGetPlacedOrderPlacedOrderBillingAddres_addPlacedOrderAddress()
 		throws Exception {
 
-		return _updateOrderAddresses();
+		return _updateBillingAndShippingAddresses();
 	}
 
 	@Override
@@ -175,7 +175,7 @@ public class PlacedOrderAddressResourceTest
 			testGetPlacedOrderPlacedOrderShippingAddres_addPlacedOrderAddress()
 		throws Exception {
 
-		return _updateOrderAddresses();
+		return _updateBillingAndShippingAddresses();
 	}
 
 	@Override
@@ -207,10 +207,12 @@ public class PlacedOrderAddressResourceTest
 			testGraphQLPlacedOrderAddress_addPlacedOrderAddress()
 		throws Exception {
 
-		return _updateOrderAddresses();
+		return _updateBillingAndShippingAddresses();
 	}
 
-	private PlacedOrderAddress _updateOrderAddresses() throws Exception {
+	private PlacedOrderAddress _updateBillingAndShippingAddresses()
+		throws Exception {
+
 		PlacedOrderAddress placedOrderAddress = randomPlacedOrderAddress();
 
 		_commerceOrderLocalService.updateBillingAddress(
