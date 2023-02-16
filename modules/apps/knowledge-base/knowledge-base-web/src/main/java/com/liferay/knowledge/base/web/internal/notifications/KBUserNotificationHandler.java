@@ -78,7 +78,7 @@ public class KBUserNotificationHandler
 			String command = jsonObject.getString("command");
 
 			if (Objects.equals(command, Constants.EXPIRE)) {
-				message = "x-has-been-expired-by-x";
+				message = "x-was-expired-by-x";
 			}
 			else {
 				return _getFormattedMessage(
