@@ -69,7 +69,7 @@ public class DBInitUtil {
 		}
 
 		if (_dataSource == null) {
-			throw new IllegalStateException("Failed to init data source");
+			throw new IllegalStateException("Data source is null");
 		}
 
 		try (Connection connection = _dataSource.getConnection()) {
