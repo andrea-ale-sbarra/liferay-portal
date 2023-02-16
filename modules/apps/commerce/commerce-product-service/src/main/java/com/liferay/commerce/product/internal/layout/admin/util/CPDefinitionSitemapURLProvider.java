@@ -51,7 +51,6 @@ import com.liferay.portal.kernel.xml.Element;
 import java.io.Serializable;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -157,7 +156,6 @@ public class CPDefinitionSitemapURLProvider implements SitemapURLProvider {
 
 		String currentSiteURL = _portal.getGroupFriendlyURL(
 			layout.getLayoutSet(), themeDisplay, false, false);
-
 		String urlSeparator = _cpFriendlyURL.getProductURLSeparator(
 			themeDisplay.getCompanyId());
 
@@ -169,18 +167,11 @@ public class CPDefinitionSitemapURLProvider implements SitemapURLProvider {
 				_portal.getClassNameId(CProduct.class),
 				cpDefinition.getCProductId());
 
-		String productFriendlyURL = StringBundler.concat(
-			currentSiteURL, urlSeparator,
-			friendlyURLEntry.getUrlTitle(themeDisplay.getLanguageId()));
-
 		Map<Locale, String> alternateFriendlyURLs = new HashMap<>();
 
-		List<FriendlyURLEntryLocalization> friendlyURLEntryLocalizations =
-			_friendlyURLEntryLocalService.getFriendlyURLEntryLocalizations(
-				friendlyURLEntry.getFriendlyURLEntryId());
-
 		for (FriendlyURLEntryLocalization friendlyURLEntryLocalization :
-				friendlyURLEntryLocalizations) {
+				_friendlyURLEntryLocalService.getFriendlyURLEntryLocalizations(
+					friendlyURLEntry.getFriendlyURLEntryId())) {
 
 			String alternateFriendlyURL = StringBundler.concat(
 				currentSiteURL, urlSeparator,
@@ -191,6 +182,10 @@ public class CPDefinitionSitemapURLProvider implements SitemapURLProvider {
 					friendlyURLEntryLocalization.getLanguageId()),
 				alternateFriendlyURL);
 		}
+
+		String productFriendlyURL = StringBundler.concat(
+			currentSiteURL, urlSeparator,
+			friendlyURLEntry.getUrlTitle(themeDisplay.getLanguageId()));
 
 		for (String alternateFriendlyURL : alternateFriendlyURLs.values()) {
 			_sitemap.addURLElement(
