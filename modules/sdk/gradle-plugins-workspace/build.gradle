@@ -130,7 +130,7 @@ dependencies {
 		exclude group: "biz.aQute.bnd", module: "biz.aQute.bnd"
 	}
 	compile group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "5.1.178"
-	compile group: "com.liferay", name: "com.liferay.gradle.plugins.target.platform", version: "3.0.8"
+	compile group: "com.liferay", name: "com.liferay.gradle.plugins.target.platform", version: "3.0.9"
 	compile(group: "com.liferay", name: "com.liferay.gradle.plugins.theme.builder", version: "2.0.23") {
 		exclude group: "biz.aQute.bnd", module: "biz.aQute.bnd"
 	}
