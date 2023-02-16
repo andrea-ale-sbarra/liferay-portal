@@ -181,11 +181,11 @@ public class ListTypeDefinitionLocalServiceTest {
 			externalReferenceCode,
 			listTypeDefinition.getExternalReferenceCode());
 		Assert.assertEquals(
-			name, listTypeDefinition.getName(LocaleUtil.getDefault()));
-		Assert.assertEquals(
 			2,
 			_listTypeEntryLocalService.getListTypeEntriesCount(
 				listTypeDefinition.getListTypeDefinitionId()));
+		Assert.assertEquals(
+			name, listTypeDefinition.getName(LocaleUtil.getDefault()));
 
 		listTypeDefinition =
 			_listTypeDefinitionLocalService.updateListTypeDefinition(
