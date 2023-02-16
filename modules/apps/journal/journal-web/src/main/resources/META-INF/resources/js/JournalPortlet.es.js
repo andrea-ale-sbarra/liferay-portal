@@ -32,7 +32,6 @@ export default function _JournalPortlet({
 	classNameId,
 	contentTitle,
 	defaultLanguageId: initialDefaultLanguageId,
-
 	displayDate,
 	hasSavePermission,
 	namespace,
