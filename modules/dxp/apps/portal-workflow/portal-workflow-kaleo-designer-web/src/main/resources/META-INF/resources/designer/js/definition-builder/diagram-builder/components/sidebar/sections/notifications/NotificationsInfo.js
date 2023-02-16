@@ -324,6 +324,7 @@ const NotificationsInfo = ({
 
 				if (recipientType === 'assetCreator') {
 					recipientDetails = {assignmentType: ['user']};
+
 					if (
 						selectedItem.data.notifications.recipients[
 							notificationIndex
