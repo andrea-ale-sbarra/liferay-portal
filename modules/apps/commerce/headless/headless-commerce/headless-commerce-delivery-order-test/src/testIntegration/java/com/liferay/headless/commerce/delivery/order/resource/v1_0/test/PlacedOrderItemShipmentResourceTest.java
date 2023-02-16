@@ -29,7 +29,6 @@ import com.liferay.commerce.price.list.constants.CommercePriceListConstants;
 import com.liferay.commerce.price.list.model.CommercePriceList;
 import com.liferay.commerce.price.list.service.CommercePriceListLocalService;
 import com.liferay.commerce.product.constants.CommerceChannelConstants;
-import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CommerceChannel;
 import com.liferay.commerce.product.service.CommerceChannelLocalService;
@@ -122,7 +121,6 @@ public class PlacedOrderItemShipmentResourceTest
 		_cpInstance = CPTestUtil.addCPInstanceWithRandomSku(
 			testGroup.getGroupId(), BigDecimal.TEN);
 
-		_cpDefinition = _cpInstance.getCPDefinition();
 		_commerceOrderItem =
 			_commerceOrderItemLocalService.addCommerceOrderItem(
 				_commerceOrder.getCommerceOrderId(),
@@ -317,9 +315,6 @@ public class PlacedOrderItemShipmentResourceTest
 
 	@Inject
 	private CountryLocalService _countryLocalService;
-
-	@DeleteAfterTestRun
-	private CPDefinition _cpDefinition;
 
 	@DeleteAfterTestRun
 	private CPInstance _cpInstance;
