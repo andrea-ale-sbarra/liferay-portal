@@ -42,29 +42,39 @@ public class DynamicDataSource implements DataSource {
 
 	@Override
 	public Connection getConnection() throws SQLException {
-		return _getDataSource().getConnection();
+		DataSource dataSource = _getDataSource();
+
+		return dataSource.getConnection();
 	}
 
 	@Override
 	public Connection getConnection(String userName, String password)
 		throws SQLException {
 
-		return _getDataSource().getConnection(userName, password);
+		DataSource dataSource = _getDataSource();
+
+		return dataSource.getConnection(userName, password);
 	}
 
 	@Override
 	public int getLoginTimeout() throws SQLException {
-		return _getDataSource().getLoginTimeout();
+		DataSource dataSource = _getDataSource();
+
+		return dataSource.getLoginTimeout();
 	}
 
 	@Override
 	public PrintWriter getLogWriter() throws SQLException {
-		return _getDataSource().getLogWriter();
+		DataSource dataSource = _getDataSource();
+
+		return dataSource.getLogWriter();
 	}
 
 	@Override
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-		return _getDataSource().getParentLogger();
+		DataSource dataSource = _getDataSource();
+
+		return dataSource.getParentLogger();
 	}
 
 	public DataSource getReadDataSource() {
@@ -77,22 +87,30 @@ public class DynamicDataSource implements DataSource {
 
 	@Override
 	public boolean isWrapperFor(Class<?> clazz) throws SQLException {
-		return _getDataSource().isWrapperFor(clazz);
+		DataSource dataSource = _getDataSource();
+
+		return dataSource.isWrapperFor(clazz);
 	}
 
 	@Override
 	public void setLoginTimeout(int seconds) throws SQLException {
-		_getDataSource().setLoginTimeout(seconds);
+		DataSource dataSource = _getDataSource();
+
+		dataSource.setLoginTimeout(seconds);
 	}
 
 	@Override
 	public void setLogWriter(PrintWriter printWriter) throws SQLException {
-		_getDataSource().setLogWriter(printWriter);
+		DataSource dataSource = _getDataSource();
+
+		dataSource.setLogWriter(printWriter);
 	}
 
 	@Override
 	public <T> T unwrap(Class<T> clazz) throws SQLException {
-		return _getDataSource().unwrap(clazz);
+		DataSource dataSource = _getDataSource();
+
+		return dataSource.unwrap(clazz);
 	}
 
 	private DataSource _getDataSource() {
