@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.scheduler.TriggerFactory;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.test.util.CompanyTestUtil;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -114,9 +115,11 @@ public class SchedulerResponseManagerTest {
 		}
 	}
 
-	private static final String _TEST_DESTINATION_NAME = "test.destination";
+	private static final String _TEST_DESTINATION_NAME =
+		RandomTestUtil.randomString();
 
-	private static final String _TEST_NAME = "SchedulerResponseManagerTest";
+	private static final String _TEST_NAME =
+		SchedulerResponseManagerTest.class.getName();
 
 	private static Company _company;
 
