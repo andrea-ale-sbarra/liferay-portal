@@ -74,11 +74,6 @@ public class ObjectValidationRuleLocalServiceTest {
 	@Test
 	public void testAddObjectValidationRule() throws Exception {
 		_testAddObjectValidationRuleFailure(
-			"abcdefghijklmnopqrstuvwxyz",
-			ObjectValidationRuleEngineException.NoSuchEngine.class,
-			"Engine \"abcdefghijklmnopqrstuvwxyz\" does not exist",
-			RandomTestUtil.randomString(), _VALID_DDM_SCRIPT);
-		_testAddObjectValidationRuleFailure(
 			ObjectValidationRuleConstants.ENGINE_TYPE_DDM,
 			ObjectValidationRuleNameException.class,
 			"Name is null for locale " + LocaleUtil.US.getDisplayName(),
@@ -95,6 +90,11 @@ public class ObjectValidationRuleLocalServiceTest {
 			StringPool.BLANK,
 			ObjectValidationRuleEngineException.MustNotBeNull.class,
 			"Engine is null", RandomTestUtil.randomString(), _VALID_DDM_SCRIPT);
+		_testAddObjectValidationRuleFailure(
+			"abcdefghijklmnopqrstuvwxyz",
+			ObjectValidationRuleEngineException.NoSuchEngine.class,
+			"Engine \"abcdefghijklmnopqrstuvwxyz\" does not exist",
+			RandomTestUtil.randomString(), _VALID_DDM_SCRIPT);
 
 		_testAddObjectValidationRuleSuccess(
 			ObjectValidationRuleConstants.ENGINE_TYPE_DDM, _VALID_DDM_SCRIPT);

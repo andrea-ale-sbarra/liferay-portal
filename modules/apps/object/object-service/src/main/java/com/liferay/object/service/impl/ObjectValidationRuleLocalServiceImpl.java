@@ -238,14 +238,14 @@ public class ObjectValidationRuleLocalServiceImpl
 					objectValidationRule.getScript());
 			}
 
-			if (GetterUtil.getBoolean(results.get("invalidScript"))) {
-				throw new ObjectValidationRuleEngineException.InvalidScript();
-			}
-
 			if (GetterUtil.getBoolean(results.get("invalidFields"))) {
 				throw new ObjectValidationRuleEngineException.InvalidFields(
 					objectValidationRule.getErrorLabel(
 						LocaleUtil.getMostRelevantLocale()));
+			}
+
+			if (GetterUtil.getBoolean(results.get("invalidScript"))) {
+				throw new ObjectValidationRuleEngineException.InvalidScript();
 			}
 		}
 	}
