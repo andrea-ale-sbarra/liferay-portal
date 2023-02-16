@@ -49,7 +49,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Iván Zaera Avellón
  */
-@Component(service = {ModelListener.class, IdentifiableOSGiService.class})
+@Component(service = {IdentifiableOSGiService.class, ModelListener.class})
 public class FragmentEntryLinkModelListener
 	extends BaseModelListener<FragmentEntryLink>
 	implements IdentifiableOSGiService {
