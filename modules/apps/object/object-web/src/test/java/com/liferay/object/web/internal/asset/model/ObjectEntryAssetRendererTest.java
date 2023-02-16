@@ -48,7 +48,7 @@ public class ObjectEntryAssetRendererTest {
 	@Test
 	public void testGetURLViewInContext() throws Exception {
 		AssetRenderer<ObjectEntry> assetRenderer =
-			_mockObjectEntryAssetRenderer();
+			_getObjectEntryAssetRenderer();
 
 		LiferayPortletRequest liferayPortletRequest = Mockito.mock(
 			LiferayPortletRequest.class);
@@ -59,7 +59,7 @@ public class ObjectEntryAssetRendererTest {
 			assetRenderer.getURLViewInContext(
 				liferayPortletRequest, liferayPortletResponse, null));
 
-		String friendlyURL = _mockGetFriendlyURL(liferayPortletRequest);
+		String friendlyURL = _getFriendlyURL(liferayPortletRequest);
 
 		Assert.assertEquals(
 			friendlyURL,
@@ -77,7 +77,7 @@ public class ObjectEntryAssetRendererTest {
 		);
 
 		AssetRenderer<ObjectEntry> assetRenderer =
-			_mockObjectEntryAssetRenderer();
+			_getObjectEntryAssetRenderer();
 
 		Assert.assertFalse(assetRenderer.hasViewPermission(_permissionChecker));
 	}
@@ -94,7 +94,7 @@ public class ObjectEntryAssetRendererTest {
 		);
 
 		AssetRenderer<ObjectEntry> assetRenderer =
-			_mockObjectEntryAssetRenderer();
+			_getObjectEntryAssetRenderer();
 
 		Assert.assertFalse(assetRenderer.hasViewPermission(_permissionChecker));
 	}
@@ -111,12 +111,12 @@ public class ObjectEntryAssetRendererTest {
 		);
 
 		AssetRenderer<ObjectEntry> assetRenderer =
-			_mockObjectEntryAssetRenderer();
+			_getObjectEntryAssetRenderer();
 
 		Assert.assertTrue(assetRenderer.hasViewPermission(_permissionChecker));
 	}
 
-	private String _mockGetFriendlyURL(
+	private String _getFriendlyURL(
 			LiferayPortletRequest liferayPortletRequest)
 		throws Exception {
 
@@ -148,7 +148,7 @@ public class ObjectEntryAssetRendererTest {
 		return friendlyURL;
 	}
 
-	private AssetRenderer<ObjectEntry> _mockObjectEntryAssetRenderer()
+	private AssetRenderer<ObjectEntry> _getObjectEntryAssetRenderer()
 		throws Exception {
 
 		return new ObjectEntryAssetRenderer(
