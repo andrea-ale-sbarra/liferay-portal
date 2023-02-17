@@ -14,6 +14,8 @@
 
 package com.liferay.headless.commerce.delivery.catalog.internal.dto.v1_0.converter;
 
+import com.liferay.commerce.configuration.CommercePriceConfiguration;
+import com.liferay.commerce.constants.CommerceConstants;
 import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.currency.model.CommerceMoney;
@@ -24,6 +26,7 @@ import com.liferay.commerce.inventory.constants.CommerceInventoryAvailabilityCon
 import com.liferay.commerce.inventory.engine.CommerceInventoryEngine;
 import com.liferay.commerce.price.CommerceProductPrice;
 import com.liferay.commerce.price.CommerceProductPriceCalculation;
+import com.liferay.commerce.product.content.util.CPContentHelper;
 import com.liferay.commerce.product.model.CPDefinitionOptionRel;
 import com.liferay.commerce.product.model.CPDefinitionOptionValueRel;
 import com.liferay.commerce.product.model.CPInstance;
@@ -38,6 +41,8 @@ import com.liferay.headless.commerce.delivery.catalog.dto.v1_0.Sku;
 import com.liferay.headless.commerce.delivery.catalog.dto.v1_0.SkuOption;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.language.Language;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
+import com.liferay.portal.kernel.settings.SystemSettingsLocator;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterContext;
 
@@ -54,6 +59,7 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Andrea Sbarra
+ * @author Alessio Antonio Rendina
  */
 @Component(
 	property = "dto.class.name=CPSku",
@@ -91,9 +97,15 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 				gtin = cpInstance.getGtin();
 				height = cpInstance.getHeight();
 				id = cpInstance.getCPInstanceId();
+				incomingQuantityLabel =
+					_cpContentHelper.getIncomingQuantityLabel(
+						cpSkuDTOConverterConvertContext.getCompanyId(),
+						cpSkuDTOConverterConvertContext.getLocale(),
+						cpInstance.getSku(),
+						cpSkuDTOConverterConvertContext.getUser());
 				manufacturerPartNumber = cpInstance.getManufacturerPartNumber();
 				price = _getPrice(
-					cpInstance, 1,
+					cpInstance, cpSkuDTOConverterConvertContext.getQuantity(),
 					cpSkuDTOConverterConvertContext.getCommerceContext(),
 					cpSkuDTOConverterConvertContext.getLocale());
 				published = cpInstance.isPublished();
@@ -102,6 +114,19 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 				skuOptions = _getSkuOptions(cpInstance);
 				weight = cpInstance.getWeight();
 				width = cpInstance.getWidth();
+
+				setDisplayDiscountLevels(
+					() -> {
+						CommercePriceConfiguration commercePriceConfiguration =
+							_configurationProvider.getConfiguration(
+								CommercePriceConfiguration.class,
+								new SystemSettingsLocator(
+									CommerceConstants.
+										SERVICE_NAME_COMMERCE_PRICE));
+
+						return commercePriceConfiguration.
+							displayDiscountLevels();
+					});
 			}
 		};
 	}
@@ -273,6 +298,12 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 
 	@Reference
 	private CommerceProductPriceCalculation _commerceProductPriceCalculation;
+
+	@Reference
+	private ConfigurationProvider _configurationProvider;
+
+	@Reference
+	private CPContentHelper _cpContentHelper;
 
 	@Reference
 	private CPDefinitionInventoryEngine _cpDefinitionInventoryEngine;

@@ -22,18 +22,21 @@ import java.util.Locale;
 
 /**
  * @author Andrea Sbarra
+ * @author Alessio Antonio Rendina
  */
 public class SkuDTOConverterContext extends DefaultDTOConverterContext {
 
 	public SkuDTOConverterContext(
-		Locale locale, long resourcePrimKey, CPDefinition cpDefinition,
-		long companyId, CommerceContext commerceContext) {
+		CommerceContext commerceContext, long companyId,
+		CPDefinition cpDefinition, Locale locale, int quantity,
+		long resourcePrimKey) {
 
 		super(resourcePrimKey, locale);
 
-		_cpDefinition = cpDefinition;
-		_companyId = companyId;
 		_commerceContext = commerceContext;
+		_companyId = companyId;
+		_cpDefinition = cpDefinition;
+		_quantity = quantity;
 	}
 
 	public CommerceContext getCommerceContext() {
@@ -48,8 +51,13 @@ public class SkuDTOConverterContext extends DefaultDTOConverterContext {
 		return _cpDefinition;
 	}
 
+	public int getQuantity() {
+		return _quantity;
+	}
+
 	private final CommerceContext _commerceContext;
 	private final long _companyId;
 	private final CPDefinition _cpDefinition;
+	private final int _quantity;
 
 }
