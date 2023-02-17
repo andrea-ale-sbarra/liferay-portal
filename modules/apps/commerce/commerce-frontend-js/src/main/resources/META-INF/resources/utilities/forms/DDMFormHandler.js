@@ -12,19 +12,28 @@
  * details.
  */
 
-import AJAX from '../AJAX/index';
 import {CP_INSTANCE_CHANGED} from '../eventsDefinitions';
 import {getDefaultFieldsShape, updateFields} from './formsHelper';
+import ServiceProvider from '../../ServiceProvider/index';
 
 class DDMFormHandler {
-	constructor({DDMFormInstance, actionURL, namespace, portletId}) {
-		this.actionURL = actionURL;
+	constructor({
+		accountId,
+		channelId,
+		DDMFormInstance,
+		namespace,
+		productId,
+		quantity,
+	}) {
+		this.accountId = accountId;
+		this.channelId = channelId;
 		this.DDMFormInstance = DDMFormInstance;
 		this.namespace = namespace;
-		this.portletId = portletId;
 		this.fields = getDefaultFieldsShape(
 			DDMFormInstance.reactComponentRef.current.toJSON()
 		);
+		this.productId = productId;
+		this.quantity = quantity;
 
 		this._attachFormListener();
 		this.checkCPInstance();
@@ -42,31 +51,29 @@ class DDMFormHandler {
 	}
 
 	checkCPInstance() {
-		const ddmFormValues = JSON.stringify(this.fields);
-		const fieldsParam = new FormData();
+		const SkuResource = ServiceProvider.DeliveryCatalogAPI('v1');
 
-		fieldsParam.append(`_${this.portletId}_ddmFormValues`, ddmFormValues);
+		SkuResource.postChannelProductSku(
+			this.channelId,
+			this.productId,
+			this.accountId,
+			this.quantity,
+			this.fields
+		).then((cpInstance) => {
+			cpInstance.disabled = this.checkCPInstanceOptions();
+			cpInstance.skuOptions = JSON.stringify(this.fields);
+			cpInstance.skuId = parseInt(cpInstance.id, 10);
 
-		AJAX.POST(this.actionURL, null, {
-			body: fieldsParam,
-			headers: new Headers({'x-csrf-token': Liferay.authToken}),
-		}).then((cpInstance) => {
-			if (cpInstance.cpInstanceExist) {
-				cpInstance.disabled = this.checkCPInstanceOptions();
-				cpInstance.skuOptions = ddmFormValues;
-				cpInstance.skuId = parseInt(cpInstance.cpInstanceId, 10);
+			const dispatchedPayload = {
+				cpInstance,
+				formFields: this.fields,
+				namespace: this.namespace,
+			};
 
-				const dispatchedPayload = {
-					cpInstance,
-					formFields: this.fields,
-					namespace: this.namespace,
-				};
-
-				Liferay.fire(
-					`${this.namespace}${CP_INSTANCE_CHANGED}`,
-					dispatchedPayload
-				);
-			}
+			Liferay.fire(
+				`${this.namespace}${CP_INSTANCE_CHANGED}`,
+				dispatchedPayload
+			);
 		});
 	}
 
