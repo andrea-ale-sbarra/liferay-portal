@@ -1,6 +1,6 @@
-sample-notification-type:
+sample-notification-type-1:
     oAuth2ApplicationExternalReferenceCode: sample-oauth-application-user-agent
-    resourcePath: /sample-notification-type
+    resourcePath: /sample/notification/type/1
     type: notificationType
 sample-oauth-application-user-agent:
     homePageURL: http://localhost:58081
@@ -11,15 +11,15 @@ sample-oauth-application-user-agent:
 sample-object-action-1:
     name: Sample Object Action 1
     oAuth2ApplicationExternalReferenceCode: sample-oauth-application-user-agent
-    resourcePath: /sample-object/action/1
+    resourcePath: /sample/object/action/1
     type: objectAction
 sample-object-action-2:
     name: Sample Object Action 2
     oAuth2ApplicationExternalReferenceCode: sample-oauth-application-user-agent
-    resourcePath: /sample-object/action/2
+    resourcePath: /sample/object/action/2
     type: objectAction
 sample-workflow-action-1:
     name: Sample Workflow Action 1
     oAuth2ApplicationExternalReferenceCode: sample-oauth-application-user-agent
-    resourcePath: /sample-workflow/action/1
+    resourcePath: /sample/workflow/action/1
     type: workflowAction
