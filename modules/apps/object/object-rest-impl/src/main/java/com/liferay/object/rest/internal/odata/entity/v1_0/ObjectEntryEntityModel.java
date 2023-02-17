@@ -21,7 +21,6 @@ import com.liferay.object.field.setting.util.ObjectFieldSettingUtil;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectRelationship;
-import com.liferay.object.rest.odata.entity.v1_0.UnsupportedBusinessTypes;
 import com.liferay.object.service.ObjectDefinitionLocalServiceUtil;
 import com.liferay.object.service.ObjectFieldLocalServiceUtil;
 import com.liferay.object.service.ObjectRelationshipLocalServiceUtil;
@@ -29,8 +28,8 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.odata.entity.BooleanEntityField;
 import com.liferay.portal.odata.entity.CollectionEntityField;
 import com.liferay.portal.odata.entity.ComplexEntityField;
@@ -44,10 +43,10 @@ import com.liferay.portal.odata.entity.IntegerEntityField;
 import com.liferay.portal.odata.entity.StringEntityField;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.ws.rs.BadRequestException;
 
@@ -98,7 +97,7 @@ public class ObjectEntryEntityModel implements EntityModel {
 	}
 
 	private EntityField _getEntityField(ObjectField objectField) {
-		if (_isUnsupportedBusinessType(objectField)) {
+		if (_unsupportedBusinessTypes.contains(objectField.getBusinessType())) {
 			return null;
 		}
 
@@ -269,13 +268,11 @@ public class ObjectEntryEntityModel implements EntityModel {
 		return entityFieldsMap;
 	}
 
-	private Boolean _isUnsupportedBusinessType(ObjectField objectField) {
-		return ListUtil.exists(
-			Arrays.asList(UnsupportedBusinessTypes.values()),
-			unsupportedBusinessType -> objectField.compareBusinessType(
-				unsupportedBusinessType.getValue()));
-	}
-
 	private final Map<String, EntityField> _entityFieldsMap;
+	private final Set<String> _unsupportedBusinessTypes = SetUtil.fromArray(
+		ObjectFieldConstants.BUSINESS_TYPE_AGGREGATION,
+		ObjectFieldConstants.BUSINESS_TYPE_ATTACHMENT,
+		ObjectFieldConstants.BUSINESS_TYPE_FORMULA,
+		ObjectFieldConstants.BUSINESS_TYPE_RICH_TEXT);
 
 }
