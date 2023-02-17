@@ -125,7 +125,6 @@ public class AssetVocabularyMultiLanguageSearchTest {
 		).build();
 
 		assertFieldValues("title", LocaleUtil.US, titleMap, "title");
-
 		assertFieldValues("title", LocaleUtil.US, titleMap, "tit");
 	}
 
@@ -145,12 +144,9 @@ public class AssetVocabularyMultiLanguageSearchTest {
 
 		assertFieldValues(
 			"description", LocaleUtil.JAPAN, descriptionMap, "新規");
-
 		assertFieldValues(
 			"description", LocaleUtil.JAPAN, descriptionMap, "作成");
-
 		assertFieldValues("description", LocaleUtil.JAPAN, descriptionMap, "新");
-
 		assertFieldValues("description", LocaleUtil.JAPAN, descriptionMap, "作");
 	}
 
