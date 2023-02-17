@@ -156,7 +156,7 @@ public class ObjectEntryEntityModel implements EntityModel {
 		}
 
 		throw new BadRequestException(
-			"A property used in the filter criteria is not supported");
+			"Unable to get entity field for bject field " + objectField);
 	}
 
 	private ObjectDefinition _getRelatedObjectDefinition(
