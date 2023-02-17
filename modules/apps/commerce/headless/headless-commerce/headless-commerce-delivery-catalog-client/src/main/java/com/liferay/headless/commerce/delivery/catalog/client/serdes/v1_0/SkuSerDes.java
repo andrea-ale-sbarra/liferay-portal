@@ -119,6 +119,16 @@ public class SkuSerDes {
 			sb.append("\"");
 		}
 
+		if (sku.getDisplayDiscountLevels() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"displayDiscountLevels\": ");
+
+			sb.append(sku.getDisplayDiscountLevels());
+		}
+
 		if (sku.getExpirationDate() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -165,6 +175,20 @@ public class SkuSerDes {
 			sb.append("\"id\": ");
 
 			sb.append(sku.getId());
+		}
+
+		if (sku.getIncomingQuantityLabel() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"incomingQuantityLabel\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(sku.getIncomingQuantityLabel()));
+
+			sb.append("\"");
 		}
 
 		if (sku.getManufacturerPartNumber() != null) {
@@ -348,6 +372,15 @@ public class SkuSerDes {
 				liferayToJSONDateFormat.format(sku.getDisplayDate()));
 		}
 
+		if (sku.getDisplayDiscountLevels() == null) {
+			map.put("displayDiscountLevels", null);
+		}
+		else {
+			map.put(
+				"displayDiscountLevels",
+				String.valueOf(sku.getDisplayDiscountLevels()));
+		}
+
 		if (sku.getExpirationDate() == null) {
 			map.put("expirationDate", null);
 		}
@@ -376,6 +409,15 @@ public class SkuSerDes {
 		}
 		else {
 			map.put("id", String.valueOf(sku.getId()));
+		}
+
+		if (sku.getIncomingQuantityLabel() == null) {
+			map.put("incomingQuantityLabel", null);
+		}
+		else {
+			map.put(
+				"incomingQuantityLabel",
+				String.valueOf(sku.getIncomingQuantityLabel()));
 		}
 
 		if (sku.getManufacturerPartNumber() == null) {
@@ -500,6 +542,13 @@ public class SkuSerDes {
 					sku.setDisplayDate(toDate((String)jsonParserFieldValue));
 				}
 			}
+			else if (Objects.equals(
+						jsonParserFieldName, "displayDiscountLevels")) {
+
+				if (jsonParserFieldValue != null) {
+					sku.setDisplayDiscountLevels((Boolean)jsonParserFieldValue);
+				}
+			}
 			else if (Objects.equals(jsonParserFieldName, "expirationDate")) {
 				if (jsonParserFieldValue != null) {
 					sku.setExpirationDate(toDate((String)jsonParserFieldValue));
@@ -518,6 +567,13 @@ public class SkuSerDes {
 			else if (Objects.equals(jsonParserFieldName, "id")) {
 				if (jsonParserFieldValue != null) {
 					sku.setId(Long.valueOf((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(
+						jsonParserFieldName, "incomingQuantityLabel")) {
+
+				if (jsonParserFieldValue != null) {
+					sku.setIncomingQuantityLabel((String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(

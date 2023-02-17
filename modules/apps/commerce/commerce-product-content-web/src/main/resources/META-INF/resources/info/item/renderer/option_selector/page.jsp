@@ -1,3 +1,4 @@
+<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -11,6 +12,27 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+--%>
 
-export const CP_CONTENT_WEB_PORTLET_KEY =
-	'com_liferay_commerce_product_content_web_internal_portlet_CPContentPortlet';
+<%@ include file="/info/item/renderer/option_selector/init.jsp" %>
+
+<form data-senna-off="true" name="fm">
+	<%= cpContentHelper.renderOptions(request, PipingServletResponseFactory.createPipingServletResponse(pageContext)) %>
+</form>
+
+<liferay-frontend:component
+	context='<%=
+		HashMapBuilder.<String, Object>put(
+			"accountId", accountId
+		).put(
+			"channelId", channelId
+		).put(
+			"cpDefinitionId", cpDefinitionId
+		).put(
+			"namespace", namespace
+		).put(
+			"productId", productId
+		).build()
+	%>'
+	module="info/item/renderer/option_selector/js/OptionSelector"
+/>
