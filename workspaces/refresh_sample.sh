@@ -64,9 +64,6 @@ function refresh_sample_workspace {
 
 	sed -i 's/name: "com.liferay.gradle.plugins.workspace", version: ".*"/name: "com.liferay.gradle.plugins.workspace", version: "4.1.13"/' settings.gradle
 
-	touch modules/.touch
-	touch themes/.touch
-
 	popd
 
 	cp ${temp_dir}/.gitignore sample-workspace
@@ -79,6 +76,15 @@ function refresh_sample_workspace {
 	mkdir -p sample-workspace/configs/local
 
 	cp ${temp_dir}/configs/local/portal-ext.properties sample-workspace/configs/local
+
+	mkdir modules
+
+	echo "Client extensions are the recommended way of customizing Liferay. Modules and" > modules/README.txt
+	echo "themes are supported for backwards compatibility." >> modules/README.txt
+
+	mkdir themes
+
+	cp modules/README.txt themes
 
 	#
 	# Client Extension: Sample Custom Element 2
