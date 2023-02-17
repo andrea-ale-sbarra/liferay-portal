@@ -12,7 +12,7 @@ function main {
 
 		mv ${dir} ${dir}.temp
 
-		cp -R sample-minimal-workspace ${dir}
+		cp -R sample-workspace ${dir}
 
 		rm -fr ${dir}/client-extensions
 
