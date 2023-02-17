@@ -59,6 +59,28 @@ public class SampleRestController {
 			HttpStatus.OK);
 	}
 
+	@PostMapping("/sample-notification-type")
+	public ResponseEntity<String> postSampleNotificationType(
+		@AuthenticationPrincipal Jwt jwt, @RequestBody String json) {
+
+		if (_log.isInfoEnabled()) {
+			_log.info("JWT Claims: " + jwt.getClaims());
+			_log.info("JWT ID: " + jwt.getId());
+			_log.info("JWT Subject: " + jwt.getSubject());
+
+			try {
+				JSONObject jsonObject = new JSONObject(json);
+
+				_log.info("\n\n" + jsonObject.toString(4) + "\n");
+			}
+			catch (Exception exception) {
+				_log.error("JSON: " + json, exception);
+			}
+		}
+
+		return new ResponseEntity<>(json, HttpStatus.CREATED);
+	}
+
 	@PostMapping("/sample-object/action/1")
 	public ResponseEntity<String> postSampleObjectAction1(
 		@AuthenticationPrincipal Jwt jwt, @RequestBody String json) {

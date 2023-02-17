@@ -1,3 +1,7 @@
+sample-notification-type:
+    oAuth2ApplicationExternalReferenceCode: sample-oauth-application-user-agent
+    resourcePath: /sample-notification-type
+    type: notificationType
 sample-oauth-application-user-agent:
     homePageURL: http://localhost:58081
     name: Sample OAuth Application User Agent
