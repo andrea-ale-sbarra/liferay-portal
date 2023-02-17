@@ -1,8 +1,13 @@
 #!/bin/bash
 
 function main {
-	for dir in ./liferay-*workspace
+	for dir in "./"*
 	do
+		if [ ${dir} = "./sample-workspace" ]
+		then
+			continue
+		fi
+
 		if [ -e ${dir}.temp ]
 		then
 			echo "${dir}.temp already exists."
