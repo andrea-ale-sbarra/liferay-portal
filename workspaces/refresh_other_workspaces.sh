@@ -3,32 +3,13 @@
 function main {
 	for dir in "./"*
 	do
-		if [ ${dir} = "./sample-workspace" ]
+		if [ ${dir} = "./sample-workspace" ] ||
+		   [ -f ${dir} ]
 		then
 			continue
 		fi
 
-		if [ -e ${dir}.temp ]
-		then
-			echo "${dir}.temp already exists."
-
-			exit 1
-		fi
-
-		mv ${dir} ${dir}.temp
-
-		cp -R sample-workspace ${dir}
-
-		rm -fr ${dir}/client-extensions
-
-		if [ -e ${dir}.temp/client-extensions ]
-		then
-			cp -R ${dir}.temp/client-extensions ${dir}
-		else
-			mkdir -p ${dir}/client-extensions
-		fi
-
-		rm -fr ${dir}.temp
+		rsync -a --delete --exclude "client-extensions" --exclude "modules" --exclude "themes" sample-workspace/ ${dir}
 	done
 }
 
