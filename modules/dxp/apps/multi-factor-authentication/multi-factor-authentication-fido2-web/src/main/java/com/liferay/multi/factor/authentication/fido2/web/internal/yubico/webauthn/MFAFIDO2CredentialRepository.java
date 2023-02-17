@@ -59,17 +59,17 @@ public class MFAFIDO2CredentialRepository implements CredentialRepository {
 			return Collections.emptySet();
 		}
 
-		List<MFAFIDO2CredentialEntry> mfaFIDO2CredentialEntryList =
+		List<MFAFIDO2CredentialEntry> mfaFIDO2CredentialEntries =
 			_mfaFIDO2CredentialEntryLocalService.
 				getMFAFIDO2CredentialEntriesByUserId(userId);
 
-		if (mfaFIDO2CredentialEntryList == null) {
+		if (mfaFIDO2CredentialEntries == null) {
 			return Collections.emptySet();
 		}
 
 		return new HashSet<>(
 			TransformUtil.transform(
-				mfaFIDO2CredentialEntryList,
+				mfaFIDO2CredentialEntries,
 				this::_buildPublicKeyCredentialDescriptor));
 	}
 
