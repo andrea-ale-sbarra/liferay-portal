@@ -44,15 +44,15 @@ public class IndividualSegmentsExpressionVisitorImpl
 	}
 
 	@Override
-	public Criteria visitChildren(@NotNull RuleNode node) {
+	public Criteria visitChildren(@NotNull RuleNode ruleNode) {
 		Criteria result = defaultResult();
 
-		for (int i = 0; i < node.getChildCount(); i++) {
-			if (!shouldVisitNextChild(node, result)) {
+		for (int i = 0; i < ruleNode.getChildCount(); i++) {
+			if (!shouldVisitNextChild(ruleNode, result)) {
 				break;
 			}
 
-			ParseTree parseTree = node.getChild(i);
+			ParseTree parseTree = ruleNode.getChild(i);
 
 			Criteria childResult = parseTree.accept(this);
 
