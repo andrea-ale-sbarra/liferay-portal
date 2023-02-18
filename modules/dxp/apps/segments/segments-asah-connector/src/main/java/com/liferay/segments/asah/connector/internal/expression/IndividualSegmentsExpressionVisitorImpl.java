@@ -45,10 +45,10 @@ public class IndividualSegmentsExpressionVisitorImpl
 
 	@Override
 	public Criteria visitChildren(@NotNull RuleNode ruleNode) {
-		Criteria result = defaultResult();
+		Criteria defaultResultCriteria = defaultResult();
 
 		for (int i = 0; i < ruleNode.getChildCount(); i++) {
-			if (!shouldVisitNextChild(ruleNode, result)) {
+			if (!shouldVisitNextChild(ruleNode, defaultResultCriteria)) {
 				break;
 			}
 
@@ -56,10 +56,11 @@ public class IndividualSegmentsExpressionVisitorImpl
 
 			Criteria childResult = parseTree.accept(this);
 
-			result = aggregateResult(result, childResult);
+			defaultResultCriteria = aggregateResult(
+				defaultResultCriteria, childResult);
 		}
 
-		return result;
+		return defaultResultCriteria;
 	}
 
 	@Override
