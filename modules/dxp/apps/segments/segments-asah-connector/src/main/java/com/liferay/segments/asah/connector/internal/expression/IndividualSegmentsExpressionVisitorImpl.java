@@ -54,10 +54,8 @@ public class IndividualSegmentsExpressionVisitorImpl
 
 			ParseTree parseTree = ruleNode.getChild(i);
 
-			Criteria childResult = parseTree.accept(this);
-
 			defaultResultCriteria = aggregateResult(
-				defaultResultCriteria, childResult);
+				defaultResultCriteria, parseTree.accept(this));
 		}
 
 		return defaultResultCriteria;
