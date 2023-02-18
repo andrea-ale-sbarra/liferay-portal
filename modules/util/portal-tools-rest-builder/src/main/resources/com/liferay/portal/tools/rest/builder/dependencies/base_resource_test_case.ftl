@@ -1819,6 +1819,7 @@ public abstract class Base${schemaName}ResourceTestCase {
 
 														<#if addGetterMethod>
 															<#assign getterMethodArgument = "" />
+
 															<#if defaultImplementationGetterMethod>
 																<#assign getterMethodArgument = "${schemaVarName}" />
 															</#if>
