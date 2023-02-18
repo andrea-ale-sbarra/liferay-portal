@@ -84,7 +84,7 @@ public class CopyFragmentEntryMVCActionCommand extends BaseMVCActionCommand {
 		long fragmentCollectionId = ParamUtil.getLong(
 			actionRequest, "fragmentCollectionId");
 
-		if (_showSuccessMessage(fragmentEntryIds, fragmentCollectionId)) {
+		if (_isShowSuccessMessage(fragmentEntryIds, fragmentCollectionId)) {
 			MultiSessionMessages.add(actionRequest, "fragmentEntryCopied");
 		}
 
@@ -245,7 +245,7 @@ public class CopyFragmentEntryMVCActionCommand extends BaseMVCActionCommand {
 		return 0;
 	}
 
-	private boolean _showSuccessMessage(
+	private boolean _isShowSuccessMessage(
 		long[] fragmentEntryIds, long fragmentCollectionId) {
 
 		if (ArrayUtil.isEmpty(fragmentEntryIds)) {
