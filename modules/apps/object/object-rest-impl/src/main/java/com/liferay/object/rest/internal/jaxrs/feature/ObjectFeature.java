@@ -40,7 +40,6 @@ public class ObjectFeature implements Feature {
 	@Override
 	public boolean configure(FeatureContext featureContext) {
 		featureContext.register(ObjectDefinitionIdContainerRequestFilter.class);
-
 		featureContext.register(
 			new ScopeKeyParamConverterProvider(_groupLocalService));
 
