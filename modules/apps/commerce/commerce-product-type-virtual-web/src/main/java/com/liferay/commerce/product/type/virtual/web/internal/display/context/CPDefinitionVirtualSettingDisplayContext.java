@@ -249,9 +249,9 @@ public class CPDefinitionVirtualSettingDisplayContext
 		InfoItemItemSelectorCriterion itemSelectorCriterion =
 			new InfoItemItemSelectorCriterion();
 
-		itemSelectorCriterion.setItemType(JournalArticle.class.getName());
 		itemSelectorCriterion.setDesiredItemSelectorReturnTypes(
 			new JournalArticleItemSelectorReturnType());
+		itemSelectorCriterion.setItemType(JournalArticle.class.getName());
 
 		return String.valueOf(
 			_itemSelector.getItemSelectorURL(
