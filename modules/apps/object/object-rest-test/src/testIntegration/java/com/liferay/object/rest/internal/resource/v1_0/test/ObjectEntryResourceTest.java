@@ -281,7 +281,9 @@ public class ObjectEntryResourceTest {
 	@Test
 	public void testGetScopeScopeKeyObjectEntriesPage() throws Exception {
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_CLASS_NAME_EXCEPTION_MAPPER, LoggerTestUtil.ERROR)) {
+				"com.liferay.portal.vulcan.internal.jaxrs.exception.mapper." +
+					"WebApplicationExceptionMapper",
+				LoggerTestUtil.ERROR)) {
 
 			JSONObject jsonObject = HTTPTestUtil.invoke(
 				null,
@@ -736,10 +738,6 @@ public class ObjectEntryResourceTest {
 			_OBJECT_FIELD_VALUE_1,
 			relatedObjectJSONObject.getString(_OBJECT_FIELD_NAME_1));
 	}
-
-	private static final String _CLASS_NAME_EXCEPTION_MAPPER =
-		"com.liferay.portal.vulcan.internal.jaxrs.exception.mapper." +
-			"WebApplicationExceptionMapper";
 
 	private static final String _NEW_OBJECT_FIELD_VALUE_1 =
 		RandomTestUtil.randomString();
