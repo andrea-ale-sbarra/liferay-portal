@@ -159,17 +159,14 @@ public class
 
 		AssetCategory assetCategory1 = _addAssetCategory(
 			_group, serviceContext, assetVocabulary);
-
 		AssetCategory assetCategory2 = _addAssetCategory(
 			_group, serviceContext, assetVocabulary);
-
 		AssetCategory assetCategory3 = _addAssetCategory(
 			_group, serviceContext, assetVocabulary);
 
 		_addJournalArticle(new long[0], serviceContext);
 		_addJournalArticle(
 			new long[] {assetCategory1.getCategoryId()}, serviceContext);
-
 		_addJournalArticle(
 			new long[] {
 				assetCategory2.getCategoryId(), assetCategory3.getCategoryId()
@@ -181,20 +178,17 @@ public class
 				assetCategory1.getCategoryId(), assetCategory3.getCategoryId()
 			},
 			serviceContext);
-
 		JournalArticle expectedJournalArticle2 = _addJournalArticle(
 			new long[] {
 				assetCategory1.getCategoryId(), assetCategory2.getCategoryId()
 			},
 			serviceContext);
-
 		JournalArticle expectedJournalArticle3 = _addJournalArticle(
 			new long[] {
 				assetCategory1.getCategoryId(), assetCategory2.getCategoryId(),
 				assetCategory3.getCategoryId()
 			},
 			serviceContext);
-
 		JournalArticle relatedJournalArticle = _addJournalArticle(
 			new long[] {assetCategory1.getCategoryId()}, serviceContext);
 
@@ -248,26 +242,22 @@ public class
 				TestPropsValues.getUserId(), _group.getGroupId(),
 				RandomTestUtil.randomString(), serviceContext);
 
+		AssetCategory assetVocabulary1AssetCategory1 = _addAssetCategory(
+			_group, serviceContext, assetVocabulary1);
+		AssetCategory assetVocabulary1AssetCategory2 = _addAssetCategory(
+			_group, serviceContext, assetVocabulary1);
+		AssetCategory assetVocabulary1AssetCategory3 = _addAssetCategory(
+			_group, serviceContext, assetVocabulary1);
+
 		AssetVocabulary assetVocabulary2 =
 			AssetVocabularyLocalServiceUtil.addVocabulary(
 				TestPropsValues.getUserId(), _group.getGroupId(),
 				RandomTestUtil.randomString(), serviceContext);
 
-		AssetCategory assetVocabulary1AssetCategory1 = _addAssetCategory(
-			_group, serviceContext, assetVocabulary1);
-
-		AssetCategory assetVocabulary1AssetCategory2 = _addAssetCategory(
-			_group, serviceContext, assetVocabulary1);
-
-		AssetCategory assetVocabulary1AssetCategory3 = _addAssetCategory(
-			_group, serviceContext, assetVocabulary1);
-
 		AssetCategory assetVocabulary2AssetCategory1 = _addAssetCategory(
 			_group, serviceContext, assetVocabulary2);
-
 		AssetCategory assetVocabulary2AssetCategory2 = _addAssetCategory(
 			_group, serviceContext, assetVocabulary2);
-
 		AssetCategory assetVocabulary2AssetCategory3 = _addAssetCategory(
 			_group, serviceContext, assetVocabulary2);
 
@@ -299,14 +289,12 @@ public class
 				assetVocabulary1AssetCategory2.getCategoryId()
 			},
 			serviceContext);
-
 		JournalArticle expectedJournalArticle2 = _addJournalArticle(
 			new long[] {
 				assetVocabulary1AssetCategory1.getCategoryId(),
 				assetVocabulary1AssetCategory3.getCategoryId()
 			},
 			serviceContext);
-
 		JournalArticle expectedJournalArticle3 = _addJournalArticle(
 			new long[] {
 				assetVocabulary1AssetCategory1.getCategoryId(),
@@ -314,7 +302,6 @@ public class
 				assetVocabulary2AssetCategory3.getCategoryId()
 			},
 			serviceContext);
-
 		JournalArticle expectedJournalArticle4 = _addJournalArticle(
 			new long[] {
 				assetVocabulary1AssetCategory1.getCategoryId(),
@@ -323,7 +310,6 @@ public class
 				assetVocabulary2AssetCategory3.getCategoryId()
 			},
 			serviceContext);
-
 		JournalArticle relatedJournalArticle = _addJournalArticle(
 			new long[] {
 				assetVocabulary1AssetCategory1.getCategoryId(),
@@ -456,17 +442,14 @@ public class
 
 		AssetCategory assetCategory1 = _addAssetCategory(
 			_group, serviceContext, assetVocabulary);
-
 		AssetCategory assetCategory2 = _addAssetCategory(
 			_group, serviceContext, assetVocabulary);
-
 		AssetCategory assetCategory3 = _addAssetCategory(
 			_group, serviceContext, assetVocabulary);
 
 		_addJournalArticle(new long[0], serviceContext);
 		_addJournalArticle(
 			new long[] {assetCategory1.getCategoryId()}, serviceContext);
-
 		_addJournalArticle(
 			new long[] {
 				assetCategory2.getCategoryId(), assetCategory3.getCategoryId()
@@ -478,14 +461,12 @@ public class
 				assetCategory1.getCategoryId(), assetCategory2.getCategoryId()
 			},
 			serviceContext);
-
 		JournalArticle expectedJournalArticle2 = _addJournalArticle(
 			new long[] {
 				assetCategory1.getCategoryId(), assetCategory2.getCategoryId(),
 				assetCategory3.getCategoryId()
 			},
 			serviceContext);
-
 		JournalArticle relatedJournalArticle = _addJournalArticle(
 			new long[] {assetCategory1.getCategoryId()}, serviceContext);
 
