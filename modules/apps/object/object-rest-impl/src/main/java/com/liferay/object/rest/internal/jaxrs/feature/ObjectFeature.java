@@ -31,11 +31,11 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"osgi.jaxrs.application.select=(liferay.objects=true)",
-		"osgi.jaxrs.extension=true", "osgi.jaxrs.name=Liferay.Objects"
+		"osgi.jaxrs.extension=true", "osgi.jaxrs.name=Liferay.Object"
 	},
 	scope = ServiceScope.PROTOTYPE, service = Feature.class
 )
-public class ObjectsFeature implements Feature {
+public class ObjectFeature implements Feature {
 
 	@Override
 	public boolean configure(FeatureContext featureContext) {
