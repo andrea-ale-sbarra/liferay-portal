@@ -164,7 +164,8 @@ public class OpenIdConnectProviderManagedServiceFactory
 		try (SafeCloseable safeCloseable =
 				CompanyThreadLocal.setWithSafeCloseable(companyId)) {
 
-			_updateOAuthClientEntry(companyId, oldProviderName, properties);
+			_updateOAuthClientEntry(
+				companyId, oldProperties, oldProviderName, properties);
 		}
 	}
 
