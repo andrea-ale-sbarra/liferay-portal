@@ -68,7 +68,6 @@ public class PDFPreviewManagedServiceFactory implements ManagedServiceFactory {
 				ExtendedObjectClassDefinition.Scope.COMPANY.getValue())) {
 
 			int companyMaxNumberOfPages = _getCompanyMaxNumberOfPages(scopePK);
-
 			int systemMaxNumberOfPages = _getSystemMaxNumberOfPages();
 
 			if ((companyMaxNumberOfPages != 0) &&
