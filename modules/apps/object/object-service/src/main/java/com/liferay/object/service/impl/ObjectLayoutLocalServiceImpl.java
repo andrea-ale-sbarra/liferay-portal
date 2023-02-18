@@ -605,7 +605,7 @@ public class ObjectLayoutLocalServiceImpl
 
 				if (!objectDefinition.isDefaultStorageType()) {
 					throw new ObjectLayoutBoxCategorizationTypeException(
-						"Categorization layout box only can be used in " +
+						"Categorization layout box can only be used in " +
 							"object definitions with a default storage type");
 				}
 

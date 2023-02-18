@@ -170,7 +170,7 @@ public class ObjectLayoutLocalServiceTest {
 		_objectDefinitionLocalService.updateObjectDefinition(_objectDefinition);
 
 		_assertFailure(
-			"Categorization layout box only can be used in object " +
+			"Categorization layout box can only be used in object " +
 				"definitions with a default storage type",
 			() -> {
 				ObjectLayoutTab objectLayoutTab =
