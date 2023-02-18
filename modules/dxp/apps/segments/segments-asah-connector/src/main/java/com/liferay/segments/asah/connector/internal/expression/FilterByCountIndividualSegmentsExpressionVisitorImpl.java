@@ -131,13 +131,13 @@ public class FilterByCountIndividualSegmentsExpressionVisitorImpl
 			if (parameters.length != 3) {
 				throw new UnsupportedOperationException(
 					StringBundler.concat(
-						"Unsupported function BETWEEN ", parameters.length,
+						"Unsupported function between ", parameters.length,
 						" params"));
 			}
 
 			if (!Objects.equals("day", parameters[0])) {
 				throw new UnsupportedOperationException(
-					"Unsupported function BETWEEN with first param " +
+					"Unsupported function between with first param " +
 						parameters[0]);
 			}
 
