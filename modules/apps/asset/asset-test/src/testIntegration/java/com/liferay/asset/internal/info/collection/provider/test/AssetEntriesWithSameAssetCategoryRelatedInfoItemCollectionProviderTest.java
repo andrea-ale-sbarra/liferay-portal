@@ -380,7 +380,6 @@ public class
 
 		JournalArticle journalArticle = _addJournalArticle(
 			assetCategoryIds, serviceContext);
-
 		JournalArticle relatedJournalArticle = _addJournalArticle(
 			assetCategoryIds, serviceContext);
 
@@ -645,19 +644,19 @@ public class
 			pageItems.size());
 
 		for (AssetEntry expectedAssetEntry : expectedAssetEntries) {
-			boolean expectedAssetEntryFound = false;
+			boolean found = false;
 
 			for (AssetEntry assetEntry : pageItems) {
 				if (!Objects.equals(assetEntry, expectedAssetEntry)) {
 					continue;
 				}
 
-				expectedAssetEntryFound = true;
+				found = true;
 
 				break;
 			}
 
-			Assert.assertTrue(expectedAssetEntryFound);
+			Assert.assertTrue(found);
 		}
 	}
 
