@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
 import com.liferay.portal.kernel.util.Portal;
@@ -82,6 +83,21 @@ public class BaseCommerceContextHttp implements CommerceContext {
 		catch (PortalException portalException) {
 			_log.error(portalException);
 		}
+	}
+
+	@Override
+	public long fetchCommerceChannelGroupId() throws PortalException {
+		CommerceChannel commerceChannel =
+			_commerceChannelLocalService.fetchCommerceChannelBySiteGroupId(
+				_portal.getScopeGroupId(_httpServletRequest));
+
+		if (commerceChannel == null) {
+			return 0;
+		}
+
+		Group group = commerceChannel.getGroup();
+
+		return group.getGroupId();
 	}
 
 	@Override
