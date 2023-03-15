@@ -91,6 +91,8 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 					cpInstance.getSku(), cpInstance,
 					cpSkuDTOConverterConvertContext.getLocale());
 				depth = cpInstance.getDepth();
+				discontinued = cpInstance.isDiscontinued();
+				discontinuedDate = cpInstance.getDiscontinuedDate();
 				displayDate = cpInstance.getDisplayDate();
 				expirationDate = cpInstance.getExpirationDate();
 				gtin = cpInstance.getGtin();
