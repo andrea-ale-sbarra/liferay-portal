@@ -140,11 +140,10 @@ public class CommerceChannelRelServiceImpl
 				getPermissionChecker(), classPK, ActionKeys.VIEW);
 
 			return commerceChannelRelFinder.findByC_C(
-				className, classPK, name, start, end);
+					className, classPK, name, start, end, true);
 		}
 
-		return commerceChannelRelFinder.findByC_C(
-			className, classPK, name, start, end, true);
+
 	}
 
 	@Override

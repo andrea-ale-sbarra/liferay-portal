@@ -16,11 +16,17 @@ package com.liferay.asset.categories.internal.layout.display.page;
 
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.service.AssetCategoryLocalService;
+import com.liferay.friendly.url.model.FriendlyURLEntry;
+import com.liferay.friendly.url.service.FriendlyURLEntryLocalServiceUtil;
 import com.liferay.info.item.InfoItemReference;
 import com.liferay.layout.display.page.LayoutDisplayPageObjectProvider;
 import com.liferay.layout.display.page.LayoutDisplayPageProvider;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.constants.FriendlyURLResolverConstants;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
+import com.liferay.portal.kernel.service.GroupServiceUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Portal;
 
@@ -65,9 +71,26 @@ public class AssetCategoryLayoutDisplayPageProvider
 	public LayoutDisplayPageObjectProvider<AssetCategory>
 		getLayoutDisplayPageObjectProvider(long groupId, String urlTitle) {
 
-		AssetCategory assetCategory =
-			_assetCategoryLocalService.fetchAssetCategory(
-				GetterUtil.getLong(urlTitle));
+		Group group = GroupLocalServiceUtil.fetchGroup(groupId);
+
+		Group companyGroup = GroupLocalServiceUtil.fetchCompanyGroup(group.getCompanyId());
+
+		FriendlyURLEntry friendlyURLEntry =
+				FriendlyURLEntryLocalServiceUtil.fetchFriendlyURLEntry(
+						companyGroup.getGroupId(),
+						_portal.getClassNameId(AssetCategory.class), urlTitle);
+
+		AssetCategory assetCategory = null;
+
+		if (friendlyURLEntry == null) {
+			assetCategory =
+					_assetCategoryLocalService.fetchAssetCategory(
+							GetterUtil.getLong(urlTitle));
+		}else{
+			assetCategory =
+					_assetCategoryLocalService.fetchAssetCategory(
+							friendlyURLEntry.getClassPK());
+		}
 
 		if (assetCategory == null) {
 			return null;
