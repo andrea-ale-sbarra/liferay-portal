@@ -8,5 +8,5 @@ author: "Zoltán Takács"
 clientDir: "../headless-commerce-admin-catalog-client/src/main/java"
 compatibilityVersion: 2
 forcePredictableOperationId: true
-forcePredictableSchemaPropertyName: false
+forcePredictableSchemaPropertyName: true
 testDir: "../headless-commerce-admin-catalog-test/src/testIntegration/java"
