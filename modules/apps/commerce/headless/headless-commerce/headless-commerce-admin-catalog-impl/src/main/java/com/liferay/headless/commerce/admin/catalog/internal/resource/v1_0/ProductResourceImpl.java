@@ -58,6 +58,7 @@ import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Attachment;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Category;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Diagram;
+import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Image;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.MappedProduct;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Pin;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Product;
@@ -720,6 +721,13 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 			contextAcceptLanguage.getPreferredLocale());
 	}
 
+	private Map<String, Serializable> _getExpandoBridgeAttributes(Image image) {
+		return CustomFieldsUtil.toMap(
+			CPAttachmentFileEntry.class.getName(),
+			contextCompany.getCompanyId(), image.getCustomFields(),
+			contextAcceptLanguage.getPreferredLocale());
+	}
+
 	private Map<String, Serializable> _getExpandoBridgeAttributes(
 		Product product) {
 
@@ -937,12 +945,12 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 
 		// Images
 
-		Attachment[] images = product.getImages();
+		Image[] images = product.getImages();
 
 		if (images != null) {
-			for (Attachment attachment : images) {
+			for (Image image : images) {
 				Map<String, Serializable> expandoBridgeAttributes =
-					_getExpandoBridgeAttributes(attachment);
+					_getExpandoBridgeAttributes(image);
 
 				if (expandoBridgeAttributes != null) {
 					serviceContext.setExpandoBridgeAttributes(
@@ -953,7 +961,7 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 					cpDefinition.getGroupId(), _cpAttachmentFileEntryService,
 					_cpDefinitionOptionRelService,
 					_cpDefinitionOptionValueRelService, _cpOptionService,
-					_uniqueFileNameProvider, attachment,
+					_uniqueFileNameProvider, image,
 					_classNameLocalService.getClassNameId(
 						cpDefinition.getModelClassName()),
 					cpDefinition.getCPDefinitionId(),

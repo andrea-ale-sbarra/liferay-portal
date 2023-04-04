@@ -31,6 +31,7 @@ import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Attachment;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.AttachmentBase64;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.AttachmentUrl;
+import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Image;
 import com.liferay.headless.commerce.admin.catalog.internal.util.DateConfigUtil;
 import com.liferay.headless.commerce.core.util.DateConfig;
 import com.liferay.headless.commerce.core.util.LanguageUtils;
@@ -146,6 +147,44 @@ public class AttachmentUtil {
 		return _addFileEntry(
 			file, attachmentUrl.getContentType(), uniqueFileNameProvider,
 			serviceContext);
+	}
+
+	public static FileEntry addFileEntry(
+			Image image, UniqueFileNameProvider uniqueFileNameProvider,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		if (Validator.isNotNull(image.getAttachment())) {
+			String base64EncodedContent = image.getAttachment();
+
+			File file = FileUtil.createTempFile(
+				Base64.decode(base64EncodedContent));
+
+			return _addFileEntry(
+				file, image.getContentType(), uniqueFileNameProvider,
+				serviceContext);
+		}
+
+		if (Validator.isNotNull(image.getSrc())) {
+			URL url = new URL(image.getSrc());
+
+			if (Objects.equals(url.getProtocol(), "file")) {
+				throw new CPAttachmentFileEntryProtocolException(
+					"Unsupported URL protocol");
+			}
+
+			URLConnection urlConnection = url.openConnection();
+
+			urlConnection.connect();
+
+			File file = FileUtil.createTempFile(urlConnection.getInputStream());
+
+			return _addFileEntry(
+				file, image.getContentType(), uniqueFileNameProvider,
+				serviceContext);
+		}
+
+		return null;
 	}
 
 	public static CPAttachmentFileEntry addOrUpdateCPAttachmentFileEntry(
@@ -332,6 +371,73 @@ public class AttachmentUtil {
 				cpOptionService, attachment.getOptions(), classPK,
 				serviceContext.getCompanyId()),
 			GetterUtil.getDouble(attachment.getPriority()), type,
+			cloneServiceContext);
+	}
+
+	public static CPAttachmentFileEntry addOrUpdateCPAttachmentFileEntry(
+			long groupId,
+			CPAttachmentFileEntryService cpAttachmentFileEntryService,
+			CPDefinitionOptionRelService cpDefinitionOptionRelService,
+			CPDefinitionOptionValueRelService cpDefinitionOptionValueRelService,
+			CPOptionService cpOptionService,
+			UniqueFileNameProvider uniqueFileNameProvider, Image image,
+			long classNameId, long classPK, int type,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		long fileEntryId = 0;
+
+		ServiceContext cloneServiceContext =
+			(ServiceContext)serviceContext.clone();
+
+		cloneServiceContext.setWorkflowAction(WorkflowConstants.ACTION_PUBLISH);
+
+		FileEntry fileEntry = addFileEntry(
+			image, uniqueFileNameProvider, cloneServiceContext);
+
+		if (fileEntry != null) {
+			fileEntryId = fileEntry.getFileEntryId();
+		}
+
+		Calendar displayCalendar = CalendarFactoryUtil.getCalendar(
+			serviceContext.getTimeZone());
+
+		if (image.getDisplayDate() != null) {
+			displayCalendar = DateConfigUtil.convertDateToCalendar(
+				image.getDisplayDate());
+		}
+
+		DateConfig displayDateConfig = new DateConfig(displayCalendar);
+
+		Calendar expirationCalendar = CalendarFactoryUtil.getCalendar(
+			serviceContext.getTimeZone());
+
+		expirationCalendar.add(Calendar.MONTH, 1);
+
+		if (image.getExpirationDate() != null) {
+			expirationCalendar = DateConfigUtil.convertDateToCalendar(
+				image.getExpirationDate());
+		}
+
+		DateConfig expirationDateConfig = new DateConfig(expirationCalendar);
+
+		return cpAttachmentFileEntryService.addOrUpdateCPAttachmentFileEntry(
+			image.getExternalReferenceCode(), groupId, classNameId, classPK,
+			GetterUtil.getLong(image.getId()), fileEntryId,
+			GetterUtil.get(image.getCdnEnabled(), false),
+			GetterUtil.getString(image.getCdnURL()),
+			displayDateConfig.getMonth(), displayDateConfig.getDay(),
+			displayDateConfig.getYear(), displayDateConfig.getHour(),
+			displayDateConfig.getMinute(), expirationDateConfig.getMonth(),
+			expirationDateConfig.getDay(), expirationDateConfig.getYear(),
+			expirationDateConfig.getHour(), expirationDateConfig.getMinute(),
+			GetterUtil.get(image.getNeverExpire(), false),
+			getTitleMap(null, image.getTitle()),
+			_getJSON(
+				cpDefinitionOptionRelService, cpDefinitionOptionValueRelService,
+				cpOptionService, image.getOptions(), classPK,
+				serviceContext.getCompanyId()),
+			GetterUtil.getDouble(image.getPriority()), type,
 			cloneServiceContext);
 	}
 

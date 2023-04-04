@@ -115,6 +115,26 @@ public class MappedProductResourceImpl
 			cpDefinition.getCPDefinitionId(), pagination, search, sorts);
 	}
 
+	@Override
+	public MappedProduct getProductIdMappedProductBySequence(
+			Long id, String sequence)
+		throws Exception {
+
+		CPDefinition cpDefinition =
+			_cpDefinitionService.fetchCPDefinitionByCProductId(id);
+
+		if (cpDefinition == null) {
+			throw new NoSuchCPDefinitionException(
+				"Unable to find product with ID " + id);
+		}
+
+		CSDiagramEntry csDiagramEntry =
+			_csDiagramEntryService.fetchCSDiagramEntry(
+				cpDefinition.getCPDefinitionId(), sequence);
+
+		return _toMappedProduct(csDiagramEntry.getCSDiagramEntryId());
+	}
+
 	@NestedField(parentClass = Product.class, value = "mappedProducts")
 	@Override
 	public Page<MappedProduct> getProductIdMappedProductsPage(
@@ -131,26 +151,6 @@ public class MappedProductResourceImpl
 
 		return _getMappedProductsPage(
 			cpDefinition.getCPDefinitionId(), pagination, search, sorts);
-	}
-
-	@Override
-	public MappedProduct getProductMappedProductBySequence(
-			Long productId, String sequence)
-		throws Exception {
-
-		CPDefinition cpDefinition =
-			_cpDefinitionService.fetchCPDefinitionByCProductId(productId);
-
-		if (cpDefinition == null) {
-			throw new NoSuchCPDefinitionException(
-				"Unable to find product with ID " + productId);
-		}
-
-		CSDiagramEntry csDiagramEntry =
-			_csDiagramEntryService.fetchCSDiagramEntry(
-				cpDefinition.getCPDefinitionId(), sequence);
-
-		return _toMappedProduct(csDiagramEntry.getCSDiagramEntryId());
 	}
 
 	@Override

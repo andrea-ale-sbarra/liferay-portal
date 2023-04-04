@@ -211,7 +211,8 @@ public class ProductGroupResourceImpl extends BaseProductGroupResourceImpl {
 
 		// Product group products
 
-		ProductGroupProduct[] productGroupProducts = productGroup.getProducts();
+		ProductGroupProduct[] productGroupProducts =
+			productGroup.getProductGroupProducts();
 
 		if (productGroupProducts != null) {
 			for (ProductGroupProduct productGroupProduct :
