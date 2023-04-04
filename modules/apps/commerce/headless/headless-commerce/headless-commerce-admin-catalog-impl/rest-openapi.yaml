@@ -11695,13 +11695,13 @@ paths:
                       - HeadlessCommerceAdminCatalog.write
             summary: Updates a product by ID.
             tags: ["ProductTaxConfiguration"]
-    "/products/{productId}/diagrams":
+    "/products/{id}/diagrams":
         get:
             operationId: getProductDiagram
             parameters:
                 - in: path
                   explode: false
-                  name: productId
+                  name: id
                   required: true
                   schema:
                       description:
@@ -11768,7 +11768,7 @@ paths:
             parameters:
                 - in: path
                   explode: false
-                  name: productId
+                  name: id
                   required: true
                   schema:
                       description:
@@ -11839,13 +11839,13 @@ paths:
             summary: Creates or updates a diagram by product ID.
             tags:
                 - Diagram
-    "/products/{productId}/grouped-products":
+    "/products/{id}/grouped-products":
         get:
             operationId: getProductGroupedProductsPage
             parameters:
                 - in: path
                   explode: false
-                  name: productId
+                  name: id
                   required: true
                   schema:
                       description:
@@ -11930,7 +11930,7 @@ paths:
             parameters:
                 - in: path
                   explode: false
-                  name: productId
+                  name: id
                   required: true
                   schema:
                       description:
@@ -12001,13 +12001,13 @@ paths:
             summary: Creates a grouped product related to a product.
             tags:
                 - GroupedProduct
-    "/products/{productId}/linked-products":
+    "/products/{id}/linked-products":
         get:
             operationId: getProductLinkedProductsPage
             parameters:
                 - in: path
                   explode: false
-                  name: productId
+                  name: id
                   required: true
                   schema:
                       description:
@@ -12087,13 +12087,13 @@ paths:
             summary: Gets a list of grouped product.
             tags:
                 - LinkedProduct
-    "/products/{productId}/mapped-products":
+    "/products/{id}/mapped-products":
         get:
             operationId: getProductMappedProductsPage
             parameters:
                 - in: path
                   explode: false
-                  name: productId
+                  name: id
                   required: true
                   schema:
                       description:
@@ -12188,7 +12188,7 @@ paths:
             parameters:
                 - in: path
                   explode: false
-                  name: productId
+                  name: id
                   required: true
                   schema:
                       description:
@@ -12259,13 +12259,13 @@ paths:
             summary: Creates a mapped product related to a product.
             tags:
                 - MappedProduct
-    "/products/{productId}/mapped-products/by-sequence/{sequence}":
+    "/products/{id}/mapped-products/by-sequence/{sequence}":
         get:
             operationId: getProductMappedProductBySequence
             parameters:
                 - in: path
                   explode: false
-                  name: productId
+                  name: id
                   required: true
                   schema:
                       description:
@@ -12337,13 +12337,13 @@ paths:
                       - HeadlessCommerceAdminCatalog.read
             summary: Gets a mapped product by product ID and sequence.
             tags: ["MappedProduct"]
-    "/products/{productId}/pins":
+    "/products/{id}/pins":
         get:
             operationId: getProductPinsPage
             parameters:
                 - in: path
                   explode: false
-                  name: productId
+                  name: id
                   required: true
                   schema:
                       description:
@@ -12438,7 +12438,7 @@ paths:
             parameters:
                 - in: path
                   explode: false
-                  name: productId
+                  name: id
                   required: true
                   schema:
                       description:
