@@ -645,7 +645,7 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	public Diagram createProductIdDiagram(
+	public Diagram createProductDiagram(
 			@GraphQLName("productId") Long productId,
 			@GraphQLName("diagram") Diagram diagram)
 		throws Exception {
@@ -653,7 +653,7 @@ public class Mutation {
 		return _applyComponentServiceObjects(
 			_diagramResourceComponentServiceObjects,
 			this::_populateResourceContext,
-			diagramResource -> diagramResource.postProductIdDiagram(
+			diagramResource -> diagramResource.postProductDiagram(
 				productId, diagram));
 	}
 
@@ -715,7 +715,7 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	public GroupedProduct createProductIdGroupedProduct(
+	public GroupedProduct createProductGroupedProduct(
 			@GraphQLName("productId") Long productId,
 			@GraphQLName("groupedProduct") GroupedProduct groupedProduct)
 		throws Exception {
@@ -724,7 +724,7 @@ public class Mutation {
 			_groupedProductResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			groupedProductResource ->
-				groupedProductResource.postProductIdGroupedProduct(
+				groupedProductResource.postProductGroupedProduct(
 					productId, groupedProduct));
 	}
 
@@ -800,7 +800,7 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	public MappedProduct createProductIdMappedProduct(
+	public MappedProduct createProductMappedProduct(
 			@GraphQLName("productId") Long productId,
 			@GraphQLName("mappedProduct") MappedProduct mappedProduct)
 		throws Exception {
@@ -809,7 +809,7 @@ public class Mutation {
 			_mappedProductResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			mappedProductResource ->
-				mappedProductResource.postProductIdMappedProduct(
+				mappedProductResource.postProductMappedProduct(
 					productId, mappedProduct));
 	}
 
@@ -1127,14 +1127,14 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	public Pin createProductIdPin(
+	public Pin createProductPin(
 			@GraphQLName("productId") Long productId,
 			@GraphQLName("pin") Pin pin)
 		throws Exception {
 
 		return _applyComponentServiceObjects(
 			_pinResourceComponentServiceObjects, this::_populateResourceContext,
-			pinResource -> pinResource.postProductIdPin(productId, pin));
+			pinResource -> pinResource.postProductPin(productId, pin));
 	}
 
 	@GraphQLField

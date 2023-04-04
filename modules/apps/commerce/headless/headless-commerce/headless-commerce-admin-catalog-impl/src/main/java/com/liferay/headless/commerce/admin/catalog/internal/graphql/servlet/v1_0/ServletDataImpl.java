@@ -360,9 +360,9 @@ public class ServletDataImpl implements ServletData {
 							DiagramResourceImpl.class,
 							"postProductByExternalReferenceCodeDiagram"));
 					put(
-						"mutation#createProductIdDiagram",
+						"mutation#createProductDiagram",
 						new ObjectValuePair<>(
-							DiagramResourceImpl.class, "postProductIdDiagram"));
+							DiagramResourceImpl.class, "postProductDiagram"));
 					put(
 						"mutation#deleteGroupedProduct",
 						new ObjectValuePair<>(
@@ -384,10 +384,10 @@ public class ServletDataImpl implements ServletData {
 							GroupedProductResourceImpl.class,
 							"postProductByExternalReferenceCodeGroupedProduct"));
 					put(
-						"mutation#createProductIdGroupedProduct",
+						"mutation#createProductGroupedProduct",
 						new ObjectValuePair<>(
 							GroupedProductResourceImpl.class,
-							"postProductIdGroupedProduct"));
+							"postProductGroupedProduct"));
 					put(
 						"mutation#createLowStockActionsPageExportBatch",
 						new ObjectValuePair<>(
@@ -414,10 +414,10 @@ public class ServletDataImpl implements ServletData {
 							MappedProductResourceImpl.class,
 							"postProductByExternalReferenceCodeMappedProduct"));
 					put(
-						"mutation#createProductIdMappedProduct",
+						"mutation#createProductMappedProduct",
 						new ObjectValuePair<>(
 							MappedProductResourceImpl.class,
-							"postProductIdMappedProduct"));
+							"postProductMappedProduct"));
 					put(
 						"mutation#createOptionsPageExportBatch",
 						new ObjectValuePair<>(
@@ -535,9 +535,9 @@ public class ServletDataImpl implements ServletData {
 							PinResourceImpl.class,
 							"postProductByExternalReferenceCodePin"));
 					put(
-						"mutation#createProductIdPin",
+						"mutation#createProductPin",
 						new ObjectValuePair<>(
-							PinResourceImpl.class, "postProductIdPin"));
+							PinResourceImpl.class, "postProductPin"));
 					put(
 						"mutation#createProductsPageExportBatch",
 						new ObjectValuePair<>(
@@ -930,24 +930,24 @@ public class ServletDataImpl implements ServletData {
 							DiagramResourceImpl.class,
 							"getProductByExternalReferenceCodeDiagram"));
 					put(
-						"query#productIdDiagram",
+						"query#productDiagram",
 						new ObjectValuePair<>(
-							DiagramResourceImpl.class, "getProductIdDiagram"));
+							DiagramResourceImpl.class, "getProductDiagram"));
 					put(
 						"query#productByExternalReferenceCodeGroupedProducts",
 						new ObjectValuePair<>(
 							GroupedProductResourceImpl.class,
 							"getProductByExternalReferenceCodeGroupedProductsPage"));
 					put(
-						"query#productIdGroupedProducts",
+						"query#productGroupedProducts",
 						new ObjectValuePair<>(
 							GroupedProductResourceImpl.class,
-							"getProductIdGroupedProductsPage"));
+							"getProductGroupedProductsPage"));
 					put(
-						"query#productIdLinkedProducts",
+						"query#productLinkedProducts",
 						new ObjectValuePair<>(
 							LinkedProductResourceImpl.class,
-							"getProductIdLinkedProductsPage"));
+							"getProductLinkedProductsPage"));
 					put(
 						"query#lowStockActions",
 						new ObjectValuePair<>(
@@ -964,10 +964,10 @@ public class ServletDataImpl implements ServletData {
 							MappedProductResourceImpl.class,
 							"getProductByExternalReferenceCodeMappedProductBySequence"));
 					put(
-						"query#productIdMappedProducts",
+						"query#productMappedProducts",
 						new ObjectValuePair<>(
 							MappedProductResourceImpl.class,
-							"getProductIdMappedProductsPage"));
+							"getProductMappedProductsPage"));
 					put(
 						"query#productMappedProductBySequence",
 						new ObjectValuePair<>(
@@ -1021,9 +1021,9 @@ public class ServletDataImpl implements ServletData {
 							PinResourceImpl.class,
 							"getProductByExternalReferenceCodePinsPage"));
 					put(
-						"query#productIdPins",
+						"query#productPins",
 						new ObjectValuePair<>(
-							PinResourceImpl.class, "getProductIdPinsPage"));
+							PinResourceImpl.class, "getProductPinsPage"));
 					put(
 						"query#products",
 						new ObjectValuePair<>(

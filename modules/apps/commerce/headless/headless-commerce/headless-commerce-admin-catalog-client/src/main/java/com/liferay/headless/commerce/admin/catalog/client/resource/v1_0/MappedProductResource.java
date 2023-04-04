@@ -92,21 +92,21 @@ public interface MappedProductResource {
 				String externalReferenceCode, String sequence)
 		throws Exception;
 
-	public Page<MappedProduct> getProductIdMappedProductsPage(
+	public Page<MappedProduct> getProductMappedProductsPage(
 			Long productId, String search, Pagination pagination,
 			String sortString)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse getProductIdMappedProductsPageHttpResponse(
+	public HttpInvoker.HttpResponse getProductMappedProductsPageHttpResponse(
 			Long productId, String search, Pagination pagination,
 			String sortString)
 		throws Exception;
 
-	public MappedProduct postProductIdMappedProduct(
+	public MappedProduct postProductMappedProduct(
 			Long productId, MappedProduct mappedProduct)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse postProductIdMappedProductHttpResponse(
+	public HttpInvoker.HttpResponse postProductMappedProductHttpResponse(
 			Long productId, MappedProduct mappedProduct)
 		throws Exception;
 
@@ -736,13 +736,13 @@ public interface MappedProductResource {
 			return httpInvoker.invoke();
 		}
 
-		public Page<MappedProduct> getProductIdMappedProductsPage(
+		public Page<MappedProduct> getProductMappedProductsPage(
 				Long productId, String search, Pagination pagination,
 				String sortString)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getProductIdMappedProductsPageHttpResponse(
+				getProductMappedProductsPageHttpResponse(
 					productId, search, pagination, sortString);
 
 			String content = httpResponse.getContent();
@@ -783,7 +783,7 @@ public interface MappedProductResource {
 		}
 
 		public HttpInvoker.HttpResponse
-				getProductIdMappedProductsPageHttpResponse(
+				getProductMappedProductsPageHttpResponse(
 					Long productId, String search, Pagination pagination,
 					String sortString)
 			throws Exception {
@@ -837,13 +837,12 @@ public interface MappedProductResource {
 			return httpInvoker.invoke();
 		}
 
-		public MappedProduct postProductIdMappedProduct(
+		public MappedProduct postProductMappedProduct(
 				Long productId, MappedProduct mappedProduct)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				postProductIdMappedProductHttpResponse(
-					productId, mappedProduct);
+				postProductMappedProductHttpResponse(productId, mappedProduct);
 
 			String content = httpResponse.getContent();
 
@@ -882,7 +881,7 @@ public interface MappedProductResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse postProductIdMappedProductHttpResponse(
+		public HttpInvoker.HttpResponse postProductMappedProductHttpResponse(
 				Long productId, MappedProduct mappedProduct)
 			throws Exception {
 

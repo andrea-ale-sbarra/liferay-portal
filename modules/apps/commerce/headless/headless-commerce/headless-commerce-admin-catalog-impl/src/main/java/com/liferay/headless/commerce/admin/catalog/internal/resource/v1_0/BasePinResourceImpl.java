@@ -305,7 +305,7 @@ public abstract class BasePinResourceImpl
 	@javax.ws.rs.Path("/products/{productId}/pins")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Page<Pin> getProductIdPinsPage(
+	public Page<Pin> getProductPinsPage(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.PathParam("productId")
@@ -341,7 +341,7 @@ public abstract class BasePinResourceImpl
 	@javax.ws.rs.POST
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Pin postProductIdPin(
+	public Pin postProductPin(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.PathParam("productId")

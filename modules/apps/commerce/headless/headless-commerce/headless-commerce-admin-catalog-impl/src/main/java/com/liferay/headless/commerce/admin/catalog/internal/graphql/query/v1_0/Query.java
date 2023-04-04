@@ -553,16 +553,16 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {productIdDiagram(productId: ___){attachmentBase64, color, id, imageId, imageURL, productExternalReferenceCode, productId, radius, type}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {productDiagram(productId: ___){attachmentBase64, color, id, imageId, imageURL, productExternalReferenceCode, productId, radius, type}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
-	public Diagram productIdDiagram(@GraphQLName("productId") Long productId)
+	public Diagram productDiagram(@GraphQLName("productId") Long productId)
 		throws Exception {
 
 		return _applyComponentServiceObjects(
 			_diagramResourceComponentServiceObjects,
 			this::_populateResourceContext,
-			diagramResource -> diagramResource.getProductIdDiagram(productId));
+			diagramResource -> diagramResource.getProductDiagram(productId));
 	}
 
 	/**
@@ -589,10 +589,10 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {productIdGroupedProducts(page: ___, pageSize: ___, productId: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {productGroupedProducts(page: ___, pageSize: ___, productId: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
-	public GroupedProductPage productIdGroupedProducts(
+	public GroupedProductPage productGroupedProducts(
 			@GraphQLName("productId") Long productId,
 			@GraphQLName("pageSize") int pageSize,
 			@GraphQLName("page") int page)
@@ -602,17 +602,17 @@ public class Query {
 			_groupedProductResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			groupedProductResource -> new GroupedProductPage(
-				groupedProductResource.getProductIdGroupedProductsPage(
+				groupedProductResource.getProductGroupedProductsPage(
 					productId, Pagination.of(page, pageSize))));
 	}
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {productIdLinkedProducts(page: ___, pageSize: ___, productId: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {productLinkedProducts(page: ___, pageSize: ___, productId: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
-	public LinkedProductPage productIdLinkedProducts(
+	public LinkedProductPage productLinkedProducts(
 			@GraphQLName("productId") Long productId,
 			@GraphQLName("pageSize") int pageSize,
 			@GraphQLName("page") int page)
@@ -622,7 +622,7 @@ public class Query {
 			_linkedProductResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			linkedProductResource -> new LinkedProductPage(
-				linkedProductResource.getProductIdLinkedProductsPage(
+				linkedProductResource.getProductLinkedProductsPage(
 					productId, Pagination.of(page, pageSize))));
 	}
 
@@ -689,10 +689,10 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {productIdMappedProducts(page: ___, pageSize: ___, productId: ___, search: ___, sorts: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {productMappedProducts(page: ___, pageSize: ___, productId: ___, search: ___, sorts: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
-	public MappedProductPage productIdMappedProducts(
+	public MappedProductPage productMappedProducts(
 			@GraphQLName("productId") Long productId,
 			@GraphQLName("search") String search,
 			@GraphQLName("pageSize") int pageSize,
@@ -704,7 +704,7 @@ public class Query {
 			_mappedProductResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			mappedProductResource -> new MappedProductPage(
-				mappedProductResource.getProductIdMappedProductsPage(
+				mappedProductResource.getProductMappedProductsPage(
 					productId, search, Pagination.of(page, pageSize),
 					_sortsBiFunction.apply(
 						mappedProductResource, sortsString))));
@@ -932,10 +932,10 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {productIdPins(page: ___, pageSize: ___, productId: ___, search: ___, sorts: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {productPins(page: ___, pageSize: ___, productId: ___, search: ___, sorts: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
-	public PinPage productIdPins(
+	public PinPage productPins(
 			@GraphQLName("productId") Long productId,
 			@GraphQLName("search") String search,
 			@GraphQLName("pageSize") int pageSize,
@@ -946,7 +946,7 @@ public class Query {
 		return _applyComponentServiceObjects(
 			_pinResourceComponentServiceObjects, this::_populateResourceContext,
 			pinResource -> new PinPage(
-				pinResource.getProductIdPinsPage(
+				pinResource.getProductPinsPage(
 					productId, search, Pagination.of(page, pageSize),
 					_sortsBiFunction.apply(pinResource, sortsString))));
 	}
@@ -1728,6 +1728,32 @@ public class Query {
 				id));
 	}
 
+	@GraphQLTypeExtension(Diagram.class)
+	public class GetProductLinkedProductsPageTypeExtension {
+
+		public GetProductLinkedProductsPageTypeExtension(Diagram diagram) {
+			_diagram = diagram;
+		}
+
+		@GraphQLField
+		public LinkedProductPage productLinkedProducts(
+				@GraphQLName("pageSize") int pageSize,
+				@GraphQLName("page") int page)
+			throws Exception {
+
+			return _applyComponentServiceObjects(
+				_linkedProductResourceComponentServiceObjects,
+				Query.this::_populateResourceContext,
+				linkedProductResource -> new LinkedProductPage(
+					linkedProductResource.getProductLinkedProductsPage(
+						_diagram.getProductId(),
+						Pagination.of(page, pageSize))));
+		}
+
+		private Diagram _diagram;
+
+	}
+
 	@GraphQLTypeExtension(Catalog.class)
 	public class GetProductByExternalReferenceCodeConfigurationTypeExtension {
 
@@ -1832,6 +1858,35 @@ public class Query {
 		}
 
 		private Catalog _catalog;
+
+	}
+
+	@GraphQLTypeExtension(Diagram.class)
+	public class GetProductPinsPageTypeExtension {
+
+		public GetProductPinsPageTypeExtension(Diagram diagram) {
+			_diagram = diagram;
+		}
+
+		@GraphQLField
+		public PinPage productPins(
+				@GraphQLName("search") String search,
+				@GraphQLName("pageSize") int pageSize,
+				@GraphQLName("page") int page,
+				@GraphQLName("sort") String sortsString)
+			throws Exception {
+
+			return _applyComponentServiceObjects(
+				_pinResourceComponentServiceObjects,
+				Query.this::_populateResourceContext,
+				pinResource -> new PinPage(
+					pinResource.getProductPinsPage(
+						_diagram.getProductId(), search,
+						Pagination.of(page, pageSize),
+						_sortsBiFunction.apply(pinResource, sortsString))));
+		}
+
+		private Diagram _diagram;
 
 	}
 
@@ -2160,35 +2215,6 @@ public class Query {
 
 	}
 
-	@GraphQLTypeExtension(Diagram.class)
-	public class GetProductIdPinsPageTypeExtension {
-
-		public GetProductIdPinsPageTypeExtension(Diagram diagram) {
-			_diagram = diagram;
-		}
-
-		@GraphQLField
-		public PinPage productIdPins(
-				@GraphQLName("search") String search,
-				@GraphQLName("pageSize") int pageSize,
-				@GraphQLName("page") int page,
-				@GraphQLName("sort") String sortsString)
-			throws Exception {
-
-			return _applyComponentServiceObjects(
-				_pinResourceComponentServiceObjects,
-				Query.this::_populateResourceContext,
-				pinResource -> new PinPage(
-					pinResource.getProductIdPinsPage(
-						_diagram.getProductId(), search,
-						Pagination.of(page, pageSize),
-						_sortsBiFunction.apply(pinResource, sortsString))));
-		}
-
-		private Diagram _diagram;
-
-	}
-
 	@GraphQLTypeExtension(Catalog.class)
 	public class GetOptionByExternalReferenceCodeOptionValuesPageTypeExtension {
 
@@ -2247,14 +2273,14 @@ public class Query {
 	}
 
 	@GraphQLTypeExtension(Diagram.class)
-	public class GetProductIdGroupedProductsPageTypeExtension {
+	public class GetProductGroupedProductsPageTypeExtension {
 
-		public GetProductIdGroupedProductsPageTypeExtension(Diagram diagram) {
+		public GetProductGroupedProductsPageTypeExtension(Diagram diagram) {
 			_diagram = diagram;
 		}
 
 		@GraphQLField
-		public GroupedProductPage productIdGroupedProducts(
+		public GroupedProductPage productGroupedProducts(
 				@GraphQLName("pageSize") int pageSize,
 				@GraphQLName("page") int page)
 			throws Exception {
@@ -2263,7 +2289,7 @@ public class Query {
 				_groupedProductResourceComponentServiceObjects,
 				Query.this::_populateResourceContext,
 				groupedProductResource -> new GroupedProductPage(
-					groupedProductResource.getProductIdGroupedProductsPage(
+					groupedProductResource.getProductGroupedProductsPage(
 						_diagram.getProductId(),
 						Pagination.of(page, pageSize))));
 		}
@@ -2368,6 +2394,36 @@ public class Query {
 
 	}
 
+	@GraphQLTypeExtension(Diagram.class)
+	public class GetProductMappedProductsPageTypeExtension {
+
+		public GetProductMappedProductsPageTypeExtension(Diagram diagram) {
+			_diagram = diagram;
+		}
+
+		@GraphQLField
+		public MappedProductPage productMappedProducts(
+				@GraphQLName("search") String search,
+				@GraphQLName("pageSize") int pageSize,
+				@GraphQLName("page") int page,
+				@GraphQLName("sort") String sortsString)
+			throws Exception {
+
+			return _applyComponentServiceObjects(
+				_mappedProductResourceComponentServiceObjects,
+				Query.this::_populateResourceContext,
+				mappedProductResource -> new MappedProductPage(
+					mappedProductResource.getProductMappedProductsPage(
+						_diagram.getProductId(), search,
+						Pagination.of(page, pageSize),
+						_sortsBiFunction.apply(
+							mappedProductResource, sortsString))));
+		}
+
+		private Diagram _diagram;
+
+	}
+
 	@GraphQLTypeExtension(Catalog.class)
 	public class
 		GetProductByExternalReferenceCodeMappedProductBySequenceTypeExtension {
@@ -2394,36 +2450,6 @@ public class Query {
 		}
 
 		private Catalog _catalog;
-
-	}
-
-	@GraphQLTypeExtension(Diagram.class)
-	public class GetProductIdMappedProductsPageTypeExtension {
-
-		public GetProductIdMappedProductsPageTypeExtension(Diagram diagram) {
-			_diagram = diagram;
-		}
-
-		@GraphQLField
-		public MappedProductPage productIdMappedProducts(
-				@GraphQLName("search") String search,
-				@GraphQLName("pageSize") int pageSize,
-				@GraphQLName("page") int page,
-				@GraphQLName("sort") String sortsString)
-			throws Exception {
-
-			return _applyComponentServiceObjects(
-				_mappedProductResourceComponentServiceObjects,
-				Query.this::_populateResourceContext,
-				mappedProductResource -> new MappedProductPage(
-					mappedProductResource.getProductIdMappedProductsPage(
-						_diagram.getProductId(), search,
-						Pagination.of(page, pageSize),
-						_sortsBiFunction.apply(
-							mappedProductResource, sortsString))));
-		}
-
-		private Diagram _diagram;
 
 	}
 
@@ -2586,32 +2612,6 @@ public class Query {
 		}
 
 		private Catalog _catalog;
-
-	}
-
-	@GraphQLTypeExtension(Diagram.class)
-	public class GetProductIdLinkedProductsPageTypeExtension {
-
-		public GetProductIdLinkedProductsPageTypeExtension(Diagram diagram) {
-			_diagram = diagram;
-		}
-
-		@GraphQLField
-		public LinkedProductPage productIdLinkedProducts(
-				@GraphQLName("pageSize") int pageSize,
-				@GraphQLName("page") int page)
-			throws Exception {
-
-			return _applyComponentServiceObjects(
-				_linkedProductResourceComponentServiceObjects,
-				Query.this::_populateResourceContext,
-				linkedProductResource -> new LinkedProductPage(
-					linkedProductResource.getProductIdLinkedProductsPage(
-						_diagram.getProductId(),
-						Pagination.of(page, pageSize))));
-		}
-
-		private Diagram _diagram;
 
 	}
 

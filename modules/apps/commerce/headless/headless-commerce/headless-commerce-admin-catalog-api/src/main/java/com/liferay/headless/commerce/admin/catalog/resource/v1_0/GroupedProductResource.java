@@ -75,11 +75,11 @@ public interface GroupedProductResource {
 			String externalReferenceCode, GroupedProduct groupedProduct)
 		throws Exception;
 
-	public Page<GroupedProduct> getProductIdGroupedProductsPage(
+	public Page<GroupedProduct> getProductGroupedProductsPage(
 			Long productId, Pagination pagination)
 		throws Exception;
 
-	public GroupedProduct postProductIdGroupedProduct(
+	public GroupedProduct postProductGroupedProduct(
 			Long productId, GroupedProduct groupedProduct)
 		throws Exception;
 

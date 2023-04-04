@@ -62,16 +62,16 @@ public interface DiagramResource {
 				String externalReferenceCode, Diagram diagram)
 		throws Exception;
 
-	public Diagram getProductIdDiagram(Long productId) throws Exception;
+	public Diagram getProductDiagram(Long productId) throws Exception;
 
-	public HttpInvoker.HttpResponse getProductIdDiagramHttpResponse(
+	public HttpInvoker.HttpResponse getProductDiagramHttpResponse(
 			Long productId)
 		throws Exception;
 
-	public Diagram postProductIdDiagram(Long productId, Diagram diagram)
+	public Diagram postProductDiagram(Long productId, Diagram diagram)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse postProductIdDiagramHttpResponse(
+	public HttpInvoker.HttpResponse postProductDiagramHttpResponse(
 			Long productId, Diagram diagram)
 		throws Exception;
 
@@ -435,9 +435,9 @@ public interface DiagramResource {
 			return httpInvoker.invoke();
 		}
 
-		public Diagram getProductIdDiagram(Long productId) throws Exception {
+		public Diagram getProductDiagram(Long productId) throws Exception {
 			HttpInvoker.HttpResponse httpResponse =
-				getProductIdDiagramHttpResponse(productId);
+				getProductDiagramHttpResponse(productId);
 
 			String content = httpResponse.getContent();
 
@@ -477,7 +477,7 @@ public interface DiagramResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse getProductIdDiagramHttpResponse(
+		public HttpInvoker.HttpResponse getProductDiagramHttpResponse(
 				Long productId)
 			throws Exception {
 
@@ -515,11 +515,11 @@ public interface DiagramResource {
 			return httpInvoker.invoke();
 		}
 
-		public Diagram postProductIdDiagram(Long productId, Diagram diagram)
+		public Diagram postProductDiagram(Long productId, Diagram diagram)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				postProductIdDiagramHttpResponse(productId, diagram);
+				postProductDiagramHttpResponse(productId, diagram);
 
 			String content = httpResponse.getContent();
 
@@ -559,7 +559,7 @@ public interface DiagramResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse postProductIdDiagramHttpResponse(
+		public HttpInvoker.HttpResponse postProductDiagramHttpResponse(
 				Long productId, Diagram diagram)
 			throws Exception {
 

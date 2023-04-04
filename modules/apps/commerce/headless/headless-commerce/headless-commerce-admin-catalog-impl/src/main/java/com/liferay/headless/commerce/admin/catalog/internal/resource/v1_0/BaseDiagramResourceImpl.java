@@ -169,7 +169,7 @@ public abstract class BaseDiagramResourceImpl implements DiagramResource {
 	@javax.ws.rs.Path("/products/{productId}/diagrams")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Diagram getProductIdDiagram(
+	public Diagram getProductDiagram(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.PathParam("productId")
@@ -200,7 +200,7 @@ public abstract class BaseDiagramResourceImpl implements DiagramResource {
 	@javax.ws.rs.POST
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Diagram postProductIdDiagram(
+	public Diagram postProductDiagram(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.PathParam("productId")

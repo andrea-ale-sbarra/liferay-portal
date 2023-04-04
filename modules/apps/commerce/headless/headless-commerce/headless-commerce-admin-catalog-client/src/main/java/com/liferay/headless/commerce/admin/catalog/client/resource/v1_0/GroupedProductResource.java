@@ -80,19 +80,19 @@ public interface GroupedProductResource {
 				String externalReferenceCode, GroupedProduct groupedProduct)
 		throws Exception;
 
-	public Page<GroupedProduct> getProductIdGroupedProductsPage(
+	public Page<GroupedProduct> getProductGroupedProductsPage(
 			Long productId, Pagination pagination)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse getProductIdGroupedProductsPageHttpResponse(
+	public HttpInvoker.HttpResponse getProductGroupedProductsPageHttpResponse(
 			Long productId, Pagination pagination)
 		throws Exception;
 
-	public GroupedProduct postProductIdGroupedProduct(
+	public GroupedProduct postProductGroupedProduct(
 			Long productId, GroupedProduct groupedProduct)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse postProductIdGroupedProductHttpResponse(
+	public HttpInvoker.HttpResponse postProductGroupedProductHttpResponse(
 			Long productId, GroupedProduct groupedProduct)
 		throws Exception;
 
@@ -620,12 +620,12 @@ public interface GroupedProductResource {
 			return httpInvoker.invoke();
 		}
 
-		public Page<GroupedProduct> getProductIdGroupedProductsPage(
+		public Page<GroupedProduct> getProductGroupedProductsPage(
 				Long productId, Pagination pagination)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getProductIdGroupedProductsPageHttpResponse(
+				getProductGroupedProductsPageHttpResponse(
 					productId, pagination);
 
 			String content = httpResponse.getContent();
@@ -666,7 +666,7 @@ public interface GroupedProductResource {
 		}
 
 		public HttpInvoker.HttpResponse
-				getProductIdGroupedProductsPageHttpResponse(
+				getProductGroupedProductsPageHttpResponse(
 					Long productId, Pagination pagination)
 			throws Exception {
 
@@ -711,12 +711,12 @@ public interface GroupedProductResource {
 			return httpInvoker.invoke();
 		}
 
-		public GroupedProduct postProductIdGroupedProduct(
+		public GroupedProduct postProductGroupedProduct(
 				Long productId, GroupedProduct groupedProduct)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				postProductIdGroupedProductHttpResponse(
+				postProductGroupedProductHttpResponse(
 					productId, groupedProduct);
 
 			String content = httpResponse.getContent();
@@ -756,7 +756,7 @@ public interface GroupedProductResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse postProductIdGroupedProductHttpResponse(
+		public HttpInvoker.HttpResponse postProductGroupedProductHttpResponse(
 				Long productId, GroupedProduct groupedProduct)
 			throws Exception {
 

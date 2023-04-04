@@ -361,7 +361,7 @@ public abstract class BaseMappedProductResourceImpl
 	@javax.ws.rs.Path("/products/{productId}/mapped-products")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Page<MappedProduct> getProductIdMappedProductsPage(
+	public Page<MappedProduct> getProductMappedProductsPage(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.PathParam("productId")
@@ -399,7 +399,7 @@ public abstract class BaseMappedProductResourceImpl
 	@javax.ws.rs.POST
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public MappedProduct postProductIdMappedProduct(
+	public MappedProduct postProductMappedProduct(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.PathParam("productId")

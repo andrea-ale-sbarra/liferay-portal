@@ -420,23 +420,23 @@ public abstract class BaseGroupedProductResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductIdGroupedProductsPage() throws Exception {
-		Long productId = testGetProductIdGroupedProductsPage_getProductId();
+	public void testGetProductGroupedProductsPage() throws Exception {
+		Long productId = testGetProductGroupedProductsPage_getProductId();
 		Long irrelevantProductId =
-			testGetProductIdGroupedProductsPage_getIrrelevantProductId();
+			testGetProductGroupedProductsPage_getIrrelevantProductId();
 
 		Page<GroupedProduct> page =
-			groupedProductResource.getProductIdGroupedProductsPage(
+			groupedProductResource.getProductGroupedProductsPage(
 				productId, Pagination.of(1, 10));
 
 		Assert.assertEquals(0, page.getTotalCount());
 
 		if (irrelevantProductId != null) {
 			GroupedProduct irrelevantGroupedProduct =
-				testGetProductIdGroupedProductsPage_addGroupedProduct(
+				testGetProductGroupedProductsPage_addGroupedProduct(
 					irrelevantProductId, randomIrrelevantGroupedProduct());
 
-			page = groupedProductResource.getProductIdGroupedProductsPage(
+			page = groupedProductResource.getProductGroupedProductsPage(
 				irrelevantProductId, Pagination.of(1, 2));
 
 			Assert.assertEquals(1, page.getTotalCount());
@@ -446,19 +446,19 @@ public abstract class BaseGroupedProductResourceTestCase {
 				(List<GroupedProduct>)page.getItems());
 			assertValid(
 				page,
-				testGetProductIdGroupedProductsPage_getExpectedActions(
+				testGetProductGroupedProductsPage_getExpectedActions(
 					irrelevantProductId));
 		}
 
 		GroupedProduct groupedProduct1 =
-			testGetProductIdGroupedProductsPage_addGroupedProduct(
+			testGetProductGroupedProductsPage_addGroupedProduct(
 				productId, randomGroupedProduct());
 
 		GroupedProduct groupedProduct2 =
-			testGetProductIdGroupedProductsPage_addGroupedProduct(
+			testGetProductGroupedProductsPage_addGroupedProduct(
 				productId, randomGroupedProduct());
 
-		page = groupedProductResource.getProductIdGroupedProductsPage(
+		page = groupedProductResource.getProductGroupedProductsPage(
 			productId, Pagination.of(1, 10));
 
 		Assert.assertEquals(2, page.getTotalCount());
@@ -468,7 +468,7 @@ public abstract class BaseGroupedProductResourceTestCase {
 			(List<GroupedProduct>)page.getItems());
 		assertValid(
 			page,
-			testGetProductIdGroupedProductsPage_getExpectedActions(productId));
+			testGetProductGroupedProductsPage_getExpectedActions(productId));
 
 		groupedProductResource.deleteGroupedProduct(groupedProduct1.getId());
 
@@ -476,8 +476,7 @@ public abstract class BaseGroupedProductResourceTestCase {
 	}
 
 	protected Map<String, Map<String, String>>
-			testGetProductIdGroupedProductsPage_getExpectedActions(
-				Long productId)
+			testGetProductGroupedProductsPage_getExpectedActions(Long productId)
 		throws Exception {
 
 		Map<String, Map<String, String>> expectedActions = new HashMap<>();
@@ -486,25 +485,25 @@ public abstract class BaseGroupedProductResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductIdGroupedProductsPageWithPagination()
+	public void testGetProductGroupedProductsPageWithPagination()
 		throws Exception {
 
-		Long productId = testGetProductIdGroupedProductsPage_getProductId();
+		Long productId = testGetProductGroupedProductsPage_getProductId();
 
 		GroupedProduct groupedProduct1 =
-			testGetProductIdGroupedProductsPage_addGroupedProduct(
+			testGetProductGroupedProductsPage_addGroupedProduct(
 				productId, randomGroupedProduct());
 
 		GroupedProduct groupedProduct2 =
-			testGetProductIdGroupedProductsPage_addGroupedProduct(
+			testGetProductGroupedProductsPage_addGroupedProduct(
 				productId, randomGroupedProduct());
 
 		GroupedProduct groupedProduct3 =
-			testGetProductIdGroupedProductsPage_addGroupedProduct(
+			testGetProductGroupedProductsPage_addGroupedProduct(
 				productId, randomGroupedProduct());
 
 		Page<GroupedProduct> page1 =
-			groupedProductResource.getProductIdGroupedProductsPage(
+			groupedProductResource.getProductGroupedProductsPage(
 				productId, Pagination.of(1, 2));
 
 		List<GroupedProduct> groupedProducts1 =
@@ -514,7 +513,7 @@ public abstract class BaseGroupedProductResourceTestCase {
 			groupedProducts1.toString(), 2, groupedProducts1.size());
 
 		Page<GroupedProduct> page2 =
-			groupedProductResource.getProductIdGroupedProductsPage(
+			groupedProductResource.getProductGroupedProductsPage(
 				productId, Pagination.of(2, 2));
 
 		Assert.assertEquals(3, page2.getTotalCount());
@@ -526,7 +525,7 @@ public abstract class BaseGroupedProductResourceTestCase {
 			groupedProducts2.toString(), 1, groupedProducts2.size());
 
 		Page<GroupedProduct> page3 =
-			groupedProductResource.getProductIdGroupedProductsPage(
+			groupedProductResource.getProductGroupedProductsPage(
 				productId, Pagination.of(1, 3));
 
 		assertEqualsIgnoringOrder(
@@ -535,45 +534,45 @@ public abstract class BaseGroupedProductResourceTestCase {
 	}
 
 	protected GroupedProduct
-			testGetProductIdGroupedProductsPage_addGroupedProduct(
+			testGetProductGroupedProductsPage_addGroupedProduct(
 				Long productId, GroupedProduct groupedProduct)
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return groupedProductResource.postProductGroupedProduct(
+			productId, groupedProduct);
 	}
 
-	protected Long testGetProductIdGroupedProductsPage_getProductId()
+	protected Long testGetProductGroupedProductsPage_getProductId()
 		throws Exception {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
-	protected Long testGetProductIdGroupedProductsPage_getIrrelevantProductId()
+	protected Long testGetProductGroupedProductsPage_getIrrelevantProductId()
 		throws Exception {
 
 		return null;
 	}
 
 	@Test
-	public void testPostProductIdGroupedProduct() throws Exception {
+	public void testPostProductGroupedProduct() throws Exception {
 		GroupedProduct randomGroupedProduct = randomGroupedProduct();
 
 		GroupedProduct postGroupedProduct =
-			testPostProductIdGroupedProduct_addGroupedProduct(
+			testPostProductGroupedProduct_addGroupedProduct(
 				randomGroupedProduct);
 
 		assertEquals(randomGroupedProduct, postGroupedProduct);
 		assertValid(postGroupedProduct);
 	}
 
-	protected GroupedProduct testPostProductIdGroupedProduct_addGroupedProduct(
+	protected GroupedProduct testPostProductGroupedProduct_addGroupedProduct(
 			GroupedProduct groupedProduct)
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return groupedProductResource.postProductGroupedProduct(
+			testGetProductGroupedProductsPage_getProductId(), groupedProduct);
 	}
 
 	protected GroupedProduct testGraphQLGroupedProduct_addGroupedProduct()

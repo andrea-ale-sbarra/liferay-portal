@@ -298,7 +298,7 @@ public abstract class BaseGroupedProductResourceImpl
 	@javax.ws.rs.Path("/products/{productId}/grouped-products")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Page<GroupedProduct> getProductIdGroupedProductsPage(
+	public Page<GroupedProduct> getProductGroupedProductsPage(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.PathParam("productId")
@@ -332,7 +332,7 @@ public abstract class BaseGroupedProductResourceImpl
 	@javax.ws.rs.POST
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public GroupedProduct postProductIdGroupedProduct(
+	public GroupedProduct postProductGroupedProduct(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.PathParam("productId")

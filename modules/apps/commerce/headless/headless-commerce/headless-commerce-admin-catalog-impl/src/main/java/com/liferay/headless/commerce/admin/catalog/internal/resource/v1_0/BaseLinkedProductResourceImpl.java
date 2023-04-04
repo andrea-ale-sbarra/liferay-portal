@@ -106,7 +106,7 @@ public abstract class BaseLinkedProductResourceImpl
 	@javax.ws.rs.Path("/products/{productId}/linked-products")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Page<LinkedProduct> getProductIdLinkedProductsPage(
+	public Page<LinkedProduct> getProductLinkedProductsPage(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.PathParam("productId")

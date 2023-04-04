@@ -517,21 +517,21 @@ public abstract class BasePinResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductIdPinsPage() throws Exception {
-		Long productId = testGetProductIdPinsPage_getProductId();
+	public void testGetProductPinsPage() throws Exception {
+		Long productId = testGetProductPinsPage_getProductId();
 		Long irrelevantProductId =
-			testGetProductIdPinsPage_getIrrelevantProductId();
+			testGetProductPinsPage_getIrrelevantProductId();
 
-		Page<Pin> page = pinResource.getProductIdPinsPage(
+		Page<Pin> page = pinResource.getProductPinsPage(
 			productId, null, Pagination.of(1, 10), null);
 
 		Assert.assertEquals(0, page.getTotalCount());
 
 		if (irrelevantProductId != null) {
-			Pin irrelevantPin = testGetProductIdPinsPage_addPin(
+			Pin irrelevantPin = testGetProductPinsPage_addPin(
 				irrelevantProductId, randomIrrelevantPin());
 
-			page = pinResource.getProductIdPinsPage(
+			page = pinResource.getProductPinsPage(
 				irrelevantProductId, null, Pagination.of(1, 2), null);
 
 			Assert.assertEquals(1, page.getTotalCount());
@@ -540,23 +540,21 @@ public abstract class BasePinResourceTestCase {
 				Arrays.asList(irrelevantPin), (List<Pin>)page.getItems());
 			assertValid(
 				page,
-				testGetProductIdPinsPage_getExpectedActions(
-					irrelevantProductId));
+				testGetProductPinsPage_getExpectedActions(irrelevantProductId));
 		}
 
-		Pin pin1 = testGetProductIdPinsPage_addPin(productId, randomPin());
+		Pin pin1 = testGetProductPinsPage_addPin(productId, randomPin());
 
-		Pin pin2 = testGetProductIdPinsPage_addPin(productId, randomPin());
+		Pin pin2 = testGetProductPinsPage_addPin(productId, randomPin());
 
-		page = pinResource.getProductIdPinsPage(
+		page = pinResource.getProductPinsPage(
 			productId, null, Pagination.of(1, 10), null);
 
 		Assert.assertEquals(2, page.getTotalCount());
 
 		assertEqualsIgnoringOrder(
 			Arrays.asList(pin1, pin2), (List<Pin>)page.getItems());
-		assertValid(
-			page, testGetProductIdPinsPage_getExpectedActions(productId));
+		assertValid(page, testGetProductPinsPage_getExpectedActions(productId));
 
 		pinResource.deletePin(pin1.getId());
 
@@ -564,7 +562,7 @@ public abstract class BasePinResourceTestCase {
 	}
 
 	protected Map<String, Map<String, String>>
-			testGetProductIdPinsPage_getExpectedActions(Long productId)
+			testGetProductPinsPage_getExpectedActions(Long productId)
 		throws Exception {
 
 		Map<String, Map<String, String>> expectedActions = new HashMap<>();
@@ -573,23 +571,23 @@ public abstract class BasePinResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductIdPinsPageWithPagination() throws Exception {
-		Long productId = testGetProductIdPinsPage_getProductId();
+	public void testGetProductPinsPageWithPagination() throws Exception {
+		Long productId = testGetProductPinsPage_getProductId();
 
-		Pin pin1 = testGetProductIdPinsPage_addPin(productId, randomPin());
+		Pin pin1 = testGetProductPinsPage_addPin(productId, randomPin());
 
-		Pin pin2 = testGetProductIdPinsPage_addPin(productId, randomPin());
+		Pin pin2 = testGetProductPinsPage_addPin(productId, randomPin());
 
-		Pin pin3 = testGetProductIdPinsPage_addPin(productId, randomPin());
+		Pin pin3 = testGetProductPinsPage_addPin(productId, randomPin());
 
-		Page<Pin> page1 = pinResource.getProductIdPinsPage(
+		Page<Pin> page1 = pinResource.getProductPinsPage(
 			productId, null, Pagination.of(1, 2), null);
 
 		List<Pin> pins1 = (List<Pin>)page1.getItems();
 
 		Assert.assertEquals(pins1.toString(), 2, pins1.size());
 
-		Page<Pin> page2 = pinResource.getProductIdPinsPage(
+		Page<Pin> page2 = pinResource.getProductPinsPage(
 			productId, null, Pagination.of(2, 2), null);
 
 		Assert.assertEquals(3, page2.getTotalCount());
@@ -598,7 +596,7 @@ public abstract class BasePinResourceTestCase {
 
 		Assert.assertEquals(pins2.toString(), 1, pins2.size());
 
-		Page<Pin> page3 = pinResource.getProductIdPinsPage(
+		Page<Pin> page3 = pinResource.getProductPinsPage(
 			productId, null, Pagination.of(1, 3), null);
 
 		assertEqualsIgnoringOrder(
@@ -606,8 +604,8 @@ public abstract class BasePinResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductIdPinsPageWithSortDateTime() throws Exception {
-		testGetProductIdPinsPageWithSort(
+	public void testGetProductPinsPageWithSortDateTime() throws Exception {
+		testGetProductPinsPageWithSort(
 			EntityField.Type.DATE_TIME,
 			(entityField, pin1, pin2) -> {
 				BeanTestUtil.setProperty(
@@ -617,8 +615,8 @@ public abstract class BasePinResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductIdPinsPageWithSortDouble() throws Exception {
-		testGetProductIdPinsPageWithSort(
+	public void testGetProductPinsPageWithSortDouble() throws Exception {
+		testGetProductPinsPageWithSort(
 			EntityField.Type.DOUBLE,
 			(entityField, pin1, pin2) -> {
 				BeanTestUtil.setProperty(pin1, entityField.getName(), 0.1);
@@ -627,8 +625,8 @@ public abstract class BasePinResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductIdPinsPageWithSortInteger() throws Exception {
-		testGetProductIdPinsPageWithSort(
+	public void testGetProductPinsPageWithSortInteger() throws Exception {
+		testGetProductPinsPageWithSort(
 			EntityField.Type.INTEGER,
 			(entityField, pin1, pin2) -> {
 				BeanTestUtil.setProperty(pin1, entityField.getName(), 0);
@@ -637,8 +635,8 @@ public abstract class BasePinResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductIdPinsPageWithSortString() throws Exception {
-		testGetProductIdPinsPageWithSort(
+	public void testGetProductPinsPageWithSortString() throws Exception {
+		testGetProductPinsPageWithSort(
 			EntityField.Type.STRING,
 			(entityField, pin1, pin2) -> {
 				Class<?> clazz = pin1.getClass();
@@ -687,7 +685,7 @@ public abstract class BasePinResourceTestCase {
 			});
 	}
 
-	protected void testGetProductIdPinsPageWithSort(
+	protected void testGetProductPinsPageWithSort(
 			EntityField.Type type,
 			UnsafeTriConsumer<EntityField, Pin, Pin, Exception>
 				unsafeTriConsumer)
@@ -699,7 +697,7 @@ public abstract class BasePinResourceTestCase {
 			return;
 		}
 
-		Long productId = testGetProductIdPinsPage_getProductId();
+		Long productId = testGetProductPinsPage_getProductId();
 
 		Pin pin1 = randomPin();
 		Pin pin2 = randomPin();
@@ -708,19 +706,19 @@ public abstract class BasePinResourceTestCase {
 			unsafeTriConsumer.accept(entityField, pin1, pin2);
 		}
 
-		pin1 = testGetProductIdPinsPage_addPin(productId, pin1);
+		pin1 = testGetProductPinsPage_addPin(productId, pin1);
 
-		pin2 = testGetProductIdPinsPage_addPin(productId, pin2);
+		pin2 = testGetProductPinsPage_addPin(productId, pin2);
 
 		for (EntityField entityField : entityFields) {
-			Page<Pin> ascPage = pinResource.getProductIdPinsPage(
+			Page<Pin> ascPage = pinResource.getProductPinsPage(
 				productId, null, Pagination.of(1, 2),
 				entityField.getName() + ":asc");
 
 			assertEquals(
 				Arrays.asList(pin1, pin2), (List<Pin>)ascPage.getItems());
 
-			Page<Pin> descPage = pinResource.getProductIdPinsPage(
+			Page<Pin> descPage = pinResource.getProductPinsPage(
 				productId, null, Pagination.of(1, 2),
 				entityField.getName() + ":desc");
 
@@ -729,37 +727,36 @@ public abstract class BasePinResourceTestCase {
 		}
 	}
 
-	protected Pin testGetProductIdPinsPage_addPin(Long productId, Pin pin)
+	protected Pin testGetProductPinsPage_addPin(Long productId, Pin pin)
 		throws Exception {
 
+		return pinResource.postProductPin(productId, pin);
+	}
+
+	protected Long testGetProductPinsPage_getProductId() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
-	protected Long testGetProductIdPinsPage_getProductId() throws Exception {
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
-	}
-
-	protected Long testGetProductIdPinsPage_getIrrelevantProductId()
+	protected Long testGetProductPinsPage_getIrrelevantProductId()
 		throws Exception {
 
 		return null;
 	}
 
 	@Test
-	public void testPostProductIdPin() throws Exception {
+	public void testPostProductPin() throws Exception {
 		Pin randomPin = randomPin();
 
-		Pin postPin = testPostProductIdPin_addPin(randomPin);
+		Pin postPin = testPostProductPin_addPin(randomPin);
 
 		assertEquals(randomPin, postPin);
 		assertValid(postPin);
 	}
 
-	protected Pin testPostProductIdPin_addPin(Pin pin) throws Exception {
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+	protected Pin testPostProductPin_addPin(Pin pin) throws Exception {
+		return pinResource.postProductPin(
+			testGetProductPinsPage_getProductId(), pin);
 	}
 
 	protected Pin testGraphQLPin_addPin() throws Exception {

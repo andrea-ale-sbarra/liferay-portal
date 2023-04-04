@@ -77,19 +77,19 @@ public interface PinResource {
 				String externalReferenceCode, Pin pin)
 		throws Exception;
 
-	public Page<Pin> getProductIdPinsPage(
+	public Page<Pin> getProductPinsPage(
 			Long productId, String search, Pagination pagination,
 			String sortString)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse getProductIdPinsPageHttpResponse(
+	public HttpInvoker.HttpResponse getProductPinsPageHttpResponse(
 			Long productId, String search, Pagination pagination,
 			String sortString)
 		throws Exception;
 
-	public Pin postProductIdPin(Long productId, Pin pin) throws Exception;
+	public Pin postProductPin(Long productId, Pin pin) throws Exception;
 
-	public HttpInvoker.HttpResponse postProductIdPinHttpResponse(
+	public HttpInvoker.HttpResponse postProductPinHttpResponse(
 			Long productId, Pin pin)
 		throws Exception;
 
@@ -618,13 +618,13 @@ public interface PinResource {
 			return httpInvoker.invoke();
 		}
 
-		public Page<Pin> getProductIdPinsPage(
+		public Page<Pin> getProductPinsPage(
 				Long productId, String search, Pagination pagination,
 				String sortString)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getProductIdPinsPageHttpResponse(
+				getProductPinsPageHttpResponse(
 					productId, search, pagination, sortString);
 
 			String content = httpResponse.getContent();
@@ -664,7 +664,7 @@ public interface PinResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse getProductIdPinsPageHttpResponse(
+		public HttpInvoker.HttpResponse getProductPinsPageHttpResponse(
 				Long productId, String search, Pagination pagination,
 				String sortString)
 			throws Exception {
@@ -718,9 +718,9 @@ public interface PinResource {
 			return httpInvoker.invoke();
 		}
 
-		public Pin postProductIdPin(Long productId, Pin pin) throws Exception {
-			HttpInvoker.HttpResponse httpResponse =
-				postProductIdPinHttpResponse(productId, pin);
+		public Pin postProductPin(Long productId, Pin pin) throws Exception {
+			HttpInvoker.HttpResponse httpResponse = postProductPinHttpResponse(
+				productId, pin);
 
 			String content = httpResponse.getContent();
 
@@ -759,7 +759,7 @@ public interface PinResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse postProductIdPinHttpResponse(
+		public HttpInvoker.HttpResponse postProductPinHttpResponse(
 				Long productId, Pin pin)
 			throws Exception {
 

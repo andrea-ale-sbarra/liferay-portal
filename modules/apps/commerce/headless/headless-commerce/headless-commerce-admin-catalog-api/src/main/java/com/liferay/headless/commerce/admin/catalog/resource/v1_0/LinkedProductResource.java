@@ -56,7 +56,7 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface LinkedProductResource {
 
-	public Page<LinkedProduct> getProductIdLinkedProductsPage(
+	public Page<LinkedProduct> getProductLinkedProductsPage(
 			Long productId, Pagination pagination)
 		throws Exception;
 

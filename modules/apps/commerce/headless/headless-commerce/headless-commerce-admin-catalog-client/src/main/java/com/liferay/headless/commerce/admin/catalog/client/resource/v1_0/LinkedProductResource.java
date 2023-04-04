@@ -40,11 +40,11 @@ public interface LinkedProductResource {
 		return new Builder();
 	}
 
-	public Page<LinkedProduct> getProductIdLinkedProductsPage(
+	public Page<LinkedProduct> getProductLinkedProductsPage(
 			Long productId, Pagination pagination)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse getProductIdLinkedProductsPageHttpResponse(
+	public HttpInvoker.HttpResponse getProductLinkedProductsPageHttpResponse(
 			Long productId, Pagination pagination)
 		throws Exception;
 
@@ -153,13 +153,12 @@ public interface LinkedProductResource {
 	public static class LinkedProductResourceImpl
 		implements LinkedProductResource {
 
-		public Page<LinkedProduct> getProductIdLinkedProductsPage(
+		public Page<LinkedProduct> getProductLinkedProductsPage(
 				Long productId, Pagination pagination)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getProductIdLinkedProductsPageHttpResponse(
-					productId, pagination);
+				getProductLinkedProductsPageHttpResponse(productId, pagination);
 
 			String content = httpResponse.getContent();
 
@@ -199,7 +198,7 @@ public interface LinkedProductResource {
 		}
 
 		public HttpInvoker.HttpResponse
-				getProductIdLinkedProductsPageHttpResponse(
+				getProductLinkedProductsPageHttpResponse(
 					Long productId, Pagination pagination)
 			throws Exception {
 
