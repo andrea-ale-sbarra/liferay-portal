@@ -11697,7 +11697,7 @@ paths:
             tags: ["ProductTaxConfiguration"]
     "/products/{id}/diagrams":
         get:
-            operationId: getProductDiagram
+            operationId: getProductIdDiagram
             parameters:
                 - in: path
                   explode: false
@@ -11764,7 +11764,7 @@ paths:
             tags:
                 - Diagram
         post:
-            operationId: postProductDiagram
+            operationId: postProductIdDiagram
             parameters:
                 - in: path
                   explode: false
@@ -11841,7 +11841,7 @@ paths:
                 - Diagram
     "/products/{id}/grouped-products":
         get:
-            operationId: getProductGroupedProductsPage
+            operationId: getProductIdGroupedProductsPage
             parameters:
                 - in: path
                   explode: false
@@ -11926,7 +11926,7 @@ paths:
             tags:
                 - GroupedProduct
         post:
-            operationId: postProductGroupedProduct
+            operationId: postProductIdGroupedProduct
             parameters:
                 - in: path
                   explode: false
@@ -12003,7 +12003,7 @@ paths:
                 - GroupedProduct
     "/products/{id}/linked-products":
         get:
-            operationId: getProductLinkedProductsPage
+            operationId: getProductIdLinkedProductsPage
             parameters:
                 - in: path
                   explode: false
@@ -12089,7 +12089,7 @@ paths:
                 - LinkedProduct
     "/products/{id}/mapped-products":
         get:
-            operationId: getProductMappedProductsPage
+            operationId: getProductIdMappedProductsPage
             parameters:
                 - in: path
                   explode: false
@@ -12184,7 +12184,7 @@ paths:
             tags:
                 - MappedProduct
         post:
-            operationId: postProductMappedProduct
+            operationId: postProductIdMappedProduct
             parameters:
                 - in: path
                   explode: false
@@ -12261,7 +12261,7 @@ paths:
                 - MappedProduct
     "/products/{id}/mapped-products/by-sequence/{sequence}":
         get:
-            operationId: getProductMappedProductBySequence
+            operationId: getProductIdMappedProductBySequence
             parameters:
                 - in: path
                   explode: false
@@ -12339,7 +12339,7 @@ paths:
             tags: ["MappedProduct"]
     "/products/{id}/pins":
         get:
-            operationId: getProductPinsPage
+            operationId: getProductIdPinsPage
             parameters:
                 - in: path
                   explode: false
@@ -12434,7 +12434,7 @@ paths:
             tags:
                 - Pin
         post:
-            operationId: postProductPin
+            operationId: postProductIdPin
             parameters:
                 - in: path
                   explode: false
