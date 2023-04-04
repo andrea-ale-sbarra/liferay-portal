@@ -685,24 +685,24 @@ public abstract class BaseMappedProductResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductMappedProductsPage() throws Exception {
-		Long productId = testGetProductMappedProductsPage_getProductId();
-		Long irrelevantProductId =
-			testGetProductMappedProductsPage_getIrrelevantProductId();
+	public void testGetProductIdMappedProductsPage() throws Exception {
+		Long id = testGetProductIdMappedProductsPage_getId();
+		Long irrelevantId =
+			testGetProductIdMappedProductsPage_getIrrelevantId();
 
 		Page<MappedProduct> page =
-			mappedProductResource.getProductMappedProductsPage(
-				productId, null, Pagination.of(1, 10), null);
+			mappedProductResource.getProductIdMappedProductsPage(
+				id, null, Pagination.of(1, 10), null);
 
 		Assert.assertEquals(0, page.getTotalCount());
 
-		if (irrelevantProductId != null) {
+		if (irrelevantId != null) {
 			MappedProduct irrelevantMappedProduct =
-				testGetProductMappedProductsPage_addMappedProduct(
-					irrelevantProductId, randomIrrelevantMappedProduct());
+				testGetProductIdMappedProductsPage_addMappedProduct(
+					irrelevantId, randomIrrelevantMappedProduct());
 
-			page = mappedProductResource.getProductMappedProductsPage(
-				irrelevantProductId, null, Pagination.of(1, 2), null);
+			page = mappedProductResource.getProductIdMappedProductsPage(
+				irrelevantId, null, Pagination.of(1, 2), null);
 
 			Assert.assertEquals(1, page.getTotalCount());
 
@@ -711,20 +711,20 @@ public abstract class BaseMappedProductResourceTestCase {
 				(List<MappedProduct>)page.getItems());
 			assertValid(
 				page,
-				testGetProductMappedProductsPage_getExpectedActions(
-					irrelevantProductId));
+				testGetProductIdMappedProductsPage_getExpectedActions(
+					irrelevantId));
 		}
 
 		MappedProduct mappedProduct1 =
-			testGetProductMappedProductsPage_addMappedProduct(
-				productId, randomMappedProduct());
+			testGetProductIdMappedProductsPage_addMappedProduct(
+				id, randomMappedProduct());
 
 		MappedProduct mappedProduct2 =
-			testGetProductMappedProductsPage_addMappedProduct(
-				productId, randomMappedProduct());
+			testGetProductIdMappedProductsPage_addMappedProduct(
+				id, randomMappedProduct());
 
-		page = mappedProductResource.getProductMappedProductsPage(
-			productId, null, Pagination.of(1, 10), null);
+		page = mappedProductResource.getProductIdMappedProductsPage(
+			id, null, Pagination.of(1, 10), null);
 
 		Assert.assertEquals(2, page.getTotalCount());
 
@@ -732,8 +732,7 @@ public abstract class BaseMappedProductResourceTestCase {
 			Arrays.asList(mappedProduct1, mappedProduct2),
 			(List<MappedProduct>)page.getItems());
 		assertValid(
-			page,
-			testGetProductMappedProductsPage_getExpectedActions(productId));
+			page, testGetProductIdMappedProductsPage_getExpectedActions(id));
 
 		mappedProductResource.deleteMappedProduct(mappedProduct1.getId());
 
@@ -741,7 +740,7 @@ public abstract class BaseMappedProductResourceTestCase {
 	}
 
 	protected Map<String, Map<String, String>>
-			testGetProductMappedProductsPage_getExpectedActions(Long productId)
+			testGetProductIdMappedProductsPage_getExpectedActions(Long id)
 		throws Exception {
 
 		Map<String, Map<String, String>> expectedActions = new HashMap<>();
@@ -750,26 +749,26 @@ public abstract class BaseMappedProductResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductMappedProductsPageWithPagination()
+	public void testGetProductIdMappedProductsPageWithPagination()
 		throws Exception {
 
-		Long productId = testGetProductMappedProductsPage_getProductId();
+		Long id = testGetProductIdMappedProductsPage_getId();
 
 		MappedProduct mappedProduct1 =
-			testGetProductMappedProductsPage_addMappedProduct(
-				productId, randomMappedProduct());
+			testGetProductIdMappedProductsPage_addMappedProduct(
+				id, randomMappedProduct());
 
 		MappedProduct mappedProduct2 =
-			testGetProductMappedProductsPage_addMappedProduct(
-				productId, randomMappedProduct());
+			testGetProductIdMappedProductsPage_addMappedProduct(
+				id, randomMappedProduct());
 
 		MappedProduct mappedProduct3 =
-			testGetProductMappedProductsPage_addMappedProduct(
-				productId, randomMappedProduct());
+			testGetProductIdMappedProductsPage_addMappedProduct(
+				id, randomMappedProduct());
 
 		Page<MappedProduct> page1 =
-			mappedProductResource.getProductMappedProductsPage(
-				productId, null, Pagination.of(1, 2), null);
+			mappedProductResource.getProductIdMappedProductsPage(
+				id, null, Pagination.of(1, 2), null);
 
 		List<MappedProduct> mappedProducts1 =
 			(List<MappedProduct>)page1.getItems();
@@ -778,8 +777,8 @@ public abstract class BaseMappedProductResourceTestCase {
 			mappedProducts1.toString(), 2, mappedProducts1.size());
 
 		Page<MappedProduct> page2 =
-			mappedProductResource.getProductMappedProductsPage(
-				productId, null, Pagination.of(2, 2), null);
+			mappedProductResource.getProductIdMappedProductsPage(
+				id, null, Pagination.of(2, 2), null);
 
 		Assert.assertEquals(3, page2.getTotalCount());
 
@@ -790,8 +789,8 @@ public abstract class BaseMappedProductResourceTestCase {
 			mappedProducts2.toString(), 1, mappedProducts2.size());
 
 		Page<MappedProduct> page3 =
-			mappedProductResource.getProductMappedProductsPage(
-				productId, null, Pagination.of(1, 3), null);
+			mappedProductResource.getProductIdMappedProductsPage(
+				id, null, Pagination.of(1, 3), null);
 
 		assertEqualsIgnoringOrder(
 			Arrays.asList(mappedProduct1, mappedProduct2, mappedProduct3),
@@ -799,10 +798,10 @@ public abstract class BaseMappedProductResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductMappedProductsPageWithSortDateTime()
+	public void testGetProductIdMappedProductsPageWithSortDateTime()
 		throws Exception {
 
-		testGetProductMappedProductsPageWithSort(
+		testGetProductIdMappedProductsPageWithSort(
 			EntityField.Type.DATE_TIME,
 			(entityField, mappedProduct1, mappedProduct2) -> {
 				BeanTestUtil.setProperty(
@@ -812,10 +811,10 @@ public abstract class BaseMappedProductResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductMappedProductsPageWithSortDouble()
+	public void testGetProductIdMappedProductsPageWithSortDouble()
 		throws Exception {
 
-		testGetProductMappedProductsPageWithSort(
+		testGetProductIdMappedProductsPageWithSort(
 			EntityField.Type.DOUBLE,
 			(entityField, mappedProduct1, mappedProduct2) -> {
 				BeanTestUtil.setProperty(
@@ -826,10 +825,10 @@ public abstract class BaseMappedProductResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductMappedProductsPageWithSortInteger()
+	public void testGetProductIdMappedProductsPageWithSortInteger()
 		throws Exception {
 
-		testGetProductMappedProductsPageWithSort(
+		testGetProductIdMappedProductsPageWithSort(
 			EntityField.Type.INTEGER,
 			(entityField, mappedProduct1, mappedProduct2) -> {
 				BeanTestUtil.setProperty(
@@ -840,10 +839,10 @@ public abstract class BaseMappedProductResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductMappedProductsPageWithSortString()
+	public void testGetProductIdMappedProductsPageWithSortString()
 		throws Exception {
 
-		testGetProductMappedProductsPageWithSort(
+		testGetProductIdMappedProductsPageWithSort(
 			EntityField.Type.STRING,
 			(entityField, mappedProduct1, mappedProduct2) -> {
 				Class<?> clazz = mappedProduct1.getClass();
@@ -892,7 +891,7 @@ public abstract class BaseMappedProductResourceTestCase {
 			});
 	}
 
-	protected void testGetProductMappedProductsPageWithSort(
+	protected void testGetProductIdMappedProductsPageWithSort(
 			EntityField.Type type,
 			UnsafeTriConsumer
 				<EntityField, MappedProduct, MappedProduct, Exception>
@@ -905,7 +904,7 @@ public abstract class BaseMappedProductResourceTestCase {
 			return;
 		}
 
-		Long productId = testGetProductMappedProductsPage_getProductId();
+		Long id = testGetProductIdMappedProductsPage_getId();
 
 		MappedProduct mappedProduct1 = randomMappedProduct();
 		MappedProduct mappedProduct2 = randomMappedProduct();
@@ -915,16 +914,16 @@ public abstract class BaseMappedProductResourceTestCase {
 				entityField, mappedProduct1, mappedProduct2);
 		}
 
-		mappedProduct1 = testGetProductMappedProductsPage_addMappedProduct(
-			productId, mappedProduct1);
+		mappedProduct1 = testGetProductIdMappedProductsPage_addMappedProduct(
+			id, mappedProduct1);
 
-		mappedProduct2 = testGetProductMappedProductsPage_addMappedProduct(
-			productId, mappedProduct2);
+		mappedProduct2 = testGetProductIdMappedProductsPage_addMappedProduct(
+			id, mappedProduct2);
 
 		for (EntityField entityField : entityFields) {
 			Page<MappedProduct> ascPage =
-				mappedProductResource.getProductMappedProductsPage(
-					productId, null, Pagination.of(1, 2),
+				mappedProductResource.getProductIdMappedProductsPage(
+					id, null, Pagination.of(1, 2),
 					entityField.getName() + ":asc");
 
 			assertEquals(
@@ -932,8 +931,8 @@ public abstract class BaseMappedProductResourceTestCase {
 				(List<MappedProduct>)ascPage.getItems());
 
 			Page<MappedProduct> descPage =
-				mappedProductResource.getProductMappedProductsPage(
-					productId, null, Pagination.of(1, 2),
+				mappedProductResource.getProductIdMappedProductsPage(
+					id, null, Pagination.of(1, 2),
 					entityField.getName() + ":desc");
 
 			assertEquals(
@@ -942,54 +941,53 @@ public abstract class BaseMappedProductResourceTestCase {
 		}
 	}
 
-	protected MappedProduct testGetProductMappedProductsPage_addMappedProduct(
-			Long productId, MappedProduct mappedProduct)
-		throws Exception {
-
-		return mappedProductResource.postProductMappedProduct(
-			productId, mappedProduct);
-	}
-
-	protected Long testGetProductMappedProductsPage_getProductId()
+	protected MappedProduct testGetProductIdMappedProductsPage_addMappedProduct(
+			Long id, MappedProduct mappedProduct)
 		throws Exception {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
-	protected Long testGetProductMappedProductsPage_getIrrelevantProductId()
+	protected Long testGetProductIdMappedProductsPage_getId() throws Exception {
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected Long testGetProductIdMappedProductsPage_getIrrelevantId()
 		throws Exception {
 
 		return null;
 	}
 
 	@Test
-	public void testPostProductMappedProduct() throws Exception {
+	public void testPostProductIdMappedProduct() throws Exception {
 		MappedProduct randomMappedProduct = randomMappedProduct();
 
 		MappedProduct postMappedProduct =
-			testPostProductMappedProduct_addMappedProduct(randomMappedProduct);
+			testPostProductIdMappedProduct_addMappedProduct(
+				randomMappedProduct);
 
 		assertEquals(randomMappedProduct, postMappedProduct);
 		assertValid(postMappedProduct);
 	}
 
-	protected MappedProduct testPostProductMappedProduct_addMappedProduct(
+	protected MappedProduct testPostProductIdMappedProduct_addMappedProduct(
 			MappedProduct mappedProduct)
 		throws Exception {
 
-		return mappedProductResource.postProductMappedProduct(
-			testGetProductMappedProductsPage_getProductId(), mappedProduct);
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
 	}
 
 	@Test
-	public void testGetProductMappedProductBySequence() throws Exception {
+	public void testGetProductIdMappedProductBySequence() throws Exception {
 		MappedProduct postMappedProduct =
-			testGetProductMappedProductBySequence_addMappedProduct();
+			testGetProductIdMappedProductBySequence_addMappedProduct();
 
 		MappedProduct getMappedProduct =
-			mappedProductResource.getProductMappedProductBySequence(
-				testGetProductMappedProductBySequence_getProductId(
+			mappedProductResource.getProductIdMappedProductBySequence(
+				testGetProductIdMappedProductBySequence_getId(
 					postMappedProduct),
 				postMappedProduct.getSequence());
 
@@ -997,15 +995,15 @@ public abstract class BaseMappedProductResourceTestCase {
 		assertValid(getMappedProduct);
 	}
 
-	protected Long testGetProductMappedProductBySequence_getProductId(
+	protected Long testGetProductIdMappedProductBySequence_getId(
 			MappedProduct mappedProduct)
 		throws Exception {
 
-		return mappedProduct.getProductId();
+		return mappedProduct.getId();
 	}
 
 	protected MappedProduct
-			testGetProductMappedProductBySequence_addMappedProduct()
+			testGetProductIdMappedProductBySequence_addMappedProduct()
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -1013,11 +1011,11 @@ public abstract class BaseMappedProductResourceTestCase {
 	}
 
 	@Test
-	public void testGraphQLGetProductMappedProductBySequence()
+	public void testGraphQLGetProductIdMappedProductBySequence()
 		throws Exception {
 
 		MappedProduct mappedProduct =
-			testGraphQLGetProductMappedProductBySequence_addMappedProduct();
+			testGraphQLGetProductIdMappedProductBySequence_addMappedProduct();
 
 		Assert.assertTrue(
 			equals(
@@ -1026,12 +1024,12 @@ public abstract class BaseMappedProductResourceTestCase {
 					JSONUtil.getValueAsString(
 						invokeGraphQLQuery(
 							new GraphQLField(
-								"productMappedProductBySequence",
+								"productIdMappedProductBySequence",
 								new HashMap<String, Object>() {
 									{
 										put(
-											"productId",
-											testGraphQLGetProductMappedProductBySequence_getProductId(
+											"id",
+											testGraphQLGetProductIdMappedProductBySequence_getId(
 												mappedProduct));
 
 										put(
@@ -1042,21 +1040,21 @@ public abstract class BaseMappedProductResourceTestCase {
 								},
 								getGraphQLFields())),
 						"JSONObject/data",
-						"Object/productMappedProductBySequence"))));
+						"Object/productIdMappedProductBySequence"))));
 	}
 
-	protected Long testGraphQLGetProductMappedProductBySequence_getProductId(
+	protected Long testGraphQLGetProductIdMappedProductBySequence_getId(
 			MappedProduct mappedProduct)
 		throws Exception {
 
-		return mappedProduct.getProductId();
+		return mappedProduct.getId();
 	}
 
 	@Test
-	public void testGraphQLGetProductMappedProductBySequenceNotFound()
+	public void testGraphQLGetProductIdMappedProductBySequenceNotFound()
 		throws Exception {
 
-		Long irrelevantProductId = RandomTestUtil.randomLong();
+		Long irrelevantId = RandomTestUtil.randomLong();
 		String irrelevantSequence = "\"" + RandomTestUtil.randomString() + "\"";
 
 		Assert.assertEquals(
@@ -1064,10 +1062,10 @@ public abstract class BaseMappedProductResourceTestCase {
 			JSONUtil.getValueAsString(
 				invokeGraphQLQuery(
 					new GraphQLField(
-						"productMappedProductBySequence",
+						"productIdMappedProductBySequence",
 						new HashMap<String, Object>() {
 							{
-								put("productId", irrelevantProductId);
+								put("id", irrelevantId);
 								put("sequence", irrelevantSequence);
 							}
 						},
@@ -1077,7 +1075,7 @@ public abstract class BaseMappedProductResourceTestCase {
 	}
 
 	protected MappedProduct
-			testGraphQLGetProductMappedProductBySequence_addMappedProduct()
+			testGraphQLGetProductIdMappedProductBySequence_addMappedProduct()
 		throws Exception {
 
 		return testGraphQLMappedProduct_addMappedProduct();

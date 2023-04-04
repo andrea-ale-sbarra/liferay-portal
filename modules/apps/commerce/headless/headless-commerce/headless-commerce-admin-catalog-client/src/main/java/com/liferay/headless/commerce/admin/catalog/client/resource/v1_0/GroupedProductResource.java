@@ -80,20 +80,29 @@ public interface GroupedProductResource {
 				String externalReferenceCode, GroupedProduct groupedProduct)
 		throws Exception;
 
-	public Page<GroupedProduct> getProductGroupedProductsPage(
-			Long productId, Pagination pagination)
+	public Page<GroupedProduct> getProductIdGroupedProductsPage(
+			Long id, Pagination pagination)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse getProductGroupedProductsPageHttpResponse(
-			Long productId, Pagination pagination)
+	public HttpInvoker.HttpResponse getProductIdGroupedProductsPageHttpResponse(
+			Long id, Pagination pagination)
 		throws Exception;
 
-	public GroupedProduct postProductGroupedProduct(
-			Long productId, GroupedProduct groupedProduct)
+	public GroupedProduct postProductIdGroupedProduct(
+			Long id, GroupedProduct groupedProduct)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse postProductGroupedProductHttpResponse(
-			Long productId, GroupedProduct groupedProduct)
+	public HttpInvoker.HttpResponse postProductIdGroupedProductHttpResponse(
+			Long id, GroupedProduct groupedProduct)
+		throws Exception;
+
+	public void postProductIdGroupedProductBatch(
+			String callbackURL, Object object)
+		throws Exception;
+
+	public HttpInvoker.HttpResponse
+			postProductIdGroupedProductBatchHttpResponse(
+				String callbackURL, Object object)
 		throws Exception;
 
 	public static class Builder {
@@ -620,13 +629,12 @@ public interface GroupedProductResource {
 			return httpInvoker.invoke();
 		}
 
-		public Page<GroupedProduct> getProductGroupedProductsPage(
-				Long productId, Pagination pagination)
+		public Page<GroupedProduct> getProductIdGroupedProductsPage(
+				Long id, Pagination pagination)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getProductGroupedProductsPageHttpResponse(
-					productId, pagination);
+				getProductIdGroupedProductsPageHttpResponse(id, pagination);
 
 			String content = httpResponse.getContent();
 
@@ -666,8 +674,8 @@ public interface GroupedProductResource {
 		}
 
 		public HttpInvoker.HttpResponse
-				getProductGroupedProductsPageHttpResponse(
-					Long productId, Pagination pagination)
+				getProductIdGroupedProductsPageHttpResponse(
+					Long id, Pagination pagination)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -701,9 +709,9 @@ public interface GroupedProductResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-admin-catalog/v1.0/products/{productId}/grouped-products");
+						"/o/headless-commerce-admin-catalog/v1.0/products/{id}/grouped-products");
 
-			httpInvoker.path("productId", productId);
+			httpInvoker.path("id", id);
 
 			httpInvoker.userNameAndPassword(
 				_builder._login + ":" + _builder._password);
@@ -711,13 +719,12 @@ public interface GroupedProductResource {
 			return httpInvoker.invoke();
 		}
 
-		public GroupedProduct postProductGroupedProduct(
-				Long productId, GroupedProduct groupedProduct)
+		public GroupedProduct postProductIdGroupedProduct(
+				Long id, GroupedProduct groupedProduct)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				postProductGroupedProductHttpResponse(
-					productId, groupedProduct);
+				postProductIdGroupedProductHttpResponse(id, groupedProduct);
 
 			String content = httpResponse.getContent();
 
@@ -756,8 +763,8 @@ public interface GroupedProductResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse postProductGroupedProductHttpResponse(
-				Long productId, GroupedProduct groupedProduct)
+		public HttpInvoker.HttpResponse postProductIdGroupedProductHttpResponse(
+				Long id, GroupedProduct groupedProduct)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -786,9 +793,87 @@ public interface GroupedProductResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-admin-catalog/v1.0/products/{productId}/grouped-products");
+						"/o/headless-commerce-admin-catalog/v1.0/products/{id}/grouped-products");
 
-			httpInvoker.path("productId", productId);
+			httpInvoker.path("id", id);
+
+			httpInvoker.userNameAndPassword(
+				_builder._login + ":" + _builder._password);
+
+			return httpInvoker.invoke();
+		}
+
+		public void postProductIdGroupedProductBatch(
+				String callbackURL, Object object)
+			throws Exception {
+
+			HttpInvoker.HttpResponse httpResponse =
+				postProductIdGroupedProductBatchHttpResponse(
+					callbackURL, object);
+
+			String content = httpResponse.getContent();
+
+			if ((httpResponse.getStatusCode() / 100) != 2) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response content: " + content);
+				_logger.log(
+					Level.WARNING,
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.log(
+					Level.WARNING,
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+			else {
+				_logger.fine("HTTP response content: " + content);
+				_logger.fine(
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.fine(
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+			}
+		}
+
+		public HttpInvoker.HttpResponse
+				postProductIdGroupedProductBatchHttpResponse(
+					String callbackURL, Object object)
+			throws Exception {
+
+			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			httpInvoker.body(object.toString(), "application/json");
+
+			if (_builder._locale != null) {
+				httpInvoker.header(
+					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
+
+			if (callbackURL != null) {
+				httpInvoker.parameter(
+					"callbackURL", String.valueOf(callbackURL));
+			}
+
+			httpInvoker.path(
+				_builder._scheme + "://" + _builder._host + ":" +
+					_builder._port + _builder._contextPath +
+						"/o/headless-commerce-admin-catalog/v1.0/products/grouped-products/batch");
 
 			httpInvoker.userNameAndPassword(
 				_builder._login + ":" + _builder._password);

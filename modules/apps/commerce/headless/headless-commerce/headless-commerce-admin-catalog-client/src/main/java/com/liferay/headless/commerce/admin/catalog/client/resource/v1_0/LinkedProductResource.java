@@ -40,12 +40,12 @@ public interface LinkedProductResource {
 		return new Builder();
 	}
 
-	public Page<LinkedProduct> getProductLinkedProductsPage(
-			Long productId, Pagination pagination)
+	public Page<LinkedProduct> getProductIdLinkedProductsPage(
+			Long id, Pagination pagination)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse getProductLinkedProductsPageHttpResponse(
-			Long productId, Pagination pagination)
+	public HttpInvoker.HttpResponse getProductIdLinkedProductsPageHttpResponse(
+			Long id, Pagination pagination)
 		throws Exception;
 
 	public static class Builder {
@@ -153,12 +153,12 @@ public interface LinkedProductResource {
 	public static class LinkedProductResourceImpl
 		implements LinkedProductResource {
 
-		public Page<LinkedProduct> getProductLinkedProductsPage(
-				Long productId, Pagination pagination)
+		public Page<LinkedProduct> getProductIdLinkedProductsPage(
+				Long id, Pagination pagination)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getProductLinkedProductsPageHttpResponse(productId, pagination);
+				getProductIdLinkedProductsPageHttpResponse(id, pagination);
 
 			String content = httpResponse.getContent();
 
@@ -198,8 +198,8 @@ public interface LinkedProductResource {
 		}
 
 		public HttpInvoker.HttpResponse
-				getProductLinkedProductsPageHttpResponse(
-					Long productId, Pagination pagination)
+				getProductIdLinkedProductsPageHttpResponse(
+					Long id, Pagination pagination)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -233,9 +233,9 @@ public interface LinkedProductResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-admin-catalog/v1.0/products/{productId}/linked-products");
+						"/o/headless-commerce-admin-catalog/v1.0/products/{id}/linked-products");
 
-			httpInvoker.path("productId", productId);
+			httpInvoker.path("id", id);
 
 			httpInvoker.userNameAndPassword(
 				_builder._login + ":" + _builder._password);

@@ -360,9 +360,14 @@ public class ServletDataImpl implements ServletData {
 							DiagramResourceImpl.class,
 							"postProductByExternalReferenceCodeDiagram"));
 					put(
-						"mutation#createProductDiagram",
+						"mutation#createProductIdDiagram",
 						new ObjectValuePair<>(
-							DiagramResourceImpl.class, "postProductDiagram"));
+							DiagramResourceImpl.class, "postProductIdDiagram"));
+					put(
+						"mutation#createProductIdDiagramBatch",
+						new ObjectValuePair<>(
+							DiagramResourceImpl.class,
+							"postProductIdDiagramBatch"));
 					put(
 						"mutation#deleteGroupedProduct",
 						new ObjectValuePair<>(
@@ -384,10 +389,15 @@ public class ServletDataImpl implements ServletData {
 							GroupedProductResourceImpl.class,
 							"postProductByExternalReferenceCodeGroupedProduct"));
 					put(
-						"mutation#createProductGroupedProduct",
+						"mutation#createProductIdGroupedProduct",
 						new ObjectValuePair<>(
 							GroupedProductResourceImpl.class,
-							"postProductGroupedProduct"));
+							"postProductIdGroupedProduct"));
+					put(
+						"mutation#createProductIdGroupedProductBatch",
+						new ObjectValuePair<>(
+							GroupedProductResourceImpl.class,
+							"postProductIdGroupedProductBatch"));
 					put(
 						"mutation#createLowStockActionsPageExportBatch",
 						new ObjectValuePair<>(
@@ -414,10 +424,15 @@ public class ServletDataImpl implements ServletData {
 							MappedProductResourceImpl.class,
 							"postProductByExternalReferenceCodeMappedProduct"));
 					put(
-						"mutation#createProductMappedProduct",
+						"mutation#createProductIdMappedProduct",
 						new ObjectValuePair<>(
 							MappedProductResourceImpl.class,
-							"postProductMappedProduct"));
+							"postProductIdMappedProduct"));
+					put(
+						"mutation#createProductIdMappedProductBatch",
+						new ObjectValuePair<>(
+							MappedProductResourceImpl.class,
+							"postProductIdMappedProductBatch"));
 					put(
 						"mutation#createOptionsPageExportBatch",
 						new ObjectValuePair<>(
@@ -535,9 +550,13 @@ public class ServletDataImpl implements ServletData {
 							PinResourceImpl.class,
 							"postProductByExternalReferenceCodePin"));
 					put(
-						"mutation#createProductPin",
+						"mutation#createProductIdPin",
 						new ObjectValuePair<>(
-							PinResourceImpl.class, "postProductPin"));
+							PinResourceImpl.class, "postProductIdPin"));
+					put(
+						"mutation#createProductIdPinBatch",
+						new ObjectValuePair<>(
+							PinResourceImpl.class, "postProductIdPinBatch"));
 					put(
 						"mutation#createProductsPageExportBatch",
 						new ObjectValuePair<>(
@@ -930,24 +949,24 @@ public class ServletDataImpl implements ServletData {
 							DiagramResourceImpl.class,
 							"getProductByExternalReferenceCodeDiagram"));
 					put(
-						"query#productDiagram",
+						"query#productIdDiagram",
 						new ObjectValuePair<>(
-							DiagramResourceImpl.class, "getProductDiagram"));
+							DiagramResourceImpl.class, "getProductIdDiagram"));
 					put(
 						"query#productByExternalReferenceCodeGroupedProducts",
 						new ObjectValuePair<>(
 							GroupedProductResourceImpl.class,
 							"getProductByExternalReferenceCodeGroupedProductsPage"));
 					put(
-						"query#productGroupedProducts",
+						"query#productIdGroupedProducts",
 						new ObjectValuePair<>(
 							GroupedProductResourceImpl.class,
-							"getProductGroupedProductsPage"));
+							"getProductIdGroupedProductsPage"));
 					put(
-						"query#productLinkedProducts",
+						"query#productIdLinkedProducts",
 						new ObjectValuePair<>(
 							LinkedProductResourceImpl.class,
-							"getProductLinkedProductsPage"));
+							"getProductIdLinkedProductsPage"));
 					put(
 						"query#lowStockActions",
 						new ObjectValuePair<>(
@@ -964,15 +983,15 @@ public class ServletDataImpl implements ServletData {
 							MappedProductResourceImpl.class,
 							"getProductByExternalReferenceCodeMappedProductBySequence"));
 					put(
-						"query#productMappedProducts",
+						"query#productIdMappedProducts",
 						new ObjectValuePair<>(
 							MappedProductResourceImpl.class,
-							"getProductMappedProductsPage"));
+							"getProductIdMappedProductsPage"));
 					put(
-						"query#productMappedProductBySequence",
+						"query#productIdMappedProductBySequence",
 						new ObjectValuePair<>(
 							MappedProductResourceImpl.class,
-							"getProductMappedProductBySequence"));
+							"getProductIdMappedProductBySequence"));
 					put(
 						"query#options",
 						new ObjectValuePair<>(
@@ -1021,9 +1040,9 @@ public class ServletDataImpl implements ServletData {
 							PinResourceImpl.class,
 							"getProductByExternalReferenceCodePinsPage"));
 					put(
-						"query#productPins",
+						"query#productIdPins",
 						new ObjectValuePair<>(
-							PinResourceImpl.class, "getProductPinsPage"));
+							PinResourceImpl.class, "getProductIdPinsPage"));
 					put(
 						"query#products",
 						new ObjectValuePair<>(

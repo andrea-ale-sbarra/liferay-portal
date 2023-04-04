@@ -81,16 +81,20 @@ public interface MappedProductResource {
 				String externalReferenceCode, String sequence)
 		throws Exception;
 
-	public Page<MappedProduct> getProductMappedProductsPage(
-			Long productId, String search, Pagination pagination, Sort[] sorts)
+	public Page<MappedProduct> getProductIdMappedProductsPage(
+			Long id, String search, Pagination pagination, Sort[] sorts)
 		throws Exception;
 
-	public MappedProduct postProductMappedProduct(
-			Long productId, MappedProduct mappedProduct)
+	public MappedProduct postProductIdMappedProduct(
+			Long id, MappedProduct mappedProduct)
 		throws Exception;
 
-	public MappedProduct getProductMappedProductBySequence(
-			Long productId, String sequence)
+	public Response postProductIdMappedProductBatch(
+			String callbackURL, Object object)
+		throws Exception;
+
+	public MappedProduct getProductIdMappedProductBySequence(
+			Long id, String sequence)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(

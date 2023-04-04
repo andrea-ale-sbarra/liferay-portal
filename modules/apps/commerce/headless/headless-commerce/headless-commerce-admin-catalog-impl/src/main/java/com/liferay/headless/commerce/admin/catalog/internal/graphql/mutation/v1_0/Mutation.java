@@ -645,16 +645,28 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	public Diagram createProductDiagram(
-			@GraphQLName("productId") Long productId,
-			@GraphQLName("diagram") Diagram diagram)
+	public Diagram createProductIdDiagram(
+			@GraphQLName("id") Long id, @GraphQLName("diagram") Diagram diagram)
 		throws Exception {
 
 		return _applyComponentServiceObjects(
 			_diagramResourceComponentServiceObjects,
 			this::_populateResourceContext,
-			diagramResource -> diagramResource.postProductDiagram(
-				productId, diagram));
+			diagramResource -> diagramResource.postProductIdDiagram(
+				id, diagram));
+	}
+
+	@GraphQLField
+	public Response createProductIdDiagramBatch(
+			@GraphQLName("callbackURL") String callbackURL,
+			@GraphQLName("object") Object object)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_diagramResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			diagramResource -> diagramResource.postProductIdDiagramBatch(
+				callbackURL, object));
 	}
 
 	@GraphQLField
@@ -715,8 +727,8 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	public GroupedProduct createProductGroupedProduct(
-			@GraphQLName("productId") Long productId,
+	public GroupedProduct createProductIdGroupedProduct(
+			@GraphQLName("id") Long id,
 			@GraphQLName("groupedProduct") GroupedProduct groupedProduct)
 		throws Exception {
 
@@ -724,8 +736,22 @@ public class Mutation {
 			_groupedProductResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			groupedProductResource ->
-				groupedProductResource.postProductGroupedProduct(
-					productId, groupedProduct));
+				groupedProductResource.postProductIdGroupedProduct(
+					id, groupedProduct));
+	}
+
+	@GraphQLField
+	public Response createProductIdGroupedProductBatch(
+			@GraphQLName("callbackURL") String callbackURL,
+			@GraphQLName("object") Object object)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_groupedProductResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			groupedProductResource ->
+				groupedProductResource.postProductIdGroupedProductBatch(
+					callbackURL, object));
 	}
 
 	@GraphQLField
@@ -800,8 +826,8 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	public MappedProduct createProductMappedProduct(
-			@GraphQLName("productId") Long productId,
+	public MappedProduct createProductIdMappedProduct(
+			@GraphQLName("id") Long id,
 			@GraphQLName("mappedProduct") MappedProduct mappedProduct)
 		throws Exception {
 
@@ -809,8 +835,22 @@ public class Mutation {
 			_mappedProductResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			mappedProductResource ->
-				mappedProductResource.postProductMappedProduct(
-					productId, mappedProduct));
+				mappedProductResource.postProductIdMappedProduct(
+					id, mappedProduct));
+	}
+
+	@GraphQLField
+	public Response createProductIdMappedProductBatch(
+			@GraphQLName("callbackURL") String callbackURL,
+			@GraphQLName("object") Object object)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_mappedProductResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			mappedProductResource ->
+				mappedProductResource.postProductIdMappedProductBatch(
+					callbackURL, object));
 	}
 
 	@GraphQLField
@@ -1127,14 +1167,25 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	public Pin createProductPin(
-			@GraphQLName("productId") Long productId,
-			@GraphQLName("pin") Pin pin)
+	public Pin createProductIdPin(
+			@GraphQLName("id") Long id, @GraphQLName("pin") Pin pin)
 		throws Exception {
 
 		return _applyComponentServiceObjects(
 			_pinResourceComponentServiceObjects, this::_populateResourceContext,
-			pinResource -> pinResource.postProductPin(productId, pin));
+			pinResource -> pinResource.postProductIdPin(id, pin));
+	}
+
+	@GraphQLField
+	public Response createProductIdPinBatch(
+			@GraphQLName("callbackURL") String callbackURL,
+			@GraphQLName("object") Object object)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_pinResourceComponentServiceObjects, this::_populateResourceContext,
+			pinResource -> pinResource.postProductIdPinBatch(
+				callbackURL, object));
 	}
 
 	@GraphQLField
@@ -2218,6 +2269,12 @@ public class Mutation {
 		diagramResource.setContextUser(_user);
 		diagramResource.setGroupLocalService(_groupLocalService);
 		diagramResource.setRoleLocalService(_roleLocalService);
+
+		diagramResource.setVulcanBatchEngineExportTaskResource(
+			_vulcanBatchEngineExportTaskResource);
+
+		diagramResource.setVulcanBatchEngineImportTaskResource(
+			_vulcanBatchEngineImportTaskResource);
 	}
 
 	private void _populateResourceContext(

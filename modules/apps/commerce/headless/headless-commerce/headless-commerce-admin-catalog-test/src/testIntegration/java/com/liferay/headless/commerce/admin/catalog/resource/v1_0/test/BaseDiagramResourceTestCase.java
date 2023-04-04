@@ -322,30 +322,30 @@ public abstract class BaseDiagramResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductDiagram() throws Exception {
-		Diagram postDiagram = testGetProductDiagram_addDiagram();
+	public void testGetProductIdDiagram() throws Exception {
+		Diagram postDiagram = testGetProductIdDiagram_addDiagram();
 
-		Diagram getDiagram = diagramResource.getProductDiagram(
-			testGetProductDiagram_getProductId(postDiagram));
+		Diagram getDiagram = diagramResource.getProductIdDiagram(
+			testGetProductIdDiagram_getId(postDiagram));
 
 		assertEquals(postDiagram, getDiagram);
 		assertValid(getDiagram);
 	}
 
-	protected Long testGetProductDiagram_getProductId(Diagram diagram)
+	protected Long testGetProductIdDiagram_getId(Diagram diagram)
 		throws Exception {
 
-		return diagram.getProductId();
+		return diagram.getId();
 	}
 
-	protected Diagram testGetProductDiagram_addDiagram() throws Exception {
+	protected Diagram testGetProductIdDiagram_addDiagram() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
 	@Test
-	public void testGraphQLGetProductDiagram() throws Exception {
-		Diagram diagram = testGraphQLGetProductDiagram_addDiagram();
+	public void testGraphQLGetProductIdDiagram() throws Exception {
+		Diagram diagram = testGraphQLGetProductIdDiagram_addDiagram();
 
 		Assert.assertTrue(
 			equals(
@@ -354,38 +354,38 @@ public abstract class BaseDiagramResourceTestCase {
 					JSONUtil.getValueAsString(
 						invokeGraphQLQuery(
 							new GraphQLField(
-								"productDiagram",
+								"productIdDiagram",
 								new HashMap<String, Object>() {
 									{
 										put(
-											"productId",
-											testGraphQLGetProductDiagram_getProductId(
+											"id",
+											testGraphQLGetProductIdDiagram_getId(
 												diagram));
 									}
 								},
 								getGraphQLFields())),
-						"JSONObject/data", "Object/productDiagram"))));
+						"JSONObject/data", "Object/productIdDiagram"))));
 	}
 
-	protected Long testGraphQLGetProductDiagram_getProductId(Diagram diagram)
+	protected Long testGraphQLGetProductIdDiagram_getId(Diagram diagram)
 		throws Exception {
 
-		return diagram.getProductId();
+		return diagram.getId();
 	}
 
 	@Test
-	public void testGraphQLGetProductDiagramNotFound() throws Exception {
-		Long irrelevantProductId = RandomTestUtil.randomLong();
+	public void testGraphQLGetProductIdDiagramNotFound() throws Exception {
+		Long irrelevantId = RandomTestUtil.randomLong();
 
 		Assert.assertEquals(
 			"Not Found",
 			JSONUtil.getValueAsString(
 				invokeGraphQLQuery(
 					new GraphQLField(
-						"productDiagram",
+						"productIdDiagram",
 						new HashMap<String, Object>() {
 							{
-								put("productId", irrelevantProductId);
+								put("id", irrelevantId);
 							}
 						},
 						getGraphQLFields())),
@@ -393,27 +393,28 @@ public abstract class BaseDiagramResourceTestCase {
 				"Object/code"));
 	}
 
-	protected Diagram testGraphQLGetProductDiagram_addDiagram()
+	protected Diagram testGraphQLGetProductIdDiagram_addDiagram()
 		throws Exception {
 
 		return testGraphQLDiagram_addDiagram();
 	}
 
 	@Test
-	public void testPostProductDiagram() throws Exception {
+	public void testPostProductIdDiagram() throws Exception {
 		Diagram randomDiagram = randomDiagram();
 
-		Diagram postDiagram = testPostProductDiagram_addDiagram(randomDiagram);
+		Diagram postDiagram = testPostProductIdDiagram_addDiagram(
+			randomDiagram);
 
 		assertEquals(randomDiagram, postDiagram);
 		assertValid(postDiagram);
 	}
 
-	protected Diagram testPostProductDiagram_addDiagram(Diagram diagram)
+	protected Diagram testPostProductIdDiagram_addDiagram(Diagram diagram)
 		throws Exception {
 
-		return diagramResource.postProductDiagram(
-			testGetProductDiagram_getProductId(diagram));
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
 	}
 
 	protected Diagram testGraphQLDiagram_addDiagram() throws Exception {

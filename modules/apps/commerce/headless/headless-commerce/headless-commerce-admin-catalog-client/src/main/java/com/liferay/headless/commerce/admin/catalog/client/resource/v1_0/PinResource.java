@@ -77,20 +77,25 @@ public interface PinResource {
 				String externalReferenceCode, Pin pin)
 		throws Exception;
 
-	public Page<Pin> getProductPinsPage(
-			Long productId, String search, Pagination pagination,
-			String sortString)
+	public Page<Pin> getProductIdPinsPage(
+			Long id, String search, Pagination pagination, String sortString)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse getProductPinsPageHttpResponse(
-			Long productId, String search, Pagination pagination,
-			String sortString)
+	public HttpInvoker.HttpResponse getProductIdPinsPageHttpResponse(
+			Long id, String search, Pagination pagination, String sortString)
 		throws Exception;
 
-	public Pin postProductPin(Long productId, Pin pin) throws Exception;
+	public Pin postProductIdPin(Long id, Pin pin) throws Exception;
 
-	public HttpInvoker.HttpResponse postProductPinHttpResponse(
-			Long productId, Pin pin)
+	public HttpInvoker.HttpResponse postProductIdPinHttpResponse(
+			Long id, Pin pin)
+		throws Exception;
+
+	public void postProductIdPinBatch(String callbackURL, Object object)
+		throws Exception;
+
+	public HttpInvoker.HttpResponse postProductIdPinBatchHttpResponse(
+			String callbackURL, Object object)
 		throws Exception;
 
 	public static class Builder {
@@ -618,14 +623,14 @@ public interface PinResource {
 			return httpInvoker.invoke();
 		}
 
-		public Page<Pin> getProductPinsPage(
-				Long productId, String search, Pagination pagination,
+		public Page<Pin> getProductIdPinsPage(
+				Long id, String search, Pagination pagination,
 				String sortString)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getProductPinsPageHttpResponse(
-					productId, search, pagination, sortString);
+				getProductIdPinsPageHttpResponse(
+					id, search, pagination, sortString);
 
 			String content = httpResponse.getContent();
 
@@ -664,8 +669,8 @@ public interface PinResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse getProductPinsPageHttpResponse(
-				Long productId, String search, Pagination pagination,
+		public HttpInvoker.HttpResponse getProductIdPinsPageHttpResponse(
+				Long id, String search, Pagination pagination,
 				String sortString)
 			throws Exception {
 
@@ -708,9 +713,9 @@ public interface PinResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-admin-catalog/v1.0/products/{productId}/pins");
+						"/o/headless-commerce-admin-catalog/v1.0/products/{id}/pins");
 
-			httpInvoker.path("productId", productId);
+			httpInvoker.path("id", id);
 
 			httpInvoker.userNameAndPassword(
 				_builder._login + ":" + _builder._password);
@@ -718,9 +723,9 @@ public interface PinResource {
 			return httpInvoker.invoke();
 		}
 
-		public Pin postProductPin(Long productId, Pin pin) throws Exception {
-			HttpInvoker.HttpResponse httpResponse = postProductPinHttpResponse(
-				productId, pin);
+		public Pin postProductIdPin(Long id, Pin pin) throws Exception {
+			HttpInvoker.HttpResponse httpResponse =
+				postProductIdPinHttpResponse(id, pin);
 
 			String content = httpResponse.getContent();
 
@@ -759,8 +764,8 @@ public interface PinResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse postProductPinHttpResponse(
-				Long productId, Pin pin)
+		public HttpInvoker.HttpResponse postProductIdPinHttpResponse(
+				Long id, Pin pin)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -789,9 +794,84 @@ public interface PinResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-admin-catalog/v1.0/products/{productId}/pins");
+						"/o/headless-commerce-admin-catalog/v1.0/products/{id}/pins");
 
-			httpInvoker.path("productId", productId);
+			httpInvoker.path("id", id);
+
+			httpInvoker.userNameAndPassword(
+				_builder._login + ":" + _builder._password);
+
+			return httpInvoker.invoke();
+		}
+
+		public void postProductIdPinBatch(String callbackURL, Object object)
+			throws Exception {
+
+			HttpInvoker.HttpResponse httpResponse =
+				postProductIdPinBatchHttpResponse(callbackURL, object);
+
+			String content = httpResponse.getContent();
+
+			if ((httpResponse.getStatusCode() / 100) != 2) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response content: " + content);
+				_logger.log(
+					Level.WARNING,
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.log(
+					Level.WARNING,
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+			else {
+				_logger.fine("HTTP response content: " + content);
+				_logger.fine(
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.fine(
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+			}
+		}
+
+		public HttpInvoker.HttpResponse postProductIdPinBatchHttpResponse(
+				String callbackURL, Object object)
+			throws Exception {
+
+			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			httpInvoker.body(object.toString(), "application/json");
+
+			if (_builder._locale != null) {
+				httpInvoker.header(
+					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
+
+			if (callbackURL != null) {
+				httpInvoker.parameter(
+					"callbackURL", String.valueOf(callbackURL));
+			}
+
+			httpInvoker.path(
+				_builder._scheme + "://" + _builder._host + ":" +
+					_builder._port + _builder._contextPath +
+						"/o/headless-commerce-admin-catalog/v1.0/products/pins/batch");
 
 			httpInvoker.userNameAndPassword(
 				_builder._login + ":" + _builder._password);

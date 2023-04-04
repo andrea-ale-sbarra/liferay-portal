@@ -56,8 +56,8 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface LinkedProductResource {
 
-	public Page<LinkedProduct> getProductLinkedProductsPage(
-			Long productId, Pagination pagination)
+	public Page<LinkedProduct> getProductIdLinkedProductsPage(
+			Long id, Pagination pagination)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(

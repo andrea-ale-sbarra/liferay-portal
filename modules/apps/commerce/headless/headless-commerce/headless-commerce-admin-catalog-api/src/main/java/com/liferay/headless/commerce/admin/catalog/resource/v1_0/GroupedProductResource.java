@@ -75,12 +75,16 @@ public interface GroupedProductResource {
 			String externalReferenceCode, GroupedProduct groupedProduct)
 		throws Exception;
 
-	public Page<GroupedProduct> getProductGroupedProductsPage(
-			Long productId, Pagination pagination)
+	public Page<GroupedProduct> getProductIdGroupedProductsPage(
+			Long id, Pagination pagination)
 		throws Exception;
 
-	public GroupedProduct postProductGroupedProduct(
-			Long productId, GroupedProduct groupedProduct)
+	public GroupedProduct postProductIdGroupedProduct(
+			Long id, GroupedProduct groupedProduct)
+		throws Exception;
+
+	public Response postProductIdGroupedProductBatch(
+			String callbackURL, Object object)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(

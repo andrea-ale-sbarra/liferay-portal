@@ -73,11 +73,14 @@ public interface PinResource {
 			String externalReferenceCode, Pin pin)
 		throws Exception;
 
-	public Page<Pin> getProductPinsPage(
-			Long productId, String search, Pagination pagination, Sort[] sorts)
+	public Page<Pin> getProductIdPinsPage(
+			Long id, String search, Pagination pagination, Sort[] sorts)
 		throws Exception;
 
-	public Pin postProductPin(Long productId, Pin pin) throws Exception;
+	public Pin postProductIdPin(Long id, Pin pin) throws Exception;
+
+	public Response postProductIdPinBatch(String callbackURL, Object object)
+		throws Exception;
 
 	public default void setContextAcceptLanguage(
 		AcceptLanguage contextAcceptLanguage) {

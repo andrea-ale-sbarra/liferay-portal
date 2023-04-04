@@ -194,24 +194,24 @@ public abstract class BaseLinkedProductResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductLinkedProductsPage() throws Exception {
-		Long productId = testGetProductLinkedProductsPage_getProductId();
-		Long irrelevantProductId =
-			testGetProductLinkedProductsPage_getIrrelevantProductId();
+	public void testGetProductIdLinkedProductsPage() throws Exception {
+		Long id = testGetProductIdLinkedProductsPage_getId();
+		Long irrelevantId =
+			testGetProductIdLinkedProductsPage_getIrrelevantId();
 
 		Page<LinkedProduct> page =
-			linkedProductResource.getProductLinkedProductsPage(
-				productId, Pagination.of(1, 10));
+			linkedProductResource.getProductIdLinkedProductsPage(
+				id, Pagination.of(1, 10));
 
 		Assert.assertEquals(0, page.getTotalCount());
 
-		if (irrelevantProductId != null) {
+		if (irrelevantId != null) {
 			LinkedProduct irrelevantLinkedProduct =
-				testGetProductLinkedProductsPage_addLinkedProduct(
-					irrelevantProductId, randomIrrelevantLinkedProduct());
+				testGetProductIdLinkedProductsPage_addLinkedProduct(
+					irrelevantId, randomIrrelevantLinkedProduct());
 
-			page = linkedProductResource.getProductLinkedProductsPage(
-				irrelevantProductId, Pagination.of(1, 2));
+			page = linkedProductResource.getProductIdLinkedProductsPage(
+				irrelevantId, Pagination.of(1, 2));
 
 			Assert.assertEquals(1, page.getTotalCount());
 
@@ -220,20 +220,20 @@ public abstract class BaseLinkedProductResourceTestCase {
 				(List<LinkedProduct>)page.getItems());
 			assertValid(
 				page,
-				testGetProductLinkedProductsPage_getExpectedActions(
-					irrelevantProductId));
+				testGetProductIdLinkedProductsPage_getExpectedActions(
+					irrelevantId));
 		}
 
 		LinkedProduct linkedProduct1 =
-			testGetProductLinkedProductsPage_addLinkedProduct(
-				productId, randomLinkedProduct());
+			testGetProductIdLinkedProductsPage_addLinkedProduct(
+				id, randomLinkedProduct());
 
 		LinkedProduct linkedProduct2 =
-			testGetProductLinkedProductsPage_addLinkedProduct(
-				productId, randomLinkedProduct());
+			testGetProductIdLinkedProductsPage_addLinkedProduct(
+				id, randomLinkedProduct());
 
-		page = linkedProductResource.getProductLinkedProductsPage(
-			productId, Pagination.of(1, 10));
+		page = linkedProductResource.getProductIdLinkedProductsPage(
+			id, Pagination.of(1, 10));
 
 		Assert.assertEquals(2, page.getTotalCount());
 
@@ -241,12 +241,11 @@ public abstract class BaseLinkedProductResourceTestCase {
 			Arrays.asList(linkedProduct1, linkedProduct2),
 			(List<LinkedProduct>)page.getItems());
 		assertValid(
-			page,
-			testGetProductLinkedProductsPage_getExpectedActions(productId));
+			page, testGetProductIdLinkedProductsPage_getExpectedActions(id));
 	}
 
 	protected Map<String, Map<String, String>>
-			testGetProductLinkedProductsPage_getExpectedActions(Long productId)
+			testGetProductIdLinkedProductsPage_getExpectedActions(Long id)
 		throws Exception {
 
 		Map<String, Map<String, String>> expectedActions = new HashMap<>();
@@ -255,26 +254,26 @@ public abstract class BaseLinkedProductResourceTestCase {
 	}
 
 	@Test
-	public void testGetProductLinkedProductsPageWithPagination()
+	public void testGetProductIdLinkedProductsPageWithPagination()
 		throws Exception {
 
-		Long productId = testGetProductLinkedProductsPage_getProductId();
+		Long id = testGetProductIdLinkedProductsPage_getId();
 
 		LinkedProduct linkedProduct1 =
-			testGetProductLinkedProductsPage_addLinkedProduct(
-				productId, randomLinkedProduct());
+			testGetProductIdLinkedProductsPage_addLinkedProduct(
+				id, randomLinkedProduct());
 
 		LinkedProduct linkedProduct2 =
-			testGetProductLinkedProductsPage_addLinkedProduct(
-				productId, randomLinkedProduct());
+			testGetProductIdLinkedProductsPage_addLinkedProduct(
+				id, randomLinkedProduct());
 
 		LinkedProduct linkedProduct3 =
-			testGetProductLinkedProductsPage_addLinkedProduct(
-				productId, randomLinkedProduct());
+			testGetProductIdLinkedProductsPage_addLinkedProduct(
+				id, randomLinkedProduct());
 
 		Page<LinkedProduct> page1 =
-			linkedProductResource.getProductLinkedProductsPage(
-				productId, Pagination.of(1, 2));
+			linkedProductResource.getProductIdLinkedProductsPage(
+				id, Pagination.of(1, 2));
 
 		List<LinkedProduct> linkedProducts1 =
 			(List<LinkedProduct>)page1.getItems();
@@ -283,8 +282,8 @@ public abstract class BaseLinkedProductResourceTestCase {
 			linkedProducts1.toString(), 2, linkedProducts1.size());
 
 		Page<LinkedProduct> page2 =
-			linkedProductResource.getProductLinkedProductsPage(
-				productId, Pagination.of(2, 2));
+			linkedProductResource.getProductIdLinkedProductsPage(
+				id, Pagination.of(2, 2));
 
 		Assert.assertEquals(3, page2.getTotalCount());
 
@@ -295,30 +294,28 @@ public abstract class BaseLinkedProductResourceTestCase {
 			linkedProducts2.toString(), 1, linkedProducts2.size());
 
 		Page<LinkedProduct> page3 =
-			linkedProductResource.getProductLinkedProductsPage(
-				productId, Pagination.of(1, 3));
+			linkedProductResource.getProductIdLinkedProductsPage(
+				id, Pagination.of(1, 3));
 
 		assertEqualsIgnoringOrder(
 			Arrays.asList(linkedProduct1, linkedProduct2, linkedProduct3),
 			(List<LinkedProduct>)page3.getItems());
 	}
 
-	protected LinkedProduct testGetProductLinkedProductsPage_addLinkedProduct(
-			Long productId, LinkedProduct linkedProduct)
+	protected LinkedProduct testGetProductIdLinkedProductsPage_addLinkedProduct(
+			Long id, LinkedProduct linkedProduct)
 		throws Exception {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
-	protected Long testGetProductLinkedProductsPage_getProductId()
-		throws Exception {
-
+	protected Long testGetProductIdLinkedProductsPage_getId() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
-	protected Long testGetProductLinkedProductsPage_getIrrelevantProductId()
+	protected Long testGetProductIdLinkedProductsPage_getIrrelevantId()
 		throws Exception {
 
 		return null;
