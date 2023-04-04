@@ -560,17 +560,17 @@ public class Product implements Serializable {
 
 	@Schema
 	@Valid
-	public Attachment[] getImages() {
+	public Image[] getImages() {
 		return images;
 	}
 
-	public void setImages(Attachment[] images) {
+	public void setImages(Image[] images) {
 		this.images = images;
 	}
 
 	@JsonIgnore
 	public void setImages(
-		UnsafeSupplier<Attachment[], Exception> imagesUnsafeSupplier) {
+		UnsafeSupplier<Image[], Exception> imagesUnsafeSupplier) {
 
 		try {
 			images = imagesUnsafeSupplier.get();
@@ -585,7 +585,7 @@ public class Product implements Serializable {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected Attachment[] images;
+	protected Image[] images;
 
 	@Schema
 	@Valid

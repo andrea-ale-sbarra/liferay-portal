@@ -100,19 +100,22 @@ public class ProductGroupSerDes {
 			sb.append(productGroup.getId());
 		}
 
-		if (productGroup.getProducts() != null) {
+		if (productGroup.getProductGroupProducts() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"products\": ");
+			sb.append("\"productGroupProducts\": ");
 
 			sb.append("[");
 
-			for (int i = 0; i < productGroup.getProducts().length; i++) {
-				sb.append(String.valueOf(productGroup.getProducts()[i]));
+			for (int i = 0; i < productGroup.getProductGroupProducts().length;
+				 i++) {
 
-				if ((i + 1) < productGroup.getProducts().length) {
+				sb.append(
+					String.valueOf(productGroup.getProductGroupProducts()[i]));
+
+				if ((i + 1) < productGroup.getProductGroupProducts().length) {
 					sb.append(", ");
 				}
 			}
@@ -191,11 +194,13 @@ public class ProductGroupSerDes {
 			map.put("id", String.valueOf(productGroup.getId()));
 		}
 
-		if (productGroup.getProducts() == null) {
-			map.put("products", null);
+		if (productGroup.getProductGroupProducts() == null) {
+			map.put("productGroupProducts", null);
 		}
 		else {
-			map.put("products", String.valueOf(productGroup.getProducts()));
+			map.put(
+				"productGroupProducts",
+				String.valueOf(productGroup.getProductGroupProducts()));
 		}
 
 		if (productGroup.getProductsCount() == null) {
@@ -263,20 +268,24 @@ public class ProductGroupSerDes {
 						Long.valueOf((String)jsonParserFieldValue));
 				}
 			}
-			else if (Objects.equals(jsonParserFieldName, "products")) {
+			else if (Objects.equals(
+						jsonParserFieldName, "productGroupProducts")) {
+
 				if (jsonParserFieldValue != null) {
 					Object[] jsonParserFieldValues =
 						(Object[])jsonParserFieldValue;
 
-					ProductGroupProduct[] productsArray =
+					ProductGroupProduct[] productGroupProductsArray =
 						new ProductGroupProduct[jsonParserFieldValues.length];
 
-					for (int i = 0; i < productsArray.length; i++) {
-						productsArray[i] = ProductGroupProductSerDes.toDTO(
-							(String)jsonParserFieldValues[i]);
+					for (int i = 0; i < productGroupProductsArray.length; i++) {
+						productGroupProductsArray[i] =
+							ProductGroupProductSerDes.toDTO(
+								(String)jsonParserFieldValues[i]);
 					}
 
-					productGroup.setProducts(productsArray);
+					productGroup.setProductGroupProducts(
+						productGroupProductsArray);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "productsCount")) {

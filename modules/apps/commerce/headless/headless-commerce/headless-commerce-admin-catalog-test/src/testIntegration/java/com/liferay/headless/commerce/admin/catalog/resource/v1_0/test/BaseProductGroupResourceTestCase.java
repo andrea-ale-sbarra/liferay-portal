@@ -942,8 +942,10 @@ public abstract class BaseProductGroupResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("products", additionalAssertFieldName)) {
-				if (productGroup.getProducts() == null) {
+			if (Objects.equals(
+					"productGroupProducts", additionalAssertFieldName)) {
+
+				if (productGroup.getProductGroupProducts() == null) {
 					valid = false;
 				}
 
@@ -1125,10 +1127,12 @@ public abstract class BaseProductGroupResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("products", additionalAssertFieldName)) {
+			if (Objects.equals(
+					"productGroupProducts", additionalAssertFieldName)) {
+
 				if (!Objects.deepEquals(
-						productGroup1.getProducts(),
-						productGroup2.getProducts())) {
+						productGroup1.getProductGroupProducts(),
+						productGroup2.getProductGroupProducts())) {
 
 					return false;
 				}
@@ -1284,7 +1288,7 @@ public abstract class BaseProductGroupResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
-		if (entityFieldName.equals("products")) {
+		if (entityFieldName.equals("productGroupProducts")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
 		}

@@ -394,16 +394,16 @@ public class Product implements Cloneable, Serializable {
 
 	protected Long id;
 
-	public Attachment[] getImages() {
+	public Image[] getImages() {
 		return images;
 	}
 
-	public void setImages(Attachment[] images) {
+	public void setImages(Image[] images) {
 		this.images = images;
 	}
 
 	public void setImages(
-		UnsafeSupplier<Attachment[], Exception> imagesUnsafeSupplier) {
+		UnsafeSupplier<Image[], Exception> imagesUnsafeSupplier) {
 
 		try {
 			images = imagesUnsafeSupplier.get();
@@ -413,7 +413,7 @@ public class Product implements Cloneable, Serializable {
 		}
 	}
 
-	protected Attachment[] images;
+	protected Image[] images;
 
 	public LinkedProduct[] getLinkedProducts() {
 		return linkedProducts;

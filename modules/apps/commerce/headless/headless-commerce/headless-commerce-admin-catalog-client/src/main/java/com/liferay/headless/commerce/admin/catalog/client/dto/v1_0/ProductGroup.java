@@ -118,27 +118,29 @@ public class ProductGroup implements Cloneable, Serializable {
 
 	protected Long id;
 
-	public ProductGroupProduct[] getProducts() {
-		return products;
+	public ProductGroupProduct[] getProductGroupProducts() {
+		return productGroupProducts;
 	}
 
-	public void setProducts(ProductGroupProduct[] products) {
-		this.products = products;
+	public void setProductGroupProducts(
+		ProductGroupProduct[] productGroupProducts) {
+
+		this.productGroupProducts = productGroupProducts;
 	}
 
-	public void setProducts(
+	public void setProductGroupProducts(
 		UnsafeSupplier<ProductGroupProduct[], Exception>
-			productsUnsafeSupplier) {
+			productGroupProductsUnsafeSupplier) {
 
 		try {
-			products = productsUnsafeSupplier.get();
+			productGroupProducts = productGroupProductsUnsafeSupplier.get();
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected ProductGroupProduct[] products;
+	protected ProductGroupProduct[] productGroupProducts;
 
 	public Integer getProductsCount() {
 		return productsCount;

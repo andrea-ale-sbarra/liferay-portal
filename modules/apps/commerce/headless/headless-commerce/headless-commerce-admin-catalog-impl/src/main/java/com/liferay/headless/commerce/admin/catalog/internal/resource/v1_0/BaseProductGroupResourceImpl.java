@@ -207,7 +207,7 @@ public abstract class BaseProductGroupResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'POST' 'http://localhost:8080/o/headless-commerce-admin-catalog/v1.0/product-groups' -d $'{"description": ___, "externalReferenceCode": ___, "id": ___, "products": ___, "productsCount": ___, "title": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'POST' 'http://localhost:8080/o/headless-commerce-admin-catalog/v1.0/product-groups' -d $'{"description": ___, "externalReferenceCode": ___, "id": ___, "productGroupProducts": ___, "productsCount": ___, "title": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.tags.Tags(
 		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "ProductGroup")}
@@ -332,7 +332,7 @@ public abstract class BaseProductGroupResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PATCH' 'http://localhost:8080/o/headless-commerce-admin-catalog/v1.0/product-groups/by-externalReferenceCode/{externalReferenceCode}' -d $'{"description": ___, "externalReferenceCode": ___, "id": ___, "products": ___, "productsCount": ___, "title": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PATCH' 'http://localhost:8080/o/headless-commerce-admin-catalog/v1.0/product-groups/by-externalReferenceCode/{externalReferenceCode}' -d $'{"description": ___, "externalReferenceCode": ___, "id": ___, "productGroupProducts": ___, "productsCount": ___, "title": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -468,7 +468,7 @@ public abstract class BaseProductGroupResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PATCH' 'http://localhost:8080/o/headless-commerce-admin-catalog/v1.0/product-groups/{id}' -d $'{"description": ___, "externalReferenceCode": ___, "id": ___, "products": ___, "productsCount": ___, "title": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PATCH' 'http://localhost:8080/o/headless-commerce-admin-catalog/v1.0/product-groups/{id}' -d $'{"description": ___, "externalReferenceCode": ___, "id": ___, "productGroupProducts": ___, "productsCount": ___, "title": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {

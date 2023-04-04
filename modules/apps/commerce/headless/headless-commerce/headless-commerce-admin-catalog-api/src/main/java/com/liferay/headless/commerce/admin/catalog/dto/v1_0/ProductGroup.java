@@ -177,21 +177,23 @@ public class ProductGroup implements Serializable {
 
 	@Schema
 	@Valid
-	public ProductGroupProduct[] getProducts() {
-		return products;
+	public ProductGroupProduct[] getProductGroupProducts() {
+		return productGroupProducts;
 	}
 
-	public void setProducts(ProductGroupProduct[] products) {
-		this.products = products;
+	public void setProductGroupProducts(
+		ProductGroupProduct[] productGroupProducts) {
+
+		this.productGroupProducts = productGroupProducts;
 	}
 
 	@JsonIgnore
-	public void setProducts(
+	public void setProductGroupProducts(
 		UnsafeSupplier<ProductGroupProduct[], Exception>
-			productsUnsafeSupplier) {
+			productGroupProductsUnsafeSupplier) {
 
 		try {
-			products = productsUnsafeSupplier.get();
+			productGroupProducts = productGroupProductsUnsafeSupplier.get();
 		}
 		catch (RuntimeException re) {
 			throw re;
@@ -203,7 +205,7 @@ public class ProductGroup implements Serializable {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected ProductGroupProduct[] products;
+	protected ProductGroupProduct[] productGroupProducts;
 
 	@DecimalMin("0")
 	@Schema(example = "20")
@@ -334,19 +336,19 @@ public class ProductGroup implements Serializable {
 			sb.append(id);
 		}
 
-		if (products != null) {
+		if (productGroupProducts != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"products\": ");
+			sb.append("\"productGroupProducts\": ");
 
 			sb.append("[");
 
-			for (int i = 0; i < products.length; i++) {
-				sb.append(String.valueOf(products[i]));
+			for (int i = 0; i < productGroupProducts.length; i++) {
+				sb.append(String.valueOf(productGroupProducts[i]));
 
-				if ((i + 1) < products.length) {
+				if ((i + 1) < productGroupProducts.length) {
 					sb.append(", ");
 				}
 			}
