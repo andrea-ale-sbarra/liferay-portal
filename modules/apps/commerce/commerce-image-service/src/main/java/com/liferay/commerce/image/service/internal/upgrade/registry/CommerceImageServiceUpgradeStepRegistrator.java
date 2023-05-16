@@ -15,8 +15,6 @@
 package com.liferay.commerce.image.service.internal.upgrade.registry;
 
 import com.liferay.commerce.model.CommerceShippingMethod;
-import com.liferay.commerce.payment.model.CommercePaymentMethodGroupRel;
-import com.liferay.commerce.payment.service.CommercePaymentMethodGroupRelLocalService;
 import com.liferay.commerce.service.CommerceShippingMethodLocalService;
 import com.liferay.image.upgrade.ImageCompanyIdUpgradeProcess;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
@@ -39,19 +37,10 @@ public class CommerceImageServiceUpgradeStepRegistrator
 		registry.register(
 			"0.0.1", "1.0.0",
 			new ImageCompanyIdUpgradeProcess<>(
-				_commercePaymentMethodGroupRelLocalService::
-					getActionableDynamicQuery,
-				CommercePaymentMethodGroupRel::getCompanyId,
-				CommercePaymentMethodGroupRel::getImageId),
-			new ImageCompanyIdUpgradeProcess<>(
 				_commerceShippingMethodLocalService::getActionableDynamicQuery,
 				CommerceShippingMethod::getCompanyId,
 				CommerceShippingMethod::getImageId));
 	}
-
-	@Reference
-	private CommercePaymentMethodGroupRelLocalService
-		_commercePaymentMethodGroupRelLocalService;
 
 	@Reference
 	private CommerceShippingMethodLocalService

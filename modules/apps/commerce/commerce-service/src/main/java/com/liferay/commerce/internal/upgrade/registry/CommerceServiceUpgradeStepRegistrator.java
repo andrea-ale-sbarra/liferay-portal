@@ -32,11 +32,14 @@ import com.liferay.commerce.internal.upgrade.v8_4_0.util.CommerceShippingOptionA
 import com.liferay.commerce.internal.upgrade.v8_5_0.CommerceAddressTypeUpgradeProcess;
 import com.liferay.commerce.internal.upgrade.v8_9_1.CommerceChannelAccountEntryRelUpgradeProcess;
 import com.liferay.commerce.internal.upgrade.v8_9_4.CommerceOrderUpgradeProcess;
+import com.liferay.commerce.model.CommerceShippingMethod;
 import com.liferay.commerce.model.impl.CPDAvailabilityEstimateModelImpl;
 import com.liferay.commerce.model.impl.CommerceAvailabilityEstimateModelImpl;
 import com.liferay.commerce.product.service.CPDefinitionLocalService;
 import com.liferay.commerce.product.service.CPInstanceLocalService;
 import com.liferay.commerce.product.service.CommerceChannelRelLocalService;
+import com.liferay.commerce.service.CommerceShippingMethodLocalService;
+import com.liferay.image.upgrade.ImageCompanyIdUpgradeProcess;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.AddressLocalService;
@@ -302,6 +305,10 @@ public class CommerceServiceUpgradeStepRegistrator
 
 		registry.register(
 			"7.2.0", "7.3.0",
+			new ImageCompanyIdUpgradeProcess<>(
+				_commerceShippingMethodLocalService::getActionableDynamicQuery,
+				CommerceShippingMethod::getCompanyId,
+				CommerceShippingMethod::getImageId),
 			new MVCCVersionUpgradeProcess() {
 
 				@Override
@@ -478,6 +485,10 @@ public class CommerceServiceUpgradeStepRegistrator
 
 	@Reference
 	private CommerceChannelRelLocalService _commerceChannelRelLocalService;
+
+	@Reference
+	private CommerceShippingMethodLocalService
+		_commerceShippingMethodLocalService;
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
