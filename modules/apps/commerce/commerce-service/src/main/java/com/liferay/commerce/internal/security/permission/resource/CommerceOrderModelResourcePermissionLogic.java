@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionLogic;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.GroupLocalService;
@@ -49,6 +50,8 @@ public class CommerceOrderModelResourcePermissionLogic
 
 	public CommerceOrderModelResourcePermissionLogic(
 		AccountEntryLocalService accountEntryLocalService,
+		ModelResourcePermission<AccountEntry>
+			accountEntryModelResourcePermission,
 		CommerceChannelLocalService commerceChannelLocalService,
 		ConfigurationProvider configurationProvider,
 		GroupLocalService groupLocalService,
@@ -57,6 +60,8 @@ public class CommerceOrderModelResourcePermissionLogic
 		WorkflowDefinitionLinkLocalService workflowDefinitionLinkLocalService) {
 
 		_accountEntryLocalService = accountEntryLocalService;
+		_accountEntryModelResourcePermission =
+			accountEntryModelResourcePermission;
 		_commerceChannelLocalService = commerceChannelLocalService;
 		_configurationProvider = configurationProvider;
 		_groupLocalService = groupLocalService;
@@ -73,6 +78,10 @@ public class CommerceOrderModelResourcePermissionLogic
 		throws PortalException {
 
 		AccountEntry accountEntry = commerceOrder.getAccountEntry();
+
+		_accountEntryModelResourcePermission.check(
+			permissionChecker, accountEntry.getAccountEntryId(),
+			ActionKeys.VIEW);
 
 		if ((accountEntry.getAccountEntryId() ==
 				AccountConstants.ACCOUNT_ENTRY_ID_GUEST) &&
@@ -517,6 +526,8 @@ public class CommerceOrderModelResourcePermissionLogic
 	}
 
 	private final AccountEntryLocalService _accountEntryLocalService;
+	private final ModelResourcePermission<AccountEntry>
+		_accountEntryModelResourcePermission;
 	private final CommerceChannelLocalService _commerceChannelLocalService;
 	private final ConfigurationProvider _configurationProvider;
 	private final GroupLocalService _groupLocalService;
