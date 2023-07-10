@@ -77,8 +77,8 @@ public class CommerceInventoryAuditModelImpl
 		{"companyId", Types.BIGINT}, {"userId", Types.BIGINT},
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
 		{"modifiedDate", Types.TIMESTAMP}, {"sku", Types.VARCHAR},
-		{"logType", Types.VARCHAR}, {"logTypeSettings", Types.CLOB},
-		{"quantity", Types.INTEGER}
+		{"unitOfMeasureKey", Types.VARCHAR}, {"logType", Types.VARCHAR},
+		{"logTypeSettings", Types.CLOB}, {"quantity", Types.INTEGER}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -93,13 +93,14 @@ public class CommerceInventoryAuditModelImpl
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("sku", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("unitOfMeasureKey", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("logType", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("logTypeSettings", Types.CLOB);
 		TABLE_COLUMNS_MAP.put("quantity", Types.INTEGER);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table CIAudit (mvccVersion LONG default 0 not null,CIAuditId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,sku VARCHAR(75) null,logType VARCHAR(75) null,logTypeSettings TEXT null,quantity INTEGER)";
+		"create table CIAudit (mvccVersion LONG default 0 not null,CIAuditId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,sku VARCHAR(75) null,unitOfMeasureKey VARCHAR(75) null,logType VARCHAR(75) null,logTypeSettings TEXT null,quantity INTEGER)";
 
 	public static final String TABLE_SQL_DROP = "drop table CIAudit";
 
@@ -132,6 +133,12 @@ public class CommerceInventoryAuditModelImpl
 	 */
 	@Deprecated
 	public static final long SKU_COLUMN_BITMASK = 4L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UNITOFMEASUREKEY_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -262,6 +269,9 @@ public class CommerceInventoryAuditModelImpl
 				"modifiedDate", CommerceInventoryAudit::getModifiedDate);
 			attributeGetterFunctions.put("sku", CommerceInventoryAudit::getSku);
 			attributeGetterFunctions.put(
+				"unitOfMeasureKey",
+				CommerceInventoryAudit::getUnitOfMeasureKey);
+			attributeGetterFunctions.put(
 				"logType", CommerceInventoryAudit::getLogType);
 			attributeGetterFunctions.put(
 				"logTypeSettings", CommerceInventoryAudit::getLogTypeSettings);
@@ -318,6 +328,10 @@ public class CommerceInventoryAuditModelImpl
 				"sku",
 				(BiConsumer<CommerceInventoryAudit, String>)
 					CommerceInventoryAudit::setSku);
+			attributeSetterBiConsumers.put(
+				"unitOfMeasureKey",
+				(BiConsumer<CommerceInventoryAudit, String>)
+					CommerceInventoryAudit::setUnitOfMeasureKey);
 			attributeSetterBiConsumers.put(
 				"logType",
 				(BiConsumer<CommerceInventoryAudit, String>)
@@ -519,6 +533,35 @@ public class CommerceInventoryAuditModelImpl
 
 	@JSON
 	@Override
+	public String getUnitOfMeasureKey() {
+		if (_unitOfMeasureKey == null) {
+			return "";
+		}
+		else {
+			return _unitOfMeasureKey;
+		}
+	}
+
+	@Override
+	public void setUnitOfMeasureKey(String unitOfMeasureKey) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_unitOfMeasureKey = unitOfMeasureKey;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public String getOriginalUnitOfMeasureKey() {
+		return getColumnOriginalValue("unitOfMeasureKey");
+	}
+
+	@JSON
+	@Override
 	public String getLogType() {
 		if (_logType == null) {
 			return "";
@@ -639,6 +682,7 @@ public class CommerceInventoryAuditModelImpl
 		commerceInventoryAuditImpl.setCreateDate(getCreateDate());
 		commerceInventoryAuditImpl.setModifiedDate(getModifiedDate());
 		commerceInventoryAuditImpl.setSku(getSku());
+		commerceInventoryAuditImpl.setUnitOfMeasureKey(getUnitOfMeasureKey());
 		commerceInventoryAuditImpl.setLogType(getLogType());
 		commerceInventoryAuditImpl.setLogTypeSettings(getLogTypeSettings());
 		commerceInventoryAuditImpl.setQuantity(getQuantity());
@@ -669,6 +713,8 @@ public class CommerceInventoryAuditModelImpl
 			this.<Date>getColumnOriginalValue("modifiedDate"));
 		commerceInventoryAuditImpl.setSku(
 			this.<String>getColumnOriginalValue("sku"));
+		commerceInventoryAuditImpl.setUnitOfMeasureKey(
+			this.<String>getColumnOriginalValue("unitOfMeasureKey"));
 		commerceInventoryAuditImpl.setLogType(
 			this.<String>getColumnOriginalValue("logType"));
 		commerceInventoryAuditImpl.setLogTypeSettings(
@@ -799,6 +845,16 @@ public class CommerceInventoryAuditModelImpl
 			commerceInventoryAuditCacheModel.sku = null;
 		}
 
+		commerceInventoryAuditCacheModel.unitOfMeasureKey =
+			getUnitOfMeasureKey();
+
+		String unitOfMeasureKey =
+			commerceInventoryAuditCacheModel.unitOfMeasureKey;
+
+		if ((unitOfMeasureKey != null) && (unitOfMeasureKey.length() == 0)) {
+			commerceInventoryAuditCacheModel.unitOfMeasureKey = null;
+		}
+
 		commerceInventoryAuditCacheModel.logType = getLogType();
 
 		String logType = commerceInventoryAuditCacheModel.logType;
@@ -889,6 +945,7 @@ public class CommerceInventoryAuditModelImpl
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
 	private String _sku;
+	private String _unitOfMeasureKey;
 	private String _logType;
 	private String _logTypeSettings;
 	private int _quantity;
@@ -931,6 +988,7 @@ public class CommerceInventoryAuditModelImpl
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("sku", _sku);
+		_columnOriginalValues.put("unitOfMeasureKey", _unitOfMeasureKey);
 		_columnOriginalValues.put("logType", _logType);
 		_columnOriginalValues.put("logTypeSettings", _logTypeSettings);
 		_columnOriginalValues.put("quantity", _quantity);
@@ -973,11 +1031,13 @@ public class CommerceInventoryAuditModelImpl
 
 		columnBitmasks.put("sku", 128L);
 
-		columnBitmasks.put("logType", 256L);
+		columnBitmasks.put("unitOfMeasureKey", 256L);
 
-		columnBitmasks.put("logTypeSettings", 512L);
+		columnBitmasks.put("logType", 512L);
 
-		columnBitmasks.put("quantity", 1024L);
+		columnBitmasks.put("logTypeSettings", 1024L);
+
+		columnBitmasks.put("quantity", 2048L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

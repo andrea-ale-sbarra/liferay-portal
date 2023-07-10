@@ -1133,6 +1133,93 @@ public class CommerceInventoryWarehouseItemUtil {
 	}
 
 	/**
+	 * Returns the commerce inventory warehouse item where commerceInventoryWarehouseId = &#63; and sku = &#63; and unitOfMeasureKey = &#63; or throws a <code>NoSuchInventoryWarehouseItemException</code> if it could not be found.
+	 *
+	 * @param commerceInventoryWarehouseId the commerce inventory warehouse ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @return the matching commerce inventory warehouse item
+	 * @throws NoSuchInventoryWarehouseItemException if a matching commerce inventory warehouse item could not be found
+	 */
+	public static CommerceInventoryWarehouseItem findByC_S_U(
+			long commerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey)
+		throws com.liferay.commerce.inventory.exception.
+			NoSuchInventoryWarehouseItemException {
+
+		return getPersistence().findByC_S_U(
+			commerceInventoryWarehouseId, sku, unitOfMeasureKey);
+	}
+
+	/**
+	 * Returns the commerce inventory warehouse item where commerceInventoryWarehouseId = &#63; and sku = &#63; and unitOfMeasureKey = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param commerceInventoryWarehouseId the commerce inventory warehouse ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @return the matching commerce inventory warehouse item, or <code>null</code> if a matching commerce inventory warehouse item could not be found
+	 */
+	public static CommerceInventoryWarehouseItem fetchByC_S_U(
+		long commerceInventoryWarehouseId, String sku,
+		String unitOfMeasureKey) {
+
+		return getPersistence().fetchByC_S_U(
+			commerceInventoryWarehouseId, sku, unitOfMeasureKey);
+	}
+
+	/**
+	 * Returns the commerce inventory warehouse item where commerceInventoryWarehouseId = &#63; and sku = &#63; and unitOfMeasureKey = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param commerceInventoryWarehouseId the commerce inventory warehouse ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching commerce inventory warehouse item, or <code>null</code> if a matching commerce inventory warehouse item could not be found
+	 */
+	public static CommerceInventoryWarehouseItem fetchByC_S_U(
+		long commerceInventoryWarehouseId, String sku, String unitOfMeasureKey,
+		boolean useFinderCache) {
+
+		return getPersistence().fetchByC_S_U(
+			commerceInventoryWarehouseId, sku, unitOfMeasureKey,
+			useFinderCache);
+	}
+
+	/**
+	 * Removes the commerce inventory warehouse item where commerceInventoryWarehouseId = &#63; and sku = &#63; and unitOfMeasureKey = &#63; from the database.
+	 *
+	 * @param commerceInventoryWarehouseId the commerce inventory warehouse ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @return the commerce inventory warehouse item that was removed
+	 */
+	public static CommerceInventoryWarehouseItem removeByC_S_U(
+			long commerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey)
+		throws com.liferay.commerce.inventory.exception.
+			NoSuchInventoryWarehouseItemException {
+
+		return getPersistence().removeByC_S_U(
+			commerceInventoryWarehouseId, sku, unitOfMeasureKey);
+	}
+
+	/**
+	 * Returns the number of commerce inventory warehouse items where commerceInventoryWarehouseId = &#63; and sku = &#63; and unitOfMeasureKey = &#63;.
+	 *
+	 * @param commerceInventoryWarehouseId the commerce inventory warehouse ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @return the number of matching commerce inventory warehouse items
+	 */
+	public static int countByC_S_U(
+		long commerceInventoryWarehouseId, String sku,
+		String unitOfMeasureKey) {
+
+		return getPersistence().countByC_S_U(
+			commerceInventoryWarehouseId, sku, unitOfMeasureKey);
+	}
+
+	/**
 	 * Returns the commerce inventory warehouse item where externalReferenceCode = &#63; and companyId = &#63; or throws a <code>NoSuchInventoryWarehouseItemException</code> if it could not be found.
 	 *
 	 * @param externalReferenceCode the external reference code

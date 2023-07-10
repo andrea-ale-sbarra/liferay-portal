@@ -141,6 +141,9 @@ public class CommerceInventoryAuditPersistenceTest {
 
 		newCommerceInventoryAudit.setSku(RandomTestUtil.randomString());
 
+		newCommerceInventoryAudit.setUnitOfMeasureKey(
+			RandomTestUtil.randomString());
+
 		newCommerceInventoryAudit.setLogType(RandomTestUtil.randomString());
 
 		newCommerceInventoryAudit.setLogTypeSettings(
@@ -183,6 +186,9 @@ public class CommerceInventoryAuditPersistenceTest {
 			existingCommerceInventoryAudit.getSku(),
 			newCommerceInventoryAudit.getSku());
 		Assert.assertEquals(
+			existingCommerceInventoryAudit.getUnitOfMeasureKey(),
+			newCommerceInventoryAudit.getUnitOfMeasureKey());
+		Assert.assertEquals(
 			existingCommerceInventoryAudit.getLogType(),
 			newCommerceInventoryAudit.getLogType());
 		Assert.assertEquals(
@@ -207,6 +213,15 @@ public class CommerceInventoryAuditPersistenceTest {
 		_persistence.countByC_S(0L, "null");
 
 		_persistence.countByC_S(0L, (String)null);
+	}
+
+	@Test
+	public void testCountByC_S_U() throws Exception {
+		_persistence.countByC_S_U(RandomTestUtil.nextLong(), "", "");
+
+		_persistence.countByC_S_U(0L, "null", "null");
+
+		_persistence.countByC_S_U(0L, (String)null, (String)null);
 	}
 
 	@Test
@@ -239,8 +254,8 @@ public class CommerceInventoryAuditPersistenceTest {
 		return OrderByComparatorFactoryUtil.create(
 			"CIAudit", "mvccVersion", true, "commerceInventoryAuditId", true,
 			"companyId", true, "userId", true, "userName", true, "createDate",
-			true, "modifiedDate", true, "sku", true, "logType", true,
-			"quantity", true);
+			true, "modifiedDate", true, "sku", true, "unitOfMeasureKey", true,
+			"logType", true, "quantity", true);
 	}
 
 	@Test
@@ -499,6 +514,9 @@ public class CommerceInventoryAuditPersistenceTest {
 		commerceInventoryAudit.setModifiedDate(RandomTestUtil.nextDate());
 
 		commerceInventoryAudit.setSku(RandomTestUtil.randomString());
+
+		commerceInventoryAudit.setUnitOfMeasureKey(
+			RandomTestUtil.randomString());
 
 		commerceInventoryAudit.setLogType(RandomTestUtil.randomString());
 

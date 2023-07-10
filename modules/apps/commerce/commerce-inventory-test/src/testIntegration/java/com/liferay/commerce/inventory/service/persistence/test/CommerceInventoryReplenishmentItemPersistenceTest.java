@@ -164,6 +164,9 @@ public class CommerceInventoryReplenishmentItemPersistenceTest {
 		newCommerceInventoryReplenishmentItem.setSku(
 			RandomTestUtil.randomString());
 
+		newCommerceInventoryReplenishmentItem.setUnitOfMeasureKey(
+			RandomTestUtil.randomString());
+
 		newCommerceInventoryReplenishmentItem.setAvailabilityDate(
 			RandomTestUtil.nextDate());
 
@@ -220,6 +223,9 @@ public class CommerceInventoryReplenishmentItemPersistenceTest {
 		Assert.assertEquals(
 			existingCommerceInventoryReplenishmentItem.getSku(),
 			newCommerceInventoryReplenishmentItem.getSku());
+		Assert.assertEquals(
+			existingCommerceInventoryReplenishmentItem.getUnitOfMeasureKey(),
+			newCommerceInventoryReplenishmentItem.getUnitOfMeasureKey());
 		Assert.assertEquals(
 			Time.getShortTimestamp(
 				existingCommerceInventoryReplenishmentItem.
@@ -310,12 +316,31 @@ public class CommerceInventoryReplenishmentItemPersistenceTest {
 	}
 
 	@Test
+	public void testCountByC_S_U() throws Exception {
+		_persistence.countByC_S_U(RandomTestUtil.nextLong(), "", "");
+
+		_persistence.countByC_S_U(0L, "null", "null");
+
+		_persistence.countByC_S_U(0L, (String)null, (String)null);
+	}
+
+	@Test
 	public void testCountByS_AD() throws Exception {
 		_persistence.countByS_AD("", RandomTestUtil.nextDate());
 
 		_persistence.countByS_AD("null", RandomTestUtil.nextDate());
 
 		_persistence.countByS_AD((String)null, RandomTestUtil.nextDate());
+	}
+
+	@Test
+	public void testCountByS_U_AD() throws Exception {
+		_persistence.countByS_U_AD("", "", RandomTestUtil.nextDate());
+
+		_persistence.countByS_U_AD("null", "null", RandomTestUtil.nextDate());
+
+		_persistence.countByS_U_AD(
+			(String)null, (String)null, RandomTestUtil.nextDate());
 	}
 
 	@Test
@@ -365,7 +390,8 @@ public class CommerceInventoryReplenishmentItemPersistenceTest {
 			"commerceInventoryReplenishmentItemId", true, "companyId", true,
 			"userId", true, "userName", true, "createDate", true,
 			"modifiedDate", true, "commerceInventoryWarehouseId", true, "sku",
-			true, "availabilityDate", true, "quantity", true);
+			true, "unitOfMeasureKey", true, "availabilityDate", true,
+			"quantity", true);
 	}
 
 	@Test
@@ -737,6 +763,9 @@ public class CommerceInventoryReplenishmentItemPersistenceTest {
 			RandomTestUtil.nextLong());
 
 		commerceInventoryReplenishmentItem.setSku(
+			RandomTestUtil.randomString());
+
+		commerceInventoryReplenishmentItem.setUnitOfMeasureKey(
 			RandomTestUtil.randomString());
 
 		commerceInventoryReplenishmentItem.setAvailabilityDate(

@@ -947,6 +947,176 @@ public interface CommerceInventoryReplenishmentItemPersistence
 	public int countByC_S(long companyId, String sku);
 
 	/**
+	 * Returns all the commerce inventory replenishment items where companyId = &#63; and sku = &#63; and unitOfMeasureKey = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @return the matching commerce inventory replenishment items
+	 */
+	public java.util.List<CommerceInventoryReplenishmentItem> findByC_S_U(
+		long companyId, String sku, String unitOfMeasureKey);
+
+	/**
+	 * Returns a range of all the commerce inventory replenishment items where companyId = &#63; and sku = &#63; and unitOfMeasureKey = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CommerceInventoryReplenishmentItemModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param start the lower bound of the range of commerce inventory replenishment items
+	 * @param end the upper bound of the range of commerce inventory replenishment items (not inclusive)
+	 * @return the range of matching commerce inventory replenishment items
+	 */
+	public java.util.List<CommerceInventoryReplenishmentItem> findByC_S_U(
+		long companyId, String sku, String unitOfMeasureKey, int start,
+		int end);
+
+	/**
+	 * Returns an ordered range of all the commerce inventory replenishment items where companyId = &#63; and sku = &#63; and unitOfMeasureKey = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CommerceInventoryReplenishmentItemModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param start the lower bound of the range of commerce inventory replenishment items
+	 * @param end the upper bound of the range of commerce inventory replenishment items (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching commerce inventory replenishment items
+	 */
+	public java.util.List<CommerceInventoryReplenishmentItem> findByC_S_U(
+		long companyId, String sku, String unitOfMeasureKey, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<CommerceInventoryReplenishmentItem> orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the commerce inventory replenishment items where companyId = &#63; and sku = &#63; and unitOfMeasureKey = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CommerceInventoryReplenishmentItemModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param start the lower bound of the range of commerce inventory replenishment items
+	 * @param end the upper bound of the range of commerce inventory replenishment items (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching commerce inventory replenishment items
+	 */
+	public java.util.List<CommerceInventoryReplenishmentItem> findByC_S_U(
+		long companyId, String sku, String unitOfMeasureKey, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<CommerceInventoryReplenishmentItem> orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first commerce inventory replenishment item in the ordered set where companyId = &#63; and sku = &#63; and unitOfMeasureKey = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching commerce inventory replenishment item
+	 * @throws NoSuchInventoryReplenishmentItemException if a matching commerce inventory replenishment item could not be found
+	 */
+	public CommerceInventoryReplenishmentItem findByC_S_U_First(
+			long companyId, String sku, String unitOfMeasureKey,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<CommerceInventoryReplenishmentItem> orderByComparator)
+		throws NoSuchInventoryReplenishmentItemException;
+
+	/**
+	 * Returns the first commerce inventory replenishment item in the ordered set where companyId = &#63; and sku = &#63; and unitOfMeasureKey = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching commerce inventory replenishment item, or <code>null</code> if a matching commerce inventory replenishment item could not be found
+	 */
+	public CommerceInventoryReplenishmentItem fetchByC_S_U_First(
+		long companyId, String sku, String unitOfMeasureKey,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<CommerceInventoryReplenishmentItem> orderByComparator);
+
+	/**
+	 * Returns the last commerce inventory replenishment item in the ordered set where companyId = &#63; and sku = &#63; and unitOfMeasureKey = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching commerce inventory replenishment item
+	 * @throws NoSuchInventoryReplenishmentItemException if a matching commerce inventory replenishment item could not be found
+	 */
+	public CommerceInventoryReplenishmentItem findByC_S_U_Last(
+			long companyId, String sku, String unitOfMeasureKey,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<CommerceInventoryReplenishmentItem> orderByComparator)
+		throws NoSuchInventoryReplenishmentItemException;
+
+	/**
+	 * Returns the last commerce inventory replenishment item in the ordered set where companyId = &#63; and sku = &#63; and unitOfMeasureKey = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching commerce inventory replenishment item, or <code>null</code> if a matching commerce inventory replenishment item could not be found
+	 */
+	public CommerceInventoryReplenishmentItem fetchByC_S_U_Last(
+		long companyId, String sku, String unitOfMeasureKey,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<CommerceInventoryReplenishmentItem> orderByComparator);
+
+	/**
+	 * Returns the commerce inventory replenishment items before and after the current commerce inventory replenishment item in the ordered set where companyId = &#63; and sku = &#63; and unitOfMeasureKey = &#63;.
+	 *
+	 * @param commerceInventoryReplenishmentItemId the primary key of the current commerce inventory replenishment item
+	 * @param companyId the company ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next commerce inventory replenishment item
+	 * @throws NoSuchInventoryReplenishmentItemException if a commerce inventory replenishment item with the primary key could not be found
+	 */
+	public CommerceInventoryReplenishmentItem[] findByC_S_U_PrevAndNext(
+			long commerceInventoryReplenishmentItemId, long companyId,
+			String sku, String unitOfMeasureKey,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<CommerceInventoryReplenishmentItem> orderByComparator)
+		throws NoSuchInventoryReplenishmentItemException;
+
+	/**
+	 * Removes all the commerce inventory replenishment items where companyId = &#63; and sku = &#63; and unitOfMeasureKey = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 */
+	public void removeByC_S_U(
+		long companyId, String sku, String unitOfMeasureKey);
+
+	/**
+	 * Returns the number of commerce inventory replenishment items where companyId = &#63; and sku = &#63; and unitOfMeasureKey = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @return the number of matching commerce inventory replenishment items
+	 */
+	public int countByC_S_U(
+		long companyId, String sku, String unitOfMeasureKey);
+
+	/**
 	 * Returns all the commerce inventory replenishment items where sku = &#63; and availabilityDate = &#63;.
 	 *
 	 * @param sku the sku
@@ -1101,6 +1271,178 @@ public interface CommerceInventoryReplenishmentItemPersistence
 	 * @return the number of matching commerce inventory replenishment items
 	 */
 	public int countByS_AD(String sku, Date availabilityDate);
+
+	/**
+	 * Returns all the commerce inventory replenishment items where sku = &#63; and unitOfMeasureKey = &#63; and availabilityDate = &#63;.
+	 *
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param availabilityDate the availability date
+	 * @return the matching commerce inventory replenishment items
+	 */
+	public java.util.List<CommerceInventoryReplenishmentItem> findByS_U_AD(
+		String sku, String unitOfMeasureKey, Date availabilityDate);
+
+	/**
+	 * Returns a range of all the commerce inventory replenishment items where sku = &#63; and unitOfMeasureKey = &#63; and availabilityDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CommerceInventoryReplenishmentItemModelImpl</code>.
+	 * </p>
+	 *
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param availabilityDate the availability date
+	 * @param start the lower bound of the range of commerce inventory replenishment items
+	 * @param end the upper bound of the range of commerce inventory replenishment items (not inclusive)
+	 * @return the range of matching commerce inventory replenishment items
+	 */
+	public java.util.List<CommerceInventoryReplenishmentItem> findByS_U_AD(
+		String sku, String unitOfMeasureKey, Date availabilityDate, int start,
+		int end);
+
+	/**
+	 * Returns an ordered range of all the commerce inventory replenishment items where sku = &#63; and unitOfMeasureKey = &#63; and availabilityDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CommerceInventoryReplenishmentItemModelImpl</code>.
+	 * </p>
+	 *
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param availabilityDate the availability date
+	 * @param start the lower bound of the range of commerce inventory replenishment items
+	 * @param end the upper bound of the range of commerce inventory replenishment items (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching commerce inventory replenishment items
+	 */
+	public java.util.List<CommerceInventoryReplenishmentItem> findByS_U_AD(
+		String sku, String unitOfMeasureKey, Date availabilityDate, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<CommerceInventoryReplenishmentItem> orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the commerce inventory replenishment items where sku = &#63; and unitOfMeasureKey = &#63; and availabilityDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CommerceInventoryReplenishmentItemModelImpl</code>.
+	 * </p>
+	 *
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param availabilityDate the availability date
+	 * @param start the lower bound of the range of commerce inventory replenishment items
+	 * @param end the upper bound of the range of commerce inventory replenishment items (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching commerce inventory replenishment items
+	 */
+	public java.util.List<CommerceInventoryReplenishmentItem> findByS_U_AD(
+		String sku, String unitOfMeasureKey, Date availabilityDate, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<CommerceInventoryReplenishmentItem> orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first commerce inventory replenishment item in the ordered set where sku = &#63; and unitOfMeasureKey = &#63; and availabilityDate = &#63;.
+	 *
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param availabilityDate the availability date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching commerce inventory replenishment item
+	 * @throws NoSuchInventoryReplenishmentItemException if a matching commerce inventory replenishment item could not be found
+	 */
+	public CommerceInventoryReplenishmentItem findByS_U_AD_First(
+			String sku, String unitOfMeasureKey, Date availabilityDate,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<CommerceInventoryReplenishmentItem> orderByComparator)
+		throws NoSuchInventoryReplenishmentItemException;
+
+	/**
+	 * Returns the first commerce inventory replenishment item in the ordered set where sku = &#63; and unitOfMeasureKey = &#63; and availabilityDate = &#63;.
+	 *
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param availabilityDate the availability date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching commerce inventory replenishment item, or <code>null</code> if a matching commerce inventory replenishment item could not be found
+	 */
+	public CommerceInventoryReplenishmentItem fetchByS_U_AD_First(
+		String sku, String unitOfMeasureKey, Date availabilityDate,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<CommerceInventoryReplenishmentItem> orderByComparator);
+
+	/**
+	 * Returns the last commerce inventory replenishment item in the ordered set where sku = &#63; and unitOfMeasureKey = &#63; and availabilityDate = &#63;.
+	 *
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param availabilityDate the availability date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching commerce inventory replenishment item
+	 * @throws NoSuchInventoryReplenishmentItemException if a matching commerce inventory replenishment item could not be found
+	 */
+	public CommerceInventoryReplenishmentItem findByS_U_AD_Last(
+			String sku, String unitOfMeasureKey, Date availabilityDate,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<CommerceInventoryReplenishmentItem> orderByComparator)
+		throws NoSuchInventoryReplenishmentItemException;
+
+	/**
+	 * Returns the last commerce inventory replenishment item in the ordered set where sku = &#63; and unitOfMeasureKey = &#63; and availabilityDate = &#63;.
+	 *
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param availabilityDate the availability date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching commerce inventory replenishment item, or <code>null</code> if a matching commerce inventory replenishment item could not be found
+	 */
+	public CommerceInventoryReplenishmentItem fetchByS_U_AD_Last(
+		String sku, String unitOfMeasureKey, Date availabilityDate,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<CommerceInventoryReplenishmentItem> orderByComparator);
+
+	/**
+	 * Returns the commerce inventory replenishment items before and after the current commerce inventory replenishment item in the ordered set where sku = &#63; and unitOfMeasureKey = &#63; and availabilityDate = &#63;.
+	 *
+	 * @param commerceInventoryReplenishmentItemId the primary key of the current commerce inventory replenishment item
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param availabilityDate the availability date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next commerce inventory replenishment item
+	 * @throws NoSuchInventoryReplenishmentItemException if a commerce inventory replenishment item with the primary key could not be found
+	 */
+	public CommerceInventoryReplenishmentItem[] findByS_U_AD_PrevAndNext(
+			long commerceInventoryReplenishmentItemId, String sku,
+			String unitOfMeasureKey, Date availabilityDate,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<CommerceInventoryReplenishmentItem> orderByComparator)
+		throws NoSuchInventoryReplenishmentItemException;
+
+	/**
+	 * Removes all the commerce inventory replenishment items where sku = &#63; and unitOfMeasureKey = &#63; and availabilityDate = &#63; from the database.
+	 *
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param availabilityDate the availability date
+	 */
+	public void removeByS_U_AD(
+		String sku, String unitOfMeasureKey, Date availabilityDate);
+
+	/**
+	 * Returns the number of commerce inventory replenishment items where sku = &#63; and unitOfMeasureKey = &#63; and availabilityDate = &#63;.
+	 *
+	 * @param sku the sku
+	 * @param unitOfMeasureKey the unit of measure key
+	 * @param availabilityDate the availability date
+	 * @return the number of matching commerce inventory replenishment items
+	 */
+	public int countByS_U_AD(
+		String sku, String unitOfMeasureKey, Date availabilityDate);
 
 	/**
 	 * Returns the commerce inventory replenishment item where externalReferenceCode = &#63; and companyId = &#63; or throws a <code>NoSuchInventoryReplenishmentItemException</code> if it could not be found.
