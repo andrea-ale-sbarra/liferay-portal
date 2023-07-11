@@ -68,8 +68,8 @@ public interface CommerceInventoryBookedQuantityLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public CommerceInventoryBookedQuantity addCommerceBookedQuantity(
-			long userId, String sku, int quantity, Date expirationDate,
-			Map<String, String> context)
+			long userId, String sku, String unitOfMeasureKey, int quantity,
+			Date expirationDate, Map<String, String> context)
 		throws PortalException;
 
 	/**
@@ -229,10 +229,12 @@ public interface CommerceInventoryBookedQuantityLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCommerceBookedQuantity(
-		long companyId, long commerceChannelGroupId, String sku);
+		long companyId, long commerceChannelGroupId, String sku,
+		String unitOfMeasureKey);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getCommerceBookedQuantity(long companyId, String sku);
+	public int getCommerceBookedQuantity(
+		long companyId, String sku, String unitOfMeasureKey);
 
 	/**
 	 * Returns a range of all the commerce inventory booked quantities.
@@ -252,12 +254,14 @@ public interface CommerceInventoryBookedQuantityLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CommerceInventoryBookedQuantity>
 		getCommerceInventoryBookedQuantities(
-			long companyId, String sku, int start, int end);
+			long companyId, String sku, String unitOfMeasureKey, int start,
+			int end);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CommerceInventoryBookedQuantity>
 			getCommerceInventoryBookedQuantities(
-				long companyId, String keywords, String sku, int start, int end)
+				long companyId, String keywords, String sku,
+				String unitOfMeasureKey, int start, int end)
 		throws PortalException;
 
 	/**
@@ -270,11 +274,12 @@ public interface CommerceInventoryBookedQuantityLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCommerceInventoryBookedQuantitiesCount(
-		long companyId, String sku);
+		long companyId, String sku, String unitOfMeasureKey);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCommerceInventoryBookedQuantitiesCount(
-			long companyId, String keywords, String sku)
+			long companyId, String keywords, String sku,
+			String unitOfMeasureKey)
 		throws PortalException;
 
 	/**
@@ -309,7 +314,8 @@ public interface CommerceInventoryBookedQuantityLocalService
 
 	public CommerceInventoryBookedQuantity resetCommerceBookedQuantity(
 			long commerceBookedQuantityId, long userId, String sku,
-			int quantity, Date expirationDate, Map<String, String> context)
+			String unitOfMeasureKey, Date expirationDate, int quantity,
+			Map<String, String> context)
 		throws PortalException;
 
 	public CommerceInventoryBookedQuantity

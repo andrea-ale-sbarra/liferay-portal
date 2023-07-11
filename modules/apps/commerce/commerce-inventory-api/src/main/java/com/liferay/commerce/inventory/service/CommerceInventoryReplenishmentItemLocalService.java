@@ -85,7 +85,7 @@ public interface CommerceInventoryReplenishmentItemLocalService
 			addCommerceInventoryReplenishmentItem(
 				String externalReferenceCode, long userId,
 				long commerceInventoryWarehouseId, String sku,
-				Date availabilityDate, int quantity)
+				String unitOfMeasureKey, Date availabilityDate, int quantity)
 		throws PortalException;
 
 	/**
@@ -142,7 +142,7 @@ public interface CommerceInventoryReplenishmentItemLocalService
 		long commerceInventoryWarehouseId);
 
 	public void deleteCommerceInventoryReplenishmentItems(
-		long companyId, String sku);
+		long companyId, String sku, String unitOfMeasureKey);
 
 	/**
 	 * @throws PortalException
@@ -231,7 +231,7 @@ public interface CommerceInventoryReplenishmentItemLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CommerceInventoryReplenishmentItem
 		fetchCommerceInventoryReplenishmentItem(
-			long companyId, String sku,
+			long companyId, String sku, String unitOfMeasureKey,
 			OrderByComparator<CommerceInventoryReplenishmentItem>
 				orderByComparator);
 
@@ -311,7 +311,8 @@ public interface CommerceInventoryReplenishmentItemLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CommerceInventoryReplenishmentItem>
 		getCommerceInventoryReplenishmentItemsByCompanyIdAndSku(
-			long companyId, String sku, int start, int end);
+			long companyId, String sku, String unitOfMeasureKey, int start,
+			int end);
 
 	/**
 	 * Returns the number of commerce inventory replenishment items.
@@ -323,7 +324,7 @@ public interface CommerceInventoryReplenishmentItemLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public long getCommerceInventoryReplenishmentItemsCount(
-		long commerceInventoryWarehouseId, String sku);
+		long commerceInventoryWarehouseId, String sku, String unitOfMeasureKey);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int
@@ -332,7 +333,7 @@ public interface CommerceInventoryReplenishmentItemLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCommerceInventoryReplenishmentItemsCountByCompanyIdAndSku(
-		long companyId, String sku);
+		long companyId, String sku, String unitOfMeasureKey);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ExportActionableDynamicQuery getExportActionableDynamicQuery(

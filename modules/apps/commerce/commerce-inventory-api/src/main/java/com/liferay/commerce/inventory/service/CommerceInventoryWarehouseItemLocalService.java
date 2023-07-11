@@ -81,28 +81,26 @@ public interface CommerceInventoryWarehouseItemLocalService
 		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem);
 
 	public CommerceInventoryWarehouseItem addCommerceInventoryWarehouseItem(
-			long userId, long commerceInventoryWarehouseId, String sku,
-			int quantity)
-		throws PortalException;
-
-	public CommerceInventoryWarehouseItem addCommerceInventoryWarehouseItem(
 			String externalReferenceCode, long userId,
-			long commerceInventoryWarehouseId, String sku, int quantity)
+			long commerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey, int quantity)
 		throws PortalException;
 
 	public CommerceInventoryWarehouseItem
 			addOrUpdateCommerceInventoryWarehouseItem(
 				long userId, long commerceInventoryWarehouseId, String sku,
-				int quantity)
+				String unitOfMeasureKey, int quantity)
 		throws PortalException;
 
 	public CommerceInventoryWarehouseItem
 			addOrUpdateCommerceInventoryWarehouseItem(
 				String externalReferenceCode, long companyId, long userId,
-				long commerceInventoryWarehouseId, String sku, int quantity)
+				long commerceInventoryWarehouseId, String sku,
+				String unitOfMeasureKey, int quantity)
 		throws PortalException;
 
-	public int countItemsByCompanyId(long companyId, String sku);
+	public int countItemsByCompanyId(
+		long companyId, String sku, String unitOfMeasureKey);
 
 	/**
 	 * Creates a new commerce inventory warehouse item with the primary key. Does not add the commerce inventory warehouse item to the database.
@@ -154,7 +152,7 @@ public interface CommerceInventoryWarehouseItemLocalService
 		long commerceInventoryWarehouseId);
 
 	public void deleteCommerceInventoryWarehouseItems(
-		long companyId, String sku);
+		long companyId, String sku, String unitOfMeasureKey);
 
 	public void deleteCommerceInventoryWarehouseItemsByCompanyId(
 		long companyId);
@@ -244,7 +242,9 @@ public interface CommerceInventoryWarehouseItemLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CommerceInventoryWarehouseItem fetchCommerceInventoryWarehouseItem(
-		long commerceInventoryWarehouseId, String sku);
+			long commerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey)
+		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CommerceInventoryWarehouseItem
@@ -280,7 +280,8 @@ public interface CommerceInventoryWarehouseItemLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CommerceInventoryWarehouseItem getCommerceInventoryWarehouseItem(
-			long commerceInventoryWarehouseId, String sku)
+			long commerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -337,7 +338,8 @@ public interface CommerceInventoryWarehouseItemLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CommerceInventoryWarehouseItem>
 		getCommerceInventoryWarehouseItemsByCompanyIdAndSku(
-			long companyId, String sku, int start, int end);
+			long companyId, String sku, String unitOfMeasureKey, int start,
+			int end);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CommerceInventoryWarehouseItem>
@@ -358,11 +360,11 @@ public interface CommerceInventoryWarehouseItemLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCommerceInventoryWarehouseItemsCount(
-		long companyId, long groupId, String sku);
+		long companyId, long groupId, String sku, String unitOfMeasureKey);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCommerceInventoryWarehouseItemsCount(
-		long companyId, String sku);
+		long companyId, String sku, String unitOfMeasureKey);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCommerceInventoryWarehouseItemsCountByCompanyId(
@@ -381,7 +383,8 @@ public interface CommerceInventoryWarehouseItemLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CIWarehouseItem> getItemsByCompanyId(
-		long companyId, String sku, int start, int end);
+		long companyId, String sku, String unitOfMeasureKey, int start,
+		int end);
 
 	/**
 	 * Returns the OSGi service identifier.
@@ -399,10 +402,12 @@ public interface CommerceInventoryWarehouseItemLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getStockQuantity(long companyId, long groupId, String sku);
+	public int getStockQuantity(
+		long companyId, long groupId, String sku, String unitOfMeasureKey);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getStockQuantity(long companyId, String sku);
+	public Integer getStockQuantity(
+		long companyId, String sku, String unitOfMeasureKey);
 
 	public CommerceInventoryWarehouseItem
 			increaseCommerceInventoryWarehouseItemQuantity(
@@ -416,7 +421,8 @@ public interface CommerceInventoryWarehouseItemLocalService
 	)
 	public void moveQuantitiesBetweenWarehouses(
 			long userId, long fromCommerceInventoryWarehouseId,
-			long toCommerceInventoryWarehouseId, String sku, int quantity)
+			long toCommerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey, int quantity)
 		throws PortalException;
 
 	/**

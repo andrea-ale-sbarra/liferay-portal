@@ -40,41 +40,45 @@ public class CommerceInventoryWarehouseItemServiceUtil {
 	 */
 	public static CommerceInventoryWarehouseItem
 			addCommerceInventoryWarehouseItem(
-				long commerceInventoryWarehouseId, String sku, int quantity)
+				long commerceInventoryWarehouseId, String sku,
+				String unitOfMeasureKey, int quantity)
 		throws PortalException {
 
 		return getService().addCommerceInventoryWarehouseItem(
-			commerceInventoryWarehouseId, sku, quantity);
+			commerceInventoryWarehouseId, sku, unitOfMeasureKey, quantity);
 	}
 
 	public static CommerceInventoryWarehouseItem
 			addCommerceInventoryWarehouseItem(
 				String externalReferenceCode, long commerceInventoryWarehouseId,
-				String sku, int quantity)
+				String sku, String unitOfMeasureKey, int quantity)
 		throws PortalException {
 
 		return getService().addCommerceInventoryWarehouseItem(
-			externalReferenceCode, commerceInventoryWarehouseId, sku, quantity);
+			externalReferenceCode, commerceInventoryWarehouseId, sku,
+			unitOfMeasureKey, quantity);
 	}
 
 	public static CommerceInventoryWarehouseItem
 			addOrUpdateCommerceInventoryWarehouseItem(
-				long commerceInventoryWarehouseId, String sku, int quantity)
+				long commerceInventoryWarehouseId, String sku,
+				String unitOfMeasureKey, int quantity)
 		throws PortalException {
 
 		return getService().addOrUpdateCommerceInventoryWarehouseItem(
-			commerceInventoryWarehouseId, sku, quantity);
+			commerceInventoryWarehouseId, sku, unitOfMeasureKey, quantity);
 	}
 
 	public static CommerceInventoryWarehouseItem
 			addOrUpdateCommerceInventoryWarehouseItem(
 				String externalReferenceCode, long companyId,
-				long commerceInventoryWarehouseId, String sku, int quantity)
+				long commerceInventoryWarehouseId, String sku,
+				String unitOfMeasureKey, int quantity)
 		throws PortalException {
 
 		return getService().addOrUpdateCommerceInventoryWarehouseItem(
 			externalReferenceCode, companyId, commerceInventoryWarehouseId, sku,
-			quantity);
+			unitOfMeasureKey, quantity);
 	}
 
 	public static void deleteCommerceInventoryWarehouseItem(
@@ -86,19 +90,21 @@ public class CommerceInventoryWarehouseItemServiceUtil {
 	}
 
 	public static void deleteCommerceInventoryWarehouseItems(
-			long companyId, String sku)
+			long companyId, String sku, String unitOfMeasureKey)
 		throws PortalException {
 
-		getService().deleteCommerceInventoryWarehouseItems(companyId, sku);
+		getService().deleteCommerceInventoryWarehouseItems(
+			companyId, sku, unitOfMeasureKey);
 	}
 
 	public static CommerceInventoryWarehouseItem
 			fetchCommerceInventoryWarehouseItem(
-				long commerceInventoryWarehouseId, String sku)
+				long commerceInventoryWarehouseId, String sku,
+				String unitOfMeasureKey)
 		throws PortalException {
 
 		return getService().fetchCommerceInventoryWarehouseItem(
-			commerceInventoryWarehouseId, sku);
+			commerceInventoryWarehouseId, sku, unitOfMeasureKey);
 	}
 
 	public static CommerceInventoryWarehouseItem
@@ -122,11 +128,12 @@ public class CommerceInventoryWarehouseItemServiceUtil {
 
 	public static CommerceInventoryWarehouseItem
 			getCommerceInventoryWarehouseItem(
-				long commerceInventoryWarehouseId, String sku)
+				long commerceInventoryWarehouseId, String sku,
+				String unitOfMeasureKey)
 		throws PortalException {
 
 		return getService().getCommerceInventoryWarehouseItem(
-			commerceInventoryWarehouseId, sku);
+			commerceInventoryWarehouseId, sku, unitOfMeasureKey);
 	}
 
 	public static CommerceInventoryWarehouseItem
@@ -158,11 +165,12 @@ public class CommerceInventoryWarehouseItemServiceUtil {
 
 	public static List<CommerceInventoryWarehouseItem>
 			getCommerceInventoryWarehouseItemsByCompanyIdAndSku(
-				long companyId, String sku, int start, int end)
+				long companyId, String sku, String unitOfMeasureKey, int start,
+				int end)
 		throws com.liferay.portal.kernel.security.auth.PrincipalException {
 
 		return getService().getCommerceInventoryWarehouseItemsByCompanyIdAndSku(
-			companyId, sku, start, end);
+			companyId, sku, unitOfMeasureKey, start, end);
 	}
 
 	public static int getCommerceInventoryWarehouseItemsCount(
@@ -174,19 +182,19 @@ public class CommerceInventoryWarehouseItemServiceUtil {
 	}
 
 	public static int getCommerceInventoryWarehouseItemsCount(
-			long companyId, long groupId, String sku)
+			long companyId, long groupId, String sku, String unitOfMeasureKey)
 		throws PortalException {
 
 		return getService().getCommerceInventoryWarehouseItemsCount(
-			companyId, groupId, sku);
+			companyId, groupId, sku, unitOfMeasureKey);
 	}
 
 	public static int getCommerceInventoryWarehouseItemsCount(
-			long companyId, String sku)
+			long companyId, String sku, String unitOfMeasureKey)
 		throws PortalException {
 
 		return getService().getCommerceInventoryWarehouseItemsCount(
-			companyId, sku);
+			companyId, sku, unitOfMeasureKey);
 	}
 
 	public static int getCommerceInventoryWarehouseItemsCountByCompanyId(
@@ -227,13 +235,16 @@ public class CommerceInventoryWarehouseItemServiceUtil {
 	}
 
 	public static int getStockQuantity(
-		long companyId, long groupId, String sku) {
+		long companyId, long groupId, String sku, String unitOfMeasureKey) {
 
-		return getService().getStockQuantity(companyId, groupId, sku);
+		return getService().getStockQuantity(
+			companyId, groupId, sku, unitOfMeasureKey);
 	}
 
-	public static int getStockQuantity(long companyId, String sku) {
-		return getService().getStockQuantity(companyId, sku);
+	public static int getStockQuantity(
+		long companyId, String sku, String unitOfMeasureKey) {
+
+		return getService().getStockQuantity(companyId, sku, unitOfMeasureKey);
 	}
 
 	public static CommerceInventoryWarehouseItem
@@ -247,12 +258,13 @@ public class CommerceInventoryWarehouseItemServiceUtil {
 
 	public static void moveQuantitiesBetweenWarehouses(
 			long fromCommerceInventoryWarehouseId,
-			long toCommerceInventoryWarehouseId, String sku, int quantity)
+			long toCommerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey, int quantity)
 		throws PortalException {
 
 		getService().moveQuantitiesBetweenWarehouses(
 			fromCommerceInventoryWarehouseId, toCommerceInventoryWarehouseId,
-			sku, quantity);
+			sku, unitOfMeasureKey, quantity);
 	}
 
 	public static CommerceInventoryWarehouseItem

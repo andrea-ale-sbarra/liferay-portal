@@ -307,30 +307,12 @@ public class CommerceInventoryReplenishmentItemPersistenceTest {
 	}
 
 	@Test
-	public void testCountByC_S() throws Exception {
-		_persistence.countByC_S(RandomTestUtil.nextLong(), "");
-
-		_persistence.countByC_S(0L, "null");
-
-		_persistence.countByC_S(0L, (String)null);
-	}
-
-	@Test
 	public void testCountByC_S_U() throws Exception {
 		_persistence.countByC_S_U(RandomTestUtil.nextLong(), "", "");
 
 		_persistence.countByC_S_U(0L, "null", "null");
 
 		_persistence.countByC_S_U(0L, (String)null, (String)null);
-	}
-
-	@Test
-	public void testCountByS_AD() throws Exception {
-		_persistence.countByS_AD("", RandomTestUtil.nextDate());
-
-		_persistence.countByS_AD("null", RandomTestUtil.nextDate());
-
-		_persistence.countByS_AD((String)null, RandomTestUtil.nextDate());
 	}
 
 	@Test

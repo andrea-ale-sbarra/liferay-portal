@@ -46,12 +46,12 @@ public class CommerceInventoryBookedQuantityLocalServiceUtil {
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.commerce.inventory.service.impl.CommerceInventoryBookedQuantityLocalServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static CommerceInventoryBookedQuantity addCommerceBookedQuantity(
-			long userId, String sku, int quantity,
+			long userId, String sku, String unitOfMeasureKey, int quantity,
 			java.util.Date expirationDate, Map<String, String> context)
 		throws PortalException {
 
 		return getService().addCommerceBookedQuantity(
-			userId, sku, quantity, expirationDate, context);
+			userId, sku, unitOfMeasureKey, quantity, expirationDate, context);
 	}
 
 	/**
@@ -257,14 +257,18 @@ public class CommerceInventoryBookedQuantityLocalServiceUtil {
 	}
 
 	public static int getCommerceBookedQuantity(
-		long companyId, long commerceChannelGroupId, String sku) {
+		long companyId, long commerceChannelGroupId, String sku,
+		String unitOfMeasureKey) {
 
 		return getService().getCommerceBookedQuantity(
-			companyId, commerceChannelGroupId, sku);
+			companyId, commerceChannelGroupId, sku, unitOfMeasureKey);
 	}
 
-	public static int getCommerceBookedQuantity(long companyId, String sku) {
-		return getService().getCommerceBookedQuantity(companyId, sku);
+	public static int getCommerceBookedQuantity(
+		long companyId, String sku, String unitOfMeasureKey) {
+
+		return getService().getCommerceBookedQuantity(
+			companyId, sku, unitOfMeasureKey);
 	}
 
 	/**
@@ -286,19 +290,21 @@ public class CommerceInventoryBookedQuantityLocalServiceUtil {
 
 	public static List<CommerceInventoryBookedQuantity>
 		getCommerceInventoryBookedQuantities(
-			long companyId, String sku, int start, int end) {
+			long companyId, String sku, String unitOfMeasureKey, int start,
+			int end) {
 
 		return getService().getCommerceInventoryBookedQuantities(
-			companyId, sku, start, end);
+			companyId, sku, unitOfMeasureKey, start, end);
 	}
 
 	public static List<CommerceInventoryBookedQuantity>
 			getCommerceInventoryBookedQuantities(
-				long companyId, String keywords, String sku, int start, int end)
+				long companyId, String keywords, String sku,
+				String unitOfMeasureKey, int start, int end)
 		throws PortalException {
 
 		return getService().getCommerceInventoryBookedQuantities(
-			companyId, keywords, sku, start, end);
+			companyId, keywords, sku, unitOfMeasureKey, start, end);
 	}
 
 	/**
@@ -311,18 +317,19 @@ public class CommerceInventoryBookedQuantityLocalServiceUtil {
 	}
 
 	public static int getCommerceInventoryBookedQuantitiesCount(
-		long companyId, String sku) {
+		long companyId, String sku, String unitOfMeasureKey) {
 
 		return getService().getCommerceInventoryBookedQuantitiesCount(
-			companyId, sku);
+			companyId, sku, unitOfMeasureKey);
 	}
 
 	public static int getCommerceInventoryBookedQuantitiesCount(
-			long companyId, String keywords, String sku)
+			long companyId, String keywords, String sku,
+			String unitOfMeasureKey)
 		throws PortalException {
 
 		return getService().getCommerceInventoryBookedQuantitiesCount(
-			companyId, keywords, sku);
+			companyId, keywords, sku, unitOfMeasureKey);
 	}
 
 	/**
@@ -368,13 +375,13 @@ public class CommerceInventoryBookedQuantityLocalServiceUtil {
 
 	public static CommerceInventoryBookedQuantity resetCommerceBookedQuantity(
 			long commerceBookedQuantityId, long userId, String sku,
-			int quantity, java.util.Date expirationDate,
-			Map<String, String> context)
+			String unitOfMeasureKey, java.util.Date expirationDate,
+			int quantity, Map<String, String> context)
 		throws PortalException {
 
 		return getService().resetCommerceBookedQuantity(
-			commerceBookedQuantityId, userId, sku, quantity, expirationDate,
-			context);
+			commerceBookedQuantityId, userId, sku, unitOfMeasureKey,
+			expirationDate, quantity, context);
 	}
 
 	public static CommerceInventoryBookedQuantity

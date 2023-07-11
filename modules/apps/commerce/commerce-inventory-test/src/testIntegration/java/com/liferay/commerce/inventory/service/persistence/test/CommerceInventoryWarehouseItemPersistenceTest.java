@@ -286,30 +286,21 @@ public class CommerceInventoryWarehouseItemPersistenceTest {
 	}
 
 	@Test
-	public void testCountByCompanyId_Sku() throws Exception {
-		_persistence.countByCompanyId_Sku(RandomTestUtil.nextLong(), "");
-
-		_persistence.countByCompanyId_Sku(0L, "null");
-
-		_persistence.countByCompanyId_Sku(0L, (String)null);
-	}
-
-	@Test
-	public void testCountByC_S() throws Exception {
-		_persistence.countByC_S(RandomTestUtil.nextLong(), "");
-
-		_persistence.countByC_S(0L, "null");
-
-		_persistence.countByC_S(0L, (String)null);
-	}
-
-	@Test
 	public void testCountByC_S_U() throws Exception {
 		_persistence.countByC_S_U(RandomTestUtil.nextLong(), "", "");
 
 		_persistence.countByC_S_U(0L, "null", "null");
 
 		_persistence.countByC_S_U(0L, (String)null, (String)null);
+	}
+
+	@Test
+	public void testCountByCIWI_S_U() throws Exception {
+		_persistence.countByCIWI_S_U(RandomTestUtil.nextLong(), "", "");
+
+		_persistence.countByCIWI_S_U(0L, "null", "null");
+
+		_persistence.countByCIWI_S_U(0L, (String)null, (String)null);
 	}
 
 	@Test
@@ -667,19 +658,6 @@ public class CommerceInventoryWarehouseItemPersistenceTest {
 
 	private void _assertOriginalValues(
 		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem) {
-
-		Assert.assertEquals(
-			Long.valueOf(
-				commerceInventoryWarehouseItem.
-					getCommerceInventoryWarehouseId()),
-			ReflectionTestUtil.<Long>invoke(
-				commerceInventoryWarehouseItem, "getColumnOriginalValue",
-				new Class<?>[] {String.class}, "commerceInventoryWarehouseId"));
-		Assert.assertEquals(
-			commerceInventoryWarehouseItem.getSku(),
-			ReflectionTestUtil.invoke(
-				commerceInventoryWarehouseItem, "getColumnOriginalValue",
-				new Class<?>[] {String.class}, "sku"));
 
 		Assert.assertEquals(
 			Long.valueOf(
