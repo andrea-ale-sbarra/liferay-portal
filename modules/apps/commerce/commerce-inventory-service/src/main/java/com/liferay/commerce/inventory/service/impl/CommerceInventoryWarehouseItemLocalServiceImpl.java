@@ -15,10 +15,13 @@
 package com.liferay.commerce.inventory.service.impl;
 
 import com.liferay.commerce.inventory.constants.CommerceInventoryConstants;
+import com.liferay.commerce.inventory.exception.CommerceInventoryWarehouseItemSkuException;
 import com.liferay.commerce.inventory.exception.DuplicateCommerceInventoryWarehouseItemException;
 import com.liferay.commerce.inventory.exception.MVCCException;
 import com.liferay.commerce.inventory.exception.NoSuchInventoryWarehouseItemException;
 import com.liferay.commerce.inventory.model.CIWarehouseItem;
+import com.liferay.commerce.inventory.model.CommerceInventoryBookedQuantityTable;
+import com.liferay.commerce.inventory.model.CommerceInventoryReplenishmentItemTable;
 import com.liferay.commerce.inventory.model.CommerceInventoryWarehouse;
 import com.liferay.commerce.inventory.model.CommerceInventoryWarehouseItem;
 import com.liferay.commerce.inventory.model.CommerceInventoryWarehouseItemTable;
@@ -30,7 +33,10 @@ import com.liferay.commerce.inventory.type.CommerceInventoryAuditTypeRegistry;
 import com.liferay.commerce.inventory.type.constants.CommerceInventoryAuditTypeConstants;
 import com.liferay.commerce.product.model.CommerceChannel;
 import com.liferay.commerce.product.model.CommerceChannelRelTable;
+import com.liferay.commerce.product.service.CPInstanceLocalService;
+import com.liferay.petra.sql.dsl.DSLFunctionFactoryUtil;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
+import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -41,10 +47,12 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
@@ -63,20 +71,9 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 
 	@Override
 	public CommerceInventoryWarehouseItem addCommerceInventoryWarehouseItem(
-			long userId, long commerceInventoryWarehouseId, String sku,
-			int quantity)
-		throws PortalException {
-
-		return commerceInventoryWarehouseItemLocalService.
-			addCommerceInventoryWarehouseItem(
-				StringPool.BLANK, userId, commerceInventoryWarehouseId, sku,
-				quantity);
-	}
-
-	@Override
-	public CommerceInventoryWarehouseItem addCommerceInventoryWarehouseItem(
 			String externalReferenceCode, long userId,
-			long commerceInventoryWarehouseId, String sku, int quantity)
+			long commerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey, int quantity)
 		throws PortalException {
 
 		User user = _userLocalService.getUser(userId);
@@ -85,9 +82,7 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 			externalReferenceCode = null;
 		}
 
-		if (Validator.isNotNull(sku)) {
-			_validate(commerceInventoryWarehouseId, sku);
-		}
+		_validate(commerceInventoryWarehouseId, sku, unitOfMeasureKey);
 
 		long commerceInventoryWarehouseItemId = counterLocalService.increment();
 
@@ -103,6 +98,7 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 		commerceInventoryWarehouseItem.setCommerceInventoryWarehouseId(
 			commerceInventoryWarehouseId);
 		commerceInventoryWarehouseItem.setSku(sku);
+		commerceInventoryWarehouseItem.setUnitOfMeasureKey(unitOfMeasureKey);
 		commerceInventoryWarehouseItem.setQuantity(quantity);
 
 		return commerceInventoryWarehouseItemPersistence.update(
@@ -113,17 +109,18 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 	public CommerceInventoryWarehouseItem
 			addOrUpdateCommerceInventoryWarehouseItem(
 				long userId, long commerceInventoryWarehouseId, String sku,
-				int quantity)
+				String unitOfMeasureKey, int quantity)
 		throws PortalException {
 
 		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem =
-			commerceInventoryWarehouseItemPersistence.fetchByC_S(
-				commerceInventoryWarehouseId, sku);
+			commerceInventoryWarehouseItemPersistence.fetchByCIWI_S_U(
+				commerceInventoryWarehouseId, sku, unitOfMeasureKey);
 
 		if (commerceInventoryWarehouseItem == null) {
 			return commerceInventoryWarehouseItemLocalService.
 				addCommerceInventoryWarehouseItem(
-					userId, commerceInventoryWarehouseId, sku, quantity);
+					StringPool.BLANK, userId, commerceInventoryWarehouseId, sku,
+					unitOfMeasureKey, quantity);
 		}
 
 		return commerceInventoryWarehouseItemLocalService.
@@ -138,7 +135,8 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 	public CommerceInventoryWarehouseItem
 			addOrUpdateCommerceInventoryWarehouseItem(
 				String externalReferenceCode, long companyId, long userId,
-				long commerceInventoryWarehouseId, String sku, int quantity)
+				long commerceInventoryWarehouseId, String sku,
+				String unitOfMeasureKey, int quantity)
 		throws PortalException {
 
 		if (Validator.isBlank(externalReferenceCode)) {
@@ -163,13 +161,34 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 		return commerceInventoryWarehouseItemLocalService.
 			addCommerceInventoryWarehouseItem(
 				externalReferenceCode, userId, commerceInventoryWarehouseId,
-				sku, quantity);
+				sku, unitOfMeasureKey, quantity);
 	}
 
 	@Override
 	public int countItemsByCompanyId(long companyId, String sku) {
-		return commerceInventoryWarehouseItemFinder.countItemsByCompanyId(
-			companyId, sku);
+		return dslQueryCount(
+			DSLQueryFactoryUtil.countDistinct(
+				CommerceInventoryWarehouseItemTable.INSTANCE.sku
+			).from(
+				CommerceInventoryWarehouseItemTable.INSTANCE
+			).where(
+				CommerceInventoryWarehouseItemTable.INSTANCE.companyId.eq(
+					companyId
+				).and(
+					() -> {
+						if (Validator.isNull(sku)) {
+							return null;
+						}
+
+						return DSLFunctionFactoryUtil.lower(
+							CommerceInventoryWarehouseItemTable.INSTANCE.sku
+						).like(
+							StringPool.PERCENT + StringUtil.toLowerCase(sku) +
+								StringPool.PERCENT
+						);
+					}
+				)
+			));
 	}
 
 	@Override
@@ -182,10 +201,10 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 
 	@Override
 	public void deleteCommerceInventoryWarehouseItems(
-		long companyId, String sku) {
+		long companyId, String sku, String unitOfMeasureKey) {
 
-		commerceInventoryWarehouseItemPersistence.removeByCompanyId_Sku(
-			companyId, sku);
+		commerceInventoryWarehouseItemPersistence.removeByC_S_U(
+			companyId, sku, unitOfMeasureKey);
 	}
 
 	@Override
@@ -197,19 +216,22 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 
 	@Override
 	public CommerceInventoryWarehouseItem fetchCommerceInventoryWarehouseItem(
-		long commerceInventoryWarehouseId, String sku) {
+			long commerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey)
+		throws PortalException {
 
-		return commerceInventoryWarehouseItemPersistence.fetchByC_S(
-			commerceInventoryWarehouseId, sku);
+		return commerceInventoryWarehouseItemPersistence.fetchByCIWI_S_U(
+			commerceInventoryWarehouseId, sku, unitOfMeasureKey);
 	}
 
 	@Override
 	public CommerceInventoryWarehouseItem getCommerceInventoryWarehouseItem(
-			long commerceInventoryWarehouseId, String sku)
+			long commerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey)
 		throws PortalException {
 
-		return commerceInventoryWarehouseItemPersistence.findByC_S(
-			commerceInventoryWarehouseId, sku);
+		return commerceInventoryWarehouseItemPersistence.findByCIWI_S_U(
+			commerceInventoryWarehouseId, sku, unitOfMeasureKey);
 	}
 
 	@Override
@@ -248,10 +270,11 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 	@Override
 	public List<CommerceInventoryWarehouseItem>
 		getCommerceInventoryWarehouseItemsByCompanyIdAndSku(
-			long companyId, String sku, int start, int end) {
+			long companyId, String sku, String unitOfMeasureKey, int start,
+			int end) {
 
-		return commerceInventoryWarehouseItemPersistence.findByCompanyId_Sku(
-			companyId, sku, start, end);
+		return commerceInventoryWarehouseItemPersistence.findByC_S_U(
+			companyId, sku, unitOfMeasureKey, start, end);
 	}
 
 	@Override
@@ -259,8 +282,26 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 		getCommerceInventoryWarehouseItemsByModifiedDate(
 			long companyId, Date startDate, Date endDate, int start, int end) {
 
-		return commerceInventoryWarehouseItemFinder.findUpdatedItemsByC_M(
-			companyId, startDate, endDate, start, end);
+		return dslQuery(
+			DSLQueryFactoryUtil.select(
+				CommerceInventoryWarehouseItemTable.INSTANCE
+			).from(
+				CommerceInventoryWarehouseItemTable.INSTANCE
+			).where(
+				CommerceInventoryWarehouseItemTable.INSTANCE.companyId.eq(
+					companyId
+				).and(
+					CommerceInventoryWarehouseItemTable.INSTANCE.modifiedDate.
+						gte(startDate)
+				).and(
+					CommerceInventoryWarehouseItemTable.INSTANCE.modifiedDate.
+						lt(endDate)
+				)
+			).orderBy(
+				CommerceInventoryWarehouseItemTable.INSTANCE.sku.ascending(),
+				CommerceInventoryWarehouseItemTable.INSTANCE.unitOfMeasureKey.
+					ascending()
+			));
 	}
 
 	@Override
@@ -273,7 +314,7 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 
 	@Override
 	public int getCommerceInventoryWarehouseItemsCount(
-		long companyId, long groupId, String sku) {
+		long companyId, long groupId, String sku, String unitOfMeasureKey) {
 
 		return dslQueryCount(
 			DSLQueryFactoryUtil.countDistinct(
@@ -311,6 +352,15 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 				).and(
 					CommerceInventoryWarehouseItemTable.INSTANCE.sku.eq(sku)
 				).and(
+					() -> {
+						if (Validator.isNull(unitOfMeasureKey)) {
+							return null;
+						}
+
+						return CommerceInventoryWarehouseItemTable.INSTANCE.
+							unitOfMeasureKey.eq(unitOfMeasureKey);
+					}
+				).and(
 					CommerceInventoryWarehouseTable.INSTANCE.active.eq(true)
 				).and(
 					GroupTable.INSTANCE.groupId.eq(groupId)
@@ -320,10 +370,10 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 
 	@Override
 	public int getCommerceInventoryWarehouseItemsCount(
-		long companyId, String sku) {
+		long companyId, String sku, String unitOfMeasureKey) {
 
-		return commerceInventoryWarehouseItemPersistence.countByCompanyId_Sku(
-			companyId, sku);
+		return commerceInventoryWarehouseItemPersistence.countByC_S_U(
+			companyId, sku, unitOfMeasureKey);
 	}
 
 	@Override
@@ -338,17 +388,128 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 	public int getCommerceInventoryWarehouseItemsCountByModifiedDate(
 		long companyId, Date startDate, Date endDate) {
 
-		return commerceInventoryWarehouseItemFinder.countUpdatedItemsByC_M(
-			companyId, startDate, endDate);
+		return dslQueryCount(
+			DSLQueryFactoryUtil.countDistinct(
+				CommerceInventoryWarehouseItemTable.INSTANCE.
+					commerceInventoryWarehouseItemId
+			).from(
+				CommerceInventoryWarehouseItemTable.INSTANCE
+			).where(
+				CommerceInventoryWarehouseItemTable.INSTANCE.companyId.eq(
+					companyId
+				).and(
+					CommerceInventoryWarehouseItemTable.INSTANCE.modifiedDate.
+						gte(
+							startDate
+						).and(
+							CommerceInventoryWarehouseItemTable.INSTANCE.
+								modifiedDate.lt(endDate)
+						)
+				)
+			));
 	}
 
 	@Override
 	public List<CIWarehouseItem> getItemsByCompanyId(
 		long companyId, String sku, int start, int end) {
 
-		List<Object[]> objects =
-			commerceInventoryWarehouseItemFinder.findItemsByCompanyId(
-				companyId, sku, start, end);
+		List<Object[]> objects = dslQuery(
+			DSLQueryFactoryUtil.select(
+				CommerceInventoryWarehouseItemTable.INSTANCE.sku,
+				CommerceInventoryWarehouseItemTable.INSTANCE.unitOfMeasureKey.
+					as("UNIT_OF_MEASURE_KEY"),
+				DSLFunctionFactoryUtil.sum(
+					CommerceInventoryWarehouseItemTable.INSTANCE.quantity
+				).as(
+					"SUM_STOCK"
+				),
+				DSLFunctionFactoryUtil.sum(
+					CommerceInventoryBookedQuantityTable.INSTANCE.quantity
+				).as(
+					"SUM_BOOKED"
+				),
+				DSLFunctionFactoryUtil.sum(
+					CommerceInventoryReplenishmentItemTable.INSTANCE.quantity
+				).as(
+					"SUM_AWAITING"
+				)
+			).from(
+				CommerceInventoryWarehouseItemTable.INSTANCE
+			).leftJoinOn(
+				CommerceInventoryBookedQuantityTable.INSTANCE,
+				CommerceInventoryBookedQuantityTable.INSTANCE.sku.eq(
+					CommerceInventoryWarehouseItemTable.INSTANCE.sku
+				).and(
+					Predicate.withParentheses(
+						CommerceInventoryBookedQuantityTable.INSTANCE.
+							unitOfMeasureKey.eq(
+								CommerceInventoryWarehouseItemTable.INSTANCE.
+									unitOfMeasureKey
+							).or(
+								Predicate.withParentheses(
+									CommerceInventoryBookedQuantityTable.
+										INSTANCE.unitOfMeasureKey.isNull(
+										).and(
+											CommerceInventoryWarehouseItemTable.
+												INSTANCE.unitOfMeasureKey.
+													isNull()
+										))
+							))
+				).and(
+					CommerceInventoryBookedQuantityTable.INSTANCE.companyId.eq(
+						CommerceInventoryWarehouseItemTable.INSTANCE.companyId)
+				)
+			).leftJoinOn(
+				CommerceInventoryReplenishmentItemTable.INSTANCE,
+				CommerceInventoryReplenishmentItemTable.INSTANCE.sku.eq(
+					CommerceInventoryWarehouseItemTable.INSTANCE.sku
+				).and(
+					Predicate.withParentheses(
+						CommerceInventoryReplenishmentItemTable.INSTANCE.
+							unitOfMeasureKey.eq(
+								CommerceInventoryWarehouseItemTable.INSTANCE.
+									unitOfMeasureKey
+							).or(
+								Predicate.withParentheses(
+									CommerceInventoryReplenishmentItemTable.
+										INSTANCE.unitOfMeasureKey.isNull(
+										).and(
+											CommerceInventoryWarehouseItemTable.
+												INSTANCE.unitOfMeasureKey.
+													isNull()
+										))
+							))
+				).and(
+					CommerceInventoryReplenishmentItemTable.INSTANCE.companyId.
+						eq(
+							CommerceInventoryWarehouseItemTable.INSTANCE.
+								companyId)
+				)
+			).where(
+				CommerceInventoryWarehouseItemTable.INSTANCE.companyId.eq(
+					companyId
+				).and(
+					() -> {
+						if (Validator.isNull(sku)) {
+							return null;
+						}
+
+						return DSLFunctionFactoryUtil.lower(
+							CommerceInventoryWarehouseItemTable.INSTANCE.sku
+						).like(
+							StringPool.PERCENT + StringUtil.toLowerCase(sku) +
+								StringPool.PERCENT
+						);
+					}
+				)
+			).groupBy(
+				CommerceInventoryWarehouseItemTable.INSTANCE.sku,
+				CommerceInventoryWarehouseItemTable.INSTANCE.unitOfMeasureKey
+			).orderBy(
+				CommerceInventoryWarehouseItemTable.INSTANCE.sku.ascending(),
+				CommerceInventoryWarehouseItemTable.INSTANCE.unitOfMeasureKey.
+					ascending()
+			));
 
 		List<CIWarehouseItem> ciWarehouseItems = new ArrayList<>();
 
@@ -360,22 +521,22 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 					skuCode = (String)object[0];
 				}
 
-				Integer stock = 0;
-
-				if ((object.length > 1) && (object[1] != null)) {
-					stock = (Integer)object[1];
-				}
-
-				Integer booked = 0;
+				int stock = 0;
 
 				if ((object.length > 2) && (object[2] != null)) {
-					booked = (Integer)object[2];
+					stock = (int)object[2];
 				}
 
-				Integer replenishment = 0;
+				int booked = 0;
 
 				if ((object.length > 3) && (object[3] != null)) {
-					replenishment = (Integer)object[3];
+					booked = (int)object[3];
+				}
+
+				int replenishment = 0;
+
+				if ((object.length > 4) && (object[4] != null)) {
+					replenishment = (int)object[4];
 				}
 
 				ciWarehouseItems.add(
@@ -387,15 +548,129 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 	}
 
 	@Override
-	public int getStockQuantity(long companyId, long groupId, String sku) {
-		return commerceInventoryWarehouseItemFinder.countStockQuantityByC_G_S(
-			companyId, groupId, sku);
+	public int getStockQuantity(
+		long companyId, long groupId, String sku, String unitOfMeasureKey) {
+
+		Iterable<Integer> iterable = dslQuery(
+			DSLQueryFactoryUtil.select(
+				DSLFunctionFactoryUtil.sum(
+					DSLFunctionFactoryUtil.subtract(
+						CommerceInventoryWarehouseItemTable.INSTANCE.quantity,
+						CommerceInventoryWarehouseItemTable.INSTANCE.
+							reservedQuantity)
+				).as(
+					"SUM_VALUE"
+				)
+			).from(
+				CommerceInventoryWarehouseItemTable.INSTANCE
+			).innerJoinON(
+				CommerceChannelRelTable.INSTANCE,
+				CommerceChannelRelTable.INSTANCE.classNameId.eq(
+					_portal.getClassNameId(
+						CommerceInventoryWarehouse.class.getName())
+				).and(
+					CommerceChannelRelTable.INSTANCE.classPK.eq(
+						CommerceInventoryWarehouseItemTable.INSTANCE.
+							commerceInventoryWarehouseId)
+				)
+			).innerJoinON(
+				GroupTable.INSTANCE,
+				GroupTable.INSTANCE.classNameId.eq(
+					_portal.getClassNameId(CommerceChannel.class.getName())
+				).and(
+					GroupTable.INSTANCE.classPK.eq(
+						CommerceChannelRelTable.INSTANCE.commerceChannelId)
+				)
+			).innerJoinON(
+				CommerceInventoryWarehouseTable.INSTANCE,
+				CommerceInventoryWarehouseTable.INSTANCE.
+					commerceInventoryWarehouseId.eq(
+						CommerceInventoryWarehouseItemTable.INSTANCE.
+							commerceInventoryWarehouseId)
+			).where(
+				CommerceInventoryWarehouseItemTable.INSTANCE.companyId.eq(
+					companyId
+				).and(
+					CommerceInventoryWarehouseItemTable.INSTANCE.sku.eq(sku)
+				).and(
+					() -> {
+						if (Validator.isNull(unitOfMeasureKey)) {
+							return CommerceInventoryWarehouseItemTable.INSTANCE.
+								unitOfMeasureKey.isNull();
+						}
+
+						return CommerceInventoryWarehouseItemTable.INSTANCE.
+							unitOfMeasureKey.eq(unitOfMeasureKey);
+					}
+				).and(
+					CommerceInventoryWarehouseTable.INSTANCE.active.eq(true)
+				).and(
+					GroupTable.INSTANCE.groupId.eq(groupId)
+				)
+			));
+
+		Iterator<Integer> iterator = iterable.iterator();
+
+		Integer stockQuantity = iterator.next();
+
+		if (stockQuantity == null) {
+			return 0;
+		}
+
+		return stockQuantity;
 	}
 
 	@Override
-	public int getStockQuantity(long companyId, String sku) {
-		return commerceInventoryWarehouseItemFinder.countStockQuantityByC_S(
-			companyId, sku);
+	public Integer getStockQuantity(
+		long companyId, String sku, String unitOfMeasureKey) {
+
+		Iterable<Integer> iterable = dslQuery(
+			DSLQueryFactoryUtil.select(
+				DSLFunctionFactoryUtil.sum(
+					DSLFunctionFactoryUtil.subtract(
+						CommerceInventoryWarehouseItemTable.INSTANCE.quantity,
+						CommerceInventoryWarehouseItemTable.INSTANCE.
+							reservedQuantity)
+				).as(
+					"SUM_VALUE"
+				)
+			).from(
+				CommerceInventoryWarehouseItemTable.INSTANCE
+			).innerJoinON(
+				CommerceInventoryWarehouseTable.INSTANCE,
+				CommerceInventoryWarehouseTable.INSTANCE.
+					commerceInventoryWarehouseId.eq(
+						CommerceInventoryWarehouseItemTable.INSTANCE.
+							commerceInventoryWarehouseId)
+			).where(
+				CommerceInventoryWarehouseItemTable.INSTANCE.companyId.eq(
+					companyId
+				).and(
+					CommerceInventoryWarehouseItemTable.INSTANCE.sku.eq(sku)
+				).and(
+					() -> {
+						if (Validator.isNull(unitOfMeasureKey)) {
+							return CommerceInventoryWarehouseItemTable.INSTANCE.
+								unitOfMeasureKey.isNull();
+						}
+
+						return CommerceInventoryWarehouseItemTable.INSTANCE.
+							unitOfMeasureKey.eq(unitOfMeasureKey);
+					}
+				).and(
+					CommerceInventoryWarehouseTable.INSTANCE.active.eq(true)
+				)
+			));
+
+		Iterator<Integer> iterator = iterable.iterator();
+
+		Integer stockQuantity = iterator.next();
+
+		if (stockQuantity == null) {
+			return 0;
+		}
+
+		return stockQuantity;
 	}
 
 	@Override
@@ -409,9 +684,8 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 			commerceInventoryWarehouseItemPersistence.findByPrimaryKey(
 				commerceInventoryWarehouseItemId);
 
-		quantity = quantity + commerceInventoryWarehouseItem.getQuantity();
-
-		commerceInventoryWarehouseItem.setQuantity(quantity);
+		commerceInventoryWarehouseItem.setQuantity(
+			quantity + commerceInventoryWarehouseItem.getQuantity());
 
 		commerceInventoryWarehouseItem =
 			commerceInventoryWarehouseItemPersistence.update(
@@ -436,12 +710,13 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 	)
 	public void moveQuantitiesBetweenWarehouses(
 			long userId, long fromCommerceInventoryWarehouseId,
-			long toCommerceInventoryWarehouseId, String sku, int quantity)
+			long toCommerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey, int quantity)
 		throws PortalException {
 
 		CommerceInventoryWarehouseItem fromWarehouseItem =
-			commerceInventoryWarehouseItemPersistence.findByC_S(
-				fromCommerceInventoryWarehouseId, sku);
+			commerceInventoryWarehouseItemPersistence.findByCIWI_S_U(
+				fromCommerceInventoryWarehouseId, sku, unitOfMeasureKey);
 
 		if (quantity > fromWarehouseItem.getQuantity()) {
 			throw new PortalException("Quantity to transfer unavailable");
@@ -454,8 +729,8 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 				fromWarehouseItem.getMvccVersion());
 
 		CommerceInventoryWarehouseItem toWarehouseItem =
-			commerceInventoryWarehouseItemPersistence.findByC_S(
-				toCommerceInventoryWarehouseId, sku);
+			commerceInventoryWarehouseItemPersistence.findByCIWI_S_U(
+				toCommerceInventoryWarehouseId, sku, unitOfMeasureKey);
 
 		commerceInventoryWarehouseItemLocalService.
 			updateCommerceInventoryWarehouseItem(
@@ -579,12 +854,19 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 		return commerceInventoryWarehouseItem;
 	}
 
-	private void _validate(long commerceInventoryWarehouseId, String sku)
+	private void _validate(
+			long commerceInventoryWarehouseId, String sku,
+			String unitOfMeasureKey)
 		throws PortalException {
 
+		if (Validator.isNull(sku)) {
+			throw new CommerceInventoryWarehouseItemSkuException(
+				"Sku is mandatory");
+		}
+
 		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem =
-			commerceInventoryWarehouseItemPersistence.fetchByC_S(
-				commerceInventoryWarehouseId, sku);
+			commerceInventoryWarehouseItemPersistence.fetchByCIWI_S_U(
+				commerceInventoryWarehouseId, sku, unitOfMeasureKey);
 
 		if (commerceInventoryWarehouseItem != null) {
 			throw new DuplicateCommerceInventoryWarehouseItemException();
@@ -598,6 +880,9 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 	@Reference
 	private CommerceInventoryAuditTypeRegistry
 		_commerceInventoryAuditTypeRegistry;
+
+	@Reference
+	private CPInstanceLocalService _cpInstanceLocalService;
 
 	@Reference
 	private Portal _portal;

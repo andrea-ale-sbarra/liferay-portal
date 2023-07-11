@@ -104,7 +104,7 @@ public class CommerceInventoryWarehouseItemFDSDataProvider
 				_commerceInventoryWarehouseItemService.
 					fetchCommerceInventoryWarehouseItem(
 						commerceInventoryWarehouseId,
-						commerceOrderItem.getSku());
+						commerceOrderItem.getSku(), StringPool.BLANK);
 
 			String portletNamespace = _portal.getPortletNamespace(
 				CommercePortletKeys.COMMERCE_SHIPMENT);
@@ -197,7 +197,8 @@ public class CommerceInventoryWarehouseItemFDSDataProvider
 		return _commerceInventoryWarehouseItemLocalService.
 			getCommerceInventoryWarehouseItemsCount(
 				_portal.getCompanyId(httpServletRequest),
-				commerceOrderItem.getGroupId(), commerceOrderItem.getSku());
+				commerceOrderItem.getGroupId(), commerceOrderItem.getSku(),
+				StringPool.BLANK);
 	}
 
 	@Reference

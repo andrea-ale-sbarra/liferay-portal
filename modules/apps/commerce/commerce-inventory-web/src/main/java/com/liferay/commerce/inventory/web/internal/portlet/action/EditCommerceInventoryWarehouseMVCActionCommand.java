@@ -20,6 +20,7 @@ import com.liferay.commerce.inventory.model.CommerceInventoryWarehouseItem;
 import com.liferay.commerce.inventory.service.CommerceInventoryReplenishmentItemService;
 import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseItemService;
 import com.liferay.commerce.product.constants.CPPortletKeys;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -97,7 +98,7 @@ public class EditCommerceInventoryWarehouseMVCActionCommand
 
 		_commerceInventoryWarehouseItemService.
 			addCommerceInventoryWarehouseItem(
-				commerceInventoryWarehouseId, sku, quantity);
+				commerceInventoryWarehouseId, sku, StringPool.BLANK, quantity);
 	}
 
 	private void _deleteCommerceInventoryWarehouse(ActionRequest actionRequest)
@@ -108,7 +109,8 @@ public class EditCommerceInventoryWarehouseMVCActionCommand
 		String sku = ParamUtil.getString(actionRequest, "sku");
 
 		_commerceInventoryWarehouseItemService.
-			deleteCommerceInventoryWarehouseItems(companyId, sku);
+			deleteCommerceInventoryWarehouseItems(
+				companyId, sku, StringPool.BLANK);
 
 		_commerceInventoryReplenishmentItemService.
 			deleteCommerceInventoryReplenishmentItems(companyId, sku);
@@ -127,12 +129,13 @@ public class EditCommerceInventoryWarehouseMVCActionCommand
 		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem =
 			_commerceInventoryWarehouseItemService.
 				fetchCommerceInventoryWarehouseItem(
-					commerceInventoryWarehouseId, sku);
+					commerceInventoryWarehouseId, sku, StringPool.BLANK);
 
 		if (commerceInventoryWarehouseItem == null) {
 			_commerceInventoryWarehouseItemService.
 				addCommerceInventoryWarehouseItem(
-					commerceInventoryWarehouseId, sku, quantity);
+					commerceInventoryWarehouseId, sku, StringPool.BLANK,
+					quantity);
 		}
 		else {
 			_commerceInventoryWarehouseItemService.

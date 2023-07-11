@@ -53,7 +53,8 @@ public class CommerceInventoryBookedQuantityServiceImpl
 			CommerceInventoryActionKeys.MANAGE_INVENTORY);
 
 		return commerceInventoryBookedQuantityLocalService.
-			getCommerceInventoryBookedQuantities(companyId, sku, start, end);
+			getCommerceInventoryBookedQuantities(
+				companyId, sku, null, start, end);
 	}
 
 	@Override
@@ -81,7 +82,7 @@ public class CommerceInventoryBookedQuantityServiceImpl
 			CommerceInventoryActionKeys.MANAGE_INVENTORY);
 
 		return commerceInventoryBookedQuantityLocalService.
-			getCommerceInventoryBookedQuantitiesCount(companyId, sku);
+			getCommerceInventoryBookedQuantitiesCount(companyId, sku, null);
 	}
 
 	@Override

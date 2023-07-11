@@ -27,6 +27,7 @@ import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseItemLoca
 import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseItemService;
 import com.liferay.commerce.inventory.type.CommerceInventoryAuditType;
 import com.liferay.commerce.inventory.type.CommerceInventoryAuditTypeRegistry;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
@@ -103,7 +104,7 @@ public class DefaultCommerceInventoryMethodImpl
 		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem =
 			_commerceInventoryWarehouseItemLocalService.
 				fetchCommerceInventoryWarehouseItem(
-					commerceInventoryWarehouseId, sku);
+					commerceInventoryWarehouseId, sku, StringPool.BLANK);
 
 		_commerceInventoryWarehouseItemLocalService.
 			updateCommerceInventoryWarehouseItem(
@@ -152,11 +153,11 @@ public class DefaultCommerceInventoryMethodImpl
 
 		int stockQuantity =
 			_commerceInventoryWarehouseItemService.getStockQuantity(
-				companyId, commerceChannelGroupId, sku);
+				companyId, commerceChannelGroupId, sku, null);
 
 		int commerceBookedQuantity =
 			_commerceBookedQuantityLocalService.getCommerceBookedQuantity(
-				companyId, commerceChannelGroupId, sku);
+				companyId, commerceChannelGroupId, sku, null);
 
 		return stockQuantity - commerceBookedQuantity;
 	}
@@ -165,11 +166,11 @@ public class DefaultCommerceInventoryMethodImpl
 	public int getStockQuantity(long companyId, String sku) {
 		int stockQuantity =
 			_commerceInventoryWarehouseItemService.getStockQuantity(
-				companyId, sku);
+				companyId, sku, null);
 
 		int commerceBookedQuantity =
 			_commerceBookedQuantityLocalService.getCommerceBookedQuantity(
-				companyId, sku);
+				companyId, sku, null);
 
 		return stockQuantity - commerceBookedQuantity;
 	}
@@ -195,7 +196,7 @@ public class DefaultCommerceInventoryMethodImpl
 		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem =
 			_commerceInventoryWarehouseItemLocalService.
 				fetchCommerceInventoryWarehouseItem(
-					commerceInventoryWarehouseId, sku);
+					commerceInventoryWarehouseId, sku, StringPool.BLANK);
 
 		try {
 			_commerceInventoryWarehouseItemLocalService.

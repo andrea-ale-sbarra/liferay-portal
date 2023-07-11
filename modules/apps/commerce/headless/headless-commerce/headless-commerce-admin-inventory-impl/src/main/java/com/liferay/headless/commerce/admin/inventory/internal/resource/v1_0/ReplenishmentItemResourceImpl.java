@@ -21,6 +21,7 @@ import com.liferay.commerce.inventory.service.CommerceInventoryReplenishmentItem
 import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseItemService;
 import com.liferay.headless.commerce.admin.inventory.dto.v1_0.ReplenishmentItem;
 import com.liferay.headless.commerce.admin.inventory.resource.v1_0.ReplenishmentItemResource;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -161,7 +162,8 @@ public class ReplenishmentItemResourceImpl
 
 		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem =
 			_commerceInventoryWarehouseItemService.
-				getCommerceInventoryWarehouseItem(warehouseId, sku);
+				getCommerceInventoryWarehouseItem(
+					warehouseId, sku, StringPool.BLANK);
 
 		return _toReplenishmentItem(
 			_commerceInventoryReplenishmentItemService.

@@ -18,6 +18,7 @@ import com.liferay.commerce.inventory.constants.CommerceInventoryActionKeys;
 import com.liferay.commerce.inventory.model.CommerceInventoryReplenishmentItem;
 import com.liferay.commerce.inventory.model.CommerceInventoryWarehouse;
 import com.liferay.commerce.inventory.service.base.CommerceInventoryReplenishmentItemServiceBaseImpl;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -58,7 +59,8 @@ public class CommerceInventoryReplenishmentItemServiceImpl
 		return commerceInventoryReplenishmentItemLocalService.
 			addCommerceInventoryReplenishmentItem(
 				externalReferenceCode, getUserId(),
-				commerceInventoryWarehouseId, sku, availabilityDate, quantity);
+				commerceInventoryWarehouseId, sku, null, availabilityDate,
+				quantity);
 	}
 
 	@Override
@@ -98,7 +100,8 @@ public class CommerceInventoryReplenishmentItemServiceImpl
 			CommerceInventoryActionKeys.MANAGE_INVENTORY);
 
 		commerceInventoryReplenishmentItemLocalService.
-			deleteCommerceInventoryReplenishmentItems(companyId, sku);
+			deleteCommerceInventoryReplenishmentItems(
+				companyId, sku, StringPool.BLANK);
 	}
 
 	@Override
@@ -174,7 +177,7 @@ public class CommerceInventoryReplenishmentItemServiceImpl
 
 		return commerceInventoryReplenishmentItemLocalService.
 			getCommerceInventoryReplenishmentItemsByCompanyIdAndSku(
-				companyId, sku, start, end);
+				companyId, sku, null, start, end);
 	}
 
 	@Override
@@ -188,7 +191,7 @@ public class CommerceInventoryReplenishmentItemServiceImpl
 
 		return commerceInventoryReplenishmentItemLocalService.
 			getCommerceInventoryReplenishmentItemsCount(
-				commerceInventoryWarehouseId, sku);
+				commerceInventoryWarehouseId, sku, null);
 	}
 
 	@Override
@@ -221,7 +224,7 @@ public class CommerceInventoryReplenishmentItemServiceImpl
 
 		return commerceInventoryReplenishmentItemLocalService.
 			getCommerceInventoryReplenishmentItemsCountByCompanyIdAndSku(
-				companyId, sku);
+				companyId, sku, null);
 	}
 
 	@Override

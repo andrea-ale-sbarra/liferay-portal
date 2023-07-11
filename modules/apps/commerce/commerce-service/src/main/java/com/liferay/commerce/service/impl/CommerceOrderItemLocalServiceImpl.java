@@ -64,6 +64,7 @@ import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.query.FromStep;
 import com.liferay.petra.sql.dsl.query.GroupByStep;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -426,7 +427,8 @@ public class CommerceOrderItemLocalServiceImpl
 		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem =
 			_commerceInventoryWarehouseItemLocalService.
 				fetchCommerceInventoryWarehouseItem(
-					commerceInventoryWarehouseId, commerceOrderItem.getSku());
+					commerceInventoryWarehouseId, commerceOrderItem.getSku(),
+					StringPool.BLANK);
 
 		if (commerceInventoryWarehouseItem == null) {
 			return 0;
