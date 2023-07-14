@@ -33,9 +33,10 @@ public class CommerceInventoryWarehouseItemQuantityComparator
 		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem1,
 		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem2) {
 
-		int value = Integer.compare(
-			commerceInventoryWarehouseItem1.getQuantity(),
-			commerceInventoryWarehouseItem2.getQuantity());
+		int value = commerceInventoryWarehouseItem1.getQuantity(
+		).compareTo(
+			commerceInventoryWarehouseItem2.getQuantity()
+		);
 
 		if (_ascending) {
 			return value;
