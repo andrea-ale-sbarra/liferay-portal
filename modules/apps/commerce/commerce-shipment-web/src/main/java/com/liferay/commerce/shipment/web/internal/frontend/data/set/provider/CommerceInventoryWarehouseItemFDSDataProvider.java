@@ -33,6 +33,8 @@ import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermi
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 
+import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,12 +128,17 @@ public class CommerceInventoryWarehouseItemFDSDataProvider
 					maxShippableQuantity + commerceShipmentItem.getQuantity();
 			}
 
-			if (commerceInventoryWarehouseItem != null) {
-				if (maxShippableQuantity >
-						commerceInventoryWarehouseItem.getQuantity()) {
+			int quantity = 0;
+			BigDecimal commerceInventoryWarehouseItemQuantity =
+				commerceInventoryWarehouseItem.getQuantity();
 
-					maxShippableQuantity =
-						commerceInventoryWarehouseItem.getQuantity();
+			if (commerceInventoryWarehouseItemQuantity != null) {
+				quantity = commerceInventoryWarehouseItemQuantity.intValue();
+			}
+
+			if (commerceInventoryWarehouseItem != null) {
+				if (maxShippableQuantity > quantity) {
+					maxShippableQuantity = quantity;
 				}
 
 				warehouses.add(
@@ -140,7 +147,7 @@ public class CommerceInventoryWarehouseItemFDSDataProvider
 						new WarehouseItem(
 							inputName, maxShippableQuantity, 0,
 							shipmentItemWarehouseItemQuantity),
-						commerceInventoryWarehouseItem.getQuantity(),
+						commerceInventoryWarehouseItemQuantity.intValue(),
 						StringPool.BLANK,
 						commerceInventoryWarehouse.getName(
 							_portal.getLocale(httpServletRequest))));
