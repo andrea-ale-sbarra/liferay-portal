@@ -6,9 +6,19 @@
 --%>
 
 <%
-UnicodeProperties unicodeProperties = commerceDiscountRule.getSettingsProperties();
+CommerceDiscountRuleDisplayContext commerceDiscountRuleDisplayContext = (CommerceDiscountRuleDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 
-String typeSettings = unicodeProperties.getProperty(commerceDiscountRule.getType());
+long commerceDiscountRuleId = commerceDiscountRuleDisplayContext.getCommerceDiscountRuleId();
+long commerceDiscountId = commerceDiscountRuleDisplayContext.getCommerceDiscountId();
+
+String type = BeanParamUtil.getString(commerceDiscountRule, request, "type");
+String typeSettings = null;
+
+if (commerceDiscountRule != null) {
+	UnicodeProperties unicodeProperties = commerceDiscountRule.getSettingsProperties();
+
+	typeSettings = unicodeProperties.getProperty(type);
+}
 %>
 
 <div class="col-12">
@@ -23,8 +33,6 @@ String typeSettings = unicodeProperties.getProperty(commerceDiscountRule.getType
 
 		var form = document.getElementById('<portlet:namespace />fm');
 
-		var name = form.querySelector('#<portlet:namespace />name').value;
-
 		var commerceDiscountRuleType = form.querySelector('#<portlet:namespace />type')
 			.value;
 		var typeSettings = form.querySelector('#<portlet:namespace />typeSettings')
@@ -38,33 +46,62 @@ String typeSettings = unicodeProperties.getProperty(commerceDiscountRule.getType
 		}
 
 		function selectItem(product) {
+			var name = form.querySelector('#<portlet:namespace />name').value;
 			var ruleData = {
 				name: name,
 				type: commerceDiscountRuleType,
 				typeSettings: addProductDefinition(product.id),
 			};
 
-			return CommerceDiscountRuleResource.updateDiscountRule(
-				'<%= commerceDiscountRule.getCommerceDiscountRuleId() %>',
-				ruleData
-			)
-				.then((payload) => {
-					Liferay.fire(events.FDS_UPDATE_DISPLAY, {
-						id:
-							'<%= CommercePricingFDSNames.DISCOUNT_RULE_PRODUCT_DEFINITIONS %>',
+			if (form.querySelector('#<portlet:namespace />commerceDiscountRuleId').value != 0) {
+				return CommerceDiscountRuleResource.updateDiscountRule(
+					form.querySelector('#<portlet:namespace />commerceDiscountRuleId').value,
+					ruleData
+				)
+					.then((payload) => {
+						Liferay.fire(events.FDS_UPDATE_DISPLAY, {
+							id:
+								'<%= CommercePricingFDSNames.DISCOUNT_RULE_PRODUCT_DEFINITIONS %>',
+						});
+
+						typeSettings = payload.typeSettings
+							.replace(/(\r\n|\n|\r)/gm, '')
+							.split('=')[1];
+
+						document.getElementById(
+							'<portlet:namespace />typeSettings'
+						).value = typeSettings;
+					})
+					.catch((error) => {
+						return Promise.reject(error);
 					});
+			}
+			else {
+				return CommerceDiscountRuleResource.addDiscountRule(
+					form.querySelector('#<portlet:namespace />commerceDiscountId').value,
+					ruleData
+				)
+					.then((response) => {
+						form.querySelector('#<portlet:namespace />commerceDiscountRuleId').value = response.id;
+						NotificationUtils.showNotification(
+							'<liferay-ui:message key="your-request-completed-successfully" />'
+						);
 
-					typeSettings = payload.typeSettings
-						.replace(/(\r\n|\n|\r)/gm, '')
-						.split('=')[1];
+						window.parent.Liferay.fire(events.FDS_UPDATE_DISPLAY, {
+							id: '<%= CommercePricingFDSNames.DISCOUNT_RULES %>',
+						});
 
-					document.getElementById(
-						'<portlet:namespace />typeSettings'
-					).value = typeSettings;
-				})
-				.catch((error) => {
-					return Promise.reject(error);
-				});
+						return;
+					})
+					.catch(() => {
+						Liferay.Util.openAlertModal({
+							message:
+								'<liferay-ui:message key="your-request-failed-to-complete" />',
+						});
+
+						return;
+					});
+			}
 		}
 
 		function getSelectedItems() {
@@ -111,7 +148,7 @@ String typeSettings = unicodeProperties.getProperty(commerceDiscountRule.getType
 		<frontend-data-set:classic-display
 			contextParams='<%=
 				HashMapBuilder.<String, String>put(
-					"commerceDiscountRuleId", String.valueOf(commerceDiscountRule.getCommerceDiscountRuleId())
+					"commerceDiscountRuleId", String.valueOf(commerceDiscountRuleId)
 				).build()
 			%>'
 			dataProviderKey="<%= CommercePricingFDSNames.DISCOUNT_RULE_PRODUCT_DEFINITIONS %>"
