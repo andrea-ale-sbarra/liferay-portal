@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.security.permission.resource.PortletResourcePer
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalServiceUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -99,13 +100,18 @@ public class CommerceDiscountDisplayContext extends BasePricingDisplayContext {
 		).buildString();
 	}
 
-	public String getAddCommerceDiscountRuleRenderURL() throws Exception {
+	public String getAddCommerceDiscountRuleRenderURL(
+			CommerceDiscountRuleType ruleType)
+		throws Exception {
+
 		return PortletURLBuilder.createRenderURL(
 			commercePricingRequestHelper.getLiferayPortletResponse()
 		).setMVCRenderCommandName(
-			"/commerce_discount/add_commerce_discount_rule"
+			"/commerce_discount/edit_commerce_discount_rule"
 		).setParameter(
 			"commerceDiscountId", getCommerceDiscountId()
+		).setParameter(
+			"type", ruleType.getKey()
 		).setWindowState(
 			LiferayWindowState.POP_UP
 		).buildString();
@@ -371,15 +377,18 @@ public class CommerceDiscountDisplayContext extends BasePricingDisplayContext {
 		CreationMenu creationMenu = new CreationMenu();
 
 		if (hasPermission(ActionKeys.UPDATE)) {
-			creationMenu.addDropdownItem(
-				dropdownItem -> {
-					dropdownItem.setHref(getAddCommerceDiscountRuleRenderURL());
-					dropdownItem.setLabel(
-						LanguageUtil.get(
-							commercePricingRequestHelper.getRequest(),
-							"add-discount-rule"));
-					dropdownItem.setTarget("modal");
-				});
+			for (CommerceDiscountRuleType ruleType :
+					getCommerceDiscountRuleTypes()) {
+
+				creationMenu.addDropdownItem(
+					dropdownItem -> {
+						dropdownItem.setHref(
+							getAddCommerceDiscountRuleRenderURL(ruleType));
+						dropdownItem.setLabel(
+							ruleType.getLabel(LocaleUtil.getDefault()));
+						dropdownItem.setTarget("sidePanel");
+					});
+			}
 		}
 
 		return creationMenu;
