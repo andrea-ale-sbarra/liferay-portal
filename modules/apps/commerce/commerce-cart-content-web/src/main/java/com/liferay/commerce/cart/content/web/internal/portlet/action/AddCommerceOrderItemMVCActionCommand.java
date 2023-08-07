@@ -31,8 +31,6 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 
-import java.math.BigDecimal;
-
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -74,8 +72,8 @@ public class AddCommerceOrderItemMVCActionCommand extends BaseMVCActionCommand {
 			actionRequest, "quantity", BigDecimal.ZERO);
 		String unitOfMeasureKey = ParamUtil.getString(
 			actionRequest, "unitOfMeasureKey");
-		String ddmFormValues = ParamUtil.getString(
-			actionRequest, "ddmFormValues");
+		String formFieldValues = ParamUtil.getString(
+			actionRequest, "formFieldValues");
 
 		long cpInstanceId = ParamUtil.getLong(actionRequest, "cpInstanceId");
 
@@ -84,7 +82,7 @@ public class AddCommerceOrderItemMVCActionCommand extends BaseMVCActionCommand {
 				actionRequest, "cpDefinitionId");
 
 			CPInstance cpInstance = _cpInstanceHelper.fetchCPInstance(
-				cpDefinitionId, ddmFormValues);
+				cpDefinitionId, formFieldValues);
 
 			if (cpInstance != null) {
 				cpInstanceId = cpInstance.getCPInstanceId();
@@ -111,7 +109,7 @@ public class AddCommerceOrderItemMVCActionCommand extends BaseMVCActionCommand {
 			CommerceOrderItem commerceOrderItem =
 				_commerceOrderItemService.addOrUpdateCommerceOrderItem(
 					commerceOrder.getCommerceOrderId(), cpInstanceId,
-					ddmFormValues, quantity, 0, 0, unitOfMeasureKey,
+					formFieldValues, quantity, 0, 0, unitOfMeasureKey,
 					commerceContext, serviceContext);
 
 			jsonObject.put(
