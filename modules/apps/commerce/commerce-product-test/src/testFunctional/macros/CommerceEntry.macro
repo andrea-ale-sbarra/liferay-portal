@@ -464,7 +464,8 @@ definition {
 			value1 = ${optionName});
 
 		Select(
-			locator1 = "CommerceEntry#FIELD_TYPE_SELECT",
+			key_fieldLabel = "Option Field Type",
+			locator1 = "Select#GENERIC_SELECT_FIELD",
 			value1 = ${optionFieldType});
 
 		Button.clickSubmitButton();
