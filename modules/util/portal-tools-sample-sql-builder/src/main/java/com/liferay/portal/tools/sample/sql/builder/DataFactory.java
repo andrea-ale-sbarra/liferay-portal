@@ -2865,7 +2865,7 @@ public class DataFactory {
 	}
 
 	public CPOptionModel newCPOptionModel(
-		String ddmFormFieldTypeName, int index) {
+		String commerceOptionTypeKey, int index) {
 
 		CPOptionModel cpOptionModel = new CPOptionModelImpl();
 
@@ -2890,7 +2890,7 @@ public class DataFactory {
 				"<Name language-id=\"en_US\">Option Name ", index,
 				"</Name></root>"));
 		cpOptionModel.setDescription("Option Description");
-		cpOptionModel.setDDMFormFieldTypeName(ddmFormFieldTypeName);
+		cpOptionModel.setCommerceOptionTypeKey(commerceOptionTypeKey);
 		cpOptionModel.setFacetable(true);
 		cpOptionModel.setRequired(true);
 		cpOptionModel.setSkuContributor(true);
