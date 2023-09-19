@@ -18,6 +18,7 @@ export default function RulesPopover({
 	max,
 	min,
 	multiple,
+	precision,
 }) {
 	const popoverRef = useRef();
 	const [popoverPosition, setPopoverPosition] = useState({});
@@ -85,7 +86,7 @@ export default function RulesPopover({
 									Liferay.Language.get(
 										'quantity-allows-for-x-decimal-places'
 									),
-									`<b>${getNumberOfDecimals(multiple)}</b>`
+									`<b>${precision}</b>`
 								),
 							}}
 						/>
