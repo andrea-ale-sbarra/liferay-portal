@@ -6,6 +6,7 @@
 package com.liferay.commerce.inventory.service.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.commerce.inventory.exception.CommerceInventoryWarehouseItemQuantityException;
 import com.liferay.commerce.inventory.model.CommerceInventoryWarehouse;
 import com.liferay.commerce.inventory.model.CommerceInventoryWarehouseItem;
 import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseItemLocalService;
@@ -132,6 +133,41 @@ public class CommerceInventoryWarehouseItemLocalServiceTest {
 			commerceInventoryWarehouseItem.getUnitOfMeasureKey());
 	}
 
+	@Test(expected = CommerceInventoryWarehouseItemQuantityException.class)
+	public void testAddWarehouseItemWithoutUOMAndDecimalQuantity()
+		throws Exception {
+
+		frutillaRule.scenario(
+			"It should not be possible to add item without UOM if the SKU " +
+				"has not got any UOM and a decimal quantity"
+		).given(
+			"1 active warehouse"
+		).when(
+			"The item is added without the UOM"
+		).and(
+			"the sku has not got any UOM"
+		).and(
+			"the quantity is decimal"
+		).then(
+			"The Item is not created"
+		);
+
+		CPInstance cpInstance =
+			CommerceInventoryTestUtil.addRandomCPInstanceSku(
+				_group.getGroupId());
+
+		CommerceInventoryWarehouse commerceInventoryWarehouseActive =
+			CommerceInventoryTestUtil.addCommerceInventoryWarehouse(
+				true, _serviceContext);
+
+		_commerceInventoryWarehouseItemLocalService.
+			addCommerceInventoryWarehouseItem(
+				StringPool.BLANK, _user.getUserId(),
+				commerceInventoryWarehouseActive.
+					getCommerceInventoryWarehouseId(),
+				new BigDecimal(1.1), cpInstance.getSku(), StringPool.BLANK);
+	}
+
 	@Test(expected = CPInstanceUnitOfMeasureKeyException.class)
 	public void testAddWarehouseItemWithoutUOMFails() throws Exception {
 		frutillaRule.scenario(
@@ -232,6 +268,40 @@ public class CommerceInventoryWarehouseItemLocalServiceTest {
 						getCommerceInventoryWarehouseId(),
 					BigDecimal.ONE, _cpInstance.getSku(),
 					_cpInstanceUnitOfMeasure.getKey()));
+	}
+
+	@Test
+	public void testAddWarehouseItemWithSKUWithoutUOM() throws Exception {
+		frutillaRule.scenario(
+			"It should be possible to add item without UOM if the SKU has " +
+				"not got any UOM"
+		).given(
+			"1 active warehouse"
+		).when(
+			"The item is added without the UOM"
+		).and(
+			"the sku has not got any UOM"
+		).then(
+			"The Item is created"
+		);
+
+		CPInstance cpInstance =
+			CommerceInventoryTestUtil.addRandomCPInstanceSku(
+				_group.getGroupId());
+
+		CommerceInventoryWarehouse commerceInventoryWarehouseActive =
+			CommerceInventoryTestUtil.addCommerceInventoryWarehouse(
+				true, _serviceContext);
+
+		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem =
+			_commerceInventoryWarehouseItemLocalService.
+				addCommerceInventoryWarehouseItem(
+					StringPool.BLANK, _user.getUserId(),
+					commerceInventoryWarehouseActive.
+						getCommerceInventoryWarehouseId(),
+					BigDecimal.ONE, cpInstance.getSku(), StringPool.BLANK);
+
+		Assert.assertNotNull(commerceInventoryWarehouseItem);
 	}
 
 	@Test(expected = NoSuchCPInstanceUnitOfMeasureException.class)

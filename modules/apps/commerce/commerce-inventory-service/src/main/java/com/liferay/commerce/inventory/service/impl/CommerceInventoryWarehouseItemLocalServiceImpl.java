@@ -6,6 +6,7 @@
 package com.liferay.commerce.inventory.service.impl;
 
 import com.liferay.commerce.inventory.constants.CommerceInventoryConstants;
+import com.liferay.commerce.inventory.exception.CommerceInventoryWarehouseItemQuantityException;
 import com.liferay.commerce.inventory.exception.CommerceInventoryWarehouseItemSkuException;
 import com.liferay.commerce.inventory.exception.DuplicateCommerceInventoryWarehouseItemException;
 import com.liferay.commerce.inventory.exception.MVCCException;
@@ -88,6 +89,7 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 			externalReferenceCode = null;
 		}
 
+		_validateQuantity(user.getCompanyId(), quantity, sku, unitOfMeasureKey);
 		_validateSku(commerceInventoryWarehouseId, sku, unitOfMeasureKey);
 		_validateUnitOfMeasureKey(user.getCompanyId(), sku, unitOfMeasureKey);
 
@@ -828,6 +830,9 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 			throw new MVCCException();
 		}
 
+		_validateQuantity(
+			commerceInventoryWarehouseItem.getCompanyId(), quantity,
+			commerceInventoryWarehouseItem.getSku(), unitOfMeasureKey);
 		_validateUnitOfMeasureKey(
 			commerceInventoryWarehouseItem.getCompanyId(),
 			commerceInventoryWarehouseItem.getSku(), unitOfMeasureKey);
@@ -909,6 +914,27 @@ public class CommerceInventoryWarehouseItemLocalServiceImpl
 		}
 
 		return unitOfMeasureKey;
+	}
+
+	private void _validateQuantity(
+			long companyId, BigDecimal quantity, String sku,
+			String unitOfMeasureKey)
+		throws PortalException {
+
+		CPInstanceUnitOfMeasure cpInstanceUnitOfMeasure =
+			_cpInstanceUnitOfMeasureLocalService.fetchCPInstanceUnitOfMeasure(
+				companyId, unitOfMeasureKey, sku);
+
+		if (Validator.isNull(unitOfMeasureKey) ||
+			(cpInstanceUnitOfMeasure == null)) {
+
+			BigDecimal stripedTrailingZero = BigDecimalUtil.stripTrailingZeros(
+				quantity);
+
+			if (stripedTrailingZero.scale() > 0) {
+				throw new CommerceInventoryWarehouseItemQuantityException();
+			}
+		}
 	}
 
 	private void _validateSku(

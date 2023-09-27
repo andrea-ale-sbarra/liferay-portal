@@ -57,6 +57,7 @@ public class CPInstanceUnitOfMeasureModelListener
 			_updateUnitOfMeasureKey(
 				cpInstanceUnitOfMeasure.getCompanyId(),
 				cpInstanceUnitOfMeasure.getKey(), StringPool.BLANK,
+				cpInstanceUnitOfMeasure.getPrecision(),
 				cpInstanceUnitOfMeasure.getSku());
 		}
 		else {
@@ -92,7 +93,7 @@ public class CPInstanceUnitOfMeasureModelListener
 		if (cpInstanceUnitOfMeasures.isEmpty()) {
 			_updateUnitOfMeasureKey(
 				cpInstanceUnitOfMeasure.getCompanyId(), StringPool.BLANK,
-				cpInstanceUnitOfMeasure.getKey(),
+				cpInstanceUnitOfMeasure.getKey(), 0,
 				cpInstanceUnitOfMeasure.getSku());
 		}
 		else {
@@ -117,8 +118,11 @@ public class CPInstanceUnitOfMeasureModelListener
 		throws ModelListenerException {
 
 		String key = cpInstanceUnitOfMeasure.getKey();
+		int precision = cpInstanceUnitOfMeasure.getPrecision();
 
-		if (key.equals(originalCPInstanceUnitOfMeasure.getKey())) {
+		if (key.equals(originalCPInstanceUnitOfMeasure.getKey()) &&
+			(precision == originalCPInstanceUnitOfMeasure.getPrecision())) {
+
 			return;
 		}
 
@@ -126,11 +130,13 @@ public class CPInstanceUnitOfMeasureModelListener
 			originalCPInstanceUnitOfMeasure.getCompanyId(),
 			cpInstanceUnitOfMeasure.getKey(),
 			originalCPInstanceUnitOfMeasure.getKey(),
+			cpInstanceUnitOfMeasure.getPrecision(),
 			originalCPInstanceUnitOfMeasure.getSku());
 	}
 
 	private void _updateUnitOfMeasureKey(
-		long companyId, String key, String originalKey, String sku) {
+		long companyId, String key, String originalKey, int precision,
+		String sku) {
 
 		for (CommerceInventoryBookedQuantity commerceInventoryBookedQuantity :
 				_commerceInventoryBookedQuantityLocalService.
@@ -164,6 +170,13 @@ public class CPInstanceUnitOfMeasureModelListener
 					getCommerceInventoryWarehouseItemsByCompanyIdSkuAndUnitOfMeasureKey(
 						companyId, sku, originalKey, QueryUtil.ALL_POS,
 						QueryUtil.ALL_POS)) {
+
+			BigDecimal commerceInventoryWarehouseItemQuantity =
+				commerceInventoryWarehouseItem.getQuantity();
+
+			commerceInventoryWarehouseItem.setQuantity(
+				commerceInventoryWarehouseItemQuantity.setScale(
+					precision, BigDecimal.ROUND_HALF_DOWN));
 
 			commerceInventoryWarehouseItem.setUnitOfMeasureKey(key);
 
