@@ -234,8 +234,8 @@ const UnitOfMeasureSelector = forwardRef(
 
 UnitOfMeasureSelector.defaultProps = {
 	disabled: false,
-	resetQuantity: true,
 	loadFinalPrice: false,
+	resetQuantity: true,
 	size: 'lg',
 };
 
@@ -244,7 +244,6 @@ UnitOfMeasureSelector.propTypes = {
 	channelId: PropTypes.number.isRequired,
 	cpInstanceId: PropTypes.number.isRequired,
 	disabled: PropTypes.bool,
-	resetQuantity: PropTypes.bool,
 	loadFinalPrice: PropTypes.bool,
 	name: PropTypes.string,
 	namespace: PropTypes.string,
@@ -255,6 +254,7 @@ UnitOfMeasureSelector.propTypes = {
 		multipleOrderQuantity: PropTypes.number,
 	}),
 	productId: PropTypes.number.isRequired,
+	resetQuantity: PropTypes.bool,
 	size: PropTypes.oneOf(['lg', 'md', 'sm']),
 	value: PropTypes.string,
 };

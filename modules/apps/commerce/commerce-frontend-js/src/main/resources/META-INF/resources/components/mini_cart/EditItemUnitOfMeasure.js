@@ -293,7 +293,6 @@ function EditItemUnitOfMeasure({cartItemId, namespace, onBack}) {
 									channelId={channel.id}
 									cpInstanceId={cpInstance.id}
 									loadFinalPrice={true}
-									resetQuantity={false}
 									name="minicart-uom-selector"
 									namespace={namespace}
 									options={
@@ -302,6 +301,7 @@ function EditItemUnitOfMeasure({cartItemId, namespace, onBack}) {
 										) || []
 									}
 									productId={cpInstance.productId}
+									resetQuantity={false}
 									value={cpInstance.skuUnitOfMeasure?.key}
 								/>
 							</div>
