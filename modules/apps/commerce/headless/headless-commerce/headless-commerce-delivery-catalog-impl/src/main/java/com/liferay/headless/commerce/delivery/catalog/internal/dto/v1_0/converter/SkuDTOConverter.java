@@ -398,9 +398,6 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 			CommerceMoney discountAmountCommerceMoney =
 				discountValue.getDiscountAmount();
 
-			CommerceMoney finalPriceCommerceMoney =
-				commerceProductPrice.getFinalPrice();
-
 			price.setDiscount(discountAmountCommerceMoney.format(locale));
 			price.setDiscountPercentage(
 				_commercePriceFormatter.format(
@@ -408,8 +405,12 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 			price.setDiscountPercentages(
 				_getFormattedDiscountPercentages(
 					discountValue.getPercentages(), locale));
-			price.setFinalPrice(finalPriceCommerceMoney.format(locale));
 		}
+
+		CommerceMoney finalPriceCommerceMoney =
+			commerceProductPrice.getFinalPrice();
+
+		price.setFinalPrice(finalPriceCommerceMoney.format(locale));
 
 		return price;
 	}
