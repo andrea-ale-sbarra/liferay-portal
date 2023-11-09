@@ -7,9 +7,9 @@ package com.liferay.commerce.product.service.impl;
 
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
-import com.liferay.commerce.product.constants.CPConstants;
 import com.liferay.asset.link.constants.AssetLinkConstants;
 import com.liferay.asset.link.service.AssetLinkLocalService;
+import com.liferay.commerce.product.constants.CPConstants;
 import com.liferay.commerce.product.constants.CPField;
 import com.liferay.commerce.product.exception.CPAttachmentFileEntryCDNURLException;
 import com.liferay.commerce.product.exception.CPAttachmentFileEntryDisplayDateException;
@@ -226,39 +226,6 @@ public class CPAttachmentFileEntryLocalServiceImpl
 
 		return _startWorkflowInstance(
 			user.getUserId(), cpAttachmentFileEntry, serviceContext);
-	}
-
-	@Reference
-	private AssetEntryLocalService _assetEntryLocalService;
-
-	@Reference
-	private GroupLocalService _groupLocalService;
-
-	@Reference
-	private AssetLinkLocalService _assetLinkLocalService;
-
-	@Override
-	public void updateAsset(
-			long userId, CPAttachmentFileEntry cpAttachmentFileEntry, long[] assetCategoryIds,
-			String[] assetTagNames, long[] assetLinkEntryIds, Double priority)
-			throws PortalException {
-
-		Group companyGroup = _groupLocalService.getCompanyGroup(
-				cpAttachmentFileEntry.getCompanyId());
-
-		AssetEntry assetEntry = _assetEntryLocalService.updateEntry(
-			userId, companyGroup.getGroupId(), cpAttachmentFileEntry.getCreateDate(),
-			cpAttachmentFileEntry.getModifiedDate(), CPAttachmentFileEntry.class.getName(),
-			cpAttachmentFileEntry.getCPAttachmentFileEntryId(), cpAttachmentFileEntry.getUuid(), 0,
-			assetCategoryIds, assetTagNames, true, true, null, null,
-			cpAttachmentFileEntry.getCreateDate(), null, ContentTypes.TEXT_PLAIN,
-			cpAttachmentFileEntry.getTitle(),
-			StringPool.BLANK, null, null, null, 0, 0,
-			priority);
-
-		_assetLinkLocalService.updateLinks(
-			userId, assetEntry.getEntryId(), assetLinkEntryIds,
-			AssetLinkConstants.TYPE_RELATED);
 	}
 
 	@Override
@@ -679,6 +646,32 @@ public class CPAttachmentFileEntryLocalServiceImpl
 				CPAttachmentFileEntryTable.INSTANCE.title));
 	}
 
+	@Override
+	public void updateAsset(
+			long userId, CPAttachmentFileEntry cpAttachmentFileEntry,
+			long[] assetCategoryIds, String[] assetTagNames,
+			long[] assetLinkEntryIds, Double priority)
+		throws PortalException {
+
+		Group companyGroup = _groupLocalService.getCompanyGroup(
+			cpAttachmentFileEntry.getCompanyId());
+
+		AssetEntry assetEntry = _assetEntryLocalService.updateEntry(
+			userId, companyGroup.getGroupId(),
+			cpAttachmentFileEntry.getCreateDate(),
+			cpAttachmentFileEntry.getModifiedDate(),
+			CPAttachmentFileEntry.class.getName(),
+			cpAttachmentFileEntry.getCPAttachmentFileEntryId(),
+			cpAttachmentFileEntry.getUuid(), 0, assetCategoryIds, assetTagNames,
+			true, true, null, null, cpAttachmentFileEntry.getCreateDate(), null,
+			ContentTypes.TEXT_PLAIN, cpAttachmentFileEntry.getTitle(),
+			StringPool.BLANK, null, null, null, 0, 0, priority);
+
+		_assetLinkLocalService.updateLinks(
+			userId, assetEntry.getEntryId(), assetLinkEntryIds,
+			AssetLinkConstants.TYPE_RELATED);
+	}
+
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPAttachmentFileEntry updateCPAttachmentFileEntry(
@@ -1088,6 +1081,12 @@ public class CPAttachmentFileEntryLocalServiceImpl
 		CPAttachmentFileEntryLocalServiceImpl.class);
 
 	@Reference
+	private AssetEntryLocalService _assetEntryLocalService;
+
+	@Reference
+	private AssetLinkLocalService _assetLinkLocalService;
+
+	@Reference
 	private ClassNameLocalService _classNameLocalService;
 
 	@Reference
@@ -1101,6 +1100,9 @@ public class CPAttachmentFileEntryLocalServiceImpl
 
 	@Reference
 	private ExpandoRowLocalService _expandoRowLocalService;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
 
 	@Reference
 	private JSONFactory _jsonFactory;

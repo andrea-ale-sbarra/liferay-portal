@@ -117,6 +117,9 @@ public class AttachmentDTOConverter
 	}
 
 	@Reference
+	private AssetTagService _assetTagService;
+
+	@Reference
 	private CommerceMediaResolver _commerceMediaResolver;
 
 	@Reference
@@ -134,8 +137,5 @@ public class AttachmentDTOConverter
 
 	@Reference
 	private Portal _portal;
-
-	@Reference
-	private AssetTagService _assetTagService;
 
 }
