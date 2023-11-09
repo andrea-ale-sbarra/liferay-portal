@@ -407,6 +407,11 @@ public class CommerceProductServiceUpgradeStepRegistrator
 				"CPOption", "DDMFormFieldTypeName",
 				"commerceOptionTypeKey VARCHAR(75) null"));
 
+		registry.register(
+				"5.10.0", "5.11.0",
+				new com.liferay.commerce.product.internal.upgrade.v5_11_0.
+						CPAttachmentFileEntryUpgradeProcess(_assetEntryLocalService));
+
 		if (_log.isInfoEnabled()) {
 			_log.info("Commerce product upgrade step registrator finished");
 		}
