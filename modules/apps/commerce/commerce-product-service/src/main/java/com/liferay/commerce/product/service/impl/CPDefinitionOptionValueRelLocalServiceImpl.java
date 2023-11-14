@@ -109,8 +109,8 @@ public class CPDefinitionOptionValueRelLocalServiceImpl
 
 		return cpDefinitionOptionValueRelLocalService.
 			addCPDefinitionOptionValueRel(
-				cpDefinitionOptionRelId, cpOptionValue.getKey(),
-				cpOptionValue.getNameMap(), cpOptionValue.getPriority(),
+				cpDefinitionOptionRelId, 0, cpOptionValue.getKey(),
+				cpOptionValue.getNameMap(), false, null, cpOptionValue.getPriority(), null, StringPool.BLANK,
 				serviceContext);
 	}
 
@@ -200,81 +200,6 @@ public class CPDefinitionOptionValueRelLocalServiceImpl
 		cpDefinitionOptionValueRel =
 			_updateCPDefinitionOptionValueRelPreselected(
 				cpDefinitionOptionValueRel, preselected);
-
-		// Commerce product definition
-
-		_reindexCPDefinition(cpDefinitionOptionRel);
-
-		return cpDefinitionOptionValueRel;
-	}
-
-	@Indexable(type = IndexableType.REINDEX)
-	@Override
-	public CPDefinitionOptionValueRel addCPDefinitionOptionValueRel(
-			long cpDefinitionOptionRelId, String key,
-			Map<Locale, String> nameMap, double priority,
-			ServiceContext serviceContext)
-		throws PortalException {
-
-		// Commerce product definition option value rel
-
-		User user = _userLocalService.getUser(serviceContext.getUserId());
-
-		key = _friendlyURLNormalizer.normalize(key);
-
-		_validate(0, cpDefinitionOptionRelId, 0, key, StringPool.BLANK);
-
-		long cpDefinitionOptionValueRelId = counterLocalService.increment();
-
-		CPDefinitionOptionValueRel cpDefinitionOptionValueRel =
-			cpDefinitionOptionValueRelPersistence.create(
-				cpDefinitionOptionValueRelId);
-
-		CPDefinitionOptionRel cpDefinitionOptionRel =
-			_cpDefinitionOptionRelLocalService.getCPDefinitionOptionRel(
-				cpDefinitionOptionRelId);
-
-		if (CPDefinitionLocalServiceCircularDependencyUtil.isVersionable(
-				cpDefinitionOptionRel.getCPDefinitionId(),
-				serviceContext.getRequest())) {
-
-			CPDefinition newCPDefinition =
-				CPDefinitionLocalServiceCircularDependencyUtil.copyCPDefinition(
-					cpDefinitionOptionRel.getCPDefinitionId());
-
-			cpDefinitionOptionRel = _cpDefinitionOptionRelPersistence.findByC_C(
-				newCPDefinition.getCPDefinitionId(),
-				cpDefinitionOptionRel.getCPOptionId());
-
-			cpDefinitionOptionRelId =
-				cpDefinitionOptionRel.getCPDefinitionOptionRelId();
-		}
-
-		cpDefinitionOptionValueRel.setGroupId(
-			cpDefinitionOptionRel.getGroupId());
-		cpDefinitionOptionValueRel.setCompanyId(user.getCompanyId());
-		cpDefinitionOptionValueRel.setUserId(user.getUserId());
-		cpDefinitionOptionValueRel.setUserName(user.getFullName());
-		cpDefinitionOptionValueRel.setCPDefinitionOptionRelId(
-			cpDefinitionOptionRelId);
-		cpDefinitionOptionValueRel.setExpandoBridgeAttributes(serviceContext);
-		cpDefinitionOptionValueRel.setKey(key);
-		cpDefinitionOptionValueRel.setNameMap(nameMap);
-
-		if (cpDefinitionOptionRel.isPriceTypeStatic()) {
-			cpDefinitionOptionValueRel.setPrice(BigDecimal.ZERO);
-		}
-
-		cpDefinitionOptionValueRel.setPriority(priority);
-		cpDefinitionOptionValueRel.setQuantity(BigDecimal.ZERO);
-
-		_validateLinkedCPDefinitionOptionValueRel(cpDefinitionOptionValueRel);
-		_validatePriceableCPDefinitionOptionValue(
-			cpDefinitionOptionValueRel, cpDefinitionOptionRel.getPriceType());
-
-		cpDefinitionOptionValueRel =
-			cpDefinitionOptionValueRelPersistence.update(
-				cpDefinitionOptionValueRel);
 
 		// Commerce product definition
 

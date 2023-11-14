@@ -70,26 +70,6 @@ public class CPDefinitionOptionValueRelServiceImpl
 	}
 
 	@Override
-	public CPDefinitionOptionValueRel addCPDefinitionOptionValueRel(
-			long cpDefinitionOptionRelId, String key,
-			Map<Locale, String> nameMap, double priority,
-			ServiceContext serviceContext)
-		throws PortalException {
-
-		CPDefinitionOptionRel cpDefinitionOptionRel =
-			_cpDefinitionOptionRelLocalService.getCPDefinitionOptionRel(
-				cpDefinitionOptionRelId);
-
-		_checkCommerceCatalog(
-			cpDefinitionOptionRel.getCPDefinitionId(), ActionKeys.VIEW);
-
-		return cpDefinitionOptionValueRelLocalService.
-			addCPDefinitionOptionValueRel(
-				cpDefinitionOptionRelId, key, nameMap, priority,
-				serviceContext);
-	}
-
-	@Override
 	public CPDefinitionOptionValueRel deleteCPDefinitionOptionValueRel(
 			long cpDefinitionOptionValueRelId)
 		throws PortalException {

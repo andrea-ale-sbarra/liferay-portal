@@ -93,122 +93,6 @@ import org.osgi.service.component.annotations.Reference;
 public class CPDefinitionOptionRelLocalServiceImpl
 	extends CPDefinitionOptionRelLocalServiceBaseImpl {
 
-	@Override
-	public CPDefinitionOptionRel addCPDefinitionOptionRel(
-			long cpDefinitionId, long cpOptionId, boolean importOptionValue,
-			ServiceContext serviceContext)
-		throws PortalException {
-
-		CPOption cpOption = _cpOptionLocalService.getCPOption(cpOptionId);
-
-		return cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, cpOption.getNameMap(),
-			cpOption.getDescriptionMap(), cpOption.getCommerceOptionTypeKey(),
-			0, cpOption.isFacetable(), cpOption.isRequired(),
-			cpOption.isSkuContributor(), importOptionValue, serviceContext);
-	}
-
-	@Override
-	public CPDefinitionOptionRel addCPDefinitionOptionRel(
-			long cpDefinitionId, long cpOptionId, Map<Locale, String> nameMap,
-			Map<Locale, String> descriptionMap, String commerceOptionTypeKey,
-			double priority, boolean facetable, boolean required,
-			boolean skuContributor, boolean importOptionValue,
-			ServiceContext serviceContext)
-		throws PortalException {
-
-		return cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, nameMap, descriptionMap,
-			commerceOptionTypeKey, priority, facetable, required,
-			skuContributor, importOptionValue, null, serviceContext);
-	}
-
-	@Indexable(type = IndexableType.REINDEX)
-	@Override
-	public CPDefinitionOptionRel addCPDefinitionOptionRel(
-			long cpDefinitionId, long cpOptionId, Map<Locale, String> nameMap,
-			Map<Locale, String> descriptionMap, String commerceOptionTypeKey,
-			double priority, boolean facetable, boolean required,
-			boolean skuContributor, boolean importOptionValue, String priceType,
-			ServiceContext serviceContext)
-		throws PortalException {
-
-		// Commerce product definition option rel
-
-		_validateCommerceOptionTypeKey(commerceOptionTypeKey, skuContributor);
-
-		CPOption cpOption = _cpOptionLocalService.getCPOption(cpOptionId);
-
-		_validateCPDefinitionOptionKey(cpDefinitionId, cpOption.getKey());
-
-		User user = _userLocalService.getUser(serviceContext.getUserId());
-		long groupId = serviceContext.getScopeGroupId();
-
-		long cpDefinitionOptionRelId = counterLocalService.increment();
-
-		CPDefinitionOptionRel cpDefinitionOptionRel =
-			cpDefinitionOptionRelPersistence.create(cpDefinitionOptionRelId);
-
-		_validatePriceType(cpDefinitionOptionRel, false, priceType);
-
-		if (CPDefinitionLocalServiceCircularDependencyUtil.isVersionable(
-				cpDefinitionId, serviceContext.getRequest())) {
-
-			CPDefinition newCPDefinition =
-				CPDefinitionLocalServiceCircularDependencyUtil.copyCPDefinition(
-					cpDefinitionId);
-
-			cpDefinitionId = newCPDefinition.getCPDefinitionId();
-
-			HttpServletRequest httpServletRequest = serviceContext.getRequest();
-
-			httpServletRequest.setAttribute(
-				"versionable#" + cpDefinitionId, Boolean.FALSE);
-		}
-
-		cpDefinitionOptionRel.setGroupId(groupId);
-		cpDefinitionOptionRel.setCompanyId(user.getCompanyId());
-		cpDefinitionOptionRel.setUserId(user.getUserId());
-		cpDefinitionOptionRel.setUserName(user.getFullName());
-		cpDefinitionOptionRel.setCPDefinitionId(cpDefinitionId);
-		cpDefinitionOptionRel.setCPOptionId(cpOptionId);
-		cpDefinitionOptionRel.setNameMap(nameMap);
-		cpDefinitionOptionRel.setDescriptionMap(descriptionMap);
-		cpDefinitionOptionRel.setCommerceOptionTypeKey(commerceOptionTypeKey);
-		cpDefinitionOptionRel.setPriority(priority);
-		cpDefinitionOptionRel.setFacetable(facetable);
-		cpDefinitionOptionRel.setRequired(required);
-		cpDefinitionOptionRel.setSkuContributor(skuContributor);
-		cpDefinitionOptionRel.setKey(cpOption.getKey());
-		cpDefinitionOptionRel.setPriceType(priceType);
-		cpDefinitionOptionRel.setExpandoBridgeAttributes(serviceContext);
-
-		cpDefinitionOptionRel = cpDefinitionOptionRelPersistence.update(
-			cpDefinitionOptionRel);
-
-		// Commerce product definition option value rels
-
-		if (importOptionValue) {
-			_cpDefinitionOptionValueRelLocalService.
-				importCPDefinitionOptionRels(
-					cpDefinitionOptionRelId, serviceContext);
-		}
-
-		// Commerce product instances
-
-		_cpInstanceLocalService.inactivateIncompatibleCPInstances(
-			user.getUserId(), cpDefinitionId);
-
-		_updateCPDefinitionIgnoreSKUCombinations(
-			cpDefinitionId, serviceContext);
-
-		// Commerce product definition
-
-		_reindexCPDefinition(cpDefinitionId);
-
-		return cpDefinitionOptionRel;
-	}
-
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
@@ -306,15 +190,6 @@ public class CPDefinitionOptionRelLocalServiceImpl
 		_reindexCPDefinition(cpDefinitionId);
 
 		return cpDefinitionOptionRel;
-	}
-
-	@Override
-	public CPDefinitionOptionRel addCPDefinitionOptionRel(
-			long cpDefinitionId, long cpOptionId, ServiceContext serviceContext)
-		throws PortalException {
-
-		return cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, true, serviceContext);
 	}
 
 	@Indexable(type = IndexableType.DELETE)

@@ -49,23 +49,6 @@ public class CPDefinitionOptionRelServiceImpl
 	public CPDefinitionOptionRel addCPDefinitionOptionRel(
 			long cpDefinitionId, long cpOptionId, Map<Locale, String> nameMap,
 			Map<Locale, String> descriptionMap, String commerceOptionTypeKey,
-			double priority, boolean facetable, boolean required,
-			boolean skuContributor, boolean importOptionValue,
-			ServiceContext serviceContext)
-		throws PortalException {
-
-		_checkCommerceCatalog(cpDefinitionId, ActionKeys.UPDATE);
-
-		return cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, nameMap, descriptionMap,
-			commerceOptionTypeKey, priority, facetable, required,
-			skuContributor, importOptionValue, serviceContext);
-	}
-
-	@Override
-	public CPDefinitionOptionRel addCPDefinitionOptionRel(
-			long cpDefinitionId, long cpOptionId, Map<Locale, String> nameMap,
-			Map<Locale, String> descriptionMap, String commerceOptionTypeKey,
 			String infoItemServiceKey, double priority,
 			boolean definedExternally, boolean facetable, boolean required,
 			boolean skuContributor, boolean importOptionValue, String priceType,
@@ -79,17 +62,6 @@ public class CPDefinitionOptionRelServiceImpl
 			commerceOptionTypeKey, infoItemServiceKey, priority,
 			definedExternally, facetable, required, skuContributor,
 			importOptionValue, priceType, typeSettings, serviceContext);
-	}
-
-	@Override
-	public CPDefinitionOptionRel addCPDefinitionOptionRel(
-			long cpDefinitionId, long cpOptionId, ServiceContext serviceContext)
-		throws PortalException {
-
-		_checkCommerceCatalog(cpDefinitionId, ActionKeys.UPDATE);
-
-		return cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, true, serviceContext);
 	}
 
 	@Override
