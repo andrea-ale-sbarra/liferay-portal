@@ -920,9 +920,9 @@ public class CommerceOrderItemLocalServiceTest {
 				CPDefinitionOptionRelLocalServiceUtil.addCPDefinitionOptionRel(
 					cpDefinition.getCPDefinitionId(), cpOption.getCPOptionId(),
 					cpOption.getNameMap(), cpOption.getDescriptionMap(),
-					cpOption.getCommerceOptionTypeKey(), 0.0, false, false,
+					cpOption.getCommerceOptionTypeKey(), StringPool.BLANK, 0.0, false, false, false,
 					cpOption.isSkuContributor(), true,
-					commerceOptionValue.getPriceType(), _serviceContext);
+					commerceOptionValue.getPriceType(), StringPool.BLANK, _serviceContext);
 
 			_cpDefinitionOptionRels.add(cpDefinitionOptionRel);
 

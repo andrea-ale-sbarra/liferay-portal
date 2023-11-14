@@ -923,17 +923,18 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		List<CPDefinitionOptionValueRel> cpDefinitionOptionValueRels =
 			cpDefinitionOptionRel.getCPDefinitionOptionValueRels();
 
-		CPDefinitionOptionValueRel newCPDefinitionOptionValueRel =
-			_cpDefinitionOptionValueRelLocalService.
-				addCPDefinitionOptionValueRel(
-					cpDefinitionOptionValueRel.getCPDefinitionOptionRelId(),
-					RandomTestUtil.randomString(),
-					RandomTestUtil.randomLocaleStringMap(),
-					RandomTestUtil.nextDouble(), _serviceContext);
-
 		CPInstance cpInstance = cpDefinitionOptionValueRel.fetchCPInstance();
 
 		BigDecimal quantity = cpDefinitionOptionValueRel.getQuantity();
+
+
+		CPDefinitionOptionValueRel newCPDefinitionOptionValueRel =
+			_cpDefinitionOptionValueRelLocalService.
+				addCPDefinitionOptionValueRel(
+					cpDefinitionOptionRel.getCPDefinitionOptionRelId(), cpInstance.getCPInstanceId(),
+					RandomTestUtil.randomString(),
+					RandomTestUtil.randomLocaleStringMap(), false
+					, null, cpDefinitionOptionValueRel.getPriority(), quantity, cpDefinitionOptionValueRel.getUnitOfMeasureKey(), _serviceContext);
 
 		newCPDefinitionOptionValueRel = _updateCPDefinitionOptionValueRel(
 			newCPDefinitionOptionValueRel, cpInstance.getCPInstanceId(),
@@ -1050,7 +1051,10 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 		return _cpDefinitionOptionValueRelLocalService.
 			addCPDefinitionOptionValueRel(
 				cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
-				"cpInstance-option-value", null, 0, _serviceContext);
+				0,
+				"cpInstance-option-value",
+				null, false, null,
+				RandomTestUtil.nextDouble(), null, StringPool.BLANK, _serviceContext);
 	}
 
 	private void _assertValidateCPDefinitionOptionValueRelCPInstanceLinkFail(
@@ -1073,14 +1077,6 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 			BigDecimalUtil.gt(
 				cpDefinitionOptionValueRel.getQuantity(), BigDecimal.ZERO));
 
-		CPDefinitionOptionValueRel newCPDefinitionOptionValueRel =
-			_cpDefinitionOptionValueRelLocalService.
-				addCPDefinitionOptionValueRel(
-					cpDefinitionOptionValueRel.getCPDefinitionOptionRelId(),
-					RandomTestUtil.randomString(),
-					RandomTestUtil.randomLocaleStringMap(),
-					RandomTestUtil.nextDouble(), _serviceContext);
-
 		CPInstance cpInstance = cpDefinitionOptionValueRel.fetchCPInstance();
 
 		BigDecimal price = null;
@@ -1090,6 +1086,15 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 
 			price = BigDecimal.TEN;
 		}
+
+		CPDefinitionOptionValueRel newCPDefinitionOptionValueRel =
+			_cpDefinitionOptionValueRelLocalService.
+				addCPDefinitionOptionValueRel(
+					cpDefinitionOptionValueRel.getCPDefinitionOptionRelId(),
+					cpInstance.getCPInstanceId(),
+					RandomTestUtil.randomString(),
+					RandomTestUtil.randomLocaleStringMap(), false, price,
+					RandomTestUtil.nextDouble(), cpDefinitionOptionValueRel.getQuantity(), cpDefinitionOptionValueRel.getUnitOfMeasureKey(), _serviceContext);
 
 		_updateCPDefinitionOptionValueRel(
 			newCPDefinitionOptionValueRel, cpInstance.getCPInstanceId(),

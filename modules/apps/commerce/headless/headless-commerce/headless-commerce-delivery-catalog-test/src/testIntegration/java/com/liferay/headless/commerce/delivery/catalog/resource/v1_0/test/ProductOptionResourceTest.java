@@ -16,6 +16,7 @@ import com.liferay.commerce.product.service.CPOptionLocalService;
 import com.liferay.commerce.product.test.util.CPTestUtil;
 import com.liferay.commerce.test.util.CommerceTestUtil;
 import com.liferay.headless.commerce.delivery.catalog.client.dto.v1_0.ProductOption;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
@@ -120,7 +121,19 @@ public class ProductOptionResourceTest
 		CPDefinitionOptionRel cpDefinitionOptionRel =
 			_cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
 				_cpDefinition.getCPDefinitionId(), cpOption.getCPOptionId(),
-				false, _serviceContext);
+				cpOption.getNameMap(),
+				cpOption.getDescriptionMap(),
+				cpOption.getCommerceOptionTypeKey(),
+				StringPool.BLANK,
+				0D,
+				false,
+				cpOption.isFacetable(),
+				cpOption.isRequired(),
+				cpOption.isSkuContributor(),
+				false,
+				StringPool.BLANK,
+				StringPool.BLANK,
+				_serviceContext);
 
 		_cpDefinitionOptionRels.add(cpDefinitionOptionRel);
 

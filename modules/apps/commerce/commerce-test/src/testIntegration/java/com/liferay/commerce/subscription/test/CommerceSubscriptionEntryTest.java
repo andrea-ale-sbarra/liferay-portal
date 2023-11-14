@@ -223,8 +223,13 @@ public class CommerceSubscriptionEntryTest {
 		CPTestUtil.addCPOptionValue(cpOption);
 
 		CPDefinitionOptionRelLocalServiceUtil.addCPDefinitionOptionRel(
-			cpDefinition.getCPDefinitionId(), cpOption.getCPOptionId(), true,
-			ServiceContextTestUtil.getServiceContext(groupId));
+			cpDefinition.getCPDefinitionId(), cpOption.getCPOptionId(),
+			RandomTestUtil.randomLocaleStringMap(),
+			RandomTestUtil.randomLocaleStringMap(),
+			cpOption.getCommerceOptionTypeKey(),
+			StringPool.BLANK,
+			RandomTestUtil.nextDouble(), false, false, false, false, true,
+			StringPool.BLANK, StringPool.BLANK, ServiceContextTestUtil.getServiceContext(groupId));
 
 		int cpDefinitionSubscriptionLength = RandomTestUtil.randomInt(1, 100);
 		String cpDefinitionSubscriptionType = "daily";

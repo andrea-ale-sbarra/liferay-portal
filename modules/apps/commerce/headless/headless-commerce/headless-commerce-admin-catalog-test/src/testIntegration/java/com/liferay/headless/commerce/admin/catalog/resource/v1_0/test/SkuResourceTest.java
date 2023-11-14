@@ -22,6 +22,7 @@ import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.Sku;
 import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.SkuOption;
 import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.SkuVirtualSettings;
 import com.liferay.headless.commerce.admin.catalog.client.resource.v1_0.SkuResource;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -80,6 +81,18 @@ public class SkuResourceTest extends BaseSkuResourceTestCase {
 		_cpDefinitionOptionRel =
 			_cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
 				_cpDefinition.getCPDefinitionId(), _cpOption.getCPOptionId(),
+				_cpOption.getNameMap(),
+				_cpOption.getDescriptionMap(),
+				_cpOption.getCommerceOptionTypeKey(),
+				StringPool.BLANK,
+				0D,
+				false,
+				_cpOption.isFacetable(),
+				_cpOption.isRequired(),
+				_cpOption.isSkuContributor(),
+				false,
+				StringPool.BLANK,
+				StringPool.BLANK,
 				serviceContext);
 
 		_cpDefinitionOptionValueRels =

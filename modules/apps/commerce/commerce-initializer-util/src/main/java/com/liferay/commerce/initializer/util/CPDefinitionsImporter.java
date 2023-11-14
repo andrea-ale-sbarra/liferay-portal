@@ -714,7 +714,19 @@ public class CPDefinitionsImporter {
 		try {
 			cpDefinitionOptionRel =
 				_cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
-					cpDefinitionId, cpOption.getCPOptionId(), importOptionValue,
+					cpDefinitionId, cpOption.getCPOptionId(),
+					cpOption.getNameMap(),
+					cpOption.getDescriptionMap(),
+					cpOption.getCommerceOptionTypeKey(),
+					StringPool.BLANK,
+					0D,
+					false,
+					cpOption.isFacetable(),
+					cpOption.isRequired(),
+					cpOption.isSkuContributor(),
+					importOptionValue,
+					StringPool.BLANK,
+					StringPool.BLANK,
 					serviceContext);
 		}
 		finally {

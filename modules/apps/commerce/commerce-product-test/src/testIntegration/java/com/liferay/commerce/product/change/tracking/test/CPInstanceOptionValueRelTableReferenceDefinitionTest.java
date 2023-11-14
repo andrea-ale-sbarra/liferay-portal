@@ -18,6 +18,7 @@ import com.liferay.commerce.product.service.CPInstanceOptionValueRelLocalService
 import com.liferay.commerce.product.service.CommerceCatalogLocalService;
 import com.liferay.commerce.product.test.util.CPTestUtil;
 import com.liferay.commerce.product.type.simple.constants.SimpleCPTypeConstants;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.change.tracking.CTModel;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
@@ -73,10 +74,11 @@ public class CPInstanceOptionValueRelTableReferenceDefinitionTest
 			_cpDefinitionOptionValueRelLocalService.
 				addCPDefinitionOptionValueRel(
 					_cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
+					0,
 					CPInstanceOptionValueRelTableReferenceDefinitionTest.class.
 						getSimpleName(),
 					RandomTestUtil.randomLocaleStringMap(),
-					RandomTestUtil.nextDouble(),
+					false, null, RandomTestUtil.nextDouble(), null, StringPool.BLANK,
 					ServiceContextTestUtil.getServiceContext(
 						group.getGroupId()));
 

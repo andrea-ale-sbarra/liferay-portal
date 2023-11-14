@@ -296,8 +296,13 @@ public class CPTestUtil {
 		throws PortalException {
 
 		return CPDefinitionOptionRelLocalServiceUtil.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId, true,
-			ServiceContextTestUtil.getServiceContext(groupId));
+			cpDefinitionId, cpOptionId,
+			RandomTestUtil.randomLocaleStringMap(),
+			RandomTestUtil.randomLocaleStringMap(),
+			getDefaultCommerceOptionTypeKey(true),
+			StringPool.BLANK,
+			RandomTestUtil.nextDouble(), false, false, false, false, true,
+			StringPool.BLANK, StringPool.BLANK, ServiceContextTestUtil.getServiceContext(groupId));
 	}
 
 	public static CPDefinitionOptionValueRel
@@ -319,17 +324,12 @@ public class CPTestUtil {
 					RandomTestUtil.randomLocaleStringMap(),
 					RandomTestUtil.randomLocaleStringMap(),
 					getDefaultCommerceOptionTypeKey(true),
-					RandomTestUtil.randomDouble(), false, required,
-					skuContributor, false, priceType, serviceContext);
+					StringPool.BLANK,
+					RandomTestUtil.nextDouble(), false, false, required, skuContributor, false,
+					priceType, StringPool.BLANK, serviceContext);
 		}
 
-		CPDefinitionOptionValueRel cpDefinitionOptionValueRel =
-			CPDefinitionOptionValueRelLocalServiceUtil.
-				addCPDefinitionOptionValueRel(
-					cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
-					RandomTestUtil.randomString(),
-					RandomTestUtil.randomLocaleStringMap(),
-					RandomTestUtil.randomDouble(), serviceContext);
+
 
 		if ((cpInstanceId == 0) && (priceType != null)) {
 			CPInstance cpInstance = addCPInstanceFromCatalog(
@@ -339,20 +339,13 @@ public class CPTestUtil {
 		}
 
 		return CPDefinitionOptionValueRelLocalServiceUtil.
-			updateCPDefinitionOptionValueRel(
-				cpDefinitionOptionValueRel.getCPDefinitionOptionValueRelId(),
-				cpInstanceId, cpDefinitionOptionValueRel.getKey(),
-				cpDefinitionOptionValueRel.getNameMap(), false, price,
-				cpDefinitionOptionValueRel.getPriority(), quantity,
-				cpDefinitionOptionValueRel.getUnitOfMeasureKey(),
+			addCPDefinitionOptionValueRel(
+				cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
+				cpInstanceId, RandomTestUtil.randomString(),
+				RandomTestUtil.randomLocaleStringMap(), false, price,
+				RandomTestUtil.randomDouble(), quantity,
+				StringPool.BLANK,
 				serviceContext);
-	}
-
-	public static CPDefinition addCPDefinitionWithChildCPDefinitions(
-			long groupId)
-		throws Exception {
-
-		return addCPDefinitionWithChildCPDefinitions(groupId, 1);
 	}
 
 	public static CPDefinition addCPDefinitionWithChildCPDefinitions(
@@ -1222,17 +1215,11 @@ public class CPTestUtil {
 				RandomTestUtil.randomLocaleStringMap(),
 				RandomTestUtil.randomLocaleStringMap(),
 				getDefaultCommerceOptionTypeKey(true),
-				RandomTestUtil.nextDouble(), false, false, false, false,
-				priceType, serviceContext);
+				StringPool.BLANK,
+				RandomTestUtil.nextDouble(), false, false, false, false, false,
+				priceType, StringPool.BLANK, serviceContext);
 
 		for (CPInstance cpInstance : childCPInstances) {
-			CPDefinitionOptionValueRel cpInstanceOptionValueRel =
-				CPDefinitionOptionValueRelLocalServiceUtil.
-					addCPDefinitionOptionValueRel(
-						cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
-						RandomTestUtil.randomString(),
-						RandomTestUtil.randomLocaleStringMap(),
-						RandomTestUtil.nextDouble(), serviceContext);
 
 			BigDecimal price = null;
 
@@ -1244,15 +1231,14 @@ public class CPTestUtil {
 
 			cpDefinitionOptionValueRels.add(
 				CPDefinitionOptionValueRelLocalServiceUtil.
-					updateCPDefinitionOptionValueRel(
-						cpInstanceOptionValueRel.
-							getCPDefinitionOptionValueRelId(),
+					addCPDefinitionOptionValueRel(
+						cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 						cpInstance.getCPInstanceId(),
-						cpInstanceOptionValueRel.getKey(),
-						cpInstanceOptionValueRel.getNameMap(), false, price,
-						cpInstanceOptionValueRel.getPriority(),
+						RandomTestUtil.randomString(),
+						RandomTestUtil.randomLocaleStringMap(), false, price,
+						RandomTestUtil.nextDouble(),
 						BigDecimal.valueOf(2),
-						cpInstanceOptionValueRel.getUnitOfMeasureKey(),
+						StringPool.BLANK,
 						serviceContext));
 		}
 
