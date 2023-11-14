@@ -137,19 +137,6 @@ public class EditCPDefinitionOptionValueRelMVCActionCommand
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			CPDefinitionOptionValueRel.class.getName(), actionRequest);
 
-		if (cpDefinitionOptionValueRelId <= 0) {
-
-			// Add commerce product definition option value rel
-
-			long cpDefinitionOptionRelId = ParamUtil.getLong(
-				actionRequest, "cpDefinitionOptionRelId");
-
-			return _cpDefinitionOptionValueRelService.
-				addCPDefinitionOptionValueRel(
-					cpDefinitionOptionRelId, key, nameMap, priority,
-					serviceContext);
-		}
-
 		// Update commerce product definition option value rel
 
 		long cpInstanceId = 0;

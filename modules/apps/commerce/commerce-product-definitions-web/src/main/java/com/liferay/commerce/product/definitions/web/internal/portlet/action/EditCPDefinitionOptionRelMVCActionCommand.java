@@ -52,12 +52,7 @@ public class EditCPDefinitionOptionRelMVCActionCommand
 			actionRequest, "cpDefinitionOptionRelId");
 
 		try {
-			if (cmd.equals(Constants.ADD) ||
-				cmd.equals(Constants.ADD_MULTIPLE)) {
-
-				_addCPDefinitionOptionRels(actionRequest);
-			}
-			else if (cmd.equals(Constants.DELETE)) {
+			if (cmd.equals(Constants.DELETE)) {
 				_deleteCPDefinitionOptionRels(
 					cpDefinitionOptionRelId, actionRequest);
 			}
@@ -74,33 +69,6 @@ public class EditCPDefinitionOptionRelMVCActionCommand
 			String redirect = ParamUtil.getString(actionRequest, "redirect");
 
 			sendRedirect(actionRequest, actionResponse, redirect);
-		}
-	}
-
-	private void _addCPDefinitionOptionRels(ActionRequest actionRequest)
-		throws Exception {
-
-		long[] addCPOptionIds = null;
-
-		long cpDefinitionId = ParamUtil.getLong(
-			actionRequest, "cpDefinitionId");
-
-		long cpOptionId = ParamUtil.getLong(actionRequest, "cpOptionId");
-
-		if (cpOptionId > 0) {
-			addCPOptionIds = new long[] {cpOptionId};
-		}
-		else {
-			addCPOptionIds = StringUtil.split(
-				ParamUtil.getString(actionRequest, "cpOptionIds"), 0L);
-		}
-
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(
-			CPDefinitionOptionRel.class.getName(), actionRequest);
-
-		for (long addCPOptionId : addCPOptionIds) {
-			_cpDefinitionOptionRelService.addCPDefinitionOptionRel(
-				cpDefinitionId, addCPOptionId, serviceContext);
 		}
 	}
 
