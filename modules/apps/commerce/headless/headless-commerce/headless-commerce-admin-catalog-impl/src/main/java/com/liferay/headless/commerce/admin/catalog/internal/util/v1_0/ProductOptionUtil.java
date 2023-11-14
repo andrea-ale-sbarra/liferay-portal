@@ -40,17 +40,7 @@ public class ProductOptionUtil {
 
 		Map<String, String> nameMap = productOption.getName();
 
-		if ((cpDefinitionOptionRel != null) && (nameMap == null)) {
-			nameMap = LanguageUtils.getLanguageIdMap(
-				cpDefinitionOptionRel.getNameMap());
-		}
-
 		Map<String, String> descriptionMap = productOption.getDescription();
-
-		if ((cpDefinitionOptionRel != null) && (descriptionMap == null)) {
-			descriptionMap = LanguageUtils.getLanguageIdMap(
-				cpDefinitionOptionRel.getDescriptionMap());
-		}
 
 		serviceContext.setExpandoBridgeAttributes(
 			CustomFieldsUtil.toMap(
@@ -59,6 +49,15 @@ public class ProductOptionUtil {
 				serviceContext.getLocale()));
 
 		if (cpDefinitionOptionRel == null) {
+			if (nameMap == null) {
+				nameMap = LanguageUtils.getLanguageIdMap(cpOption.getNameMap());
+			}
+
+			if (descriptionMap == null) {
+				descriptionMap = LanguageUtils.getLanguageIdMap(
+					cpOption.getDescriptionMap());
+			}
+
 			cpDefinitionOptionRel =
 				cpDefinitionOptionRelService.addCPDefinitionOptionRel(
 					cpDefinitionId, cpOption.getCPOptionId(),
@@ -87,6 +86,16 @@ public class ProductOptionUtil {
 					serviceContext);
 		}
 		else {
+			if (nameMap == null) {
+				nameMap = LanguageUtils.getLanguageIdMap(
+					cpDefinitionOptionRel.getNameMap());
+			}
+
+			if (descriptionMap == null) {
+				descriptionMap = LanguageUtils.getLanguageIdMap(
+					cpDefinitionOptionRel.getDescriptionMap());
+			}
+
 			cpDefinitionOptionRel =
 				cpDefinitionOptionRelService.updateCPDefinitionOptionRel(
 					cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
