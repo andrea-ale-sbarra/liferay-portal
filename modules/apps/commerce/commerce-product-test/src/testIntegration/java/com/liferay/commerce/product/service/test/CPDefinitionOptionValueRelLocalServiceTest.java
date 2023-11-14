@@ -927,14 +927,15 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 
 		BigDecimal quantity = cpDefinitionOptionValueRel.getQuantity();
 
-
 		CPDefinitionOptionValueRel newCPDefinitionOptionValueRel =
 			_cpDefinitionOptionValueRelLocalService.
 				addCPDefinitionOptionValueRel(
-					cpDefinitionOptionRel.getCPDefinitionOptionRelId(), cpInstance.getCPInstanceId(),
-					RandomTestUtil.randomString(),
-					RandomTestUtil.randomLocaleStringMap(), false
-					, null, cpDefinitionOptionValueRel.getPriority(), quantity, cpDefinitionOptionValueRel.getUnitOfMeasureKey(), _serviceContext);
+					cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
+					cpInstance.getCPInstanceId(), RandomTestUtil.randomString(),
+					RandomTestUtil.randomLocaleStringMap(), false, null,
+					cpDefinitionOptionValueRel.getPriority(), quantity,
+					cpDefinitionOptionValueRel.getUnitOfMeasureKey(),
+					_serviceContext);
 
 		newCPDefinitionOptionValueRel = _updateCPDefinitionOptionValueRel(
 			newCPDefinitionOptionValueRel, cpInstance.getCPInstanceId(),
@@ -1050,11 +1051,10 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 
 		return _cpDefinitionOptionValueRelLocalService.
 			addCPDefinitionOptionValueRel(
-				cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
-				0,
-				"cpInstance-option-value",
-				null, false, null,
-				RandomTestUtil.nextDouble(), null, StringPool.BLANK, _serviceContext);
+				cpDefinitionOptionRel.getCPDefinitionOptionRelId(), 0,
+				"cpInstance-option-value", null, false, null,
+				RandomTestUtil.nextDouble(), null, StringPool.BLANK,
+				_serviceContext);
 	}
 
 	private void _assertValidateCPDefinitionOptionValueRelCPInstanceLinkFail(
@@ -1091,10 +1091,12 @@ public class CPDefinitionOptionValueRelLocalServiceTest {
 			_cpDefinitionOptionValueRelLocalService.
 				addCPDefinitionOptionValueRel(
 					cpDefinitionOptionValueRel.getCPDefinitionOptionRelId(),
-					cpInstance.getCPInstanceId(),
-					RandomTestUtil.randomString(),
+					cpInstance.getCPInstanceId(), RandomTestUtil.randomString(),
 					RandomTestUtil.randomLocaleStringMap(), false, price,
-					RandomTestUtil.nextDouble(), cpDefinitionOptionValueRel.getQuantity(), cpDefinitionOptionValueRel.getUnitOfMeasureKey(), _serviceContext);
+					RandomTestUtil.nextDouble(),
+					cpDefinitionOptionValueRel.getQuantity(),
+					cpDefinitionOptionValueRel.getUnitOfMeasureKey(),
+					_serviceContext);
 
 		_updateCPDefinitionOptionValueRel(
 			newCPDefinitionOptionValueRel, cpInstance.getCPInstanceId(),

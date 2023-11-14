@@ -81,19 +81,11 @@ public class SkuResourceTest extends BaseSkuResourceTestCase {
 		_cpDefinitionOptionRel =
 			_cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
 				_cpDefinition.getCPDefinitionId(), _cpOption.getCPOptionId(),
-				_cpOption.getNameMap(),
-				_cpOption.getDescriptionMap(),
-				_cpOption.getCommerceOptionTypeKey(),
-				StringPool.BLANK,
-				0D,
-				false,
-				_cpOption.isFacetable(),
-				_cpOption.isRequired(),
-				_cpOption.isSkuContributor(),
-				false,
-				StringPool.BLANK,
-				StringPool.BLANK,
-				serviceContext);
+				_cpOption.getNameMap(), _cpOption.getDescriptionMap(),
+				_cpOption.getCommerceOptionTypeKey(), StringPool.BLANK, 0D,
+				false, _cpOption.isFacetable(), _cpOption.isRequired(),
+				_cpOption.isSkuContributor(), false, StringPool.BLANK,
+				StringPool.BLANK, serviceContext);
 
 		_cpDefinitionOptionValueRels =
 			_cpDefinitionOptionRel.getCPDefinitionOptionValueRels();

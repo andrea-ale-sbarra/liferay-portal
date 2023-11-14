@@ -110,7 +110,8 @@ public class CPDefinitionOptionValueRelLocalServiceImpl
 		return cpDefinitionOptionValueRelLocalService.
 			addCPDefinitionOptionValueRel(
 				cpDefinitionOptionRelId, 0, cpOptionValue.getKey(),
-				cpOptionValue.getNameMap(), false, null, cpOptionValue.getPriority(), null, StringPool.BLANK,
+				cpOptionValue.getNameMap(), false, null,
+				cpOptionValue.getPriority(), null, StringPool.BLANK,
 				serviceContext);
 	}
 

@@ -71,12 +71,11 @@ public class CPDefinitionOptionValueRelTableReferenceDefinitionTest
 	protected CTModel<?> addCTModel() throws Exception {
 		return _cpDefinitionOptionValueRelLocalService.
 			addCPDefinitionOptionValueRel(
-				_cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
-				0,
+				_cpDefinitionOptionRel.getCPDefinitionOptionRelId(), 0,
 				CPDefinitionOptionValueRelTableReferenceDefinitionTest.class.
 					getSimpleName(),
-				RandomTestUtil.randomLocaleStringMap(),
-				false, null, RandomTestUtil.nextDouble(), null, StringPool.BLANK,
+				RandomTestUtil.randomLocaleStringMap(), false, null,
+				RandomTestUtil.nextDouble(), null, StringPool.BLANK,
 				ServiceContextTestUtil.getServiceContext(group.getGroupId()));
 	}
 

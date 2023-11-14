@@ -121,19 +121,11 @@ public class ProductOptionResourceTest
 		CPDefinitionOptionRel cpDefinitionOptionRel =
 			_cpDefinitionOptionRelLocalService.addCPDefinitionOptionRel(
 				_cpDefinition.getCPDefinitionId(), cpOption.getCPOptionId(),
-				cpOption.getNameMap(),
-				cpOption.getDescriptionMap(),
-				cpOption.getCommerceOptionTypeKey(),
-				StringPool.BLANK,
-				0D,
-				false,
-				cpOption.isFacetable(),
-				cpOption.isRequired(),
-				cpOption.isSkuContributor(),
-				false,
-				StringPool.BLANK,
-				StringPool.BLANK,
-				_serviceContext);
+				cpOption.getNameMap(), cpOption.getDescriptionMap(),
+				cpOption.getCommerceOptionTypeKey(), StringPool.BLANK, 0D,
+				false, cpOption.isFacetable(), cpOption.isRequired(),
+				cpOption.isSkuContributor(), false, StringPool.BLANK,
+				StringPool.BLANK, _serviceContext);
 
 		_cpDefinitionOptionRels.add(cpDefinitionOptionRel);
 

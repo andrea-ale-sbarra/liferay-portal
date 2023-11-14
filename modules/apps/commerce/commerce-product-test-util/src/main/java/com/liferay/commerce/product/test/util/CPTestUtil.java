@@ -296,13 +296,12 @@ public class CPTestUtil {
 		throws PortalException {
 
 		return CPDefinitionOptionRelLocalServiceUtil.addCPDefinitionOptionRel(
-			cpDefinitionId, cpOptionId,
+			cpDefinitionId, cpOptionId, RandomTestUtil.randomLocaleStringMap(),
 			RandomTestUtil.randomLocaleStringMap(),
-			RandomTestUtil.randomLocaleStringMap(),
-			getDefaultCommerceOptionTypeKey(true),
-			StringPool.BLANK,
+			getDefaultCommerceOptionTypeKey(true), StringPool.BLANK,
 			RandomTestUtil.nextDouble(), false, false, false, false, true,
-			StringPool.BLANK, StringPool.BLANK, ServiceContextTestUtil.getServiceContext(groupId));
+			StringPool.BLANK, StringPool.BLANK,
+			ServiceContextTestUtil.getServiceContext(groupId));
 	}
 
 	public static CPDefinitionOptionValueRel
@@ -323,13 +322,11 @@ public class CPTestUtil {
 					cpDefinitionId, cpOptionId,
 					RandomTestUtil.randomLocaleStringMap(),
 					RandomTestUtil.randomLocaleStringMap(),
-					getDefaultCommerceOptionTypeKey(true),
-					StringPool.BLANK,
-					RandomTestUtil.nextDouble(), false, false, required, skuContributor, false,
-					priceType, StringPool.BLANK, serviceContext);
+					getDefaultCommerceOptionTypeKey(true), StringPool.BLANK,
+					RandomTestUtil.nextDouble(), false, false, required,
+					skuContributor, false, priceType, StringPool.BLANK,
+					serviceContext);
 		}
-
-
 
 		if ((cpInstanceId == 0) && (priceType != null)) {
 			CPInstance cpInstance = addCPInstanceFromCatalog(
@@ -343,8 +340,7 @@ public class CPTestUtil {
 				cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 				cpInstanceId, RandomTestUtil.randomString(),
 				RandomTestUtil.randomLocaleStringMap(), false, price,
-				RandomTestUtil.randomDouble(), quantity,
-				StringPool.BLANK,
+				RandomTestUtil.randomDouble(), quantity, StringPool.BLANK,
 				serviceContext);
 	}
 
@@ -1214,13 +1210,11 @@ public class CPTestUtil {
 				priceableCPOption.getCPOptionId(),
 				RandomTestUtil.randomLocaleStringMap(),
 				RandomTestUtil.randomLocaleStringMap(),
-				getDefaultCommerceOptionTypeKey(true),
-				StringPool.BLANK,
+				getDefaultCommerceOptionTypeKey(true), StringPool.BLANK,
 				RandomTestUtil.nextDouble(), false, false, false, false, false,
 				priceType, StringPool.BLANK, serviceContext);
 
 		for (CPInstance cpInstance : childCPInstances) {
-
 			BigDecimal price = null;
 
 			if (Objects.equals(
@@ -1236,10 +1230,8 @@ public class CPTestUtil {
 						cpInstance.getCPInstanceId(),
 						RandomTestUtil.randomString(),
 						RandomTestUtil.randomLocaleStringMap(), false, price,
-						RandomTestUtil.nextDouble(),
-						BigDecimal.valueOf(2),
-						StringPool.BLANK,
-						serviceContext));
+						RandomTestUtil.nextDouble(), BigDecimal.valueOf(2),
+						StringPool.BLANK, serviceContext));
 		}
 
 		return cpDefinitionOptionValueRels;
