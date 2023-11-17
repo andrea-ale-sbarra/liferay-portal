@@ -145,15 +145,10 @@ public class CPDefinitionVirtualSettingDisplayContext
 		return creationMenu;
 	}
 
-	public String getDownloadFileEntryURL() throws PortalException {
-		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-			getCPDefinitionVirtualSetting();
+	public String getDownloadFileEntryURL(long fileEntryId)
+		throws PortalException {
 
-		if (cpDefinitionVirtualSetting == null) {
-			return null;
-		}
-
-		FileEntry fileEntry = _dlAppService.getFileEntry(0);
+		FileEntry fileEntry = _dlAppService.getFileEntry(fileEntryId);
 
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)httpServletRequest.getAttribute(
@@ -185,16 +180,9 @@ public class CPDefinitionVirtualSettingDisplayContext
 			StringPool.BLANK, true, true);
 	}
 
-	public FileEntry getFileEntry() throws PortalException {
-		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-			getCPDefinitionVirtualSetting();
-
-		if (cpDefinitionVirtualSetting != null) {
-			long fileEntryId = 0;
-
-			if (fileEntryId > 0) {
-				return _dlAppService.getFileEntry(fileEntryId);
-			}
+	public FileEntry getFileEntry(long fileEntryId) throws PortalException {
+		if (fileEntryId > 0) {
+			return _dlAppService.getFileEntry(fileEntryId);
 		}
 
 		return null;
