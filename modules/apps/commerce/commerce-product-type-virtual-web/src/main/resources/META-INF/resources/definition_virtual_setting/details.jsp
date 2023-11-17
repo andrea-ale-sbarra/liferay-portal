@@ -1,3 +1,5 @@
+<%@ include file="/init.jsp" %>
+
 <%--
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
@@ -5,16 +7,25 @@
  */
 --%>
 
-<%@ include file="/init.jsp" %>
-
 <%
 CPDefinitionVirtualSettingDisplayContext cpDefinitionVirtualSettingDisplayContext = (CPDefinitionVirtualSettingDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 
 CPDefinitionVirtualSetting cpDefinitionVirtualSetting = cpDefinitionVirtualSettingDisplayContext.getCPDefinitionVirtualSetting();
-
-Map<String, String> contextParams = HashMapBuilder.<String, String>put(
-	"cpDefinitionId", String.valueOf(cpDefinitionVirtualSetting.getClassPK())
-).build();
 %>
 
-<%@ include file="/details.jspf" %>
+<c:if test="<%= cpDefinitionVirtualSetting != null %>">
+
+	<%
+	long cpDefinitionId = -1;
+
+	if (cpDefinitionVirtualSetting != null) {
+		cpDefinitionId = cpDefinitionVirtualSetting.getClassPK();
+	}
+
+	Map<String, String> contextParams = HashMapBuilder.<String, String>put(
+		"cpDefinitionId", String.valueOf(cpDefinitionId)
+	).build();
+	%>
+
+	<%@ include file="/details.jspf" %>
+</c:if>

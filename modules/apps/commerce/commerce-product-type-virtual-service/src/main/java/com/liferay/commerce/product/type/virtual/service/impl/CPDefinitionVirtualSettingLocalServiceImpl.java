@@ -9,15 +9,12 @@ import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.service.CPDefinitionLocalService;
 import com.liferay.commerce.product.service.CPInstanceLocalService;
-import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingException;
-import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingFileEntryIdException;
 import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingSampleException;
 import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingSampleFileEntryIdException;
 import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingSampleURLException;
 import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingTermsOfUseArticleResourcePKException;
 import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingTermsOfUseContentException;
 import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingTermsOfUseException;
-import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingURLException;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
 import com.liferay.commerce.product.type.virtual.service.base.CPDefinitionVirtualSettingLocalServiceBaseImpl;
 import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
@@ -103,9 +100,8 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 		}
 
 		_validate(
-			fileEntryId, url, useSample, sampleFileEntryId, sampleURL,
-			termsOfUseRequired, termsOfUseContentMap,
-			termsOfUseJournalArticleResourcePrimKey);
+			useSample, sampleFileEntryId, sampleURL, termsOfUseRequired,
+			termsOfUseContentMap, termsOfUseJournalArticleResourcePrimKey);
 
 		long cpDefinitionVirtualSettingId = counterLocalService.increment();
 
@@ -325,9 +321,8 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 		}
 
 		_validate(
-			fileEntryId, url, useSample, sampleFileEntryId, sampleURL,
-			termsOfUseRequired, termsOfUseContentMap,
-			termsOfUseJournalArticleResourcePrimKey);
+			useSample, sampleFileEntryId, sampleURL, termsOfUseRequired,
+			termsOfUseContentMap, termsOfUseJournalArticleResourcePrimKey);
 
 		long cpDefinitionClassNameId = _classNameLocalService.getClassNameId(
 			CPDefinition.class);
@@ -412,34 +407,11 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 	}
 
 	private void _validate(
-			long fileEntryId, String url, boolean useSample,
-			long sampleFileEntryId, String sampleURL,
+			boolean useSample, long sampleFileEntryId, String sampleURL,
 			boolean termsOfUseRequired,
 			Map<Locale, String> termsOfUseContentMap,
 			long termsOfUseJournalArticleResourcePrimKey)
 		throws PortalException {
-
-		if (fileEntryId > 0) {
-			try {
-				_dlAppLocalService.getFileEntry(fileEntryId);
-			}
-			catch (NoSuchFileEntryException noSuchFileEntryException) {
-				throw new CPDefinitionVirtualSettingFileEntryIdException(
-					noSuchFileEntryException);
-			}
-		}
-		else if (Validator.isNull(url)) {
-			throw new CPDefinitionVirtualSettingException();
-		}
-		else {
-			try {
-				new URL(url);
-			}
-			catch (MalformedURLException malformedURLException) {
-				throw new CPDefinitionVirtualSettingURLException(
-					malformedURLException);
-			}
-		}
 
 		if (useSample) {
 			if (sampleFileEntryId > 0) {
