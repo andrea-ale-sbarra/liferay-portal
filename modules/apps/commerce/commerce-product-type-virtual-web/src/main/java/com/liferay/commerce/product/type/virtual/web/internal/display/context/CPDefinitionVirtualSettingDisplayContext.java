@@ -82,7 +82,7 @@ public class CPDefinitionVirtualSettingDisplayContext
 			return _cpDefinitionVirtualSetting;
 		}
 
-		if(_cpdVirtualSettingFileEntry != null) {
+		if (_cpdVirtualSettingFileEntry != null) {
 			return _cpdVirtualSettingFileEntry.getCPDefinitionVirtualSetting();
 		}
 

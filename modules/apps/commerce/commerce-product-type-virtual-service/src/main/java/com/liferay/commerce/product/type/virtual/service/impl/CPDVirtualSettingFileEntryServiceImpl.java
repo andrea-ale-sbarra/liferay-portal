@@ -59,42 +59,47 @@ public class CPDVirtualSettingFileEntryServiceImpl
 	}
 
 	@Override
-	public CPDVirtualSettingFileEntry updateCPDefinitionVirtualSetting(
-			long cpdVirtualSettingFileEntryId, long fileEntryId,
-			String url, String version)
-			throws PortalException {
+	public CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
+			long cpdVirtualSettingFileEntryId)
+		throws PortalException {
 
-		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry = cpdVirtualSettingFileEntryLocalService.getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry =
+			cpdVirtualSettingFileEntryLocalService.
+				getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
 
 		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-				cpdVirtualSettingFileEntry.getCPDefinitionVirtualSetting();
+			CPDefinitionVirtualSettingLocalServiceUtil.
+				getCPDefinitionVirtualSetting(
+					cpdVirtualSettingFileEntry.
+						getCPDefinitionVirtualSettingId());
 
 		_checkPermission(
-				cpDefinitionVirtualSetting.getClassName(),
-				cpDefinitionVirtualSetting.getClassPK(), ActionKeys.UPDATE);
+			cpDefinitionVirtualSetting.getClassName(),
+			cpDefinitionVirtualSetting.getClassPK(), ActionKeys.UPDATE);
 
-		return cpdVirtualSettingFileEntryLocalService.
-				updateCPDVirtualSettingFileEntry(
-						cpdVirtualSettingFileEntryId, fileEntryId,
-						url, version);
+		return cpdVirtualSettingFileEntry;
 	}
 
 	@Override
-	public CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
-			long cpdVirtualSettingFileEntryId)
-			throws PortalException {
+	public CPDVirtualSettingFileEntry updateCPDefinitionVirtualSetting(
+			long cpdVirtualSettingFileEntryId, long fileEntryId, String url,
+			String version)
+		throws PortalException {
 
-		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry = cpdVirtualSettingFileEntryLocalService.getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry =
+			cpdVirtualSettingFileEntryLocalService.
+				getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
 
 		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-				CPDefinitionVirtualSettingLocalServiceUtil.
-						getCPDefinitionVirtualSetting(cpdVirtualSettingFileEntry.getCPDefinitionVirtualSettingId());
+			cpdVirtualSettingFileEntry.getCPDefinitionVirtualSetting();
 
 		_checkPermission(
-				cpDefinitionVirtualSetting.getClassName(),
-				cpDefinitionVirtualSetting.getClassPK(), ActionKeys.UPDATE);
+			cpDefinitionVirtualSetting.getClassName(),
+			cpDefinitionVirtualSetting.getClassPK(), ActionKeys.UPDATE);
 
-		return cpdVirtualSettingFileEntry;
+		return cpdVirtualSettingFileEntryLocalService.
+			updateCPDVirtualSettingFileEntry(
+				cpdVirtualSettingFileEntryId, fileEntryId, url, version);
 	}
 
 	private void _checkCommerceCatalog(long cpDefinitionId, String actionId)

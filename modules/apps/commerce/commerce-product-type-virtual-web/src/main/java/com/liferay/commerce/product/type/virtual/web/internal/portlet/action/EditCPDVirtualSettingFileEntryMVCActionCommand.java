@@ -123,9 +123,11 @@ public class EditCPDVirtualSettingFileEntryMVCActionCommand
 				className, classPK);
 
 		if (cpdVirtualSettingFileEntryId > 0) {
-			return _cpdVirtualSettingFileEntryService.updateCPDefinitionVirtualSetting(
+			return _cpdVirtualSettingFileEntryService.
+				updateCPDefinitionVirtualSetting(
 					cpDefinitionVirtualSetting.getGroupId(),
-					cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
+					cpDefinitionVirtualSetting.
+						getCPDefinitionVirtualSettingId(),
 					fileEntryId, url, version);
 		}
 

@@ -15,7 +15,11 @@ import com.liferay.portal.kernel.exception.PortalException;
 public class CPDVirtualSettingFileEntryImpl
 	extends CPDVirtualSettingFileEntryBaseImpl {
 
-	public CPDefinitionVirtualSetting getCPDefinitionVirtualSetting() throws PortalException {
-		return CPDefinitionVirtualSettingLocalServiceUtil.getCPDefinitionVirtualSetting(getCPDefinitionVirtualSettingId());
+	public CPDefinitionVirtualSetting getCPDefinitionVirtualSetting()
+		throws PortalException {
+
+		return CPDefinitionVirtualSettingLocalServiceUtil.
+			getCPDefinitionVirtualSetting(getCPDefinitionVirtualSettingId());
 	}
+
 }

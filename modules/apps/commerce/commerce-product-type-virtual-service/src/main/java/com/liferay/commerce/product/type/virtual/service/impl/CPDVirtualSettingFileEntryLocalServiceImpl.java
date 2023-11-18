@@ -9,7 +9,6 @@ import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSe
 import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingFileEntryIdException;
 import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingURLException;
 import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
-import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
 import com.liferay.commerce.product.type.virtual.service.base.CPDVirtualSettingFileEntryLocalServiceBaseImpl;
 import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
@@ -75,13 +74,21 @@ public class CPDVirtualSettingFileEntryLocalServiceImpl
 	}
 
 	@Override
+	public List<CPDVirtualSettingFileEntry> getCPDVirtualSettingFileEntries(
+		long cpDefinitionVirtualSettingId) {
+
+		return cpdVirtualSettingFileEntryPersistence.
+			findByCPDefinitionVirtualSettingId(cpDefinitionVirtualSettingId);
+	}
+
+	@Override
 	public CPDVirtualSettingFileEntry updateCPDVirtualSettingFileEntry(
-			long cpdVirtualSettingFileEntryId,
-			long fileEntryId, String url, String version)
-			throws PortalException {
+			long cpdVirtualSettingFileEntryId, long fileEntryId, String url,
+			String version)
+		throws PortalException {
 
-
-		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry = cpdVirtualSettingFileEntryPersistence.findByPrimaryKey(
+		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry =
+			cpdVirtualSettingFileEntryPersistence.findByPrimaryKey(
 				cpdVirtualSettingFileEntryId);
 
 		if (Validator.isNotNull(url)) {
@@ -98,15 +105,7 @@ public class CPDVirtualSettingFileEntryLocalServiceImpl
 		cpdVirtualSettingFileEntry.setVersion(version);
 
 		return cpdVirtualSettingFileEntryPersistence.update(
-				cpdVirtualSettingFileEntry);
-	}
-
-	@Override
-	public List<CPDVirtualSettingFileEntry> getCPDVirtualSettingFileEntries(
-		long cpDefinitionVirtualSettingId) {
-
-		return cpdVirtualSettingFileEntryPersistence.
-			findByCPDefinitionVirtualSettingId(cpDefinitionVirtualSettingId);
+			cpdVirtualSettingFileEntry);
 	}
 
 	private void _validate(long fileEntryId, String url)
