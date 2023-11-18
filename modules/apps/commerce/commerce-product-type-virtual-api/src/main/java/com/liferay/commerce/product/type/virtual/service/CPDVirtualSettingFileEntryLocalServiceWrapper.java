@@ -481,6 +481,19 @@ public class CPDVirtualSettingFileEntryLocalServiceWrapper
 	}
 
 	@Override
+	public
+		com.liferay.commerce.product.type.virtual.model.
+			CPDVirtualSettingFileEntry updateCPDVirtualSettingFileEntry(
+					long cpdVirtualSettingFileEntryId, long fileEntryId,
+					String url, String version)
+				throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpdVirtualSettingFileEntryLocalService.
+			updateCPDVirtualSettingFileEntry(
+				cpdVirtualSettingFileEntryId, fileEntryId, url, version);
+	}
+
+	@Override
 	public BasePersistence<?> getBasePersistence() {
 		return _cpdVirtualSettingFileEntryLocalService.getBasePersistence();
 	}

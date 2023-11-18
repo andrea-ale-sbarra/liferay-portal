@@ -156,6 +156,13 @@ public class CPDVirtualSettingFileEntryWrapper
 		return model.getCompanyId();
 	}
 
+	@Override
+	public CPDefinitionVirtualSetting getCPDefinitionVirtualSetting()
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return model.getCPDefinitionVirtualSetting();
+	}
+
 	/**
 	 * Returns the cp definition virtual setting file entry ID of this cpd virtual setting file entry.
 	 *

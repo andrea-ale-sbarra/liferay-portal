@@ -335,4 +335,9 @@ public interface CPDVirtualSettingFileEntryLocalService
 	public CPDVirtualSettingFileEntry updateCPDVirtualSettingFileEntry(
 		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry);
 
+	public CPDVirtualSettingFileEntry updateCPDVirtualSettingFileEntry(
+			long cpdVirtualSettingFileEntryId, long fileEntryId, String url,
+			String version)
+		throws PortalException;
+
 }

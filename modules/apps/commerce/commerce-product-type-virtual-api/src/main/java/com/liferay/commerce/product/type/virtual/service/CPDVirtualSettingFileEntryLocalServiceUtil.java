@@ -394,6 +394,15 @@ public class CPDVirtualSettingFileEntryLocalServiceUtil {
 			cpdVirtualSettingFileEntry);
 	}
 
+	public static CPDVirtualSettingFileEntry updateCPDVirtualSettingFileEntry(
+			long cpdVirtualSettingFileEntryId, long fileEntryId, String url,
+			String version)
+		throws PortalException {
+
+		return getService().updateCPDVirtualSettingFileEntry(
+			cpdVirtualSettingFileEntryId, fileEntryId, url, version);
+	}
+
 	public static CPDVirtualSettingFileEntryLocalService getService() {
 		return _service;
 	}

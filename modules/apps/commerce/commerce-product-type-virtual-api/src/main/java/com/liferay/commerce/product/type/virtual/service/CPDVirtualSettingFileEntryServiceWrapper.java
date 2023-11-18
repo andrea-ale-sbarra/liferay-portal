@@ -40,6 +40,17 @@ public class CPDVirtualSettingFileEntryServiceWrapper
 			groupId, cpDefinitionVirtualSettingId, fileEntryId, url, version);
 	}
 
+	@Override
+	public
+		com.liferay.commerce.product.type.virtual.model.
+			CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
+					long cpdVirtualSettingFileEntryId)
+				throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpdVirtualSettingFileEntryService.getCPDVirtualSettingFileEntry(
+			cpdVirtualSettingFileEntryId);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -48,6 +59,19 @@ public class CPDVirtualSettingFileEntryServiceWrapper
 	@Override
 	public String getOSGiServiceIdentifier() {
 		return _cpdVirtualSettingFileEntryService.getOSGiServiceIdentifier();
+	}
+
+	@Override
+	public
+		com.liferay.commerce.product.type.virtual.model.
+			CPDVirtualSettingFileEntry updateCPDefinitionVirtualSetting(
+					long cpdVirtualSettingFileEntryId, long fileEntryId,
+					String url, String version)
+				throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpdVirtualSettingFileEntryService.
+			updateCPDefinitionVirtualSetting(
+				cpdVirtualSettingFileEntryId, fileEntryId, url, version);
 	}
 
 	@Override

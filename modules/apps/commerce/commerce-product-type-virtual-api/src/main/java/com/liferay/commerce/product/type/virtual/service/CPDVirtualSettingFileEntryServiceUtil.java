@@ -36,6 +36,14 @@ public class CPDVirtualSettingFileEntryServiceUtil {
 			groupId, cpDefinitionVirtualSettingId, fileEntryId, url, version);
 	}
 
+	public static CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
+			long cpdVirtualSettingFileEntryId)
+		throws PortalException {
+
+		return getService().getCPDVirtualSettingFileEntry(
+			cpdVirtualSettingFileEntryId);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -43,6 +51,15 @@ public class CPDVirtualSettingFileEntryServiceUtil {
 	 */
 	public static String getOSGiServiceIdentifier() {
 		return getService().getOSGiServiceIdentifier();
+	}
+
+	public static CPDVirtualSettingFileEntry updateCPDefinitionVirtualSetting(
+			long cpdVirtualSettingFileEntryId, long fileEntryId, String url,
+			String version)
+		throws PortalException {
+
+		return getService().updateCPDefinitionVirtualSetting(
+			cpdVirtualSettingFileEntryId, fileEntryId, url, version);
 	}
 
 	public static CPDVirtualSettingFileEntryService getService() {

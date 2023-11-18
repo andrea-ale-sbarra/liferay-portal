@@ -54,4 +54,7 @@ public interface CPDVirtualSettingFileEntry
 
 			};
 
+	public CPDefinitionVirtualSetting getCPDefinitionVirtualSetting()
+		throws com.liferay.portal.kernel.exception.PortalException;
+
 }

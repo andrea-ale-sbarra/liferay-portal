@@ -58,6 +58,45 @@ public class CPDVirtualSettingFileEntryServiceImpl
 				url, version);
 	}
 
+	@Override
+	public CPDVirtualSettingFileEntry updateCPDefinitionVirtualSetting(
+			long cpdVirtualSettingFileEntryId, long fileEntryId,
+			String url, String version)
+			throws PortalException {
+
+		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry = cpdVirtualSettingFileEntryLocalService.getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+
+		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
+				cpdVirtualSettingFileEntry.getCPDefinitionVirtualSetting();
+
+		_checkPermission(
+				cpDefinitionVirtualSetting.getClassName(),
+				cpDefinitionVirtualSetting.getClassPK(), ActionKeys.UPDATE);
+
+		return cpdVirtualSettingFileEntryLocalService.
+				updateCPDVirtualSettingFileEntry(
+						cpdVirtualSettingFileEntryId, fileEntryId,
+						url, version);
+	}
+
+	@Override
+	public CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
+			long cpdVirtualSettingFileEntryId)
+			throws PortalException {
+
+		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry = cpdVirtualSettingFileEntryLocalService.getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+
+		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
+				CPDefinitionVirtualSettingLocalServiceUtil.
+						getCPDefinitionVirtualSetting(cpdVirtualSettingFileEntry.getCPDefinitionVirtualSettingId());
+
+		_checkPermission(
+				cpDefinitionVirtualSetting.getClassName(),
+				cpDefinitionVirtualSetting.getClassPK(), ActionKeys.UPDATE);
+
+		return cpdVirtualSettingFileEntry;
+	}
+
 	private void _checkCommerceCatalog(long cpDefinitionId, String actionId)
 		throws PortalException {
 
