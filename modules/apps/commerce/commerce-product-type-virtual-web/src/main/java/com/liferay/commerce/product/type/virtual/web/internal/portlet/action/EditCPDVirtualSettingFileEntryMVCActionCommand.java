@@ -11,6 +11,7 @@ import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingException;
 import com.liferay.commerce.product.type.virtual.exception.CPDefinitionVirtualSettingFileEntryIdException;
 import com.liferay.commerce.product.type.virtual.exception.NoSuchCPDefinitionVirtualSettingException;
+import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
 import com.liferay.commerce.product.type.virtual.service.CPDVirtualSettingFileEntryService;
 import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingService;
@@ -53,7 +54,7 @@ public class EditCPDVirtualSettingFileEntryMVCActionCommand
 
 		try {
 			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
-				_updateCPDefinitionVirtualSetting(actionRequest);
+				_updateCPDVirtualSettingFileEntry(actionRequest);
 			}
 		}
 		catch (Exception exception) {
@@ -105,12 +106,12 @@ public class EditCPDVirtualSettingFileEntryMVCActionCommand
 		}
 	}
 
-	private CPDefinitionVirtualSetting _updateCPDefinitionVirtualSetting(
+	private CPDVirtualSettingFileEntry _updateCPDVirtualSettingFileEntry(
 			ActionRequest actionRequest)
 		throws Exception {
 
-		long cpDefinitionVirtualSettingId = ParamUtil.getLong(
-			actionRequest, "cpDefinitionVirtualSettingId");
+		long cpdVirtualSettingFileEntryId = ParamUtil.getLong(
+			actionRequest, "cpdVirtualSettingFileEntryId");
 		String className = ParamUtil.getString(actionRequest, "className");
 		long classPK = ParamUtil.getLong(actionRequest, "classPK");
 		long fileEntryId = ParamUtil.getLong(actionRequest, "fileEntryId");
@@ -121,12 +122,17 @@ public class EditCPDVirtualSettingFileEntryMVCActionCommand
 			_cpDefinitionVirtualSettingService.fetchCPDefinitionVirtualSetting(
 				className, classPK);
 
-		_cpdVirtualSettingFileEntryService.addCPDefinitionVirtualSetting(
+		if (cpdVirtualSettingFileEntryId > 0) {
+			return _cpdVirtualSettingFileEntryService.updateCPDefinitionVirtualSetting(
+					cpDefinitionVirtualSetting.getGroupId(),
+					cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
+					fileEntryId, url, version);
+		}
+
+		return _cpdVirtualSettingFileEntryService.addCPDefinitionVirtualSetting(
 			cpDefinitionVirtualSetting.getGroupId(),
 			cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
 			fileEntryId, url, version);
-
-		return null;
 	}
 
 	@Reference

@@ -11,12 +11,17 @@ import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSettin
 import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingService;
 import com.liferay.commerce.product.type.virtual.web.internal.constants.CPDefinitionVirtualSettingFDSNames;
 import com.liferay.commerce.product.type.virtual.web.internal.model.VirtualSettingFile;
+import com.liferay.document.library.kernel.service.DLAppService;
+import com.liferay.document.library.util.DLURLHelperUtil;
 import com.liferay.frontend.data.set.provider.FDSDataProvider;
 import com.liferay.frontend.data.set.provider.search.FDSKeywords;
 import com.liferay.frontend.data.set.provider.search.FDSPagination;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +67,7 @@ public class CPDefinitionVirtualSettingFDSDataProvider
 					new VirtualSettingFile(
 						cpdVirtualSettingFileEntry.
 							getCPDefinitionVirtualSettingFileEntryId(),
-						cpdVirtualSettingFileEntry.getFileEntryId(),
-						cpdVirtualSettingFileEntry.getUrl(),
+						_getURL(cpdVirtualSettingFileEntry),
 						cpdVirtualSettingFileEntry.getVersion()));
 			}
 		}
@@ -93,8 +97,27 @@ public class CPDefinitionVirtualSettingFDSDataProvider
 		return 0;
 	}
 
+	private String _getURL(
+			CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry)
+		throws PortalException {
+
+		if (Validator.isNull(cpdVirtualSettingFileEntry.getUrl())) {
+			FileEntry fileEntry = _dlAppService.getFileEntry(
+				cpdVirtualSettingFileEntry.getFileEntryId());
+
+			return DLURLHelperUtil.getDownloadURL(
+				fileEntry, fileEntry.getLatestFileVersion(), null,
+				StringPool.BLANK, true, true);
+		}
+
+		return cpdVirtualSettingFileEntry.getUrl();
+	}
+
 	@Reference
 	private CPDefinitionVirtualSettingService
 		_cpDefinitionVirtualSettingService;
+
+	@Reference
+	private DLAppService _dlAppService;
 
 }

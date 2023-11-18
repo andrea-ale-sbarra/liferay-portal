@@ -5,9 +5,17 @@
 
 package com.liferay.commerce.product.type.virtual.model.impl;
 
+import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
+import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+
 /**
  * @author Marco Leo
  */
 public class CPDVirtualSettingFileEntryImpl
 	extends CPDVirtualSettingFileEntryBaseImpl {
+
+	public CPDefinitionVirtualSetting getCPDefinitionVirtualSetting() throws PortalException {
+		return CPDefinitionVirtualSettingLocalServiceUtil.getCPDefinitionVirtualSetting(getCPDefinitionVirtualSettingId());
+	}
 }

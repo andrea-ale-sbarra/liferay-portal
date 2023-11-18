@@ -10,9 +10,9 @@
 <%
 CPDefinitionVirtualSettingDisplayContext cpDefinitionVirtualSettingDisplayContext = (CPDefinitionVirtualSettingDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 
-CPDefinitionVirtualSetting cpDefinitionVirtualSetting = cpDefinitionVirtualSettingDisplayContext.getCPDefinitionVirtualSetting();
-
 CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry = cpDefinitionVirtualSettingDisplayContext.getCPDVirtualSettingFileEntry();
+
+CPDefinitionVirtualSetting cpDefinitionVirtualSetting = cpDefinitionVirtualSettingDisplayContext.getCPDefinitionVirtualSetting();
 
 long fileEntryId = 0;
 
@@ -34,6 +34,7 @@ FileEntry fileEntry = cpDefinitionVirtualSettingDisplayContext.getFileEntry(file
 		<aui:input name="className" type="hidden" value="<%= cpDefinitionVirtualSetting.getClassName() %>" />
 		<aui:input name="classPK" type="hidden" value="<%= cpDefinitionVirtualSetting.getClassPK() %>" />
 		<aui:input name="cpDefinitionVirtualSettingId" type="hidden" value="<%= cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId() %>" />
+		<aui:input name="cpdVirtualSettingFileEntryId" type="hidden" value="<%= cpdVirtualSettingFileEntry.getCPDefinitionVirtualSettingFileEntryId() %>" />
 		<aui:input name="fileEntryId" type="hidden" value="<%= fileEntryId %>" />
 
 		<aui:model-context bean="<%= cpdVirtualSettingFileEntry %>" model="<%= CPDVirtualSettingFileEntry.class %>" />

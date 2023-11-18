@@ -7,7 +7,9 @@ package com.liferay.commerce.product.type.virtual.web.internal.portlet.action.he
 
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
+import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
+import com.liferay.commerce.product.type.virtual.service.CPDVirtualSettingFileEntryService;
 import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingService;
 import com.liferay.commerce.product.type.virtual.web.internal.constants.CPDefinitionVirtualSettingWebKeys;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -62,6 +64,40 @@ public class CPDefinitionVirtualSettingActionHelper {
 
 		return cpDefinitionVirtualSetting;
 	}
+
+	public CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
+			RenderRequest renderRequest)
+		throws PortalException {
+
+		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry =
+			(CPDVirtualSettingFileEntry)renderRequest.getAttribute(
+				CPDefinitionVirtualSettingWebKeys.
+					CPD_VIRTUAL_SETTING_FILE_ENTRY);
+
+		if (cpdVirtualSettingFileEntry != null) {
+			return cpdVirtualSettingFileEntry;
+		}
+
+		long cpdVirtualSettingFileEntryId = ParamUtil.getLong(
+			renderRequest, "cpdVirtualSettingFileEntryId");
+
+		cpdVirtualSettingFileEntry =
+			_cpdefinitionVirtualSettingFileEntryService.
+				getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+
+		if (cpdVirtualSettingFileEntry != null) {
+			renderRequest.setAttribute(
+				CPDefinitionVirtualSettingWebKeys.
+					CPD_VIRTUAL_SETTING_FILE_ENTRY,
+				cpdVirtualSettingFileEntry);
+		}
+
+		return cpdVirtualSettingFileEntry;
+	}
+
+	@Reference
+	private CPDVirtualSettingFileEntryService
+		_cpdefinitionVirtualSettingFileEntryService;
 
 	@Reference
 	private CPDefinitionVirtualSettingService

@@ -287,13 +287,6 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 			cpDefinitionVirtualSettingPersistence.findByPrimaryKey(
 				cpDefinitionVirtualSettingId);
 
-		if (Validator.isNotNull(url)) {
-			fileEntryId = 0;
-		}
-		else {
-			url = null;
-		}
-
 		if (useSample) {
 			if (Validator.isNotNull(sampleURL)) {
 				sampleFileEntryId = 0;

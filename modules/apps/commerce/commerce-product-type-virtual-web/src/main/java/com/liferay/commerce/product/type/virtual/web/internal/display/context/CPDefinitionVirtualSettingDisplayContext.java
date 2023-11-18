@@ -82,6 +82,10 @@ public class CPDefinitionVirtualSettingDisplayContext
 			return _cpDefinitionVirtualSetting;
 		}
 
+		if(_cpdVirtualSettingFileEntry != null) {
+			return _cpdVirtualSettingFileEntry.getCPDefinitionVirtualSetting();
+		}
+
 		_cpDefinitionVirtualSetting =
 			_cpDefinitionVirtualSettingActionHelper.
 				getCPDefinitionVirtualSetting(
@@ -90,7 +94,18 @@ public class CPDefinitionVirtualSettingDisplayContext
 		return _cpDefinitionVirtualSetting;
 	}
 
-	public CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry() {
+	public CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry()
+		throws PortalException {
+
+		if (_cpdVirtualSettingFileEntry != null) {
+			return _cpdVirtualSettingFileEntry;
+		}
+
+		_cpdVirtualSettingFileEntry =
+			_cpDefinitionVirtualSettingActionHelper.
+				getCPDVirtualSettingFileEntry(
+					cpRequestHelper.getRenderRequest());
+
 		return _cpdVirtualSettingFileEntry;
 	}
 

@@ -11,21 +11,16 @@ package com.liferay.commerce.product.type.virtual.web.internal.model;
 public class VirtualSettingFile {
 
 	public VirtualSettingFile(
-		long cpDefinitionVirtualSettingFileId, long fileEntryId, String url,
-		String version) {
+		long cpdVirtualSettingFileEntryId, String url, String version) {
 
-		_cpDefinitionVirtualSettingFileId = cpDefinitionVirtualSettingFileId;
-		_fileEntryId = fileEntryId;
 		_url = url;
 		_version = version;
+
+		_id = cpdVirtualSettingFileEntryId;
 	}
 
-	public long getCPDefinitionVirtualSettingFileId() {
-		return _cpDefinitionVirtualSettingFileId;
-	}
-
-	public long getFileEntryId() {
-		return _fileEntryId;
+	public long getId() {
+		return _id;
 	}
 
 	public String getURL() {
@@ -36,8 +31,7 @@ public class VirtualSettingFile {
 		return _version;
 	}
 
-	private final long _cpDefinitionVirtualSettingFileId;
-	private final long _fileEntryId;
+	private final long _id;
 	private final String _url;
 	private final String _version;
 

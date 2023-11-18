@@ -32,10 +32,9 @@ public class CPDefinitionVirtualSettingTableFDSView extends BaseTableFDSView {
 			_fdsTableSchemaBuilderFactory.create();
 
 		return fdsTableSchemaBuilder.add(
-			"cpDefinitionVirtualSettingFileId",
-			"cpDefinitionVirtualSettingFileId"
-		).add(
-			"fileEntryId", "fileEntryId"
+			"id", "id",
+			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
+				"actionLink")
 		).add(
 			"url", "url"
 		).add(
