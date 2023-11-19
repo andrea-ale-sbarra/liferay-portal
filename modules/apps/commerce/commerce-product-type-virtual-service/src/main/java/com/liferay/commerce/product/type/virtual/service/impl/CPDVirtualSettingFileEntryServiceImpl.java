@@ -59,6 +59,29 @@ public class CPDVirtualSettingFileEntryServiceImpl
 	}
 
 	@Override
+	public CPDVirtualSettingFileEntry deleteCPDVirtualSettingFileEntry(
+			long cpdVirtualSettingFileEntryId)
+		throws PortalException {
+
+		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry =
+			cpdVirtualSettingFileEntryLocalService.
+				getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+
+		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
+			CPDefinitionVirtualSettingLocalServiceUtil.
+				getCPDefinitionVirtualSetting(
+					cpdVirtualSettingFileEntry.
+						getCPDefinitionVirtualSettingId());
+
+		_checkPermission(
+			cpDefinitionVirtualSetting.getClassName(),
+			cpDefinitionVirtualSetting.getClassPK(), ActionKeys.UPDATE);
+
+		return cpdVirtualSettingFileEntryLocalService.
+			deleteCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+	}
+
+	@Override
 	public CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
 			long cpdVirtualSettingFileEntryId)
 		throws PortalException {

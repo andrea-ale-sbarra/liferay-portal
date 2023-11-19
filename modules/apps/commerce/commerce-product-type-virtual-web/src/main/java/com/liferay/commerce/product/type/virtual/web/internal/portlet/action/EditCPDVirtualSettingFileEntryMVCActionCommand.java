@@ -45,6 +45,17 @@ import org.osgi.service.component.annotations.Reference;
 public class EditCPDVirtualSettingFileEntryMVCActionCommand
 	extends BaseMVCActionCommand {
 
+	protected void _deleteCPDVirtualSettingFileEntry(
+			ActionRequest actionRequest)
+		throws Exception {
+
+		long cpdVirtualSettingFileEntryId = ParamUtil.getLong(
+			actionRequest, "cpdVirtualSettingFileEntryId");
+
+		_cpdVirtualSettingFileEntryService.deleteCPDVirtualSettingFileEntry(
+			cpdVirtualSettingFileEntryId);
+	}
+
 	@Override
 	protected void doProcessAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
@@ -55,6 +66,9 @@ public class EditCPDVirtualSettingFileEntryMVCActionCommand
 		try {
 			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
 				_updateCPDVirtualSettingFileEntry(actionRequest);
+			}
+			else if (cmd.equals(Constants.DELETE)) {
+				_deleteCPDVirtualSettingFileEntry(actionRequest);
 			}
 		}
 		catch (Exception exception) {
@@ -125,7 +139,6 @@ public class EditCPDVirtualSettingFileEntryMVCActionCommand
 		if (cpdVirtualSettingFileEntryId > 0) {
 			return _cpdVirtualSettingFileEntryService.
 				updateCPDefinitionVirtualSetting(
-					cpDefinitionVirtualSetting.getGroupId(),
 					cpDefinitionVirtualSetting.
 						getCPDefinitionVirtualSettingId(),
 					fileEntryId, url, version);
