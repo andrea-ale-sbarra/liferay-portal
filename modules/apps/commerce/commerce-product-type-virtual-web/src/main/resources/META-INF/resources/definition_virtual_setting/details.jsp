@@ -7,25 +7,4 @@
  */
 --%>
 
-<%
-CPDefinitionVirtualSettingDisplayContext cpDefinitionVirtualSettingDisplayContext = (CPDefinitionVirtualSettingDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
-
-CPDefinitionVirtualSetting cpDefinitionVirtualSetting = cpDefinitionVirtualSettingDisplayContext.getCPDefinitionVirtualSetting();
-%>
-
-<c:if test="<%= cpDefinitionVirtualSetting != null %>">
-
-	<%
-	long cpDefinitionId = -1;
-
-	if (cpDefinitionVirtualSetting != null) {
-		cpDefinitionId = cpDefinitionVirtualSetting.getClassPK();
-	}
-
-	Map<String, String> contextParams = HashMapBuilder.<String, String>put(
-		"cpDefinitionId", String.valueOf(cpDefinitionId)
-	).build();
-	%>
-
 	<%@ include file="/details.jspf" %>
-</c:if>

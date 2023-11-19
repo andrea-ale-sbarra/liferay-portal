@@ -83,7 +83,7 @@ public class CPDefinitionVirtualSettingActionHelper {
 
 		cpdVirtualSettingFileEntry =
 			_cpdefinitionVirtualSettingFileEntryService.
-				getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+				fetchCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
 
 		if (cpdVirtualSettingFileEntry != null) {
 			renderRequest.setAttribute(

@@ -49,12 +49,14 @@ public class CPDefinitionVirtualSettingFDSDataProvider
 
 		List<VirtualSettingFile> virtualSettingFiles = new ArrayList<>();
 
-		long cpDefinitionId = ParamUtil.getLong(
-			httpServletRequest, "cpDefinitionId");
+		String className = ParamUtil.getString(
+				httpServletRequest, "className");
+		long classPK = ParamUtil.getLong(
+			httpServletRequest, "classPK");
 
 		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
 			_cpDefinitionVirtualSettingService.fetchCPDefinitionVirtualSetting(
-				CPDefinition.class.getName(), cpDefinitionId);
+				className, classPK);
 
 		if (cpDefinitionVirtualSetting != null) {
 			List<CPDVirtualSettingFileEntry> cpdVirtualSettingFileEntries =
@@ -80,12 +82,15 @@ public class CPDefinitionVirtualSettingFDSDataProvider
 			FDSKeywords fdsKeywords, HttpServletRequest httpServletRequest)
 		throws PortalException {
 
-		long cpDefinitionId = ParamUtil.getLong(
-			httpServletRequest, "cpDefinitionId");
+		String className = ParamUtil.getString(
+				httpServletRequest, "className");
+		long classPK = ParamUtil.getLong(
+				httpServletRequest, "classPK");
 
 		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-			_cpDefinitionVirtualSettingService.fetchCPDefinitionVirtualSetting(
-				CPDefinition.class.getName(), cpDefinitionId);
+				_cpDefinitionVirtualSettingService.fetchCPDefinitionVirtualSetting(
+						className, classPK);
+
 
 		if (cpDefinitionVirtualSetting != null) {
 			List<CPDVirtualSettingFileEntry> cpdVirtualSettingFileEntries =
