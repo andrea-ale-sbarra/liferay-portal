@@ -44,6 +44,14 @@ public class CPDVirtualSettingFileEntryServiceUtil {
 			cpdVirtualSettingFileEntryId);
 	}
 
+	public static CPDVirtualSettingFileEntry fetchCPDVirtualSettingFileEntry(
+			long cpdVirtualSettingFileEntryId)
+		throws PortalException {
+
+		return getService().fetchCPDVirtualSettingFileEntry(
+			cpdVirtualSettingFileEntryId);
+	}
+
 	public static CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
 			long cpdVirtualSettingFileEntryId)
 		throws PortalException {

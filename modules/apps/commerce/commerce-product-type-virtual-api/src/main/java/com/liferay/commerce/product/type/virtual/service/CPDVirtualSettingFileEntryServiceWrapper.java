@@ -54,6 +54,17 @@ public class CPDVirtualSettingFileEntryServiceWrapper
 	@Override
 	public
 		com.liferay.commerce.product.type.virtual.model.
+			CPDVirtualSettingFileEntry fetchCPDVirtualSettingFileEntry(
+					long cpdVirtualSettingFileEntryId)
+				throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpdVirtualSettingFileEntryService.
+			fetchCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+	}
+
+	@Override
+	public
+		com.liferay.commerce.product.type.virtual.model.
 			CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
 					long cpdVirtualSettingFileEntryId)
 				throws com.liferay.portal.kernel.exception.PortalException {

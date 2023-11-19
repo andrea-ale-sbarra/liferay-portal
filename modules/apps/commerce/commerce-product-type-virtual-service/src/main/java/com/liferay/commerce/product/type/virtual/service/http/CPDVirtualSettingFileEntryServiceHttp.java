@@ -180,6 +180,51 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 
 	public static
 		com.liferay.commerce.product.type.virtual.model.
+			CPDVirtualSettingFileEntry fetchCPDVirtualSettingFileEntry(
+					HttpPrincipal httpPrincipal,
+					long cpdVirtualSettingFileEntryId)
+				throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CPDVirtualSettingFileEntryServiceUtil.class,
+				"fetchCPDVirtualSettingFileEntry",
+				_fetchCPDVirtualSettingFileEntryParameterTypes3);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, cpdVirtualSettingFileEntryId);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (com.liferay.commerce.product.type.virtual.model.
+				CPDVirtualSettingFileEntry)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static
+		com.liferay.commerce.product.type.virtual.model.
 			CPDVirtualSettingFileEntry updateCPDefinitionVirtualSetting(
 					HttpPrincipal httpPrincipal,
 					long cpdVirtualSettingFileEntryId, long fileEntryId,
@@ -190,7 +235,7 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPDVirtualSettingFileEntryServiceUtil.class,
 				"updateCPDefinitionVirtualSetting",
-				_updateCPDefinitionVirtualSettingParameterTypes3);
+				_updateCPDefinitionVirtualSettingParameterTypes4);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cpdVirtualSettingFileEntryId, fileEntryId, url,
@@ -241,7 +286,11 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 			long.class
 		};
 	private static final Class<?>[]
-		_updateCPDefinitionVirtualSettingParameterTypes3 = new Class[] {
+		_fetchCPDVirtualSettingFileEntryParameterTypes3 = new Class[] {
+			long.class
+		};
+	private static final Class<?>[]
+		_updateCPDefinitionVirtualSettingParameterTypes4 = new Class[] {
 			long.class, long.class, String.class, String.class
 		};
 

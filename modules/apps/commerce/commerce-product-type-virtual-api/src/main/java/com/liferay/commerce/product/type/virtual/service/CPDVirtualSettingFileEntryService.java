@@ -50,6 +50,11 @@ public interface CPDVirtualSettingFileEntryService extends BaseService {
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public CPDVirtualSettingFileEntry fetchCPDVirtualSettingFileEntry(
+			long cpdVirtualSettingFileEntryId)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
 			long cpdVirtualSettingFileEntryId)
 		throws PortalException;
