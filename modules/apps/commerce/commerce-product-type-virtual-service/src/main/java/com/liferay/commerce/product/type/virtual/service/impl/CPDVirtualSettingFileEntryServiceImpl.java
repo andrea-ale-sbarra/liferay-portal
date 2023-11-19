@@ -82,6 +82,30 @@ public class CPDVirtualSettingFileEntryServiceImpl
 	}
 
 	@Override
+	public CPDVirtualSettingFileEntry fetchCPDVirtualSettingFileEntry(
+			long cpdVirtualSettingFileEntryId)
+		throws PortalException {
+
+		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry =
+			cpdVirtualSettingFileEntryLocalService.
+				fetchCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+
+		if (cpdVirtualSettingFileEntry != null) {
+			CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
+				CPDefinitionVirtualSettingLocalServiceUtil.
+					getCPDefinitionVirtualSetting(
+						cpdVirtualSettingFileEntry.
+							getCPDefinitionVirtualSettingId());
+
+			_checkPermission(
+				cpDefinitionVirtualSetting.getClassName(),
+				cpDefinitionVirtualSetting.getClassPK(), ActionKeys.VIEW);
+		}
+
+		return cpdVirtualSettingFileEntry;
+	}
+
+	@Override
 	public CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
 			long cpdVirtualSettingFileEntryId)
 		throws PortalException {
@@ -99,31 +123,6 @@ public class CPDVirtualSettingFileEntryServiceImpl
 		_checkPermission(
 			cpDefinitionVirtualSetting.getClassName(),
 			cpDefinitionVirtualSetting.getClassPK(), ActionKeys.VIEW);
-
-		return cpdVirtualSettingFileEntry;
-	}
-
-	@Override
-	public CPDVirtualSettingFileEntry fetchCPDVirtualSettingFileEntry(
-			long cpdVirtualSettingFileEntryId)
-			throws PortalException {
-
-		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry =
-				cpdVirtualSettingFileEntryLocalService.
-						fetchCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
-
-		if (cpdVirtualSettingFileEntry != null) {
-
-		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-				CPDefinitionVirtualSettingLocalServiceUtil.
-						getCPDefinitionVirtualSetting(
-								cpdVirtualSettingFileEntry.
-										getCPDefinitionVirtualSettingId());
-
-		_checkPermission(
-				cpDefinitionVirtualSetting.getClassName(),
-				cpDefinitionVirtualSetting.getClassPK(), ActionKeys.VIEW);
-		}
 
 		return cpdVirtualSettingFileEntry;
 	}

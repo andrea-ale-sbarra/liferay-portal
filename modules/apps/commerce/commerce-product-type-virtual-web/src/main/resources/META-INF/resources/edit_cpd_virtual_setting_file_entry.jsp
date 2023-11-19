@@ -16,6 +16,7 @@ CPDefinitionVirtualSetting cpDefinitionVirtualSetting = cpDefinitionVirtualSetti
 
 long fileEntryId = 0;
 long cpdVirtualSettingFileEntryId = 0;
+
 if (cpdVirtualSettingFileEntry != null) {
 	fileEntryId = cpdVirtualSettingFileEntry.getFileEntryId();
 	cpdVirtualSettingFileEntryId = cpdVirtualSettingFileEntry.getCPDefinitionVirtualSettingFileEntryId();

@@ -37,35 +37,33 @@ boolean override = BeanParamUtil.getBoolean(cpDefinitionVirtualSetting, request,
 
 			<div class="<%= !override ? "hide" : "" %>" id="<portlet:namespace />cpDefinitionVirtualSettingContainer">
 				<aui:fieldset collapsible="<%= true %>" label="details">
-
 					<c:if test="<%= cpDefinitionVirtualSetting != null %>">
 
 						<%
-							String className = StringPool.BLANK;
-							long classPK = -1;
+						String className = StringPool.BLANK;
+						long classPK = -1;
 
-							if (cpDefinitionVirtualSetting != null) {
-								className = cpDefinitionVirtualSetting.getClassName();
-								classPK = cpDefinitionVirtualSetting.getClassPK();
-							}
+						if (cpDefinitionVirtualSetting != null) {
+							className = cpDefinitionVirtualSetting.getClassName();
+							classPK = cpDefinitionVirtualSetting.getClassPK();
+						}
 
-							Map<String, String> contextParams = HashMapBuilder.<String, String>put(
-									"className", className
-							).put(
-									"classPK", String.valueOf(classPK)
-							).build();
+						Map<String, String> contextParams = HashMapBuilder.<String, String>put(
+							"className", className
+						).put(
+							"classPK", String.valueOf(classPK)
+						).build();
 						%>
 
 						<frontend-data-set:classic-display
-								contextParams="<%= contextParams %>"
-								creationMenu="<%= cpDefinitionVirtualSettingDisplayContext.getCreationMenu() %>"
-								dataProviderKey="<%= CPDefinitionVirtualSettingFDSNames.VIRTUAL_SETTING_FILES %>"
-								formName="fm"
-								id="<%= CPDefinitionVirtualSettingFDSNames.VIRTUAL_SETTING_FILES %>"
-								itemsPerPage="<%= 10 %>"
-								selectedItemsKey="cpDefinitionVirtualSettingFileId"
+							contextParams="<%= contextParams %>"
+							creationMenu="<%= cpDefinitionVirtualSettingDisplayContext.getCreationMenu() %>"
+							dataProviderKey="<%= CPDefinitionVirtualSettingFDSNames.VIRTUAL_SETTING_FILES %>"
+							formName="fm"
+							id="<%= CPDefinitionVirtualSettingFDSNames.VIRTUAL_SETTING_FILES %>"
+							itemsPerPage="<%= 10 %>"
+							selectedItemsKey="cpDefinitionVirtualSettingFileId"
 						/>
-
 					</c:if>
 				</aui:fieldset>
 

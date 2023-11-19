@@ -7,4 +7,4 @@
  */
 --%>
 
-	<%@ include file="/details.jspf" %>
+<%@ include file="/details.jspf" %>

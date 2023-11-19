@@ -6,37 +6,36 @@
 --%>
 
 <%
-	CPDefinitionVirtualSettingDisplayContext cpDefinitionVirtualSettingDisplayContext = (CPDefinitionVirtualSettingDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
+CPDefinitionVirtualSettingDisplayContext cpDefinitionVirtualSettingDisplayContext = (CPDefinitionVirtualSettingDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 
-	CPDefinitionVirtualSetting cpDefinitionVirtualSetting = cpDefinitionVirtualSettingDisplayContext.getCPDefinitionVirtualSetting();
+CPDefinitionVirtualSetting cpDefinitionVirtualSetting = cpDefinitionVirtualSettingDisplayContext.getCPDefinitionVirtualSetting();
 %>
 
 <c:if test="<%= cpDefinitionVirtualSetting != null %>">
 
 	<%
-		String className = StringPool.BLANK;
-		long classPK = -1;
+	String className = StringPool.BLANK;
+	long classPK = -1;
 
-		if (cpDefinitionVirtualSetting != null) {
-			className = cpDefinitionVirtualSetting.getClassName();
-			classPK = cpDefinitionVirtualSetting.getClassPK();
-		}
+	if (cpDefinitionVirtualSetting != null) {
+		className = cpDefinitionVirtualSetting.getClassName();
+		classPK = cpDefinitionVirtualSetting.getClassPK();
+	}
 
-		Map<String, String> contextParams = HashMapBuilder.<String, String>put(
-				"className", className
-		).put(
-				"classPK", String.valueOf(classPK)
-		).build();
+	Map<String, String> contextParams = HashMapBuilder.<String, String>put(
+		"className", className
+	).put(
+		"classPK", String.valueOf(classPK)
+	).build();
 	%>
 
-<frontend-data-set:classic-display
-	contextParams="<%= contextParams %>"
-	creationMenu="<%= cpDefinitionVirtualSettingDisplayContext.getCreationMenu() %>"
-	dataProviderKey="<%= CPDefinitionVirtualSettingFDSNames.VIRTUAL_SETTING_FILES %>"
-	formName="fm"
-	id="<%= CPDefinitionVirtualSettingFDSNames.VIRTUAL_SETTING_FILES %>"
-	itemsPerPage="<%= 10 %>"
-	selectedItemsKey="cpDefinitionVirtualSettingFileId"
-/>
-
+	<frontend-data-set:classic-display
+		contextParams="<%= contextParams %>"
+		creationMenu="<%= cpDefinitionVirtualSettingDisplayContext.getCreationMenu() %>"
+		dataProviderKey="<%= CPDefinitionVirtualSettingFDSNames.VIRTUAL_SETTING_FILES %>"
+		formName="fm"
+		id="<%= CPDefinitionVirtualSettingFDSNames.VIRTUAL_SETTING_FILES %>"
+		itemsPerPage="<%= 10 %>"
+		selectedItemsKey="cpDefinitionVirtualSettingFileId"
+	/>
 </c:if>

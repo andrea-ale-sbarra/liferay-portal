@@ -132,16 +132,16 @@ public class EditCPDVirtualSettingFileEntryMVCActionCommand
 
 		if (cpdVirtualSettingFileEntryId > 0) {
 			return _cpdVirtualSettingFileEntryService.
-				updateCPDefinitionVirtualSetting(cpdVirtualSettingFileEntryId,
-					fileEntryId, url, version);
+				updateCPDefinitionVirtualSetting(
+					cpdVirtualSettingFileEntryId, fileEntryId, url, version);
 		}
 
 		String className = ParamUtil.getString(actionRequest, "className");
 		long classPK = ParamUtil.getLong(actionRequest, "classPK");
 
 		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-				_cpDefinitionVirtualSettingService.fetchCPDefinitionVirtualSetting(
-						className, classPK);
+			_cpDefinitionVirtualSettingService.fetchCPDefinitionVirtualSetting(
+				className, classPK);
 
 		return _cpdVirtualSettingFileEntryService.addCPDefinitionVirtualSetting(
 			cpDefinitionVirtualSetting.getGroupId(),

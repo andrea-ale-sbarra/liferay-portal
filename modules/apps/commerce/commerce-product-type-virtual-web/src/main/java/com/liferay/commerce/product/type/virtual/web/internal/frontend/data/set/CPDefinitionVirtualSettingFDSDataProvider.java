@@ -5,7 +5,6 @@
 
 package com.liferay.commerce.product.type.virtual.web.internal.frontend.data.set;
 
-import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
 import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingService;
@@ -49,10 +48,8 @@ public class CPDefinitionVirtualSettingFDSDataProvider
 
 		List<VirtualSettingFile> virtualSettingFiles = new ArrayList<>();
 
-		String className = ParamUtil.getString(
-				httpServletRequest, "className");
-		long classPK = ParamUtil.getLong(
-			httpServletRequest, "classPK");
+		String className = ParamUtil.getString(httpServletRequest, "className");
+		long classPK = ParamUtil.getLong(httpServletRequest, "classPK");
 
 		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
 			_cpDefinitionVirtualSettingService.fetchCPDefinitionVirtualSetting(
@@ -82,15 +79,12 @@ public class CPDefinitionVirtualSettingFDSDataProvider
 			FDSKeywords fdsKeywords, HttpServletRequest httpServletRequest)
 		throws PortalException {
 
-		String className = ParamUtil.getString(
-				httpServletRequest, "className");
-		long classPK = ParamUtil.getLong(
-				httpServletRequest, "classPK");
+		String className = ParamUtil.getString(httpServletRequest, "className");
+		long classPK = ParamUtil.getLong(httpServletRequest, "classPK");
 
 		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-				_cpDefinitionVirtualSettingService.fetchCPDefinitionVirtualSetting(
-						className, classPK);
-
+			_cpDefinitionVirtualSettingService.fetchCPDefinitionVirtualSetting(
+				className, classPK);
 
 		if (cpDefinitionVirtualSetting != null) {
 			List<CPDVirtualSettingFileEntry> cpdVirtualSettingFileEntries =
