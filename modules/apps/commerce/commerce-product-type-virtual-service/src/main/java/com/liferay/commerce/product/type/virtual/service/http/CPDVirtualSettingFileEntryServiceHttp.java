@@ -90,21 +90,19 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 
 	public static
 		com.liferay.commerce.product.type.virtual.model.
-			CPDVirtualSettingFileEntry updateCPDefinitionVirtualSetting(
+			CPDVirtualSettingFileEntry deleteCPDVirtualSettingFileEntry(
 					HttpPrincipal httpPrincipal,
-					long cpdVirtualSettingFileEntryId, long fileEntryId,
-					String url, String version)
+					long cpdVirtualSettingFileEntryId)
 				throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
 			MethodKey methodKey = new MethodKey(
 				CPDVirtualSettingFileEntryServiceUtil.class,
-				"updateCPDefinitionVirtualSetting",
-				_updateCPDefinitionVirtualSettingParameterTypes1);
+				"deleteCPDVirtualSettingFileEntry",
+				_deleteCPDVirtualSettingFileEntryParameterTypes1);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, cpdVirtualSettingFileEntryId, fileEntryId, url,
-				version);
+				methodKey, cpdVirtualSettingFileEntryId);
 
 			Object returnObj = null;
 
@@ -180,6 +178,53 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 		}
 	}
 
+	public static
+		com.liferay.commerce.product.type.virtual.model.
+			CPDVirtualSettingFileEntry updateCPDefinitionVirtualSetting(
+					HttpPrincipal httpPrincipal,
+					long cpdVirtualSettingFileEntryId, long fileEntryId,
+					String url, String version)
+				throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CPDVirtualSettingFileEntryServiceUtil.class,
+				"updateCPDefinitionVirtualSetting",
+				_updateCPDefinitionVirtualSettingParameterTypes3);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, cpdVirtualSettingFileEntryId, fileEntryId, url,
+				version);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (com.liferay.commerce.product.type.virtual.model.
+				CPDVirtualSettingFileEntry)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(
 		CPDVirtualSettingFileEntryServiceHttp.class);
 
@@ -188,12 +233,16 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 			long.class, long.class, long.class, String.class, String.class
 		};
 	private static final Class<?>[]
-		_updateCPDefinitionVirtualSettingParameterTypes1 = new Class[] {
-			long.class, long.class, String.class, String.class
+		_deleteCPDVirtualSettingFileEntryParameterTypes1 = new Class[] {
+			long.class
 		};
 	private static final Class<?>[]
 		_getCPDVirtualSettingFileEntryParameterTypes2 = new Class[] {
 			long.class
+		};
+	private static final Class<?>[]
+		_updateCPDefinitionVirtualSettingParameterTypes3 = new Class[] {
+			long.class, long.class, String.class, String.class
 		};
 
 }

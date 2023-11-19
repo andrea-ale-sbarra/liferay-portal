@@ -45,6 +45,10 @@ public interface CPDVirtualSettingFileEntryService extends BaseService {
 			String url, String version)
 		throws PortalException;
 
+	public CPDVirtualSettingFileEntry deleteCPDVirtualSettingFileEntry(
+			long cpdVirtualSettingFileEntryId)
+		throws PortalException;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
 			long cpdVirtualSettingFileEntryId)

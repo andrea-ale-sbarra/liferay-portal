@@ -36,6 +36,14 @@ public class CPDVirtualSettingFileEntryServiceUtil {
 			groupId, cpDefinitionVirtualSettingId, fileEntryId, url, version);
 	}
 
+	public static CPDVirtualSettingFileEntry deleteCPDVirtualSettingFileEntry(
+			long cpdVirtualSettingFileEntryId)
+		throws PortalException {
+
+		return getService().deleteCPDVirtualSettingFileEntry(
+			cpdVirtualSettingFileEntryId);
+	}
+
 	public static CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
 			long cpdVirtualSettingFileEntryId)
 		throws PortalException {
