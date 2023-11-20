@@ -54,14 +54,17 @@ public class CommerceVirtualOrderItemLocalServiceUtil {
 	}
 
 	public static CommerceVirtualOrderItem addCommerceVirtualOrderItem(
-			long commerceOrderItemId, long fileEntryId, String url,
+			long commerceOrderItemId,
+			List
+				<com.liferay.commerce.product.type.virtual.model.
+					CPDVirtualSettingFileEntry> cpdVirtualSettingFileEntries,
 			int activationStatus, long duration, int usages, int maxUsages,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
 		return getService().addCommerceVirtualOrderItem(
-			commerceOrderItemId, fileEntryId, url, activationStatus, duration,
-			usages, maxUsages, serviceContext);
+			commerceOrderItemId, cpdVirtualSettingFileEntries, activationStatus,
+			duration, usages, maxUsages, serviceContext);
 	}
 
 	public static CommerceVirtualOrderItem addCommerceVirtualOrderItem(

@@ -53,6 +53,19 @@ public class CommerceVirtualOrderItemFileEntryLocalServiceWrapper
 				commerceVirtualOrderItemFileEntry);
 	}
 
+	@Override
+	public com.liferay.commerce.product.type.virtual.order.model.
+		CommerceVirtualOrderItemFileEntry addCommerceVirtualOrderItemFileEntry(
+				long userId, long groupId, long commerceOrderItemId,
+				long fileEntryId, String Url, String version)
+			throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _commerceVirtualOrderItemFileEntryLocalService.
+			addCommerceVirtualOrderItemFileEntry(
+				userId, groupId, commerceOrderItemId, fileEntryId, Url,
+				version);
+	}
+
 	/**
 	 * Creates a new commerce virtual order item file entry with the primary key. Does not add the commerce virtual order item file entry to the database.
 	 *

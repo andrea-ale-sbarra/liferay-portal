@@ -54,15 +54,19 @@ public class CommerceVirtualOrderItemLocalServiceWrapper
 	@Override
 	public com.liferay.commerce.product.type.virtual.order.model.
 		CommerceVirtualOrderItem addCommerceVirtualOrderItem(
-				long commerceOrderItemId, long fileEntryId, String url,
+				long commerceOrderItemId,
+				java.util.List
+					<com.liferay.commerce.product.type.virtual.model.
+						CPDVirtualSettingFileEntry>
+							cpdVirtualSettingFileEntries,
 				int activationStatus, long duration, int usages, int maxUsages,
 				com.liferay.portal.kernel.service.ServiceContext serviceContext)
 			throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _commerceVirtualOrderItemLocalService.
 			addCommerceVirtualOrderItem(
-				commerceOrderItemId, fileEntryId, url, activationStatus,
-				duration, usages, maxUsages, serviceContext);
+				commerceOrderItemId, cpdVirtualSettingFileEntries,
+				activationStatus, duration, usages, maxUsages, serviceContext);
 	}
 
 	@Override

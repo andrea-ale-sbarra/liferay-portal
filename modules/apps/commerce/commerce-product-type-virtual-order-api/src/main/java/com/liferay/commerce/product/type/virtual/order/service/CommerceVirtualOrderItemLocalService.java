@@ -5,6 +5,7 @@
 
 package com.liferay.commerce.product.type.virtual.order.service;
 
+import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
 import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
@@ -72,7 +73,8 @@ public interface CommerceVirtualOrderItemLocalService
 		CommerceVirtualOrderItem commerceVirtualOrderItem);
 
 	public CommerceVirtualOrderItem addCommerceVirtualOrderItem(
-			long commerceOrderItemId, long fileEntryId, String url,
+			long commerceOrderItemId,
+			List<CPDVirtualSettingFileEntry> cpdVirtualSettingFileEntries,
 			int activationStatus, long duration, int usages, int maxUsages,
 			ServiceContext serviceContext)
 		throws PortalException;
