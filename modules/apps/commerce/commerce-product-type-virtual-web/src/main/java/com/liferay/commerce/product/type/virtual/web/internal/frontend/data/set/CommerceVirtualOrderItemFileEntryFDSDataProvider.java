@@ -5,9 +5,9 @@
 
 package com.liferay.commerce.product.type.virtual.web.internal.frontend.data.set;
 
-import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
-import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
-import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingService;
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem;
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry;
+import com.liferay.commerce.product.type.virtual.order.service.CommerceVirtualOrderItemService;
 import com.liferay.commerce.product.type.virtual.web.internal.constants.CPDefinitionVirtualSettingFDSNames;
 import com.liferay.commerce.product.type.virtual.web.internal.model.VirtualFile;
 import com.liferay.document.library.kernel.service.DLAppService;
@@ -31,13 +31,13 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Alessio Antonio Rendina
+ * @author Andrea Sbarra
  */
 @Component(
-	property = "fds.data.provider.key=" + CPDefinitionVirtualSettingFDSNames.VIRTUAL_SETTING_FILES,
+	property = "fds.data.provider.key=" + CPDefinitionVirtualSettingFDSNames.VIRTUAL_ORDER_FILES,
 	service = FDSDataProvider.class
 )
-public class CPDefinitionVirtualSettingFDSDataProvider
+public class CommerceVirtualOrderItemFileEntryFDSDataProvider
 	implements FDSDataProvider<VirtualFile> {
 
 	@Override
@@ -48,26 +48,25 @@ public class CPDefinitionVirtualSettingFDSDataProvider
 
 		List<VirtualFile> virtualFiles = new ArrayList<>();
 
-		String className = ParamUtil.getString(httpServletRequest, "className");
-		long classPK = ParamUtil.getLong(httpServletRequest, "classPK");
+		long commerceVirtualOrderItemId = ParamUtil.getLong(
+			httpServletRequest, "commerceVirtualOrderItemId");
 
-		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-			_cpDefinitionVirtualSettingService.fetchCPDefinitionVirtualSetting(
-				className, classPK);
+		CommerceVirtualOrderItem commerceVirtualOrderItem =
+			_commerceVirtualOrderItemService.fetchCommerceVirtualOrderItem(
+				commerceVirtualOrderItemId);
 
-		if (cpDefinitionVirtualSetting != null) {
-			List<CPDVirtualSettingFileEntry> cpdVirtualSettingFileEntries =
-				cpDefinitionVirtualSetting.getCPDVirtualSettingFileEntries();
-
-			for (CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry :
-					cpdVirtualSettingFileEntries) {
+		if (commerceVirtualOrderItem != null) {
+			for (CommerceVirtualOrderItemFileEntry
+					commerceVirtualOrderItemFileEntry :
+						commerceVirtualOrderItem.
+							getCommerceVirtualOrderItemFileEntries()) {
 
 				virtualFiles.add(
 					new VirtualFile(
-						cpdVirtualSettingFileEntry.
-							getCPDefinitionVirtualSettingFileEntryId(),
-						_getURL(cpdVirtualSettingFileEntry),
-						cpdVirtualSettingFileEntry.getVersion()));
+						commerceVirtualOrderItemFileEntry.
+							getCommerceVirtualOrderItemFileEntryId(),
+						_getURL(commerceVirtualOrderItemFileEntry),
+						commerceVirtualOrderItemFileEntry.getVersion()));
 			}
 		}
 
@@ -79,42 +78,39 @@ public class CPDefinitionVirtualSettingFDSDataProvider
 			FDSKeywords fdsKeywords, HttpServletRequest httpServletRequest)
 		throws PortalException {
 
-		String className = ParamUtil.getString(httpServletRequest, "className");
-		long classPK = ParamUtil.getLong(httpServletRequest, "classPK");
+		long commerceVirtualOrderItemId = ParamUtil.getLong(
+			httpServletRequest, "commerceVirtualOrderItemId");
 
-		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-			_cpDefinitionVirtualSettingService.fetchCPDefinitionVirtualSetting(
-				className, classPK);
+		CommerceVirtualOrderItem commerceVirtualOrderItem =
+			_commerceVirtualOrderItemService.fetchCommerceVirtualOrderItem(
+				commerceVirtualOrderItemId);
 
-		if (cpDefinitionVirtualSetting != null) {
-			List<CPDVirtualSettingFileEntry> cpdVirtualSettingFileEntries =
-				cpDefinitionVirtualSetting.getCPDVirtualSettingFileEntries();
-
-			return cpdVirtualSettingFileEntries.size();
+		if (commerceVirtualOrderItem != null) {
+			return commerceVirtualOrderItem.
+				getCommerceVirtualOrderItemFileEntriesCount();
 		}
 
 		return 0;
 	}
 
 	private String _getURL(
-			CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry)
+			CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry)
 		throws PortalException {
 
-		if (Validator.isNull(cpdVirtualSettingFileEntry.getUrl())) {
+		if (Validator.isNull(commerceVirtualOrderItemFileEntry.getUrl())) {
 			FileEntry fileEntry = _dlAppService.getFileEntry(
-				cpdVirtualSettingFileEntry.getFileEntryId());
+				commerceVirtualOrderItemFileEntry.getFileEntryId());
 
 			return DLURLHelperUtil.getDownloadURL(
 				fileEntry, fileEntry.getLatestFileVersion(), null,
 				StringPool.BLANK, true, true);
 		}
 
-		return cpdVirtualSettingFileEntry.getUrl();
+		return commerceVirtualOrderItemFileEntry.getUrl();
 	}
 
 	@Reference
-	private CPDefinitionVirtualSettingService
-		_cpDefinitionVirtualSettingService;
+	private CommerceVirtualOrderItemService _commerceVirtualOrderItemService;
 
 	@Reference
 	private DLAppService _dlAppService;

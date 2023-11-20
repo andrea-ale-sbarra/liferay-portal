@@ -1,3 +1,5 @@
+<%@ page import="com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry" %>
+
 <%--
 /**
  * SPDX-FileCopyrightText: (c) 2023 Liferay, Inc. https://liferay.com
@@ -10,36 +12,29 @@
 <%
 CPDefinitionVirtualSettingDisplayContext cpDefinitionVirtualSettingDisplayContext = (CPDefinitionVirtualSettingDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 
-CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry = cpDefinitionVirtualSettingDisplayContext.getCPDVirtualSettingFileEntry();
-
-CPDefinitionVirtualSetting cpDefinitionVirtualSetting = cpDefinitionVirtualSettingDisplayContext.getCPDefinitionVirtualSetting();
+CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry = cpDefinitionVirtualSettingDisplayContext.getCommerceVirtualOrderItemFileEntry();
 
 long fileEntryId = 0;
-long cpdVirtualSettingFileEntryId = 0;
 
-if (cpdVirtualSettingFileEntry != null) {
-	fileEntryId = cpdVirtualSettingFileEntry.getFileEntryId();
-	cpdVirtualSettingFileEntryId = cpdVirtualSettingFileEntry.getCPDefinitionVirtualSettingFileEntryId();
+if (commerceVirtualOrderItemFileEntry != null) {
+	fileEntryId = commerceVirtualOrderItemFileEntry.getFileEntryId();
 }
 
 FileEntry fileEntry = cpDefinitionVirtualSettingDisplayContext.getFileEntry(fileEntryId);
 %>
 
-<portlet:actionURL name="/cp_definitions/edit_cpd_virtual_setting_file_entry" var="editCPDVirtualSettingFileEntryActionURL" />
+<portlet:actionURL name="/commerce_order/edit_commerce_virtual_order_item_file_entry" var="editCommerceVirtualOrderItemFileEntryActionURL" />
 
 <liferay-frontend:side-panel-content
 	title='<%= LanguageUtil.get(request, "insert-the-url-or-select-a-file-of-your-virtual-product") %>'
 >
-	<aui:form action="<%= editCPDVirtualSettingFileEntryActionURL %>" method="post" name="fm">
-		<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= cpdVirtualSettingFileEntry == null ? Constants.ADD : Constants.UPDATE %>" />
+	<aui:form action="<%= editCommerceVirtualOrderItemFileEntryActionURL %>" method="post" name="fm">
+		<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 		<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
-		<aui:input name="className" type="hidden" value="<%= cpDefinitionVirtualSetting != null ? cpDefinitionVirtualSetting.getClassName() : StringPool.BLANK %>" />
-		<aui:input name="classPK" type="hidden" value="<%= cpDefinitionVirtualSetting != null ? cpDefinitionVirtualSetting.getClassPK() : 0 %>" />
-		<aui:input name="cpDefinitionVirtualSettingId" type="hidden" value="<%= cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId() %>" />
-		<aui:input name="cpdVirtualSettingFileEntryId" type="hidden" value="<%= cpdVirtualSettingFileEntryId %>" />
+		<aui:input name="commerceVirtualOrderItemFileEntryId" type="hidden" value="<%= commerceVirtualOrderItemFileEntry.getCommerceVirtualOrderItemFileEntryId() %>" />
 		<aui:input name="fileEntryId" type="hidden" value="<%= fileEntryId %>" />
 
-		<aui:model-context bean="<%= cpdVirtualSettingFileEntry %>" model="<%= CPDVirtualSettingFileEntry.class %>" />
+		<aui:model-context bean="<%= commerceVirtualOrderItemFileEntry %>" model="<%= CommerceVirtualOrderItemFileEntry.class %>" />
 
 		<commerce-ui:panel
 			title='<%= LanguageUtil.get(request, "details") %>'

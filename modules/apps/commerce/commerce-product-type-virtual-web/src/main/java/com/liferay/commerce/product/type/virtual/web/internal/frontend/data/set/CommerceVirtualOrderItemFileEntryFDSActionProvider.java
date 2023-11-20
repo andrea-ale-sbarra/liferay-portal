@@ -5,8 +5,7 @@
 
 package com.liferay.commerce.product.type.virtual.web.internal.frontend.data.set;
 
-import com.liferay.commerce.product.constants.CPPortletKeys;
-import com.liferay.commerce.product.model.CPDefinition;
+import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.product.type.virtual.web.internal.constants.CPDefinitionVirtualSettingFDSNames;
 import com.liferay.commerce.product.type.virtual.web.internal.model.VirtualFile;
 import com.liferay.frontend.data.set.provider.FDSActionProvider;
@@ -20,13 +19,10 @@ import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
-import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 
 import java.util.List;
 
-import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 import javax.portlet.WindowStateException;
 
@@ -36,13 +32,13 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Alessio Antonio Rendina
+ * @author Andrea Sbarra
  */
 @Component(
-	property = "fds.data.provider.key=" + CPDefinitionVirtualSettingFDSNames.VIRTUAL_SETTING_FILES,
+	property = "fds.data.provider.key=" + CPDefinitionVirtualSettingFDSNames.VIRTUAL_ORDER_FILES,
 	service = FDSActionProvider.class
 )
-public class CPDefinitionVirtualSettingFDSActionProvider
+public class CommerceVirtualOrderItemFileEntryFDSActionProvider
 	implements FDSActionProvider {
 
 	@Override
@@ -61,36 +57,7 @@ public class CPDefinitionVirtualSettingFDSActionProvider
 					_language.get(httpServletRequest, "edit"));
 				dropdownItem.setTarget("sidePanel");
 			}
-		).add(
-			dropdownItem -> {
-				dropdownItem.setHref(
-					_getVirtualSettingFileDeleteURL(
-						virtualFile, httpServletRequest));
-				dropdownItem.setLabel(
-					_language.get(httpServletRequest, "delete"));
-			}
 		).build();
-	}
-
-	private PortletURL _getVirtualSettingFileDeleteURL(
-			VirtualFile virtualFile, HttpServletRequest httpServletRequest)
-		throws PortalException {
-
-		return PortletURLBuilder.create(
-			_portal.getControlPanelPortletURL(
-				httpServletRequest, CPPortletKeys.CP_DEFINITIONS,
-				PortletRequest.ACTION_PHASE)
-		).setActionName(
-			"/cp_definitions/edit_cpd_virtual_setting_file_entry"
-		).setCMD(
-			Constants.DELETE
-		).setRedirect(
-			ParamUtil.getString(
-				httpServletRequest, "currentUrl",
-				_portal.getCurrentURL(httpServletRequest))
-		).setParameter(
-			"cpdVirtualSettingFileEntryId", virtualFile.getId()
-		).buildPortletURL();
 	}
 
 	private PortletURL _getVirtualSettingFileEditURL(
@@ -99,14 +66,14 @@ public class CPDefinitionVirtualSettingFDSActionProvider
 
 		PortletURL portletURL = PortletURLBuilder.create(
 			PortletProviderUtil.getPortletURL(
-				httpServletRequest, CPDefinition.class.getName(),
+				httpServletRequest, CommerceOrder.class.getName(),
 				PortletProvider.Action.MANAGE)
 		).setMVCRenderCommandName(
-			"/cp_definitions/edit_cpd_virtual_setting_file_entry"
+			"/commerce_order/edit_commerce_virtual_order_item_file_entry"
 		).setRedirect(
-			"/cp_definitions/edit_cpd_virtual_setting_file_entry"
+			"/commerce_order/edit_commerce_virtual_order_item_file_entry"
 		).setParameter(
-			"cpdVirtualSettingFileEntryId", virtualFile.getId()
+			"commerceVirtualOrderItemFileEntryId", virtualFile.getId()
 		).buildPortletURL();
 
 		try {
@@ -120,7 +87,7 @@ public class CPDefinitionVirtualSettingFDSActionProvider
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		CPDefinitionVirtualSettingFDSActionProvider.class);
+		CommerceVirtualOrderItemFileEntryFDSActionProvider.class);
 
 	@Reference
 	private Language _language;

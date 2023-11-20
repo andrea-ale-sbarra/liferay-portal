@@ -5,8 +5,10 @@
 
 package com.liferay.commerce.product.type.virtual.order.service.impl;
 
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry;
 import com.liferay.commerce.product.type.virtual.order.service.base.CommerceVirtualOrderItemFileEntryServiceBaseImpl;
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.exception.PortalException;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -22,4 +24,32 @@ import org.osgi.service.component.annotations.Component;
 )
 public class CommerceVirtualOrderItemFileEntryServiceImpl
 	extends CommerceVirtualOrderItemFileEntryServiceBaseImpl {
+
+	public CommerceVirtualOrderItemFileEntry
+		fetchCommerceVirtualOrderItemFileEntry(
+			long commerceVirtualOrderItemFileEntryId) {
+
+		CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry =
+			commerceVirtualOrderItemFileEntryLocalService.
+				fetchCommerceVirtualOrderItemFileEntry(
+					commerceVirtualOrderItemFileEntryId);
+
+		if (commerceVirtualOrderItemFileEntry != null) {
+		}
+
+		return commerceVirtualOrderItemFileEntry;
+	}
+
+	@Override
+	public CommerceVirtualOrderItemFileEntry
+			updateCommerceVirtualOrderItemFileEntry(
+				long commerceVirtualOrderItemFileEntryId, long fileEntryId,
+				String url, String version)
+		throws PortalException {
+
+		return commerceVirtualOrderItemFileEntryLocalService.
+			updateCommerceVirtualOrderItemFileEntry(
+				commerceVirtualOrderItemFileEntryId, fileEntryId, url, version);
+	}
+
 }

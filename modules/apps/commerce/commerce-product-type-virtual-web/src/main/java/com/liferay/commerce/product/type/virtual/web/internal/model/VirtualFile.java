@@ -8,15 +8,13 @@ package com.liferay.commerce.product.type.virtual.web.internal.model;
 /**
  * @author Andrea Sbarra
  */
-public class VirtualSettingFile {
+public class VirtualFile {
 
-	public VirtualSettingFile(
-		long cpdVirtualSettingFileEntryId, String url, String version) {
-
+	public VirtualFile(long virtualFileEntryId, String url, String version) {
 		_url = url;
 		_version = version;
 
-		_id = cpdVirtualSettingFileEntryId;
+		_id = virtualFileEntryId;
 	}
 
 	public long getId() {

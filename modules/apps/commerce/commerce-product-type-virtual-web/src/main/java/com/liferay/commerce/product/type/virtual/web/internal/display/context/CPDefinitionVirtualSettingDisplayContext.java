@@ -13,6 +13,7 @@ import com.liferay.commerce.product.type.CPType;
 import com.liferay.commerce.product.type.virtual.constants.VirtualCPTypeConstants;
 import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry;
 import com.liferay.commerce.product.type.virtual.web.internal.portlet.action.helper.CPDefinitionVirtualSettingActionHelper;
 import com.liferay.commerce.product.type.virtual.web.internal.security.permission.resource.CommerceCatalogPermission;
 import com.liferay.document.library.kernel.service.DLAppService;
@@ -73,6 +74,22 @@ public class CPDefinitionVirtualSettingDisplayContext
 
 	public String getActivationStatusLabel(int status) {
 		return CommerceOrderConstants.getOrderStatusLabel(status);
+	}
+
+	public CommerceVirtualOrderItemFileEntry
+			getCommerceVirtualOrderItemFileEntry()
+		throws PortalException {
+
+		if (_commerceVirtualOrderItemFileEntry != null) {
+			return _commerceVirtualOrderItemFileEntry;
+		}
+
+		_commerceVirtualOrderItemFileEntry =
+			_cpDefinitionVirtualSettingActionHelper.
+				getCommerceVirtualOrderItemFileEntry(
+					cpRequestHelper.getRenderRequest());
+
+		return _commerceVirtualOrderItemFileEntry;
 	}
 
 	public CPDefinitionVirtualSetting getCPDefinitionVirtualSetting()
@@ -296,6 +313,8 @@ public class CPDefinitionVirtualSettingDisplayContext
 	private static final Log _log = LogFactoryUtil.getLog(
 		CPDefinitionVirtualSettingDisplayContext.class);
 
+	private CommerceVirtualOrderItemFileEntry
+		_commerceVirtualOrderItemFileEntry;
 	private CPDefinitionVirtualSetting _cpDefinitionVirtualSetting;
 	private final CPDefinitionVirtualSettingActionHelper
 		_cpDefinitionVirtualSettingActionHelper;

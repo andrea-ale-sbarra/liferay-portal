@@ -9,6 +9,8 @@ import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry;
+import com.liferay.commerce.product.type.virtual.order.service.CommerceVirtualOrderItemFileEntryService;
 import com.liferay.commerce.product.type.virtual.service.CPDVirtualSettingFileEntryService;
 import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingService;
 import com.liferay.commerce.product.type.virtual.web.internal.constants.CPDefinitionVirtualSettingWebKeys;
@@ -25,6 +27,27 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(service = CPDefinitionVirtualSettingActionHelper.class)
 public class CPDefinitionVirtualSettingActionHelper {
+
+	public CommerceVirtualOrderItemFileEntry
+		getCommerceVirtualOrderItemFileEntry(RenderRequest renderRequest) {
+
+		long commerceVirtualOrderItemFileEntryId = ParamUtil.getLong(
+			renderRequest, "commerceVirtualOrderItemFileEntryId");
+
+		CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry =
+			_commerceVirtualOrderItemFileEntryService.
+				fetchCommerceVirtualOrderItemFileEntry(
+					commerceVirtualOrderItemFileEntryId);
+
+		if (commerceVirtualOrderItemFileEntry != null) {
+			renderRequest.setAttribute(
+				CPDefinitionVirtualSettingWebKeys.
+					CPD_VIRTUAL_SETTING_FILE_ENTRY,
+				commerceVirtualOrderItemFileEntryId);
+		}
+
+		return commerceVirtualOrderItemFileEntry;
+	}
 
 	public CPDefinitionVirtualSetting getCPDefinitionVirtualSetting(
 			RenderRequest renderRequest)
@@ -94,6 +117,10 @@ public class CPDefinitionVirtualSettingActionHelper {
 
 		return cpdVirtualSettingFileEntry;
 	}
+
+	@Reference
+	private CommerceVirtualOrderItemFileEntryService
+		_commerceVirtualOrderItemFileEntryService;
 
 	@Reference
 	private CPDVirtualSettingFileEntryService
