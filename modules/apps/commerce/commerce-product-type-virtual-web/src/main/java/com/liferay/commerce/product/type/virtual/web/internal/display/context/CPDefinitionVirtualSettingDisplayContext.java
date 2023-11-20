@@ -148,6 +148,8 @@ public class CPDefinitionVirtualSettingDisplayContext
 							"/cp_definitions/edit_cpd_virtual_setting_file_entry"
 						).setParameter(
 							"cpDefinitionId", getCPDefinitionId()
+						).setParameter(
+							"cpInstanceId", getCPInstanceId()
 						).setWindowState(
 							LiferayWindowState.POP_UP
 						).buildString());
