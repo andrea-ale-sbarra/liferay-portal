@@ -30,6 +30,17 @@ public class CommerceVirtualOrderItemFileEntryServiceWrapper
 			commerceVirtualOrderItemFileEntryService;
 	}
 
+	@Override
+	public com.liferay.commerce.product.type.virtual.order.model.
+		CommerceVirtualOrderItemFileEntry
+			fetchCommerceVirtualOrderItemFileEntry(
+				long commerceVirtualOrderItemFileEntryId) {
+
+		return _commerceVirtualOrderItemFileEntryService.
+			fetchCommerceVirtualOrderItemFileEntry(
+				commerceVirtualOrderItemFileEntryId);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -39,6 +50,19 @@ public class CommerceVirtualOrderItemFileEntryServiceWrapper
 	public String getOSGiServiceIdentifier() {
 		return _commerceVirtualOrderItemFileEntryService.
 			getOSGiServiceIdentifier();
+	}
+
+	@Override
+	public com.liferay.commerce.product.type.virtual.order.model.
+		CommerceVirtualOrderItemFileEntry
+				updateCommerceVirtualOrderItemFileEntry(
+					long commerceVirtualOrderItemFileEntryId, long fileEntryId,
+					String url, String version)
+			throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _commerceVirtualOrderItemFileEntryService.
+			updateCommerceVirtualOrderItemFileEntry(
+				commerceVirtualOrderItemFileEntryId, fileEntryId, url, version);
 	}
 
 	@Override

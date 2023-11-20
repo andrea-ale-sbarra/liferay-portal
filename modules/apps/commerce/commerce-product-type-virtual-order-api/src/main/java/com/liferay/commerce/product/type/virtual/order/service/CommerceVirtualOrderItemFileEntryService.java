@@ -5,12 +5,14 @@
 
 package com.liferay.commerce.product.type.virtual.order.service;
 
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
 import com.liferay.portal.kernel.security.access.control.AccessControlled;
 import com.liferay.portal.kernel.service.BaseService;
 import com.liferay.portal.kernel.transaction.Isolation;
+import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -38,6 +40,10 @@ public interface CommerceVirtualOrderItemFileEntryService extends BaseService {
 	 *
 	 * Never modify this interface directly. Add custom service methods to <code>com.liferay.commerce.product.type.virtual.order.service.impl.CommerceVirtualOrderItemFileEntryServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the commerce virtual order item file entry remote service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link CommerceVirtualOrderItemFileEntryServiceUtil} if injection and service tracking are not available.
 	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public CommerceVirtualOrderItemFileEntry
+		fetchCommerceVirtualOrderItemFileEntry(
+			long commerceVirtualOrderItemFileEntryId);
 
 	/**
 	 * Returns the OSGi service identifier.
@@ -45,5 +51,11 @@ public interface CommerceVirtualOrderItemFileEntryService extends BaseService {
 	 * @return the OSGi service identifier
 	 */
 	public String getOSGiServiceIdentifier();
+
+	public CommerceVirtualOrderItemFileEntry
+			updateCommerceVirtualOrderItemFileEntry(
+				long commerceVirtualOrderItemFileEntryId, long fileEntryId,
+				String url, String version)
+		throws PortalException;
 
 }

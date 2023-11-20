@@ -241,6 +241,10 @@ public interface CommerceVirtualOrderItemFileEntryLocalService
 	public List<CommerceVirtualOrderItemFileEntry>
 		getCommerceVirtualOrderItemFileEntries(int start, int end);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CommerceVirtualOrderItemFileEntry>
+		getCommerceVirtualOrderItemFileEntries(long commerceVirtualOrderItemId);
+
 	/**
 	 * Returns all the commerce virtual order item file entries matching the UUID and company.
 	 *
@@ -277,6 +281,10 @@ public interface CommerceVirtualOrderItemFileEntryLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCommerceVirtualOrderItemFileEntriesCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getCommerceVirtualOrderItemFileEntriesCount(
+		long commerceVirtualOrderItemId);
 
 	/**
 	 * Returns the commerce virtual order item file entry with the primary key.
@@ -342,5 +350,11 @@ public interface CommerceVirtualOrderItemFileEntryLocalService
 		updateCommerceVirtualOrderItemFileEntry(
 			CommerceVirtualOrderItemFileEntry
 				commerceVirtualOrderItemFileEntry);
+
+	public CommerceVirtualOrderItemFileEntry
+			updateCommerceVirtualOrderItemFileEntry(
+				long commerceVirtualOrderItemFileEntryId, long fileEntryId,
+				String url, String version)
+		throws PortalException;
 
 }

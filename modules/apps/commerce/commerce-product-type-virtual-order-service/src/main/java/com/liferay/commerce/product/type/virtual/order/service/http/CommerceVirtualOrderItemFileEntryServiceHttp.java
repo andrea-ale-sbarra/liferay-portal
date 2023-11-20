@@ -5,13 +5,21 @@
 
 package com.liferay.commerce.product.type.virtual.order.service.http;
 
+import com.liferay.commerce.product.type.virtual.order.service.CommerceVirtualOrderItemFileEntryServiceUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.HttpPrincipal;
+import com.liferay.portal.kernel.service.http.TunnelUtil;
+import com.liferay.portal.kernel.util.MethodHandler;
+import com.liferay.portal.kernel.util.MethodKey;
+
 /**
  * Provides the HTTP utility for the
- * <code>com.liferay.commerce.product.type.virtual.order.service.CommerceVirtualOrderItemFileEntryServiceUtil</code> service
+ * <code>CommerceVirtualOrderItemFileEntryServiceUtil</code> service
  * utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it requires an additional
- * <code>com.liferay.portal.kernel.security.auth.HttpPrincipal</code> parameter.
+ * <code>HttpPrincipal</code> parameter.
  *
  * <p>
  * The benefits of using the HTTP utility is that it is fast and allows for
@@ -32,4 +40,101 @@ package com.liferay.commerce.product.type.virtual.order.service.http;
  * @generated
  */
 public class CommerceVirtualOrderItemFileEntryServiceHttp {
+
+	public static com.liferay.commerce.product.type.virtual.order.model.
+		CommerceVirtualOrderItemFileEntry
+			fetchCommerceVirtualOrderItemFileEntry(
+				HttpPrincipal httpPrincipal,
+				long commerceVirtualOrderItemFileEntryId) {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CommerceVirtualOrderItemFileEntryServiceUtil.class,
+				"fetchCommerceVirtualOrderItemFileEntry",
+				_fetchCommerceVirtualOrderItemFileEntryParameterTypes0);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, commerceVirtualOrderItemFileEntryId);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (com.liferay.commerce.product.type.virtual.order.model.
+				CommerceVirtualOrderItemFileEntry)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static com.liferay.commerce.product.type.virtual.order.model.
+		CommerceVirtualOrderItemFileEntry
+				updateCommerceVirtualOrderItemFileEntry(
+					HttpPrincipal httpPrincipal,
+					long commerceVirtualOrderItemFileEntryId, long fileEntryId,
+					String url, String version)
+			throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CommerceVirtualOrderItemFileEntryServiceUtil.class,
+				"updateCommerceVirtualOrderItemFileEntry",
+				_updateCommerceVirtualOrderItemFileEntryParameterTypes1);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, commerceVirtualOrderItemFileEntryId, fileEntryId,
+				url, version);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (com.liferay.commerce.product.type.virtual.order.model.
+				CommerceVirtualOrderItemFileEntry)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		CommerceVirtualOrderItemFileEntryServiceHttp.class);
+
+	private static final Class<?>[]
+		_fetchCommerceVirtualOrderItemFileEntryParameterTypes0 = new Class[] {
+			long.class
+		};
+	private static final Class<?>[]
+		_updateCommerceVirtualOrderItemFileEntryParameterTypes1 = new Class[] {
+			long.class, long.class, String.class, String.class
+		};
+
 }

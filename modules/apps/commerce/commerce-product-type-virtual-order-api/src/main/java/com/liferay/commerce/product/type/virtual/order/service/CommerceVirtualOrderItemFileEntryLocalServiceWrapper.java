@@ -318,6 +318,17 @@ public class CommerceVirtualOrderItemFileEntryLocalServiceWrapper
 			getCommerceVirtualOrderItemFileEntries(start, end);
 	}
 
+	@Override
+	public java.util.List
+		<com.liferay.commerce.product.type.virtual.order.model.
+			CommerceVirtualOrderItemFileEntry>
+				getCommerceVirtualOrderItemFileEntries(
+					long commerceVirtualOrderItemId) {
+
+		return _commerceVirtualOrderItemFileEntryLocalService.
+			getCommerceVirtualOrderItemFileEntries(commerceVirtualOrderItemId);
+	}
+
 	/**
 	 * Returns all the commerce virtual order item file entries matching the UUID and company.
 	 *
@@ -372,6 +383,15 @@ public class CommerceVirtualOrderItemFileEntryLocalServiceWrapper
 	public int getCommerceVirtualOrderItemFileEntriesCount() {
 		return _commerceVirtualOrderItemFileEntryLocalService.
 			getCommerceVirtualOrderItemFileEntriesCount();
+	}
+
+	@Override
+	public int getCommerceVirtualOrderItemFileEntriesCount(
+		long commerceVirtualOrderItemId) {
+
+		return _commerceVirtualOrderItemFileEntryLocalService.
+			getCommerceVirtualOrderItemFileEntriesCount(
+				commerceVirtualOrderItemId);
 	}
 
 	/**
@@ -473,6 +493,19 @@ public class CommerceVirtualOrderItemFileEntryLocalServiceWrapper
 		return _commerceVirtualOrderItemFileEntryLocalService.
 			updateCommerceVirtualOrderItemFileEntry(
 				commerceVirtualOrderItemFileEntry);
+	}
+
+	@Override
+	public com.liferay.commerce.product.type.virtual.order.model.
+		CommerceVirtualOrderItemFileEntry
+				updateCommerceVirtualOrderItemFileEntry(
+					long commerceVirtualOrderItemFileEntryId, long fileEntryId,
+					String url, String version)
+			throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _commerceVirtualOrderItemFileEntryLocalService.
+			updateCommerceVirtualOrderItemFileEntry(
+				commerceVirtualOrderItemFileEntryId, fileEntryId, url, version);
 	}
 
 	@Override

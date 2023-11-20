@@ -221,6 +221,18 @@ public class CommerceVirtualOrderItemWrapper
 		return model.getCommerceOrderItemId();
 	}
 
+	@Override
+	public java.util.List<CommerceVirtualOrderItemFileEntry>
+		getCommerceVirtualOrderItemFileEntries() {
+
+		return model.getCommerceVirtualOrderItemFileEntries();
+	}
+
+	@Override
+	public int getCommerceVirtualOrderItemFileEntriesCount() {
+		return model.getCommerceVirtualOrderItemFileEntriesCount();
+	}
+
 	/**
 	 * Returns the commerce virtual order item ID of this commerce virtual order item.
 	 *

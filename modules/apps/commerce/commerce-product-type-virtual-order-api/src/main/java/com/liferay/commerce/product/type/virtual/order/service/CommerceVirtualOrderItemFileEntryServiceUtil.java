@@ -5,6 +5,9 @@
 
 package com.liferay.commerce.product.type.virtual.order.service;
 
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry;
+import com.liferay.portal.kernel.exception.PortalException;
+
 /**
  * Provides the remote service utility for CommerceVirtualOrderItemFileEntry. This utility wraps
  * <code>com.liferay.commerce.product.type.virtual.order.service.impl.CommerceVirtualOrderItemFileEntryServiceImpl</code> and is an
@@ -24,14 +27,31 @@ public class CommerceVirtualOrderItemFileEntryServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.commerce.product.type.virtual.order.service.impl.CommerceVirtualOrderItemFileEntryServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static CommerceVirtualOrderItemFileEntry
+		fetchCommerceVirtualOrderItemFileEntry(
+			long commerceVirtualOrderItemFileEntryId) {
+
+		return getService().fetchCommerceVirtualOrderItemFileEntry(
+			commerceVirtualOrderItemFileEntryId);
+	}
 
 	/**
 	 * Returns the OSGi service identifier.
 	 *
 	 * @return the OSGi service identifier
 	 */
-	public static java.lang.String getOSGiServiceIdentifier() {
+	public static String getOSGiServiceIdentifier() {
 		return getService().getOSGiServiceIdentifier();
+	}
+
+	public static CommerceVirtualOrderItemFileEntry
+			updateCommerceVirtualOrderItemFileEntry(
+				long commerceVirtualOrderItemFileEntryId, long fileEntryId,
+				String url, String version)
+		throws PortalException {
+
+		return getService().updateCommerceVirtualOrderItemFileEntry(
+			commerceVirtualOrderItemFileEntryId, fileEntryId, url, version);
 	}
 
 	public static CommerceVirtualOrderItemFileEntryService getService() {

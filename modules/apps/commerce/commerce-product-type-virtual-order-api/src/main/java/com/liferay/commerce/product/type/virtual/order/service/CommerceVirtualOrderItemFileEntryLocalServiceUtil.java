@@ -270,6 +270,14 @@ public class CommerceVirtualOrderItemFileEntryLocalServiceUtil {
 		return getService().getCommerceVirtualOrderItemFileEntries(start, end);
 	}
 
+	public static List<CommerceVirtualOrderItemFileEntry>
+		getCommerceVirtualOrderItemFileEntries(
+			long commerceVirtualOrderItemId) {
+
+		return getService().getCommerceVirtualOrderItemFileEntries(
+			commerceVirtualOrderItemId);
+	}
+
 	/**
 	 * Returns all the commerce virtual order item file entries matching the UUID and company.
 	 *
@@ -314,6 +322,13 @@ public class CommerceVirtualOrderItemFileEntryLocalServiceUtil {
 	 */
 	public static int getCommerceVirtualOrderItemFileEntriesCount() {
 		return getService().getCommerceVirtualOrderItemFileEntriesCount();
+	}
+
+	public static int getCommerceVirtualOrderItemFileEntriesCount(
+		long commerceVirtualOrderItemId) {
+
+		return getService().getCommerceVirtualOrderItemFileEntriesCount(
+			commerceVirtualOrderItemId);
 	}
 
 	/**
@@ -399,6 +414,16 @@ public class CommerceVirtualOrderItemFileEntryLocalServiceUtil {
 
 		return getService().updateCommerceVirtualOrderItemFileEntry(
 			commerceVirtualOrderItemFileEntry);
+	}
+
+	public static CommerceVirtualOrderItemFileEntry
+			updateCommerceVirtualOrderItemFileEntry(
+				long commerceVirtualOrderItemFileEntryId, long fileEntryId,
+				String url, String version)
+		throws PortalException {
+
+		return getService().updateCommerceVirtualOrderItemFileEntry(
+			commerceVirtualOrderItemFileEntryId, fileEntryId, url, version);
 	}
 
 	public static CommerceVirtualOrderItemFileEntryLocalService getService() {
