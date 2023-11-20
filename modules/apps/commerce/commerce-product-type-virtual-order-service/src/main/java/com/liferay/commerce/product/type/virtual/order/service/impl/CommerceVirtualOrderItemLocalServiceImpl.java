@@ -11,10 +11,12 @@ import com.liferay.commerce.model.CommerceOrderItem;
 import com.liferay.commerce.model.CommerceSubscriptionEntry;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
+import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
 import com.liferay.commerce.product.type.virtual.order.exception.CommerceVirtualOrderItemFileEntryIdException;
 import com.liferay.commerce.product.type.virtual.order.exception.CommerceVirtualOrderItemUrlException;
 import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem;
+import com.liferay.commerce.product.type.virtual.order.service.CommerceVirtualOrderItemFileEntryLocalService;
 import com.liferay.commerce.product.type.virtual.order.service.base.CommerceVirtualOrderItemLocalServiceBaseImpl;
 import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingLocalService;
 import com.liferay.commerce.service.CommerceOrderItemLocalService;
@@ -62,7 +64,8 @@ public class CommerceVirtualOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceVirtualOrderItem addCommerceVirtualOrderItem(
-			long commerceOrderItemId, long fileEntryId, String url,
+			long commerceOrderItemId,
+			List<CPDVirtualSettingFileEntry> cpdVirtualSettingFileEntries,
 			int activationStatus, long duration, int usages, int maxUsages,
 			ServiceContext serviceContext)
 		throws PortalException {
@@ -76,11 +79,18 @@ public class CommerceVirtualOrderItemLocalServiceImpl
 
 		CommerceOrder commerceOrder = commerceOrderItem.getCommerceOrder();
 
-		if (Validator.isNotNull(url)) {
-			fileEntryId = 0;
-		}
+		for (CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry :
+				cpdVirtualSettingFileEntries) {
 
-		_validate(fileEntryId, url);
+			long fileEntryId = cpdVirtualSettingFileEntry.getFileEntryId();
+			String url = cpdVirtualSettingFileEntry.getUrl();
+
+			if (Validator.isNotNull(url)) {
+				fileEntryId = 0;
+			}
+
+			_validate(fileEntryId, url);
+		}
 
 		long commerceVirtualOrderItemId = counterLocalService.increment();
 
@@ -93,8 +103,6 @@ public class CommerceVirtualOrderItemLocalServiceImpl
 		commerceVirtualOrderItem.setUserId(user.getUserId());
 		commerceVirtualOrderItem.setUserName(user.getFullName());
 		commerceVirtualOrderItem.setCommerceOrderItemId(commerceOrderItemId);
-		commerceVirtualOrderItem.setFileEntryId(fileEntryId);
-		commerceVirtualOrderItem.setUrl(url);
 		commerceVirtualOrderItem.setActivationStatus(activationStatus);
 		commerceVirtualOrderItem.setDuration(duration);
 		commerceVirtualOrderItem.setUsages(usages);
@@ -110,8 +118,22 @@ public class CommerceVirtualOrderItemLocalServiceImpl
 				commerceVirtualOrderItem);
 		}
 
-		return commerceVirtualOrderItemPersistence.update(
+		commerceVirtualOrderItem = commerceVirtualOrderItemPersistence.update(
 			commerceVirtualOrderItem);
+
+		for (CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry :
+				cpdVirtualSettingFileEntries) {
+
+			_commerceVirtualOrderItemFileEntryLocalService.
+				addCommerceVirtualOrderItemFileEntry(
+					user.getUserId(), groupId,
+					commerceVirtualOrderItem.getCommerceVirtualOrderItemId(),
+					cpdVirtualSettingFileEntry.getFileEntryId(),
+					cpdVirtualSettingFileEntry.getUrl(),
+					cpdVirtualSettingFileEntry.getVersion());
+		}
+
+		return commerceVirtualOrderItem;
 	}
 
 	@Override
@@ -142,13 +164,14 @@ public class CommerceVirtualOrderItemLocalServiceImpl
 		if (cpDefinitionVirtualSetting == null) {
 			return commerceVirtualOrderItemLocalService.
 				addCommerceVirtualOrderItem(
-					commerceOrderItemId, 0, null,
+					commerceOrderItemId, null,
 					CommerceOrderConstants.ORDER_STATUS_COMPLETED, 0, 0, 0,
 					serviceContext);
 		}
 
 		return commerceVirtualOrderItemLocalService.addCommerceVirtualOrderItem(
-			commerceOrderItemId, 0, "",
+			commerceOrderItemId,
+			cpDefinitionVirtualSetting.getCPDVirtualSettingFileEntries(),
 			cpDefinitionVirtualSetting.getActivationStatus(),
 			cpDefinitionVirtualSetting.getDuration(), 0,
 			cpDefinitionVirtualSetting.getMaxUsages(), serviceContext);
@@ -455,6 +478,10 @@ public class CommerceVirtualOrderItemLocalServiceImpl
 	@Reference
 	private CommerceSubscriptionEntryLocalService
 		_commerceSubscriptionEntryLocalService;
+
+	@Reference
+	private CommerceVirtualOrderItemFileEntryLocalService
+		_commerceVirtualOrderItemFileEntryLocalService;
 
 	@Reference
 	private CPDefinitionVirtualSettingLocalService
