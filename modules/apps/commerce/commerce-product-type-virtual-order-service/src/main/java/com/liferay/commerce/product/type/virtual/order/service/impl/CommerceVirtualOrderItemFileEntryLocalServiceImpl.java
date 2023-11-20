@@ -47,6 +47,9 @@ public class CommerceVirtualOrderItemFileEntryLocalServiceImpl
 		commerceVirtualOrderItemFileEntry.setUserName(user.getFullName());
 		commerceVirtualOrderItemFileEntry.setCommerceVirtualOrderItemId(
 			commerceOrderItemId);
+		commerceVirtualOrderItemFileEntry.setFileEntryId(fileEntryId);
+		commerceVirtualOrderItemFileEntry.setUrl(Url);
+		commerceVirtualOrderItemFileEntry.setVersion(version);
 
 		return commerceVirtualOrderItemFileEntryPersistence.update(
 			commerceVirtualOrderItemFileEntry);
