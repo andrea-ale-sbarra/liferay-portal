@@ -14,6 +14,7 @@ import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
 import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem;
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry;
 import com.liferay.commerce.product.type.virtual.order.service.CommerceVirtualOrderItemFileEntryLocalService;
 import com.liferay.commerce.product.type.virtual.order.service.base.CommerceVirtualOrderItemLocalServiceBaseImpl;
 import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingLocalService;
@@ -223,26 +224,32 @@ public class CommerceVirtualOrderItemLocalServiceImpl
 	}
 
 	@Override
-	public File getFile(long commerceVirtualOrderItemId) throws Exception {
+	public File getFile(
+			long commerceVirtualOrderItemId,
+			long commerceVirtualOrderItemFileEntryId)
+		throws Exception {
+
 		CommerceVirtualOrderItem commerceVirtualOrderItem =
 			commerceVirtualOrderItemPersistence.findByPrimaryKey(
 				commerceVirtualOrderItemId);
 
-		CommerceOrderItem commerceOrderItem =
-			commerceVirtualOrderItem.getCommerceOrderItem();
+		CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry =
+			commerceVirtualOrderItem.getCommerceVirtualOrderItemFileEntry(
+				commerceVirtualOrderItemFileEntryId);
 
 		InputStream contentInputStream;
 		String extension = StringPool.BLANK;
 
-		if (commerceVirtualOrderItem.getFileEntryId() > 0) {
-			FileEntry fileEntry = commerceVirtualOrderItem.getFileEntry();
+		if (commerceVirtualOrderItemFileEntry.getFileEntryId() > 0) {
+			FileEntry fileEntry =
+				commerceVirtualOrderItemFileEntry.getFileEntry();
 
 			contentInputStream = fileEntry.getContentStream();
 
 			extension = fileEntry.getExtension();
 		}
 		else {
-			URL url = new URL(commerceVirtualOrderItem.getUrl());
+			URL url = new URL(commerceVirtualOrderItemFileEntry.getUrl());
 
 			contentInputStream = url.openStream();
 
@@ -257,6 +264,9 @@ public class CommerceVirtualOrderItemLocalServiceImpl
 				extension = iterator.next();
 			}
 		}
+
+		CommerceOrderItem commerceOrderItem =
+			commerceVirtualOrderItem.getCommerceOrderItem();
 
 		File tempFile = _file.createTempFile(contentInputStream);
 

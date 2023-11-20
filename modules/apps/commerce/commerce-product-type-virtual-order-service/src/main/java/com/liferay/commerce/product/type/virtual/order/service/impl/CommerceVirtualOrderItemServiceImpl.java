@@ -75,7 +75,11 @@ public class CommerceVirtualOrderItemServiceImpl
 	}
 
 	@Override
-	public File getFile(long commerceVirtualOrderItemId) throws Exception {
+	public File getFile(
+			long commerceVirtualOrderItemId,
+			long commerceVirtualOrderItemFileEntryId)
+		throws Exception {
+
 		PermissionChecker permissionChecker = getPermissionChecker();
 
 		CommerceVirtualOrderItem commerceVirtualOrderItem =
@@ -88,7 +92,7 @@ public class CommerceVirtualOrderItemServiceImpl
 				DOWNLOAD_COMMERCE_VIRTUAL_ORDER_ITEM);
 
 		File file = commerceVirtualOrderItemLocalService.getFile(
-			commerceVirtualOrderItemId);
+			commerceVirtualOrderItemId, commerceVirtualOrderItemFileEntryId);
 
 		if (!permissionChecker.isCompanyAdmin() ||
 			!permissionChecker.isGroupAdmin(

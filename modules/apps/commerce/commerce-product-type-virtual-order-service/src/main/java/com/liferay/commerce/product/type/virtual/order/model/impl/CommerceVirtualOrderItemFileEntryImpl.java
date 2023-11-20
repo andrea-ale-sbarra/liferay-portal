@@ -5,9 +5,19 @@
 
 package com.liferay.commerce.product.type.virtual.order.model.impl;
 
+import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+
 /**
  * @author Alessio Antonio Rendina
  */
 public class CommerceVirtualOrderItemFileEntryImpl
 	extends CommerceVirtualOrderItemFileEntryBaseImpl {
+
+	@Override
+	public FileEntry getFileEntry() throws PortalException {
+		return DLAppLocalServiceUtil.getFileEntry(getFileEntryId());
+	}
+
 }
