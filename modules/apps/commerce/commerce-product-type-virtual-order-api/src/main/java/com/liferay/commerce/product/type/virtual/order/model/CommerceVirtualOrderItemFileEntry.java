@@ -55,4 +55,7 @@ public interface CommerceVirtualOrderItemFileEntry
 
 			};
 
+	public com.liferay.portal.kernel.repository.model.FileEntry getFileEntry()
+		throws com.liferay.portal.kernel.exception.PortalException;
+
 }

@@ -233,6 +233,16 @@ public class CommerceVirtualOrderItemWrapper
 		return model.getCommerceVirtualOrderItemFileEntriesCount();
 	}
 
+	@Override
+	public CommerceVirtualOrderItemFileEntry
+			getCommerceVirtualOrderItemFileEntry(
+				long commerceVirtualOrderItemFileEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return model.getCommerceVirtualOrderItemFileEntry(
+			commerceVirtualOrderItemFileEntryId);
+	}
+
 	/**
 	 * Returns the commerce virtual order item ID of this commerce virtual order item.
 	 *
@@ -281,13 +291,6 @@ public class CommerceVirtualOrderItemWrapper
 	@Override
 	public Date getEndDate() {
 		return model.getEndDate();
-	}
-
-	@Override
-	public com.liferay.portal.kernel.repository.model.FileEntry getFileEntry()
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return model.getFileEntry();
 	}
 
 	/**

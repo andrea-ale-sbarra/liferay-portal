@@ -478,11 +478,13 @@ public class CommerceVirtualOrderItemLocalServiceWrapper
 	}
 
 	@Override
-	public java.io.File getFile(long commerceVirtualOrderItemId)
+	public java.io.File getFile(
+			long commerceVirtualOrderItemId,
+			long commerceVirtualOrderItemFileEntryId)
 		throws Exception {
 
 		return _commerceVirtualOrderItemLocalService.getFile(
-			commerceVirtualOrderItemId);
+			commerceVirtualOrderItemId, commerceVirtualOrderItemFileEntryId);
 	}
 
 	@Override

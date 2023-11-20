@@ -54,7 +54,10 @@ public interface CommerceVirtualOrderItemService extends BaseService {
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public File getFile(long commerceVirtualOrderItemId) throws Exception;
+	public File getFile(
+			long commerceVirtualOrderItemId,
+			long commerceVirtualOrderItemFileEntryId)
+		throws Exception;
 
 	/**
 	 * Returns the OSGi service identifier.

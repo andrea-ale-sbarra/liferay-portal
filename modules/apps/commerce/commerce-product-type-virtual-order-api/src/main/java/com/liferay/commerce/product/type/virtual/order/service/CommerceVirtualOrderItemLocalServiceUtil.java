@@ -400,10 +400,13 @@ public class CommerceVirtualOrderItemLocalServiceUtil {
 		return getService().getExportActionableDynamicQuery(portletDataContext);
 	}
 
-	public static java.io.File getFile(long commerceVirtualOrderItemId)
+	public static java.io.File getFile(
+			long commerceVirtualOrderItemId,
+			long commerceVirtualOrderItemFileEntryId)
 		throws Exception {
 
-		return getService().getFile(commerceVirtualOrderItemId);
+		return getService().getFile(
+			commerceVirtualOrderItemId, commerceVirtualOrderItemFileEntryId);
 	}
 
 	public static

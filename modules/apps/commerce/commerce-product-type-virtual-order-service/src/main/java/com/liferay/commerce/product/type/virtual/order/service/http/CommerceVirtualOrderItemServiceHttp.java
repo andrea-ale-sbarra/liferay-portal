@@ -129,7 +129,8 @@ public class CommerceVirtualOrderItemServiceHttp {
 	}
 
 	public static java.io.File getFile(
-			HttpPrincipal httpPrincipal, long commerceVirtualOrderItemId)
+			HttpPrincipal httpPrincipal, long commerceVirtualOrderItemId,
+			long commerceVirtualOrderItemFileEntryId)
 		throws Exception {
 
 		try {
@@ -138,7 +139,8 @@ public class CommerceVirtualOrderItemServiceHttp {
 				_getFileParameterTypes2);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, commerceVirtualOrderItemId);
+				methodKey, commerceVirtualOrderItemId,
+				commerceVirtualOrderItemFileEntryId);
 
 			Object returnObj = null;
 
@@ -222,7 +224,7 @@ public class CommerceVirtualOrderItemServiceHttp {
 		_fetchCommerceVirtualOrderItemByCommerceOrderItemIdParameterTypes1 =
 			new Class[] {long.class};
 	private static final Class<?>[] _getFileParameterTypes2 = new Class[] {
-		long.class
+		long.class, long.class
 	};
 	private static final Class<?>[]
 		_updateCommerceVirtualOrderItemParameterTypes3 = new Class[] {

@@ -51,11 +51,13 @@ public class CommerceVirtualOrderItemServiceWrapper
 	}
 
 	@Override
-	public java.io.File getFile(long commerceVirtualOrderItemId)
+	public java.io.File getFile(
+			long commerceVirtualOrderItemId,
+			long commerceVirtualOrderItemFileEntryId)
 		throws Exception {
 
 		return _commerceVirtualOrderItemService.getFile(
-			commerceVirtualOrderItemId);
+			commerceVirtualOrderItemId, commerceVirtualOrderItemFileEntryId);
 	}
 
 	/**

@@ -186,6 +186,13 @@ public class CommerceVirtualOrderItemFileEntryWrapper
 		return model.getCreateDate();
 	}
 
+	@Override
+	public com.liferay.portal.kernel.repository.model.FileEntry getFileEntry()
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return model.getFileEntry();
+	}
+
 	/**
 	 * Returns the file entry ID of this commerce virtual order item file entry.
 	 *

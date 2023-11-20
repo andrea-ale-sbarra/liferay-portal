@@ -44,10 +44,13 @@ public class CommerceVirtualOrderItemServiceUtil {
 			commerceOrderItemId);
 	}
 
-	public static java.io.File getFile(long commerceVirtualOrderItemId)
+	public static java.io.File getFile(
+			long commerceVirtualOrderItemId,
+			long commerceVirtualOrderItemFileEntryId)
 		throws Exception {
 
-		return getService().getFile(commerceVirtualOrderItemId);
+		return getService().getFile(
+			commerceVirtualOrderItemId, commerceVirtualOrderItemFileEntryId);
 	}
 
 	/**
