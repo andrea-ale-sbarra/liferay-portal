@@ -40,17 +40,11 @@ public class CPDVirtualSettingFileEntryServiceImpl
 
 	@Override
 	public CPDVirtualSettingFileEntry addCPDefinitionVirtualSetting(
-			long groupId, long cpDefinitionVirtualSettingId, long fileEntryId,
+			long groupId, String className, long classPK, long cpDefinitionVirtualSettingId, long fileEntryId,
 			String url, String version)
 		throws PortalException {
 
-		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-			CPDefinitionVirtualSettingLocalServiceUtil.
-				getCPDefinitionVirtualSetting(cpDefinitionVirtualSettingId);
-
-		_checkPermission(
-			cpDefinitionVirtualSetting.getClassName(),
-			cpDefinitionVirtualSetting.getClassPK(), ActionKeys.UPDATE);
+		_checkPermission(className, classPK, ActionKeys.UPDATE);
 
 		return cpdVirtualSettingFileEntryLocalService.
 			addCPDVirtualSettingFileEntry(
@@ -60,22 +54,10 @@ public class CPDVirtualSettingFileEntryServiceImpl
 
 	@Override
 	public CPDVirtualSettingFileEntry deleteCPDVirtualSettingFileEntry(
-			long cpdVirtualSettingFileEntryId)
+			String className, long classPK, long cpdVirtualSettingFileEntryId)
 		throws PortalException {
 
-		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry =
-			cpdVirtualSettingFileEntryLocalService.
-				getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
-
-		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-			CPDefinitionVirtualSettingLocalServiceUtil.
-				getCPDefinitionVirtualSetting(
-					cpdVirtualSettingFileEntry.
-						getCPDefinitionVirtualSettingId());
-
-		_checkPermission(
-			cpDefinitionVirtualSetting.getClassName(),
-			cpDefinitionVirtualSetting.getClassPK(), ActionKeys.UPDATE);
+		_checkPermission(className, classPK, ActionKeys.UPDATE);
 
 		return cpdVirtualSettingFileEntryLocalService.
 			deleteCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
@@ -92,10 +74,7 @@ public class CPDVirtualSettingFileEntryServiceImpl
 
 		if (cpdVirtualSettingFileEntry != null) {
 			CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-				CPDefinitionVirtualSettingLocalServiceUtil.
-					getCPDefinitionVirtualSetting(
-						cpdVirtualSettingFileEntry.
-							getCPDefinitionVirtualSettingId());
+				cpdVirtualSettingFileEntry.getCPDefinitionVirtualSetting();
 
 			_checkPermission(
 				cpDefinitionVirtualSetting.getClassName(),
@@ -115,10 +94,7 @@ public class CPDVirtualSettingFileEntryServiceImpl
 				getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
 
 		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-			CPDefinitionVirtualSettingLocalServiceUtil.
-				getCPDefinitionVirtualSetting(
-					cpdVirtualSettingFileEntry.
-						getCPDefinitionVirtualSettingId());
+				cpdVirtualSettingFileEntry.getCPDefinitionVirtualSetting();
 
 		_checkPermission(
 			cpDefinitionVirtualSetting.getClassName(),

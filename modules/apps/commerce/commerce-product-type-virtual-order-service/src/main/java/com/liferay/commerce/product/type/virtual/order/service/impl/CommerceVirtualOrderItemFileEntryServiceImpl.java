@@ -5,12 +5,19 @@
 
 package com.liferay.commerce.product.type.virtual.order.service.impl;
 
+import com.liferay.commerce.model.CommerceOrder;
+import com.liferay.commerce.model.CommerceOrderItem;
 import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry;
 import com.liferay.commerce.product.type.virtual.order.service.base.CommerceVirtualOrderItemFileEntryServiceBaseImpl;
+import com.liferay.commerce.service.CommerceOrderItemLocalService;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 
+import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alessio Antonio Rendina
@@ -27,7 +34,7 @@ public class CommerceVirtualOrderItemFileEntryServiceImpl
 
 	public CommerceVirtualOrderItemFileEntry
 		fetchCommerceVirtualOrderItemFileEntry(
-			long commerceVirtualOrderItemFileEntryId) {
+			long commerceVirtualOrderItemFileEntryId) throws PortalException {
 
 		CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry =
 			commerceVirtualOrderItemFileEntryLocalService.
@@ -35,6 +42,11 @@ public class CommerceVirtualOrderItemFileEntryServiceImpl
 					commerceVirtualOrderItemFileEntryId);
 
 		if (commerceVirtualOrderItemFileEntry != null) {
+
+			CommerceOrderItem commerceOrderItem = _commerceOrderItemLocalService.getCommerceOrderItem(commerceVirtualOrderItemFileEntry.getCommerceVirtualOrderItemId());
+
+			_commerceOrderModelResourcePermission.check(
+					getPermissionChecker(), commerceOrderItem.getCommerceOrderId(), ActionKeys.VIEW);
 		}
 
 		return commerceVirtualOrderItemFileEntry;
@@ -47,9 +59,26 @@ public class CommerceVirtualOrderItemFileEntryServiceImpl
 				String url, String version)
 		throws PortalException {
 
+		CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry = commerceVirtualOrderItemFileEntryLocalService.getCommerceVirtualOrderItemFileEntry(commerceVirtualOrderItemFileEntryId);
+
+		CommerceOrderItem commerceOrderItem = _commerceOrderItemLocalService.getCommerceOrderItem(commerceVirtualOrderItemFileEntry.getCommerceVirtualOrderItemId());
+
+		_commerceOrderModelResourcePermission.check(
+				getPermissionChecker(), commerceOrderItem .getCommerceOrderId(), ActionKeys.UPDATE);
+
 		return commerceVirtualOrderItemFileEntryLocalService.
 			updateCommerceVirtualOrderItemFileEntry(
 				commerceVirtualOrderItemFileEntryId, fileEntryId, url, version);
 	}
 
+	@Reference
+	private CommerceOrderItemLocalService
+			_commerceOrderItemLocalService;
+
+	@Reference(
+			target = "(model.class.name=com.liferay.commerce.model.CommerceOrder)"
+	)
+	private ModelResourcePermission<CommerceOrder>
+			_commerceOrderModelResourcePermission;
 }
+
