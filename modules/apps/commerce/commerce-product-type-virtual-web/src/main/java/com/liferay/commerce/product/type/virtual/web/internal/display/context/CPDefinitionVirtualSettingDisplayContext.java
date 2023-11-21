@@ -32,12 +32,14 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -222,7 +224,7 @@ public class CPDefinitionVirtualSettingDisplayContext
 		return null;
 	}
 
-	public String getFileEntryItemSelectorURL() {
+	public String getFileEntryItemSelectorURL() throws PortalException {
 		RequestBackedPortletURLFactory requestBackedPortletURLFactory =
 			RequestBackedPortletURLFactoryUtil.create(
 				cpRequestHelper.getRenderRequest());
@@ -234,9 +236,11 @@ public class CPDefinitionVirtualSettingDisplayContext
 			Collections.<ItemSelectorReturnType>singletonList(
 				new FileEntryItemSelectorReturnType()));
 
+		CPDefinitionVirtualSetting cpDefinitionVirtualSetting = getCPDefinitionVirtualSetting();
+
 		return String.valueOf(
 			_itemSelector.getItemSelectorURL(
-				requestBackedPortletURLFactory,
+				requestBackedPortletURLFactory, GroupLocalServiceUtil.getGroup(cpDefinitionVirtualSetting.getGroupId()), 0,
 				"uploadCPDefinitionVirtualSetting", fileItemSelectorCriterion));
 	}
 
