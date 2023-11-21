@@ -28,20 +28,22 @@ public class CPDVirtualSettingFileEntryServiceUtil {
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.commerce.product.type.virtual.service.impl.CPDVirtualSettingFileEntryServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static CPDVirtualSettingFileEntry addCPDefinitionVirtualSetting(
-			long groupId, long cpDefinitionVirtualSettingId, long fileEntryId,
-			String url, String version)
+			long groupId, String className, long classPK,
+			long cpDefinitionVirtualSettingId, long fileEntryId, String url,
+			String version)
 		throws PortalException {
 
 		return getService().addCPDefinitionVirtualSetting(
-			groupId, cpDefinitionVirtualSettingId, fileEntryId, url, version);
+			groupId, className, classPK, cpDefinitionVirtualSettingId,
+			fileEntryId, url, version);
 	}
 
 	public static CPDVirtualSettingFileEntry deleteCPDVirtualSettingFileEntry(
-			long cpdVirtualSettingFileEntryId)
+			String className, long classPK, long cpdVirtualSettingFileEntryId)
 		throws PortalException {
 
 		return getService().deleteCPDVirtualSettingFileEntry(
-			cpdVirtualSettingFileEntryId);
+			className, classPK, cpdVirtualSettingFileEntryId);
 	}
 
 	public static CPDVirtualSettingFileEntry fetchCPDVirtualSettingFileEntry(

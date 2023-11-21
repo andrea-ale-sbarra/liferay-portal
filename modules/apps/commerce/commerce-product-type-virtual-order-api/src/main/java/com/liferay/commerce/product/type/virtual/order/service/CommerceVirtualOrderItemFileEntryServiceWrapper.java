@@ -33,8 +33,9 @@ public class CommerceVirtualOrderItemFileEntryServiceWrapper
 	@Override
 	public com.liferay.commerce.product.type.virtual.order.model.
 		CommerceVirtualOrderItemFileEntry
-			fetchCommerceVirtualOrderItemFileEntry(
-				long commerceVirtualOrderItemFileEntryId) {
+				fetchCommerceVirtualOrderItemFileEntry(
+					long commerceVirtualOrderItemFileEntryId)
+			throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _commerceVirtualOrderItemFileEntryService.
 			fetchCommerceVirtualOrderItemFileEntry(

@@ -57,14 +57,14 @@ public interface CommerceVirtualOrderItem
 	public com.liferay.commerce.model.CommerceOrderItem getCommerceOrderItem()
 		throws com.liferay.portal.kernel.exception.PortalException;
 
-	public CommerceVirtualOrderItemFileEntry
-			getCommerceVirtualOrderItemFileEntry(
-				long commerceVirtualOrderItemFileEntryId)
-		throws com.liferay.portal.kernel.exception.PortalException;
-
 	public java.util.List<CommerceVirtualOrderItemFileEntry>
 		getCommerceVirtualOrderItemFileEntries();
 
 	public int getCommerceVirtualOrderItemFileEntriesCount();
+
+	public CommerceVirtualOrderItemFileEntry
+			getCommerceVirtualOrderItemFileEntry(
+				long commerceVirtualOrderItemFileEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException;
 
 }

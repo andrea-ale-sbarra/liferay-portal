@@ -32,23 +32,27 @@ public class CPDVirtualSettingFileEntryServiceWrapper
 	public
 		com.liferay.commerce.product.type.virtual.model.
 			CPDVirtualSettingFileEntry addCPDefinitionVirtualSetting(
-					long groupId, long cpDefinitionVirtualSettingId,
-					long fileEntryId, String url, String version)
+					long groupId, String className, long classPK,
+					long cpDefinitionVirtualSettingId, long fileEntryId,
+					String url, String version)
 				throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _cpdVirtualSettingFileEntryService.addCPDefinitionVirtualSetting(
-			groupId, cpDefinitionVirtualSettingId, fileEntryId, url, version);
+			groupId, className, classPK, cpDefinitionVirtualSettingId,
+			fileEntryId, url, version);
 	}
 
 	@Override
 	public
 		com.liferay.commerce.product.type.virtual.model.
 			CPDVirtualSettingFileEntry deleteCPDVirtualSettingFileEntry(
+					String className, long classPK,
 					long cpdVirtualSettingFileEntryId)
 				throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _cpdVirtualSettingFileEntryService.
-			deleteCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+			deleteCPDVirtualSettingFileEntry(
+				className, classPK, cpdVirtualSettingFileEntryId);
 	}
 
 	@Override

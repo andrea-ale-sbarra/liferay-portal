@@ -42,8 +42,9 @@ public interface CommerceVirtualOrderItemFileEntryService extends BaseService {
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CommerceVirtualOrderItemFileEntry
-		fetchCommerceVirtualOrderItemFileEntry(
-			long commerceVirtualOrderItemFileEntryId);
+			fetchCommerceVirtualOrderItemFileEntry(
+				long commerceVirtualOrderItemFileEntryId)
+		throws PortalException;
 
 	/**
 	 * Returns the OSGi service identifier.

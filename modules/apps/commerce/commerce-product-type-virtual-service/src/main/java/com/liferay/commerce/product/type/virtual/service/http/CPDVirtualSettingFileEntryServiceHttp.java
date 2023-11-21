@@ -44,9 +44,9 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 	public static
 		com.liferay.commerce.product.type.virtual.model.
 			CPDVirtualSettingFileEntry addCPDefinitionVirtualSetting(
-					HttpPrincipal httpPrincipal, long groupId,
-					long cpDefinitionVirtualSettingId, long fileEntryId,
-					String url, String version)
+					HttpPrincipal httpPrincipal, long groupId, String className,
+					long classPK, long cpDefinitionVirtualSettingId,
+					long fileEntryId, String url, String version)
 				throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
@@ -56,8 +56,8 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 				_addCPDefinitionVirtualSettingParameterTypes0);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, groupId, cpDefinitionVirtualSettingId, fileEntryId,
-				url, version);
+				methodKey, groupId, className, classPK,
+				cpDefinitionVirtualSettingId, fileEntryId, url, version);
 
 			Object returnObj = null;
 
@@ -91,7 +91,7 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 	public static
 		com.liferay.commerce.product.type.virtual.model.
 			CPDVirtualSettingFileEntry deleteCPDVirtualSettingFileEntry(
-					HttpPrincipal httpPrincipal,
+					HttpPrincipal httpPrincipal, String className, long classPK,
 					long cpdVirtualSettingFileEntryId)
 				throws com.liferay.portal.kernel.exception.PortalException {
 
@@ -102,7 +102,7 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 				_deleteCPDVirtualSettingFileEntryParameterTypes1);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, cpdVirtualSettingFileEntryId);
+				methodKey, className, classPK, cpdVirtualSettingFileEntryId);
 
 			Object returnObj = null;
 
@@ -275,11 +275,12 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 
 	private static final Class<?>[]
 		_addCPDefinitionVirtualSettingParameterTypes0 = new Class[] {
-			long.class, long.class, long.class, String.class, String.class
+			long.class, String.class, long.class, long.class, long.class,
+			String.class, String.class
 		};
 	private static final Class<?>[]
 		_deleteCPDVirtualSettingFileEntryParameterTypes1 = new Class[] {
-			long.class
+			String.class, long.class, long.class
 		};
 	private static final Class<?>[]
 		_fetchCPDVirtualSettingFileEntryParameterTypes2 = new Class[] {

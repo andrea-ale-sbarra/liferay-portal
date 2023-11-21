@@ -28,8 +28,9 @@ public class CommerceVirtualOrderItemFileEntryServiceUtil {
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.commerce.product.type.virtual.order.service.impl.CommerceVirtualOrderItemFileEntryServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static CommerceVirtualOrderItemFileEntry
-		fetchCommerceVirtualOrderItemFileEntry(
-			long commerceVirtualOrderItemFileEntryId) {
+			fetchCommerceVirtualOrderItemFileEntry(
+				long commerceVirtualOrderItemFileEntryId)
+		throws PortalException {
 
 		return getService().fetchCommerceVirtualOrderItemFileEntry(
 			commerceVirtualOrderItemFileEntryId);

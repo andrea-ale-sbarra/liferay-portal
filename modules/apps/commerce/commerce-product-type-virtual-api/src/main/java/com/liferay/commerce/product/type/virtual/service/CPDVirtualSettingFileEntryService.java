@@ -41,12 +41,13 @@ public interface CPDVirtualSettingFileEntryService extends BaseService {
 	 * Never modify this interface directly. Add custom service methods to <code>com.liferay.commerce.product.type.virtual.service.impl.CPDVirtualSettingFileEntryServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the cpd virtual setting file entry remote service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link CPDVirtualSettingFileEntryServiceUtil} if injection and service tracking are not available.
 	 */
 	public CPDVirtualSettingFileEntry addCPDefinitionVirtualSetting(
-			long groupId, long cpDefinitionVirtualSettingId, long fileEntryId,
-			String url, String version)
+			long groupId, String className, long classPK,
+			long cpDefinitionVirtualSettingId, long fileEntryId, String url,
+			String version)
 		throws PortalException;
 
 	public CPDVirtualSettingFileEntry deleteCPDVirtualSettingFileEntry(
-			long cpdVirtualSettingFileEntryId)
+			String className, long classPK, long cpdVirtualSettingFileEntryId)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
