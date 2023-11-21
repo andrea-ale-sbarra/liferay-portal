@@ -128,17 +128,25 @@ public class PlacedOrderItemDTOConverter
 								return null;
 							}
 
-							List<CommerceVirtualOrderItemFileEntry> commerceVirtualOrderItemFileEntries = commerceVirtualOrderItem.getCommerceVirtualOrderItemFileEntries();
-							CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry = commerceVirtualOrderItemFileEntries.get(0);
+							List<CommerceVirtualOrderItemFileEntry>
+								commerceVirtualOrderItemFileEntries =
+									commerceVirtualOrderItem.
+										getCommerceVirtualOrderItemFileEntries();
+							CommerceVirtualOrderItemFileEntry
+								commerceVirtualOrderItemFileEntry =
+									commerceVirtualOrderItemFileEntries.get(0);
 
-							String url = commerceVirtualOrderItemFileEntry.getUrl();
+							String url =
+								commerceVirtualOrderItemFileEntry.getUrl();
 
 							if (Validator.isBlank(url)) {
 								url =
 									_commerceMediaResolver.
 										getDownloadVirtualOrderItemURL(
 											commerceVirtualOrderItem.
-												getCommerceVirtualOrderItemId(), commerceVirtualOrderItemFileEntry.getFileEntryId());
+												getCommerceVirtualOrderItemId(),
+											commerceVirtualOrderItemFileEntry.
+												getFileEntryId());
 							}
 
 							return new String[] {url};
@@ -152,67 +160,33 @@ public class PlacedOrderItemDTOConverter
 						}
 					});
 				setVirtualItems(
-						() -> {
-							try {
-								CommerceVirtualOrderItem commerceVirtualOrderItem =
-										_commerceVirtualOrderItemService.
-												fetchCommerceVirtualOrderItemByCommerceOrderItemId(
-														commerceOrderItem.
-																getCommerceOrderItemId());
+					() -> {
+						try {
+							CommerceVirtualOrderItem commerceVirtualOrderItem =
+								_commerceVirtualOrderItemService.
+									fetchCommerceVirtualOrderItemByCommerceOrderItemId(
+										commerceOrderItem.
+											getCommerceOrderItemId());
 
-								if (commerceVirtualOrderItem == null) {
-									return null;
-								}
-
-								return _toVirtualItems(commerceVirtualOrderItem.getCommerceVirtualOrderItemFileEntries(), commerceVirtualOrderItem);
-							}
-							catch (PortalException portalException) {
-								if (_log.isDebugEnabled()) {
-									_log.debug(portalException);
-								}
-
+							if (commerceVirtualOrderItem == null) {
 								return null;
 							}
+
+							return _toVirtualItems(
+								commerceVirtualOrderItem.
+									getCommerceVirtualOrderItemFileEntries(),
+								commerceVirtualOrderItem);
 						}
-				);
+						catch (PortalException portalException) {
+							if (_log.isDebugEnabled()) {
+								_log.debug(portalException);
+							}
+
+							return null;
+						}
+					});
 			}
 		};
-	}
-
-	private VirtualItem[] _toVirtualItems(List<CommerceVirtualOrderItemFileEntry> commerceVirtualOrderItemFileEntries, CommerceVirtualOrderItem commerceVirtualOrderItem) {
-
-		return TransformUtil.transformToArray(
-				commerceVirtualOrderItemFileEntries,
-				commerceVirtualOrderItemFileEntry -> new VirtualItem() {
-					{
-						setUrl(
-								() -> {
-									if (Validator.isNull(commerceVirtualOrderItemFileEntry.getUrl())) {
-
-										_commerceMediaResolver.
-												getDownloadVirtualOrderItemURL(
-														commerceVirtualOrderItem.
-																getCommerceVirtualOrderItemId(),
-														commerceVirtualOrderItemFileEntry.
-																getFileEntryId());
-									}
-
-									return commerceVirtualOrderItemFileEntry.getUrl();
-								});
-						setVersion(
-								() -> {
-									if (Validator.isNull(
-											commerceVirtualOrderItemFileEntry.getVersion())) {
-
-										return null;
-									}
-
-									return commerceVirtualOrderItemFileEntry.getVersion();
-								});
-
-					}
-				},
-				VirtualItem.class);
 	}
 
 	private String[] _getErrorMessages(
@@ -372,6 +346,48 @@ public class PlacedOrderItemDTOConverter
 		}
 
 		return settings;
+	}
+
+	private VirtualItem[] _toVirtualItems(
+		List<CommerceVirtualOrderItemFileEntry>
+			commerceVirtualOrderItemFileEntries,
+		CommerceVirtualOrderItem commerceVirtualOrderItem) {
+
+		return TransformUtil.transformToArray(
+			commerceVirtualOrderItemFileEntries,
+			commerceVirtualOrderItemFileEntry -> new VirtualItem() {
+				{
+					setUrl(
+						() -> {
+							if (Validator.isNull(
+									commerceVirtualOrderItemFileEntry.
+										getUrl())) {
+
+								_commerceMediaResolver.
+									getDownloadVirtualOrderItemURL(
+										commerceVirtualOrderItem.
+											getCommerceVirtualOrderItemId(),
+										commerceVirtualOrderItemFileEntry.
+											getFileEntryId());
+							}
+
+							return commerceVirtualOrderItemFileEntry.getUrl();
+						});
+					setVersion(
+						() -> {
+							if (Validator.isNull(
+									commerceVirtualOrderItemFileEntry.
+										getVersion())) {
+
+								return null;
+							}
+
+							return commerceVirtualOrderItemFileEntry.
+								getVersion();
+						});
+				}
+			},
+			VirtualItem.class);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

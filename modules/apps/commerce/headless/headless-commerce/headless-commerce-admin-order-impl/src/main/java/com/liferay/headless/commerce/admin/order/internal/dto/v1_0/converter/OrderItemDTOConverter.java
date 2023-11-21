@@ -5,7 +5,6 @@
 
 package com.liferay.headless.commerce.admin.order.internal.dto.v1_0.converter;
 
-import com.liferay.account.constants.AccountConstants;
 import com.liferay.commerce.media.CommerceMediaResolver;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderItem;
@@ -35,20 +34,20 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterContext;
 
+import java.util.List;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-
-import java.util.List;
 
 /**
  * @author Alessio Antonio Rendina
  */
 @Component(
-		property = "dto.class.name=com.liferay.commerce.model.CommerceOrderItem",
-		service = DTOConverter.class
+	property = "dto.class.name=com.liferay.commerce.model.CommerceOrderItem",
+	service = DTOConverter.class
 )
 public class OrderItemDTOConverter
-		implements DTOConverter<CommerceOrderItem, OrderItem> {
+	implements DTOConverter<CommerceOrderItem, OrderItem> {
 
 	@Override
 	public String getContentType() {
@@ -57,231 +56,201 @@ public class OrderItemDTOConverter
 
 	@Override
 	public OrderItem toDTO(DTOConverterContext dtoConverterContext)
-			throws Exception {
+		throws Exception {
 
 		CommerceOrderItem commerceOrderItem = _getCommerceOrderItem(
-				dtoConverterContext);
+			dtoConverterContext);
 
 		CommerceOrder commerceOrder = commerceOrderItem.getCommerceOrder();
 		CPInstance cpInstance = commerceOrderItem.fetchCPInstance();
 		CPInstanceUnitOfMeasure cpInstanceUnitOfMeasure =
-				_cpInstanceUnitOfMeasureLocalService.fetchCPInstanceUnitOfMeasure(
-						commerceOrderItem.getCompanyId(),
-						commerceOrderItem.getUnitOfMeasureKey(),
-						commerceOrderItem.getSku());
+			_cpInstanceUnitOfMeasureLocalService.fetchCPInstanceUnitOfMeasure(
+				commerceOrderItem.getCompanyId(),
+				commerceOrderItem.getUnitOfMeasureKey(),
+				commerceOrderItem.getSku());
 
 		return new OrderItem() {
 			{
 				bookedQuantityId =
-						commerceOrderItem.getCommerceInventoryBookedQuantityId();
+					commerceOrderItem.getCommerceInventoryBookedQuantityId();
 				customFields = CustomFieldsUtil.toCustomFields(
-						dtoConverterContext.isAcceptAllLanguages(),
-						CommerceOrderItem.class.getName(),
-						commerceOrderItem.getCommerceOrderItemId(),
-						commerceOrderItem.getCompanyId(),
-						dtoConverterContext.getLocale());
+					dtoConverterContext.isAcceptAllLanguages(),
+					CommerceOrderItem.class.getName(),
+					commerceOrderItem.getCommerceOrderItemId(),
+					commerceOrderItem.getCompanyId(),
+					dtoConverterContext.getLocale());
 				decimalQuantity = commerceOrderItem.getQuantity();
 				deliveryGroup = commerceOrderItem.getDeliveryGroup();
 				discountAmount = commerceOrderItem.getDiscountAmount();
 				discountManuallyAdjusted =
-						commerceOrderItem.isDiscountManuallyAdjusted();
+					commerceOrderItem.isDiscountManuallyAdjusted();
 				discountPercentageLevel1 =
-						commerceOrderItem.getDiscountPercentageLevel1();
+					commerceOrderItem.getDiscountPercentageLevel1();
 				discountPercentageLevel1WithTaxAmount =
-						commerceOrderItem.
-								getDiscountPercentageLevel1WithTaxAmount();
+					commerceOrderItem.
+						getDiscountPercentageLevel1WithTaxAmount();
 				discountPercentageLevel2 =
-						commerceOrderItem.getDiscountPercentageLevel2();
+					commerceOrderItem.getDiscountPercentageLevel2();
 				discountPercentageLevel2WithTaxAmount =
-						commerceOrderItem.
-								getDiscountPercentageLevel2WithTaxAmount();
+					commerceOrderItem.
+						getDiscountPercentageLevel2WithTaxAmount();
 				discountPercentageLevel3 =
-						commerceOrderItem.getDiscountPercentageLevel3();
+					commerceOrderItem.getDiscountPercentageLevel3();
 				discountPercentageLevel3WithTaxAmount =
-						commerceOrderItem.
-								getDiscountPercentageLevel3WithTaxAmount();
+					commerceOrderItem.
+						getDiscountPercentageLevel3WithTaxAmount();
 				discountPercentageLevel4 =
-						commerceOrderItem.getDiscountPercentageLevel4();
+					commerceOrderItem.getDiscountPercentageLevel4();
 				discountPercentageLevel4WithTaxAmount =
-						commerceOrderItem.
-								getDiscountPercentageLevel4WithTaxAmount();
+					commerceOrderItem.
+						getDiscountPercentageLevel4WithTaxAmount();
 				discountWithTaxAmount =
-						commerceOrderItem.getDiscountWithTaxAmount();
+					commerceOrderItem.getDiscountWithTaxAmount();
 				externalReferenceCode =
-						commerceOrderItem.getExternalReferenceCode();
+					commerceOrderItem.getExternalReferenceCode();
 				finalPrice = commerceOrderItem.getFinalPrice();
 				finalPriceWithTaxAmount =
-						commerceOrderItem.getFinalPriceWithTaxAmount();
+					commerceOrderItem.getFinalPriceWithTaxAmount();
 				formattedQuantity = _commerceOrderItemQuantityFormatter.format(
-						commerceOrderItem, cpInstanceUnitOfMeasure,
-						dtoConverterContext.getLocale());
+					commerceOrderItem, cpInstanceUnitOfMeasure,
+					dtoConverterContext.getLocale());
 				id = commerceOrderItem.getCommerceOrderItemId();
 				name = LanguageUtils.getLanguageIdMap(
-						commerceOrderItem.getNameMap());
+					commerceOrderItem.getNameMap());
 				options = commerceOrderItem.getJson();
 				orderExternalReferenceCode =
-						commerceOrder.getExternalReferenceCode();
+					commerceOrder.getExternalReferenceCode();
 				orderId = commerceOrder.getCommerceOrderId();
 				priceManuallyAdjusted =
-						commerceOrderItem.isPriceManuallyAdjusted();
+					commerceOrderItem.isPriceManuallyAdjusted();
 				printedNote = commerceOrderItem.getPrintedNote();
 				promoPrice = commerceOrderItem.getPromoPrice();
 				promoPriceWithTaxAmount =
-						commerceOrderItem.getPromoPriceWithTaxAmount();
+					commerceOrderItem.getPromoPriceWithTaxAmount();
 				quantity = _commerceQuantityFormatter.format(
-						cpInstanceUnitOfMeasure, commerceOrderItem.getQuantity());
+					cpInstanceUnitOfMeasure, commerceOrderItem.getQuantity());
 				replacedSku = commerceOrderItem.getReplacedSku();
 				replacedSkuId = commerceOrderItem.getReplacedCPInstanceId();
 				requestedDeliveryDate =
-						commerceOrderItem.getRequestedDeliveryDate();
+					commerceOrderItem.getRequestedDeliveryDate();
 				shippedQuantity = _commerceQuantityFormatter.format(
-						cpInstanceUnitOfMeasure,
-						commerceOrderItem.getShippedQuantity());
+					cpInstanceUnitOfMeasure,
+					commerceOrderItem.getShippedQuantity());
 				shippingAddressId = commerceOrderItem.getShippingAddressId();
 				sku = commerceOrderItem.getSku();
 				skuExternalReferenceCode = _getSkuExternalReferenceCode(
-						cpInstance);
+					cpInstance);
 				skuId = _getSkuId(cpInstance);
 				subscription = commerceOrderItem.isSubscription();
 				unitOfMeasureKey = commerceOrderItem.getUnitOfMeasureKey();
 				unitPrice = commerceOrderItem.getUnitPrice();
 				unitPriceWithTaxAmount =
-						commerceOrderItem.getUnitPriceWithTaxAmount();
+					commerceOrderItem.getUnitPriceWithTaxAmount();
 
 				setUnitOfMeasure(
-						() -> {
-							if (commerceOrderItem.getCPMeasurementUnitId() <= 0) {
-								return StringPool.BLANK;
-							}
+					() -> {
+						if (commerceOrderItem.getCPMeasurementUnitId() <= 0) {
+							return StringPool.BLANK;
+						}
 
-							CPMeasurementUnit cpMeasurementUnit =
-									_cpMeasurementUnitService.getCPMeasurementUnit(
-											commerceOrderItem.getCPMeasurementUnitId());
+						CPMeasurementUnit cpMeasurementUnit =
+							_cpMeasurementUnitService.getCPMeasurementUnit(
+								commerceOrderItem.getCPMeasurementUnitId());
 
-							return cpMeasurementUnit.getKey();
-						});
+						return cpMeasurementUnit.getKey();
+					});
 				setVirtualItemURLs(
-						() -> {
-							try {
-								CommerceVirtualOrderItem commerceVirtualOrderItem =
-										_commerceVirtualOrderItemService.
-												fetchCommerceVirtualOrderItemByCommerceOrderItemId(
-														commerceOrderItem.
-																getCommerceOrderItemId());
+					() -> {
+						try {
+							CommerceVirtualOrderItem commerceVirtualOrderItem =
+								_commerceVirtualOrderItemService.
+									fetchCommerceVirtualOrderItemByCommerceOrderItemId(
+										commerceOrderItem.
+											getCommerceOrderItemId());
 
-								if (commerceVirtualOrderItem == null) {
-									return null;
-								}
-
-								List<CommerceVirtualOrderItemFileEntry> commerceVirtualOrderItemFileEntries = commerceVirtualOrderItem.getCommerceVirtualOrderItemFileEntries();
-								CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry = commerceVirtualOrderItemFileEntries.get(0);
-
-								String url = commerceVirtualOrderItemFileEntry.getUrl();
-
-								if (Validator.isBlank(url)) {
-									url =
-											_commerceMediaResolver.
-													getDownloadVirtualOrderItemURL(
-															commerceVirtualOrderItem.
-																	getCommerceVirtualOrderItemId(),
-															commerceVirtualOrderItemFileEntry.
-																	getFileEntryId());
-								}
-
-								return new String[] {url};
-							}
-							catch (PortalException portalException) {
-								if (_log.isDebugEnabled()) {
-									_log.debug(portalException);
-								}
-
+							if (commerceVirtualOrderItem == null) {
 								return null;
 							}
-						});
+
+							List<CommerceVirtualOrderItemFileEntry>
+								commerceVirtualOrderItemFileEntries =
+									commerceVirtualOrderItem.
+										getCommerceVirtualOrderItemFileEntries();
+							CommerceVirtualOrderItemFileEntry
+								commerceVirtualOrderItemFileEntry =
+									commerceVirtualOrderItemFileEntries.get(0);
+
+							String url =
+								commerceVirtualOrderItemFileEntry.getUrl();
+
+							if (Validator.isBlank(url)) {
+								url =
+									_commerceMediaResolver.
+										getDownloadVirtualOrderItemURL(
+											commerceVirtualOrderItem.
+												getCommerceVirtualOrderItemId(),
+											commerceVirtualOrderItemFileEntry.
+												getFileEntryId());
+							}
+
+							return new String[] {url};
+						}
+						catch (PortalException portalException) {
+							if (_log.isDebugEnabled()) {
+								_log.debug(portalException);
+							}
+
+							return null;
+						}
+					});
 
 				setVirtualItems(
-						() -> {
-							try {
-								CommerceVirtualOrderItem commerceVirtualOrderItem =
-										_commerceVirtualOrderItemService.
-												fetchCommerceVirtualOrderItemByCommerceOrderItemId(
-														commerceOrderItem.
-																getCommerceOrderItemId());
+					() -> {
+						try {
+							CommerceVirtualOrderItem commerceVirtualOrderItem =
+								_commerceVirtualOrderItemService.
+									fetchCommerceVirtualOrderItemByCommerceOrderItemId(
+										commerceOrderItem.
+											getCommerceOrderItemId());
 
-								if (commerceVirtualOrderItem == null) {
-									return null;
-								}
-
-								return _toVirtualItems(commerceVirtualOrderItem.getCommerceVirtualOrderItemFileEntries(), commerceVirtualOrderItem);
-							}
-							catch (PortalException portalException) {
-								if (_log.isDebugEnabled()) {
-									_log.debug(portalException);
-								}
-
+							if (commerceVirtualOrderItem == null) {
 								return null;
 							}
+
+							return _toVirtualItems(
+								commerceVirtualOrderItem.
+									getCommerceVirtualOrderItemFileEntries(),
+								commerceVirtualOrderItem);
 						}
-				);
+						catch (PortalException portalException) {
+							if (_log.isDebugEnabled()) {
+								_log.debug(portalException);
+							}
+
+							return null;
+						}
+					});
 			}
 		};
 	}
 
-	private VirtualItem[] _toVirtualItems(List<CommerceVirtualOrderItemFileEntry> commerceVirtualOrderItemFileEntries, CommerceVirtualOrderItem commerceVirtualOrderItem) {
-
-		return TransformUtil.transformToArray(
-				commerceVirtualOrderItemFileEntries,
-				commerceVirtualOrderItemFileEntry -> new VirtualItem() {
-					{
-						setUrl(
-								() -> {
-									if (Validator.isNull(commerceVirtualOrderItemFileEntry.getUrl())) {
-
-										_commerceMediaResolver.
-												getDownloadVirtualOrderItemURL(
-														commerceVirtualOrderItem.
-																getCommerceVirtualOrderItemId(),
-														commerceVirtualOrderItemFileEntry.
-																getFileEntryId());
-									}
-
-									return commerceVirtualOrderItemFileEntry.getUrl();
-								});
-						setVersion(
-								() -> {
-									if (Validator.isNull(
-											commerceVirtualOrderItemFileEntry.getVersion())) {
-
-										return null;
-									}
-
-									return commerceVirtualOrderItemFileEntry.getVersion();
-								});
-
-					}
-				},
-				VirtualItem.class);
-	}
-
-
-
 	private CommerceOrderItem _getCommerceOrderItem(
 			DTOConverterContext dtoConverterContext)
-			throws Exception {
+		throws Exception {
 
 		CommerceOrderItem commerceOrderItem = null;
 
 		boolean secure = GetterUtil.getBoolean(
-				dtoConverterContext.getAttribute("secure"), true);
+			dtoConverterContext.getAttribute("secure"), true);
 
 		if (secure) {
 			commerceOrderItem = _commerceOrderItemService.getCommerceOrderItem(
-					(Long)dtoConverterContext.getId());
+				(Long)dtoConverterContext.getId());
 		}
 		else {
 			commerceOrderItem =
-					_commerceOrderItemLocalService.getCommerceOrderItem(
-							(Long)dtoConverterContext.getId());
+				_commerceOrderItemLocalService.getCommerceOrderItem(
+					(Long)dtoConverterContext.getId());
 		}
 
 		return commerceOrderItem;
@@ -303,8 +272,50 @@ public class OrderItemDTOConverter
 		return cpInstance.getCPInstanceId();
 	}
 
+	private VirtualItem[] _toVirtualItems(
+		List<CommerceVirtualOrderItemFileEntry>
+			commerceVirtualOrderItemFileEntries,
+		CommerceVirtualOrderItem commerceVirtualOrderItem) {
+
+		return TransformUtil.transformToArray(
+			commerceVirtualOrderItemFileEntries,
+			commerceVirtualOrderItemFileEntry -> new VirtualItem() {
+				{
+					setUrl(
+						() -> {
+							if (Validator.isNull(
+									commerceVirtualOrderItemFileEntry.
+										getUrl())) {
+
+								_commerceMediaResolver.
+									getDownloadVirtualOrderItemURL(
+										commerceVirtualOrderItem.
+											getCommerceVirtualOrderItemId(),
+										commerceVirtualOrderItemFileEntry.
+											getFileEntryId());
+							}
+
+							return commerceVirtualOrderItemFileEntry.getUrl();
+						});
+					setVersion(
+						() -> {
+							if (Validator.isNull(
+									commerceVirtualOrderItemFileEntry.
+										getVersion())) {
+
+								return null;
+							}
+
+							return commerceVirtualOrderItemFileEntry.
+								getVersion();
+						});
+				}
+			},
+			VirtualItem.class);
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
-			OrderItemDTOConverter.class);
+		OrderItemDTOConverter.class);
 
 	@Reference
 	private CommerceMediaResolver _commerceMediaResolver;
@@ -314,7 +325,7 @@ public class OrderItemDTOConverter
 
 	@Reference
 	private CommerceOrderItemQuantityFormatter
-			_commerceOrderItemQuantityFormatter;
+		_commerceOrderItemQuantityFormatter;
 
 	@Reference
 	private CommerceOrderItemService _commerceOrderItemService;
@@ -327,7 +338,7 @@ public class OrderItemDTOConverter
 
 	@Reference
 	private CPInstanceUnitOfMeasureLocalService
-			_cpInstanceUnitOfMeasureLocalService;
+		_cpInstanceUnitOfMeasureLocalService;
 
 	@Reference
 	private CPMeasurementUnitService _cpMeasurementUnitService;

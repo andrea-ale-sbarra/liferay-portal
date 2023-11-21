@@ -65,15 +65,14 @@ public class DefaultCommerceMediaResolver implements CommerceMediaResolver {
 
 	@Override
 	public String getDownloadVirtualOrderItemURL(
-			long commerceVirtualOrderItemId, long fileEntryId) {
+		long commerceVirtualOrderItemId, long fileEntryId) {
 
 		return StringBundler.concat(
 			_portal.getPathModule(), StringPool.SLASH,
 			CommerceMediaConstants.SERVLET_PATH,
 			CommerceMediaConstants.URL_SEPARATOR_VIRTUAL_ORDER_ITEM,
 			commerceVirtualOrderItemId,
-			CommerceMediaConstants.URL_SEPARATOR_FILE,
-			fileEntryId);
+			CommerceMediaConstants.URL_SEPARATOR_FILE, fileEntryId);
 	}
 
 	@Override

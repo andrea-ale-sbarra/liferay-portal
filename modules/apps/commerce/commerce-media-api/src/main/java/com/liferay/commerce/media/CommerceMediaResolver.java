@@ -23,7 +23,7 @@ public interface CommerceMediaResolver {
 		throws PortalException;
 
 	public String getDownloadVirtualOrderItemURL(
-			long commerceVirtualOrderItemId, long fileEntryId);
+		long commerceVirtualOrderItemId, long fileEntryId);
 
 	public String getDownloadVirtualProductSampleURL(
 			String className, long classPK, long commerceAccountId,
