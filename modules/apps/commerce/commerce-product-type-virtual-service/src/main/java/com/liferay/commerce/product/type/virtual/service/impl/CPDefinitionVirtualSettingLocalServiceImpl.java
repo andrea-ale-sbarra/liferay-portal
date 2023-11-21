@@ -160,10 +160,14 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 		cpDefinitionVirtualSetting.setOverride(override);
 		cpDefinitionVirtualSetting.setExpandoBridgeAttributes(serviceContext);
 
-		cpDefinitionVirtualSetting = cpDefinitionVirtualSettingPersistence.update(
-			cpDefinitionVirtualSetting);
+		cpDefinitionVirtualSetting =
+			cpDefinitionVirtualSettingPersistence.update(
+				cpDefinitionVirtualSetting);
 
-		_cpdVirtualSettingFileEntryLocalService.addCPDVirtualSettingFileEntry(user.getUserId(), groupId, cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(), fileEntryId, url, StringPool.BLANK);
+		_cpdVirtualSettingFileEntryLocalService.addCPDVirtualSettingFileEntry(
+			user.getUserId(), groupId,
+			cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
+			fileEntryId, url, StringPool.BLANK);
 
 		return cpDefinitionVirtualSetting;
 	}
@@ -457,7 +461,8 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 	private CPDefinitionLocalService _cpDefinitionLocalService;
 
 	@Reference
-	private CPDVirtualSettingFileEntryLocalService _cpdVirtualSettingFileEntryLocalService;
+	private CPDVirtualSettingFileEntryLocalService
+		_cpdVirtualSettingFileEntryLocalService;
 
 	@Reference
 	private CPInstanceLocalService _cpInstanceLocalService;

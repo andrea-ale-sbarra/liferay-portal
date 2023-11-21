@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
@@ -236,12 +235,16 @@ public class CPDefinitionVirtualSettingDisplayContext
 			Collections.<ItemSelectorReturnType>singletonList(
 				new FileEntryItemSelectorReturnType()));
 
-		CPDefinitionVirtualSetting cpDefinitionVirtualSetting = getCPDefinitionVirtualSetting();
+		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
+			getCPDefinitionVirtualSetting();
 
 		return String.valueOf(
 			_itemSelector.getItemSelectorURL(
-				requestBackedPortletURLFactory, GroupLocalServiceUtil.getGroup(cpDefinitionVirtualSetting.getGroupId()), 0,
-				"uploadCPDefinitionVirtualSetting", fileItemSelectorCriterion));
+				requestBackedPortletURLFactory,
+				GroupLocalServiceUtil.getGroup(
+					cpDefinitionVirtualSetting.getGroupId()),
+				0, "uploadCPDefinitionVirtualSetting",
+				fileItemSelectorCriterion));
 	}
 
 	public JournalArticle getJournalArticle() throws PortalException {
