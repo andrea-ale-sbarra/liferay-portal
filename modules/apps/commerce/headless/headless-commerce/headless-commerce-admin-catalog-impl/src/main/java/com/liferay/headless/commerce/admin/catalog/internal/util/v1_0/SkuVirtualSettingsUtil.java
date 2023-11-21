@@ -9,8 +9,10 @@ import com.liferay.commerce.constants.CommerceOrderConstants;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.type.virtual.constants.VirtualCPTypeConstants;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
+import com.liferay.commerce.product.type.virtual.service.CPDVirtualSettingFileEntryService;
 import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingService;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.SkuVirtualSettings;
+import com.liferay.headless.commerce.admin.catalog.dto.v1_0.SkuVirtualSettingsFileEntry;
 import com.liferay.headless.commerce.admin.catalog.internal.util.FileEntryUtil;
 import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.journal.model.JournalArticle;
@@ -34,6 +36,7 @@ public class SkuVirtualSettingsUtil {
 	public static CPDefinitionVirtualSetting addOrUpdateSkuVirtualSettings(
 			CPInstance cpInstance, SkuVirtualSettings skuVirtualSettings,
 			CPDefinitionVirtualSettingService cpDefinitionVirtualSettingService,
+			CPDVirtualSettingFileEntryService cpdVirtualSettingFileEntryService,
 			UniqueFileNameProvider uniqueFileNameProvider,
 			ServiceContext serviceContext)
 		throws Exception {
@@ -45,7 +48,8 @@ public class SkuVirtualSettingsUtil {
 		if (cpDefinitionVirtualSetting == null) {
 			return _addSkuVirtualSettings(
 				cpInstance, skuVirtualSettings,
-				cpDefinitionVirtualSettingService, uniqueFileNameProvider,
+				cpDefinitionVirtualSettingService,
+				cpdVirtualSettingFileEntryService, uniqueFileNameProvider,
 				serviceContext);
 		}
 
@@ -58,6 +62,7 @@ public class SkuVirtualSettingsUtil {
 	private static CPDefinitionVirtualSetting _addSkuVirtualSettings(
 			CPInstance cpInstance, SkuVirtualSettings skuVirtualSettings,
 			CPDefinitionVirtualSettingService cpDefinitionVirtualSettingService,
+			CPDVirtualSettingFileEntryService cpdVirtualSettingFileEntryService,
 			UniqueFileNameProvider uniqueFileNameProvider,
 			ServiceContext serviceContext)
 		throws Exception {
@@ -100,19 +105,40 @@ public class SkuVirtualSettingsUtil {
 				skuVirtualSettings.getTermsOfUseJournalArticleId());
 		}
 
-		return cpDefinitionVirtualSettingService.addCPDefinitionVirtualSetting(
-			CPInstance.class.getName(), cpInstance.getCPInstanceId(),
-			attachmentFileEntryId, attachmentURL,
-			_getActivationStatus(
-				GetterUtil.getInteger(
-					skuVirtualSettings.getActivationStatus(),
-					CommerceOrderConstants.ORDER_STATUS_COMPLETED)),
-			TimeUnit.DAYS.toMillis(
-				GetterUtil.getLong(skuVirtualSettings.getDuration())),
-			GetterUtil.getInteger(skuVirtualSettings.getMaxUsages()), useSample,
-			sampleFileEntryId, sampleAttachmentURL, termsOfUseRequired,
-			termsOfUseContentMap, termsOfUseJournalArticleId, true,
-			serviceContext);
+		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
+			cpDefinitionVirtualSettingService.addCPDefinitionVirtualSetting(
+				CPInstance.class.getName(), cpInstance.getCPInstanceId(),
+				attachmentFileEntryId, attachmentURL,
+				_getActivationStatus(
+					GetterUtil.getInteger(
+						skuVirtualSettings.getActivationStatus(),
+						CommerceOrderConstants.ORDER_STATUS_COMPLETED)),
+				TimeUnit.DAYS.toMillis(
+					GetterUtil.getLong(skuVirtualSettings.getDuration())),
+				GetterUtil.getInteger(skuVirtualSettings.getMaxUsages()),
+				useSample, sampleFileEntryId, sampleAttachmentURL,
+				termsOfUseRequired, termsOfUseContentMap,
+				termsOfUseJournalArticleId, true, serviceContext);
+
+		if (skuVirtualSettings.getSkuVirtualSettingsFileEntries() == null) {
+			return cpDefinitionVirtualSetting;
+		}
+
+		for (SkuVirtualSettingsFileEntry productVirtualSettingsFileEntry :
+				skuVirtualSettings.getSkuVirtualSettingsFileEntries()) {
+
+			cpdVirtualSettingFileEntryService.addCPDefinitionVirtualSetting(
+				cpDefinitionVirtualSetting.getGroupId(),
+				cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
+				FileEntryUtil.getFileEntryId(
+					productVirtualSettingsFileEntry.getAttachment(),
+					productVirtualSettingsFileEntry.getUrl(),
+					uniqueFileNameProvider, serviceContext),
+				productVirtualSettingsFileEntry.getUrl(),
+				productVirtualSettingsFileEntry.getVersion());
+		}
+
+		return cpDefinitionVirtualSetting;
 	}
 
 	private static int _getActivationStatus(int activationStatus) {
