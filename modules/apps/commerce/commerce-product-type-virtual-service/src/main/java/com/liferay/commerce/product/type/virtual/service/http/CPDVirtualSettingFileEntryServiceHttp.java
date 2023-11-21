@@ -135,7 +135,7 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 
 	public static
 		com.liferay.commerce.product.type.virtual.model.
-			CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
+			CPDVirtualSettingFileEntry fetchCPDVirtualSettingFileEntry(
 					HttpPrincipal httpPrincipal,
 					long cpdVirtualSettingFileEntryId)
 				throws com.liferay.portal.kernel.exception.PortalException {
@@ -143,8 +143,8 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CPDVirtualSettingFileEntryServiceUtil.class,
-				"getCPDVirtualSettingFileEntry",
-				_getCPDVirtualSettingFileEntryParameterTypes2);
+				"fetchCPDVirtualSettingFileEntry",
+				_fetchCPDVirtualSettingFileEntryParameterTypes2);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cpdVirtualSettingFileEntryId);
@@ -180,7 +180,7 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 
 	public static
 		com.liferay.commerce.product.type.virtual.model.
-			CPDVirtualSettingFileEntry fetchCPDVirtualSettingFileEntry(
+			CPDVirtualSettingFileEntry getCPDVirtualSettingFileEntry(
 					HttpPrincipal httpPrincipal,
 					long cpdVirtualSettingFileEntryId)
 				throws com.liferay.portal.kernel.exception.PortalException {
@@ -188,8 +188,8 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CPDVirtualSettingFileEntryServiceUtil.class,
-				"fetchCPDVirtualSettingFileEntry",
-				_fetchCPDVirtualSettingFileEntryParameterTypes3);
+				"getCPDVirtualSettingFileEntry",
+				_getCPDVirtualSettingFileEntryParameterTypes3);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cpdVirtualSettingFileEntryId);
@@ -282,11 +282,11 @@ public class CPDVirtualSettingFileEntryServiceHttp {
 			long.class
 		};
 	private static final Class<?>[]
-		_getCPDVirtualSettingFileEntryParameterTypes2 = new Class[] {
+		_fetchCPDVirtualSettingFileEntryParameterTypes2 = new Class[] {
 			long.class
 		};
 	private static final Class<?>[]
-		_fetchCPDVirtualSettingFileEntryParameterTypes3 = new Class[] {
+		_getCPDVirtualSettingFileEntryParameterTypes3 = new Class[] {
 			long.class
 		};
 	private static final Class<?>[]
