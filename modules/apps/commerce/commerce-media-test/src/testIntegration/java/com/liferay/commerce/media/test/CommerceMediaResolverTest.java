@@ -204,7 +204,7 @@ public class CommerceMediaResolverTest {
 
 		String downloadVirtualOrderItemURL =
 			_commerceMediaResolver.getDownloadVirtualOrderItemURL(
-				commerceVirtualOrderItem.getCommerceVirtualOrderItemId());
+				commerceVirtualOrderItem.getCommerceVirtualOrderItemId(), 0);
 
 		String expectedVirtualOrderItemURL = StringBundler.concat(
 			_portal.getPathModule(), StringPool.SLASH,
