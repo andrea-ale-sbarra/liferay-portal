@@ -52,8 +52,11 @@ public class EditCPDVirtualSettingFileEntryMVCActionCommand
 		long cpdVirtualSettingFileEntryId = ParamUtil.getLong(
 			actionRequest, "cpdVirtualSettingFileEntryId");
 
-		_cpdVirtualSettingFileEntryService.deleteCPDVirtualSettingFileEntry(
-			cpdVirtualSettingFileEntryId);
+		CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry = _cpdVirtualSettingFileEntryService.getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
+		CPDefinitionVirtualSetting cpDefinitionVirtualSetting = cpdVirtualSettingFileEntry.getCPDefinitionVirtualSetting();
+
+		_cpdVirtualSettingFileEntryService.deleteCPDVirtualSettingFileEntry(cpDefinitionVirtualSetting.getClassName(), cpDefinitionVirtualSetting.getClassPK(),
+				cpdVirtualSettingFileEntryId);
 	}
 
 	@Override
@@ -144,9 +147,8 @@ public class EditCPDVirtualSettingFileEntryMVCActionCommand
 				className, classPK);
 
 		return _cpdVirtualSettingFileEntryService.addCPDefinitionVirtualSetting(
-			cpDefinitionVirtualSetting.getGroupId(),
-			cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
-			fileEntryId, url, version);
+			cpDefinitionVirtualSetting.getGroupId(), className, classPK, cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
+				fileEntryId, url, version);
 	}
 
 	@Reference

@@ -128,14 +128,11 @@ public class SkuVirtualSettingsUtil {
 				skuVirtualSettings.getSkuVirtualSettingsFileEntries()) {
 
 			cpdVirtualSettingFileEntryService.addCPDefinitionVirtualSetting(
-				cpDefinitionVirtualSetting.getGroupId(),
-				cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
-				FileEntryUtil.getFileEntryId(
-					productVirtualSettingsFileEntry.getAttachment(),
-					productVirtualSettingsFileEntry.getUrl(),
-					uniqueFileNameProvider, serviceContext),
-				productVirtualSettingsFileEntry.getUrl(),
-				productVirtualSettingsFileEntry.getVersion());
+				cpDefinitionVirtualSetting.getGroupId(), CPInstance.class.getName(), cpInstance.getCPInstanceId(), cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
+					FileEntryUtil.getFileEntryId(
+						productVirtualSettingsFileEntry.getAttachment(),
+						productVirtualSettingsFileEntry.getUrl(),
+						uniqueFileNameProvider, serviceContext), productVirtualSettingsFileEntry.getUrl(), productVirtualSettingsFileEntry.getVersion());
 		}
 
 		return cpDefinitionVirtualSetting;
