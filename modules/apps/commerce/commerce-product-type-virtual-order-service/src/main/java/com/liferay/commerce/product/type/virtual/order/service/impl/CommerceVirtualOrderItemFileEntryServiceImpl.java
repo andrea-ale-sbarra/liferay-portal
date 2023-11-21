@@ -12,10 +12,9 @@ import com.liferay.commerce.product.type.virtual.order.service.base.CommerceVirt
 import com.liferay.commerce.service.CommerceOrderItemLocalService;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
-
-import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -33,8 +32,9 @@ public class CommerceVirtualOrderItemFileEntryServiceImpl
 	extends CommerceVirtualOrderItemFileEntryServiceBaseImpl {
 
 	public CommerceVirtualOrderItemFileEntry
-		fetchCommerceVirtualOrderItemFileEntry(
-			long commerceVirtualOrderItemFileEntryId) throws PortalException {
+			fetchCommerceVirtualOrderItemFileEntry(
+				long commerceVirtualOrderItemFileEntryId)
+		throws PortalException {
 
 		CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry =
 			commerceVirtualOrderItemFileEntryLocalService.
@@ -42,11 +42,14 @@ public class CommerceVirtualOrderItemFileEntryServiceImpl
 					commerceVirtualOrderItemFileEntryId);
 
 		if (commerceVirtualOrderItemFileEntry != null) {
-
-			CommerceOrderItem commerceOrderItem = _commerceOrderItemLocalService.getCommerceOrderItem(commerceVirtualOrderItemFileEntry.getCommerceVirtualOrderItemId());
+			CommerceOrderItem commerceOrderItem =
+				_commerceOrderItemLocalService.getCommerceOrderItem(
+					commerceVirtualOrderItemFileEntry.
+						getCommerceVirtualOrderItemId());
 
 			_commerceOrderModelResourcePermission.check(
-					getPermissionChecker(), commerceOrderItem.getCommerceOrderId(), ActionKeys.VIEW);
+				getPermissionChecker(), commerceOrderItem.getCommerceOrderId(),
+				ActionKeys.VIEW);
 		}
 
 		return commerceVirtualOrderItemFileEntry;
@@ -59,12 +62,19 @@ public class CommerceVirtualOrderItemFileEntryServiceImpl
 				String url, String version)
 		throws PortalException {
 
-		CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry = commerceVirtualOrderItemFileEntryLocalService.getCommerceVirtualOrderItemFileEntry(commerceVirtualOrderItemFileEntryId);
+		CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry =
+			commerceVirtualOrderItemFileEntryLocalService.
+				getCommerceVirtualOrderItemFileEntry(
+					commerceVirtualOrderItemFileEntryId);
 
-		CommerceOrderItem commerceOrderItem = _commerceOrderItemLocalService.getCommerceOrderItem(commerceVirtualOrderItemFileEntry.getCommerceVirtualOrderItemId());
+		CommerceOrderItem commerceOrderItem =
+			_commerceOrderItemLocalService.getCommerceOrderItem(
+				commerceVirtualOrderItemFileEntry.
+					getCommerceVirtualOrderItemId());
 
 		_commerceOrderModelResourcePermission.check(
-				getPermissionChecker(), commerceOrderItem .getCommerceOrderId(), ActionKeys.UPDATE);
+			getPermissionChecker(), commerceOrderItem.getCommerceOrderId(),
+			ActionKeys.UPDATE);
 
 		return commerceVirtualOrderItemFileEntryLocalService.
 			updateCommerceVirtualOrderItemFileEntry(
@@ -72,13 +82,12 @@ public class CommerceVirtualOrderItemFileEntryServiceImpl
 	}
 
 	@Reference
-	private CommerceOrderItemLocalService
-			_commerceOrderItemLocalService;
+	private CommerceOrderItemLocalService _commerceOrderItemLocalService;
 
 	@Reference(
-			target = "(model.class.name=com.liferay.commerce.model.CommerceOrder)"
+		target = "(model.class.name=com.liferay.commerce.model.CommerceOrder)"
 	)
 	private ModelResourcePermission<CommerceOrder>
-			_commerceOrderModelResourcePermission;
-}
+		_commerceOrderModelResourcePermission;
 
+}

@@ -14,7 +14,6 @@ import com.liferay.commerce.product.service.CPInstanceLocalService;
 import com.liferay.commerce.product.service.CommerceCatalogLocalService;
 import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
-import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingLocalServiceUtil;
 import com.liferay.commerce.product.type.virtual.service.base.CPDVirtualSettingFileEntryServiceBaseImpl;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -40,8 +39,9 @@ public class CPDVirtualSettingFileEntryServiceImpl
 
 	@Override
 	public CPDVirtualSettingFileEntry addCPDefinitionVirtualSetting(
-			long groupId, String className, long classPK, long cpDefinitionVirtualSettingId, long fileEntryId,
-			String url, String version)
+			long groupId, String className, long classPK,
+			long cpDefinitionVirtualSettingId, long fileEntryId, String url,
+			String version)
 		throws PortalException {
 
 		_checkPermission(className, classPK, ActionKeys.UPDATE);
@@ -94,7 +94,7 @@ public class CPDVirtualSettingFileEntryServiceImpl
 				getCPDVirtualSettingFileEntry(cpdVirtualSettingFileEntryId);
 
 		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-				cpdVirtualSettingFileEntry.getCPDefinitionVirtualSetting();
+			cpdVirtualSettingFileEntry.getCPDefinitionVirtualSetting();
 
 		_checkPermission(
 			cpDefinitionVirtualSetting.getClassName(),

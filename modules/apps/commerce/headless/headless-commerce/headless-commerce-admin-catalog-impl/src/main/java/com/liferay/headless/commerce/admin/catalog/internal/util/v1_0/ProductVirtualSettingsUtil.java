@@ -131,11 +131,15 @@ public class ProductVirtualSettingsUtil {
 				productVirtualSettings.getProductVirtualSettingsFileEntries()) {
 
 			cpdVirtualSettingFileEntryService.addCPDefinitionVirtualSetting(
-				cpDefinitionVirtualSetting.getGroupId(),CPDefinition.class.getName(), cpDefinition.getCPDefinitionId(), cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
-					FileEntryUtil.getFileEntryId(
-						productVirtualSettingsFileEntry.getAttachment(),
-						productVirtualSettingsFileEntry.getUrl(),
-						uniqueFileNameProvider, serviceContext), productVirtualSettingsFileEntry.getUrl(), productVirtualSettingsFileEntry.getVersion());
+				cpDefinitionVirtualSetting.getGroupId(),
+				CPDefinition.class.getName(), cpDefinition.getCPDefinitionId(),
+				cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
+				FileEntryUtil.getFileEntryId(
+					productVirtualSettingsFileEntry.getAttachment(),
+					productVirtualSettingsFileEntry.getUrl(),
+					uniqueFileNameProvider, serviceContext),
+				productVirtualSettingsFileEntry.getUrl(),
+				productVirtualSettingsFileEntry.getVersion());
 		}
 
 		return cpDefinitionVirtualSetting;

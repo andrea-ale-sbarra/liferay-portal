@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 public class CPDefinitionVirtualSettingActionHelper {
 
 	public CommerceVirtualOrderItemFileEntry
-		getCommerceVirtualOrderItemFileEntry(RenderRequest renderRequest) {
+		getCommerceVirtualOrderItemFileEntry(RenderRequest renderRequest) throws PortalException {
 
 		long commerceVirtualOrderItemFileEntryId = ParamUtil.getLong(
 			renderRequest, "commerceVirtualOrderItemFileEntryId");
