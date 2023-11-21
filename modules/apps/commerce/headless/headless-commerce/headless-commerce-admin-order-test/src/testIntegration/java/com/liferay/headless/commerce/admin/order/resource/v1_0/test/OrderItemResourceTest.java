@@ -387,7 +387,7 @@ public class OrderItemResourceTest extends BaseOrderItemResourceTestCase {
 			cpDefinition.getModelClassName(), cpDefinition.getCPDefinitionId(),
 			fileEntryId, url, CommerceOrderConstants.ORDER_STATUS_PENDING, 0,
 			RandomTestUtil.randomInt(), true, 0, "https://liferay.com", false,
-			null, 0, _serviceContext);
+			null, 0, false, _serviceContext);
 
 		CommerceTestUtil.updateBackOrderCPDefinitionInventory(cpDefinition);
 

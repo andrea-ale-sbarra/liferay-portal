@@ -82,7 +82,7 @@ public class CPDefinitionVirtualSettingServiceImpl
 				className, classPK, fileEntryId, url, activationStatus,
 				duration, maxUsages, useSample, sampleFileEntryId, sampleURL,
 				termsOfUseRequired, termsOfUseContentMap,
-				termsOfUseJournalArticleResourcePrimKey, serviceContext);
+				termsOfUseJournalArticleResourcePrimKey, false, serviceContext);
 	}
 
 	@Override
