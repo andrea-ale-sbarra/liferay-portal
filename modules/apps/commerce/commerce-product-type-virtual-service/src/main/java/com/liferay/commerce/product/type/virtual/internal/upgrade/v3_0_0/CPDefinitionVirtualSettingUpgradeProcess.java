@@ -32,7 +32,7 @@ public class CPDefinitionVirtualSettingUpgradeProcess extends UpgradeProcess {
 
 			while (resultSet.next()) {
 				long groupId = resultSet.getLong("groupId");
-				long classPK = resultSet.getLong("companyPK");
+				long classPK = resultSet.getLong("cpDefinitionId");
 
 				preparedStatement2.setLong(1, groupId);
 				preparedStatement2.setLong(2, classPK);
@@ -50,7 +50,7 @@ public class CPDefinitionVirtualSettingUpgradeProcess extends UpgradeProcess {
 
 			while (resultSet.next()) {
 				long groupId = resultSet.getLong("groupId");
-				long classPK = resultSet.getLong("companyPK");
+				long classPK = resultSet.getLong("cpInstanceId");
 
 				preparedStatement4.setLong(1, groupId);
 				preparedStatement4.setLong(2, classPK);
