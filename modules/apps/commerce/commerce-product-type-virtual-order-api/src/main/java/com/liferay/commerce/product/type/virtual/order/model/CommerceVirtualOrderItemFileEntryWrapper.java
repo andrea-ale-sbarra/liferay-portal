@@ -146,6 +146,13 @@ public class CommerceVirtualOrderItemFileEntryWrapper
 		return wrap(model.cloneWithOriginalValues());
 	}
 
+	@Override
+	public CommerceVirtualOrderItem getCommerceVirtualOrderItem()
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return model.getCommerceVirtualOrderItem();
+	}
+
 	/**
 	 * Returns the commerce virtual order item file entry ID of this commerce virtual order item file entry.
 	 *

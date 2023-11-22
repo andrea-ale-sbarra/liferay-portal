@@ -170,8 +170,8 @@ public class CommerceVirtualOrderItemServiceHttp {
 	public static com.liferay.commerce.product.type.virtual.order.model.
 		CommerceVirtualOrderItem updateCommerceVirtualOrderItem(
 				HttpPrincipal httpPrincipal, long commerceVirtualOrderItemId,
-				long fileEntryId, String url, int activationStatus,
-				long duration, int usages, int maxUsages, boolean active)
+				int activationStatus, long duration, int usages, int maxUsages,
+				boolean active)
 			throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
@@ -181,8 +181,8 @@ public class CommerceVirtualOrderItemServiceHttp {
 				_updateCommerceVirtualOrderItemParameterTypes3);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, commerceVirtualOrderItemId, fileEntryId, url,
-				activationStatus, duration, usages, maxUsages, active);
+				methodKey, commerceVirtualOrderItemId, activationStatus,
+				duration, usages, maxUsages, active);
 
 			Object returnObj = null;
 
@@ -228,8 +228,8 @@ public class CommerceVirtualOrderItemServiceHttp {
 	};
 	private static final Class<?>[]
 		_updateCommerceVirtualOrderItemParameterTypes3 = new Class[] {
-			long.class, long.class, String.class, int.class, long.class,
-			int.class, int.class, boolean.class
+			long.class, int.class, long.class, int.class, int.class,
+			boolean.class
 		};
 
 }

@@ -67,9 +67,8 @@ public interface CommerceVirtualOrderItemService extends BaseService {
 	public String getOSGiServiceIdentifier();
 
 	public CommerceVirtualOrderItem updateCommerceVirtualOrderItem(
-			long commerceVirtualOrderItemId,
-			int activationStatus, long duration, int usages, int maxUsages,
-			boolean active)
+			long commerceVirtualOrderItemId, int activationStatus,
+			long duration, int usages, int maxUsages, boolean active)
 		throws PortalException;
 
 }
