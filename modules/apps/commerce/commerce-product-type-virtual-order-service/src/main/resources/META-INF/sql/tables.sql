@@ -25,8 +25,6 @@ create table CommerceVirtualOrderItem (
 	createDate DATE null,
 	modifiedDate DATE null,
 	commerceOrderItemId LONG,
-	fileEntryId LONG,
-	url VARCHAR(75) null,
 	activationStatus INTEGER,
 	duration LONG,
 	usages INTEGER,

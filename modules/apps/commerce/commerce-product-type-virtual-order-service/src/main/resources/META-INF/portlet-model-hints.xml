@@ -12,8 +12,6 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="commerceOrderItemId" type="long" />
-		<field name="fileEntryId" type="long" />
-		<field name="url" type="String" />
 		<field name="activationStatus" type="int" />
 		<field name="duration" type="long" />
 		<field name="usages" type="int" />

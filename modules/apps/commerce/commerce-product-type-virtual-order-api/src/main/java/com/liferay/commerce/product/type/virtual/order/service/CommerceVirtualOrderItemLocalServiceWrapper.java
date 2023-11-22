@@ -558,14 +558,14 @@ public class CommerceVirtualOrderItemLocalServiceWrapper
 	@Override
 	public com.liferay.commerce.product.type.virtual.order.model.
 		CommerceVirtualOrderItem updateCommerceVirtualOrderItem(
-				long commerceVirtualOrderItemId, long fileEntryId, String url,
-				int activationStatus, long duration, int usages, int maxUsages,
+				long commerceVirtualOrderItemId,
+                int activationStatus, long duration, int usages, int maxUsages,
 				boolean active)
 			throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _commerceVirtualOrderItemLocalService.
 			updateCommerceVirtualOrderItem(
-				commerceVirtualOrderItemId, fileEntryId, url, activationStatus,
+				commerceVirtualOrderItemId, activationStatus,
 				duration, usages, maxUsages, active);
 	}
 

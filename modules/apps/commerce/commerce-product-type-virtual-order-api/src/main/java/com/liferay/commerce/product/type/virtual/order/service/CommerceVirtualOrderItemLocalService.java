@@ -377,7 +377,7 @@ public interface CommerceVirtualOrderItemLocalService
 		CommerceVirtualOrderItem commerceVirtualOrderItem);
 
 	public CommerceVirtualOrderItem updateCommerceVirtualOrderItem(
-			long commerceVirtualOrderItemId, long fileEntryId, String url,
+			long commerceVirtualOrderItemId,
 			int activationStatus, long duration, int usages, int maxUsages,
 			boolean active)
 		throws PortalException;

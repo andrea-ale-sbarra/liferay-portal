@@ -474,7 +474,7 @@ public class CommerceVirtualOrderItemLocalServiceUtil {
 		throws PortalException {
 
 		return getService().updateCommerceVirtualOrderItem(
-			commerceVirtualOrderItemId, fileEntryId, url, activationStatus,
+			commerceVirtualOrderItemId, activationStatus,
 			duration, usages, maxUsages, active);
 	}
 

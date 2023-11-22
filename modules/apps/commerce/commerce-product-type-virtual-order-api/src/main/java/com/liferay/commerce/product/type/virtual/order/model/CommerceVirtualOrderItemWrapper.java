@@ -48,8 +48,6 @@ public class CommerceVirtualOrderItemWrapper
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("commerceOrderItemId", getCommerceOrderItemId());
-		attributes.put("fileEntryId", getFileEntryId());
-		attributes.put("url", getUrl());
 		attributes.put("activationStatus", getActivationStatus());
 		attributes.put("duration", getDuration());
 		attributes.put("usages", getUsages());
@@ -122,18 +120,6 @@ public class CommerceVirtualOrderItemWrapper
 
 		if (commerceOrderItemId != null) {
 			setCommerceOrderItemId(commerceOrderItemId);
-		}
-
-		Long fileEntryId = (Long)attributes.get("fileEntryId");
-
-		if (fileEntryId != null) {
-			setFileEntryId(fileEntryId);
-		}
-
-		String url = (String)attributes.get("url");
-
-		if (url != null) {
-			setUrl(url);
 		}
 
 		Integer activationStatus = (Integer)attributes.get("activationStatus");
@@ -294,16 +280,6 @@ public class CommerceVirtualOrderItemWrapper
 	}
 
 	/**
-	 * Returns the file entry ID of this commerce virtual order item.
-	 *
-	 * @return the file entry ID of this commerce virtual order item
-	 */
-	@Override
-	public long getFileEntryId() {
-		return model.getFileEntryId();
-	}
-
-	/**
 	 * Returns the group ID of this commerce virtual order item.
 	 *
 	 * @return the group ID of this commerce virtual order item
@@ -361,16 +337,6 @@ public class CommerceVirtualOrderItemWrapper
 	@Override
 	public Date getStartDate() {
 		return model.getStartDate();
-	}
-
-	/**
-	 * Returns the url of this commerce virtual order item.
-	 *
-	 * @return the url of this commerce virtual order item
-	 */
-	@Override
-	public String getUrl() {
-		return model.getUrl();
 	}
 
 	/**
@@ -519,16 +485,6 @@ public class CommerceVirtualOrderItemWrapper
 	}
 
 	/**
-	 * Sets the file entry ID of this commerce virtual order item.
-	 *
-	 * @param fileEntryId the file entry ID of this commerce virtual order item
-	 */
-	@Override
-	public void setFileEntryId(long fileEntryId) {
-		model.setFileEntryId(fileEntryId);
-	}
-
-	/**
 	 * Sets the group ID of this commerce virtual order item.
 	 *
 	 * @param groupId the group ID of this commerce virtual order item
@@ -586,16 +542,6 @@ public class CommerceVirtualOrderItemWrapper
 	@Override
 	public void setStartDate(Date startDate) {
 		model.setStartDate(startDate);
-	}
-
-	/**
-	 * Sets the url of this commerce virtual order item.
-	 *
-	 * @param url the url of this commerce virtual order item
-	 */
-	@Override
-	public void setUrl(String url) {
-		model.setUrl(url);
 	}
 
 	/**
