@@ -74,7 +74,7 @@ public class CPDVirtualSettingFileEntryUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected UpgradeStep[] getPreUpgradeSteps() {
-		return new UpgradeStep[] {CPDVirtualSettingFileEntryTable.create()};
+		return new UpgradeStep[] {new CPDefinitionVirtualSettingUpgradeProcess(), CPDVirtualSettingFileEntryTable.create()};
 	}
 
 }
