@@ -370,8 +370,20 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 		cpDefinitionVirtualSetting.setOverride(override);
 		cpDefinitionVirtualSetting.setExpandoBridgeAttributes(serviceContext);
 
-		return cpDefinitionVirtualSettingPersistence.update(
-			cpDefinitionVirtualSetting);
+		cpDefinitionVirtualSetting = cpDefinitionVirtualSettingPersistence.update(
+				cpDefinitionVirtualSetting);
+
+		if ((fileEntryId > 0) || Validator.isNotNull(url)) {
+			_cpdVirtualSettingFileEntryLocalService.
+				addCPDVirtualSettingFileEntry(
+					cpDefinitionVirtualSetting.getUserId(),
+					cpDefinitionVirtualSetting.getGroupId(),
+					cpDefinitionVirtualSetting.
+						getCPDefinitionVirtualSettingId(),
+					fileEntryId, url, StringPool.BLANK);
+		}
+
+		return cpDefinitionVirtualSetting;
 	}
 
 	@Override

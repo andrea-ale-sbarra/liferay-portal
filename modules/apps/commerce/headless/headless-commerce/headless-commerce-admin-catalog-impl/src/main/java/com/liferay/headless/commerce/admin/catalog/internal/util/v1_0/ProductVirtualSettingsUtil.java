@@ -257,22 +257,49 @@ public class ProductVirtualSettingsUtil {
 			}
 		}
 
-		return cpDefinitionVirtualSettingService.
-			updateCPDefinitionVirtualSetting(
+		 cpDefinitionVirtualSetting = cpDefinitionVirtualSettingService.
+				updateCPDefinitionVirtualSetting(
+						cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
+						attachmentFileEntryId, attachmentURL,
+						_getActivationStatus(
+								GetterUtil.getInteger(
+										productVirtualSettings.getActivationStatus(),
+										cpDefinitionVirtualSetting.getActivationStatus())),
+						GetterUtil.getLong(
+								duration, cpDefinitionVirtualSetting.getDuration()),
+						GetterUtil.getInteger(
+								productVirtualSettings.getMaxUsages(),
+								cpDefinitionVirtualSetting.getMaxUsages()),
+						useSample, sampleFileEntryId, sampleAttachmentURL,
+						termsOfUseRequired, termsOfUseContentMap,
+						termsOfUseJournalArticleId, serviceContext);
+
+		if (productVirtualSettings.getProductVirtualSettingsFileEntries() ==
+				null) {
+
+			return cpDefinitionVirtualSetting;
+		}
+
+		for (CPDVirtualSettingFileEntry cpdVirtualSettingFileEntry : cpDefinitionVirtualSetting.getCPDVirtualSettingFileEntries()) {
+			cpdVirtualSettingFileEntryService.deleteCPDVirtualSettingFileEntry(CPDefinition.class.getName(), cpDefinitionVirtualSetting.getClassPK(), cpdVirtualSettingFileEntry.getCPDefinitionVirtualSettingFileEntryId());
+		}
+
+		for (ProductVirtualSettingsFileEntry productVirtualSettingsFileEntry :
+				productVirtualSettings.getProductVirtualSettingsFileEntries()) {
+
+			cpdVirtualSettingFileEntryService.addCPDefinitionVirtualSetting(
+				cpDefinitionVirtualSetting.getGroupId(),
+				CPDefinition.class.getName(), cpDefinitionVirtualSetting.getClassPK(),
 				cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
-				attachmentFileEntryId, attachmentURL,
-				_getActivationStatus(
-					GetterUtil.getInteger(
-						productVirtualSettings.getActivationStatus(),
-						cpDefinitionVirtualSetting.getActivationStatus())),
-				GetterUtil.getLong(
-					duration, cpDefinitionVirtualSetting.getDuration()),
-				GetterUtil.getInteger(
-					productVirtualSettings.getMaxUsages(),
-					cpDefinitionVirtualSetting.getMaxUsages()),
-				useSample, sampleFileEntryId, sampleAttachmentURL,
-				termsOfUseRequired, termsOfUseContentMap,
-				termsOfUseJournalArticleId, serviceContext);
+				FileEntryUtil.getFileEntryId(
+					productVirtualSettingsFileEntry.getAttachment(),
+					productVirtualSettingsFileEntry.getUrl(),
+					uniqueFileNameProvider, serviceContext),
+				productVirtualSettingsFileEntry.getUrl(),
+				productVirtualSettingsFileEntry.getVersion());
+		}
+
+		return cpDefinitionVirtualSetting;
 	}
 
 	private static String _validateURL(String value) throws Exception {
