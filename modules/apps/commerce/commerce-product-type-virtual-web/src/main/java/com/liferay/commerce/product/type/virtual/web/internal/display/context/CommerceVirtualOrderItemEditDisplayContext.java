@@ -119,7 +119,9 @@ public class CommerceVirtualOrderItemEditDisplayContext {
 		return _commerceVirtualOrderItem;
 	}
 
-	public String getDownloadFileEntryURL(long fileEntryId) throws PortalException {
+	public String getDownloadFileEntryURL(long fileEntryId)
+		throws PortalException {
+
 		if (_commerceVirtualOrderItem == null) {
 			return null;
 		}

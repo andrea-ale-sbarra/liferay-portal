@@ -367,11 +367,18 @@ public class OrderItemResourceTest extends BaseOrderItemResourceTestCase {
 							return null;
 						}
 
-						List<CommerceVirtualOrderItemFileEntry> commerceVirtualOrderItemFileEntries = commerceVirtualOrderItem.getCommerceVirtualOrderItemFileEntries();
+						List<CommerceVirtualOrderItemFileEntry>
+							commerceVirtualOrderItemFileEntries =
+								commerceVirtualOrderItem.
+									getCommerceVirtualOrderItemFileEntries();
 
-						CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry = commerceVirtualOrderItemFileEntries.get(0);
+						CommerceVirtualOrderItemFileEntry
+							commerceVirtualOrderItemFileEntry =
+								commerceVirtualOrderItemFileEntries.get(0);
 
-						return new String[] {commerceVirtualOrderItemFileEntry.getUrl()};
+						return new String[] {
+							commerceVirtualOrderItemFileEntry.getUrl()
+						};
 					});
 			}
 		};

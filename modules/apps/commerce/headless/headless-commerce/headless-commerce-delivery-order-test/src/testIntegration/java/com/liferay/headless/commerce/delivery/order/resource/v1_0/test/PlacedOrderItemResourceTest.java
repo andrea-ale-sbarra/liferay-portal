@@ -253,10 +253,17 @@ public class PlacedOrderItemResourceTest
 							return null;
 						}
 
-						List<CommerceVirtualOrderItemFileEntry> commerceVirtualOrderItemFileEntries = commerceVirtualOrderItem.getCommerceVirtualOrderItemFileEntries();
-						CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry = commerceVirtualOrderItemFileEntries.get(0);
+						List<CommerceVirtualOrderItemFileEntry>
+							commerceVirtualOrderItemFileEntries =
+								commerceVirtualOrderItem.
+									getCommerceVirtualOrderItemFileEntries();
+						CommerceVirtualOrderItemFileEntry
+							commerceVirtualOrderItemFileEntry =
+								commerceVirtualOrderItemFileEntries.get(0);
 
-						return new String[] {commerceVirtualOrderItemFileEntry.getUrl()};
+						return new String[] {
+							commerceVirtualOrderItemFileEntry.getUrl()
+						};
 					});
 			}
 		};
