@@ -164,11 +164,12 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 			cpDefinitionVirtualSettingPersistence.update(
 				cpDefinitionVirtualSetting);
 
-		_cpdVirtualSettingFileEntryLocalService.addCPDVirtualSettingFileEntry(
-			user.getUserId(), groupId,
-			cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
-			fileEntryId, url, StringPool.BLANK);
-
+		if((fileEntryId > 0) || Validator.isNotNull(url)) {
+			_cpdVirtualSettingFileEntryLocalService.addCPDVirtualSettingFileEntry(
+					user.getUserId(), groupId,
+					cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
+					fileEntryId, url, StringPool.BLANK);
+		}
 		return cpDefinitionVirtualSetting;
 	}
 

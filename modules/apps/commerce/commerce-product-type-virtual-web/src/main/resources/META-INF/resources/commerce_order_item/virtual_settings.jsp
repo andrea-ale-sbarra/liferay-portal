@@ -11,6 +11,7 @@
 CommerceVirtualOrderItemEditDisplayContext commerceVirtualOrderItemEditDisplayContext = (CommerceVirtualOrderItemEditDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 
 CommerceOrder commerceOrder = commerceVirtualOrderItemEditDisplayContext.getCommerceOrder();
+
 CommerceVirtualOrderItem commerceVirtualOrderItem = commerceVirtualOrderItemEditDisplayContext.getCommerceVirtualOrderItem();
 
 long fileEntryId = BeanParamUtil.getLong(commerceVirtualOrderItem, request, "fileEntryId");

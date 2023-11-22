@@ -5,6 +5,8 @@
 
 package com.liferay.commerce.product.type.virtual.order.model.impl;
 
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem;
+import com.liferay.commerce.product.type.virtual.order.service.CommerceVirtualOrderItemLocalServiceUtil;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -18,6 +20,11 @@ public class CommerceVirtualOrderItemFileEntryImpl
 	@Override
 	public FileEntry getFileEntry() throws PortalException {
 		return DLAppLocalServiceUtil.getFileEntry(getFileEntryId());
+	}
+
+	@Override
+	public CommerceVirtualOrderItem getCommerceVirtualOrderItem() throws PortalException {
+		return CommerceVirtualOrderItemLocalServiceUtil.getCommerceVirtualOrderItem(getCommerceVirtualOrderItemId());
 	}
 
 }

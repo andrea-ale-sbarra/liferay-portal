@@ -7,7 +7,9 @@ package com.liferay.commerce.product.type.virtual.order.service.impl;
 
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderItem;
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem;
 import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry;
+import com.liferay.commerce.product.type.virtual.order.service.CommerceVirtualOrderItemLocalService;
 import com.liferay.commerce.product.type.virtual.order.service.base.CommerceVirtualOrderItemFileEntryServiceBaseImpl;
 import com.liferay.commerce.service.CommerceOrderItemLocalService;
 import com.liferay.portal.aop.AopService;
@@ -42,10 +44,14 @@ public class CommerceVirtualOrderItemFileEntryServiceImpl
 					commerceVirtualOrderItemFileEntryId);
 
 		if (commerceVirtualOrderItemFileEntry != null) {
+			CommerceVirtualOrderItem commerceVirtualOrderItem =
+				_commerceVirtualOrderItemLocalService.
+					getCommerceVirtualOrderItem(
+						commerceVirtualOrderItemFileEntry.
+							getCommerceVirtualOrderItemId());
+
 			CommerceOrderItem commerceOrderItem =
-				_commerceOrderItemLocalService.getCommerceOrderItem(
-					commerceVirtualOrderItemFileEntry.
-						getCommerceVirtualOrderItemId());
+				commerceVirtualOrderItem.getCommerceOrderItem();
 
 			_commerceOrderModelResourcePermission.check(
 				getPermissionChecker(), commerceOrderItem.getCommerceOrderId(),
@@ -67,10 +73,13 @@ public class CommerceVirtualOrderItemFileEntryServiceImpl
 				getCommerceVirtualOrderItemFileEntry(
 					commerceVirtualOrderItemFileEntryId);
 
-		CommerceOrderItem commerceOrderItem =
-			_commerceOrderItemLocalService.getCommerceOrderItem(
+		CommerceVirtualOrderItem commerceVirtualOrderItem =
+			_commerceVirtualOrderItemLocalService.getCommerceVirtualOrderItem(
 				commerceVirtualOrderItemFileEntry.
 					getCommerceVirtualOrderItemId());
+
+		CommerceOrderItem commerceOrderItem =
+			commerceVirtualOrderItem.getCommerceOrderItem();
 
 		_commerceOrderModelResourcePermission.check(
 			getPermissionChecker(), commerceOrderItem.getCommerceOrderId(),
@@ -89,5 +98,9 @@ public class CommerceVirtualOrderItemFileEntryServiceImpl
 	)
 	private ModelResourcePermission<CommerceOrder>
 		_commerceOrderModelResourcePermission;
+
+	@Reference
+	private CommerceVirtualOrderItemLocalService
+		_commerceVirtualOrderItemLocalService;
 
 }

@@ -1,5 +1,3 @@
-<%@ page import="com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry" %>
-
 <%--
 /**
  * SPDX-FileCopyrightText: (c) 2023 Liferay, Inc. https://liferay.com

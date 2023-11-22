@@ -6,13 +6,16 @@
 package com.liferay.commerce.product.type.virtual.web.internal.display.context;
 
 import com.liferay.commerce.constants.CommerceOrderConstants;
+import com.liferay.commerce.model.CommerceOrderItem;
 import com.liferay.commerce.product.display.context.BaseCPDefinitionsDisplayContext;
+import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.portlet.action.ActionHelper;
 import com.liferay.commerce.product.type.CPType;
 import com.liferay.commerce.product.type.virtual.constants.VirtualCPTypeConstants;
 import com.liferay.commerce.product.type.virtual.model.CPDVirtualSettingFileEntry;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem;
 import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry;
 import com.liferay.commerce.product.type.virtual.web.internal.portlet.action.helper.CPDefinitionVirtualSettingActionHelper;
 import com.liferay.commerce.product.type.virtual.web.internal.security.permission.resource.CommerceCatalogPermission;
@@ -235,16 +238,41 @@ public class CPDefinitionVirtualSettingDisplayContext
 			Collections.<ItemSelectorReturnType>singletonList(
 				new FileEntryItemSelectorReturnType()));
 
-		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-			getCPDefinitionVirtualSetting();
 
 		return String.valueOf(
 			_itemSelector.getItemSelectorURL(
 				requestBackedPortletURLFactory,
-				GroupLocalServiceUtil.getGroup(
-					cpDefinitionVirtualSetting.getGroupId()),
+				GroupLocalServiceUtil.getGroup(_getGroupId()),
 				0, "uploadCPDefinitionVirtualSetting",
 				fileItemSelectorCriterion));
+	}
+
+	private long _getGroupId() throws PortalException {
+
+		CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry = getCommerceVirtualOrderItemFileEntry();
+		if (commerceVirtualOrderItemFileEntry != null) {
+			CommerceVirtualOrderItem commerceVirtualOrderItem = commerceVirtualOrderItemFileEntry.getCommerceVirtualOrderItem();
+			CommerceOrderItem commerceOrderItem = commerceVirtualOrderItem.getCommerceOrderItem();
+			CPDefinition cpDefinition = commerceOrderItem.getCPDefinition();
+			return cpDefinition.getGroupId();
+		}
+
+		CPDefinition cpDefinition = getCPDefinition();
+		if (cpDefinition != null) {
+			return cpDefinition.getGroupId();
+		}
+
+		CPInstance cpInstance = getCPInstance();
+		if(cpInstance != null){
+			return cpInstance.getGroupId();
+		}
+		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
+				getCPDefinitionVirtualSetting();
+		if(cpDefinitionVirtualSetting != null) {
+			return cpDefinitionVirtualSetting.getGroupId();
+		}
+
+		return 0;
 	}
 
 	public JournalArticle getJournalArticle() throws PortalException {
