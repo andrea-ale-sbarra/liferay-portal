@@ -18,13 +18,16 @@ public class CommerceVirtualOrderItemFileEntryImpl
 	extends CommerceVirtualOrderItemFileEntryBaseImpl {
 
 	@Override
-	public FileEntry getFileEntry() throws PortalException {
-		return DLAppLocalServiceUtil.getFileEntry(getFileEntryId());
+	public CommerceVirtualOrderItem getCommerceVirtualOrderItem()
+		throws PortalException {
+
+		return CommerceVirtualOrderItemLocalServiceUtil.
+			getCommerceVirtualOrderItem(getCommerceVirtualOrderItemId());
 	}
 
 	@Override
-	public CommerceVirtualOrderItem getCommerceVirtualOrderItem() throws PortalException {
-		return CommerceVirtualOrderItemLocalServiceUtil.getCommerceVirtualOrderItem(getCommerceVirtualOrderItemId());
+	public FileEntry getFileEntry() throws PortalException {
+		return DLAppLocalServiceUtil.getFileEntry(getFileEntryId());
 	}
 
 }

@@ -17,7 +17,7 @@ taglib uri="http://liferay.com/tld/frontend-data-set" prefix="frontend-data-set"
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
-<%@ page import="com.liferay.commerce.model.CommerceOrder" %><%@ page import="com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry" %><%@
+<%@ page import="com.liferay.commerce.model.CommerceOrder" %><%@
 page import="com.liferay.commerce.product.catalog.CPCatalogEntry" %><%@
 page import="com.liferay.commerce.product.catalog.CPSku" %><%@
 page import="com.liferay.commerce.product.constants.CPPortletKeys" %><%@
@@ -40,6 +40,7 @@ page import="com.liferay.commerce.product.type.virtual.order.exception.CommerceV
 page import="com.liferay.commerce.product.type.virtual.order.exception.CommerceVirtualOrderItemFileEntryIdException" %><%@
 page import="com.liferay.commerce.product.type.virtual.order.exception.CommerceVirtualOrderItemUrlException" %><%@
 page import="com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem" %><%@
+page import="com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItemFileEntry" %><%@
 page import="com.liferay.commerce.product.type.virtual.util.VirtualCPTypeHelper" %><%@
 page import="com.liferay.commerce.product.type.virtual.web.internal.constants.CPDefinitionVirtualSettingFDSNames" %><%@
 page import="com.liferay.commerce.product.type.virtual.web.internal.display.context.CPDefinitionVirtualSettingDisplayContext" %><%@

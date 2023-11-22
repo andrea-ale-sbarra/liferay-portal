@@ -238,41 +238,11 @@ public class CPDefinitionVirtualSettingDisplayContext
 			Collections.<ItemSelectorReturnType>singletonList(
 				new FileEntryItemSelectorReturnType()));
 
-
 		return String.valueOf(
 			_itemSelector.getItemSelectorURL(
 				requestBackedPortletURLFactory,
-				GroupLocalServiceUtil.getGroup(_getGroupId()),
-				0, "uploadCPDefinitionVirtualSetting",
-				fileItemSelectorCriterion));
-	}
-
-	private long _getGroupId() throws PortalException {
-
-		CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry = getCommerceVirtualOrderItemFileEntry();
-		if (commerceVirtualOrderItemFileEntry != null) {
-			CommerceVirtualOrderItem commerceVirtualOrderItem = commerceVirtualOrderItemFileEntry.getCommerceVirtualOrderItem();
-			CommerceOrderItem commerceOrderItem = commerceVirtualOrderItem.getCommerceOrderItem();
-			CPDefinition cpDefinition = commerceOrderItem.getCPDefinition();
-			return cpDefinition.getGroupId();
-		}
-
-		CPDefinition cpDefinition = getCPDefinition();
-		if (cpDefinition != null) {
-			return cpDefinition.getGroupId();
-		}
-
-		CPInstance cpInstance = getCPInstance();
-		if(cpInstance != null){
-			return cpInstance.getGroupId();
-		}
-		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
-				getCPDefinitionVirtualSetting();
-		if(cpDefinitionVirtualSetting != null) {
-			return cpDefinitionVirtualSetting.getGroupId();
-		}
-
-		return 0;
+				GroupLocalServiceUtil.getGroup(_getGroupId()), 0,
+				"uploadCPDefinitionVirtualSetting", fileItemSelectorCriterion));
 	}
 
 	public JournalArticle getJournalArticle() throws PortalException {
@@ -343,6 +313,44 @@ public class CPDefinitionVirtualSettingDisplayContext
 			_itemSelector.getItemSelectorURL(
 				requestBackedPortletURLFactory, "selectedItem",
 				itemSelectorCriterion));
+	}
+
+	private long _getGroupId() throws PortalException {
+		CommerceVirtualOrderItemFileEntry commerceVirtualOrderItemFileEntry =
+			getCommerceVirtualOrderItemFileEntry();
+
+		if (commerceVirtualOrderItemFileEntry != null) {
+			CommerceVirtualOrderItem commerceVirtualOrderItem =
+				commerceVirtualOrderItemFileEntry.getCommerceVirtualOrderItem();
+
+			CommerceOrderItem commerceOrderItem =
+				commerceVirtualOrderItem.getCommerceOrderItem();
+
+			CPDefinition cpDefinition = commerceOrderItem.getCPDefinition();
+
+			return cpDefinition.getGroupId();
+		}
+
+		CPDefinition cpDefinition = getCPDefinition();
+
+		if (cpDefinition != null) {
+			return cpDefinition.getGroupId();
+		}
+
+		CPInstance cpInstance = getCPInstance();
+
+		if (cpInstance != null) {
+			return cpInstance.getGroupId();
+		}
+
+		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
+			getCPDefinitionVirtualSetting();
+
+		if (cpDefinitionVirtualSetting != null) {
+			return cpDefinitionVirtualSetting.getGroupId();
+		}
+
+		return 0;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
