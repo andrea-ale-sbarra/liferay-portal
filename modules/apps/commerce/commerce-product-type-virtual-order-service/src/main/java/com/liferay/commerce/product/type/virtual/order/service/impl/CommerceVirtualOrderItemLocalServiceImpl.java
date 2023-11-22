@@ -317,8 +317,8 @@ public class CommerceVirtualOrderItemLocalServiceImpl
 
 	@Override
 	public CommerceVirtualOrderItem updateCommerceVirtualOrderItem(
-			long commerceVirtualOrderItemId, long fileEntryId, String url,
-			int activationStatus, long duration, int usages, int maxUsages,
+			long commerceVirtualOrderItemId,
+            int activationStatus, long duration, int usages, int maxUsages,
 			boolean active)
 		throws PortalException {
 

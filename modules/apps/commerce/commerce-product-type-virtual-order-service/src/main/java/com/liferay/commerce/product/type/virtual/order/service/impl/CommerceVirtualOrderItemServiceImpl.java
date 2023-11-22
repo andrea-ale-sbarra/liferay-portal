@@ -108,7 +108,7 @@ public class CommerceVirtualOrderItemServiceImpl
 
 	@Override
 	public CommerceVirtualOrderItem updateCommerceVirtualOrderItem(
-			long commerceVirtualOrderItemId, long fileEntryId, String url,
+			long commerceVirtualOrderItemId,
 			int activationStatus, long duration, int usages, int maxUsages,
 			boolean active)
 		throws PortalException {
@@ -126,7 +126,7 @@ public class CommerceVirtualOrderItemServiceImpl
 
 		return commerceVirtualOrderItemLocalService.
 			updateCommerceVirtualOrderItem(
-				commerceVirtualOrderItemId, fileEntryId, url, activationStatus,
+				commerceVirtualOrderItemId, activationStatus,
 				duration, usages, maxUsages, active);
 	}
 

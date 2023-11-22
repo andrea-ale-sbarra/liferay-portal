@@ -44,7 +44,6 @@ Map<String, String> contextParams = HashMapBuilder.<String, String>put(
 	<aui:input name="commerceOrderId" type="hidden" value="<%= commerceOrder.getCommerceOrderId() %>" />
 	<aui:input name="commerceOrderItemId" type="hidden" value="<%= commerceVirtualOrderItem.getCommerceOrderItemId() %>" />
 	<aui:input name="commerceVirtualOrderItemId" type="hidden" value="<%= commerceVirtualOrderItem.getCommerceVirtualOrderItemId() %>" />
-	<aui:input name="fileEntryId" type="hidden" value="<%= (commerceVirtualOrderItem == null) ? StringPool.BLANK : commerceVirtualOrderItem.getFileEntryId() %>" />
 
 	<aui:model-context bean="<%= commerceVirtualOrderItem %>" model="<%= CommerceVirtualOrderItem.class %>" />
 

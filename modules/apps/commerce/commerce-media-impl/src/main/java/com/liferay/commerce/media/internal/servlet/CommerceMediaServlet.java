@@ -349,8 +349,6 @@ public class CommerceMediaServlet extends HttpServlet {
 					updateCommerceVirtualOrderItem(
 						commerceVirtualOrderItem.
 							getCommerceVirtualOrderItemId(),
-						commerceVirtualOrderItem.getFileEntryId(),
-						commerceVirtualOrderItem.getUrl(),
 						commerceVirtualOrderItem.getActivationStatus(),
 						commerceVirtualOrderItem.getDuration(), usages,
 						commerceVirtualOrderItem.getMaxUsages(),
