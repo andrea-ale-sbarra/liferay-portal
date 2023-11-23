@@ -14,18 +14,6 @@ CommerceOrder commerceOrder = commerceVirtualOrderItemEditDisplayContext.getComm
 
 CommerceVirtualOrderItem commerceVirtualOrderItem = commerceVirtualOrderItemEditDisplayContext.getCommerceVirtualOrderItem();
 
-long fileEntryId = BeanParamUtil.getLong(commerceVirtualOrderItem, request, "fileEntryId");
-
-String textCssClass = "text-default ";
-
-boolean useFileEntry = false;
-
-if (fileEntryId > 0) {
-	textCssClass += "hide";
-
-	useFileEntry = true;
-}
-
 long durationDays = 0;
 
 if ((commerceVirtualOrderItem != null) && (commerceVirtualOrderItem.getDuration() > 0)) {
