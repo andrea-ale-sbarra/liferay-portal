@@ -70,7 +70,7 @@ public class VirtualItem implements Serializable {
 	}
 
 	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected String url;
 
 	@Schema(example = "v1.0.0")
@@ -98,7 +98,7 @@ public class VirtualItem implements Serializable {
 	}
 
 	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected String version;
 
 	@Override
