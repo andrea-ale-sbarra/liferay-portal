@@ -40,7 +40,7 @@
 
 		<!-- Finder methods -->
 
-		<finder name="C_C" return-type="CPDVirtualSettingFileEntry" unique="true">
+		<finder name="C_C" return-type="CPDVirtualSetting" unique="true">
 			<finder-column name="classNameId" />
 			<finder-column name="classPK" />
 		</finder>

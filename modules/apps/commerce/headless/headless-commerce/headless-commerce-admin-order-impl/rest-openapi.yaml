@@ -810,7 +810,6 @@ components:
                 virtualItems:
                     items:
                         $ref: "#/components/schemas/VirtualItem"
-                    readOnly: true
                     type: array
             type: object
         OrderNote:
@@ -1360,11 +1359,9 @@ components:
             properties:
                 url:
                     example: http://www.liferay.com
-                    readOnly: true
                     type: string
                 version:
                     example: v1.0.0
-                    readOnly: true
                     type: string
             type: object
     securitySchemes:
