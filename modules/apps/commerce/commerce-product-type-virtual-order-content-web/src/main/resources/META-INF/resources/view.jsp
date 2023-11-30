@@ -103,9 +103,9 @@ CommerceVirtualOrderItemContentDisplayContext commerceVirtualOrderItemContentDis
 											cssClass="btn"
 											displayType="link"
 											icon="download"
+											label='<%= LanguageUtil.format(request, "download-x", commerceVirtualOrderItemFileEntry.getVersion(), false) %>'
 											propsTransformer="js/AssetEntryActionButtonPropsTransformer"
 											title='<%= LanguageUtil.format(request, "download-x", commerceVirtualOrderItemFileEntry.getVersion(), false) %>'
-											label='<%= LanguageUtil.format(request, "download-x", commerceVirtualOrderItemFileEntry.getVersion(), false) %>'
 										/>
 									<%
 									}

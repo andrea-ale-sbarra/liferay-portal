@@ -285,7 +285,7 @@ public class OptionResourceImpl extends BaseOptionResourceImpl {
 	private DTOConverter<CPOption, Option> _optionDTOConverter;
 
 	@Reference
-	private OptionValueResource _optionValueResource;
+	private UserAccountResourceOptionValueResource _optionValueResource;
 
 	@Reference
 	private ServiceContextHelper _serviceContextHelper;
