@@ -39,11 +39,9 @@ public class SupplierRoleUpgradeProcess extends UpgradeProcess {
 	@Override
 	protected void doUpgrade() throws Exception {
 		_companyLocalService.forEachCompanyId(
-			companyId ->
-				_updateSupplierRolePermissions(
-					companyId, _ROLE_NAME_SUPPLIER, _RESOURCE_NAME,
-					ListUtil.fromString(ActionKeys.VIEW))
-			);
+			companyId -> _updateSupplierRolePermissions(
+				companyId, _ROLE_NAME_SUPPLIER, _RESOURCE_NAME,
+				ListUtil.fromString(ActionKeys.VIEW)));
 	}
 
 	private void _addResourcePermission(
@@ -75,10 +73,10 @@ public class SupplierRoleUpgradeProcess extends UpgradeProcess {
 		}
 	}
 
-	private static final String _ROLE_NAME_SUPPLIER = "Supplier";
-
 	private static final String _RESOURCE_NAME =
 		"com.liferay.commerce.price.list.model.CommercePriceList";
+
+	private static final String _ROLE_NAME_SUPPLIER = "Supplier";
 
 	private final CompanyLocalService _companyLocalService;
 	private final ResourceActionLocalService _resourceActionLocalService;
