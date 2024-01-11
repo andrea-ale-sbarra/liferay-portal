@@ -121,6 +121,15 @@ public class CommerceAccountTestUtil {
 			userId, name, email, StringPool.BLANK, null, null, serviceContext);
 	}
 
+	public static AccountEntry addSupplierAccountEntry(
+		long userId, String name, String email,
+		ServiceContext serviceContext)
+		throws Exception {
+
+		return addSupplierAccountEntry(
+			userId, name, email, StringPool.BLANK, null, null, serviceContext);
+	}
+
 	public static AccountEntry addBusinessAccountEntry(
 			long userId, String name, String email,
 			String externalReferenceCode, long[] userIds,
@@ -141,6 +150,47 @@ public class CommerceAccountTestUtil {
 		Role role = RoleLocalServiceUtil.getRole(
 			serviceContext.getCompanyId(),
 			AccountRoleConstants.REQUIRED_ROLE_NAME_ACCOUNT_ADMINISTRATOR);
+
+		UserGroupRoleLocalServiceUtil.addUserGroupRoles(
+			userId, accountEntry.getAccountEntryGroupId(),
+			new long[] {role.getRoleId()});
+
+		if (externalReferenceCode != null) {
+			accountEntry.setExternalReferenceCode(externalReferenceCode);
+
+			accountEntry = AccountEntryLocalServiceUtil.updateAccountEntry(
+				accountEntry);
+		}
+
+		addAccountEntryUserRels(
+			accountEntry.getAccountEntryId(), userIds, serviceContext);
+
+		addAccountEntryOrganizationRels(
+			accountEntry.getAccountEntryId(), organizationIds, serviceContext);
+
+		return accountEntry;
+	}
+
+	public static AccountEntry addSupplierAccountEntry(
+		long userId, String name, String email,
+		String externalReferenceCode, long[] userIds,
+		long[] organizationIds, ServiceContext serviceContext)
+		throws Exception {
+
+		AccountEntry accountEntry =
+			AccountEntryLocalServiceUtil.addAccountEntry(
+				userId, AccountConstants.PARENT_ACCOUNT_ENTRY_ID_DEFAULT, name,
+				null, null, email, null, StringPool.BLANK,
+				AccountConstants.ACCOUNT_ENTRY_TYPE_SUPPLIER,
+				WorkflowConstants.STATUS_APPROVED, serviceContext);
+
+		addAccountEntryUserRels(
+			accountEntry.getAccountEntryId(), new long[] {userId},
+			serviceContext);
+
+		Role role = RoleLocalServiceUtil.getRole(
+			serviceContext.getCompanyId(),
+			AccountRoleConstants.ROLE_NAME_ACCOUNT_SUPPLIER);
 
 		UserGroupRoleLocalServiceUtil.addUserGroupRoles(
 			userId, accountEntry.getAccountEntryGroupId(),
