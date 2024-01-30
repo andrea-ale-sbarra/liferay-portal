@@ -33,7 +33,6 @@ import com.liferay.commerce.product.internal.upgrade.v4_0_0.util.CommerceChannel
 import com.liferay.commerce.product.internal.upgrade.v4_0_2.CommerceRepositoryUpgradeProcess;
 import com.liferay.commerce.product.internal.upgrade.v5_11_0.CPAttachmentFileEntryGalleryEnabledUpgradeProcess;
 import com.liferay.commerce.product.internal.upgrade.v5_11_1.ProductDefinitionConfigurationUpgradeProcess;
-import com.liferay.commerce.product.internal.upgrade.v5_14_0.CPDefinitionSpecificationOptionValueUpgradeProcess;
 import com.liferay.commerce.product.internal.upgrade.v5_4_0.CommercePermissionUpgradeProcess;
 import com.liferay.commerce.product.internal.upgrade.v5_5_0.util.CPInstanceUnitOfMeasureTable;
 import com.liferay.counter.kernel.service.CounterLocalService;
@@ -433,25 +432,11 @@ public class CommerceProductServiceUpgradeStepRegistrator
 
 		registry.register(
 			"5.12.1", "5.13.0",
-			new BaseExternalReferenceCodeUpgradeProcess() {
-
-				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {
-						{"CPMeasurementUnit", "CPMeasurementUnitId"}
-					};
-				}
-
-			});
-
-		registry.register(
-			"5.13.0", "5.14.0",
-			new CPDefinitionSpecificationOptionValueUpgradeProcess());
-
-		registry.register(
-			"5.14.0", "5.15.0",
 			UpgradeProcessFactory.addColumns(
-				"CPSpecificationOption", "priority DOUBLE"));
+				"CPDefinitionOptionRel", "dateTime BOOLEAN"),
+			UpgradeProcessFactory.addColumns(
+				"CPDefinitionOptionValueRel", "optionValueDate DATE null",
+				"duration INTEGER", "durationType VARCHAR(75) null"));
 
 		if (_log.isInfoEnabled()) {
 			_log.info("Commerce product upgrade step registrator finished");
