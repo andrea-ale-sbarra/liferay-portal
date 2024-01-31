@@ -6,9 +6,14 @@
 package com.liferay.commerce.shop.by.diagram.web.internal.portlet.action;
 
 import com.liferay.commerce.product.constants.CPPortletKeys;
+import com.liferay.commerce.product.constants.CommerceCatalogConstants;
 import com.liferay.commerce.product.exception.CPAttachmentFileEntryNameException;
 import com.liferay.commerce.product.exception.CPAttachmentFileEntrySizeException;
+import com.liferay.commerce.product.model.CommerceCatalog;
+import com.liferay.commerce.product.service.CommerceCatalogLocalService;
 import com.liferay.commerce.shop.by.diagram.configuration.CSDiagramSettingImageConfiguration;
+import com.liferay.commerce.shop.by.diagram.constants.CSDiagramSettingsConstants;
+import com.liferay.commerce.shop.by.diagram.web.internal.util.CSDiagramSettingUtil;
 import com.liferay.item.selector.ItemSelectorUploadResponseHandler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -17,18 +22,17 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.portletfilerepository.PortletFileRepository;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.servlet.ServletResponseConstants;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.File;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.upload.UniqueFileNameProvider;
 import com.liferay.upload.UploadFileEntryHandler;
 import com.liferay.upload.UploadHandler;
 import com.liferay.upload.UploadResponseHandler;
@@ -81,6 +85,9 @@ public class UploadCSDiagramSettingImageMVCActionCommand
 	private static final Log _log = LogFactoryUtil.getLog(
 		UploadCSDiagramSettingImageMVCActionCommand.class);
 
+	@Reference
+	private CommerceCatalogLocalService _commerceCatalogLocalService;
+
 	private volatile CSDiagramSettingImageConfiguration
 		_csDiagramSettingImageConfiguration;
 	private final CSDiagramSettingImageUploadFileEntryHandler
@@ -98,7 +105,7 @@ public class UploadCSDiagramSettingImageMVCActionCommand
 		_itemSelectorUploadResponseHandler;
 
 	@Reference
-	private UniqueFileNameProvider _uniqueFileNameProvider;
+	private PortletFileRepository _portletFileRepository;
 
 	@Reference
 	private UploadHandler _uploadHandler;
@@ -115,18 +122,24 @@ public class UploadCSDiagramSettingImageMVCActionCommand
 			_validateFile(
 				fileName, uploadPortletRequest.getSize(_parameterName));
 
-			String contentType = uploadPortletRequest.getContentType(
-				_parameterName);
-
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)uploadPortletRequest.getAttribute(
-					WebKeys.THEME_DISPLAY);
-
 			try (InputStream inputStream = uploadPortletRequest.getFileAsStream(
 					_parameterName)) {
 
+				String contentType = uploadPortletRequest.getContentType(
+					_parameterName);
+
+				if (StringUtil.containsIgnoreCase(contentType, "svg")) {
+					return _addFileEntry(
+						fileName, contentType,
+						CSDiagramSettingUtil.cleanInputStream(inputStream),
+						(ThemeDisplay)uploadPortletRequest.getAttribute(
+							WebKeys.THEME_DISPLAY));
+				}
+
 				return _addFileEntry(
-					fileName, contentType, inputStream, themeDisplay);
+					fileName, contentType, inputStream,
+					(ThemeDisplay)uploadPortletRequest.getAttribute(
+						WebKeys.THEME_DISPLAY));
 			}
 		}
 
@@ -135,35 +148,24 @@ public class UploadCSDiagramSettingImageMVCActionCommand
 				ThemeDisplay themeDisplay)
 			throws PortalException {
 
-			String uniqueFileName = _uniqueFileNameProvider.provide(
-				fileName, curFileName -> _exists(themeDisplay, curFileName));
+			Folder folder = _commerceCatalogLocalService.addCatalogFolder(
+				themeDisplay.getUserId(), themeDisplay.getRefererGroupId(),
+				CSDiagramSettingsConstants.FOLDER_NAME);
 
-			Company company = themeDisplay.getCompany();
+			String uniqueFileName = _portletFileRepository.getUniqueFileName(
+				themeDisplay.getRefererGroupId(), folder.getFolderId(),
+				fileName);
 
-			return TempFileEntryUtil.addTempFileEntry(
-				company.getGroupId(), themeDisplay.getUserId(), _tempFolderName,
-				uniqueFileName, inputStream, contentType);
-		}
+			CommerceCatalog commerceCatalog =
+				_commerceCatalogLocalService.fetchCommerceCatalogByGroupId(
+					themeDisplay.getRefererGroupId());
 
-		private boolean _exists(ThemeDisplay themeDisplay, String curFileName) {
-			try {
-				FileEntry tempFileEntry = TempFileEntryUtil.getTempFileEntry(
-					themeDisplay.getScopeGroupId(), themeDisplay.getUserId(),
-					_tempFolderName, curFileName);
-
-				if (tempFileEntry != null) {
-					return true;
-				}
-
-				return false;
-			}
-			catch (PortalException portalException) {
-				if (_log.isDebugEnabled()) {
-					_log.debug(portalException);
-				}
-
-				return false;
-			}
+			return _portletFileRepository.addPortletFileEntry(
+				null, themeDisplay.getRefererGroupId(),
+				themeDisplay.getUserId(), CommerceCatalog.class.getName(),
+				commerceCatalog.getCommerceCatalogId(),
+				CommerceCatalogConstants.SERVICE_NAME, folder.getFolderId(),
+				inputStream, uniqueFileName, contentType, true);
 		}
 
 		private void _validateFile(String fileName, long size)
@@ -193,9 +195,6 @@ public class UploadCSDiagramSettingImageMVCActionCommand
 		}
 
 		private final String _parameterName = "imageSelectorFileName";
-		private final String _tempFolderName =
-			UploadCSDiagramSettingImageMVCActionCommand.
-				CSDiagramSettingImageUploadFileEntryHandler.class.getName();
 
 	}
 
@@ -241,7 +240,17 @@ public class UploadCSDiagramSettingImageMVCActionCommand
 					));
 			}
 			else {
-				throw portalException;
+				if (_log.isDebugEnabled()) {
+					_log.debug(portalException);
+				}
+
+				jsonObject.put(
+					"error",
+					JSONUtil.put(
+						"errorType", portalException.getCause()
+					).put(
+						"message", portalException.getMessage()
+					));
 			}
 
 			return jsonObject;

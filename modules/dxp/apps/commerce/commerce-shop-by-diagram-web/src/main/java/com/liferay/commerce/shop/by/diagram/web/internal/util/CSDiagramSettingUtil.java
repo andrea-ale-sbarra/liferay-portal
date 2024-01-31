@@ -14,12 +14,48 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
+import com.liferay.portal.kernel.util.StringUtil;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.nio.charset.StandardCharsets;
+
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 
 /**
  * @author Andrea Sbarra
  * @author Crescenzo Rega
  */
 public class CSDiagramSettingUtil {
+
+	public static InputStream cleanInputStream(InputStream inputStream) {
+		String cleanedSvg = null;
+
+		try {
+			cleanedSvg = Jsoup.clean(
+				StringUtil.read(inputStream),
+				Safelist.relaxed(
+				).addTags(
+					"circle", "path", "rect", "svg"
+				).addAttributes(
+					":all", "d", "fill", "height", "stroke", "stroke-width",
+					"style", "viewBox", "width", "xmlns"
+				).preserveRelativeLinks(
+					true
+				));
+		}
+		catch (IOException ioException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(ioException);
+			}
+		}
+
+		return new ByteArrayInputStream(
+			cleanedSvg.getBytes(StandardCharsets.UTF_8));
+	}
 
 	public static FileVersion getFileVersion(CSDiagramSetting csDiagramSetting)
 		throws Exception {
