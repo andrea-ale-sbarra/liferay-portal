@@ -16,16 +16,22 @@ import com.liferay.commerce.product.exception.CommerceCatalogSystemException;
 import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.CPDefinitionLocalService;
 import com.liferay.commerce.product.service.base.CommerceCatalogLocalServiceBaseImpl;
+import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
+import com.liferay.portal.kernel.model.Repository;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.SystemEventConstants;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.portletfilerepository.PortletFileRepository;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
@@ -66,6 +72,24 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class CommerceCatalogLocalServiceImpl
 	extends CommerceCatalogLocalServiceBaseImpl {
+
+	@Override
+	public Folder addCatalogFolder(long userId, long groupId, String folderName)
+		throws PortalException {
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setAddGuestPermissions(true);
+
+		Repository repository = _portletFileRepository.addPortletRepository(
+			groupId, CommerceCatalogConstants.SERVICE_NAME, serviceContext);
+
+		return _portletFileRepository.addPortletFolder(
+			userId, repository.getRepositoryId(),
+			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, folderName,
+			serviceContext);
+	}
 
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
@@ -211,6 +235,32 @@ public class CommerceCatalogLocalServiceImpl
 
 		return commerceCatalogPersistence.fetchByERC_C(
 			externalReferenceCode, companyId);
+	}
+
+	@Override
+	public Folder fetchCatalogFolder(
+		long userId, long groupId, String folderName) {
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setAddGuestPermissions(true);
+
+		Repository repository = _portletFileRepository.fetchPortletRepository(
+			groupId, CommerceCatalogConstants.SERVICE_NAME);
+
+		try {
+			return _portletFileRepository.getPortletFolder(
+				repository.getRepositoryId(),
+				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, folderName);
+		}
+		catch (Exception exception) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(exception);
+			}
+		}
+
+		return null;
 	}
 
 	@Override
@@ -490,6 +540,9 @@ public class CommerceCatalogLocalServiceImpl
 		Field.ENTRY_CLASS_PK, Field.COMPANY_ID
 	};
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		CommerceCatalogLocalServiceImpl.class);
+
 	@Reference
 	private AccountEntryLocalService _accountEntryLocalService;
 
@@ -504,6 +557,9 @@ public class CommerceCatalogLocalServiceImpl
 
 	@Reference
 	private GroupLocalService _groupLocalService;
+
+	@Reference
+	private PortletFileRepository _portletFileRepository;
 
 	@Reference
 	private ResourceLocalService _resourceLocalService;
