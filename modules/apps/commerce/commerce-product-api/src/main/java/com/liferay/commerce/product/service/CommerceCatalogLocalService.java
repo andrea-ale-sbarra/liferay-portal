@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.model.SystemEventConstants;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.search.Sort;
@@ -65,6 +66,8 @@ public interface CommerceCatalogLocalService
 	 *
 	 * Never modify this interface directly. Add custom service methods to <code>com.liferay.commerce.product.service.impl.CommerceCatalogLocalServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the commerce catalog local service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link CommerceCatalogLocalServiceUtil} if injection and service tracking are not available.
 	 */
+	public Folder addCatalogFolder(long userId, long groupId, String folderName)
+		throws PortalException;
 
 	/**
 	 * Adds the commerce catalog to the database. Also notifies the appropriate model listeners.
@@ -226,6 +229,10 @@ public interface CommerceCatalogLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CommerceCatalog fetchByExternalReferenceCode(
 		String externalReferenceCode, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Folder fetchCatalogFolder(
+		long userId, long groupId, String folderName);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CommerceCatalog fetchCommerceCatalog(long commerceCatalogId);
