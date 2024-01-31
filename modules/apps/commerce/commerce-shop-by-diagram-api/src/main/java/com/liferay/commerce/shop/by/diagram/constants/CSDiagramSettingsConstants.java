@@ -10,6 +10,8 @@ package com.liferay.commerce.shop.by.diagram.constants;
  */
 public class CSDiagramSettingsConstants {
 
+	public static final String FOLDER_NAME = "DIAGRAM";
+
 	public static final int TYPE_DIAGRAM = 2;
 
 }

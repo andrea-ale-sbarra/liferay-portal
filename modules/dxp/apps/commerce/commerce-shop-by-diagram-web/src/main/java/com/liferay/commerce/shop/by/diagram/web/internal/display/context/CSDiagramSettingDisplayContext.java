@@ -5,6 +5,7 @@
 
 package com.liferay.commerce.shop.by.diagram.web.internal.display.context;
 
+import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.display.context.BaseCPDefinitionsDisplayContext;
 import com.liferay.commerce.product.exception.NoSuchCPAttachmentFileEntryException;
 import com.liferay.commerce.product.model.CPAttachmentFileEntry;
@@ -12,6 +13,7 @@ import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.portlet.action.ActionHelper;
 import com.liferay.commerce.product.type.CPType;
 import com.liferay.commerce.shop.by.diagram.configuration.CSDiagramSettingImageConfiguration;
+import com.liferay.commerce.shop.by.diagram.item.selector.criterion.CommerceShopByDiagramItemSelectorCriterion;
 import com.liferay.commerce.shop.by.diagram.model.CSDiagramSetting;
 import com.liferay.commerce.shop.by.diagram.service.CSDiagramSettingService;
 import com.liferay.commerce.shop.by.diagram.type.CSDiagramType;
@@ -19,13 +21,16 @@ import com.liferay.commerce.shop.by.diagram.type.CSDiagramTypeRegistry;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.item.selector.ItemSelectorReturnType;
 import com.liferay.item.selector.criteria.FileEntryItemSelectorReturnType;
-import com.liferay.item.selector.criteria.image.criterion.ImageItemSelectorCriterion;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
+import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.service.GroupLocalService;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,8 +47,8 @@ public class CSDiagramSettingDisplayContext
 		ActionHelper actionHelper, HttpServletRequest httpServletRequest,
 		CSDiagramSettingImageConfiguration csDiagramSettingImageConfiguration,
 		CSDiagramSettingService csDiagramSettingService,
-		CSDiagramTypeRegistry csDiagramTypeRegistry,
-		ItemSelector itemSelector) {
+		CSDiagramTypeRegistry csDiagramTypeRegistry, ItemSelector itemSelector,
+		GroupLocalService groupLocalService) {
 
 		super(actionHelper, httpServletRequest);
 
@@ -52,6 +57,7 @@ public class CSDiagramSettingDisplayContext
 		_csDiagramSettingService = csDiagramSettingService;
 		_csDiagramTypeRegistry = csDiagramTypeRegistry;
 		_itemSelector = itemSelector;
+		_groupLocalService = groupLocalService;
 	}
 
 	public CSDiagramSetting fetchCSDiagramSetting() throws PortalException {
@@ -109,22 +115,26 @@ public class CSDiagramSettingDisplayContext
 		return _csDiagramSettingImageConfiguration.imageExtensions();
 	}
 
-	public String getImageItemSelectorURL() {
+	public String getImageItemSelectorURL(long groupId) throws PortalException {
 		RequestBackedPortletURLFactory requestBackedPortletURLFactory =
 			RequestBackedPortletURLFactoryUtil.create(
 				cpRequestHelper.getRenderRequest());
 
-		ImageItemSelectorCriterion imageItemSelectorCriterion =
-			new ImageItemSelectorCriterion();
+		CommerceShopByDiagramItemSelectorCriterion
+			commerceShopByDiagramItemSelectorCriterion =
+				new CommerceShopByDiagramItemSelectorCriterion();
 
-		imageItemSelectorCriterion.setDesiredItemSelectorReturnTypes(
-			Collections.<ItemSelectorReturnType>singletonList(
-				new FileEntryItemSelectorReturnType()));
+		commerceShopByDiagramItemSelectorCriterion.
+			setDesiredItemSelectorReturnTypes(
+				Collections.<ItemSelectorReturnType>singletonList(
+					new FileEntryItemSelectorReturnType()));
+
+		Group group = _groupLocalService.getGroup(groupId);
 
 		return String.valueOf(
 			_itemSelector.getItemSelectorURL(
-				requestBackedPortletURLFactory, "addFileEntry",
-				imageItemSelectorCriterion));
+				requestBackedPortletURLFactory, group, group.getGroupId(),
+				"addFileEntry", commerceShopByDiagramItemSelectorCriterion));
 	}
 
 	public long getImageMaxSize() {
@@ -153,6 +163,14 @@ public class CSDiagramSettingDisplayContext
 		return super.getScreenNavigationCategoryKey();
 	}
 
+	public String getUploadURL(LiferayPortletResponse liferayPortletResponse) {
+		return PortletURLBuilder.createActionURL(
+			liferayPortletResponse, CPPortletKeys.CP_DEFINITIONS
+		).setActionName(
+			"/cp_definitions/upload_cs_diagram_setting_image"
+		).buildString();
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		CSDiagramSettingDisplayContext.class);
 
@@ -161,6 +179,7 @@ public class CSDiagramSettingDisplayContext
 		_csDiagramSettingImageConfiguration;
 	private final CSDiagramSettingService _csDiagramSettingService;
 	private final CSDiagramTypeRegistry _csDiagramTypeRegistry;
+	private final GroupLocalService _groupLocalService;
 	private final ItemSelector _itemSelector;
 
 }
