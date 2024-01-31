@@ -1,0 +1,6 @@
+Bundle-Name: Liferay Commerce Shop by Diagram Item Selector API
+Bundle-SymbolicName: com.liferay.commerce.shop.by.diagram.item.selector.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.commerce.shop.by.diagram.item.selector.constants,\
+	com.liferay.commerce.shop.by.diagram.item.selector.criterion
