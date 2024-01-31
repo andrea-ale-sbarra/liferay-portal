@@ -14,4 +14,6 @@ public class CommerceCatalogConstants {
 
 	public static final String MASTER_COMMERCE_DEFAULT_CURRENCY = "USD";
 
+	public static final String SERVICE_NAME = "com.liferay.commerce.product";
+
 }
