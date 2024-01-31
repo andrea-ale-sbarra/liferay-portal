@@ -32,6 +32,15 @@ public class CommerceCatalogLocalServiceWrapper
 		_commerceCatalogLocalService = commerceCatalogLocalService;
 	}
 
+	@Override
+	public com.liferay.portal.kernel.repository.model.Folder addCatalogFolder(
+			long userId, long groupId, String folderName)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _commerceCatalogLocalService.addCatalogFolder(
+			userId, groupId, folderName);
+	}
+
 	/**
 	 * Adds the commerce catalog to the database. Also notifies the appropriate model listeners.
 	 *
@@ -270,6 +279,14 @@ public class CommerceCatalogLocalServiceWrapper
 
 		return _commerceCatalogLocalService.fetchByExternalReferenceCode(
 			externalReferenceCode, companyId);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.repository.model.Folder fetchCatalogFolder(
+		long userId, long groupId, String folderName) {
+
+		return _commerceCatalogLocalService.fetchCatalogFolder(
+			userId, groupId, folderName);
 	}
 
 	@Override

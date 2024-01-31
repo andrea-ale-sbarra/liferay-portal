@@ -35,6 +35,12 @@ public class CommerceCatalogLocalServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.commerce.product.service.impl.CommerceCatalogLocalServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static com.liferay.portal.kernel.repository.model.Folder
+			addCatalogFolder(long userId, long groupId, String folderName)
+		throws PortalException {
+
+		return getService().addCatalogFolder(userId, groupId, folderName);
+	}
 
 	/**
 	 * Adds the commerce catalog to the database. Also notifies the appropriate model listeners.
@@ -244,6 +250,12 @@ public class CommerceCatalogLocalServiceUtil {
 
 		return getService().fetchByExternalReferenceCode(
 			externalReferenceCode, companyId);
+	}
+
+	public static com.liferay.portal.kernel.repository.model.Folder
+		fetchCatalogFolder(long userId, long groupId, String folderName) {
+
+		return getService().fetchCatalogFolder(userId, groupId, folderName);
 	}
 
 	public static CommerceCatalog fetchCommerceCatalog(long commerceCatalogId) {
