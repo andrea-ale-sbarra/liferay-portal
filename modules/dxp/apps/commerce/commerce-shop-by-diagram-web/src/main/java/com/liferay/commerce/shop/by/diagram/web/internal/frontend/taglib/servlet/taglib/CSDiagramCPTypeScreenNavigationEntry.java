@@ -17,6 +17,7 @@ import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
@@ -74,7 +75,7 @@ public class CSDiagramCPTypeScreenNavigationEntry
 			new CSDiagramSettingDisplayContext(
 				_actionHelper, httpServletRequest,
 				_csDiagramSettingImageConfiguration, _csDiagramSettingService,
-				_csDiagramTypeRegistry, _itemSelector);
+				_csDiagramTypeRegistry, _itemSelector, _groupLocalService);
 
 		httpServletRequest.setAttribute(
 			WebKeys.PORTLET_DISPLAY_CONTEXT, csDiagramSettingDisplayContext);
@@ -103,6 +104,9 @@ public class CSDiagramCPTypeScreenNavigationEntry
 
 	@Reference
 	private CSDiagramTypeRegistry _csDiagramTypeRegistry;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
 
 	@Reference
 	private ItemSelector _itemSelector;
