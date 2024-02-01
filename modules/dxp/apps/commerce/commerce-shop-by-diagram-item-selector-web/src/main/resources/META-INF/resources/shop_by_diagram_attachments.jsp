@@ -23,7 +23,7 @@ Folder folder = commerceShopByDiagramItemSelectorViewDisplayContext.fetchAttachm
 	mimeTypeRestriction="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getMimeTypeRestriction() %>"
 	portletURL="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getPortletURL(request, liferayPortletResponse) %>"
 	repositoryEntries="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getPortletFileEntries(themeDisplay.getRefererGroupId(), folder.getFolderId()) %>"
-	repositoryEntriesCount="<%= PortletFileRepositoryUtil.getPortletFileEntriesCount(themeDisplay.getRefererGroupId(), folder.getFolderId()) %>"
+	repositoryEntriesCount="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getPortletFileEntriesCount(themeDisplay.getRefererGroupId(), folder.getFolderId()) %>"
 	showDragAndDropZone="<%= true %>"
 	tabName="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getTitle(locale) %>"
 	uploadURL="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getUploadURL(liferayPortletResponse) %>"

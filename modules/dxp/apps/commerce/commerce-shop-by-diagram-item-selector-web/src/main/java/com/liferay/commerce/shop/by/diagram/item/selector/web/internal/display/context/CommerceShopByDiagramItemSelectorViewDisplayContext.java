@@ -27,6 +27,8 @@ import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.repository.model.RepositoryEntry;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
@@ -114,12 +116,14 @@ public class CommerceShopByDiagramItemSelectorViewDisplayContext {
 				_httpServletRequest, _portalPreferences));
 	}
 
-	public List<FileEntry> getPortletFileEntries(long groupId, long folderId)
+	public List<RepositoryEntry> getPortletFileEntries(long groupId, long folderId)
 		throws PortalException {
 
-		return PortletFileRepositoryUtil.getPortletFileEntries(
-			groupId, folderId, WorkflowConstants.STATUS_APPROVED,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, getOrderByComparator());
+		return	ListUtil.toList(PortletFileRepositoryUtil.getPortletFileEntries(
+						groupId, folderId, WorkflowConstants.STATUS_APPROVED,
+						QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+						getOrderByComparator()),
+					RepositoryEntry.class::cast);
 	}
 
 	public int getPortletFileEntriesCount(long groupId, long folderId)

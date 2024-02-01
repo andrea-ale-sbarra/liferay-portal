@@ -129,12 +129,10 @@ public class CSDiagramSettingDisplayContext
 				Collections.<ItemSelectorReturnType>singletonList(
 					new FileEntryItemSelectorReturnType()));
 
-		Group group = _groupLocalService.getGroup(groupId);
-
 		return String.valueOf(
 			_itemSelector.getItemSelectorURL(
-				requestBackedPortletURLFactory, group, group.getGroupId(),
-				"addFileEntry", commerceShopByDiagramItemSelectorCriterion));
+				requestBackedPortletURLFactory, "addFileEntry",
+				commerceShopByDiagramItemSelectorCriterion));
 	}
 
 	public long getImageMaxSize() {

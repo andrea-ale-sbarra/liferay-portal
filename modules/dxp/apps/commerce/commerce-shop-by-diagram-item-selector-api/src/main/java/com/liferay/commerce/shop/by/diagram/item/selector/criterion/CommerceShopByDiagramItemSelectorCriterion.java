@@ -7,16 +7,9 @@ package com.liferay.commerce.shop.by.diagram.item.selector.criterion;
 
 import com.liferay.item.selector.BaseItemSelectorCriterion;
 import com.liferay.item.selector.constants.ItemSelectorCriterionConstants;
+import com.liferay.item.selector.criteria.upload.criterion.UploadItemSelectorCriterion;
 
 /**
  * @author Andrea Sbarra
  */
-public class CommerceShopByDiagramItemSelectorCriterion
-	extends BaseItemSelectorCriterion {
-
-	@Override
-	public String getMimeTypeRestriction() {
-		return ItemSelectorCriterionConstants.MIME_TYPE_RESTRICTION_IMAGE;
-	}
-
-}
+public class CommerceShopByDiagramItemSelectorCriterion extends UploadItemSelectorCriterion { }
