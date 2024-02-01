@@ -5,7 +5,6 @@
 
 package com.liferay.commerce.shop.by.diagram.web.internal.display.context;
 
-import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.display.context.BaseCPDefinitionsDisplayContext;
 import com.liferay.commerce.product.exception.NoSuchCPAttachmentFileEntryException;
 import com.liferay.commerce.product.model.CPAttachmentFileEntry;
@@ -24,11 +23,8 @@ import com.liferay.item.selector.criteria.FileEntryItemSelectorReturnType;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Group;
-import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
-import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.GroupLocalService;
 
@@ -115,7 +111,7 @@ public class CSDiagramSettingDisplayContext
 		return _csDiagramSettingImageConfiguration.imageExtensions();
 	}
 
-	public String getImageItemSelectorURL(long groupId) throws PortalException {
+	public String getImageItemSelectorURL() {
 		RequestBackedPortletURLFactory requestBackedPortletURLFactory =
 			RequestBackedPortletURLFactoryUtil.create(
 				cpRequestHelper.getRenderRequest());
@@ -159,14 +155,6 @@ public class CSDiagramSettingDisplayContext
 		}
 
 		return super.getScreenNavigationCategoryKey();
-	}
-
-	public String getUploadURL(LiferayPortletResponse liferayPortletResponse) {
-		return PortletURLBuilder.createActionURL(
-			liferayPortletResponse, CPPortletKeys.CP_DEFINITIONS
-		).setActionName(
-			"/cp_definitions/upload_cs_diagram_setting_image"
-		).buildString();
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

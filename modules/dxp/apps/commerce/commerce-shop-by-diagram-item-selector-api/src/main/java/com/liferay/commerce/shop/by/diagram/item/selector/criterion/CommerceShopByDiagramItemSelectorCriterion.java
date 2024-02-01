@@ -12,4 +12,10 @@ import com.liferay.item.selector.criteria.upload.criterion.UploadItemSelectorCri
 /**
  * @author Andrea Sbarra
  */
-public class CommerceShopByDiagramItemSelectorCriterion extends UploadItemSelectorCriterion { }
+public class CommerceShopByDiagramItemSelectorCriterion extends BaseItemSelectorCriterion {
+
+	@Override
+	public String getMimeTypeRestriction() {
+		return ItemSelectorCriterionConstants.MIME_TYPE_RESTRICTION_IMAGE;
+	}
+}

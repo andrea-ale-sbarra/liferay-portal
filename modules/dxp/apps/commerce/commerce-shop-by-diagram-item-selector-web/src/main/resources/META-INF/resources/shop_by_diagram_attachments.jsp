@@ -9,21 +9,21 @@
 
 <%
 CommerceShopByDiagramItemSelectorViewDisplayContext commerceShopByDiagramItemSelectorViewDisplayContext = (CommerceShopByDiagramItemSelectorViewDisplayContext)request.getAttribute(CommerceShopByDiagramItemSelectorWebKeys.COMMERCE_SHOP_BY_DIAGRAM_ITEM_SELECTOR_VIEW_DISPLAY_CONTEXT);
-
-Folder folder = commerceShopByDiagramItemSelectorViewDisplayContext.fetchAttachmentsFolder(themeDisplay.getUserId(), themeDisplay.getRefererGroupId());
 %>
 
 <liferay-item-selector:repository-entry-browser
 	allowedCreationMenuUIItemKeys="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getAllowedCreationMenuUIItemKeys() %>"
 	emptyResultsMessage='<%= LanguageUtil.get(resourceBundle, "there-are-no-images") %>'
 	extensions="<%= ListUtil.fromArray(commerceShopByDiagramItemSelectorViewDisplayContext.getImageExtensions()) %>"
+	folderId="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getFolderId() %>"
 	itemSelectedEventName="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getItemSelectedEventName() %>"
 	itemSelectorReturnTypeResolver="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getItemSelectorReturnTypeResolver() %>"
 	maxFileSize="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getImageMaxSize() %>"
 	mimeTypeRestriction="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getMimeTypeRestriction() %>"
 	portletURL="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getPortletURL(request, liferayPortletResponse) %>"
-	repositoryEntries="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getPortletFileEntries(themeDisplay.getRefererGroupId(), folder.getFolderId()) %>"
-	repositoryEntriesCount="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getPortletFileEntriesCount(themeDisplay.getRefererGroupId(), folder.getFolderId()) %>"
+	repositoryEntries="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getPortletFileEntries() %>"
+	repositoryEntriesCount="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getPortletFileEntriesCount() %>"
+	showBreadcrumb="<%= true %>"
 	showDragAndDropZone="<%= true %>"
 	tabName="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getTitle(locale) %>"
 	uploadURL="<%= commerceShopByDiagramItemSelectorViewDisplayContext.getUploadURL(liferayPortletResponse) %>"

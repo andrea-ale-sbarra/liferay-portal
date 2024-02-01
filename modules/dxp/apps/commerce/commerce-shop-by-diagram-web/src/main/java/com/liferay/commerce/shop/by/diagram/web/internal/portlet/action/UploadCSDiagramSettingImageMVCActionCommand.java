@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.servlet.ServletResponseConstants;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.File;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -128,7 +129,7 @@ public class UploadCSDiagramSettingImageMVCActionCommand
 				String contentType = uploadPortletRequest.getContentType(
 					_parameterName);
 
-				if (StringUtil.containsIgnoreCase(contentType, "svg")) {
+				if (contentType.equals(ContentTypes.IMAGE_SVG_XML)) {
 					return _addFileEntry(
 						fileName, contentType,
 						CSDiagramSettingUtil.cleanInputStream(inputStream),

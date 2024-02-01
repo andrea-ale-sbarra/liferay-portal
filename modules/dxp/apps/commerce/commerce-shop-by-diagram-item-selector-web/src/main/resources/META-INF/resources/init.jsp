@@ -14,8 +14,6 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 <%@ page import="com.liferay.commerce.shop.by.diagram.item.selector.web.internal.constants.CommerceShopByDiagramItemSelectorWebKeys" %><%@
 page import="com.liferay.commerce.shop.by.diagram.item.selector.web.internal.display.context.CommerceShopByDiagramItemSelectorViewDisplayContext" %><%@
 page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
-page import="com.liferay.portal.kernel.portletfilerepository.PortletFileRepositoryUtil" %><%@
-page import="com.liferay.portal.kernel.repository.model.Folder" %><%@
 page import="com.liferay.portal.kernel.util.ListUtil" %>
 
 <liferay-frontend:defineObjects />

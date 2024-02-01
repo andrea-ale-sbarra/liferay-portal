@@ -16,6 +16,7 @@ import com.liferay.item.selector.ItemSelectorView;
 import com.liferay.item.selector.criteria.FileEntryItemSelectorReturnType;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.staging.StagingGroupHelper;
 
 import java.io.IOException;
 
@@ -86,7 +87,8 @@ public class CommerceShopByDiagramItemSelectorView
 					_commerceCatalogLocalService,
 					commerceShopByDiagramItemSelectorCriterion, this,
 					(HttpServletRequest)servletRequest, itemSelectedEventName,
-					_itemSelectorReturnTypeResolverHandler, portletURL);
+					_itemSelectorReturnTypeResolverHandler, portletURL,
+					stagingGroupHelper);
 
 		servletRequest.setAttribute(
 			CommerceShopByDiagramItemSelectorWebKeys.
@@ -95,6 +97,9 @@ public class CommerceShopByDiagramItemSelectorView
 
 		requestDispatcher.include(servletRequest, servletResponse);
 	}
+
+	@Reference
+	protected StagingGroupHelper stagingGroupHelper;
 
 	private static final List<ItemSelectorReturnType>
 		_supportedItemSelectorReturnTypes = Collections.unmodifiableList(
