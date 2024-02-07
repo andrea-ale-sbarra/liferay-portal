@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import java.io.InputStream;
 import java.io.Serializable;
 
 import java.util.List;
@@ -61,6 +62,18 @@ public class CPDVirtualSettingFileEntryLocalServiceUtil {
 		return getService().addCPDVirtualSettingFileEntry(
 			userId, groupId, cpDefinitionVirtualSettingId, fileEntryId, url,
 			version);
+	}
+
+	public static com.liferay.portal.kernel.repository.model.FileEntry
+			addFileEntry(
+				long userId, long groupId, String className, long classPK,
+				String serviceName, long folderId, InputStream inputStream,
+				String fileName, String mimeType)
+		throws PortalException {
+
+		return getService().addFileEntry(
+			userId, groupId, className, classPK, serviceName, folderId,
+			inputStream, fileName, mimeType);
 	}
 
 	/**

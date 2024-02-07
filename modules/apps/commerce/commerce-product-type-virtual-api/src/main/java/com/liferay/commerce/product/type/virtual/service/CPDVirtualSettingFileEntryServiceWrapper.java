@@ -7,6 +7,8 @@ package com.liferay.commerce.product.type.virtual.service;
 
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
+import java.io.InputStream;
+
 /**
  * Provides a wrapper for {@link CPDVirtualSettingFileEntryService}.
  *
@@ -40,6 +42,16 @@ public class CPDVirtualSettingFileEntryServiceWrapper
 		return _cpdVirtualSettingFileEntryService.addCPDefinitionVirtualSetting(
 			groupId, className, classPK, cpDefinitionVirtualSettingId,
 			fileEntryId, url, version);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.repository.model.FileEntry addFileEntry(
+		long groupId, long folderId, InputStream inputStream, String fileName,
+		String mimeType, String serviceName)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpdVirtualSettingFileEntryService.addFileEntry(
+			groupId, folderId, inputStream, fileName, mimeType, serviceName);
 	}
 
 	@Override
