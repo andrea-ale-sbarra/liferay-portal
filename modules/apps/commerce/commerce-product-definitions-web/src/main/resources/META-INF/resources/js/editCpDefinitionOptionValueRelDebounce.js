@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {slugify} from 'commerce-frontend-js';
+import slugify from 'commerce-frontend-js/utilities/slugify';
 import {debounce} from 'frontend-js-web';
 
 export default function editCpDefinitionOptionValueRelDebounce({namespace}) {
@@ -16,7 +16,7 @@ export default function editCpDefinitionOptionValueRelDebounce({namespace}) {
 
 	if (nameInput) {
 		const handleOnNameInput = function () {
-			keyInput.value = slugify.default(nameInput.value);
+			keyInput.value = slugify(nameInput.value);
 		};
 
 		nameInput.addEventListener('input', debounce(handleOnNameInput, 200));

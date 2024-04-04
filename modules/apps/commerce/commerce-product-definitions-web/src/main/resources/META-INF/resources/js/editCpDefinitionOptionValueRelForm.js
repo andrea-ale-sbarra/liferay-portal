@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {slugify} from 'commerce-frontend-js';
+import slugify from 'commerce-frontend-js/utilities/slugify';
 import {debounce} from 'frontend-js-web';
 
 export default function editCpDefinitionOptionValueRelForm({
@@ -26,8 +26,8 @@ export default function editCpDefinitionOptionValueRelForm({
 	const optionValueSelectDateObj = new optionValueSelectDate();
 
 	const handleOnLabelInput = function () {
-		optionValueSelectDateObj.setDate(slugify.default(dateInput.value));
-		optionValueSelectDateObj.setTime(slugify.default(timeInput.value));
+		optionValueSelectDateObj.setDate(slugify(dateInput.value));
+		optionValueSelectDateObj.setTime(slugify(timeInput.value));
 		optionValueSelectDateObj.setTimezone(timeZoneInput.value);
 		optionValueSelectDateObj.setDuration(durationInput.value);
 		optionValueSelectDateObj.setDurationType(durationTypeInput.value);
