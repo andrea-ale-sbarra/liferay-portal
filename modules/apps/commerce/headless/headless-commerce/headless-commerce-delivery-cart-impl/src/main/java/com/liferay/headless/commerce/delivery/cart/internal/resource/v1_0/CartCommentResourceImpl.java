@@ -5,6 +5,7 @@
 
 package com.liferay.headless.commerce.delivery.cart.internal.resource.v1_0;
 
+import com.liferay.commerce.exception.NoSuchOrderException;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderNote;
 import com.liferay.commerce.service.CommerceOrderNoteService;
@@ -41,6 +42,33 @@ public class CartCommentResourceImpl extends BaseCartCommentResourceImpl {
 	@Override
 	public void deleteCartComment(Long commentId) throws Exception {
 		_commerceOrderNoteService.deleteCommerceOrderNote(commentId);
+	}
+
+	@Override
+	public Page<CartComment> getCartByExternalReferenceCodeCommentsPage(
+			String externalReferenceCode, Pagination pagination)
+		throws Exception {
+
+		CommerceOrder commerceOrder =
+			_commerceOrderService.fetchByExternalReferenceCode(
+				externalReferenceCode, contextCompany.getCompanyId());
+
+		if (commerceOrder == null) {
+			throw new NoSuchOrderException(
+				"Unable to find order with external reference code " +
+					externalReferenceCode);
+		}
+
+		int totalItems = _commerceOrderNoteService.getCommerceOrderNotesCount(
+			commerceOrder.getCommerceOrderId(), false);
+
+		return Page.of(
+			_toOrderNotes(
+				_commerceOrderNoteService.getCommerceOrderNotes(
+					commerceOrder.getCommerceOrderId(), false,
+					pagination.getStartPosition(),
+					pagination.getEndPosition())),
+			pagination, totalItems);
 	}
 
 	@Override

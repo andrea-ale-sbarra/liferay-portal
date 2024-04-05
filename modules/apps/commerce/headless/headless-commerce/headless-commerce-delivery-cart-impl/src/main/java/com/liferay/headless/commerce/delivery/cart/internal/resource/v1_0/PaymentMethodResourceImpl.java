@@ -5,6 +5,7 @@
 
 package com.liferay.headless.commerce.delivery.cart.internal.resource.v1_0;
 
+import com.liferay.commerce.exception.NoSuchOrderException;
 import com.liferay.commerce.model.CommerceAddress;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderType;
@@ -43,6 +44,58 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.PROTOTYPE, service = PaymentMethodResource.class
 )
 public class PaymentMethodResourceImpl extends BasePaymentMethodResourceImpl {
+
+	@Override
+	public Page<PaymentMethod> getCartByExternalReferenceCodePaymentMethodsPage(
+			String externalReferenceCode)
+		throws Exception {
+
+		CommerceOrder commerceOrder =
+			_commerceOrderService.fetchByExternalReferenceCode(
+				externalReferenceCode, contextCompany.getCompanyId());
+
+		if (commerceOrder == null) {
+			throw new NoSuchOrderException(
+				"Unable to find order with external reference code " +
+					externalReferenceCode);
+		}
+
+		List<CommercePaymentMethodGroupRel> commercePaymentMethodGroupRels =
+			new ArrayList<>();
+
+		CommerceAddress commerceAddress = commerceOrder.getBillingAddress();
+
+		if (commerceAddress == null) {
+			commerceAddress = commerceOrder.getShippingAddress();
+		}
+
+		if (commerceAddress != null) {
+			commercePaymentMethodGroupRels.addAll(
+				_commercePaymentMethodGroupRelLocalService.
+					getCommercePaymentMethodGroupRels(
+						commerceOrder.getGroupId(),
+						commerceAddress.getCountryId(), true));
+		}
+		else {
+			commercePaymentMethodGroupRels.addAll(
+				_commercePaymentMethodGroupRelLocalService.
+					getCommercePaymentMethodGroupRels(
+						commerceOrder.getGroupId(), true));
+		}
+
+		commercePaymentMethodGroupRels = _filterCommercePaymentMethodGroupRels(
+			commercePaymentMethodGroupRels,
+			commerceOrder.getCommerceOrderTypeId(),
+			commerceOrder.isSubscriptionOrder());
+
+		return Page.of(
+			transform(
+				_filterCommercePaymentMethodGroupRels(
+					commercePaymentMethodGroupRels,
+					commerceOrder.getCommerceOrderTypeId(),
+					commerceOrder.isSubscriptionOrder()),
+				this::_toPaymentMethod));
+	}
 
 	@Override
 	public Page<PaymentMethod> getCartPaymentMethodsPage(Long cartId)

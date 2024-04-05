@@ -8,6 +8,7 @@ package com.liferay.headless.commerce.delivery.cart.internal.resource.v1_0;
 import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.context.CommerceContextFactory;
 import com.liferay.commerce.currency.util.CommercePriceFormatter;
+import com.liferay.commerce.exception.NoSuchOrderException;
 import com.liferay.commerce.model.CommerceAddress;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceShippingEngine;
@@ -40,6 +41,44 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.PROTOTYPE, service = ShippingMethodResource.class
 )
 public class ShippingMethodResourceImpl extends BaseShippingMethodResourceImpl {
+
+	@Override
+	public Page<ShippingMethod>
+			getCartByExternalReferenceCodeShippingMethodsPage(
+				String externalReferenceCode)
+		throws Exception {
+
+		CommerceOrder commerceOrder =
+			_commerceOrderService.fetchByExternalReferenceCode(
+				externalReferenceCode, contextCompany.getCompanyId());
+
+		if (commerceOrder == null) {
+			throw new NoSuchOrderException(
+				"Unable to find order with external reference code " +
+					externalReferenceCode);
+		}
+
+		CommerceAddress shippingCommerceAddress =
+			commerceOrder.getShippingAddress();
+
+		if (shippingCommerceAddress != null) {
+			CommerceChannel commerceChannel =
+				_commerceChannelLocalService.getCommerceChannelByOrderGroupId(
+					commerceOrder.getGroupId());
+
+			return Page.of(
+				transform(
+					_commerceShippingMethodLocalService.
+						getCommerceShippingMethods(
+							commerceChannel.getGroupId(),
+							shippingCommerceAddress.getCountryId(), true),
+					shippingMethod -> _toShippingMethod(
+						shippingMethod, commerceChannel, commerceOrder)));
+		}
+
+		return super.getCartShippingMethodsPage(
+			commerceOrder.getCommerceOrderId());
+	}
 
 	@Override
 	public Page<ShippingMethod> getCartShippingMethodsPage(Long cartId)
