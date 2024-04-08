@@ -179,93 +179,15 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 					externalReferenceCode);
 		}
 
-		_initThemeDisplay(commerceOrder);
-
-		StringBundler sb = new StringBundler(14);
-
-		sb.append(_portal.getPortalURL(contextHttpServletRequest));
-		sb.append(_portal.getPathModule());
-		sb.append(CharPool.SLASH);
-		sb.append(CommercePaymentMethodConstants.SERVLET_PATH);
-		sb.append("?groupId=");
-		sb.append(commerceOrder.getGroupId());
-		sb.append(StringPool.AMPERSAND);
-
-		if (commerceOrder.isGuestOrder()) {
-			sb.append("guestToken=");
-
-			Key key = contextCompany.getKeyObj();
-
-			sb.append(
-				_encryptor.encrypt(
-					key, String.valueOf(commerceOrder.getCommerceOrderId())));
-
-			sb.append(StringPool.AMPERSAND);
-		}
-
-		sb.append("nextStep=");
-
-		if (Validator.isNotNull(callbackURL)) {
-			sb.append(callbackURL);
-		}
-		else {
-			sb.append(
-				URLCodec.encodeURL(
-					_getOrderConfirmationCheckoutStepURL(commerceOrder)));
-		}
-
-		sb.append("&uuid=");
-		sb.append(commerceOrder.getUuid());
-
-		return sb.toString();
+		return _getPaymentURL(callbackURL, commerceOrder);
 	}
 
 	@Override
 	public String getCartPaymentURL(Long cartId, String callbackURL)
 		throws Exception {
 
-		CommerceOrder commerceOrder = _commerceOrderService.getCommerceOrder(
-			cartId);
-
-		_initThemeDisplay(commerceOrder);
-
-		StringBundler sb = new StringBundler(14);
-
-		sb.append(_portal.getPortalURL(contextHttpServletRequest));
-		sb.append(_portal.getPathModule());
-		sb.append(CharPool.SLASH);
-		sb.append(CommercePaymentMethodConstants.SERVLET_PATH);
-		sb.append("?groupId=");
-		sb.append(commerceOrder.getGroupId());
-		sb.append(StringPool.AMPERSAND);
-
-		if (commerceOrder.isGuestOrder()) {
-			sb.append("guestToken=");
-
-			Key key = contextCompany.getKeyObj();
-
-			sb.append(
-				_encryptor.encrypt(
-					key, String.valueOf(commerceOrder.getCommerceOrderId())));
-
-			sb.append(StringPool.AMPERSAND);
-		}
-
-		sb.append("nextStep=");
-
-		if (Validator.isNotNull(callbackURL)) {
-			sb.append(callbackURL);
-		}
-		else {
-			sb.append(
-				URLCodec.encodeURL(
-					_getOrderConfirmationCheckoutStepURL(commerceOrder)));
-		}
-
-		sb.append("&uuid=");
-		sb.append(commerceOrder.getUuid());
-
-		return sb.toString();
+		return _getPaymentURL(
+			callbackURL, _commerceOrderService.getCommerceOrder(cartId));
 	}
 
 	@Override
@@ -333,55 +255,7 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 					externalReferenceCode);
 		}
 
-		Cart cart = _toCart(commerceOrder);
-
-		cart.setCartItems(_getValidatedCommerceOrderItems(commerceOrder, cart));
-		cart.setValid(true);
-
-		try {
-			commerceOrder = _commerceOrderEngine.checkoutCommerceOrder(
-				commerceOrder, contextUser.getUserId());
-
-			cart = _toCart(commerceOrder);
-		}
-		catch (Exception exception) {
-			cart.setValid(false);
-
-			if (exception.getCause() instanceof
-					CommerceOrderBillingAddressException) {
-
-				cart.setErrorMessages(new String[] {"Invalid billing address"});
-			}
-
-			if (exception.getCause() instanceof
-					CommerceOrderGuestCheckoutException) {
-
-				cart.setErrorMessages(new String[] {"Invalid guest checkout"});
-			}
-
-			if (exception.getCause() instanceof CommerceOrderPriceException) {
-				cart.setErrorMessages(new String[] {"Invalid price"});
-			}
-
-			if (exception.getCause() instanceof
-					CommerceOrderShippingAddressException) {
-
-				cart.setErrorMessages(
-					new String[] {"Invalid shipping address"});
-			}
-
-			if (exception.getCause() instanceof
-					CommerceOrderShippingMethodException) {
-
-				cart.setErrorMessages(new String[] {"Invalid shipping method"});
-			}
-
-			if (exception.getCause() instanceof CommerceOrderStatusException) {
-				cart.setErrorMessages(new String[] {"Invalid cart status"});
-			}
-		}
-
-		return cart;
+		return _checkoutOrder(commerceOrder);
 	}
 
 	@Override
@@ -410,58 +284,7 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 
 	@Override
 	public Cart postCartCheckout(Long cartId) throws Exception {
-		CommerceOrder commerceOrder = _commerceOrderService.getCommerceOrder(
-			cartId);
-
-		Cart cart = _toCart(commerceOrder);
-
-		cart.setCartItems(_getValidatedCommerceOrderItems(commerceOrder, cart));
-		cart.setValid(true);
-
-		try {
-			commerceOrder = _commerceOrderEngine.checkoutCommerceOrder(
-				commerceOrder, contextUser.getUserId());
-
-			cart = _toCart(commerceOrder);
-		}
-		catch (Exception exception) {
-			cart.setValid(false);
-
-			if (exception.getCause() instanceof
-					CommerceOrderBillingAddressException) {
-
-				cart.setErrorMessages(new String[] {"Invalid billing address"});
-			}
-
-			if (exception.getCause() instanceof
-					CommerceOrderGuestCheckoutException) {
-
-				cart.setErrorMessages(new String[] {"Invalid guest checkout"});
-			}
-
-			if (exception.getCause() instanceof CommerceOrderPriceException) {
-				cart.setErrorMessages(new String[] {"Invalid price"});
-			}
-
-			if (exception.getCause() instanceof
-					CommerceOrderShippingAddressException) {
-
-				cart.setErrorMessages(
-					new String[] {"Invalid shipping address"});
-			}
-
-			if (exception.getCause() instanceof
-					CommerceOrderShippingMethodException) {
-
-				cart.setErrorMessages(new String[] {"Invalid shipping method"});
-			}
-
-			if (exception.getCause() instanceof CommerceOrderStatusException) {
-				cart.setErrorMessages(new String[] {"Invalid cart status"});
-			}
-		}
-
-		return cart;
+		return _checkoutOrder(_commerceOrderService.getCommerceOrder(cartId));
 	}
 
 	@Override
@@ -774,6 +597,58 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 			commerceOrder.getTotalWithTaxAmount(), commerceContext, true);
 	}
 
+	private Cart _checkoutOrder(CommerceOrder commerceOrder) throws Exception {
+		Cart cart = _toCart(commerceOrder);
+
+		cart.setCartItems(_getValidatedCommerceOrderItems(commerceOrder, cart));
+		cart.setValid(true);
+
+		try {
+			commerceOrder = _commerceOrderEngine.checkoutCommerceOrder(
+				commerceOrder, contextUser.getUserId());
+
+			cart = _toCart(commerceOrder);
+		}
+		catch (Exception exception) {
+			cart.setValid(false);
+
+			if (exception.getCause() instanceof
+					CommerceOrderBillingAddressException) {
+
+				cart.setErrorMessages(new String[] {"Invalid billing address"});
+			}
+
+			if (exception.getCause() instanceof
+					CommerceOrderGuestCheckoutException) {
+
+				cart.setErrorMessages(new String[] {"Invalid guest checkout"});
+			}
+
+			if (exception.getCause() instanceof CommerceOrderPriceException) {
+				cart.setErrorMessages(new String[] {"Invalid price"});
+			}
+
+			if (exception.getCause() instanceof
+					CommerceOrderShippingAddressException) {
+
+				cart.setErrorMessages(
+					new String[] {"Invalid shipping address"});
+			}
+
+			if (exception.getCause() instanceof
+					CommerceOrderShippingMethodException) {
+
+				cart.setErrorMessages(new String[] {"Invalid shipping method"});
+			}
+
+			if (exception.getCause() instanceof CommerceOrderStatusException) {
+				cart.setErrorMessages(new String[] {"Invalid cart status"});
+			}
+		}
+
+		return cart;
+	}
+
 	private long _getCommerceOrderTypeId(Cart cart) throws Exception {
 		if (cart.getOrderTypeId() != null) {
 			return cart.getOrderTypeId();
@@ -812,6 +687,51 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 		).setParameter(
 			"commerceOrderUuid", commerceOrder.getUuid()
 		).buildString();
+	}
+
+	private String _getPaymentURL(
+			String callbackURL, CommerceOrder commerceOrder)
+		throws Exception {
+
+		_initThemeDisplay(commerceOrder);
+
+		StringBundler sb = new StringBundler(14);
+
+		sb.append(_portal.getPortalURL(contextHttpServletRequest));
+		sb.append(_portal.getPathModule());
+		sb.append(CharPool.SLASH);
+		sb.append(CommercePaymentMethodConstants.SERVLET_PATH);
+		sb.append("?groupId=");
+		sb.append(commerceOrder.getGroupId());
+		sb.append(StringPool.AMPERSAND);
+
+		if (commerceOrder.isGuestOrder()) {
+			sb.append("guestToken=");
+
+			Key key = contextCompany.getKeyObj();
+
+			sb.append(
+				_encryptor.encrypt(
+					key, String.valueOf(commerceOrder.getCommerceOrderId())));
+
+			sb.append(StringPool.AMPERSAND);
+		}
+
+		sb.append("nextStep=");
+
+		if (Validator.isNotNull(callbackURL)) {
+			sb.append(callbackURL);
+		}
+		else {
+			sb.append(
+				URLCodec.encodeURL(
+					_getOrderConfirmationCheckoutStepURL(commerceOrder)));
+		}
+
+		sb.append("&uuid=");
+		sb.append(commerceOrder.getUuid());
+
+		return sb.toString();
 	}
 
 	private long _getRegionId(

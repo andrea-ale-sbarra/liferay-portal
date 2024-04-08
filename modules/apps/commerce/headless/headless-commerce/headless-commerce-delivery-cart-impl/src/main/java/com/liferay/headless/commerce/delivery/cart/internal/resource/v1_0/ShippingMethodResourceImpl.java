@@ -76,8 +76,8 @@ public class ShippingMethodResourceImpl extends BaseShippingMethodResourceImpl {
 						shippingMethod, commerceChannel, commerceOrder)));
 		}
 
-		return super.getCartShippingMethodsPage(
-			commerceOrder.getCommerceOrderId());
+		return super.getCartByExternalReferenceCodeShippingMethodsPage(
+			commerceOrder.getExternalReferenceCode());
 	}
 
 	@Override

@@ -59,16 +59,15 @@ public class CartCommentResourceImpl extends BaseCartCommentResourceImpl {
 					externalReferenceCode);
 		}
 
-		int totalItems = _commerceOrderNoteService.getCommerceOrderNotesCount(
-			commerceOrder.getCommerceOrderId(), false);
-
 		return Page.of(
 			_toOrderNotes(
 				_commerceOrderNoteService.getCommerceOrderNotes(
 					commerceOrder.getCommerceOrderId(), false,
 					pagination.getStartPosition(),
 					pagination.getEndPosition())),
-			pagination, totalItems);
+			pagination,
+			_commerceOrderNoteService.getCommerceOrderNotesCount(
+				commerceOrder.getCommerceOrderId(), false));
 	}
 
 	@Override
@@ -82,15 +81,14 @@ public class CartCommentResourceImpl extends BaseCartCommentResourceImpl {
 			@NestedFieldId("id") Long cartId, Pagination pagination)
 		throws Exception {
 
-		int totalItems = _commerceOrderNoteService.getCommerceOrderNotesCount(
-			cartId, false);
-
 		return Page.of(
 			_toOrderNotes(
 				_commerceOrderNoteService.getCommerceOrderNotes(
 					cartId, false, pagination.getStartPosition(),
 					pagination.getEndPosition())),
-			pagination, totalItems);
+			pagination,
+			_commerceOrderNoteService.getCommerceOrderNotesCount(
+				cartId, false));
 	}
 
 	@Override

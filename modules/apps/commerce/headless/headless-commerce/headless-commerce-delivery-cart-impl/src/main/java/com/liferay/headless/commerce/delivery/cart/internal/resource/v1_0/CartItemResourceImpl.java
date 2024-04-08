@@ -80,11 +80,11 @@ public class CartItemResourceImpl extends BaseCartItemResourceImpl {
 			String externalReferenceCode, Long skuId, Pagination pagination)
 		throws Exception {
 
-		CommerceOrder commerceOrder1 =
+		CommerceOrder commerceOrder =
 			_commerceOrderService.fetchByExternalReferenceCode(
 				externalReferenceCode, contextCompany.getCompanyId());
 
-		if (commerceOrder1 == null) {
+		if (commerceOrder == null) {
 			throw new NoSuchOrderException(
 				"Unable to find order with external reference code " +
 					externalReferenceCode);
@@ -94,7 +94,7 @@ public class CartItemResourceImpl extends BaseCartItemResourceImpl {
 			_filterCartItems(
 				transform(
 					_commerceOrderItemService.getCommerceOrderItems(
-						commerceOrder1.getCommerceOrderId(), QueryUtil.ALL_POS,
+						commerceOrder.getCommerceOrderId(), QueryUtil.ALL_POS,
 						QueryUtil.ALL_POS),
 					commerceOrderItem -> {
 						if ((skuId != null) &&
@@ -104,11 +104,8 @@ public class CartItemResourceImpl extends BaseCartItemResourceImpl {
 							return null;
 						}
 
-						CommerceOrder commerceOrder2 =
-							commerceOrderItem.getCommerceOrder();
-
 						return _toCartItem(
-							commerceOrder2.getCommerceAccountId(),
+							commerceOrder.getCommerceAccountId(),
 							commerceOrderItem);
 					})));
 	}
