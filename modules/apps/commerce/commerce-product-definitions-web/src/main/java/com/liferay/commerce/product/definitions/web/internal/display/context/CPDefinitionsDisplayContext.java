@@ -365,7 +365,7 @@ public class CPDefinitionsDisplayContext
 					"cpDefinitionId", "{id}"
 				).setParameter(
 					"screenNavigationCategoryKey",
-					CPDefinitionScreenNavigationConstants.CATEGORY_KEY_DETAILS
+					getScreenNavigationCategoryKey()
 				).buildString(),
 				"pencil", "edit", LanguageUtil.get(httpServletRequest, "edit"),
 				"get", null, null),
@@ -454,6 +454,11 @@ public class CPDefinitionsDisplayContext
 	public String getProductURLSeparator() {
 		return _cpFriendlyURL.getProductURLSeparator(
 			cpRequestHelper.getCompanyId());
+	}
+
+	@Override
+	public String getScreenNavigationCategoryKey() {
+		return CPDefinitionScreenNavigationConstants.CATEGORY_KEY_DETAILS;
 	}
 
 	public String getUrlTitleMapAsXML() throws PortalException {
