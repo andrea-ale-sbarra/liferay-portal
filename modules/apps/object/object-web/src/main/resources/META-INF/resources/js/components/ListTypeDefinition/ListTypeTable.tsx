@@ -196,9 +196,9 @@ function getDataSetProps(
 		},
 		portletId:
 			'com_liferay_object_web_internal_list_type_portlet_portlet_ListTypeDefinitionsPortlet',
-		showManagementBar: true,
+		showManagementBar: false,
 		showPagination: true,
-		showSearch: true,
+		showSearch: false,
 		style: 'fluid',
 		views: [
 			{

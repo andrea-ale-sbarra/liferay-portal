@@ -11,19 +11,27 @@ import com.liferay.commerce.product.options.web.internal.portlet.action.helper.A
 import com.liferay.commerce.product.options.web.internal.util.CPOptionsPortletUtil;
 import com.liferay.commerce.product.service.CPOptionCategoryService;
 import com.liferay.commerce.product.service.CPSpecificationOptionService;
+import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
+import com.liferay.object.constants.ObjectPortletKeys;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
+import com.liferay.portal.kernel.portlet.url.builder.ResourceURLBuilder;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.util.Arrays;
 import java.util.List;
 
+import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +58,32 @@ public class CPSpecificationOptionDisplayContext
 		_cpSpecificationOptionService = cpSpecificationOptionService;
 
 		setDefaultOrderByCol("label");
+	}
+
+	public String getAPIURL() {
+		return "/o/headless-admin-list-type/v1.0/list-type-definitions";
+	}
+
+	public List<FDSActionDropdownItem> getFDSActionDropdownItems()
+		throws Exception {
+
+		return Arrays.asList(
+			new FDSActionDropdownItem(
+				PortletURLBuilder.create(
+					PortletURLFactoryUtil.create(
+						cpRequestHelper.getRenderRequest(),
+						ObjectPortletKeys.LIST_TYPE_DEFINITIONS,
+						PortletRequest.RENDER_PHASE)
+				).setMVCRenderCommandName(
+					"/list_type_definitions/edit_list_type_definition"
+				).setParameter(
+					"listTypeDefinitionId", "{id}"
+				).setWindowState(
+					LiferayWindowState.POP_UP
+				).buildString(),
+				"view", "view",
+				LanguageUtil.get(cpRequestHelper.getRequest(), "view"),
+				"get", null, "sidePanel"));
 	}
 
 	public List<CPOptionCategory> getCPOptionCategories()
