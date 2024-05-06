@@ -90,13 +90,26 @@ function BulkActions({
 			const form = document.getElementById(namespacedId);
 
 			if (form) {
+				function getCmdFromUrl(url) {
+					const match = url.match(/[?&](_\w+)?cmd=([^&]+)/);
+					return match && decodeURIComponent(match[2]);
+				}
+
+				let cmd = getCmdFromUrl(href || form.action);
+
+				let dataObj = {
+					...data,
+					[`${
+						actionParameterName || selectedItemsKey
+					}`]: selectedItemsValue.join(','),
+				};
+
+				if (cmd) {
+					dataObj["cmd"] = cmd
+				}
+
 				postForm(form, {
-					data: {
-						...data,
-						[`${
-							actionParameterName || selectedItemsKey
-						}`]: selectedItemsValue.join(','),
-					},
+					data: dataObj,
 					url: href || form.action,
 				});
 			}
