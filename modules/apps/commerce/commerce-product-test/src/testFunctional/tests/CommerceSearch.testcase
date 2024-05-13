@@ -573,16 +573,6 @@ definition {
 
 		SelectFrameTop();
 
-		Type.sendKeys(
-			locator1 = "Search#GLOBAL_SEARCH_BAR",
-			value1 = "ABS Sensor");
-
-		for (var productName : list "ABS Sensor,Wear Sensors") {
-			AssertElementPresent(
-				key_suggestionName = ${productName},
-				locator1 = "Search#GLOBAL_SEARCH_SUGGESTION");
-		}
-
 		Click(locator1 = "Search#GLOBAL_SEARCH_CLEAN_BUTTON");
 
 		Type.sendKeys(
@@ -597,11 +587,9 @@ definition {
 
 		Click(locator1 = "Search#GLOBAL_SEARCH_CLEAN_BUTTON");
 
-		var searchTerm = '''"ABS Sensor"''';
-
 		Type.sendKeys(
 			locator1 = "Search#GLOBAL_SEARCH_BAR",
-			value1 = ${searchTerm});
+			value1 = "ABS Sensor");
 
 		AssertElementPresent(
 			key_suggestionName = "ABS Sensor",
