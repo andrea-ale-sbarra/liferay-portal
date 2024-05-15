@@ -5,6 +5,8 @@
 
 package com.liferay.list.type.service.impl;
 
+import com.liferay.list.type.contributor.ListTypeDefinitionContributor;
+import com.liferay.list.type.contributor.ListTypeDefinitionContributorRegistry;
 import com.liferay.list.type.exception.ListTypeDefinitionNameException;
 import com.liferay.list.type.exception.RequiredListTypeDefinitionException;
 import com.liferay.list.type.internal.definition.util.ListTypeDefinitionUtil;
@@ -107,6 +109,12 @@ public class ListTypeDefinitionLocalServiceImpl
 		int count =
 			_objectFieldLocalService.getObjectFieldsCountByListTypeDefinitionId(
 				listTypeDefinition.getListTypeDefinitionId());
+
+		ListTypeDefinitionContributorRegistry listTypeDefinitionContributorRegistry = null;
+
+		for (ListTypeDefinitionContributor listTypeDefinitionContributor: listTypeDefinitionContributorRegistry.getListTypeDefinitionContributors()) {
+			count += listTypeDefinitionContributor.onDelete(listTypeDefinition.getListTypeDefinitionId());
+		}
 
 		if (count > 0) {
 			throw new RequiredListTypeDefinitionException();
