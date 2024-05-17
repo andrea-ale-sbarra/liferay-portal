@@ -71,11 +71,11 @@ public class CPJSONUtil {
 				).put(
 					"skuOptionValueNames",
 					JSONFactoryUtil.createJSONArray(
-						Collections.singletonList(value.get(1)))
+						Collections.singletonList(value.get(2)))
 				).put(
 					"value",
 					JSONFactoryUtil.createJSONArray(
-						Collections.singletonList(value.get(2)))
+						Collections.singletonList(value.get(1)))
 				));
 		}
 

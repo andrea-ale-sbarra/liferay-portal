@@ -71,6 +71,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -664,13 +665,11 @@ public class CPDefinitionOptionRelLocalServiceImpl
 			cpDefinitionOptionValueRelKeys.add(
 				cpDefinitionOptionRel.getName(
 					cpDefinitionOptionRel.getDefaultLanguageId()));
-
+			cpDefinitionOptionValueRelKeys.add(
+				cpDefinitionOptionValueRel.getKey());
 			cpDefinitionOptionValueRelKeys.add(
 				cpDefinitionOptionValueRel.getName(
 					cpDefinitionOptionRel.getDefaultLanguageId()));
-
-			cpDefinitionOptionValueRelKeys.add(
-				cpDefinitionOptionValueRel.getKey());
 		}
 
 		return cpDefinitionOptionRelKeysCPDefinitionOptionValueRelKeys;
