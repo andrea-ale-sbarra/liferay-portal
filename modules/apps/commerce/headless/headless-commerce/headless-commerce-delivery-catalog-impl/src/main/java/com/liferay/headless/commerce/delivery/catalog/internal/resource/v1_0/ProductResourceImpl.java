@@ -43,7 +43,9 @@ import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.search.generic.BooleanQueryImpl;
 import com.liferay.portal.kernel.search.generic.MatchAllQuery;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.odata.entity.EntityModel;
@@ -61,6 +63,8 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
@@ -234,6 +238,10 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 			return commerceAccountIds[0];
 		}
 
+		_accountEntryModelResourcePermission.check(
+			PermissionThreadLocal.getPermissionChecker(), accountId,
+			ActionKeys.VIEW);
+
 		return accountId;
 	}
 
@@ -294,6 +302,14 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 
 	@Reference
 	private AccountEntryLocalService _accountEntryLocalService;
+
+	@Reference(
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(model.class.name=com.liferay.account.model.AccountEntry)"
+	)
+	private volatile ModelResourcePermission<AccountEntry>
+		_accountEntryModelResourcePermission;
 
 	@Reference
 	private AccountGroupLocalService _accountGroupLocalService;

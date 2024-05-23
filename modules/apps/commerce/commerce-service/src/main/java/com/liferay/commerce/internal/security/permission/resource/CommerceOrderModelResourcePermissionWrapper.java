@@ -5,6 +5,7 @@
 
 package com.liferay.commerce.internal.security.permission.resource;
 
+import com.liferay.account.model.AccountEntry;
 import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.commerce.constants.CommerceOrderConstants;
 import com.liferay.commerce.model.CommerceOrder;
@@ -21,6 +22,8 @@ import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalService;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * @author Andrea Di Giorgi
@@ -48,7 +51,9 @@ public class CommerceOrderModelResourcePermissionWrapper
 
 				consumer.accept(
 					new CommerceOrderModelResourcePermissionLogic(
-						_accountEntryLocalService, _commerceChannelLocalService,
+						_accountEntryLocalService,
+						_accountEntryModelResourcePermission,
+						_commerceChannelLocalService,
 						_commerceOrderLocalService, _configurationProvider,
 						_groupLocalService, _portletResourcePermission,
 						_userGroupRoleLocalService,
@@ -58,6 +63,14 @@ public class CommerceOrderModelResourcePermissionWrapper
 
 	@Reference
 	private AccountEntryLocalService _accountEntryLocalService;
+
+	@Reference(
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(model.class.name=com.liferay.account.model.AccountEntry)"
+	)
+	private volatile ModelResourcePermission<AccountEntry>
+		_accountEntryModelResourcePermission;
 
 	@Reference
 	private CommerceChannelLocalService _commerceChannelLocalService;

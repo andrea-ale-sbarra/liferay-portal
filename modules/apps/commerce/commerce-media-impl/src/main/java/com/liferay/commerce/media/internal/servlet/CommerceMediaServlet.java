@@ -6,6 +6,7 @@
 package com.liferay.commerce.media.internal.servlet;
 
 import com.liferay.account.constants.AccountConstants;
+import com.liferay.account.model.AccountEntry;
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.service.AssetCategoryLocalService;
 import com.liferay.commerce.media.CommerceMediaProvider;
@@ -70,6 +71,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * @author Alec Sloan
@@ -210,6 +213,10 @@ public class CommerceMediaServlet extends HttpServlet {
 					cpDefinition.getCommerceCatalog(), ActionKeys.VIEW);
 			}
 			else {
+				_accountEntryModelResourcePermission.check(
+					PermissionThreadLocal.getPermissionChecker(),
+					commerceAccountId, ActionKeys.VIEW);
+
 				_commerceProductViewPermission.check(
 					PermissionThreadLocal.getPermissionChecker(),
 					commerceAccountId, cpDefinition.getCPDefinitionId());
@@ -556,6 +563,10 @@ public class CommerceMediaServlet extends HttpServlet {
 			}
 			else {
 				if (sample) {
+					_accountEntryModelResourcePermission.check(
+						PermissionThreadLocal.getPermissionChecker(),
+						commerceAccountId, ActionKeys.VIEW);
+
 					_commerceProductViewPermission.check(
 						PermissionThreadLocal.getPermissionChecker(),
 						commerceAccountId, cpDefinition.getCPDefinitionId());
@@ -649,6 +660,14 @@ public class CommerceMediaServlet extends HttpServlet {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		CommerceMediaServlet.class);
+
+	@Reference(
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(model.class.name=com.liferay.account.model.AccountEntry)"
+	)
+	private volatile ModelResourcePermission<AccountEntry>
+		_accountEntryModelResourcePermission;
 
 	@Reference
 	private AssetCategoryLocalService _assetCategoryLocalService;
