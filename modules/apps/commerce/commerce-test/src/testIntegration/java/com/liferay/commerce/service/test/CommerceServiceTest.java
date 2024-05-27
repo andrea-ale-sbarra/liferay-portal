@@ -14,6 +14,7 @@ import com.liferay.commerce.account.test.util.CommerceAccountTestUtil;
 import com.liferay.commerce.constants.CommerceOrderConstants;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.currency.test.util.CommerceCurrencyTestUtil;
+import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.product.constants.CommerceChannelConstants;
 import com.liferay.commerce.product.model.CommerceChannel;
 import com.liferay.commerce.product.service.CommerceChannelLocalServiceUtil;
@@ -229,6 +230,75 @@ public class CommerceServiceTest {
 			_commerceChannel.getGroupId(), accountEntry.getAccountEntryId(),
 			_commerceCurrency.getCommerceCurrencyId(), 0);
 	}
+
+	@Test
+	public void testViewB2BCommerceOrderOfOwnAccount()
+		throws Exception {
+
+		frutillaRule.scenario(
+			"User can see order of own account only"
+		).given(
+			"2 users and their accounts"
+		).when(
+			"The user tries to fetch other account order"
+		).then(
+			"The order should not be accessible"
+		);
+
+		Role role = _addBuyerRole();
+
+		User user1 = UserTestUtil.addUser(_company);
+
+		PrincipalThreadLocal.setName(user1.getUserId());
+
+		PermissionThreadLocal.setPermissionChecker(
+			PermissionCheckerFactoryUtil.create(user1));
+
+		AccountEntry accountEntry1 =
+			CommerceAccountTestUtil.addBusinessAccountEntry(
+				_serviceContext.getUserId(), "Test Business Account", null,
+				null, new long[] {_user.getUserId()}, null, _serviceContext);
+
+		_accountEntryUserRelLocalService.addAccountEntryUserRel(
+			accountEntry1.getAccountEntryId(), user1.getUserId());
+
+		_userGroupRoleLocalService.addUserGroupRole(
+			user1.getUserId(), accountEntry1.getAccountEntryGroupId(),
+			role.getRoleId());
+
+		CommerceOrder commerceOrder = _commerceOrderService.addCommerceOrder(
+			_commerceChannel.getGroupId(), accountEntry1.getAccountEntryId(),
+			_commerceCurrency.getCommerceCurrencyId(), 0);
+
+		User user2 = UserTestUtil.addUser(_company);
+
+		PrincipalThreadLocal.setName(user2.getUserId());
+
+		PermissionThreadLocal.setPermissionChecker(
+			PermissionCheckerFactoryUtil.create(user2));
+
+		AccountEntry accountEntry2 =
+			CommerceAccountTestUtil.addBusinessAccountEntry(
+				_serviceContext.getUserId(), "Test Business Account", null,
+				null, new long[] {_user.getUserId()}, null, _serviceContext);
+
+		_accountEntryUserRelLocalService.addAccountEntryUserRel(
+			accountEntry2.getAccountEntryId(), user2.getUserId());
+
+		_userGroupRoleLocalService.addUserGroupRole(
+			user2.getUserId(), accountEntry2.getAccountEntryGroupId(),
+			role.getRoleId());
+
+		_commerceOrderService.addCommerceOrder(
+			_commerceChannel.getGroupId(), accountEntry2.getAccountEntryId(),
+			_commerceCurrency.getCommerceCurrencyId(), 0);
+
+		_commerceOrderService.getCommerceOrder(
+			commerceOrder.getCommerceOrderId());
+	}
+
+
+
 
 	@Rule
 	public FrutillaRule frutillaRule = new FrutillaRule();
