@@ -79,7 +79,8 @@ public class CPSpecificationOptionModelImpl
 		{"modifiedDate", Types.TIMESTAMP}, {"CPOptionCategoryId", Types.BIGINT},
 		{"title", Types.VARCHAR}, {"description", Types.VARCHAR},
 		{"facetable", Types.BOOLEAN}, {"key_", Types.VARCHAR},
-		{"priority", Types.DOUBLE}, {"lastPublishDate", Types.TIMESTAMP}
+		{"listTypeDefinitionId", Types.BIGINT}, {"priority", Types.DOUBLE},
+		{"lastPublishDate", Types.TIMESTAMP}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -100,12 +101,13 @@ public class CPSpecificationOptionModelImpl
 		TABLE_COLUMNS_MAP.put("description", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("facetable", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("key_", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("listTypeDefinitionId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("priority", Types.DOUBLE);
 		TABLE_COLUMNS_MAP.put("lastPublishDate", Types.TIMESTAMP);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table CPSpecificationOption (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,CPSpecificationOptionId LONG not null,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,CPOptionCategoryId LONG,title STRING null,description STRING null,facetable BOOLEAN,key_ VARCHAR(75) null,priority DOUBLE,lastPublishDate DATE null,primary key (CPSpecificationOptionId, ctCollectionId))";
+		"create table CPSpecificationOption (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,CPSpecificationOptionId LONG not null,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,CPOptionCategoryId LONG,title STRING null,description STRING null,facetable BOOLEAN,key_ VARCHAR(75) null,listTypeDefinitionId LONG,priority DOUBLE,lastPublishDate DATE null,primary key (CPSpecificationOptionId, ctCollectionId))";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table CPSpecificationOption";
@@ -298,6 +300,9 @@ public class CPSpecificationOptionModelImpl
 				"facetable", CPSpecificationOption::getFacetable);
 			attributeGetterFunctions.put("key", CPSpecificationOption::getKey);
 			attributeGetterFunctions.put(
+				"listTypeDefinitionId",
+				CPSpecificationOption::getListTypeDefinitionId);
+			attributeGetterFunctions.put(
 				"priority", CPSpecificationOption::getPriority);
 			attributeGetterFunctions.put(
 				"lastPublishDate", CPSpecificationOption::getLastPublishDate);
@@ -376,6 +381,10 @@ public class CPSpecificationOptionModelImpl
 				"key",
 				(BiConsumer<CPSpecificationOption, String>)
 					CPSpecificationOption::setKey);
+			attributeSetterBiConsumers.put(
+				"listTypeDefinitionId",
+				(BiConsumer<CPSpecificationOption, Long>)
+					CPSpecificationOption::setListTypeDefinitionId);
 			attributeSetterBiConsumers.put(
 				"priority",
 				(BiConsumer<CPSpecificationOption, Double>)
@@ -875,6 +884,21 @@ public class CPSpecificationOptionModelImpl
 
 	@JSON
 	@Override
+	public long getListTypeDefinitionId() {
+		return _listTypeDefinitionId;
+	}
+
+	@Override
+	public void setListTypeDefinitionId(long listTypeDefinitionId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_listTypeDefinitionId = listTypeDefinitionId;
+	}
+
+	@JSON
+	@Override
 	public double getPriority() {
 		return _priority;
 	}
@@ -1071,6 +1095,8 @@ public class CPSpecificationOptionModelImpl
 		cpSpecificationOptionImpl.setDescription(getDescription());
 		cpSpecificationOptionImpl.setFacetable(isFacetable());
 		cpSpecificationOptionImpl.setKey(getKey());
+		cpSpecificationOptionImpl.setListTypeDefinitionId(
+			getListTypeDefinitionId());
 		cpSpecificationOptionImpl.setPriority(getPriority());
 		cpSpecificationOptionImpl.setLastPublishDate(getLastPublishDate());
 
@@ -1112,6 +1138,8 @@ public class CPSpecificationOptionModelImpl
 			this.<Boolean>getColumnOriginalValue("facetable"));
 		cpSpecificationOptionImpl.setKey(
 			this.<String>getColumnOriginalValue("key_"));
+		cpSpecificationOptionImpl.setListTypeDefinitionId(
+			this.<Long>getColumnOriginalValue("listTypeDefinitionId"));
 		cpSpecificationOptionImpl.setPriority(
 			this.<Double>getColumnOriginalValue("priority"));
 		cpSpecificationOptionImpl.setLastPublishDate(
@@ -1278,6 +1306,9 @@ public class CPSpecificationOptionModelImpl
 			cpSpecificationOptionCacheModel.key = null;
 		}
 
+		cpSpecificationOptionCacheModel.listTypeDefinitionId =
+			getListTypeDefinitionId();
+
 		cpSpecificationOptionCacheModel.priority = getPriority();
 
 		Date lastPublishDate = getLastPublishDate();
@@ -1369,6 +1400,7 @@ public class CPSpecificationOptionModelImpl
 	private String _descriptionCurrentLanguageId;
 	private boolean _facetable;
 	private String _key;
+	private long _listTypeDefinitionId;
 	private double _priority;
 	private Date _lastPublishDate;
 
@@ -1417,6 +1449,8 @@ public class CPSpecificationOptionModelImpl
 		_columnOriginalValues.put("description", _description);
 		_columnOriginalValues.put("facetable", _facetable);
 		_columnOriginalValues.put("key_", _key);
+		_columnOriginalValues.put(
+			"listTypeDefinitionId", _listTypeDefinitionId);
 		_columnOriginalValues.put("priority", _priority);
 		_columnOriginalValues.put("lastPublishDate", _lastPublishDate);
 	}
@@ -1471,9 +1505,11 @@ public class CPSpecificationOptionModelImpl
 
 		columnBitmasks.put("key_", 8192L);
 
-		columnBitmasks.put("priority", 16384L);
+		columnBitmasks.put("listTypeDefinitionId", 16384L);
 
-		columnBitmasks.put("lastPublishDate", 32768L);
+		columnBitmasks.put("priority", 32768L);
+
+		columnBitmasks.put("lastPublishDate", 65536L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}
