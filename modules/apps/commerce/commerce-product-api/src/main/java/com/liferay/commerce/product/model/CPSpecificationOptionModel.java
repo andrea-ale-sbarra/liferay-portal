@@ -469,6 +469,20 @@ public interface CPSpecificationOptionModel
 	public void setKey(String key);
 
 	/**
+	 * Returns the list type definition ID of this cp specification option.
+	 *
+	 * @return the list type definition ID of this cp specification option
+	 */
+	public long getListTypeDefinitionId();
+
+	/**
+	 * Sets the list type definition ID of this cp specification option.
+	 *
+	 * @param listTypeDefinitionId the list type definition ID of this cp specification option
+	 */
+	public void setListTypeDefinitionId(long listTypeDefinitionId);
+
+	/**
 	 * Returns the priority of this cp specification option.
 	 *
 	 * @return the priority of this cp specification option

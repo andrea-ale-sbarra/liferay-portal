@@ -69,7 +69,7 @@ public class CPSpecificationOptionCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -99,6 +99,8 @@ public class CPSpecificationOptionCacheModel
 		sb.append(facetable);
 		sb.append(", key=");
 		sb.append(key);
+		sb.append(", listTypeDefinitionId=");
+		sb.append(listTypeDefinitionId);
 		sb.append(", priority=");
 		sb.append(priority);
 		sb.append(", lastPublishDate=");
@@ -174,6 +176,7 @@ public class CPSpecificationOptionCacheModel
 			cpSpecificationOptionImpl.setKey(key);
 		}
 
+		cpSpecificationOptionImpl.setListTypeDefinitionId(listTypeDefinitionId);
 		cpSpecificationOptionImpl.setPriority(priority);
 
 		if (lastPublishDate == Long.MIN_VALUE) {
@@ -211,6 +214,8 @@ public class CPSpecificationOptionCacheModel
 
 		facetable = objectInput.readBoolean();
 		key = objectInput.readUTF();
+
+		listTypeDefinitionId = objectInput.readLong();
 
 		priority = objectInput.readDouble();
 		lastPublishDate = objectInput.readLong();
@@ -270,6 +275,8 @@ public class CPSpecificationOptionCacheModel
 			objectOutput.writeUTF(key);
 		}
 
+		objectOutput.writeLong(listTypeDefinitionId);
+
 		objectOutput.writeDouble(priority);
 		objectOutput.writeLong(lastPublishDate);
 	}
@@ -288,6 +295,7 @@ public class CPSpecificationOptionCacheModel
 	public String description;
 	public boolean facetable;
 	public String key;
+	public long listTypeDefinitionId;
 	public double priority;
 	public long lastPublishDate;
 
