@@ -109,6 +109,8 @@ public class OpenAPIResourceImpl {
 
 			add(OptionValueResourceImpl.class);
 
+			add(PickListResourceImpl.class);
+
 			add(PinResourceImpl.class);
 
 			add(ProductResourceImpl.class);
