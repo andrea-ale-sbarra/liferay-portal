@@ -1203,6 +1203,7 @@
 		<column localized="true" name="description" type="String" />
 		<column name="facetable" type="boolean" />
 		<column name="key" type="String" />
+		<column name="listTypeDefinitionId" type="long" />
 		<column name="priority" type="double" />
 		<column name="lastPublishDate" type="Date" />
 
@@ -1223,6 +1224,9 @@
 		<finder name="C_K" return-type="CPSpecificationOption" unique="true">
 			<finder-column name="companyId" />
 			<finder-column name="key" />
+		</finder>
+		<finder name="ListTypeDefinitionId" return-type="Collection">
+			<finder-column name="listTypeDefinitionId" />
 		</finder>
 	</entity>
 	<entity external-reference-code="company" local-service="true" name="CPTaxCategory" remote-service="true" uuid="true">
