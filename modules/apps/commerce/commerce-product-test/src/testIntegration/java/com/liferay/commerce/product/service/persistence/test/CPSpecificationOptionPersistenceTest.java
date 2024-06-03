@@ -147,6 +147,9 @@ public class CPSpecificationOptionPersistenceTest {
 
 		newCPSpecificationOption.setKey(RandomTestUtil.randomString());
 
+		newCPSpecificationOption.setListTypeDefinitionId(
+			RandomTestUtil.nextLong());
+
 		newCPSpecificationOption.setPriority(RandomTestUtil.nextDouble());
 
 		newCPSpecificationOption.setLastPublishDate(RandomTestUtil.nextDate());
@@ -202,6 +205,9 @@ public class CPSpecificationOptionPersistenceTest {
 		Assert.assertEquals(
 			existingCPSpecificationOption.getKey(),
 			newCPSpecificationOption.getKey());
+		Assert.assertEquals(
+			existingCPSpecificationOption.getListTypeDefinitionId(),
+			newCPSpecificationOption.getListTypeDefinitionId());
 		AssertUtils.assertEquals(
 			existingCPSpecificationOption.getPriority(),
 			newCPSpecificationOption.getPriority());
@@ -254,6 +260,13 @@ public class CPSpecificationOptionPersistenceTest {
 	}
 
 	@Test
+	public void testCountByListTypeDefinitionId() throws Exception {
+		_persistence.countByListTypeDefinitionId(RandomTestUtil.nextLong());
+
+		_persistence.countByListTypeDefinitionId(0L);
+	}
+
+	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		CPSpecificationOption newCPSpecificationOption =
 			addCPSpecificationOption();
@@ -285,8 +298,9 @@ public class CPSpecificationOptionPersistenceTest {
 			true, "uuid", true, "CPSpecificationOptionId", true, "companyId",
 			true, "userId", true, "userName", true, "createDate", true,
 			"modifiedDate", true, "CPOptionCategoryId", true, "title", true,
-			"description", true, "facetable", true, "key", true, "priority",
-			true, "lastPublishDate", true);
+			"description", true, "facetable", true, "key", true,
+			"listTypeDefinitionId", true, "priority", true, "lastPublishDate",
+			true);
 	}
 
 	@Test
@@ -626,6 +640,9 @@ public class CPSpecificationOptionPersistenceTest {
 		cpSpecificationOption.setFacetable(RandomTestUtil.randomBoolean());
 
 		cpSpecificationOption.setKey(RandomTestUtil.randomString());
+
+		cpSpecificationOption.setListTypeDefinitionId(
+			RandomTestUtil.nextLong());
 
 		cpSpecificationOption.setPriority(RandomTestUtil.nextDouble());
 

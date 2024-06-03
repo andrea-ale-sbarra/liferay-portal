@@ -67,6 +67,13 @@ public class CPSpecificationOptionLocalServiceUtil {
 			key, priority, serviceContext);
 	}
 
+	public static int countCPSpecificationOptionByListTypeDefinitionId(
+		long listTypeDefinitionId) {
+
+		return getService().countCPSpecificationOptionByListTypeDefinitionId(
+			listTypeDefinitionId);
+	}
+
 	/**
 	 * Creates a new cp specification option with the primary key. Does not add the cp specification option to the database.
 	 *
@@ -280,6 +287,14 @@ public class CPSpecificationOptionLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getCPSpecificationOption(companyId, key);
+	}
+
+	public static List<CPSpecificationOption>
+		getCPSpecificationOptionByListTypeDefinitionId(
+			long listTypeDefinitionId) {
+
+		return getService().getCPSpecificationOptionByListTypeDefinitionId(
+			listTypeDefinitionId);
 	}
 
 	/**
