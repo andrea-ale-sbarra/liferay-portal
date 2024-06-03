@@ -17,6 +17,7 @@ import com.liferay.headless.commerce.admin.catalog.dto.v1_0.MappedProduct;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Option;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.OptionCategory;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.OptionValue;
+import com.liferay.headless.commerce.admin.catalog.dto.v1_0.PickList;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Pin;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Product;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductConfiguration;
@@ -43,6 +44,7 @@ import com.liferay.headless.commerce.admin.catalog.resource.v1_0.MappedProductRe
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.OptionCategoryResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.OptionResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.OptionValueResource;
+import com.liferay.headless.commerce.admin.catalog.resource.v1_0.PickListResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.PinResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductAccountGroupResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductChannelResource;
@@ -178,6 +180,14 @@ public class Mutation {
 
 		_optionValueResourceComponentServiceObjects =
 			optionValueResourceComponentServiceObjects;
+	}
+
+	public static void setPickListResourceComponentServiceObjects(
+		ComponentServiceObjects<PickListResource>
+			pickListResourceComponentServiceObjects) {
+
+		_pickListResourceComponentServiceObjects =
+			pickListResourceComponentServiceObjects;
 	}
 
 	public static void setPinResourceComponentServiceObjects(
@@ -1267,6 +1277,33 @@ public class Mutation {
 			this::_populateResourceContext,
 			optionValueResource ->
 				optionValueResource.postOptionIdOptionValueBatch(
+					callbackURL, object));
+	}
+
+	@GraphQLField
+	public PickList createSpecificationIdPickList(
+			@GraphQLName("id") Long id,
+			@GraphQLName("pickList") PickList pickList)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_pickListResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			pickListResource -> pickListResource.postSpecificationIdPickList(
+				id, pickList));
+	}
+
+	@GraphQLField
+	public Response createSpecificationIdPickListBatch(
+			@GraphQLName("callbackURL") String callbackURL,
+			@GraphQLName("object") Object object)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_pickListResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			pickListResource ->
+				pickListResource.postSpecificationIdPickListBatch(
 					callbackURL, object));
 	}
 
@@ -2696,6 +2733,25 @@ public class Mutation {
 			_vulcanBatchEngineImportTaskResource);
 	}
 
+	private void _populateResourceContext(PickListResource pickListResource)
+		throws Exception {
+
+		pickListResource.setContextAcceptLanguage(_acceptLanguage);
+		pickListResource.setContextCompany(_company);
+		pickListResource.setContextHttpServletRequest(_httpServletRequest);
+		pickListResource.setContextHttpServletResponse(_httpServletResponse);
+		pickListResource.setContextUriInfo(_uriInfo);
+		pickListResource.setContextUser(_user);
+		pickListResource.setGroupLocalService(_groupLocalService);
+		pickListResource.setRoleLocalService(_roleLocalService);
+
+		pickListResource.setVulcanBatchEngineExportTaskResource(
+			_vulcanBatchEngineExportTaskResource);
+
+		pickListResource.setVulcanBatchEngineImportTaskResource(
+			_vulcanBatchEngineImportTaskResource);
+	}
+
 	private void _populateResourceContext(PinResource pinResource)
 		throws Exception {
 
@@ -3066,6 +3122,8 @@ public class Mutation {
 		_optionCategoryResourceComponentServiceObjects;
 	private static ComponentServiceObjects<OptionValueResource>
 		_optionValueResourceComponentServiceObjects;
+	private static ComponentServiceObjects<PickListResource>
+		_pickListResourceComponentServiceObjects;
 	private static ComponentServiceObjects<PinResource>
 		_pinResourceComponentServiceObjects;
 	private static ComponentServiceObjects<ProductResource>
