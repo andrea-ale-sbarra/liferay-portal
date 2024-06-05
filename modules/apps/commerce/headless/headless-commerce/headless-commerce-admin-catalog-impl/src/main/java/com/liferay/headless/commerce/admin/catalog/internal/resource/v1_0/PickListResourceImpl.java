@@ -14,6 +14,8 @@ import com.liferay.headless.commerce.core.util.ServiceContextHelper;
 import com.liferay.list.type.model.ListTypeDefinition;
 import com.liferay.list.type.service.ListTypeDefinitionService;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
@@ -39,14 +41,46 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 		CPSpecificationOption cpSpecificationOption =
 			_cpSpecificationOptionService.getCPSpecificationOption(id);
 
-		return Page.of(Collections.singletonList( _toPickList(
-			_listTypeDefinitionService.getListTypeDefinition(
-				cpSpecificationOption.getListTypeDefinitionId()))));
+		long listTypeDefinitionId =
+			cpSpecificationOption.getListTypeDefinitionId();
+
+		if (listTypeDefinitionId == 0) {
+			return super.getSpecificationIdPickListsPage(id);
+		}
+
+		try {
+			ListTypeDefinition listTypeDefinition =
+				_listTypeDefinitionService.getListTypeDefinition(
+					listTypeDefinitionId);
+
+			return Page.of(
+				Collections.singletonList(_toPickList(listTypeDefinition))
+			);
+		} catch(Exception exception) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(exception);
+			}
+
+			_cpSpecificationOptionService.updateCPSpecificationOption(
+				cpSpecificationOption.getCPSpecificationOptionId(),
+				cpSpecificationOption.getCPOptionCategoryId(),
+				0,
+				cpSpecificationOption.getTitleMap(),
+				cpSpecificationOption.getDescriptionMap(),
+				cpSpecificationOption.getFacetable(),
+				cpSpecificationOption.getKey(),
+				cpSpecificationOption.getPriority(),
+				_serviceContextHelper.getServiceContext()
+			);
+
+			return super.getSpecificationIdPickListsPage(id);
+		}
 	}
 
 	@Override
 	public PickList postSpecificationIdPickList(Long id, PickList pickList)
 		throws Exception {
+
 		ListTypeDefinition listTypeDefinition =
 			_listTypeDefinitionService.addListTypeDefinition(
 				StringPool.BLANK, //Maybe this needs to be null to make it calculate system ERC
@@ -57,18 +91,17 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 		CPSpecificationOption cpSpecificationOption =
 			_cpSpecificationOptionService.getCPSpecificationOption(id);
 
-		cpSpecificationOption.setListTypeDefinitionId(
-			listTypeDefinition.getListTypeDefinitionId());
-
 		_cpSpecificationOptionService.updateCPSpecificationOption(
 			cpSpecificationOption.getCPSpecificationOptionId(),
 			cpSpecificationOption.getCPOptionCategoryId(),
+			listTypeDefinition.getListTypeDefinitionId(),
 			cpSpecificationOption.getTitleMap(),
 			cpSpecificationOption.getDescriptionMap(),
 			cpSpecificationOption.getFacetable(),
 			cpSpecificationOption.getKey(),
 			cpSpecificationOption.getPriority(),
-			_serviceContextHelper.getServiceContext());
+			_serviceContextHelper.getServiceContext()
+		);
 
 		return _toPickList(listTypeDefinition);
 	}
@@ -111,6 +144,10 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 			}
 		};
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		PickListResourceImpl.class);
+
 	@Reference
 	private ServiceContextHelper _serviceContextHelper;
 

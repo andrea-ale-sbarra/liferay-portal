@@ -11,6 +11,7 @@ import com.liferay.frontend.data.set.view.table.BaseTableFDSView;
 import com.liferay.frontend.data.set.view.table.FDSTableSchema;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilder;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilderFactory;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -24,7 +25,7 @@ import java.util.Locale;
 			   CommerceSpecificationOptionFDSNames.LIST_TYPE_DEFINITIONS,
 	service = FDSView.class
 )
-public class CommerceSpecificationOptionTableFDSView extends BaseTableFDSView {
+public class CommerceSpecificationOptionPicklistTableFDSView extends BaseTableFDSView {
 
 	@Override
 	public FDSTableSchema getFDSTableSchema(Locale locale) {
@@ -34,7 +35,7 @@ public class CommerceSpecificationOptionTableFDSView extends BaseTableFDSView {
 		return fdsTableSchemaBuilder.add(
 			"name", "name"
 		).add(
-			"externalReferenceCode", "externalReferenceCode"
+			"externalReferenceCode", LanguageUtil.get(locale, "external-reference-code")
 		).build();
 	}
 

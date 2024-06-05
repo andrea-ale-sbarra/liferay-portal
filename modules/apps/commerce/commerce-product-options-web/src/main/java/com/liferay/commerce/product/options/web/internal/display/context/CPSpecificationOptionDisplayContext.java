@@ -5,6 +5,8 @@
 
 package com.liferay.commerce.product.options.web.internal.display.context;
 
+import com.liferay.commerce.frontend.model.HeaderActionModel;
+import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.model.CPOptionCategory;
 import com.liferay.commerce.product.model.CPSpecificationOption;
 import com.liferay.commerce.product.options.web.internal.portlet.action.helper.ActionHelper;
@@ -12,22 +14,25 @@ import com.liferay.commerce.product.options.web.internal.util.CPOptionsPortletUt
 import com.liferay.commerce.product.service.CPOptionCategoryService;
 import com.liferay.commerce.product.service.CPSpecificationOptionService;
 import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
 import com.liferay.object.constants.ObjectPortletKeys;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
-import com.liferay.portal.kernel.portlet.url.builder.ResourceURLBuilder;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -56,6 +61,8 @@ public class CPSpecificationOptionDisplayContext
 
 		_cpOptionCategoryService = cpOptionCategoryService;
 		_cpSpecificationOptionService = cpSpecificationOptionService;
+		_themeDisplay = (ThemeDisplay)httpServletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
 		setDefaultOrderByCol("label");
 	}
@@ -64,9 +71,81 @@ public class CPSpecificationOptionDisplayContext
 		return "/o/headless-admin-list-type/v1.0/list-type-definitions";
 	}
 
-	public List<FDSActionDropdownItem> getFDSActionDropdownItems()
-		throws Exception {
 
+	public List<HeaderActionModel> getHeaderActionModels() {
+		List<HeaderActionModel> headerActionModels = new ArrayList<>();
+		LiferayPortletResponse liferayPortletResponse =
+			cpRequestHelper.getLiferayPortletResponse();
+
+		HeaderActionModel publishHeaderActionModel = new HeaderActionModel(
+			"btn-primary", liferayPortletResponse.getNamespace() + "fm",
+			PortletURLBuilder.createActionURL(
+				liferayPortletResponse
+			).setActionName(
+				"/cp_specification_options/edit_cp_specification_option"
+			).buildString(),
+			liferayPortletResponse.getNamespace() + "publishButton",
+			"publish");
+
+		headerActionModels.add(publishHeaderActionModel);
+
+		return headerActionModels;
+	}
+
+	public CreationMenu getCreationMenu(CPSpecificationOption cpSpecificationOption) {
+		CreationMenu creationMenu = new CreationMenu();
+
+		creationMenu.addDropdownItem(
+			dropdownItem -> {
+				dropdownItem.setHref(
+					getAddSpecificationOptionPicklistRenderURL(cpSpecificationOption, Constants.ADD));
+
+				dropdownItem.setLabel(
+					LanguageUtil.get(
+						cpRequestHelper.getRequest(),
+						"create-new-picklist"));
+
+				dropdownItem.setTarget("modal");
+			}
+		);
+
+		creationMenu.addDropdownItem(
+			dropdownItem -> {
+				dropdownItem.setHref(
+					getAddSpecificationOptionPicklistRenderURL(
+						cpSpecificationOption, Constants.ASSIGN));
+
+				dropdownItem.setLabel(
+					LanguageUtil.get(
+						cpRequestHelper.getRequest(),
+						"add-an-existing-picklist"));
+
+				dropdownItem.setTarget("modal");
+			}
+		);
+
+		return creationMenu;
+	}
+
+	private String getAddSpecificationOptionPicklistRenderURL(
+		CPSpecificationOption cpSpecificationOption, String actionCommand) {
+
+		return PortletURLBuilder.createRenderURL(
+			cpRequestHelper.getLiferayPortletResponse()
+		).setMVCRenderCommandName(
+			"/cp_specification_options/add_cp_specification_option_picklist"
+		).setCMD(
+			actionCommand
+		).setParameter(
+			"cpSpecificationOptionId", cpSpecificationOption.getCPSpecificationOptionId()
+		).setParameter(
+			"cpSpecificationOptionTitle", cpSpecificationOption.getTitle(_themeDisplay.getLocale())
+		).setWindowState(
+			LiferayWindowState.POP_UP
+		).buildString();
+	}
+
+	public List<FDSActionDropdownItem> getFDSActionDropdownItems() {
 		return Arrays.asList(
 			new FDSActionDropdownItem(
 				PortletURLBuilder.create(
@@ -107,11 +186,7 @@ public class CPSpecificationOptionDisplayContext
 				cpSpecificationOption.getCPOptionCategoryId());
 
 		if (cpOptionCategory != null) {
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)httpServletRequest.getAttribute(
-					WebKeys.THEME_DISPLAY);
-
-			return cpOptionCategory.getTitle(themeDisplay.getLocale());
+			return cpOptionCategory.getTitle(_themeDisplay.getLocale());
 		}
 
 		return StringPool.BLANK;
@@ -172,5 +247,7 @@ public class CPSpecificationOptionDisplayContext
 
 	private final CPOptionCategoryService _cpOptionCategoryService;
 	private final CPSpecificationOptionService _cpSpecificationOptionService;
+
+	private final ThemeDisplay _themeDisplay;
 
 }

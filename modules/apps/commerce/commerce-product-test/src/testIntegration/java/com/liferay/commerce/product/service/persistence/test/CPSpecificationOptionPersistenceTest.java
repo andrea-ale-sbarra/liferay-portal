@@ -139,6 +139,9 @@ public class CPSpecificationOptionPersistenceTest {
 		newCPSpecificationOption.setCPOptionCategoryId(
 			RandomTestUtil.nextLong());
 
+		newCPSpecificationOption.setListTypeDefinitionId(
+			RandomTestUtil.nextLong());
+
 		newCPSpecificationOption.setTitle(RandomTestUtil.randomString());
 
 		newCPSpecificationOption.setDescription(RandomTestUtil.randomString());
@@ -146,9 +149,6 @@ public class CPSpecificationOptionPersistenceTest {
 		newCPSpecificationOption.setFacetable(RandomTestUtil.randomBoolean());
 
 		newCPSpecificationOption.setKey(RandomTestUtil.randomString());
-
-		newCPSpecificationOption.setListTypeDefinitionId(
-			RandomTestUtil.nextLong());
 
 		newCPSpecificationOption.setPriority(RandomTestUtil.nextDouble());
 
@@ -194,6 +194,9 @@ public class CPSpecificationOptionPersistenceTest {
 			existingCPSpecificationOption.getCPOptionCategoryId(),
 			newCPSpecificationOption.getCPOptionCategoryId());
 		Assert.assertEquals(
+			existingCPSpecificationOption.getListTypeDefinitionId(),
+			newCPSpecificationOption.getListTypeDefinitionId());
+		Assert.assertEquals(
 			existingCPSpecificationOption.getTitle(),
 			newCPSpecificationOption.getTitle());
 		Assert.assertEquals(
@@ -205,9 +208,6 @@ public class CPSpecificationOptionPersistenceTest {
 		Assert.assertEquals(
 			existingCPSpecificationOption.getKey(),
 			newCPSpecificationOption.getKey());
-		Assert.assertEquals(
-			existingCPSpecificationOption.getListTypeDefinitionId(),
-			newCPSpecificationOption.getListTypeDefinitionId());
 		AssertUtils.assertEquals(
 			existingCPSpecificationOption.getPriority(),
 			newCPSpecificationOption.getPriority());
@@ -290,9 +290,9 @@ public class CPSpecificationOptionPersistenceTest {
 			"CPSpecificationOption", "mvccVersion", true, "ctCollectionId",
 			true, "uuid", true, "CPSpecificationOptionId", true, "companyId",
 			true, "userId", true, "userName", true, "createDate", true,
-			"modifiedDate", true, "CPOptionCategoryId", true, "title", true,
-			"description", true, "facetable", true, "key", true,
-			"listTypeDefinitionId", true, "priority", true, "lastPublishDate",
+			"modifiedDate", true, "CPOptionCategoryId", true,
+			"listTypeDefinitionId", true, "title", true, "description", true,
+			"facetable", true, "key", true, "priority", true, "lastPublishDate",
 			true);
 	}
 
@@ -626,6 +626,9 @@ public class CPSpecificationOptionPersistenceTest {
 
 		cpSpecificationOption.setCPOptionCategoryId(RandomTestUtil.nextLong());
 
+		cpSpecificationOption.setListTypeDefinitionId(
+			RandomTestUtil.nextLong());
+
 		cpSpecificationOption.setTitle(RandomTestUtil.randomString());
 
 		cpSpecificationOption.setDescription(RandomTestUtil.randomString());
@@ -633,9 +636,6 @@ public class CPSpecificationOptionPersistenceTest {
 		cpSpecificationOption.setFacetable(RandomTestUtil.randomBoolean());
 
 		cpSpecificationOption.setKey(RandomTestUtil.randomString());
-
-		cpSpecificationOption.setListTypeDefinitionId(
-			RandomTestUtil.nextLong());
 
 		cpSpecificationOption.setPriority(RandomTestUtil.nextDouble());
 

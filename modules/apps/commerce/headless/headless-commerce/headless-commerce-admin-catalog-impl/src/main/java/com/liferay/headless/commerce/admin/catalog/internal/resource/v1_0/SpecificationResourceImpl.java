@@ -199,6 +199,7 @@ public class SpecificationResourceImpl extends BaseSpecificationResourceImpl {
 			GetterUtil.getLong(
 				cpSpecificationOption.getCPOptionCategoryId(),
 				_getCPOptionCategoryId(specification)),
+			GetterUtil.getLong(cpSpecificationOption.getListTypeDefinitionId()),
 			LanguageUtils.getLocalizedMap(specification.getTitle()),
 			LanguageUtils.getLocalizedMap(specification.getDescription()),
 			GetterUtil.getBoolean(
@@ -226,6 +227,7 @@ public class SpecificationResourceImpl extends BaseSpecificationResourceImpl {
 		return _cpSpecificationOptionService.updateCPSpecificationOption(
 			cpSpecificationOption.getCPSpecificationOptionId(),
 			_getCPOptionCategoryId(specification),
+			cpSpecificationOption.getListTypeDefinitionId(),
 			LanguageUtils.getLocalizedMap(specification.getTitle()),
 			LanguageUtils.getLocalizedMap(specification.getDescription()),
 			GetterUtil.getBoolean(

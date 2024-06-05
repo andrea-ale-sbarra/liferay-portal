@@ -55,6 +55,10 @@ public class CPSpecificationOptionTable
 		createColumn(
 			"CPOptionCategoryId", Long.class, Types.BIGINT,
 			Column.FLAG_DEFAULT);
+	public final Column<CPSpecificationOptionTable, Long> listTypeDefinitionId =
+		createColumn(
+			"listTypeDefinitionId", Long.class, Types.BIGINT,
+			Column.FLAG_DEFAULT);
 	public final Column<CPSpecificationOptionTable, String> title =
 		createColumn("title", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<CPSpecificationOptionTable, String> description =
@@ -65,10 +69,6 @@ public class CPSpecificationOptionTable
 			"facetable", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<CPSpecificationOptionTable, String> key = createColumn(
 		"key_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<CPSpecificationOptionTable, Long> listTypeDefinitionId =
-		createColumn(
-			"listTypeDefinitionId", Long.class, Types.BIGINT,
-			Column.FLAG_DEFAULT);
 	public final Column<CPSpecificationOptionTable, Double> priority =
 		createColumn(
 			"priority", Double.class, Types.DOUBLE, Column.FLAG_DEFAULT);

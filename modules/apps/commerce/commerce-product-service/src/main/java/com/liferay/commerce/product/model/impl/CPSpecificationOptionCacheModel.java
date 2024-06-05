@@ -91,6 +91,8 @@ public class CPSpecificationOptionCacheModel
 		sb.append(modifiedDate);
 		sb.append(", CPOptionCategoryId=");
 		sb.append(CPOptionCategoryId);
+		sb.append(", listTypeDefinitionId=");
+		sb.append(listTypeDefinitionId);
 		sb.append(", title=");
 		sb.append(title);
 		sb.append(", description=");
@@ -99,8 +101,6 @@ public class CPSpecificationOptionCacheModel
 		sb.append(facetable);
 		sb.append(", key=");
 		sb.append(key);
-		sb.append(", listTypeDefinitionId=");
-		sb.append(listTypeDefinitionId);
 		sb.append(", priority=");
 		sb.append(priority);
 		sb.append(", lastPublishDate=");
@@ -152,6 +152,7 @@ public class CPSpecificationOptionCacheModel
 		}
 
 		cpSpecificationOptionImpl.setCPOptionCategoryId(CPOptionCategoryId);
+		cpSpecificationOptionImpl.setListTypeDefinitionId(listTypeDefinitionId);
 
 		if (title == null) {
 			cpSpecificationOptionImpl.setTitle("");
@@ -176,7 +177,6 @@ public class CPSpecificationOptionCacheModel
 			cpSpecificationOptionImpl.setKey(key);
 		}
 
-		cpSpecificationOptionImpl.setListTypeDefinitionId(listTypeDefinitionId);
 		cpSpecificationOptionImpl.setPriority(priority);
 
 		if (lastPublishDate == Long.MIN_VALUE) {
@@ -209,13 +209,13 @@ public class CPSpecificationOptionCacheModel
 		modifiedDate = objectInput.readLong();
 
 		CPOptionCategoryId = objectInput.readLong();
+
+		listTypeDefinitionId = objectInput.readLong();
 		title = objectInput.readUTF();
 		description = objectInput.readUTF();
 
 		facetable = objectInput.readBoolean();
 		key = objectInput.readUTF();
-
-		listTypeDefinitionId = objectInput.readLong();
 
 		priority = objectInput.readDouble();
 		lastPublishDate = objectInput.readLong();
@@ -252,6 +252,8 @@ public class CPSpecificationOptionCacheModel
 
 		objectOutput.writeLong(CPOptionCategoryId);
 
+		objectOutput.writeLong(listTypeDefinitionId);
+
 		if (title == null) {
 			objectOutput.writeUTF("");
 		}
@@ -275,8 +277,6 @@ public class CPSpecificationOptionCacheModel
 			objectOutput.writeUTF(key);
 		}
 
-		objectOutput.writeLong(listTypeDefinitionId);
-
 		objectOutput.writeDouble(priority);
 		objectOutput.writeLong(lastPublishDate);
 	}
@@ -291,11 +291,11 @@ public class CPSpecificationOptionCacheModel
 	public long createDate;
 	public long modifiedDate;
 	public long CPOptionCategoryId;
+	public long listTypeDefinitionId;
 	public String title;
 	public String description;
 	public boolean facetable;
 	public String key;
-	public long listTypeDefinitionId;
 	public double priority;
 	public long lastPublishDate;
 

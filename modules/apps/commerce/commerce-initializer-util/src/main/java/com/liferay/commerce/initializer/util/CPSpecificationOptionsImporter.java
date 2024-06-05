@@ -97,7 +97,7 @@ public class CPSpecificationOptionsImporter {
 			return _cpSpecificationOptionLocalService.
 				updateCPSpecificationOption(
 					cpSpecificationOption.getCPSpecificationOptionId(),
-					cpOptionCategoryId, titleMap, descriptionMap, facetable,
+					cpOptionCategoryId, 0, titleMap, descriptionMap, facetable,
 					key, priority, serviceContext);
 		}
 

@@ -583,6 +583,7 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="CPOptionCategoryId" type="long" />
+		<field name="listTypeDefinitionId" type="long" />
 		<field localized="true" name="title" type="String">
 			<validator name="required" />
 		</field>
@@ -593,7 +594,6 @@
 		<field name="key" type="String">
 			<validator name="required" />
 		</field>
-		<field name="listTypeDefinitionId" type="long" />
 		<field name="priority" type="double" />
 		<field name="lastPublishDate" type="Date" />
 	</model>
