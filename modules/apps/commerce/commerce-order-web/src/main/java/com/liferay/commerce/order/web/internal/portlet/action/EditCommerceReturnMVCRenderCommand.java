@@ -10,8 +10,13 @@ import com.liferay.commerce.constants.CommercePortletKeys;
 import com.liferay.commerce.currency.util.CommercePriceFormatter;
 import com.liferay.commerce.exception.NoSuchOrderException;
 import com.liferay.commerce.order.web.internal.display.context.CommerceReturnEditDisplayContext;
+import com.liferay.commerce.service.CommerceOrderItemLocalService;
 import com.liferay.commerce.service.CommerceOrderLocalService;
-import com.liferay.object.service.ObjectEntryService;
+import com.liferay.list.type.service.ListTypeDefinitionService;
+import com.liferay.list.type.service.ListTypeEntryService;
+import com.liferay.object.service.ObjectEntryLocalService;
+import com.liferay.object.service.ObjectRelationshipLocalService;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -45,8 +50,10 @@ public class EditCommerceReturnMVCRenderCommand implements MVCRenderCommand {
 			CommerceReturnEditDisplayContext commerceReturnEditDisplayContext =
 				new CommerceReturnEditDisplayContext(
 					_accountEntryLocalService, _commerceOrderLocalService,
-					_commercePriceFormatter, _objectEntryService,
-					renderRequest);
+					_commerceOrderItemLocalService, _commercePriceFormatter,
+					_language, _listTypeDefinitionService,
+					_listTypeEntryService, _objectEntryLocalService,
+					_objectRelationshipLocalService, renderRequest);
 
 			renderRequest.setAttribute(
 				WebKeys.PORTLET_DISPLAY_CONTEXT,
@@ -71,12 +78,27 @@ public class EditCommerceReturnMVCRenderCommand implements MVCRenderCommand {
 	private AccountEntryLocalService _accountEntryLocalService;
 
 	@Reference
+	private CommerceOrderItemLocalService _commerceOrderItemLocalService;
+
+	@Reference
 	private CommerceOrderLocalService _commerceOrderLocalService;
 
 	@Reference
 	private CommercePriceFormatter _commercePriceFormatter;
 
 	@Reference
-	private ObjectEntryService _objectEntryService;
+	private Language _language;
+
+	@Reference
+	private ListTypeDefinitionService _listTypeDefinitionService;
+
+	@Reference
+	private ListTypeEntryService _listTypeEntryService;
+
+	@Reference
+	private ObjectEntryLocalService _objectEntryLocalService;
+
+	@Reference
+	private ObjectRelationshipLocalService _objectRelationshipLocalService;
 
 }
