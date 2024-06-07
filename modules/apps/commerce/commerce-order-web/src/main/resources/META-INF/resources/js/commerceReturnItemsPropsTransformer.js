@@ -3,15 +3,21 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {CommerceReturnItemAcceptedDataRenderer} from './CommerceReturnItemAcceptedDataRenderer';
 import {CommerceReturnItemPicklistDataRenderer} from './CommerceReturnItemPicklistDataRenderer';
+import {CommerceReturnItemStatusDataRenderer} from './CommerceReturnItemStatusDataRenderer';
 import CommerceStatusDataRenderer from './CommerceStatusDataRenderer';
 
 export default function propsTransformer({...otherProps}) {
 	return {
 		...otherProps,
 		customDataRenderers: {
+			commerceReturnItemAcceptedDataRenderer:
+				CommerceReturnItemAcceptedDataRenderer,
 			commerceReturnItemPicklistDataRenderer:
 				CommerceReturnItemPicklistDataRenderer,
+			commerceReturnItemStatusDataRenderer:
+				CommerceReturnItemStatusDataRenderer,
 			commerceStatusDataRenderer: CommerceStatusDataRenderer,
 		},
 	};
