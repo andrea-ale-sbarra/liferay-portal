@@ -47,12 +47,9 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 			return super.getSpecificationIdPickListsPage(id);
 		}
 
-		ListTypeDefinition listTypeDefinition =
-			_listTypeDefinitionService.getListTypeDefinition(
-				listTypeDefinitionId);
-
 		return Page.of(
-			Collections.singletonList(_toPickList(listTypeDefinition)));
+			Collections.singletonList(_toPickList(_listTypeDefinitionService.getListTypeDefinition(
+				listTypeDefinitionId))));
 	}
 
 	@Override
