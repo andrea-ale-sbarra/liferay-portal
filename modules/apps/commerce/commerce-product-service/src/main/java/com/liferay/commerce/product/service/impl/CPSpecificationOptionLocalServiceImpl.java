@@ -220,10 +220,10 @@ public class CPSpecificationOptionLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPSpecificationOption updateCPSpecificationOption(
-			long cpSpecificationOptionId, long cpOptionCategoryId, long listTypeDefinitionId,
-			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
-			boolean facetable, String key, double priority,
-			ServiceContext serviceContext)
+			long cpSpecificationOptionId, long cpOptionCategoryId,
+			long listTypeDefinitionId, Map<Locale, String> titleMap,
+			Map<Locale, String> descriptionMap, boolean facetable, String key,
+			double priority, ServiceContext serviceContext)
 		throws PortalException {
 
 		CPSpecificationOption cpSpecificationOption =
