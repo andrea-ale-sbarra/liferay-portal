@@ -2174,6 +2174,12 @@ components:
                     type: string
                 optionCategory:
                     $ref: "#/components/schemas/OptionCategory"
+                pickListId:
+                    example: 31130
+                    format: int64
+                    minimum: 0
+                    readOnly: true
+                    type: integer
                 priority:
                     example: 1.2
                     format: double
