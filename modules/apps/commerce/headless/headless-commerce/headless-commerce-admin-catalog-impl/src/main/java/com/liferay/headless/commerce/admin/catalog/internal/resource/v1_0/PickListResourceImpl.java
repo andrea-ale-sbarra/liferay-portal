@@ -39,17 +39,29 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 		CPSpecificationOption cpSpecificationOption =
 			_cpSpecificationOptionService.getCPSpecificationOption(id);
 
-		return Page.of(Collections.singletonList( _toPickList(
+		long listTypeDefinitionId =
+			cpSpecificationOption.getListTypeDefinitionId();
+
+		if (listTypeDefinitionId == 0) {
+			return super.getSpecificationIdPickListsPage(id);
+		}
+
+		ListTypeDefinition listTypeDefinition =
 			_listTypeDefinitionService.getListTypeDefinition(
-				cpSpecificationOption.getListTypeDefinitionId()))));
+				listTypeDefinitionId);
+
+		return Page.of(
+			Collections.singletonList(_toPickList(listTypeDefinition))
+		);
 	}
 
 	@Override
 	public PickList postSpecificationIdPickList(Long id, PickList pickList)
 		throws Exception {
+
 		ListTypeDefinition listTypeDefinition =
 			_listTypeDefinitionService.addListTypeDefinition(
-				StringPool.BLANK, //Maybe this needs to be null to make it calculate system ERC
+				StringPool.BLANK,
 				HashMapBuilder.put(_getLocale(),
 					pickList.getName()).build(), false,
 				Collections.emptyList());
@@ -57,18 +69,17 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 		CPSpecificationOption cpSpecificationOption =
 			_cpSpecificationOptionService.getCPSpecificationOption(id);
 
-		cpSpecificationOption.setListTypeDefinitionId(
-			listTypeDefinition.getListTypeDefinitionId());
-
 		_cpSpecificationOptionService.updateCPSpecificationOption(
 			cpSpecificationOption.getCPSpecificationOptionId(),
 			cpSpecificationOption.getCPOptionCategoryId(),
+			listTypeDefinition.getListTypeDefinitionId(),
 			cpSpecificationOption.getTitleMap(),
 			cpSpecificationOption.getDescriptionMap(),
 			cpSpecificationOption.getFacetable(),
 			cpSpecificationOption.getKey(),
 			cpSpecificationOption.getPriority(),
-			_serviceContextHelper.getServiceContext());
+			_serviceContextHelper.getServiceContext()
+		);
 
 		return _toPickList(listTypeDefinition);
 	}
