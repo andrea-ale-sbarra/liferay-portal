@@ -1,5 +1,4 @@
-<%@ page
-	import="com.liferay.commerce.product.options.web.internal.constants.CommerceSpecificationOptionFDSNames" %><%--
+<%--
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
@@ -54,20 +53,32 @@ List<CPOptionCategory> cpOptionCategories = cpSpecificationOptionDisplayContext.
 		<aui:input helpMessage="key-help" name="key" />
 
 		<aui:input name="priority" />
+
+		<aui:input name="listTypeDefinitionId" type="hidden" value="<%= cpSpecificationOption.getListTypeDefinitionId() %>" />
 	</aui:fieldset>
 </commerce-ui:panel>
+
 <commerce-ui:panel
 	elementClasses="mt-4"
 	title='<%= LanguageUtil.get(request, "picklist") %>'
 >
 	<frontend-data-set:headless-display
-		apiURL='<%= "/o/headless-commerce-admin-catalog/v1.0/specifications/" + cpSpecificationOption.getCPSpecificationOptionId() + "/list-type-definitions" %>'
+		apiURL='<%= "/o/headless-commerce-admin-catalog/v1.0/specifications/" + cpSpecificationOption.getCPSpecificationOptionId() + "/pick-lists" %>'
+		creationMenu="<%= cpSpecificationOptionDisplayContext.getCreationMenu(cpSpecificationOption) %>"
 		fdsActionDropdownItems="<%= cpSpecificationOptionDisplayContext.getFDSActionDropdownItems() %>"
 		id="<%= CommerceSpecificationOptionFDSNames.LIST_TYPE_DEFINITIONS %>"
 		itemsPerPage="<%= 10 %>"
+		propsTransformer="{removeCPSpecificationOptionPicklistRelation} from commerce-product-options-web"
 		style="stacked"
 	/>
 </commerce-ui:panel>
+
+<div>
+	<react:component
+		module="{ListTypeEntriesModal} from object-web"
+	/>
+</div>
+
 <c:if test="<%= cpSpecificationOption == null %>">
 	<aui:script sandbox="<%= true %>">
 		var form = document.getElementById('<portlet:namespace />fm');

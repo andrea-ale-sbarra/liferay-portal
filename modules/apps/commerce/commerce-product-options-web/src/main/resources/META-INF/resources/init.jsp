@@ -16,7 +16,7 @@ taglib uri="http://liferay.com/tld/expando" prefix="liferay-expando" %><%@
 taglib uri="http://liferay.com/tld/frontend" prefix="liferay-frontend" %><%@
 taglib uri="http://liferay.com/tld/frontend-data-set" prefix="frontend-data-set" %><%@
 taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %><%@
-taglib prefix="react" uri="http://liferay.com/tld/react" %><%@
+taglib uri="http://liferay.com/tld/react" %><%@
 taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %><%@
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
@@ -39,6 +39,7 @@ page import="com.liferay.commerce.product.model.CPOptionValue" %><%@
 page import="com.liferay.commerce.product.model.CPSpecificationOption" %><%@
 page import="com.liferay.commerce.product.option.CommerceOptionType" %><%@
 page import="com.liferay.commerce.product.options.web.internal.constants.CommerceOptionFDSNames" %><%@
+page import="com.liferay.commerce.product.options.web.internal.constants.CommerceSpecificationOptionFDSNames" %><%@
 page import="com.liferay.commerce.product.options.web.internal.display.context.CPOptionCategoryDisplayContext" %><%@
 page import="com.liferay.commerce.product.options.web.internal.display.context.CPOptionCategoryManagementToolbarDisplayContext" %><%@
 page import="com.liferay.commerce.product.options.web.internal.display.context.CPOptionDisplayContext" %><%@
@@ -64,8 +65,7 @@ page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.LocaleUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %><%@
-page import="com.liferay.taglib.util.CustomAttributesUtil" %><%@
-page import="com.liferay.commerce.product.options.web.internal.constants.CommerceSpecificationOptionFDSNames" %>
+page import="com.liferay.taglib.util.CustomAttributesUtil" %>
 
 <%@ page import="java.util.ArrayList" %><%@
 page import="java.util.Calendar" %><%@
