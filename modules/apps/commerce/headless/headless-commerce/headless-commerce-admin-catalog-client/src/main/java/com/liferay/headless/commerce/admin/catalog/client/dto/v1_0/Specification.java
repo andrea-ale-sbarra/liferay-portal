@@ -129,6 +129,27 @@ public class Specification implements Cloneable, Serializable {
 
 	protected OptionCategory optionCategory;
 
+	public Long getPickListId() {
+		return pickListId;
+	}
+
+	public void setPickListId(Long pickListId) {
+		this.pickListId = pickListId;
+	}
+
+	public void setPickListId(
+		UnsafeSupplier<Long, Exception> pickListIdUnsafeSupplier) {
+
+		try {
+			pickListId = pickListIdUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Long pickListId;
+
 	public Double getPriority() {
 		return priority;
 	}

@@ -100,6 +100,16 @@ public class SpecificationSerDes {
 			sb.append(String.valueOf(specification.getOptionCategory()));
 		}
 
+		if (specification.getPickListId() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"pickListId\": ");
+
+			sb.append(specification.getPickListId());
+		}
+
 		if (specification.getPriority() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -177,6 +187,14 @@ public class SpecificationSerDes {
 				String.valueOf(specification.getOptionCategory()));
 		}
 
+		if (specification.getPickListId() == null) {
+			map.put("pickListId", null);
+		}
+		else {
+			map.put(
+				"pickListId", String.valueOf(specification.getPickListId()));
+		}
+
 		if (specification.getPriority() == null) {
 			map.put("priority", null);
 		}
@@ -224,6 +242,9 @@ public class SpecificationSerDes {
 			else if (Objects.equals(jsonParserFieldName, "optionCategory")) {
 				return false;
 			}
+			else if (Objects.equals(jsonParserFieldName, "pickListId")) {
+				return false;
+			}
 			else if (Objects.equals(jsonParserFieldName, "priority")) {
 				return false;
 			}
@@ -266,6 +287,12 @@ public class SpecificationSerDes {
 					specification.setOptionCategory(
 						OptionCategorySerDes.toDTO(
 							(String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "pickListId")) {
+				if (jsonParserFieldValue != null) {
+					specification.setPickListId(
+						Long.valueOf((String)jsonParserFieldValue));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "priority")) {

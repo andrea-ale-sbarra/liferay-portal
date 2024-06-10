@@ -31,6 +31,8 @@ import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.SearchUtil;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -193,6 +195,20 @@ public class SpecificationResourceImpl extends BaseSpecificationResourceImpl {
 
 		CPSpecificationOption cpSpecificationOption =
 			_cpSpecificationOptionService.getCPSpecificationOption(id);
+
+		Map<String, String> descriptionMap = specification.getDescription();
+
+		if ((cpSpecificationOption != null) && (descriptionMap == null)) {
+			descriptionMap = LanguageUtils.getLanguageIdMap(
+				cpSpecificationOption.getDescriptionMap());
+		}
+
+		Map<String, String> titleMap = specification.getTitle();
+
+		if ((cpSpecificationOption != null) && (titleMap == null)) {
+			titleMap = LanguageUtils.getLanguageIdMap(
+				cpSpecificationOption.getTitleMap());
+		}
 
 		return _cpSpecificationOptionService.updateCPSpecificationOption(
 			cpSpecificationOption.getCPSpecificationOptionId(),
