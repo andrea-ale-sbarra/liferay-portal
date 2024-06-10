@@ -1225,6 +1225,9 @@
 			<finder-column name="companyId" />
 			<finder-column name="key" />
 		</finder>
+		<finder name="ListTypeDefinitionId" return-type="Collection">
+			<finder-column name="listTypeDefinitionId" />
+		</finder>
 	</entity>
 	<entity external-reference-code="company" local-service="true" name="CPTaxCategory" remote-service="true" uuid="true">
 
