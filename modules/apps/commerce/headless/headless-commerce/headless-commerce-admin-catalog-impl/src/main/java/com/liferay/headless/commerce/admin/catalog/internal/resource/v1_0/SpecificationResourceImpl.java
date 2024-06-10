@@ -215,8 +215,11 @@ public class SpecificationResourceImpl extends BaseSpecificationResourceImpl {
 			GetterUtil.getLong(
 				cpSpecificationOption.getCPOptionCategoryId(),
 				_getCPOptionCategoryId(specification)),
-			LanguageUtils.getLocalizedMap(specification.getTitle()),
-			LanguageUtils.getLocalizedMap(specification.getDescription()),
+			GetterUtil.getLong(
+				specification.getPickListId(),
+				cpSpecificationOption.getListTypeDefinitionId()),
+			LanguageUtils.getLocalizedMap(titleMap),
+			LanguageUtils.getLocalizedMap(descriptionMap),
 			GetterUtil.getBoolean(
 				specification.getFacetable(),
 				cpSpecificationOption.isFacetable()),
@@ -239,11 +242,28 @@ public class SpecificationResourceImpl extends BaseSpecificationResourceImpl {
 			_cpSpecificationOptionService.getCPSpecificationOption(
 				serviceContext.getCompanyId(), key);
 
+		Map<String, String> descriptionMap = specification.getDescription();
+
+		if ((cpSpecificationOption != null) && (descriptionMap == null)) {
+			descriptionMap = LanguageUtils.getLanguageIdMap(
+				cpSpecificationOption.getDescriptionMap());
+		}
+
+		Map<String, String> titleMap = specification.getTitle();
+
+		if ((cpSpecificationOption != null) && (titleMap == null)) {
+			titleMap = LanguageUtils.getLanguageIdMap(
+				cpSpecificationOption.getTitleMap());
+		}
+
 		return _cpSpecificationOptionService.updateCPSpecificationOption(
 			cpSpecificationOption.getCPSpecificationOptionId(),
 			_getCPOptionCategoryId(specification),
-			LanguageUtils.getLocalizedMap(specification.getTitle()),
-			LanguageUtils.getLocalizedMap(specification.getDescription()),
+			GetterUtil.getLong(
+				specification.getPickListId(),
+				cpSpecificationOption.getListTypeDefinitionId()),
+			LanguageUtils.getLocalizedMap(titleMap),
+			LanguageUtils.getLocalizedMap(descriptionMap),
 			GetterUtil.getBoolean(
 				specification.getFacetable(),
 				cpSpecificationOption.isFacetable()),
