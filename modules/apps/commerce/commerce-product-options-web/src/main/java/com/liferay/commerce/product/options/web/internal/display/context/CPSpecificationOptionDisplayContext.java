@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
-import com.liferay.portal.kernel.portlet.url.builder.ResourceURLBuilder;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -64,28 +63,6 @@ public class CPSpecificationOptionDisplayContext
 		return "/o/headless-admin-list-type/v1.0/list-type-definitions";
 	}
 
-	public List<FDSActionDropdownItem> getFDSActionDropdownItems()
-		throws Exception {
-
-		return Arrays.asList(
-			new FDSActionDropdownItem(
-				PortletURLBuilder.create(
-					PortletURLFactoryUtil.create(
-						cpRequestHelper.getRenderRequest(),
-						ObjectPortletKeys.LIST_TYPE_DEFINITIONS,
-						PortletRequest.RENDER_PHASE)
-				).setMVCRenderCommandName(
-					"/list_type_definitions/edit_list_type_definition"
-				).setParameter(
-					"listTypeDefinitionId", "{id}"
-				).setWindowState(
-					LiferayWindowState.POP_UP
-				).buildString(),
-				"view", "view",
-				LanguageUtil.get(cpRequestHelper.getRequest(), "view"),
-				"get", null, "sidePanel"));
-	}
-
 	public List<CPOptionCategory> getCPOptionCategories()
 		throws PortalException {
 
@@ -115,6 +92,28 @@ public class CPSpecificationOptionDisplayContext
 		}
 
 		return StringPool.BLANK;
+	}
+
+	public List<FDSActionDropdownItem> getFDSActionDropdownItems()
+		throws Exception {
+
+		return Arrays.asList(
+			new FDSActionDropdownItem(
+				PortletURLBuilder.create(
+					PortletURLFactoryUtil.create(
+						cpRequestHelper.getRenderRequest(),
+						ObjectPortletKeys.LIST_TYPE_DEFINITIONS,
+						PortletRequest.RENDER_PHASE)
+				).setMVCRenderCommandName(
+					"/list_type_definitions/edit_list_type_definition"
+				).setParameter(
+					"listTypeDefinitionId", "{id}"
+				).setWindowState(
+					LiferayWindowState.POP_UP
+				).buildString(),
+				"view", "view",
+				LanguageUtil.get(cpRequestHelper.getRequest(), "view"), "get",
+				null, "sidePanel"));
 	}
 
 	@Override

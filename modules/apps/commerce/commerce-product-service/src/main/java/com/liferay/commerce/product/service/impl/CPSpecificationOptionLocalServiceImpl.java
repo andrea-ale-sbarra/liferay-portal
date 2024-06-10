@@ -116,13 +116,11 @@ public class CPSpecificationOptionLocalServiceImpl
 	}
 
 	@Override
-	public List<CPSpecificationOption> getCPSpecificationOptionByListTypeDefinitionId(long listTypeDefinitionId){
-		return cpSpecificationOptionPersistence.findByListTypeDefinitionId(listTypeDefinitionId);
-	}
+	public int countCPSpecificationOptionByListTypeDefinitionId(
+		long listTypeDefinitionId) {
 
-	@Override
-	public int countCPSpecificationOptionByListTypeDefinitionId(long listTypeDefinitionId){
-		return cpSpecificationOptionPersistence.countByListTypeDefinitionId(listTypeDefinitionId);
+		return cpSpecificationOptionPersistence.countByListTypeDefinitionId(
+			listTypeDefinitionId);
 	}
 
 	@Indexable(type = IndexableType.DELETE)
@@ -198,6 +196,15 @@ public class CPSpecificationOptionLocalServiceImpl
 
 		return cpSpecificationOptionPersistence.findByC_K(
 			companyId, _friendlyURLNormalizer.normalize(key));
+	}
+
+	@Override
+	public List<CPSpecificationOption>
+		getCPSpecificationOptionByListTypeDefinitionId(
+			long listTypeDefinitionId) {
+
+		return cpSpecificationOptionPersistence.findByListTypeDefinitionId(
+			listTypeDefinitionId);
 	}
 
 	@Override
