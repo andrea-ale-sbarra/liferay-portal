@@ -672,7 +672,6 @@ components:
                     readOnly: true
                     type: string
             type: object
-
         LowStockAction:
             properties:
                 key:
@@ -15597,12 +15596,12 @@ paths:
                     description:
                         Unexpected error
             security:
-                - BasicAuth: [ ]
-                - BearerAuth: [ ]
+                - BasicAuth: []
+                - BearerAuth: []
                 - OAuth2:
                       - HeadlessCommerceAdminCatalog.write
             summary: Creates a picklist and links it to the specification.
-            tags: [ "PickList" ]
+            tags: ["PickList"]
     "/unit-of-measure-skus":
         get:
             operationId: getUnitOfMeasureSkusPage
