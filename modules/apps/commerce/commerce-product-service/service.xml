@@ -1199,11 +1199,11 @@
 		<!-- Other fields -->
 
 		<column name="CPOptionCategoryId" type="long" />
+		<column name="listTypeDefinitionId" type="long" />
 		<column localized="true" name="title" type="String" />
 		<column localized="true" name="description" type="String" />
 		<column name="facetable" type="boolean" />
 		<column name="key" type="String" />
-		<column name="listTypeDefinitionId" type="long" />
 		<column name="priority" type="double" />
 		<column name="lastPublishDate" type="Date" />
 
