@@ -48,11 +48,11 @@ public class CPSpecificationOptionWrapper
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("CPOptionCategoryId", getCPOptionCategoryId());
+		attributes.put("listTypeDefinitionId", getListTypeDefinitionId());
 		attributes.put("title", getTitle());
 		attributes.put("description", getDescription());
 		attributes.put("facetable", isFacetable());
 		attributes.put("key", getKey());
-		attributes.put("listTypeDefinitionId", getListTypeDefinitionId());
 		attributes.put("priority", getPriority());
 		attributes.put("lastPublishDate", getLastPublishDate());
 
@@ -122,6 +122,13 @@ public class CPSpecificationOptionWrapper
 			setCPOptionCategoryId(CPOptionCategoryId);
 		}
 
+		Long listTypeDefinitionId = (Long)attributes.get(
+			"listTypeDefinitionId");
+
+		if (listTypeDefinitionId != null) {
+			setListTypeDefinitionId(listTypeDefinitionId);
+		}
+
 		String title = (String)attributes.get("title");
 
 		if (title != null) {
@@ -144,13 +151,6 @@ public class CPSpecificationOptionWrapper
 
 		if (key != null) {
 			setKey(key);
-		}
-
-		Long listTypeDefinitionId = (Long)attributes.get(
-			"listTypeDefinitionId");
-
-		if (listTypeDefinitionId != null) {
-			setListTypeDefinitionId(listTypeDefinitionId);
 		}
 
 		Double priority = (Double)attributes.get("priority");

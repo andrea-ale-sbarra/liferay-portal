@@ -124,7 +124,7 @@ public class CPSpecificationOptionServiceImpl
 
 	@Override
 	public CPSpecificationOption updateCPSpecificationOption(
-			long cpSpecificationOptionId, long cpOptionCategoryId,
+			long cpSpecificationOptionId, long cpOptionCategoryId, long listTypeDefinitionId,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
 			boolean facetable, String key, double priority,
 			ServiceContext serviceContext)
@@ -134,7 +134,7 @@ public class CPSpecificationOptionServiceImpl
 			getPermissionChecker(), cpSpecificationOptionId, ActionKeys.UPDATE);
 
 		return cpSpecificationOptionLocalService.updateCPSpecificationOption(
-			cpSpecificationOptionId, cpOptionCategoryId, titleMap,
+			cpSpecificationOptionId, cpOptionCategoryId, listTypeDefinitionId, titleMap,
 			descriptionMap, facetable, key, priority, serviceContext);
 	}
 

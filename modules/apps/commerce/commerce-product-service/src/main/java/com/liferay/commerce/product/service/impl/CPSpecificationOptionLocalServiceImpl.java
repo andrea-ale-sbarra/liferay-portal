@@ -220,7 +220,7 @@ public class CPSpecificationOptionLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPSpecificationOption updateCPSpecificationOption(
-			long cpSpecificationOptionId, long cpOptionCategoryId,
+			long cpSpecificationOptionId, long cpOptionCategoryId, long listTypeDefinitionId,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
 			boolean facetable, String key, double priority,
 			ServiceContext serviceContext)
@@ -239,6 +239,7 @@ public class CPSpecificationOptionLocalServiceImpl
 			cpSpecificationOption.getCompanyId(), titleMap, key);
 
 		cpSpecificationOption.setCPOptionCategoryId(cpOptionCategoryId);
+		cpSpecificationOption.setListTypeDefinitionId(listTypeDefinitionId);
 		cpSpecificationOption.setTitleMap(titleMap);
 		cpSpecificationOption.setDescriptionMap(descriptionMap);
 		cpSpecificationOption.setFacetable(facetable);

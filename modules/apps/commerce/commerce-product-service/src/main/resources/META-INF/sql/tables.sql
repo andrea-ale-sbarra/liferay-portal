@@ -417,11 +417,11 @@ create table CPSpecificationOption (
 	createDate DATE null,
 	modifiedDate DATE null,
 	CPOptionCategoryId LONG,
+	listTypeDefinitionId LONG,
 	title STRING null,
 	description STRING null,
 	facetable BOOLEAN,
 	key_ VARCHAR(75) null,
-	listTypeDefinitionId LONG,
 	priority DOUBLE,
 	lastPublishDate DATE null,
 	primary key (CPSpecificationOptionId, ctCollectionId)

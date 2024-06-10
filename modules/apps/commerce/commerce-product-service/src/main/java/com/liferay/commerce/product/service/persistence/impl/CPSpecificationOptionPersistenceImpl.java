@@ -5077,11 +5077,11 @@ public class CPSpecificationOptionPersistenceImpl
 		ctStrictColumnNames.add("createDate");
 		ctIgnoreColumnNames.add("modifiedDate");
 		ctStrictColumnNames.add("CPOptionCategoryId");
+		ctStrictColumnNames.add("listTypeDefinitionId");
 		ctStrictColumnNames.add("title");
 		ctStrictColumnNames.add("description");
 		ctStrictColumnNames.add("facetable");
 		ctStrictColumnNames.add("key_");
-		ctStrictColumnNames.add("listTypeDefinitionId");
 		ctStrictColumnNames.add("priority");
 		ctStrictColumnNames.add("lastPublishDate");
 

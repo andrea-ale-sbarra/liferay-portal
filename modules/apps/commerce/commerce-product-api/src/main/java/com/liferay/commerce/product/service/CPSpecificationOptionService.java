@@ -88,9 +88,9 @@ public interface CPSpecificationOptionService extends BaseService {
 
 	public CPSpecificationOption updateCPSpecificationOption(
 			long cpSpecificationOptionId, long cpOptionCategoryId,
-			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
-			boolean facetable, String key, double priority,
-			ServiceContext serviceContext)
+			long listTypeDefinitionId, Map<Locale, String> titleMap,
+			Map<Locale, String> descriptionMap, boolean facetable, String key,
+			double priority, ServiceContext serviceContext)
 		throws PortalException;
 
 }
