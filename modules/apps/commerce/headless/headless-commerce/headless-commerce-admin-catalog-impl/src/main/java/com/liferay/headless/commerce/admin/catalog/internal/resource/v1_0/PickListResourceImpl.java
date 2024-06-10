@@ -9,7 +9,6 @@ import com.liferay.commerce.product.model.CPSpecificationOption;
 import com.liferay.commerce.product.service.CPSpecificationOptionService;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.PickList;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.PickListResource;
-
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
 import com.liferay.list.type.model.ListTypeDefinition;
 import com.liferay.list.type.service.ListTypeDefinitionService;
@@ -17,12 +16,13 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ServiceScope;
 
 import java.util.Collections;
 import java.util.Locale;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Zoltán Takács
@@ -36,6 +36,7 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 	@Override
 	public Page<PickList> getSpecificationIdPickListsPage(Long id)
 		throws Exception {
+
 		CPSpecificationOption cpSpecificationOption =
 			_cpSpecificationOptionService.getCPSpecificationOption(id);
 
@@ -51,8 +52,7 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 				listTypeDefinitionId);
 
 		return Page.of(
-			Collections.singletonList(_toPickList(listTypeDefinition))
-		);
+			Collections.singletonList(_toPickList(listTypeDefinition)));
 	}
 
 	@Override
@@ -62,9 +62,10 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 		ListTypeDefinition listTypeDefinition =
 			_listTypeDefinitionService.addListTypeDefinition(
 				StringPool.BLANK,
-				HashMapBuilder.put(_getLocale(),
-					pickList.getName()).build(), false,
-				Collections.emptyList());
+				HashMapBuilder.put(
+					_getLocale(), pickList.getName()
+				).build(),
+				false, Collections.emptyList());
 
 		CPSpecificationOption cpSpecificationOption =
 			_cpSpecificationOptionService.getCPSpecificationOption(id);
@@ -75,17 +76,12 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 			listTypeDefinition.getListTypeDefinitionId(),
 			cpSpecificationOption.getTitleMap(),
 			cpSpecificationOption.getDescriptionMap(),
-			cpSpecificationOption.getFacetable(),
-			cpSpecificationOption.getKey(),
+			cpSpecificationOption.isFacetable(), cpSpecificationOption.getKey(),
 			cpSpecificationOption.getPriority(),
-			_serviceContextHelper.getServiceContext()
-		);
+			_serviceContextHelper.getServiceContext());
 
 		return _toPickList(listTypeDefinition);
 	}
-
-	@Reference
-	private ListTypeDefinitionService _listTypeDefinitionService;
 
 	private Locale _getLocale() {
 		if (contextUser != null) {
@@ -95,10 +91,7 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 		return contextAcceptLanguage.getPreferredLocale();
 	}
 
-	private PickList _toPickList(
-		ListTypeDefinition
-			listTypeDefinition) {
-
+	private PickList _toPickList(ListTypeDefinition listTypeDefinition) {
 		if (listTypeDefinition == null) {
 			return null;
 		}
@@ -108,12 +101,10 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 		return new PickList() {
 			{
 				setDateCreated(listTypeDefinition::getCreateDate);
-				setDateModified(
-					listTypeDefinition::getModifiedDate);
+				setDateModified(listTypeDefinition::getModifiedDate);
 				setExternalReferenceCode(
 					listTypeDefinition::getExternalReferenceCode);
-				setId(
-					listTypeDefinition::getListTypeDefinitionId);
+				setId(listTypeDefinition::getListTypeDefinitionId);
 				setName(() -> listTypeDefinition.getName(locale));
 				setName_i18n(
 					() -> LocalizedMapUtil.getI18nMap(
@@ -122,9 +113,14 @@ public class PickListResourceImpl extends BasePickListResourceImpl {
 			}
 		};
 	}
-	@Reference
-	private ServiceContextHelper _serviceContextHelper;
 
 	@Reference
 	private CPSpecificationOptionService _cpSpecificationOptionService;
+
+	@Reference
+	private ListTypeDefinitionService _listTypeDefinitionService;
+
+	@Reference
+	private ServiceContextHelper _serviceContextHelper;
+
 }
