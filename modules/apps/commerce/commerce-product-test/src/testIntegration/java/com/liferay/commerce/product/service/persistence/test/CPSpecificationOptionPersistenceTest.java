@@ -260,6 +260,13 @@ public class CPSpecificationOptionPersistenceTest {
 	}
 
 	@Test
+	public void testCountByListTypeDefinitionId() throws Exception {
+		_persistence.countByListTypeDefinitionId(RandomTestUtil.nextLong());
+
+		_persistence.countByListTypeDefinitionId(0L);
+	}
+
+	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		CPSpecificationOption newCPSpecificationOption =
 			addCPSpecificationOption();

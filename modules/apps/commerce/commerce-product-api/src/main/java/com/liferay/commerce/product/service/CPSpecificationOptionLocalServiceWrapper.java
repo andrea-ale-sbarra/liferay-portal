@@ -64,6 +64,15 @@ public class CPSpecificationOptionLocalServiceWrapper
 			key, priority, serviceContext);
 	}
 
+	@Override
+	public int countCPSpecificationOptionByListTypeDefinitionId(
+		long listTypeDefinitionId) {
+
+		return _cpSpecificationOptionLocalService.
+			countCPSpecificationOptionByListTypeDefinitionId(
+				listTypeDefinitionId);
+	}
+
 	/**
 	 * Creates a new cp specification option with the primary key. Does not add the cp specification option to the database.
 	 *
@@ -315,6 +324,16 @@ public class CPSpecificationOptionLocalServiceWrapper
 
 		return _cpSpecificationOptionLocalService.getCPSpecificationOption(
 			companyId, key);
+	}
+
+	@Override
+	public java.util.List<CPSpecificationOption>
+		getCPSpecificationOptionByListTypeDefinitionId(
+			long listTypeDefinitionId) {
+
+		return _cpSpecificationOptionLocalService.
+			getCPSpecificationOptionByListTypeDefinitionId(
+				listTypeDefinitionId);
 	}
 
 	/**
