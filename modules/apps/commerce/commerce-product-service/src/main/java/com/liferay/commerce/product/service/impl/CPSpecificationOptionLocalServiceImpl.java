@@ -115,6 +115,14 @@ public class CPSpecificationOptionLocalServiceImpl
 		return cpSpecificationOption;
 	}
 
+	@Override
+	public int countCPSpecificationOptionByListTypeDefinitionId(
+		long listTypeDefinitionId) {
+
+		return cpSpecificationOptionPersistence.countByListTypeDefinitionId(
+			listTypeDefinitionId);
+	}
+
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
@@ -188,6 +196,15 @@ public class CPSpecificationOptionLocalServiceImpl
 
 		return cpSpecificationOptionPersistence.findByC_K(
 			companyId, _friendlyURLNormalizer.normalize(key));
+	}
+
+	@Override
+	public List<CPSpecificationOption>
+		getCPSpecificationOptionByListTypeDefinitionId(
+			long listTypeDefinitionId) {
+
+		return cpSpecificationOptionPersistence.findByListTypeDefinitionId(
+			listTypeDefinitionId);
 	}
 
 	@Override
