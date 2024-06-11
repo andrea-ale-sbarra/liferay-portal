@@ -68,7 +68,7 @@ List<CPOptionCategory> cpOptionCategories = cpSpecificationOptionDisplayContext.
 		fdsActionDropdownItems="<%= cpSpecificationOptionDisplayContext.getFDSActionDropdownItems() %>"
 		id="<%= CommerceSpecificationOptionFDSNames.LIST_TYPE_DEFINITIONS %>"
 		itemsPerPage="<%= 10 %>"
-		propsTransformer="{removeCPSpecificationOptionPicklistRelation} from commerce-product-options-web"
+		propsTransformer="{CPSpecificationOptionPickListPropsTransformer} from commerce-product-options-web"
 		style="stacked"
 	/>
 </commerce-ui:panel>

@@ -16,9 +16,7 @@ long cpSpecificationOptionId = ParamUtil.getLong(request, "cpSpecificationOption
 	title='<%= LanguageUtil.get(request, "create-a-new-picklist") %>'
 >
 	<aui:form method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + liferayPortletResponse.getNamespace() + "storeToParentForm(this.form);" %>' useNamespace="<%= false %>">
-		<div class="p-4">
-			<aui:input label='<%= LanguageUtil.get(request, "name") %>' localized="<%= true %>" name="name" required="<%= true %>" value='<%= ParamUtil.getString(request, "cpSpecificationOptionTitle") %>' />
-		</div>
+		<aui:input label='<%= LanguageUtil.get(request, "name") %>' localized="<%= true %>" name="name" required="<%= true %>" value='<%= ParamUtil.getString(request, "cpSpecificationOptionTitle") %>' />
 	</aui:form>
 
 	<liferay-frontend:component
@@ -31,6 +29,6 @@ long cpSpecificationOptionId = ParamUtil.getLong(request, "cpSpecificationOption
 				"namespace", liferayPortletResponse.getNamespace()
 			).build()
 		%>'
-		module="{assignOrCreateSpecificationOptionPicklist} from commerce-product-options-web"
+		module="{CreateOrAssignCPSpecificationOptionPickList} from commerce-product-options-web"
 	/>
 </commerce-ui:modal-content>

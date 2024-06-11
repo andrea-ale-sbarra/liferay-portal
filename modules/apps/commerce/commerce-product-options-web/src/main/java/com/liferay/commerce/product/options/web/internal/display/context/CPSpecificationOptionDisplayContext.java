@@ -236,7 +236,7 @@ public class CPSpecificationOptionDisplayContext
 		return PortletURLBuilder.createRenderURL(
 			cpRequestHelper.getLiferayPortletResponse()
 		).setMVCRenderCommandName(
-			"/cp_specification_options/add_cp_specification_option_picklist"
+			"/cp_specification_options/add_cp_specification_option_pick_list"
 		).setCMD(
 			actionCommand
 		).setParameter(

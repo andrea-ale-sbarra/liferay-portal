@@ -16,7 +16,7 @@ long cpSpecificationOptionId = ParamUtil.getLong(request, "cpSpecificationOption
 	title='<%= LanguageUtil.get(request, "add-an-existing-picklist") %>'
 >
 	<aui:form method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + liferayPortletResponse.getNamespace() + "storeToParentForm(this.form);" %>' useNamespace="<%= false %>">
-		<div class="p-4">
+		<div class="py-3">
 			<react:component
 				module="{ListTypeDefinitionsAutocomplete} from commerce-product-options-web"
 			/>
@@ -33,6 +33,6 @@ long cpSpecificationOptionId = ParamUtil.getLong(request, "cpSpecificationOption
 				"namespace", liferayPortletResponse.getNamespace()
 			).build()
 		%>'
-		module="{assignOrCreateSpecificationOptionPicklist} from commerce-product-options-web"
+		module="{CreateOrAssignCPSpecificationOptionPickList} from commerce-product-options-web"
 	/>
 </commerce-ui:modal-content>
