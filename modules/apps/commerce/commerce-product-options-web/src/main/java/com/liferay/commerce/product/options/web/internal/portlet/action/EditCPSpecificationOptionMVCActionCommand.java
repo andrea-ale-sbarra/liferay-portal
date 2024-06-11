@@ -144,10 +144,14 @@ public class EditCPSpecificationOptionMVCActionCommand
 
 			// Update commerce product specification option
 
+			long listTypeDefinitionId = ParamUtil.getLong(
+				actionRequest, "listTypeDefinitionId");
+
 			cpSpecificationOption =
 				_cpSpecificationOptionService.updateCPSpecificationOption(
-					cpSpecificationOptionId, cpOptionCategoryId, titleMap,
-					descriptionMap, facetable, key, priority, serviceContext);
+					cpSpecificationOptionId, cpOptionCategoryId,
+					listTypeDefinitionId, titleMap, descriptionMap, facetable,
+					key, priority, serviceContext);
 		}
 
 		return cpSpecificationOption;
