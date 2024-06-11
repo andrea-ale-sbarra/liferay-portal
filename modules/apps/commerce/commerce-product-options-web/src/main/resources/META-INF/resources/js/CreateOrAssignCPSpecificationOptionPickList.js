@@ -11,16 +11,16 @@ const CMD = {
 	ASSIGN: 'assign',
 	CREATE: 'add',
 };
-export default function createOrAssignSpecificationOptionPicklist({
+export default function CreateOrAssignCPSpecificationOptionPickList({
 	cmd,
 	cpSpecificationOptionId,
 	namespace,
 }) {
-	let picklistId = 0;
+	let pickListId = 0;
 
 	if (cmd === CMD.ASSIGN) {
 		Liferay.on(`picklist-id-selected`, ({id}) => {
-			picklistId = id;
+			pickListId = id;
 		});
 	}
 
@@ -35,10 +35,15 @@ export default function createOrAssignSpecificationOptionPicklist({
 						{name}
 					);
 
-				picklistId = id;
+				pickListId = id;
+			} else {
+				await AdminCatalogResource.updateSpecificationById(
+					cpSpecificationOptionId,
+					{pickListId}
+				);
 			}
 
-			if (!picklistId) {
+			if (!pickListId) {
 				throw new Error(
 					Liferay.Language.get(
 						'failed-to-associate-the-picklist-to-the-current-specification'
@@ -46,11 +51,11 @@ export default function createOrAssignSpecificationOptionPicklist({
 				);
 			}
 
-			const picklistIdInput = window.parent.document.querySelector(
+			const pickListIdInput = window.parent.document.querySelector(
 				`input[name="${namespace}listTypeDefinitionId"]`
 			);
 
-			picklistIdInput.value = picklistId;
+			pickListIdInput.value = pickListId;
 
 			window.parent.Liferay.fire(commerceEvents.CLOSE_MODAL, {
 				successNotification: {
