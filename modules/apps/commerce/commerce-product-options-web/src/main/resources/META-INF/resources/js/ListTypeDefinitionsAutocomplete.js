@@ -4,6 +4,7 @@
  */
 
 import ClayAutocomplete from '@clayui/autocomplete';
+import ClayIcon from "@clayui/icon";
 import ClayForm from '@clayui/form';
 import {fetch} from 'frontend-js-web';
 import React, {useEffect, useMemo, useState} from 'react';
@@ -46,10 +47,19 @@ const ListTypeDefinitionsAutocomplete = ({namespace}) => {
 		<ClayForm.Group aria-required={true}>
 			<label
 				aria-required={true}
+				className="control-label"
 				htmlFor={`${namespace}autocomplete`}
 				id={`${namespace}autocomplete-label`}
 			>
-				{Liferay.Language.get('name')}*
+				{Liferay.Language.get('name')}
+
+				<span className="reference-mark text-warning">
+					<ClayIcon symbol="asterisk" />
+				</span>
+
+				<span className="hide-accessible sr-only">
+					{Liferay.Language.get('required')}
+				</span>
 			</label>
 
 			<ClayAutocomplete
