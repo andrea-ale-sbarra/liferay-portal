@@ -20,7 +20,7 @@ export default function propsTransformer(props) {
 		}) {
 			if (actionId === 'removePicklistRelation') {
 				AdminCatalogResource.updateSpecificationById(specificationId, {
-					listTypeDefinitionId: 0,
+					pickListId: 0,
 				})
 					.then(() => {
 						const picklistIdInput =
