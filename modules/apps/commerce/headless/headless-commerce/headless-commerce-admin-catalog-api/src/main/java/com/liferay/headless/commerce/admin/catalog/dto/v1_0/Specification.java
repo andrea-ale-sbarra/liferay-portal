@@ -261,6 +261,48 @@ public class Specification implements Serializable {
 	@JsonIgnore
 	private Supplier<OptionCategory> _optionCategorySupplier;
 
+	@DecimalMin("0")
+	@Schema(example = "31130")
+	public Long getPickListId() {
+		if (_pickListIdSupplier != null) {
+			pickListId = _pickListIdSupplier.get();
+
+			_pickListIdSupplier = null;
+		}
+
+		return pickListId;
+	}
+
+	public void setPickListId(Long pickListId) {
+		this.pickListId = pickListId;
+
+		_pickListIdSupplier = null;
+	}
+
+	@JsonIgnore
+	public void setPickListId(
+		UnsafeSupplier<Long, Exception> pickListIdUnsafeSupplier) {
+
+		_pickListIdSupplier = () -> {
+			try {
+				return pickListIdUnsafeSupplier.get();
+			}
+			catch (RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected Long pickListId;
+
+	@JsonIgnore
+	private Supplier<Long> _pickListIdSupplier;
+
 	@Schema(example = "1.2")
 	public Double getPriority() {
 		if (_prioritySupplier != null) {
@@ -434,6 +476,18 @@ public class Specification implements Serializable {
 			sb.append("\"optionCategory\": ");
 
 			sb.append(String.valueOf(optionCategory));
+		}
+
+		Long pickListId = getPickListId();
+
+		if (pickListId != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"pickListId\": ");
+
+			sb.append(pickListId);
 		}
 
 		Double priority = getPriority();

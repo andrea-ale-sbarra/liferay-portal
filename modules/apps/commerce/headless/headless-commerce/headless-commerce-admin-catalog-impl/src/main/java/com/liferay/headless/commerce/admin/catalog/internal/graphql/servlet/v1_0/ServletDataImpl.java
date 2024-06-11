@@ -19,6 +19,7 @@ import com.liferay.headless.commerce.admin.catalog.internal.resource.v1_0.Mapped
 import com.liferay.headless.commerce.admin.catalog.internal.resource.v1_0.OptionCategoryResourceImpl;
 import com.liferay.headless.commerce.admin.catalog.internal.resource.v1_0.OptionResourceImpl;
 import com.liferay.headless.commerce.admin.catalog.internal.resource.v1_0.OptionValueResourceImpl;
+import com.liferay.headless.commerce.admin.catalog.internal.resource.v1_0.PickListResourceImpl;
 import com.liferay.headless.commerce.admin.catalog.internal.resource.v1_0.PinResourceImpl;
 import com.liferay.headless.commerce.admin.catalog.internal.resource.v1_0.ProductAccountGroupResourceImpl;
 import com.liferay.headless.commerce.admin.catalog.internal.resource.v1_0.ProductChannelResourceImpl;
@@ -51,6 +52,7 @@ import com.liferay.headless.commerce.admin.catalog.resource.v1_0.MappedProductRe
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.OptionCategoryResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.OptionResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.OptionValueResource;
+import com.liferay.headless.commerce.admin.catalog.resource.v1_0.PickListResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.PinResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductAccountGroupResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductChannelResource;
@@ -118,6 +120,8 @@ public class ServletDataImpl implements ServletData {
 			_optionCategoryResourceComponentServiceObjects);
 		Mutation.setOptionValueResourceComponentServiceObjects(
 			_optionValueResourceComponentServiceObjects);
+		Mutation.setPickListResourceComponentServiceObjects(
+			_pickListResourceComponentServiceObjects);
 		Mutation.setPinResourceComponentServiceObjects(
 			_pinResourceComponentServiceObjects);
 		Mutation.setProductResourceComponentServiceObjects(
@@ -178,6 +182,8 @@ public class ServletDataImpl implements ServletData {
 			_optionCategoryResourceComponentServiceObjects);
 		Query.setOptionValueResourceComponentServiceObjects(
 			_optionValueResourceComponentServiceObjects);
+		Query.setPickListResourceComponentServiceObjects(
+			_pickListResourceComponentServiceObjects);
 		Query.setPinResourceComponentServiceObjects(
 			_pinResourceComponentServiceObjects);
 		Query.setProductResourceComponentServiceObjects(
@@ -591,6 +597,16 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							OptionValueResourceImpl.class,
 							"postOptionIdOptionValueBatch"));
+					put(
+						"mutation#createSpecificationIdPickList",
+						new ObjectValuePair<>(
+							PickListResourceImpl.class,
+							"postSpecificationIdPickList"));
+					put(
+						"mutation#createSpecificationIdPickListBatch",
+						new ObjectValuePair<>(
+							PickListResourceImpl.class,
+							"postSpecificationIdPickListBatch"));
 					put(
 						"mutation#deletePin",
 						new ObjectValuePair<>(
@@ -1147,6 +1163,11 @@ public class ServletDataImpl implements ServletData {
 							OptionValueResourceImpl.class,
 							"getOptionIdOptionValuesPage"));
 					put(
+						"query#specificationIdPickLists",
+						new ObjectValuePair<>(
+							PickListResourceImpl.class,
+							"getSpecificationIdPickListsPage"));
+					put(
 						"query#productByExternalReferenceCodePins",
 						new ObjectValuePair<>(
 							PinResourceImpl.class,
@@ -1603,6 +1624,10 @@ public class ServletDataImpl implements ServletData {
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<OptionValueResource>
 		_optionValueResourceComponentServiceObjects;
+
+	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
+	private ComponentServiceObjects<PickListResource>
+		_pickListResourceComponentServiceObjects;
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<PinResource>

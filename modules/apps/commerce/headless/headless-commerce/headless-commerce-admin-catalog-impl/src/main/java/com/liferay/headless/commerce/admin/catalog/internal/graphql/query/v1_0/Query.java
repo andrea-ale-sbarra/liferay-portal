@@ -17,6 +17,7 @@ import com.liferay.headless.commerce.admin.catalog.dto.v1_0.MappedProduct;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Option;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.OptionCategory;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.OptionValue;
+import com.liferay.headless.commerce.admin.catalog.dto.v1_0.PickList;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Pin;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Product;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductAccountGroup;
@@ -49,6 +50,7 @@ import com.liferay.headless.commerce.admin.catalog.resource.v1_0.MappedProductRe
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.OptionCategoryResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.OptionResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.OptionValueResource;
+import com.liferay.headless.commerce.admin.catalog.resource.v1_0.PickListResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.PinResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductAccountGroupResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductChannelResource;
@@ -195,6 +197,14 @@ public class Query {
 
 		_optionValueResourceComponentServiceObjects =
 			optionValueResourceComponentServiceObjects;
+	}
+
+	public static void setPickListResourceComponentServiceObjects(
+		ComponentServiceObjects<PickListResource>
+			pickListResourceComponentServiceObjects) {
+
+		_pickListResourceComponentServiceObjects =
+			pickListResourceComponentServiceObjects;
 	}
 
 	public static void setPinResourceComponentServiceObjects(
@@ -981,6 +991,22 @@ public class Query {
 				optionValueResource.getOptionIdOptionValuesPage(
 					id, search, Pagination.of(page, pageSize),
 					_sortsBiFunction.apply(optionValueResource, sortsString))));
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {specificationIdPickLists(id: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
+	 */
+	@GraphQLField
+	public PickListPage specificationIdPickLists(@GraphQLName("id") Long id)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_pickListResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			pickListResource -> new PickListPage(
+				pickListResource.getSpecificationIdPickListsPage(id)));
 	}
 
 	/**
@@ -2000,7 +2026,7 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {specification(id: ___){description, facetable, id, key, optionCategory, priority, title}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {specification(id: ___){description, facetable, id, key, optionCategory, pickListId, priority, title}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
 	public Specification specification(@GraphQLName("id") Long id)
@@ -3273,6 +3299,39 @@ public class Query {
 
 	}
 
+	@GraphQLName("PickListPage")
+	public class PickListPage {
+
+		public PickListPage(Page pickListPage) {
+			actions = pickListPage.getActions();
+
+			items = pickListPage.getItems();
+			lastPage = pickListPage.getLastPage();
+			page = pickListPage.getPage();
+			pageSize = pickListPage.getPageSize();
+			totalCount = pickListPage.getTotalCount();
+		}
+
+		@GraphQLField
+		protected Map<String, Map<String, String>> actions;
+
+		@GraphQLField
+		protected java.util.Collection<PickList> items;
+
+		@GraphQLField
+		protected long lastPage;
+
+		@GraphQLField
+		protected long page;
+
+		@GraphQLField
+		protected long pageSize;
+
+		@GraphQLField
+		protected long totalCount;
+
+	}
+
 	@GraphQLName("PinPage")
 	public class PinPage {
 
@@ -4128,6 +4187,19 @@ public class Query {
 		optionValueResource.setRoleLocalService(_roleLocalService);
 	}
 
+	private void _populateResourceContext(PickListResource pickListResource)
+		throws Exception {
+
+		pickListResource.setContextAcceptLanguage(_acceptLanguage);
+		pickListResource.setContextCompany(_company);
+		pickListResource.setContextHttpServletRequest(_httpServletRequest);
+		pickListResource.setContextHttpServletResponse(_httpServletResponse);
+		pickListResource.setContextUriInfo(_uriInfo);
+		pickListResource.setContextUser(_user);
+		pickListResource.setGroupLocalService(_groupLocalService);
+		pickListResource.setRoleLocalService(_roleLocalService);
+	}
+
 	private void _populateResourceContext(PinResource pinResource)
 		throws Exception {
 
@@ -4475,6 +4547,8 @@ public class Query {
 		_optionCategoryResourceComponentServiceObjects;
 	private static ComponentServiceObjects<OptionValueResource>
 		_optionValueResourceComponentServiceObjects;
+	private static ComponentServiceObjects<PickListResource>
+		_pickListResourceComponentServiceObjects;
 	private static ComponentServiceObjects<PinResource>
 		_pinResourceComponentServiceObjects;
 	private static ComponentServiceObjects<ProductResource>
