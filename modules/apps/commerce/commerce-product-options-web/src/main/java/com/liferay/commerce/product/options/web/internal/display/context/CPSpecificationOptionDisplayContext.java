@@ -158,7 +158,7 @@ public class CPSpecificationOptionDisplayContext
 			new FDSActionDropdownItem(
 				null, "trash", "removePicklistRelation",
 				LanguageUtil.get(cpRequestHelper.getRequest(), "remove"), null,
-				null, "headless"));
+				null, null));
 	}
 
 	public List<HeaderActionModel> getHeaderActionModels() {

@@ -2177,7 +2177,6 @@ components:
                     example: 31130
                     format: int64
                     minimum: 0
-                    readOnly: true
                     type: integer
                 priority:
                     example: 1.2
@@ -2231,7 +2230,7 @@ info:
         name: Commerce Team
     description:
         "Liferay Commerce Admin Catalog API. A Java client JAR is available for use with the group ID 'com.liferay',
-        artifact ID 'com.liferay.headless.commerce.admin.catalog.client', and version '4.0.60'."
+        artifact ID 'com.liferay.headless.commerce.admin.catalog.client', and version '4.0.61'."
     license:
         name: "Apache 2.0"
         url: "http://www.apache.org/licenses/LICENSE-2.0.html"

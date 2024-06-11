@@ -63,6 +63,11 @@ List<CPOptionCategory> cpOptionCategories = cpSpecificationOptionDisplayContext.
 	title='<%= LanguageUtil.get(request, "picklist") %>'
 >
 	<frontend-data-set:headless-display
+		additionalProps='<%=
+			HashMapBuilder.<String, Object>put(
+				"specificationId", cpSpecificationOption.getCPSpecificationOptionId()
+			).build()
+		%>'
 		apiURL='<%= "/o/headless-commerce-admin-catalog/v1.0/specifications/" + cpSpecificationOption.getCPSpecificationOptionId() + "/pick-lists" %>'
 		creationMenu="<%= cpSpecificationOptionDisplayContext.getCreationMenu(cpSpecificationOption) %>"
 		fdsActionDropdownItems="<%= cpSpecificationOptionDisplayContext.getFDSActionDropdownItems() %>"

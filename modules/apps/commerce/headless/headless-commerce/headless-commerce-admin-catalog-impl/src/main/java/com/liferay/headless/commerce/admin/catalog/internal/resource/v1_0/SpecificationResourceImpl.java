@@ -96,7 +96,7 @@ public class SpecificationResourceImpl extends BaseSpecificationResourceImpl {
 
 		_updateSpecification(id, specification);
 
-		Response.ResponseBuilder responseBuilder = Response.ok();
+		Response.ResponseBuilder responseBuilder = Response.noContent();
 
 		return responseBuilder.build();
 	}

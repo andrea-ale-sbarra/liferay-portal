@@ -8,14 +8,13 @@ import {openToast} from 'frontend-js-web';
 
 const AdminCatalogResource = CommerceServiceProvider.AdminCatalogAPI('v1');
 
-export default function propsTransformer(props) {
+export default function propsTransformer({additionalProps:{specificationId}, ...props}) {
 	return {
 		...props,
 		onActionDropdownItemClick({
 			action: {
 				data: {id: actionId},
 			},
-			itemData: {id: specificationId},
 			loadData: refresh,
 		}) {
 			if (actionId === 'removePicklistRelation') {
