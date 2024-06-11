@@ -5,10 +5,10 @@
 
 export {default as CPOptionCategoryManagementToolbarPropsTransformer} from './CPOptionCategoryManagementToolbarPropsTransformer';
 export {default as CPSpecificationOptionManagementToolbarPropsTransformer} from './CPSpecificationOptionManagementToolbarPropsTransformer';
+export {default as CreateOrAssignCPSpecificationOptionPickList} from './CreateOrAssignCPSpecificationOptionPickList';
 export {default as EditCPSpecificationOption} from './EditCPSpecificationOption';
 export {default as ListTypeDefinitionsAutocomplete} from './ListTypeDefinitionsAutocomplete';
 export {default as addCpOptionValue} from './addCpOptionValue';
 export {default as addCpOption} from './addCpOption';
-export {default as assignOrCreateSpecificationOptionPicklist} from './assignOrCreateCPSpecificationOptionPicklist';
 export {default as editCpOptionAndValue} from './editCpOptionAndValue';
-export {default as removeCPSpecificationOptionPicklistRelation} from './removeCPSpecificationOptionPicklistRelation';
+export {default as CPSpecificationOptionPickListPropsTransformer} from './CPSpecificationOptionPickListPropsTransformer';
