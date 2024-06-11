@@ -89,6 +89,9 @@ public interface CPSpecificationOptionLocalService
 			double priority, ServiceContext serviceContext)
 		throws PortalException;
 
+	public int countCPSpecificationOptionByListTypeDefinitionId(
+		long listTypeDefinitionId);
+
 	/**
 	 * Creates a new cp specification option with the primary key. Does not add the cp specification option to the database.
 	 *
@@ -259,6 +262,11 @@ public interface CPSpecificationOptionLocalService
 			long companyId, String key)
 		throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CPSpecificationOption>
+		getCPSpecificationOptionByListTypeDefinitionId(
+			long listTypeDefinitionId);
+
 	/**
 	 * Returns the cp specification option with the matching UUID and company.
 	 *
@@ -345,9 +353,9 @@ public interface CPSpecificationOptionLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public CPSpecificationOption updateCPSpecificationOption(
 			long cpSpecificationOptionId, long cpOptionCategoryId,
-			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
-			boolean facetable, String key, double priority,
-			ServiceContext serviceContext)
+			long listTypeDefinitionId, Map<Locale, String> titleMap,
+			Map<Locale, String> descriptionMap, boolean facetable, String key,
+			double priority, ServiceContext serviceContext)
 		throws PortalException;
 
 	@Override

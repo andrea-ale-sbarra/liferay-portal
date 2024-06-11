@@ -67,6 +67,13 @@ public class CPSpecificationOptionLocalServiceUtil {
 			key, priority, serviceContext);
 	}
 
+	public static int countCPSpecificationOptionByListTypeDefinitionId(
+		long listTypeDefinitionId) {
+
+		return getService().countCPSpecificationOptionByListTypeDefinitionId(
+			listTypeDefinitionId);
+	}
+
 	/**
 	 * Creates a new cp specification option with the primary key. Does not add the cp specification option to the database.
 	 *
@@ -282,6 +289,14 @@ public class CPSpecificationOptionLocalServiceUtil {
 		return getService().getCPSpecificationOption(companyId, key);
 	}
 
+	public static List<CPSpecificationOption>
+		getCPSpecificationOptionByListTypeDefinitionId(
+			long listTypeDefinitionId) {
+
+		return getService().getCPSpecificationOptionByListTypeDefinitionId(
+			listTypeDefinitionId);
+	}
+
 	/**
 	 * Returns the cp specification option with the matching UUID and company.
 	 *
@@ -394,15 +409,15 @@ public class CPSpecificationOptionLocalServiceUtil {
 
 	public static CPSpecificationOption updateCPSpecificationOption(
 			long cpSpecificationOptionId, long cpOptionCategoryId,
-			Map<java.util.Locale, String> titleMap,
+			long listTypeDefinitionId, Map<java.util.Locale, String> titleMap,
 			Map<java.util.Locale, String> descriptionMap, boolean facetable,
 			String key, double priority,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {
 
 		return getService().updateCPSpecificationOption(
-			cpSpecificationOptionId, cpOptionCategoryId, titleMap,
-			descriptionMap, facetable, key, priority, serviceContext);
+			cpSpecificationOptionId, cpOptionCategoryId, listTypeDefinitionId,
+			titleMap, descriptionMap, facetable, key, priority, serviceContext);
 	}
 
 	public static CPSpecificationOptionLocalService getService() {
