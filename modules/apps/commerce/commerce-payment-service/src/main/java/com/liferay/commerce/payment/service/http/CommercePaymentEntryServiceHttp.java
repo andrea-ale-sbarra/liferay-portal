@@ -329,6 +329,48 @@ public class CommercePaymentEntryServiceHttp {
 		}
 	}
 
+	public static int getCommercePaymentEntriesCount(
+			HttpPrincipal httpPrincipal, long companyId, long classNameId,
+			long classPK, int type)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CommercePaymentEntryServiceUtil.class,
+				"getCommercePaymentEntriesCount",
+				_getCommercePaymentEntriesCountParameterTypes6);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, companyId, classNameId, classPK, type);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return ((Integer)returnObj).intValue();
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
 	public static java.util.List
 		<com.liferay.commerce.payment.model.CommercePaymentEntry>
 				getCommercePaymentEntries(
@@ -343,7 +385,7 @@ public class CommercePaymentEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CommercePaymentEntryServiceUtil.class,
 				"getCommercePaymentEntries",
-				_getCommercePaymentEntriesParameterTypes6);
+				_getCommercePaymentEntriesParameterTypes7);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, companyId, classNameId, classPK, start, end,
@@ -388,7 +430,7 @@ public class CommercePaymentEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CommercePaymentEntryServiceUtil.class,
 				"getCommercePaymentEntry",
-				_getCommercePaymentEntryParameterTypes7);
+				_getCommercePaymentEntryParameterTypes8);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, commercePaymentEntryId);
@@ -434,7 +476,7 @@ public class CommercePaymentEntryServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CommercePaymentEntryServiceUtil.class, "search",
-				_searchParameterTypes8);
+				_searchParameterTypes9);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, companyId, classNameIds, classPKs, currencyCodes,
@@ -487,7 +529,7 @@ public class CommercePaymentEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CommercePaymentEntryServiceUtil.class,
 				"updateCommercePaymentEntry",
-				_updateCommercePaymentEntryParameterTypes9);
+				_updateCommercePaymentEntryParameterTypes10);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, externalReferenceCode, commercePaymentEntryId,
@@ -535,7 +577,7 @@ public class CommercePaymentEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CommercePaymentEntryServiceUtil.class,
 				"updateExternalReferenceCode",
-				_updateExternalReferenceCodeParameterTypes10);
+				_updateExternalReferenceCodeParameterTypes11);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, commercePaymentEntryId, externalReferenceCode);
@@ -578,7 +620,7 @@ public class CommercePaymentEntryServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CommercePaymentEntryServiceUtil.class, "updateNote",
-				_updateNoteParameterTypes11);
+				_updateNoteParameterTypes12);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, commercePaymentEntryId, note);
@@ -621,7 +663,7 @@ public class CommercePaymentEntryServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CommercePaymentEntryServiceUtil.class, "updateReasonKey",
-				_updateReasonKeyParameterTypes12);
+				_updateReasonKeyParameterTypes13);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, commercePaymentEntryId, reasonKey);
@@ -687,33 +729,37 @@ public class CommercePaymentEntryServiceHttp {
 			long.class, long.class, long.class, int.class, int.class, int.class,
 			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
-	private static final Class<?>[] _getCommercePaymentEntriesParameterTypes6 =
+	private static final Class<?>[]
+		_getCommercePaymentEntriesCountParameterTypes6 = new Class[] {
+			long.class, long.class, long.class, int.class
+		};
+	private static final Class<?>[] _getCommercePaymentEntriesParameterTypes7 =
 		new Class[] {
 			long.class, long.class, long.class, int.class, int.class,
 			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
-	private static final Class<?>[] _getCommercePaymentEntryParameterTypes7 =
+	private static final Class<?>[] _getCommercePaymentEntryParameterTypes8 =
 		new Class[] {long.class};
-	private static final Class<?>[] _searchParameterTypes8 = new Class[] {
+	private static final Class<?>[] _searchParameterTypes9 = new Class[] {
 		long.class, long[].class, long[].class, String[].class, String.class,
 		String[].class, int[].class, boolean.class, int.class, int.class,
 		com.liferay.portal.kernel.search.Sort.class
 	};
-	private static final Class<?>[] _updateCommercePaymentEntryParameterTypes9 =
-		new Class[] {
+	private static final Class<?>[]
+		_updateCommercePaymentEntryParameterTypes10 = new Class[] {
 			String.class, long.class, long.class, java.math.BigDecimal.class,
 			String.class, String.class, String.class, String.class,
 			String.class, String.class, String.class, String.class, int.class,
 			int.class, String.class, String.class, String.class, int.class
 		};
 	private static final Class<?>[]
-		_updateExternalReferenceCodeParameterTypes10 = new Class[] {
+		_updateExternalReferenceCodeParameterTypes11 = new Class[] {
 			long.class, String.class
 		};
-	private static final Class<?>[] _updateNoteParameterTypes11 = new Class[] {
+	private static final Class<?>[] _updateNoteParameterTypes12 = new Class[] {
 		long.class, String.class
 	};
-	private static final Class<?>[] _updateReasonKeyParameterTypes12 =
+	private static final Class<?>[] _updateReasonKeyParameterTypes13 =
 		new Class[] {long.class, String.class};
 
 }
