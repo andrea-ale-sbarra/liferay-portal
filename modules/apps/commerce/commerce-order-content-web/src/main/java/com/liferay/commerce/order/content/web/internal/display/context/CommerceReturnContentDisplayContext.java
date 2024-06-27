@@ -285,8 +285,12 @@ public class CommerceReturnContentDisplayContext {
 		CommerceReturn commerceReturn = getCommerceReturn();
 		HttpServletRequest httpServletRequest = _cpRequestHelper.getRequest();
 
-		if (StringUtil.equals(commerceReturn.getReturnStatus(), "processing") ||
-			StringUtil.equals(commerceReturn.getReturnStatus(), "completed")) {
+		if (StringUtil.equals(
+				commerceReturn.getReturnStatus(),
+				CommerceReturnConstants.RETURN_STATUS_PROCESSING) ||
+			StringUtil.equals(
+				commerceReturn.getReturnStatus(),
+				CommerceReturnConstants.RETURN_STATUS_COMPLETED)) {
 
 			return ListUtil.fromArray(
 				new FDSActionDropdownItem(
@@ -322,7 +326,10 @@ public class CommerceReturnContentDisplayContext {
 					_language.get(httpServletRequest, "view-refunds"), "get",
 					"get", "modal"));
 		}
-		else if (StringUtil.equals(commerceReturn.getReturnStatus(), "draft")) {
+		else if (StringUtil.equals(
+					commerceReturn.getReturnStatus(),
+					CommerceReturnConstants.RETURN_STATUS_DRAFT)) {
+
 			return ListUtil.fromArray(
 				new FDSActionDropdownItem(
 					PortletURLBuilder.create(
