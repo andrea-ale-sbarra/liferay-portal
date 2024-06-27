@@ -97,9 +97,14 @@ test('LPD-22572 Picklist on product specifications page', async ({
 		await productDetailsPage.checkSpecificationProduct('item3')
 	).toBeVisible();
 
-	await apiHelpers.headlessCommerceAdminCatalog.deleteSpecification(
-		specification.id
-	);
+	const specifications =
+			await apiHelpers.headlessCommerceAdminCatalog.getSpecifications();
+
+		for (let i = 0; i < specifications.totalCount; i++) {
+			await apiHelpers.headlessCommerceAdminCatalog.deleteSpecification(
+				specifications.items[i].id,
+			);
+		}
 
 	await apiHelpers.listTypeAdmin.deleteListTypeDefinition(
 		picklist.id
