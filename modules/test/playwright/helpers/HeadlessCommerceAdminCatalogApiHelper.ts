@@ -439,7 +439,7 @@ export class HeadlessCommerceAdminCatalogApiHelper {
 						en_US: 'Product' + getRandomInt(),
 					},
 					productStatus: 0,
-					productType: 'simple',
+					productType: 'virtual',
 					skus: [
 						{
 							cost: 0,
