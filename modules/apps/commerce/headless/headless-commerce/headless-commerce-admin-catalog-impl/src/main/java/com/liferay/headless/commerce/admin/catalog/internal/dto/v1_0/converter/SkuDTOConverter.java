@@ -5,6 +5,11 @@
 
 package com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.converter;
 
+import com.liferay.commerce.currency.model.CommerceCurrency;
+import com.liferay.commerce.price.list.constants.CommercePriceListConstants;
+import com.liferay.commerce.price.list.model.CommercePriceEntry;
+import com.liferay.commerce.price.list.model.CommercePriceList;
+import com.liferay.commerce.price.list.service.CommercePriceEntryService;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPDefinitionOptionRel;
 import com.liferay.commerce.product.model.CPDefinitionOptionValueRel;
@@ -18,7 +23,6 @@ import com.liferay.commerce.product.util.CPInstanceHelper;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Sku;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.SkuOption;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.SkuUnitOfMeasure;
-import com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.converter.constants.DTOConverterConstants;
 import com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.util.CustomFieldsUtil;
 import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.petra.string.StringBundler;
@@ -26,7 +30,9 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterContext;
-import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
+import com.liferay.portal.vulcan.util.TransformUtil;
+
+import java.math.BigDecimal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,9 +168,7 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 
 						return skuOptions.toArray(new SkuOption[0]);
 					});
-				setSkuUnitOfMeasures(
-					() -> _toSkuUnitOfMeasures(
-						cpInstance, dtoConverterContext));
+				setSkuUnitOfMeasures(() -> _toSkuUnitOfMeasures(cpInstance));
 				setUnitOfMeasureKey(
 					() -> {
 						if (cpInstanceUnitOfMeasure != null) {
@@ -200,31 +204,52 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 		};
 	}
 
-	private SkuUnitOfMeasure[] _toSkuUnitOfMeasures(
-			CPInstance cpInstance, DTOConverterContext dtoConverterContext)
+	private BigDecimal _getInstanceBaseCommercePriceEntryPrice(
+			String cpInstanceUuid, String key, String type)
 		throws Exception {
 
-		List<SkuUnitOfMeasure> skuUnitOfMeasures = new ArrayList<>();
+		CommercePriceEntry commercePriceEntry =
+			_commercePriceEntryService.getInstanceBaseCommercePriceEntry(
+				cpInstanceUuid, type, key);
 
-		for (CPInstanceUnitOfMeasure cpInstanceUnitOfMeasure :
-				cpInstance.getCPInstanceUnitOfMeasures(
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-
-			DefaultDTOConverterContext defaultDTOConverterContext =
-				new DefaultDTOConverterContext(
-					cpInstanceUnitOfMeasure.getCPInstanceUnitOfMeasureId(),
-					dtoConverterContext.getLocale());
-
-			defaultDTOConverterContext.setAttribute(
-				"id", cpInstance.getCPInstanceId());
-
-			skuUnitOfMeasures.add(
-				_skuUnitOfMeasureDTOConverter.toDTO(
-					defaultDTOConverterContext));
+		if (commercePriceEntry == null) {
+			return null;
 		}
 
-		return skuUnitOfMeasures.toArray(new SkuUnitOfMeasure[0]);
+		CommercePriceList commercePriceList =
+			commercePriceEntry.getCommercePriceList();
+
+		CommerceCurrency commerceCurrency =
+			commercePriceList.getCommerceCurrency();
+
+		return commerceCurrency.round(commercePriceEntry.getPrice());
 	}
+
+	private SkuUnitOfMeasure[] _toSkuUnitOfMeasures(CPInstance cpInstance) {
+		return TransformUtil.transformToArray(
+			cpInstance.getCPInstanceUnitOfMeasures(
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null),
+			cpInstanceUnitOfMeasure -> new SkuUnitOfMeasure() {
+				{
+					setBasePrice(
+						() -> _getInstanceBaseCommercePriceEntryPrice(
+							cpInstance.getCPInstanceUuid(),
+							cpInstanceUnitOfMeasure.getKey(),
+							CommercePriceListConstants.TYPE_PRICE_LIST));
+					setKey(cpInstanceUnitOfMeasure::getKey);
+					setPriority(cpInstanceUnitOfMeasure::getPriority);
+					setPromoPrice(
+						() -> _getInstanceBaseCommercePriceEntryPrice(
+							cpInstance.getCPInstanceUuid(),
+							cpInstanceUnitOfMeasure.getKey(),
+							CommercePriceListConstants.TYPE_PROMOTION));
+				}
+			},
+			SkuUnitOfMeasure.class);
+	}
+
+	@Reference
+	private CommercePriceEntryService _commercePriceEntryService;
 
 	@Reference
 	private CPDefinitionOptionRelLocalService
@@ -239,9 +264,5 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 
 	@Reference
 	private CPInstanceService _cpInstanceService;
-
-	@Reference(target = DTOConverterConstants.SKU_UNIT_OF_MEASURE_DTO_CONVERTER)
-	private DTOConverter<CPInstanceUnitOfMeasure, SkuUnitOfMeasure>
-		_skuUnitOfMeasureDTOConverter;
 
 }
