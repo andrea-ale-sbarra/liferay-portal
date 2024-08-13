@@ -138,6 +138,13 @@ public class CPInstanceUnitOfMeasureModelListener
 			int compare = originalIncrementalOrderQuantity.compareTo(
 				incrementalOrderQuantity);
 
+			BigDecimal originalPricingQuantity =
+				originalCPInstanceUnitOfMeasure.getPricingQuantity();
+			BigDecimal pricingQuantity =
+				cpInstanceUnitOfMeasure.getPricingQuantity();
+
+			compare = originalPricingQuantity.compareTo(pricingQuantity);
+
 			if (!StringUtil.equals(
 					originalUnitOfMeasureKey, unitOfMeasureKey) ||
 				(compare != 0)) {
@@ -151,6 +158,7 @@ public class CPInstanceUnitOfMeasureModelListener
 							originalIncrementalOrderQuantity,
 							originalUnitOfMeasureKey)) {
 
+					commercePriceEntry.setPricingQuantity(pricingQuantity);
 					commercePriceEntry.setQuantity(incrementalOrderQuantity);
 					commercePriceEntry.setUnitOfMeasureKey(unitOfMeasureKey);
 
