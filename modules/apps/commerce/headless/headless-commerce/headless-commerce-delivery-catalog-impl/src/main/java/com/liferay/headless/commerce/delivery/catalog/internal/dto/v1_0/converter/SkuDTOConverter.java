@@ -407,9 +407,17 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 
 		BigDecimal unitPrice = unitPriceCommerceMoney.getPrice();
 
+		CommerceMoney pricingQuantityUnitPriceCommerceMoney =
+			commerceProductPrice.getPricingQuantityUnitPrice();
+
+		BigDecimal pricingQuantityUnitPrice = pricingQuantityUnitPriceCommerceMoney.getPrice();
+
 		Price price = new Price() {
 			{
 				setCurrency(() -> commerceCurrency.getName(locale));
+				setPricingQuantityPriceFormatted(
+					pricingQuantityUnitPriceCommerceMoney.format(locale) + " / " + unitOfMeasureKey );
+				setPricingQuantityPrice(pricingQuantityUnitPrice::doubleValue);
 				setPrice(unitPrice::doubleValue);
 				setPriceFormatted(() -> unitPriceCommerceMoney.format(locale));
 				setPriceOnApplication(
