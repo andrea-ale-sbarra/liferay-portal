@@ -156,6 +156,14 @@ public class CommerceProductPriceImpl implements CommerceProductPrice {
 		_unitPromoPriceWithTaxAmount = unitPromoPriceWithTaxAmount;
 	}
 
+	public void setPricingQuantityUnitPrice(CommerceMoney pricingQuantityUnitPrice) {
+		_pricingQuantityUnitPrice = pricingQuantityUnitPrice;
+	}
+
+	public CommerceMoney getPricingQuantityUnitPrice() {
+		return _pricingQuantityUnitPrice;
+	}
+
 	private CommerceDiscountValue _commerceDiscountValue;
 	private CommerceDiscountValue _commerceDiscountValueWithTaxAmount;
 	private long _commercePriceListId;
@@ -166,6 +174,7 @@ public class CommerceProductPriceImpl implements CommerceProductPrice {
 	private BigDecimal _taxValue;
 	private BigDecimal _unitOfMeasureIncrementalOrderQuantity;
 	private String _unitOfMeasureKey;
+	private CommerceMoney _pricingQuantityUnitPrice;
 	private CommerceMoney _unitPrice;
 	private CommerceMoney _unitPriceWithTaxAmount;
 	private CommerceMoney _unitPromoPrice;
