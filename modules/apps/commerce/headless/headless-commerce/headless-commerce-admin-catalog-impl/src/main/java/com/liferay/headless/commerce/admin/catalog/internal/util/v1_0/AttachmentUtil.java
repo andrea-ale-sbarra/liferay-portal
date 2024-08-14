@@ -388,6 +388,8 @@ public class AttachmentUtil {
 
 		uniqueFileName = _appendExtension(contentType, uniqueFileName);
 
+		DLAppServiceUtil.getFileEntryByExternalReferenceCode()
+
 		FileEntry fileEntry = DLAppServiceUtil.addFileEntry(
 			null, serviceContext.getScopeGroupId(),
 			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, uniqueFileName,
