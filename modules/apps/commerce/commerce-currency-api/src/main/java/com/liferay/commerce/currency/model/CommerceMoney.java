@@ -21,6 +21,10 @@ public interface CommerceMoney {
 
 	public String format(Locale locale) throws PortalException;
 
+	public default String format(
+			Locale locale, BigDecimal pricingQuantity, String unitOfMeasureName)
+		throws PortalException { return null; }
+
 	public CommerceCurrency getCommerceCurrency();
 
 	public BigDecimal getPrice();

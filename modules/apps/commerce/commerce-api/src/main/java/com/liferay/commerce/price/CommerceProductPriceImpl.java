@@ -40,6 +40,10 @@ public class CommerceProductPriceImpl implements CommerceProductPrice {
 		return _finalPriceWithTaxAmount;
 	}
 
+	public CommerceMoney getPricingQuantityUnitPrice() {
+		return _pricingQuantityUnitPrice;
+	}
+
 	@Override
 	public BigDecimal getQuantity() {
 		return _quantity;
@@ -117,6 +121,12 @@ public class CommerceProductPriceImpl implements CommerceProductPrice {
 		_priceOnApplication = priceOnApplication;
 	}
 
+	public void setPricingQuantityUnitPrice(
+		CommerceMoney pricingQuantityUnitPrice) {
+
+		_pricingQuantityUnitPrice = pricingQuantityUnitPrice;
+	}
+
 	public void setQuantity(BigDecimal quantity) {
 		_quantity = quantity;
 	}
@@ -156,25 +166,17 @@ public class CommerceProductPriceImpl implements CommerceProductPrice {
 		_unitPromoPriceWithTaxAmount = unitPromoPriceWithTaxAmount;
 	}
 
-	public void setPricingQuantityUnitPrice(CommerceMoney pricingQuantityUnitPrice) {
-		_pricingQuantityUnitPrice = pricingQuantityUnitPrice;
-	}
-
-	public CommerceMoney getPricingQuantityUnitPrice() {
-		return _pricingQuantityUnitPrice;
-	}
-
 	private CommerceDiscountValue _commerceDiscountValue;
 	private CommerceDiscountValue _commerceDiscountValueWithTaxAmount;
 	private long _commercePriceListId;
 	private CommerceMoney _finalPrice;
 	private CommerceMoney _finalPriceWithTaxAmount;
 	private boolean _priceOnApplication;
+	private CommerceMoney _pricingQuantityUnitPrice;
 	private BigDecimal _quantity;
 	private BigDecimal _taxValue;
 	private BigDecimal _unitOfMeasureIncrementalOrderQuantity;
 	private String _unitOfMeasureKey;
-	private CommerceMoney _pricingQuantityUnitPrice;
 	private CommerceMoney _unitPrice;
 	private CommerceMoney _unitPriceWithTaxAmount;
 	private CommerceMoney _unitPromoPrice;

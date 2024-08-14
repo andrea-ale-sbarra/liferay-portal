@@ -25,6 +25,8 @@ public interface CommerceProductPrice {
 
 	public CommerceMoney getFinalPriceWithTaxAmount();
 
+	public CommerceMoney getPricingQuantityUnitPrice();
+
 	public BigDecimal getQuantity();
 
 	public BigDecimal getTaxValue();
@@ -41,12 +43,11 @@ public interface CommerceProductPrice {
 
 	public CommerceMoney getUnitPromoPriceWithTaxAmount();
 
-	public void setPricingQuantityUnitPrice(CommerceMoney pricingQuantityUnitPrice);
-
-	public CommerceMoney getPricingQuantityUnitPrice();
-
 	public boolean isPriceOnApplication();
 
 	public void setPriceOnApplication(boolean priceOnApplication);
+
+	public void setPricingQuantityUnitPrice(
+		CommerceMoney pricingQuantityUnitPrice);
 
 }

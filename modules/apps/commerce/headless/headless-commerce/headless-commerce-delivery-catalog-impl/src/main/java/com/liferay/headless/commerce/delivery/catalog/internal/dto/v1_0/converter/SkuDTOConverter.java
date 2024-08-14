@@ -64,6 +64,8 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.settings.SystemSettingsLocator;
+import com.liferay.portal.kernel.util.BigDecimalUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -207,7 +209,10 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 									skuOption.toString()))),
 						skuDTOConverterContext.getLocale(),
 						skuDTOConverterContext.getQuantity(),
-						skuDTOConverterContext.getUnitOfMeasureKey()));
+						_cpInstanceUnitOfMeasureLocalService.
+							getCPInstanceUnitOfMeasure(
+								cpInstance.getCPInstanceId(),
+								skuDTOConverterContext.getUnitOfMeasureKey())));
 				setProductConfiguration(
 					() -> _productConfigurationDTOConverter.toDTO(
 						new DefaultDTOConverterContext(
@@ -380,7 +385,7 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 	private Price _getPrice(
 			CommerceContext commerceContext, CPInstance cpInstance,
 			String formFieldValues, Locale locale, BigDecimal quantity,
-			String unitOfMeasureKey)
+			CPInstanceUnitOfMeasure cpInstanceUnitOfMeasure)
 		throws Exception {
 
 		CommerceProductPrice commerceProductPrice =
@@ -390,7 +395,8 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 					_commerceOptionValueHelper.
 						getCPDefinitionCommerceOptionValues(
 							cpInstance.getCPDefinitionId(), formFieldValues),
-					cpInstance.getCPInstanceId(), quantity, unitOfMeasureKey));
+					cpInstance.getCPInstanceId(), quantity,
+					cpInstanceUnitOfMeasure.getKey()));
 
 		if (commerceProductPrice == null) {
 			return new Price();
@@ -410,13 +416,23 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 		CommerceMoney pricingQuantityUnitPriceCommerceMoney =
 			commerceProductPrice.getPricingQuantityUnitPrice();
 
-		BigDecimal pricingQuantityUnitPrice = pricingQuantityUnitPriceCommerceMoney.getPrice();
+		BigDecimal pricingQuantityUnitPrice =
+			pricingQuantityUnitPriceCommerceMoney.getPrice();
 
 		Price price = new Price() {
 			{
 				setCurrency(() -> commerceCurrency.getName(locale));
 				setPricingQuantityPriceFormatted(
-					pricingQuantityUnitPriceCommerceMoney.format(locale) + " / " + unitOfMeasureKey );
+					() -> {
+						BigDecimal pricingQuantity = BigDecimalUtil.get(cpInstanceUnitOfMeasure.getPricingQuantity(), BigDecimal.ZERO);
+							if(BigDecimalUtil.lte(pricingQuantity, BigDecimal.ZERO)) {
+								return null;
+							}
+					
+					return pricingQuantityUnitPriceCommerceMoney.format(
+						locale, pricingQuantity,
+						cpInstanceUnitOfMeasure.getName(locale));
+					});
 				setPricingQuantityPrice(pricingQuantityUnitPrice::doubleValue);
 				setPrice(unitPrice::doubleValue);
 				setPriceFormatted(() -> unitPriceCommerceMoney.format(locale));
@@ -552,7 +568,10 @@ public class SkuDTOConverter implements DTOConverter<CPInstance, Sku> {
 												toString()))),
 							skuDTOConverterContext.getLocale(),
 							skuDTOConverterContext.getQuantity(),
-							replacementUnitOfMeasureKey);
+							_cpInstanceUnitOfMeasureLocalService.
+								getCPInstanceUnitOfMeasure(
+									replacementCPInstance.getCPInstanceId(),
+									replacementUnitOfMeasureKey));
 					});
 				setProductConfiguration(
 					() -> {
