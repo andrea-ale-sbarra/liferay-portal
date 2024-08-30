@@ -6,6 +6,9 @@
 package com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.converter;
 
 import com.liferay.account.constants.AccountConstants;
+import com.liferay.account.model.AccountGroup;
+import com.liferay.account.service.AccountGroupLocalService;
+import com.liferay.account.service.AccountGroupRelLocalService;
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetTag;
 import com.liferay.asset.kernel.model.AssetVocabulary;
@@ -16,17 +19,23 @@ import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CProduct;
 import com.liferay.commerce.product.model.CommerceCatalog;
+import com.liferay.commerce.product.model.CommerceChannel;
 import com.liferay.commerce.product.service.CPDefinitionService;
+import com.liferay.commerce.product.service.CommerceChannelRelService;
 import com.liferay.commerce.product.type.CPType;
 import com.liferay.commerce.product.type.CPTypeRegistry;
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Category;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Product;
+import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductAccountGroup;
+import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductChannel;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Status;
 import com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.util.CustomFieldsUtil;
 import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.language.LanguageResources;
@@ -132,7 +141,11 @@ public class ProductDTOConverter
 						cpDefinition.getNameMap()));
 				setProductAccountGroupFilter(
 					cpDefinition::isAccountGroupFilterEnabled);
+				setProductAccountGroups(
+					_getAccountGroups(cpDefinition.getCPDefinitionId()));
 				setProductChannelFilter(cpDefinition::isChannelFilterEnabled);
+				setProductChannels(
+					_getProductChannels(cpDefinition.getCPDefinitionId()));
 				setProductId(cProduct::getCProductId);
 				setProductStatus(cpDefinition::getStatus);
 				setProductType(cpType::getName);
@@ -179,6 +192,29 @@ public class ProductDTOConverter
 		};
 	}
 
+	private ProductAccountGroup[] _getAccountGroups(long cpDefinitionId)
+		throws PortalException {
+
+		return TransformUtil.transformToArray(
+			_accountGroupRelLocalService.getAccountGroupRels(
+				CPDefinition.class.getName(), cpDefinitionId, null,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS),
+			accountGroupRel -> {
+				AccountGroup accountGroup =
+					_accountGroupLocalService.getAccountGroup(
+						accountGroupRel.getAccountGroupId());
+
+				return new ProductAccountGroup() {
+					{
+						accountGroupId = accountGroup.getAccountGroupId();
+						externalReferenceCode =
+							accountGroup.getExternalReferenceCode();
+					}
+				};
+			},
+			ProductAccountGroup.class);
+	}
+
 	private long _getCommerceCatalogId(CPDefinition cpDefinition) {
 		CommerceCatalog commerceCatalog = cpDefinition.getCommerceCatalog();
 
@@ -191,6 +227,28 @@ public class ProductDTOConverter
 
 	private CPType _getCPType(String name) {
 		return _cpTypeRegistry.getCPType(name);
+	}
+
+	private ProductChannel[] _getProductChannels(long cpDefinitionId)
+		throws PortalException {
+
+		return TransformUtil.transformToArray(
+			_commerceChannelRelService.getCommerceChannelRels(
+				CPDefinition.class.getName(), cpDefinitionId, null,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS),
+			commerceChannelRel -> {
+				CommerceChannel commerceChannel =
+					commerceChannelRel.getCommerceChannel();
+
+				return new ProductChannel() {
+					{
+						channelId = commerceChannel.getCommerceChannelId();
+						externalReferenceCode =
+							commerceChannel.getExternalReferenceCode();
+					}
+				};
+			},
+			ProductChannel.class);
 	}
 
 	private String _getSku(CPDefinition cpDefinition, Locale locale) {
@@ -246,6 +304,12 @@ public class ProductDTOConverter
 	}
 
 	@Reference
+	private AccountGroupLocalService _accountGroupLocalService;
+
+	@Reference
+	private AccountGroupRelLocalService _accountGroupRelLocalService;
+
+	@Reference
 	private AssetCategoryLocalService _assetCategoryLocalService;
 
 	@Reference
@@ -253,6 +317,9 @@ public class ProductDTOConverter
 
 	@Reference
 	private AssetVocabularyLocalService _assetVocabularyLocalService;
+
+	@Reference
+	private CommerceChannelRelService _commerceChannelRelService;
 
 	@Reference
 	private CPDefinitionService _cpDefinitionService;
