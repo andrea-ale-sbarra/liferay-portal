@@ -14,6 +14,7 @@ import com.liferay.headless.commerce.delivery.cart.internal.resource.v1_0.CartRe
 import com.liferay.headless.commerce.delivery.cart.internal.resource.v1_0.CartTransitionResourceImpl;
 import com.liferay.headless.commerce.delivery.cart.internal.resource.v1_0.PaymentMethodResourceImpl;
 import com.liferay.headless.commerce.delivery.cart.internal.resource.v1_0.ShippingMethodResourceImpl;
+import com.liferay.headless.commerce.delivery.cart.internal.resource.v1_0.TermResourceImpl;
 import com.liferay.headless.commerce.delivery.cart.resource.v1_0.AddressResource;
 import com.liferay.headless.commerce.delivery.cart.resource.v1_0.CartCommentResource;
 import com.liferay.headless.commerce.delivery.cart.resource.v1_0.CartItemResource;
@@ -21,6 +22,7 @@ import com.liferay.headless.commerce.delivery.cart.resource.v1_0.CartResource;
 import com.liferay.headless.commerce.delivery.cart.resource.v1_0.CartTransitionResource;
 import com.liferay.headless.commerce.delivery.cart.resource.v1_0.PaymentMethodResource;
 import com.liferay.headless.commerce.delivery.cart.resource.v1_0.ShippingMethodResource;
+import com.liferay.headless.commerce.delivery.cart.resource.v1_0.TermResource;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.vulcan.graphql.servlet.ServletData;
 
@@ -73,6 +75,8 @@ public class ServletDataImpl implements ServletData {
 			_paymentMethodResourceComponentServiceObjects);
 		Query.setShippingMethodResourceComponentServiceObjects(
 			_shippingMethodResourceComponentServiceObjects);
+		Query.setTermResourceComponentServiceObjects(
+			_termResourceComponentServiceObjects);
 	}
 
 	public String getApplicationName() {
@@ -402,12 +406,30 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							ShippingMethodResourceImpl.class,
 							"getCartShippingMethodsPage"));
+					put(
+						"query#cartDeliveryTerms",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getCartDeliveryTermsPage"));
+					put(
+						"query#cartPaymentTerms",
+						new ObjectValuePair<>(
+							TermResourceImpl.class, "getCartPaymentTermsPage"));
 
 					put(
 						"query#Cart.paymentMethods",
 						new ObjectValuePair<>(
 							PaymentMethodResourceImpl.class,
 							"getCartPaymentMethodsPage"));
+					put(
+						"query#Cart.paymentTerms",
+						new ObjectValuePair<>(
+							TermResourceImpl.class, "getCartPaymentTermsPage"));
+					put(
+						"query#Cart.deliveryTerms",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getCartDeliveryTermsPage"));
 					put(
 						"query#Cart.shippingMethods",
 						new ObjectValuePair<>(
@@ -520,5 +542,9 @@ public class ServletDataImpl implements ServletData {
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<AddressResource>
 		_addressResourceComponentServiceObjects;
+
+	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
+	private ComponentServiceObjects<TermResource>
+		_termResourceComponentServiceObjects;
 
 }
