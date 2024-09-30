@@ -9,7 +9,9 @@ import ClayModal from '@clayui/modal';
 import React, {useState} from 'react';
 
 import InfoBoxModalDateInput from './info_box/modal/InfoBoxModalDateInput';
+import InfoBoxModalDeliveryTermInput from './info_box/modal/InfoBoxModalDeliveryTermInput';
 import InfoBoxModalPaymentMethodInput from './info_box/modal/InfoBoxModalPaymentMethodInput';
+import InfoBoxModalPaymentTermInput from './info_box/modal/InfoBoxModalPaymentTermInput';
 import InfoBoxModalShippingMethodInput from './info_box/modal/InfoBoxModalShippingMethodInput';
 import InfoBoxModalTextInput from './info_box/modal/InfoBoxModalTextInput';
 
@@ -18,8 +20,16 @@ const getInputRendered = (field, fieldValueType) => {
 		return InfoBoxModalDateInput;
 	}
 
+	if (field === 'deliveryTerm') {
+		return InfoBoxModalDeliveryTermInput;
+	}
+
 	if (field === 'paymentMethod') {
 		return InfoBoxModalPaymentMethodInput;
+	}
+
+	if (field === 'paymentTerm') {
+		return InfoBoxModalPaymentTermInput;
 	}
 
 	if (field === 'shippingMethod') {

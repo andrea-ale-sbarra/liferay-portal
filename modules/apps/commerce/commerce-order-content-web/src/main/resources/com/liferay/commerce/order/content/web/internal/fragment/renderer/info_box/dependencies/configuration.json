@@ -40,6 +40,10 @@
 								"value": "channelName"
 							},
 							{
+								"label": "delivery-term",
+								"value": "deliveryTerm"
+							},
+							{
 								"label": "order-date",
 								"value": "orderDate"
 							},
@@ -50,6 +54,10 @@
 							{
 								"label": "payment-method",
 								"value": "paymentMethod"
+							},
+							{
+								"label": "payment-term",
+								"value": "paymentTerm"
 							},
 							{
 								"label": "purchase-order-number",

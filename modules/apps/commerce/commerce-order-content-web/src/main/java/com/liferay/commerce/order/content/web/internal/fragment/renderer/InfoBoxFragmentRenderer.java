@@ -267,7 +267,19 @@ public class InfoBoxFragmentRenderer implements FragmentRenderer {
 			CommerceOrder commerceOrder, String field)
 		throws PortalException {
 
-		if (field.equals("paymentMethod")) {
+		if (field.equals("deliveryTerm")) {
+			long deliveryCommerceTermEntryId =
+				commerceOrder.getDeliveryCommerceTermEntryId();
+
+			if (deliveryCommerceTermEntryId == 0) {
+				return Collections.emptyMap();
+			}
+
+			return HashMapBuilder.<String, Object>put(
+				"value", deliveryCommerceTermEntryId
+			).build();
+		}
+		else if (field.equals("paymentMethod")) {
 			CommercePaymentMethod commercePaymentMethod =
 				_commercePaymentMethodRegistry.getCommercePaymentMethod(
 					commerceOrder.getCommercePaymentMethodKey());
@@ -290,6 +302,18 @@ public class InfoBoxFragmentRenderer implements FragmentRenderer {
 			}
 
 			return Collections.emptyMap();
+		}
+		else if (field.equals("paymentTerm")) {
+			long paymentCommerceTermEntryId =
+				commerceOrder.getPaymentCommerceTermEntryId();
+
+			if (paymentCommerceTermEntryId == 0) {
+				return Collections.emptyMap();
+			}
+
+			return HashMapBuilder.<String, Object>put(
+				"value", paymentCommerceTermEntryId
+			).build();
 		}
 		else if (field.equals("shippingMethod")) {
 			CommerceShippingMethod commerceShippingMethod =
@@ -402,6 +426,9 @@ public class InfoBoxFragmentRenderer implements FragmentRenderer {
 
 			return commerceChannel.getName();
 		}
+		else if (field.equals("deliveryTerm")) {
+			return commerceOrder.getDeliveryCommerceTermEntryName();
+		}
 		else if (field.equals("orderDate")) {
 			DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat(
 				DateTimeFormatterBuilder.getLocalizedDateTimePattern(
@@ -437,6 +464,9 @@ public class InfoBoxFragmentRenderer implements FragmentRenderer {
 			if (commercePaymentIntegration != null) {
 				return commercePaymentIntegration.getName(locale);
 			}
+		}
+		else if (field.equals("paymentTerm")) {
+			return commerceOrder.getPaymentCommerceTermEntryName();
 		}
 		else if (field.equals("purchaseOrderNumber")) {
 			return commerceOrder.getPurchaseOrderNumber();
