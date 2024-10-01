@@ -1085,7 +1085,7 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 
 		CommercePaymentMethodGroupRel commercePaymentMethodGroupRel =
 			_commercePaymentMethodGroupRelLocalService.
-				getCommercePaymentMethodGroupRel(
+				fetchCommercePaymentMethodGroupRel(
 					commerceOrder.getGroupId(),
 					commerceOrder.getCommercePaymentMethodKey());
 
