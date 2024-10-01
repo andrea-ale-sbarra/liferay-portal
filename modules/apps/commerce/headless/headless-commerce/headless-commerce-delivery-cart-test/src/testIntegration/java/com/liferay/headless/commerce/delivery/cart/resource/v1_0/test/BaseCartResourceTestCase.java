@@ -1760,6 +1760,14 @@ public abstract class BaseCartResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("deliveryTerm", additionalAssertFieldName)) {
+				if (cart.getDeliveryTerm() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("errorMessages", additionalAssertFieldName)) {
 				if (cart.getErrorMessages() == null) {
 					valid = false;
@@ -1887,6 +1895,14 @@ public abstract class BaseCartResourceTestCase {
 					"paymentStatusLabel", additionalAssertFieldName)) {
 
 				if (cart.getPaymentStatusLabel() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("paymentTerm", additionalAssertFieldName)) {
+				if (cart.getPaymentTerm() == null) {
 					valid = false;
 				}
 
@@ -2248,6 +2264,16 @@ public abstract class BaseCartResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("deliveryTerm", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						cart1.getDeliveryTerm(), cart2.getDeliveryTerm())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("errorMessages", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
 						cart1.getErrorMessages(), cart2.getErrorMessages())) {
@@ -2415,6 +2441,16 @@ public abstract class BaseCartResourceTestCase {
 				if (!Objects.deepEquals(
 						cart1.getPaymentStatusLabel(),
 						cart2.getPaymentStatusLabel())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("paymentTerm", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						cart1.getPaymentTerm(), cart2.getPaymentTerm())) {
 
 					return false;
 				}
@@ -2963,6 +2999,11 @@ public abstract class BaseCartResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
+		if (entityFieldName.equals("deliveryTerm")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
 		if (entityFieldName.equals("errorMessages")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -3383,6 +3424,11 @@ public abstract class BaseCartResourceTestCase {
 			return sb.toString();
 		}
 
+		if (entityFieldName.equals("paymentTerm")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
 		if (entityFieldName.equals("printedNote")) {
 			Object object = cart.getPrintedNote();
 
@@ -3777,6 +3823,7 @@ public abstract class BaseCartResourceTestCase {
 				createDate = RandomTestUtil.nextDate();
 				currencyCode = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
+				deliveryTerm = RandomTestUtil.randomLong();
 				externalReferenceCode = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				id = RandomTestUtil.randomLong();
@@ -3795,6 +3842,7 @@ public abstract class BaseCartResourceTestCase {
 				paymentStatus = RandomTestUtil.randomInt();
 				paymentStatusLabel = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
+				paymentTerm = RandomTestUtil.randomLong();
 				printedNote = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				purchaseOrderNumber = StringUtil.toLowerCase(

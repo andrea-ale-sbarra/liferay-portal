@@ -206,6 +206,16 @@ public class CartSerDes {
 			sb.append(_toJSON(cart.getCustomFields()));
 		}
 
+		if (cart.getDeliveryTerm() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"deliveryTerm\": ");
+
+			sb.append(cart.getDeliveryTerm());
+		}
+
 		if (cart.getErrorMessages() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -421,6 +431,16 @@ public class CartSerDes {
 			sb.append(_escape(cart.getPaymentStatusLabel()));
 
 			sb.append("\"");
+		}
+
+		if (cart.getPaymentTerm() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"paymentTerm\": ");
+
+			sb.append(cart.getPaymentTerm());
 		}
 
 		if (cart.getPrintedNote() != null) {
@@ -693,6 +713,13 @@ public class CartSerDes {
 			map.put("customFields", String.valueOf(cart.getCustomFields()));
 		}
 
+		if (cart.getDeliveryTerm() == null) {
+			map.put("deliveryTerm", null);
+		}
+		else {
+			map.put("deliveryTerm", String.valueOf(cart.getDeliveryTerm()));
+		}
+
 		if (cart.getErrorMessages() == null) {
 			map.put("errorMessages", null);
 		}
@@ -818,6 +845,13 @@ public class CartSerDes {
 			map.put(
 				"paymentStatusLabel",
 				String.valueOf(cart.getPaymentStatusLabel()));
+		}
+
+		if (cart.getPaymentTerm() == null) {
+			map.put("paymentTerm", null);
+		}
+		else {
+			map.put("paymentTerm", String.valueOf(cart.getPaymentTerm()));
 		}
 
 		if (cart.getPrintedNote() == null) {
@@ -979,6 +1013,9 @@ public class CartSerDes {
 			else if (Objects.equals(jsonParserFieldName, "customFields")) {
 				return true;
 			}
+			else if (Objects.equals(jsonParserFieldName, "deliveryTerm")) {
+				return false;
+			}
 			else if (Objects.equals(jsonParserFieldName, "errorMessages")) {
 				return false;
 			}
@@ -1036,6 +1073,9 @@ public class CartSerDes {
 			else if (Objects.equals(
 						jsonParserFieldName, "paymentStatusLabel")) {
 
+				return false;
+			}
+			else if (Objects.equals(jsonParserFieldName, "paymentTerm")) {
 				return false;
 			}
 			else if (Objects.equals(jsonParserFieldName, "printedNote")) {
@@ -1174,6 +1214,12 @@ public class CartSerDes {
 					cart.setCustomFields((Map<String, ?>)jsonParserFieldValue);
 				}
 			}
+			else if (Objects.equals(jsonParserFieldName, "deliveryTerm")) {
+				if (jsonParserFieldValue != null) {
+					cart.setDeliveryTerm(
+						Long.valueOf((String)jsonParserFieldValue));
+				}
+			}
 			else if (Objects.equals(jsonParserFieldName, "errorMessages")) {
 				if (jsonParserFieldValue != null) {
 					cart.setErrorMessages(
@@ -1281,6 +1327,12 @@ public class CartSerDes {
 
 				if (jsonParserFieldValue != null) {
 					cart.setPaymentStatusLabel((String)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "paymentTerm")) {
+				if (jsonParserFieldValue != null) {
+					cart.setPaymentTerm(
+						Long.valueOf((String)jsonParserFieldValue));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "printedNote")) {

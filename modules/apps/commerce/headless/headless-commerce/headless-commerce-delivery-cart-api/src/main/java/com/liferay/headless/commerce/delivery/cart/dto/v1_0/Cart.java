@@ -555,6 +555,47 @@ public class Cart implements Serializable {
 	private Supplier<Map<String, ?>> _customFieldsSupplier;
 
 	@Schema
+	public Long getDeliveryTerm() {
+		if (_deliveryTermSupplier != null) {
+			deliveryTerm = _deliveryTermSupplier.get();
+
+			_deliveryTermSupplier = null;
+		}
+
+		return deliveryTerm;
+	}
+
+	public void setDeliveryTerm(Long deliveryTerm) {
+		this.deliveryTerm = deliveryTerm;
+
+		_deliveryTermSupplier = null;
+	}
+
+	@JsonIgnore
+	public void setDeliveryTerm(
+		UnsafeSupplier<Long, Exception> deliveryTermUnsafeSupplier) {
+
+		_deliveryTermSupplier = () -> {
+			try {
+				return deliveryTermUnsafeSupplier.get();
+			}
+			catch (RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	protected Long deliveryTerm;
+
+	@JsonIgnore
+	private Supplier<Long> _deliveryTermSupplier;
+
+	@Schema
 	public String[] getErrorMessages() {
 		if (_errorMessagesSupplier != null) {
 			errorMessages = _errorMessagesSupplier.get();
@@ -1212,6 +1253,47 @@ public class Cart implements Serializable {
 
 	@JsonIgnore
 	private Supplier<String> _paymentStatusLabelSupplier;
+
+	@Schema
+	public Long getPaymentTerm() {
+		if (_paymentTermSupplier != null) {
+			paymentTerm = _paymentTermSupplier.get();
+
+			_paymentTermSupplier = null;
+		}
+
+		return paymentTerm;
+	}
+
+	public void setPaymentTerm(Long paymentTerm) {
+		this.paymentTerm = paymentTerm;
+
+		_paymentTermSupplier = null;
+	}
+
+	@JsonIgnore
+	public void setPaymentTerm(
+		UnsafeSupplier<Long, Exception> paymentTermUnsafeSupplier) {
+
+		_paymentTermSupplier = () -> {
+			try {
+				return paymentTermUnsafeSupplier.get();
+			}
+			catch (RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	protected Long paymentTerm;
+
+	@JsonIgnore
+	private Supplier<Long> _paymentTermSupplier;
 
 	@Schema
 	public String getPrintedNote() {
@@ -1963,6 +2045,18 @@ public class Cart implements Serializable {
 			sb.append(_toJSON(customFields));
 		}
 
+		Long deliveryTerm = getDeliveryTerm();
+
+		if (deliveryTerm != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"deliveryTerm\": ");
+
+			sb.append(deliveryTerm);
+		}
+
 		String[] errorMessages = getErrorMessages();
 
 		if (errorMessages != null) {
@@ -2214,6 +2308,18 @@ public class Cart implements Serializable {
 			sb.append(_escape(paymentStatusLabel));
 
 			sb.append("\"");
+		}
+
+		Long paymentTerm = getPaymentTerm();
+
+		if (paymentTerm != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"paymentTerm\": ");
+
+			sb.append(paymentTerm);
 		}
 
 		String printedNote = getPrintedNote();
