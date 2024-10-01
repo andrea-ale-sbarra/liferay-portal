@@ -30,10 +30,14 @@ import com.liferay.commerce.model.CommerceAddress;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderItem;
 import com.liferay.commerce.model.CommerceOrderType;
+import com.liferay.commerce.model.CommerceShippingEngine;
 import com.liferay.commerce.model.CommerceShippingMethod;
+import com.liferay.commerce.model.CommerceShippingOption;
 import com.liferay.commerce.order.CommerceOrderValidatorRegistry;
 import com.liferay.commerce.order.CommerceOrderValidatorResult;
 import com.liferay.commerce.order.engine.CommerceOrderEngine;
+import com.liferay.commerce.payment.model.CommercePaymentMethodGroupRel;
+import com.liferay.commerce.payment.service.CommercePaymentMethodGroupRelLocalService;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CommerceChannel;
 import com.liferay.commerce.product.service.CPInstanceLocalService;
@@ -43,9 +47,14 @@ import com.liferay.commerce.service.CommerceOrderItemService;
 import com.liferay.commerce.service.CommerceOrderService;
 import com.liferay.commerce.service.CommerceOrderTypeService;
 import com.liferay.commerce.service.CommerceShippingMethodLocalService;
+import com.liferay.commerce.shipping.engine.fixed.model.CommerceShippingFixedOption;
+import com.liferay.commerce.shipping.engine.fixed.service.CommerceShippingFixedOptionLocalService;
+import com.liferay.commerce.term.model.CommerceTermEntry;
+import com.liferay.commerce.term.service.CommerceTermEntryLocalService;
 import com.liferay.commerce.util.CommerceAccountHelper;
 import com.liferay.commerce.util.CommerceCheckoutStep;
 import com.liferay.commerce.util.CommerceCheckoutStepRegistry;
+import com.liferay.commerce.util.CommerceShippingEngineRegistry;
 import com.liferay.headless.commerce.core.util.DateConfig;
 import com.liferay.headless.commerce.core.util.ExpandoUtil;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
@@ -87,6 +96,7 @@ import com.liferay.portal.kernel.util.BigDecimalUtil;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -815,6 +825,42 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 		return commerceOrderType.getCommerceOrderTypeId();
 	}
 
+	private CommerceShippingFixedOption _getCommerceShippingFixedOption(
+			CommerceContext commerceContext, CommerceOrder commerceOrder,
+			String commerceShippingMethodEngineKey)
+		throws Exception {
+
+		CommerceShippingEngine commerceShippingEngine =
+			_commerceShippingEngineRegistry.getCommerceShippingEngine(
+				commerceShippingMethodEngineKey);
+
+		List<CommerceShippingOption> commerceShippingOptions =
+			commerceShippingEngine.getEnabledCommerceShippingOptions(
+				commerceContext, commerceOrder,
+				contextAcceptLanguage.getPreferredLocale());
+
+		CommerceShippingFixedOption commerceShippingFixedOption = null;
+
+		for (CommerceShippingOption commerceShippingOption :
+				commerceShippingOptions) {
+
+			if (StringUtil.equals(
+					commerceOrder.getShippingOptionName(),
+					commerceShippingOption.getKey())) {
+
+				commerceShippingFixedOption =
+					_commerceShippingFixedOptionLocalService.
+						fetchCommerceShippingFixedOption(
+							commerceOrder.getCompanyId(),
+							commerceShippingOption.getKey());
+
+				break;
+			}
+		}
+
+		return commerceShippingFixedOption;
+	}
+
 	private String _getOrderConfirmationCheckoutStepURL(
 			CommerceOrder commerceOrder)
 		throws Exception {
@@ -996,6 +1042,73 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 		themeDisplay.setScopeGroupId(commerceChannel.getSiteGroupId());
 	}
 
+	private boolean _isNotValidDeliveryTerm(
+			CommerceContext commerceContext, CommerceOrder commerceOrder,
+			CommerceShippingMethod commerceShippingMethod, long deliveryTerm)
+		throws Exception {
+
+		if ((deliveryTerm == 0) || !commerceOrder.isOpen() ||
+			(commerceShippingMethod == null)) {
+
+			return true;
+		}
+
+		CommerceShippingFixedOption commerceShippingFixedOption =
+			_getCommerceShippingFixedOption(
+				commerceContext, commerceOrder,
+				commerceShippingMethod.getEngineKey());
+
+		if (commerceShippingFixedOption == null) {
+			return true;
+		}
+
+		List<CommerceTermEntry> deliveryCommerceTermEntries =
+			_commerceTermEntryLocalService.getDeliveryCommerceTermEntries(
+				commerceOrder.getCompanyId(),
+				commerceOrder.getCommerceOrderTypeId(),
+				commerceShippingFixedOption.getCommerceShippingFixedOptionId());
+
+		for (CommerceTermEntry commerceTermEntry :
+				deliveryCommerceTermEntries) {
+
+			if (commerceTermEntry.getCommerceTermEntryId() == deliveryTerm) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private boolean _isNotValidPaymentTerm(
+			CommerceOrder commerceOrder, long paymentTerm)
+		throws Exception {
+
+		CommercePaymentMethodGroupRel commercePaymentMethodGroupRel =
+			_commercePaymentMethodGroupRelLocalService.
+				getCommercePaymentMethodGroupRel(
+					commerceOrder.getGroupId(),
+					commerceOrder.getCommercePaymentMethodKey());
+
+		if (commercePaymentMethodGroupRel == null) {
+			return true;
+		}
+
+		List<CommerceTermEntry> paymentCommerceTermEntries =
+			_commerceTermEntryLocalService.getPaymentCommerceTermEntries(
+				commerceOrder.getCompanyId(),
+				commerceOrder.getCommerceOrderTypeId(),
+				commercePaymentMethodGroupRel.
+					getCommercePaymentMethodGroupRelId());
+
+		for (CommerceTermEntry commerceTermEntry : paymentCommerceTermEntries) {
+			if (commerceTermEntry.getCommerceTermEntryId() == paymentTerm) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	private Cart _toCart(CommerceOrder commerceOrder) throws Exception {
 		return _cartDTOConverter.toDTO(
 			new DefaultDTOConverterContext(
@@ -1146,6 +1259,25 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 				commerceOrder.getPrimaryKey(), customFields);
 		}
 
+		long deliveryTerm = GetterUtil.getLong(cart.getDeliveryTerm());
+
+		if (_isNotValidDeliveryTerm(
+				commerceContext, commerceOrder, commerceShippingMethod,
+				deliveryTerm)) {
+
+			deliveryTerm = 0;
+		}
+
+		long paymentTerm = GetterUtil.getLong(cart.getPaymentTerm());
+
+		if (_isNotValidPaymentTerm(commerceOrder, paymentTerm)) {
+			paymentTerm = 0;
+		}
+
+		_commerceOrderService.updateTermsAndConditions(
+			commerceOrder.getCommerceOrderId(), deliveryTerm, paymentTerm,
+			contextAcceptLanguage.getPreferredLanguageId());
+
 		_addOrUpdateNestedResources(cart, commerceOrder, commerceContext);
 	}
 
@@ -1202,8 +1334,22 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 	private CommerceOrderValidatorRegistry _commerceOrderValidatorRegistry;
 
 	@Reference
+	private CommercePaymentMethodGroupRelLocalService
+		_commercePaymentMethodGroupRelLocalService;
+
+	@Reference
+	private CommerceShippingEngineRegistry _commerceShippingEngineRegistry;
+
+	@Reference
+	private CommerceShippingFixedOptionLocalService
+		_commerceShippingFixedOptionLocalService;
+
+	@Reference
 	private CommerceShippingMethodLocalService
 		_commerceShippingMethodLocalService;
+
+	@Reference
+	private CommerceTermEntryLocalService _commerceTermEntryLocalService;
 
 	@Reference
 	private ConfigurationProvider _configurationProvider;

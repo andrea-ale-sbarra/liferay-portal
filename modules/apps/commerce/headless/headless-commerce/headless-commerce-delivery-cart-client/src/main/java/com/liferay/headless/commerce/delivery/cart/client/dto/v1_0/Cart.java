@@ -284,6 +284,27 @@ public class Cart implements Cloneable, Serializable {
 
 	protected Map<String, ?> customFields;
 
+	public Long getDeliveryTerm() {
+		return deliveryTerm;
+	}
+
+	public void setDeliveryTerm(Long deliveryTerm) {
+		this.deliveryTerm = deliveryTerm;
+	}
+
+	public void setDeliveryTerm(
+		UnsafeSupplier<Long, Exception> deliveryTermUnsafeSupplier) {
+
+		try {
+			deliveryTerm = deliveryTermUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Long deliveryTerm;
+
 	public String[] getErrorMessages() {
 		return errorMessages;
 	}
@@ -619,6 +640,27 @@ public class Cart implements Cloneable, Serializable {
 	}
 
 	protected String paymentStatusLabel;
+
+	public Long getPaymentTerm() {
+		return paymentTerm;
+	}
+
+	public void setPaymentTerm(Long paymentTerm) {
+		this.paymentTerm = paymentTerm;
+	}
+
+	public void setPaymentTerm(
+		UnsafeSupplier<Long, Exception> paymentTermUnsafeSupplier) {
+
+		try {
+			paymentTerm = paymentTermUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Long paymentTerm;
 
 	public String getPrintedNote() {
 		return printedNote;
