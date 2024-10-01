@@ -35,6 +35,8 @@ export class CommerceLayoutsPage {
 	readonly firstFragment: Locator;
 	readonly infoBoxButton: (label: string) => Locator;
 	readonly infoBoxCancelButton: Locator;
+	readonly infoBoxDeletePurchaseOrderDocumentButton: Locator;
+	readonly infoBoxEditPurchaseOrderDocumentButton: Locator;
 	readonly infoBoxFieldSelect: Locator;
 	readonly infoBoxLabelInput: Locator;
 	readonly infoBoxShippingMethodAlert: Locator;
@@ -150,6 +152,12 @@ export class CommerceLayoutsPage {
 			exact: true,
 			name: 'Cancel',
 		});
+		this.infoBoxDeletePurchaseOrderDocumentButton = page.getByTestId(
+			'purchaseOrderDocument-infoBoxDeleteButton'
+		);
+		this.infoBoxEditPurchaseOrderDocumentButton = page.getByTestId(
+			'purchaseOrderDocument-infoBoxEditButton'
+		);
 		this.infoBoxFieldSelect = page.getByLabel('Field', {exact: true});
 		this.infoBoxLabelInput = page.getByLabel('Label', {exact: true});
 		this.infoBoxShippingMethodAlert = page.getByText('are no available');
@@ -381,7 +389,9 @@ export class CommerceLayoutsPage {
 		await this.page
 			.getByRole('button', {exact: true, name: 'Blank'})
 			.click();
-		await this.page.getByLabel('Name').fill(displayPageTemplateName);
+		await this.page
+			.getByLabel('Name', {exact: true})
+			.fill(displayPageTemplateName);
 		await this.page
 			.getByLabel('Content Type')
 			.selectOption({label: contentTypeLabel});
