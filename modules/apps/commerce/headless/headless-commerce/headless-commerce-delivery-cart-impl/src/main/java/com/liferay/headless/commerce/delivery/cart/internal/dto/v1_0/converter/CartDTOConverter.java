@@ -25,10 +25,13 @@ import com.liferay.commerce.service.CommerceOrderService;
 import com.liferay.commerce.service.CommerceOrderTypeService;
 import com.liferay.commerce.util.CommerceShippingEngineRegistry;
 import com.liferay.expando.kernel.model.ExpandoBridge;
+import com.liferay.headless.commerce.delivery.cart.dto.v1_0.Address;
 import com.liferay.headless.commerce.delivery.cart.dto.v1_0.Cart;
 import com.liferay.headless.commerce.delivery.cart.dto.v1_0.Status;
 import com.liferay.headless.commerce.delivery.cart.dto.v1_0.Summary;
 import com.liferay.portal.kernel.language.Language;
+import com.liferay.portal.kernel.model.Country;
+import com.liferay.portal.kernel.model.Region;
 import com.liferay.portal.kernel.util.BigDecimalUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.language.LanguageResources;
@@ -80,6 +83,86 @@ public class CartDTOConverter implements DTOConverter<CommerceOrder, Cart> {
 				setAccount(commerceOrder::getCommerceAccountName);
 				setAccountId(commerceOrder::getCommerceAccountId);
 				setAuthor(commerceOrder::getUserName);
+				setBillingAddress(
+					() -> {
+						CommerceAddress billingCommerceAddress =
+							commerceOrder.getBillingAddress();
+
+						if (billingCommerceAddress == null) {
+							return null;
+						}
+
+						return new Address() {
+							{
+								setCity(billingCommerceAddress::getCity);
+								setCountry(
+									() -> {
+										Country billingCommerceAddressCountry =
+											billingCommerceAddress.getCountry();
+
+										return billingCommerceAddressCountry.
+											getName(locale);
+									});
+								setCountryISOCode(
+									() -> {
+										Country billingCommerceAddressCountry =
+											billingCommerceAddress.getCountry();
+
+										return billingCommerceAddressCountry.
+											getA2();
+									});
+								setDescription(
+									billingCommerceAddress::getDescription);
+								setExternalReferenceCode(
+									billingCommerceAddress::
+										getExternalReferenceCode);
+								setId(
+									billingCommerceAddress::
+										getCommerceAddressId);
+								setLatitude(
+									billingCommerceAddress::getLatitude);
+								setLongitude(
+									billingCommerceAddress::getLongitude);
+								setName(billingCommerceAddress::getName);
+								setPhoneNumber(
+									billingCommerceAddress::getPhoneNumber);
+								setRegion(
+									() -> {
+										Region billingCommerceAddressRegion =
+											billingCommerceAddress.getRegion();
+
+										if (billingCommerceAddressRegion ==
+												null) {
+
+											return null;
+										}
+
+										return billingCommerceAddressRegion.
+											getTitle(
+												_language.getLanguageId(
+													locale));
+									});
+								setRegionISOCode(
+									() -> {
+										Region billingCommerceAddressRegion =
+											billingCommerceAddress.getRegion();
+
+										if (billingCommerceAddressRegion ==
+												null) {
+
+											return null;
+										}
+
+										return billingCommerceAddressRegion.
+											getRegionCode();
+									});
+								setStreet1(billingCommerceAddress::getStreet1);
+								setStreet2(billingCommerceAddress::getStreet2);
+								setStreet3(billingCommerceAddress::getStreet3);
+								setZip(billingCommerceAddress::getZip);
+							}
+						};
+					});
 				setBillingAddressExternalReferenceCode(
 					() -> {
 						CommerceAddress billingCommerceAddress =
@@ -175,6 +258,88 @@ public class CartDTOConverter implements DTOConverter<CommerceOrder, Cart> {
 				setPurchaseOrderNumber(commerceOrder::getPurchaseOrderNumber);
 				setRequestedDeliveryDate(
 					commerceOrder::getRequestedDeliveryDate);
+				setShippingAddress(
+					() -> {
+						CommerceAddress shippingCommerceAddress =
+							commerceOrder.getBillingAddress();
+
+						if (shippingCommerceAddress == null) {
+							return null;
+						}
+
+						return new Address() {
+							{
+								setCity(shippingCommerceAddress::getCity);
+								setCountry(
+									() -> {
+										Country shippingCommerceAddressCountry =
+											shippingCommerceAddress.
+												getCountry();
+
+										return shippingCommerceAddressCountry.
+											getName(locale);
+									});
+								setCountryISOCode(
+									() -> {
+										Country shippingCommerceAddressCountry =
+											shippingCommerceAddress.
+												getCountry();
+
+										return shippingCommerceAddressCountry.
+											getA2();
+									});
+								setDescription(
+									shippingCommerceAddress::getDescription);
+								setExternalReferenceCode(
+									shippingCommerceAddress::
+										getExternalReferenceCode);
+								setId(
+									shippingCommerceAddress::
+										getCommerceAddressId);
+								setLatitude(
+									shippingCommerceAddress::getLatitude);
+								setLongitude(
+									shippingCommerceAddress::getLongitude);
+								setName(shippingCommerceAddress::getName);
+								setPhoneNumber(
+									shippingCommerceAddress::getPhoneNumber);
+								setRegion(
+									() -> {
+										Region shippingCommerceAddressRegion =
+											shippingCommerceAddress.getRegion();
+
+										if (shippingCommerceAddressRegion ==
+												null) {
+
+											return null;
+										}
+
+										return shippingCommerceAddressRegion.
+											getTitle(
+												_language.getLanguageId(
+													locale));
+									});
+								setRegionISOCode(
+									() -> {
+										Region shippingCommerceAddressRegion =
+											shippingCommerceAddress.getRegion();
+
+										if (shippingCommerceAddressRegion ==
+												null) {
+
+											return null;
+										}
+
+										return shippingCommerceAddressRegion.
+											getRegionCode();
+									});
+								setStreet1(shippingCommerceAddress::getStreet1);
+								setStreet2(shippingCommerceAddress::getStreet2);
+								setStreet3(shippingCommerceAddress::getStreet3);
+								setZip(shippingCommerceAddress::getZip);
+							}
+						};
+					});
 				setShippingAddressExternalReferenceCode(
 					() -> {
 						CommerceAddress shippingCommerceAddress =
