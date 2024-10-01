@@ -1080,7 +1080,7 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 	}
 
 	private boolean _isNotValidPaymentTerm(
-			CommerceOrder commerceOrder, long paymentTerm)
+			CommerceOrder commerceOrder, long paymentTermId)
 		throws Exception {
 
 		CommercePaymentMethodGroupRel commercePaymentMethodGroupRel =
@@ -1101,7 +1101,7 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 					getCommercePaymentMethodGroupRelId());
 
 		for (CommerceTermEntry commerceTermEntry : paymentCommerceTermEntries) {
-			if (commerceTermEntry.getCommerceTermEntryId() == paymentTerm) {
+			if (commerceTermEntry.getCommerceTermEntryId() == paymentTermId) {
 				return false;
 			}
 		}
