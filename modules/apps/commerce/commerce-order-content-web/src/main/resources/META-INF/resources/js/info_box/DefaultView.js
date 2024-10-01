@@ -7,7 +7,7 @@ import ClayButton from '@clayui/button';
 import {useModal} from '@clayui/modal';
 import {CommerceServiceProvider} from 'commerce-frontend-js';
 import {openToast, sub} from 'frontend-js-web';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import InfoBoxModal from '../InfoBoxModal';
 import {formatValue, isEditable} from './util';
@@ -72,6 +72,14 @@ const DefaultView = ({
 				});
 			});
 	};
+
+	useEffect(() => {
+		setHandleSubmit(() => async (event) => {
+			event.preventDefault();
+
+			await submitOrder(inputValue);
+		})
+	}, [inputValue]);
 
 	const [handleSubmit, setHandleSubmit] = useState(() => async (event) => {
 		event.preventDefault();
