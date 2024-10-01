@@ -147,6 +147,10 @@ components:
                 customFields:
                     additionalProperties: true
                     type: object
+                deliveryTerm:
+                    format: int64
+                    readOnly: true
+                    type: integer
                 errorMessages:
                     items:
                         type: string
@@ -201,6 +205,10 @@ components:
                 paymentStatusLabel:
                     readOnly: true
                     type: string
+                paymentTerm:
+                    format: int64
+                    readOnly: true
+                    type: integer
                 printedNote:
                     type: string
                 purchaseOrderNumber:
