@@ -557,6 +557,26 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {placedOrderExternalReferenceCodeDeliveryTerm(externalReferenceCode: ___){description, externalReferenceCode, id, name}}"}' -u 'test@liferay.com:test'
+	 */
+	@GraphQLField(
+		description = "Retrieve delivery term of the given Placed Order."
+	)
+	public Term placedOrderExternalReferenceCodeDeliveryTerm(
+			@GraphQLName("externalReferenceCode") String externalReferenceCode)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_termResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			termResource ->
+				termResource.getPlacedOrderExternalReferenceCodeDeliveryTerm(
+					externalReferenceCode));
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
 	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {placedOrderDeliveryTerm(placedOrderId: ___){description, externalReferenceCode, id, name}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField(
@@ -576,10 +596,30 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {placedOrderExternalReferenceCodePaymentTerm(externalReferenceCode: ___){description, externalReferenceCode, id, name}}"}' -u 'test@liferay.com:test'
+	 */
+	@GraphQLField(
+		description = "Retrieve payment term of the given Placed Order."
+	)
+	public Term placedOrderExternalReferenceCodePaymentTerm(
+			@GraphQLName("externalReferenceCode") String externalReferenceCode)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_termResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			termResource ->
+				termResource.getPlacedOrderExternalReferenceCodePaymentTerm(
+					externalReferenceCode));
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
 	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {placedOrderPaymentTerm(placedOrderId: ___){description, externalReferenceCode, id, name}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField(
-		description = "Retrieve delivery term of the given Placed Order."
+		description = "Retrieve payment term of the given Placed Order."
 	)
 	public Term placedOrderPaymentTerm(
 			@GraphQLName("placedOrderId") Long placedOrderId)
@@ -734,7 +774,7 @@ public class Query {
 		}
 
 		@GraphQLField(
-			description = "Retrieve delivery term of the given Placed Order."
+			description = "Retrieve payment term of the given Placed Order."
 		)
 		public Term paymentTerm() throws Exception {
 			return _applyComponentServiceObjects(
@@ -821,6 +861,31 @@ public class Query {
 					placedOrderCommentResource.
 						getPlacedOrderCommentByExternalReferenceCode(
 							_placedOrder.getExternalReferenceCode()));
+		}
+
+		private PlacedOrder _placedOrder;
+
+	}
+
+	@GraphQLTypeExtension(PlacedOrder.class)
+	public class GetPlacedOrderExternalReferenceCodePaymentTermTypeExtension {
+
+		public GetPlacedOrderExternalReferenceCodePaymentTermTypeExtension(
+			PlacedOrder placedOrder) {
+
+			_placedOrder = placedOrder;
+		}
+
+		@GraphQLField(
+			description = "Retrieve payment term of the given Placed Order."
+		)
+		public Term externalReferenceCodePaymentTerm() throws Exception {
+			return _applyComponentServiceObjects(
+				_termResourceComponentServiceObjects,
+				Query.this::_populateResourceContext,
+				termResource ->
+					termResource.getPlacedOrderExternalReferenceCodePaymentTerm(
+						_placedOrder.getExternalReferenceCode()));
 		}
 
 		private PlacedOrder _placedOrder;
@@ -954,6 +1019,32 @@ public class Query {
 				placedOrderItemResource ->
 					placedOrderItemResource.
 						getPlacedOrderItemByExternalReferenceCode(
+							_placedOrder.getExternalReferenceCode()));
+		}
+
+		private PlacedOrder _placedOrder;
+
+	}
+
+	@GraphQLTypeExtension(PlacedOrder.class)
+	public class GetPlacedOrderExternalReferenceCodeDeliveryTermTypeExtension {
+
+		public GetPlacedOrderExternalReferenceCodeDeliveryTermTypeExtension(
+			PlacedOrder placedOrder) {
+
+			_placedOrder = placedOrder;
+		}
+
+		@GraphQLField(
+			description = "Retrieve delivery term of the given Placed Order."
+		)
+		public Term externalReferenceCodeDeliveryTerm() throws Exception {
+			return _applyComponentServiceObjects(
+				_termResourceComponentServiceObjects,
+				Query.this::_populateResourceContext,
+				termResource ->
+					termResource.
+						getPlacedOrderExternalReferenceCodeDeliveryTerm(
 							_placedOrder.getExternalReferenceCode()));
 		}
 

@@ -414,6 +414,16 @@ public class ServletDataImpl implements ServletData {
 						"query#cartPaymentTerms",
 						new ObjectValuePair<>(
 							TermResourceImpl.class, "getCartPaymentTermsPage"));
+					put(
+						"query#cartExternalReferenceCodeDeliveryTerms",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getCartExternalReferenceCodeDeliveryTermsPage"));
+					put(
+						"query#cartExternalReferenceCodePaymentTerms",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getCartExternalReferenceCodePaymentTermsPage"));
 
 					put(
 						"query#Cart.paymentMethods",
@@ -491,6 +501,11 @@ public class ServletDataImpl implements ServletData {
 							CartTransitionResourceImpl.class,
 							"getCartCartTransitionsPage"));
 					put(
+						"query#Cart.externalReferenceCodeDeliveryTerms",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getCartExternalReferenceCodeDeliveryTermsPage"));
+					put(
 						"query#Cart.byExternalReferenceCodePaymentMethods",
 						new ObjectValuePair<>(
 							PaymentMethodResourceImpl.class,
@@ -500,6 +515,11 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							CartCommentResourceImpl.class,
 							"getCartByExternalReferenceCodeCommentsPage"));
+					put(
+						"query#Cart.externalReferenceCodePaymentTerms",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getCartExternalReferenceCodePaymentTermsPage"));
 					put(
 						"query#Cart.byExternalReferenceCodeShippingMethods",
 						new ObjectValuePair<>(

@@ -50,6 +50,14 @@ public interface TermResource {
 
 	public Page<Term> getCartPaymentTermsPage(Long cartId) throws Exception;
 
+	public Page<Term> getCartExternalReferenceCodeDeliveryTermsPage(
+			String externalReferenceCode)
+		throws Exception;
+
+	public Page<Term> getCartExternalReferenceCodePaymentTermsPage(
+			String externalReferenceCode)
+		throws Exception;
+
 	public default void setContextAcceptLanguage(
 		AcceptLanguage contextAcceptLanguage) {
 	}

@@ -306,6 +306,174 @@ public abstract class BaseTermResourceTestCase {
 		return null;
 	}
 
+	@Test
+	public void testGetCartExternalReferenceCodeDeliveryTermsPage()
+		throws Exception {
+
+		String externalReferenceCode =
+			testGetCartExternalReferenceCodeDeliveryTermsPage_getExternalReferenceCode();
+		String irrelevantExternalReferenceCode =
+			testGetCartExternalReferenceCodeDeliveryTermsPage_getIrrelevantExternalReferenceCode();
+
+		Page<Term> page =
+			termResource.getCartExternalReferenceCodeDeliveryTermsPage(
+				externalReferenceCode);
+
+		long totalCount = page.getTotalCount();
+
+		if (irrelevantExternalReferenceCode != null) {
+			Term irrelevantTerm =
+				testGetCartExternalReferenceCodeDeliveryTermsPage_addTerm(
+					irrelevantExternalReferenceCode, randomIrrelevantTerm());
+
+			page = termResource.getCartExternalReferenceCodeDeliveryTermsPage(
+				irrelevantExternalReferenceCode);
+
+			Assert.assertEquals(totalCount + 1, page.getTotalCount());
+
+			assertContains(irrelevantTerm, (List<Term>)page.getItems());
+			assertValid(
+				page,
+				testGetCartExternalReferenceCodeDeliveryTermsPage_getExpectedActions(
+					irrelevantExternalReferenceCode));
+		}
+
+		Term term1 = testGetCartExternalReferenceCodeDeliveryTermsPage_addTerm(
+			externalReferenceCode, randomTerm());
+
+		Term term2 = testGetCartExternalReferenceCodeDeliveryTermsPage_addTerm(
+			externalReferenceCode, randomTerm());
+
+		page = termResource.getCartExternalReferenceCodeDeliveryTermsPage(
+			externalReferenceCode);
+
+		Assert.assertEquals(totalCount + 2, page.getTotalCount());
+
+		assertContains(term1, (List<Term>)page.getItems());
+		assertContains(term2, (List<Term>)page.getItems());
+		assertValid(
+			page,
+			testGetCartExternalReferenceCodeDeliveryTermsPage_getExpectedActions(
+				externalReferenceCode));
+	}
+
+	protected Map<String, Map<String, String>>
+			testGetCartExternalReferenceCodeDeliveryTermsPage_getExpectedActions(
+				String externalReferenceCode)
+		throws Exception {
+
+		Map<String, Map<String, String>> expectedActions = new HashMap<>();
+
+		return expectedActions;
+	}
+
+	protected Term testGetCartExternalReferenceCodeDeliveryTermsPage_addTerm(
+			String externalReferenceCode, Term term)
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected String
+			testGetCartExternalReferenceCodeDeliveryTermsPage_getExternalReferenceCode()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected String
+			testGetCartExternalReferenceCodeDeliveryTermsPage_getIrrelevantExternalReferenceCode()
+		throws Exception {
+
+		return null;
+	}
+
+	@Test
+	public void testGetCartExternalReferenceCodePaymentTermsPage()
+		throws Exception {
+
+		String externalReferenceCode =
+			testGetCartExternalReferenceCodePaymentTermsPage_getExternalReferenceCode();
+		String irrelevantExternalReferenceCode =
+			testGetCartExternalReferenceCodePaymentTermsPage_getIrrelevantExternalReferenceCode();
+
+		Page<Term> page =
+			termResource.getCartExternalReferenceCodePaymentTermsPage(
+				externalReferenceCode);
+
+		long totalCount = page.getTotalCount();
+
+		if (irrelevantExternalReferenceCode != null) {
+			Term irrelevantTerm =
+				testGetCartExternalReferenceCodePaymentTermsPage_addTerm(
+					irrelevantExternalReferenceCode, randomIrrelevantTerm());
+
+			page = termResource.getCartExternalReferenceCodePaymentTermsPage(
+				irrelevantExternalReferenceCode);
+
+			Assert.assertEquals(totalCount + 1, page.getTotalCount());
+
+			assertContains(irrelevantTerm, (List<Term>)page.getItems());
+			assertValid(
+				page,
+				testGetCartExternalReferenceCodePaymentTermsPage_getExpectedActions(
+					irrelevantExternalReferenceCode));
+		}
+
+		Term term1 = testGetCartExternalReferenceCodePaymentTermsPage_addTerm(
+			externalReferenceCode, randomTerm());
+
+		Term term2 = testGetCartExternalReferenceCodePaymentTermsPage_addTerm(
+			externalReferenceCode, randomTerm());
+
+		page = termResource.getCartExternalReferenceCodePaymentTermsPage(
+			externalReferenceCode);
+
+		Assert.assertEquals(totalCount + 2, page.getTotalCount());
+
+		assertContains(term1, (List<Term>)page.getItems());
+		assertContains(term2, (List<Term>)page.getItems());
+		assertValid(
+			page,
+			testGetCartExternalReferenceCodePaymentTermsPage_getExpectedActions(
+				externalReferenceCode));
+	}
+
+	protected Map<String, Map<String, String>>
+			testGetCartExternalReferenceCodePaymentTermsPage_getExpectedActions(
+				String externalReferenceCode)
+		throws Exception {
+
+		Map<String, Map<String, String>> expectedActions = new HashMap<>();
+
+		return expectedActions;
+	}
+
+	protected Term testGetCartExternalReferenceCodePaymentTermsPage_addTerm(
+			String externalReferenceCode, Term term)
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected String
+			testGetCartExternalReferenceCodePaymentTermsPage_getExternalReferenceCode()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected String
+			testGetCartExternalReferenceCodePaymentTermsPage_getIrrelevantExternalReferenceCode()
+		throws Exception {
+
+		return null;
+	}
+
 	protected Term testGraphQLTerm_addTerm() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");

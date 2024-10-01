@@ -8,6 +8,8 @@ import {ClaySelect} from '@clayui/form';
 import {CommerceServiceProvider} from 'commerce-frontend-js';
 import React, {useEffect, useState} from 'react';
 
+import '../../../css/index.scss';
+
 const InfoBoxModalTermInput = ({
 	additionalProps:{
 		termDescription

@@ -43,7 +43,15 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface TermResource {
 
+	public Term getPlacedOrderExternalReferenceCodeDeliveryTerm(
+			String externalReferenceCode)
+		throws Exception;
+
 	public Term getPlacedOrderDeliveryTerm(Long placedOrderId) throws Exception;
+
+	public Term getPlacedOrderExternalReferenceCodePaymentTerm(
+			String externalReferenceCode)
+		throws Exception;
 
 	public Term getPlacedOrderPaymentTerm(Long placedOrderId) throws Exception;
 
