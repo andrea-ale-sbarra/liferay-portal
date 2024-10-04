@@ -1606,6 +1606,114 @@ paths:
                     description:
                         Unexpected error
             tags: ["PlacedOrderAddress"]
+    /placed-orders/{externalReferenceCode}/delivery-term:
+        get:
+            description:
+                Retrieve delivery term of the given Placed Order.
+            parameters:
+                - in: path
+                  name: externalReferenceCode
+                  required: true
+                  schema:
+                      description:
+                          The resource external reference code
+                      example: AB-34098-789-N
+                      minLength: 1
+                      type: string
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Term"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Term"
+                401:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                    description:
+                        Authentication information is missing or invalid
+                404:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                    description:
+                        The specified resource was not found
+                500:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                    description:
+                        Unexpected error
+            tags: ["Term"]
+    /placed-orders/{externalReferenceCode}/payment-term:
+        get:
+            description:
+                Retrieve payment term of the given Placed Order.
+            parameters:
+                - in: path
+                  name: externalReferenceCode
+                  required: true
+                  schema:
+                      description:
+                          The resource external reference code
+                      example: AB-34098-789-N
+                      minLength: 1
+                      type: string
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Term"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Term"
+                401:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                    description:
+                        Authentication information is missing or invalid
+                404:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                    description:
+                        The specified resource was not found
+                500:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                    description:
+                        Unexpected error
+            tags: ["Term"]
     /placed-orders/{placedOrderId}:
         get:
             description:
@@ -1876,7 +1984,7 @@ paths:
     /placed-orders/{placedOrderId}/payment-term:
         get:
             description:
-                Retrieve delivery term of the given Placed Order.
+                Retrieve payment term of the given Placed Order.
             operationId: getPlacedOrderPaymentTerm
             parameters:
                 - in: path
