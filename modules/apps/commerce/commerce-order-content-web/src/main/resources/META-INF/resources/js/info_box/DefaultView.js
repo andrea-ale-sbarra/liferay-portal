@@ -114,9 +114,8 @@ const DefaultView = ({
 						}}
 						size="xs"
 					>
-						{value
-							? Liferay.Language.get('edit')
-							: Liferay.Language.get('add')}
+						{additionalProps?.termDescription ? Liferay.Language.get('read') :
+							value ? Liferay.Language.get('edit') : Liferay.Language.get('add')}
 					</ClayButton>
 				) : null}
 			</div>

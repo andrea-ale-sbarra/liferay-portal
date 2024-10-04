@@ -10,10 +10,9 @@ import React, {useState} from 'react';
 
 import InfoBoxModalAddressInput from './info_box/modal/InfoBoxModalAddressInput';
 import InfoBoxModalDateInput from './info_box/modal/InfoBoxModalDateInput';
-import InfoBoxModalDeliveryTermInput from './info_box/modal/InfoBoxModalDeliveryTermInput';
 import InfoBoxModalPaymentMethodInput from './info_box/modal/InfoBoxModalPaymentMethodInput';
-import InfoBoxModalPaymentTermInput from './info_box/modal/InfoBoxModalPaymentTermInput';
 import InfoBoxModalShippingMethodInput from './info_box/modal/InfoBoxModalShippingMethodInput';
+import InfoBoxModalTermInput from './info_box/modal/InfoBoxModalTermInput';
 import InfoBoxModalTextInput from './info_box/modal/InfoBoxModalTextInput';
 
 const getInputRendered = (field, fieldValueType) => {
@@ -25,16 +24,12 @@ const getInputRendered = (field, fieldValueType) => {
 		return InfoBoxModalAddressInput;
 	}
 
-	if (field === 'deliveryTerm') {
-		return InfoBoxModalDeliveryTermInput;
+	if (field === 'deliveryTermId' || field === 'paymentTermId') {
+		return InfoBoxModalTermInput;
 	}
 
 	if (field === 'paymentMethod') {
 		return InfoBoxModalPaymentMethodInput;
-	}
-
-	if (field === 'paymentTerm') {
-		return InfoBoxModalPaymentTermInput;
 	}
 
 	if (field === 'shippingMethod') {
@@ -84,6 +79,7 @@ const InfoBoxModal = ({
 									additionalProps={additionalProps}
 									field={field}
 									inputValue={inputValue}
+									isOpen={open}
 									label={label}
 									orderId={orderId}
 									setHandleSubmit={setHandleSubmit}

@@ -45,7 +45,7 @@
 							},
 							{
 								"label": "delivery-term",
-								"value": "deliveryTerm"
+								"value": "deliveryTermId"
 							},
 							{
 								"label": "order-date",
@@ -65,7 +65,7 @@
 							},
 							{
 								"label": "payment-term",
-								"value": "paymentTerm"
+								"value": "paymentTermId"
 							},
 							{
 								"label": "purchase-order-number",

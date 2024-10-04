@@ -6,6 +6,7 @@
 package com.liferay.headless.commerce.delivery.cart.internal.resource.v1_0;
 
 import com.liferay.commerce.context.CommerceContextFactory;
+import com.liferay.commerce.exception.NoSuchOrderException;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceShippingEngine;
 import com.liferay.commerce.model.CommerceShippingMethod;
@@ -51,7 +52,43 @@ public class TermResourceImpl extends BaseTermResourceImpl {
 					commerceOrder.getCompanyId(),
 					commerceOrder.getCommerceOrderTypeId(),
 					_getCommerceShippingFixedOptionId(commerceOrder)),
-				this::_getTerm));
+				this::_toTerm));
+	}
+
+	@Override
+	public Page<Term> getCartExternalReferenceCodeDeliveryTermsPage(
+			String externalReferenceCode)
+		throws Exception {
+
+		CommerceOrder commerceOrder =
+			_commerceOrderService.fetchCommerceOrderByExternalReferenceCode(
+				externalReferenceCode, contextCompany.getCompanyId());
+
+		if (commerceOrder == null) {
+			throw new NoSuchOrderException(
+				"Unable to find order with external reference code " +
+					externalReferenceCode);
+		}
+
+		return getCartDeliveryTermsPage(commerceOrder.getCommerceOrderId());
+	}
+
+	@Override
+	public Page<Term> getCartExternalReferenceCodePaymentTermsPage(
+			String externalReferenceCode)
+		throws Exception {
+
+		CommerceOrder commerceOrder =
+			_commerceOrderService.fetchCommerceOrderByExternalReferenceCode(
+				externalReferenceCode, contextCompany.getCompanyId());
+
+		if (commerceOrder == null) {
+			throw new NoSuchOrderException(
+				"Unable to find order with external reference code " +
+					externalReferenceCode);
+		}
+
+		return getCartPaymentTermsPage(commerceOrder.getCommerceOrderId());
 	}
 
 	@Override
@@ -61,9 +98,13 @@ public class TermResourceImpl extends BaseTermResourceImpl {
 
 		CommercePaymentMethodGroupRel commercePaymentMethodGroupRel =
 			_commercePaymentMethodGroupRelLocalService.
-				getCommercePaymentMethodGroupRel(
+				fetchCommercePaymentMethodGroupRel(
 					commerceOrder.getGroupId(),
 					commerceOrder.getCommercePaymentMethodKey());
+
+		if (commercePaymentMethodGroupRel == null) {
+			return super.getCartPaymentTermsPage(cartId);
+		}
 
 		return Page.of(
 			transform(
@@ -72,7 +113,7 @@ public class TermResourceImpl extends BaseTermResourceImpl {
 					commerceOrder.getCommerceOrderTypeId(),
 					commercePaymentMethodGroupRel.
 						getCommercePaymentMethodGroupRelId()),
-				this::_getTerm));
+				this::_toTerm));
 	}
 
 	private long _getCommerceShippingFixedOptionId(CommerceOrder commerceOrder)
@@ -132,7 +173,7 @@ public class TermResourceImpl extends BaseTermResourceImpl {
 		return 0;
 	}
 
-	private Term _getTerm(CommerceTermEntry commerceTermEntry) {
+	private Term _toTerm(CommerceTermEntry commerceTermEntry) {
 		return new Term() {
 			{
 				setDescription(

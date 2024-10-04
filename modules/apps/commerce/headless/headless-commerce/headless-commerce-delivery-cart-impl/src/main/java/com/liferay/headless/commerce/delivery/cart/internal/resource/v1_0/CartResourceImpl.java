@@ -839,8 +839,6 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 				commerceContext, commerceOrder,
 				contextAcceptLanguage.getPreferredLocale());
 
-		CommerceShippingFixedOption commerceShippingFixedOption = null;
-
 		for (CommerceShippingOption commerceShippingOption :
 				commerceShippingOptions) {
 
@@ -848,17 +846,14 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 					commerceOrder.getShippingOptionName(),
 					commerceShippingOption.getKey())) {
 
-				commerceShippingFixedOption =
-					_commerceShippingFixedOptionLocalService.
-						fetchCommerceShippingFixedOption(
-							commerceOrder.getCompanyId(),
-							commerceShippingOption.getKey());
-
-				break;
+				return _commerceShippingFixedOptionLocalService.
+					fetchCommerceShippingFixedOption(
+						commerceOrder.getCompanyId(),
+						commerceShippingOption.getKey());
 			}
 		}
 
-		return commerceShippingFixedOption;
+		return null;
 	}
 
 	private String _getOrderConfirmationCheckoutStepURL(
@@ -1042,13 +1037,13 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 		themeDisplay.setScopeGroupId(commerceChannel.getSiteGroupId());
 	}
 
-	private boolean _isNotValidDeliveryTerm(
+	private boolean _isValidDeliveryTerm(
 			CommerceContext commerceContext, CommerceOrder commerceOrder,
-			CommerceShippingMethod commerceShippingMethod, long deliveryTerm)
+			CommerceShippingMethod commerceShippingMethod, long deliveryTermId)
 		throws Exception {
 
-		if ((deliveryTerm == 0) || !commerceOrder.isOpen() ||
-			(commerceShippingMethod == null)) {
+		if ((commerceShippingMethod == null) || (deliveryTermId == 0) ||
+			!commerceOrder.isOpen()) {
 
 			return true;
 		}
@@ -1071,7 +1066,7 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 		for (CommerceTermEntry commerceTermEntry :
 				deliveryCommerceTermEntries) {
 
-			if (commerceTermEntry.getCommerceTermEntryId() == deliveryTerm) {
+			if (commerceTermEntry.getCommerceTermEntryId() == deliveryTermId) {
 				return false;
 			}
 		}
@@ -1079,7 +1074,7 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 		return true;
 	}
 
-	private boolean _isNotValidPaymentTerm(
+	private boolean _isValidPaymentTerm(
 			CommerceOrder commerceOrder, long paymentTermId)
 		throws Exception {
 
@@ -1259,23 +1254,25 @@ public class CartResourceImpl extends BaseCartResourceImpl {
 				commerceOrder.getPrimaryKey(), customFields);
 		}
 
-		long deliveryTerm = GetterUtil.getLong(cart.getDeliveryTerm());
+		long deliveryTermId = GetterUtil.getLong(cart.getDeliveryTermId());
 
-		if (_isNotValidDeliveryTerm(
+		if (!_isValidDeliveryTerm(
 				commerceContext, commerceOrder, commerceShippingMethod,
-				deliveryTerm)) {
+				deliveryTermId)) {
 
-			deliveryTerm = 0;
+			deliveryTermId = GetterUtil.getLong(
+				commerceOrder.getDeliveryCommerceTermEntryId());
 		}
 
-		long paymentTerm = GetterUtil.getLong(cart.getPaymentTerm());
+		long paymentTermId = GetterUtil.getLong(cart.getPaymentTermId());
 
-		if (_isNotValidPaymentTerm(commerceOrder, paymentTerm)) {
-			paymentTerm = 0;
+		if (!_isValidPaymentTerm(commerceOrder, paymentTermId)) {
+			paymentTermId = GetterUtil.getLong(
+				commerceOrder.getPaymentCommerceTermEntryId());
 		}
 
-		_commerceOrderService.updateTermsAndConditions(
-			commerceOrder.getCommerceOrderId(), deliveryTerm, paymentTerm,
+		commerceOrder = _commerceOrderService.updateTermsAndConditions(
+			commerceOrder.getCommerceOrderId(), deliveryTermId, paymentTermId,
 			contextAcceptLanguage.getPreferredLanguageId());
 
 		_addOrUpdateNestedResources(cart, commerceOrder, commerceContext);
