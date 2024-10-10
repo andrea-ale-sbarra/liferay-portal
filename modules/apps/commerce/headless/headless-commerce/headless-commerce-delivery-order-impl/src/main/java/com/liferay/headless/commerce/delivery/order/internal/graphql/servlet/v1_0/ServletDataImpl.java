@@ -159,6 +159,16 @@ public class ServletDataImpl implements ServletData {
 							PlacedOrderResourceImpl.class,
 							"getChannelAccountPlacedOrdersPage"));
 					put(
+						"query#channelPlacedOrders",
+						new ObjectValuePair<>(
+							PlacedOrderResourceImpl.class,
+							"getChannelPlacedOrdersPage"));
+					put(
+						"query#channelByExternalReferenceCodePlacedOrders",
+						new ObjectValuePair<>(
+							PlacedOrderResourceImpl.class,
+							"getChannelByExternalReferenceCodePlacedOrdersPage"));
+					put(
 						"query#placedOrderByExternalReferenceCode",
 						new ObjectValuePair<>(
 							PlacedOrderResourceImpl.class,
@@ -258,6 +268,11 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							PlacedOrderResourceImpl.class,
 							"getPlacedOrderPaymentURL"));
+					put(
+						"query#PlacedOrder.channelByExternalReferenceCodePlacedOrders",
+						new ObjectValuePair<>(
+							PlacedOrderResourceImpl.class,
+							"getChannelByExternalReferenceCodePlacedOrdersPage"));
 					put(
 						"query#PlacedOrder.placedOrderShippingAddres",
 						new ObjectValuePair<>(
