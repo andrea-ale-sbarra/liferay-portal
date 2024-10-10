@@ -182,7 +182,7 @@ export class CommerceLayoutsPage {
 		});
 		this.moreActionsButton = page.getByLabel('More actions');
 		this.orderActionsButton = (orderActionName: string) =>
-			page.getByRole('button', {name: orderActionName});
+			page.getByRole('button', {exact: true, name: orderActionName});
 		this.openProductMenuButton = page.getByRole('tab', {
 			exact: true,
 			name: 'Open Product Menu',
