@@ -165,6 +165,10 @@ components:
                 status:
                     readOnly: true
                     type: string
+                steps:
+                    items:
+                        $ref: "#/components/schemas/Step"
+                    type: array
                 summary:
                     $ref: "#/components/schemas/Summary"
                     readOnly: true
@@ -603,6 +607,17 @@ components:
                     readOnly: true
                     type: string
             type: object
+        Step:
+            properties:
+                id:
+                    readOnly: true
+                    type: string
+                label:
+                    readOnly: true
+                    type: string
+                state:
+                    readOnly: true
+                    type: string
         Summary:
             properties:
                 currency:
@@ -703,7 +718,7 @@ components:
 info:
     description:
         "Headless Delivery Commerce Order API. A Java client JAR is available for use with the group ID 'com.liferay',
-        artifact ID 'com.liferay.headless.commerce.delivery.order.client', and version '1.0.24'."
+        artifact ID 'com.liferay.headless.commerce.delivery.order.client', and version '1.0.25'."
     license:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
