@@ -185,11 +185,6 @@ public class CartDTOConverter implements DTOConverter<CommerceOrder, Cart> {
 
 						return commerceOrderType.getName(locale);
 					});
-				setSteps(
-					() -> TransformUtil.transformToArray(
-						_commerceOrderStepTrackerHelper.getCommerceOrderSteps(
-							commerceOrder, locale, true),
-						stepModel -> _toStep(stepModel), Step.class));
 				setOrderTypeExternalReferenceCode(
 					() -> _getOrderTypeExternalReferenceCode(
 						commerceOrder.getCommerceOrderTypeId()));
@@ -299,6 +294,11 @@ public class CartDTOConverter implements DTOConverter<CommerceOrder, Cart> {
 				setStatus(
 					() -> WorkflowConstants.getStatusLabel(
 						commerceOrder.getStatus()));
+				setSteps(
+					() -> TransformUtil.transformToArray(
+						_commerceOrderStepTrackerHelper.getCommerceOrderSteps(
+							commerceOrder, locale, true),
+						stepModel -> _toStep(stepModel), Step.class));
 				setSummary(() -> _getSummary(commerceOrder, locale));
 				setWorkflowStatusInfo(
 					() -> {
@@ -765,9 +765,9 @@ public class CartDTOConverter implements DTOConverter<CommerceOrder, Cart> {
 	private Step _toStep(StepModel stepModel) {
 		return new Step() {
 			{
-				id = stepModel.getId();
-				label = stepModel.getLabel();
-				state = stepModel.getState();
+				setId(stepModel::getId);
+				setLabel(stepModel::getLabel);
+				setState(stepModel::getState);
 			}
 		};
 	}
