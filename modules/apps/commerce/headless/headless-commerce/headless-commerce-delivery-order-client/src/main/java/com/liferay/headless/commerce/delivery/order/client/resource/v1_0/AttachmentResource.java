@@ -1,16 +1,17 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 package com.liferay.headless.commerce.delivery.order.client.resource.v1_0;
 
-import com.liferay.headless.commerce.delivery.order.client.dto.v1_0.PlacedOrder;
+import com.liferay.headless.commerce.delivery.order.client.dto.v1_0.Attachment;
+import com.liferay.headless.commerce.delivery.order.client.dto.v1_0.AttachmentBase64;
 import com.liferay.headless.commerce.delivery.order.client.http.HttpInvoker;
 import com.liferay.headless.commerce.delivery.order.client.pagination.Page;
 import com.liferay.headless.commerce.delivery.order.client.pagination.Pagination;
 import com.liferay.headless.commerce.delivery.order.client.problem.Problem;
-import com.liferay.headless.commerce.delivery.order.client.serdes.v1_0.PlacedOrderSerDes;
+import com.liferay.headless.commerce.delivery.order.client.serdes.v1_0.AttachmentSerDes;
 
 import java.net.URL;
 
@@ -28,101 +29,77 @@ import javax.annotation.Generated;
  * @generated
  */
 @Generated("")
-public interface PlacedOrderResource {
+public interface AttachmentResource {
 
 	public static Builder builder() {
 		return new Builder();
 	}
 
-	public Page<PlacedOrder>
-			getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-				String channelExternalReferenceCode,
-				String accountExternalReferenceCode, Pagination pagination)
+	public Page<Attachment>
+			getPlacedOrderByExternalReferenceCodeAttachmentsPage(
+				String externalReferenceCode, Pagination pagination)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse
-			getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPageHttpResponse(
-				String channelExternalReferenceCode,
-				String accountExternalReferenceCode, Pagination pagination)
+			getPlacedOrderByExternalReferenceCodeAttachmentsPageHttpResponse(
+				String externalReferenceCode, Pagination pagination)
 		throws Exception;
 
-	public Page<PlacedOrder> getChannelByExternalReferenceCodePlacedOrdersPage(
-			String externalReferenceCode, String search, String filterString,
-			Pagination pagination, String sortString)
-		throws Exception;
-
-	public HttpInvoker.HttpResponse
-			getChannelByExternalReferenceCodePlacedOrdersPageHttpResponse(
-				String externalReferenceCode, String search,
-				String filterString, Pagination pagination, String sortString)
-		throws Exception;
-
-	public Page<PlacedOrder> getChannelAccountPlacedOrdersPage(
-			Long channelId, Long accountId, Pagination pagination)
+	public Attachment postPlacedOrderByExternalReferenceCodeAttachmentByBase64(
+			String externalReferenceCode, AttachmentBase64 attachmentBase64)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse
-			getChannelAccountPlacedOrdersPageHttpResponse(
-				Long channelId, Long accountId, Pagination pagination)
+			postPlacedOrderByExternalReferenceCodeAttachmentByBase64HttpResponse(
+				String externalReferenceCode, AttachmentBase64 attachmentBase64)
 		throws Exception;
 
-	public Page<PlacedOrder> getChannelPlacedOrdersPage(
-			Long channelId, String search, String filterString,
-			Pagination pagination, String sortString)
-		throws Exception;
-
-	public HttpInvoker.HttpResponse getChannelPlacedOrdersPageHttpResponse(
-			Long channelId, String search, String filterString,
-			Pagination pagination, String sortString)
-		throws Exception;
-
-	public PlacedOrder getPlacedOrderByExternalReferenceCode(
-			String externalReferenceCode)
+	public void
+			deletePlacedOrderByExternalReferenceCodeAttachmentByExternalReferenceCodeAttachmentExternalReferenceCode(
+				String externalReferenceCode,
+				String attachmentExternalReferenceCode)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse
-			getPlacedOrderByExternalReferenceCodeHttpResponse(
-				String externalReferenceCode)
+			deletePlacedOrderByExternalReferenceCodeAttachmentByExternalReferenceCodeAttachmentExternalReferenceCodeHttpResponse(
+				String externalReferenceCode,
+				String attachmentExternalReferenceCode)
 		throws Exception;
 
-	public PlacedOrder patchPlacedOrderByExternalReferenceCode(
-			String externalReferenceCode, PlacedOrder placedOrder)
+	public Page<Attachment> getPlacedOrderAttachmentsPage(
+			Long placedOrderId, Pagination pagination)
+		throws Exception;
+
+	public HttpInvoker.HttpResponse getPlacedOrderAttachmentsPageHttpResponse(
+			Long placedOrderId, Pagination pagination)
+		throws Exception;
+
+	public void postPlacedOrderAttachmentsPageExportBatch(
+			Long placedOrderId, String callbackURL, String contentType,
+			String fieldNames)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse
-			patchPlacedOrderByExternalReferenceCodeHttpResponse(
-				String externalReferenceCode, PlacedOrder placedOrder)
+			postPlacedOrderAttachmentsPageExportBatchHttpResponse(
+				Long placedOrderId, String callbackURL, String contentType,
+				String fieldNames)
 		throws Exception;
 
-	public String getPlacedOrderByExternalReferenceCodePaymentURL(
-			String externalReferenceCode, String callbackURL)
+	public Attachment postPlacedOrderAttachmentByBase64(
+			Long placedOrderId, AttachmentBase64 attachmentBase64)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse
-			getPlacedOrderByExternalReferenceCodePaymentURLHttpResponse(
-				String externalReferenceCode, String callbackURL)
+			postPlacedOrderAttachmentByBase64HttpResponse(
+				Long placedOrderId, AttachmentBase64 attachmentBase64)
 		throws Exception;
 
-	public PlacedOrder getPlacedOrder(Long placedOrderId) throws Exception;
-
-	public HttpInvoker.HttpResponse getPlacedOrderHttpResponse(
-			Long placedOrderId)
+	public void deletePlacedOrderAttachment(
+			Long placedOrderId, Long attachmentId)
 		throws Exception;
 
-	public PlacedOrder patchPlacedOrder(
-			Long placedOrderId, PlacedOrder placedOrder)
-		throws Exception;
-
-	public HttpInvoker.HttpResponse patchPlacedOrderHttpResponse(
-			Long placedOrderId, PlacedOrder placedOrder)
-		throws Exception;
-
-	public String getPlacedOrderPaymentURL(
-			Long placedOrderId, String callbackURL)
-		throws Exception;
-
-	public HttpInvoker.HttpResponse getPlacedOrderPaymentURLHttpResponse(
-			Long placedOrderId, String callbackURL)
+	public HttpInvoker.HttpResponse deletePlacedOrderAttachmentHttpResponse(
+			Long placedOrderId, Long attachmentId)
 		throws Exception;
 
 	public static class Builder {
@@ -138,8 +115,8 @@ public interface PlacedOrderResource {
 			return header("Authorization", "Bearer " + token);
 		}
 
-		public PlacedOrderResource build() {
-			return new PlacedOrderResourceImpl(this);
+		public AttachmentResource build() {
+			return new AttachmentResourceImpl(this);
 		}
 
 		public Builder contextPath(String contextPath) {
@@ -231,18 +208,16 @@ public interface PlacedOrderResource {
 
 	}
 
-	public static class PlacedOrderResourceImpl implements PlacedOrderResource {
+	public static class AttachmentResourceImpl implements AttachmentResource {
 
-		public Page<PlacedOrder>
-				getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-					String channelExternalReferenceCode,
-					String accountExternalReferenceCode, Pagination pagination)
+		public Page<Attachment>
+				getPlacedOrderByExternalReferenceCodeAttachmentsPage(
+					String externalReferenceCode, Pagination pagination)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPageHttpResponse(
-					channelExternalReferenceCode, accountExternalReferenceCode,
-					pagination);
+				getPlacedOrderByExternalReferenceCodeAttachmentsPageHttpResponse(
+					externalReferenceCode, pagination);
 
 			String content = httpResponse.getContent();
 
@@ -292,7 +267,7 @@ public interface PlacedOrderResource {
 			}
 
 			try {
-				return Page.of(content, PlacedOrderSerDes::toDTO);
+				return Page.of(content, AttachmentSerDes::toDTO);
 			}
 			catch (Exception e) {
 				_logger.log(
@@ -304,9 +279,8 @@ public interface PlacedOrderResource {
 		}
 
 		public HttpInvoker.HttpResponse
-				getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPageHttpResponse(
-					String channelExternalReferenceCode,
-					String accountExternalReferenceCode, Pagination pagination)
+				getPlacedOrderByExternalReferenceCodeAttachmentsPageHttpResponse(
+					String externalReferenceCode, Pagination pagination)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -340,141 +314,7 @@ public interface PlacedOrderResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-delivery-order/v1.0/channels/by-externalReferenceCode/{channelExternalReferenceCode}/accounts/by-externalReferenceCode/{accountExternalReferenceCode}/placed-orders");
-
-			httpInvoker.path(
-				"channelExternalReferenceCode", channelExternalReferenceCode);
-			httpInvoker.path(
-				"accountExternalReferenceCode", accountExternalReferenceCode);
-
-			httpInvoker.userNameAndPassword(
-				_builder._login + ":" + _builder._password);
-
-			return httpInvoker.invoke();
-		}
-
-		public Page<PlacedOrder>
-				getChannelByExternalReferenceCodePlacedOrdersPage(
-					String externalReferenceCode, String search,
-					String filterString, Pagination pagination,
-					String sortString)
-			throws Exception {
-
-			HttpInvoker.HttpResponse httpResponse =
-				getChannelByExternalReferenceCodePlacedOrdersPageHttpResponse(
-					externalReferenceCode, search, filterString, pagination,
-					sortString);
-
-			String content = httpResponse.getContent();
-
-			if ((httpResponse.getStatusCode() / 100) != 2) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response content: " + content);
-				_logger.log(
-					Level.WARNING,
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.log(
-					Level.WARNING,
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-
-				Problem.ProblemException problemException = null;
-
-				if (Objects.equals(
-						httpResponse.getContentType(), "application/json")) {
-
-					problemException = new Problem.ProblemException(
-						Problem.toDTO(content));
-				}
-				else {
-					_logger.log(
-						Level.WARNING,
-						"Unable to process content type: " +
-							httpResponse.getContentType());
-
-					Problem problem = new Problem();
-
-					problem.setStatus(
-						String.valueOf(httpResponse.getStatusCode()));
-
-					problemException = new Problem.ProblemException(problem);
-				}
-
-				throw problemException;
-			}
-			else {
-				_logger.fine("HTTP response content: " + content);
-				_logger.fine(
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.fine(
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-			}
-
-			try {
-				return Page.of(content, PlacedOrderSerDes::toDTO);
-			}
-			catch (Exception e) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response: " + content, e);
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-		}
-
-		public HttpInvoker.HttpResponse
-				getChannelByExternalReferenceCodePlacedOrdersPageHttpResponse(
-					String externalReferenceCode, String search,
-					String filterString, Pagination pagination,
-					String sortString)
-			throws Exception {
-
-			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-			if (_builder._locale != null) {
-				httpInvoker.header(
-					"Accept-Language", _builder._locale.toLanguageTag());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._headers.entrySet()) {
-
-				httpInvoker.header(entry.getKey(), entry.getValue());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._parameters.entrySet()) {
-
-				httpInvoker.parameter(entry.getKey(), entry.getValue());
-			}
-
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
-
-			if (search != null) {
-				httpInvoker.parameter("search", String.valueOf(search));
-			}
-
-			if (filterString != null) {
-				httpInvoker.parameter("filter", filterString);
-			}
-
-			if (pagination != null) {
-				httpInvoker.parameter(
-					"page", String.valueOf(pagination.getPage()));
-				httpInvoker.parameter(
-					"pageSize", String.valueOf(pagination.getPageSize()));
-			}
-
-			if (sortString != null) {
-				httpInvoker.parameter("sort", sortString);
-			}
-
-			httpInvoker.path(
-				_builder._scheme + "://" + _builder._host + ":" +
-					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-delivery-order/v1.0/channels/by-externalReferenceCode/{externalReferenceCode}/placed-orders");
+						"/o/headless-commerce-delivery-order/v1.0/placed-orders/by-externalReferenceCode/{externalReferenceCode}/attachments");
 
 			httpInvoker.path("externalReferenceCode", externalReferenceCode);
 
@@ -484,13 +324,15 @@ public interface PlacedOrderResource {
 			return httpInvoker.invoke();
 		}
 
-		public Page<PlacedOrder> getChannelAccountPlacedOrdersPage(
-				Long channelId, Long accountId, Pagination pagination)
+		public Attachment
+				postPlacedOrderByExternalReferenceCodeAttachmentByBase64(
+					String externalReferenceCode,
+					AttachmentBase64 attachmentBase64)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getChannelAccountPlacedOrdersPageHttpResponse(
-					channelId, accountId, pagination);
+				postPlacedOrderByExternalReferenceCodeAttachmentByBase64HttpResponse(
+					externalReferenceCode, attachmentBase64);
 
 			String content = httpResponse.getContent();
 
@@ -540,7 +382,7 @@ public interface PlacedOrderResource {
 			}
 
 			try {
-				return Page.of(content, PlacedOrderSerDes::toDTO);
+				return AttachmentSerDes.toDTO(content);
 			}
 			catch (Exception e) {
 				_logger.log(
@@ -552,8 +394,229 @@ public interface PlacedOrderResource {
 		}
 
 		public HttpInvoker.HttpResponse
-				getChannelAccountPlacedOrdersPageHttpResponse(
-					Long channelId, Long accountId, Pagination pagination)
+				postPlacedOrderByExternalReferenceCodeAttachmentByBase64HttpResponse(
+					String externalReferenceCode,
+					AttachmentBase64 attachmentBase64)
+			throws Exception {
+
+			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			httpInvoker.body(attachmentBase64.toString(), "application/json");
+
+			if (_builder._locale != null) {
+				httpInvoker.header(
+					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
+
+			httpInvoker.path(
+				_builder._scheme + "://" + _builder._host + ":" +
+					_builder._port + _builder._contextPath +
+						"/o/headless-commerce-delivery-order/v1.0/placed-orders/by-externalReferenceCode/{externalReferenceCode}/attachments/by-base64");
+
+			httpInvoker.path("externalReferenceCode", externalReferenceCode);
+
+			httpInvoker.userNameAndPassword(
+				_builder._login + ":" + _builder._password);
+
+			return httpInvoker.invoke();
+		}
+
+		public void
+				deletePlacedOrderByExternalReferenceCodeAttachmentByExternalReferenceCodeAttachmentExternalReferenceCode(
+					String externalReferenceCode,
+					String attachmentExternalReferenceCode)
+			throws Exception {
+
+			HttpInvoker.HttpResponse httpResponse =
+				deletePlacedOrderByExternalReferenceCodeAttachmentByExternalReferenceCodeAttachmentExternalReferenceCodeHttpResponse(
+					externalReferenceCode, attachmentExternalReferenceCode);
+
+			String content = httpResponse.getContent();
+
+			if ((httpResponse.getStatusCode() / 100) != 2) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response content: " + content);
+				_logger.log(
+					Level.WARNING,
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.log(
+					Level.WARNING,
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+
+				Problem.ProblemException problemException = null;
+
+				if (Objects.equals(
+						httpResponse.getContentType(), "application/json")) {
+
+					problemException = new Problem.ProblemException(
+						Problem.toDTO(content));
+				}
+				else {
+					_logger.log(
+						Level.WARNING,
+						"Unable to process content type: " +
+							httpResponse.getContentType());
+
+					Problem problem = new Problem();
+
+					problem.setStatus(
+						String.valueOf(httpResponse.getStatusCode()));
+
+					problemException = new Problem.ProblemException(problem);
+				}
+
+				throw problemException;
+			}
+			else {
+				_logger.fine("HTTP response content: " + content);
+				_logger.fine(
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.fine(
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+			}
+
+			try {
+				return;
+			}
+			catch (Exception e) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response: " + content, e);
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+		}
+
+		public HttpInvoker.HttpResponse
+				deletePlacedOrderByExternalReferenceCodeAttachmentByExternalReferenceCodeAttachmentExternalReferenceCodeHttpResponse(
+					String externalReferenceCode,
+					String attachmentExternalReferenceCode)
+			throws Exception {
+
+			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			if (_builder._locale != null) {
+				httpInvoker.header(
+					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.DELETE);
+
+			httpInvoker.path(
+				_builder._scheme + "://" + _builder._host + ":" +
+					_builder._port + _builder._contextPath +
+						"/o/headless-commerce-delivery-order/v1.0/placed-orders/by-externalReferenceCode/{externalReferenceCode}/attachments/by-externalReferenceCode/{attachmentExternalReferenceCode}");
+
+			httpInvoker.path("externalReferenceCode", externalReferenceCode);
+			httpInvoker.path(
+				"attachmentExternalReferenceCode",
+				attachmentExternalReferenceCode);
+
+			httpInvoker.userNameAndPassword(
+				_builder._login + ":" + _builder._password);
+
+			return httpInvoker.invoke();
+		}
+
+		public Page<Attachment> getPlacedOrderAttachmentsPage(
+				Long placedOrderId, Pagination pagination)
+			throws Exception {
+
+			HttpInvoker.HttpResponse httpResponse =
+				getPlacedOrderAttachmentsPageHttpResponse(
+					placedOrderId, pagination);
+
+			String content = httpResponse.getContent();
+
+			if ((httpResponse.getStatusCode() / 100) != 2) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response content: " + content);
+				_logger.log(
+					Level.WARNING,
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.log(
+					Level.WARNING,
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+
+				Problem.ProblemException problemException = null;
+
+				if (Objects.equals(
+						httpResponse.getContentType(), "application/json")) {
+
+					problemException = new Problem.ProblemException(
+						Problem.toDTO(content));
+				}
+				else {
+					_logger.log(
+						Level.WARNING,
+						"Unable to process content type: " +
+							httpResponse.getContentType());
+
+					Problem problem = new Problem();
+
+					problem.setStatus(
+						String.valueOf(httpResponse.getStatusCode()));
+
+					problemException = new Problem.ProblemException(problem);
+				}
+
+				throw problemException;
+			}
+			else {
+				_logger.fine("HTTP response content: " + content);
+				_logger.fine(
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.fine(
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+			}
+
+			try {
+				return Page.of(content, AttachmentSerDes::toDTO);
+			}
+			catch (Exception e) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response: " + content, e);
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+		}
+
+		public HttpInvoker.HttpResponse
+				getPlacedOrderAttachmentsPageHttpResponse(
+					Long placedOrderId, Pagination pagination)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -587,10 +650,9 @@ public interface PlacedOrderResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-delivery-order/v1.0/channels/{channelId}/accounts/{accountId}/placed-orders");
+						"/o/headless-commerce-delivery-order/v1.0/placed-orders/{placedOrderId}/attachments");
 
-			httpInvoker.path("channelId", channelId);
-			httpInvoker.path("accountId", accountId);
+			httpInvoker.path("placedOrderId", placedOrderId);
 
 			httpInvoker.userNameAndPassword(
 				_builder._login + ":" + _builder._password);
@@ -598,14 +660,14 @@ public interface PlacedOrderResource {
 			return httpInvoker.invoke();
 		}
 
-		public Page<PlacedOrder> getChannelPlacedOrdersPage(
-				Long channelId, String search, String filterString,
-				Pagination pagination, String sortString)
+		public void postPlacedOrderAttachmentsPageExportBatch(
+				Long placedOrderId, String callbackURL, String contentType,
+				String fieldNames)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getChannelPlacedOrdersPageHttpResponse(
-					channelId, search, filterString, pagination, sortString);
+				postPlacedOrderAttachmentsPageExportBatchHttpResponse(
+					placedOrderId, callbackURL, contentType, fieldNames);
 
 			String content = httpResponse.getContent();
 
@@ -652,151 +714,18 @@ public interface PlacedOrderResource {
 				_logger.fine(
 					"HTTP response status code: " +
 						httpResponse.getStatusCode());
-			}
-
-			try {
-				return Page.of(content, PlacedOrderSerDes::toDTO);
-			}
-			catch (Exception e) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response: " + content, e);
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-		}
-
-		public HttpInvoker.HttpResponse getChannelPlacedOrdersPageHttpResponse(
-				Long channelId, String search, String filterString,
-				Pagination pagination, String sortString)
-			throws Exception {
-
-			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-			if (_builder._locale != null) {
-				httpInvoker.header(
-					"Accept-Language", _builder._locale.toLanguageTag());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._headers.entrySet()) {
-
-				httpInvoker.header(entry.getKey(), entry.getValue());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._parameters.entrySet()) {
-
-				httpInvoker.parameter(entry.getKey(), entry.getValue());
-			}
-
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
-
-			if (search != null) {
-				httpInvoker.parameter("search", String.valueOf(search));
-			}
-
-			if (filterString != null) {
-				httpInvoker.parameter("filter", filterString);
-			}
-
-			if (pagination != null) {
-				httpInvoker.parameter(
-					"page", String.valueOf(pagination.getPage()));
-				httpInvoker.parameter(
-					"pageSize", String.valueOf(pagination.getPageSize()));
-			}
-
-			if (sortString != null) {
-				httpInvoker.parameter("sort", sortString);
-			}
-
-			httpInvoker.path(
-				_builder._scheme + "://" + _builder._host + ":" +
-					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-delivery-order/v1.0/channels/{channelId}/placed-orders");
-
-			httpInvoker.path("channelId", channelId);
-
-			httpInvoker.userNameAndPassword(
-				_builder._login + ":" + _builder._password);
-
-			return httpInvoker.invoke();
-		}
-
-		public PlacedOrder getPlacedOrderByExternalReferenceCode(
-				String externalReferenceCode)
-			throws Exception {
-
-			HttpInvoker.HttpResponse httpResponse =
-				getPlacedOrderByExternalReferenceCodeHttpResponse(
-					externalReferenceCode);
-
-			String content = httpResponse.getContent();
-
-			if ((httpResponse.getStatusCode() / 100) != 2) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response content: " + content);
-				_logger.log(
-					Level.WARNING,
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.log(
-					Level.WARNING,
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-
-				Problem.ProblemException problemException = null;
-
-				if (Objects.equals(
-						httpResponse.getContentType(), "application/json")) {
-
-					problemException = new Problem.ProblemException(
-						Problem.toDTO(content));
-				}
-				else {
-					_logger.log(
-						Level.WARNING,
-						"Unable to process content type: " +
-							httpResponse.getContentType());
-
-					Problem problem = new Problem();
-
-					problem.setStatus(
-						String.valueOf(httpResponse.getStatusCode()));
-
-					problemException = new Problem.ProblemException(problem);
-				}
-
-				throw problemException;
-			}
-			else {
-				_logger.fine("HTTP response content: " + content);
-				_logger.fine(
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.fine(
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-			}
-
-			try {
-				return PlacedOrderSerDes.toDTO(content);
-			}
-			catch (Exception e) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response: " + content, e);
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
 			}
 		}
 
 		public HttpInvoker.HttpResponse
-				getPlacedOrderByExternalReferenceCodeHttpResponse(
-					String externalReferenceCode)
+				postPlacedOrderAttachmentsPageExportBatchHttpResponse(
+					Long placedOrderId, String callbackURL, String contentType,
+					String fieldNames)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			httpInvoker.body("[]", "application/json");
 
 			if (_builder._locale != null) {
 				httpInvoker.header(
@@ -815,548 +744,26 @@ public interface PlacedOrderResource {
 				httpInvoker.parameter(entry.getKey(), entry.getValue());
 			}
 
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
-
-			httpInvoker.path(
-				_builder._scheme + "://" + _builder._host + ":" +
-					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-delivery-order/v1.0/placed-orders/by-externalReferenceCode/{externalReferenceCode}");
-
-			httpInvoker.path("externalReferenceCode", externalReferenceCode);
-
-			httpInvoker.userNameAndPassword(
-				_builder._login + ":" + _builder._password);
-
-			return httpInvoker.invoke();
-		}
-
-		public PlacedOrder patchPlacedOrderByExternalReferenceCode(
-				String externalReferenceCode, PlacedOrder placedOrder)
-			throws Exception {
-
-			HttpInvoker.HttpResponse httpResponse =
-				patchPlacedOrderByExternalReferenceCodeHttpResponse(
-					externalReferenceCode, placedOrder);
-
-			String content = httpResponse.getContent();
-
-			if ((httpResponse.getStatusCode() / 100) != 2) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response content: " + content);
-				_logger.log(
-					Level.WARNING,
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.log(
-					Level.WARNING,
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-
-				Problem.ProblemException problemException = null;
-
-				if (Objects.equals(
-						httpResponse.getContentType(), "application/json")) {
-
-					problemException = new Problem.ProblemException(
-						Problem.toDTO(content));
-				}
-				else {
-					_logger.log(
-						Level.WARNING,
-						"Unable to process content type: " +
-							httpResponse.getContentType());
-
-					Problem problem = new Problem();
-
-					problem.setStatus(
-						String.valueOf(httpResponse.getStatusCode()));
-
-					problemException = new Problem.ProblemException(problem);
-				}
-
-				throw problemException;
-			}
-			else {
-				_logger.fine("HTTP response content: " + content);
-				_logger.fine(
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.fine(
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-			}
-
-			try {
-				return PlacedOrderSerDes.toDTO(content);
-			}
-			catch (Exception e) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response: " + content, e);
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-		}
-
-		public HttpInvoker.HttpResponse
-				patchPlacedOrderByExternalReferenceCodeHttpResponse(
-					String externalReferenceCode, PlacedOrder placedOrder)
-			throws Exception {
-
-			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-			httpInvoker.body(placedOrder.toString(), "application/json");
-
-			if (_builder._locale != null) {
-				httpInvoker.header(
-					"Accept-Language", _builder._locale.toLanguageTag());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._headers.entrySet()) {
-
-				httpInvoker.header(entry.getKey(), entry.getValue());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._parameters.entrySet()) {
-
-				httpInvoker.parameter(entry.getKey(), entry.getValue());
-			}
-
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.PATCH);
-
-			httpInvoker.path(
-				_builder._scheme + "://" + _builder._host + ":" +
-					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-delivery-order/v1.0/placed-orders/by-externalReferenceCode/{externalReferenceCode}");
-
-			httpInvoker.path("externalReferenceCode", externalReferenceCode);
-
-			httpInvoker.userNameAndPassword(
-				_builder._login + ":" + _builder._password);
-
-			return httpInvoker.invoke();
-		}
-
-		public String getPlacedOrderByExternalReferenceCodePaymentURL(
-				String externalReferenceCode, String callbackURL)
-			throws Exception {
-
-			HttpInvoker.HttpResponse httpResponse =
-				getPlacedOrderByExternalReferenceCodePaymentURLHttpResponse(
-					externalReferenceCode, callbackURL);
-
-			String content = httpResponse.getContent();
-
-			if ((httpResponse.getStatusCode() / 100) != 2) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response content: " + content);
-				_logger.log(
-					Level.WARNING,
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.log(
-					Level.WARNING,
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-
-				Problem.ProblemException problemException = null;
-
-				if (Objects.equals(
-						httpResponse.getContentType(), "application/json")) {
-
-					problemException = new Problem.ProblemException(
-						Problem.toDTO(content));
-				}
-				else {
-					_logger.log(
-						Level.WARNING,
-						"Unable to process content type: " +
-							httpResponse.getContentType());
-
-					Problem problem = new Problem();
-
-					problem.setStatus(
-						String.valueOf(httpResponse.getStatusCode()));
-
-					problemException = new Problem.ProblemException(problem);
-				}
-
-				throw problemException;
-			}
-			else {
-				_logger.fine("HTTP response content: " + content);
-				_logger.fine(
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.fine(
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-			}
-
-			try {
-				return content;
-			}
-			catch (Exception e) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response: " + content, e);
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-		}
-
-		public HttpInvoker.HttpResponse
-				getPlacedOrderByExternalReferenceCodePaymentURLHttpResponse(
-					String externalReferenceCode, String callbackURL)
-			throws Exception {
-
-			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-			if (_builder._locale != null) {
-				httpInvoker.header(
-					"Accept-Language", _builder._locale.toLanguageTag());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._headers.entrySet()) {
-
-				httpInvoker.header(entry.getKey(), entry.getValue());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._parameters.entrySet()) {
-
-				httpInvoker.parameter(entry.getKey(), entry.getValue());
-			}
-
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
 
 			if (callbackURL != null) {
 				httpInvoker.parameter(
 					"callbackURL", String.valueOf(callbackURL));
 			}
 
-			httpInvoker.path(
-				_builder._scheme + "://" + _builder._host + ":" +
-					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-delivery-order/v1.0/placed-orders/by-externalReferenceCode/{externalReferenceCode}/payment-url");
-
-			httpInvoker.path("externalReferenceCode", externalReferenceCode);
-
-			httpInvoker.userNameAndPassword(
-				_builder._login + ":" + _builder._password);
-
-			return httpInvoker.invoke();
-		}
-
-		public PlacedOrder getPlacedOrder(Long placedOrderId) throws Exception {
-			HttpInvoker.HttpResponse httpResponse = getPlacedOrderHttpResponse(
-				placedOrderId);
-
-			String content = httpResponse.getContent();
-
-			if ((httpResponse.getStatusCode() / 100) != 2) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response content: " + content);
-				_logger.log(
-					Level.WARNING,
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.log(
-					Level.WARNING,
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-
-				Problem.ProblemException problemException = null;
-
-				if (Objects.equals(
-						httpResponse.getContentType(), "application/json")) {
-
-					problemException = new Problem.ProblemException(
-						Problem.toDTO(content));
-				}
-				else {
-					_logger.log(
-						Level.WARNING,
-						"Unable to process content type: " +
-							httpResponse.getContentType());
-
-					Problem problem = new Problem();
-
-					problem.setStatus(
-						String.valueOf(httpResponse.getStatusCode()));
-
-					problemException = new Problem.ProblemException(problem);
-				}
-
-				throw problemException;
-			}
-			else {
-				_logger.fine("HTTP response content: " + content);
-				_logger.fine(
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.fine(
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-			}
-
-			try {
-				return PlacedOrderSerDes.toDTO(content);
-			}
-			catch (Exception e) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response: " + content, e);
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-		}
-
-		public HttpInvoker.HttpResponse getPlacedOrderHttpResponse(
-				Long placedOrderId)
-			throws Exception {
-
-			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-			if (_builder._locale != null) {
-				httpInvoker.header(
-					"Accept-Language", _builder._locale.toLanguageTag());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._headers.entrySet()) {
-
-				httpInvoker.header(entry.getKey(), entry.getValue());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._parameters.entrySet()) {
-
-				httpInvoker.parameter(entry.getKey(), entry.getValue());
-			}
-
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
-
-			httpInvoker.path(
-				_builder._scheme + "://" + _builder._host + ":" +
-					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-delivery-order/v1.0/placed-orders/{placedOrderId}");
-
-			httpInvoker.path("placedOrderId", placedOrderId);
-
-			httpInvoker.userNameAndPassword(
-				_builder._login + ":" + _builder._password);
-
-			return httpInvoker.invoke();
-		}
-
-		public PlacedOrder patchPlacedOrder(
-				Long placedOrderId, PlacedOrder placedOrder)
-			throws Exception {
-
-			HttpInvoker.HttpResponse httpResponse =
-				patchPlacedOrderHttpResponse(placedOrderId, placedOrder);
-
-			String content = httpResponse.getContent();
-
-			if ((httpResponse.getStatusCode() / 100) != 2) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response content: " + content);
-				_logger.log(
-					Level.WARNING,
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.log(
-					Level.WARNING,
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-
-				Problem.ProblemException problemException = null;
-
-				if (Objects.equals(
-						httpResponse.getContentType(), "application/json")) {
-
-					problemException = new Problem.ProblemException(
-						Problem.toDTO(content));
-				}
-				else {
-					_logger.log(
-						Level.WARNING,
-						"Unable to process content type: " +
-							httpResponse.getContentType());
-
-					Problem problem = new Problem();
-
-					problem.setStatus(
-						String.valueOf(httpResponse.getStatusCode()));
-
-					problemException = new Problem.ProblemException(problem);
-				}
-
-				throw problemException;
-			}
-			else {
-				_logger.fine("HTTP response content: " + content);
-				_logger.fine(
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.fine(
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-			}
-
-			try {
-				return PlacedOrderSerDes.toDTO(content);
-			}
-			catch (Exception e) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response: " + content, e);
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-		}
-
-		public HttpInvoker.HttpResponse patchPlacedOrderHttpResponse(
-				Long placedOrderId, PlacedOrder placedOrder)
-			throws Exception {
-
-			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-			httpInvoker.body(placedOrder.toString(), "application/json");
-
-			if (_builder._locale != null) {
-				httpInvoker.header(
-					"Accept-Language", _builder._locale.toLanguageTag());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._headers.entrySet()) {
-
-				httpInvoker.header(entry.getKey(), entry.getValue());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._parameters.entrySet()) {
-
-				httpInvoker.parameter(entry.getKey(), entry.getValue());
-			}
-
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.PATCH);
-
-			httpInvoker.path(
-				_builder._scheme + "://" + _builder._host + ":" +
-					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-delivery-order/v1.0/placed-orders/{placedOrderId}");
-
-			httpInvoker.path("placedOrderId", placedOrderId);
-
-			httpInvoker.userNameAndPassword(
-				_builder._login + ":" + _builder._password);
-
-			return httpInvoker.invoke();
-		}
-
-		public String getPlacedOrderPaymentURL(
-				Long placedOrderId, String callbackURL)
-			throws Exception {
-
-			HttpInvoker.HttpResponse httpResponse =
-				getPlacedOrderPaymentURLHttpResponse(
-					placedOrderId, callbackURL);
-
-			String content = httpResponse.getContent();
-
-			if ((httpResponse.getStatusCode() / 100) != 2) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response content: " + content);
-				_logger.log(
-					Level.WARNING,
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.log(
-					Level.WARNING,
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-
-				Problem.ProblemException problemException = null;
-
-				if (Objects.equals(
-						httpResponse.getContentType(), "application/json")) {
-
-					problemException = new Problem.ProblemException(
-						Problem.toDTO(content));
-				}
-				else {
-					_logger.log(
-						Level.WARNING,
-						"Unable to process content type: " +
-							httpResponse.getContentType());
-
-					Problem problem = new Problem();
-
-					problem.setStatus(
-						String.valueOf(httpResponse.getStatusCode()));
-
-					problemException = new Problem.ProblemException(problem);
-				}
-
-				throw problemException;
-			}
-			else {
-				_logger.fine("HTTP response content: " + content);
-				_logger.fine(
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.fine(
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-			}
-
-			try {
-				return content;
-			}
-			catch (Exception e) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response: " + content, e);
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-		}
-
-		public HttpInvoker.HttpResponse getPlacedOrderPaymentURLHttpResponse(
-				Long placedOrderId, String callbackURL)
-			throws Exception {
-
-			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-			if (_builder._locale != null) {
-				httpInvoker.header(
-					"Accept-Language", _builder._locale.toLanguageTag());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._headers.entrySet()) {
-
-				httpInvoker.header(entry.getKey(), entry.getValue());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._parameters.entrySet()) {
-
-				httpInvoker.parameter(entry.getKey(), entry.getValue());
-			}
-
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
-
-			if (callbackURL != null) {
+			if (contentType != null) {
 				httpInvoker.parameter(
-					"callbackURL", String.valueOf(callbackURL));
+					"contentType", String.valueOf(contentType));
+			}
+
+			if (fieldNames != null) {
+				httpInvoker.parameter("fieldNames", String.valueOf(fieldNames));
 			}
 
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-delivery-order/v1.0/placed-orders/{placedOrderId}/payment-url");
+						"/o/headless-commerce-delivery-order/v1.0/placed-orders/{placedOrderId}/attachments/export-batch");
 
 			httpInvoker.path("placedOrderId", placedOrderId);
 
@@ -1366,12 +773,226 @@ public interface PlacedOrderResource {
 			return httpInvoker.invoke();
 		}
 
-		private PlacedOrderResourceImpl(Builder builder) {
+		public Attachment postPlacedOrderAttachmentByBase64(
+				Long placedOrderId, AttachmentBase64 attachmentBase64)
+			throws Exception {
+
+			HttpInvoker.HttpResponse httpResponse =
+				postPlacedOrderAttachmentByBase64HttpResponse(
+					placedOrderId, attachmentBase64);
+
+			String content = httpResponse.getContent();
+
+			if ((httpResponse.getStatusCode() / 100) != 2) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response content: " + content);
+				_logger.log(
+					Level.WARNING,
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.log(
+					Level.WARNING,
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+
+				Problem.ProblemException problemException = null;
+
+				if (Objects.equals(
+						httpResponse.getContentType(), "application/json")) {
+
+					problemException = new Problem.ProblemException(
+						Problem.toDTO(content));
+				}
+				else {
+					_logger.log(
+						Level.WARNING,
+						"Unable to process content type: " +
+							httpResponse.getContentType());
+
+					Problem problem = new Problem();
+
+					problem.setStatus(
+						String.valueOf(httpResponse.getStatusCode()));
+
+					problemException = new Problem.ProblemException(problem);
+				}
+
+				throw problemException;
+			}
+			else {
+				_logger.fine("HTTP response content: " + content);
+				_logger.fine(
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.fine(
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+			}
+
+			try {
+				return AttachmentSerDes.toDTO(content);
+			}
+			catch (Exception e) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response: " + content, e);
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+		}
+
+		public HttpInvoker.HttpResponse
+				postPlacedOrderAttachmentByBase64HttpResponse(
+					Long placedOrderId, AttachmentBase64 attachmentBase64)
+			throws Exception {
+
+			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			httpInvoker.body(attachmentBase64.toString(), "application/json");
+
+			if (_builder._locale != null) {
+				httpInvoker.header(
+					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
+
+			httpInvoker.path(
+				_builder._scheme + "://" + _builder._host + ":" +
+					_builder._port + _builder._contextPath +
+						"/o/headless-commerce-delivery-order/v1.0/placed-orders/{placedOrderId}/attachments/by-base64");
+
+			httpInvoker.path("placedOrderId", placedOrderId);
+
+			httpInvoker.userNameAndPassword(
+				_builder._login + ":" + _builder._password);
+
+			return httpInvoker.invoke();
+		}
+
+		public void deletePlacedOrderAttachment(
+				Long placedOrderId, Long attachmentId)
+			throws Exception {
+
+			HttpInvoker.HttpResponse httpResponse =
+				deletePlacedOrderAttachmentHttpResponse(
+					placedOrderId, attachmentId);
+
+			String content = httpResponse.getContent();
+
+			if ((httpResponse.getStatusCode() / 100) != 2) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response content: " + content);
+				_logger.log(
+					Level.WARNING,
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.log(
+					Level.WARNING,
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+
+				Problem.ProblemException problemException = null;
+
+				if (Objects.equals(
+						httpResponse.getContentType(), "application/json")) {
+
+					problemException = new Problem.ProblemException(
+						Problem.toDTO(content));
+				}
+				else {
+					_logger.log(
+						Level.WARNING,
+						"Unable to process content type: " +
+							httpResponse.getContentType());
+
+					Problem problem = new Problem();
+
+					problem.setStatus(
+						String.valueOf(httpResponse.getStatusCode()));
+
+					problemException = new Problem.ProblemException(problem);
+				}
+
+				throw problemException;
+			}
+			else {
+				_logger.fine("HTTP response content: " + content);
+				_logger.fine(
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.fine(
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+			}
+
+			try {
+				return;
+			}
+			catch (Exception e) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response: " + content, e);
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+		}
+
+		public HttpInvoker.HttpResponse deletePlacedOrderAttachmentHttpResponse(
+				Long placedOrderId, Long attachmentId)
+			throws Exception {
+
+			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			if (_builder._locale != null) {
+				httpInvoker.header(
+					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.DELETE);
+
+			httpInvoker.path(
+				_builder._scheme + "://" + _builder._host + ":" +
+					_builder._port + _builder._contextPath +
+						"/o/headless-commerce-delivery-order/v1.0/placed-orders/{placedOrderId}/attachments/{attachmentId}");
+
+			httpInvoker.path("placedOrderId", placedOrderId);
+			httpInvoker.path("attachmentId", attachmentId);
+
+			httpInvoker.userNameAndPassword(
+				_builder._login + ":" + _builder._password);
+
+			return httpInvoker.invoke();
+		}
+
+		private AttachmentResourceImpl(Builder builder) {
 			_builder = builder;
 		}
 
 		private static final Logger _logger = Logger.getLogger(
-			PlacedOrderResource.class.getName());
+			AttachmentResource.class.getName());
 
 		private Builder _builder;
 

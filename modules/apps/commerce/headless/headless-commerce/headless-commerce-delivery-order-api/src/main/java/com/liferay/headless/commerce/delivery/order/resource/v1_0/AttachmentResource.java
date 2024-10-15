@@ -1,11 +1,12 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 package com.liferay.headless.commerce.delivery.order.resource.v1_0;
 
-import com.liferay.headless.commerce.delivery.order.dto.v1_0.PlacedOrder;
+import com.liferay.headless.commerce.delivery.order.dto.v1_0.Attachment;
+import com.liferay.headless.commerce.delivery.order.dto.v1_0.AttachmentBase64;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.service.GroupLocalService;
@@ -31,6 +32,7 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -45,48 +47,38 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @Generated("")
 @ProviderType
-public interface PlacedOrderResource {
+public interface AttachmentResource {
 
-	public Page<PlacedOrder>
-			getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-				String channelExternalReferenceCode,
-				String accountExternalReferenceCode, Pagination pagination)
+	public Page<Attachment>
+			getPlacedOrderByExternalReferenceCodeAttachmentsPage(
+				String externalReferenceCode, Pagination pagination)
 		throws Exception;
 
-	public Page<PlacedOrder> getChannelByExternalReferenceCodePlacedOrdersPage(
-			String externalReferenceCode, String search, Filter filter,
-			Pagination pagination, Sort[] sorts)
+	public Attachment postPlacedOrderByExternalReferenceCodeAttachmentByBase64(
+			String externalReferenceCode, AttachmentBase64 attachmentBase64)
 		throws Exception;
 
-	public Page<PlacedOrder> getChannelAccountPlacedOrdersPage(
-			Long channelId, Long accountId, Pagination pagination)
+	public void
+			deletePlacedOrderByExternalReferenceCodeAttachmentByExternalReferenceCodeAttachmentExternalReferenceCode(
+				String externalReferenceCode,
+				String attachmentExternalReferenceCode)
 		throws Exception;
 
-	public Page<PlacedOrder> getChannelPlacedOrdersPage(
-			Long channelId, String search, Filter filter, Pagination pagination,
-			Sort[] sorts)
+	public Page<Attachment> getPlacedOrderAttachmentsPage(
+			Long placedOrderId, Pagination pagination)
 		throws Exception;
 
-	public PlacedOrder getPlacedOrderByExternalReferenceCode(
-			String externalReferenceCode)
+	public Response postPlacedOrderAttachmentsPageExportBatch(
+			Long placedOrderId, String callbackURL, String contentType,
+			String fieldNames)
 		throws Exception;
 
-	public PlacedOrder patchPlacedOrderByExternalReferenceCode(
-			String externalReferenceCode, PlacedOrder placedOrder)
+	public Attachment postPlacedOrderAttachmentByBase64(
+			Long placedOrderId, AttachmentBase64 attachmentBase64)
 		throws Exception;
 
-	public String getPlacedOrderByExternalReferenceCodePaymentURL(
-			String externalReferenceCode, String callbackURL)
-		throws Exception;
-
-	public PlacedOrder getPlacedOrder(Long placedOrderId) throws Exception;
-
-	public PlacedOrder patchPlacedOrder(
-			Long placedOrderId, PlacedOrder placedOrder)
-		throws Exception;
-
-	public String getPlacedOrderPaymentURL(
-			Long placedOrderId, String callbackURL)
+	public void deletePlacedOrderAttachment(
+			Long placedOrderId, Long attachmentId)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(
@@ -154,7 +146,7 @@ public interface PlacedOrderResource {
 	@ProviderType
 	public interface Builder {
 
-		public PlacedOrderResource build();
+		public AttachmentResource build();
 
 		public Builder checkPermissions(boolean checkPermissions);
 

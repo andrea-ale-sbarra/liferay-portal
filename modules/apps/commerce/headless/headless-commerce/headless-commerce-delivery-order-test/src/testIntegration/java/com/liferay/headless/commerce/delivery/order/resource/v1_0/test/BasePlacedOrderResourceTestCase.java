@@ -214,37 +214,37 @@ public abstract class BasePlacedOrderResourceTestCase {
 	public void testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage()
 		throws Exception {
 
-		String accountExternalReferenceCode =
-			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getAccountExternalReferenceCode();
-		String irrelevantAccountExternalReferenceCode =
-			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getIrrelevantAccountExternalReferenceCode();
 		String channelExternalReferenceCode =
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getChannelExternalReferenceCode();
 		String irrelevantChannelExternalReferenceCode =
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getIrrelevantChannelExternalReferenceCode();
+		String accountExternalReferenceCode =
+			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getAccountExternalReferenceCode();
+		String irrelevantAccountExternalReferenceCode =
+			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getIrrelevantAccountExternalReferenceCode();
 
 		Page<PlacedOrder> page =
 			placedOrderResource.
 				getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-					accountExternalReferenceCode, channelExternalReferenceCode,
+					channelExternalReferenceCode, accountExternalReferenceCode,
 					Pagination.of(1, 10));
 
 		long totalCount = page.getTotalCount();
 
-		if ((irrelevantAccountExternalReferenceCode != null) &&
-			(irrelevantChannelExternalReferenceCode != null)) {
+		if ((irrelevantChannelExternalReferenceCode != null) &&
+			(irrelevantAccountExternalReferenceCode != null)) {
 
 			PlacedOrder irrelevantPlacedOrder =
 				testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_addPlacedOrder(
-					irrelevantAccountExternalReferenceCode,
 					irrelevantChannelExternalReferenceCode,
+					irrelevantAccountExternalReferenceCode,
 					randomIrrelevantPlacedOrder());
 
 			page =
 				placedOrderResource.
 					getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-						irrelevantAccountExternalReferenceCode,
 						irrelevantChannelExternalReferenceCode,
+						irrelevantAccountExternalReferenceCode,
 						Pagination.of(1, (int)totalCount + 1));
 
 			Assert.assertEquals(totalCount + 1, page.getTotalCount());
@@ -254,24 +254,24 @@ public abstract class BasePlacedOrderResourceTestCase {
 			assertValid(
 				page,
 				testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getExpectedActions(
-					irrelevantAccountExternalReferenceCode,
-					irrelevantChannelExternalReferenceCode));
+					irrelevantChannelExternalReferenceCode,
+					irrelevantAccountExternalReferenceCode));
 		}
 
 		PlacedOrder placedOrder1 =
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_addPlacedOrder(
-				accountExternalReferenceCode, channelExternalReferenceCode,
+				channelExternalReferenceCode, accountExternalReferenceCode,
 				randomPlacedOrder());
 
 		PlacedOrder placedOrder2 =
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_addPlacedOrder(
-				accountExternalReferenceCode, channelExternalReferenceCode,
+				channelExternalReferenceCode, accountExternalReferenceCode,
 				randomPlacedOrder());
 
 		page =
 			placedOrderResource.
 				getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-					accountExternalReferenceCode, channelExternalReferenceCode,
+					channelExternalReferenceCode, accountExternalReferenceCode,
 					Pagination.of(1, 10));
 
 		Assert.assertEquals(totalCount + 2, page.getTotalCount());
@@ -281,13 +281,13 @@ public abstract class BasePlacedOrderResourceTestCase {
 		assertValid(
 			page,
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getExpectedActions(
-				accountExternalReferenceCode, channelExternalReferenceCode));
+				channelExternalReferenceCode, accountExternalReferenceCode));
 	}
 
 	protected Map<String, Map<String, String>>
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getExpectedActions(
-				String accountExternalReferenceCode,
-				String channelExternalReferenceCode)
+				String channelExternalReferenceCode,
+				String accountExternalReferenceCode)
 		throws Exception {
 
 		Map<String, Map<String, String>> expectedActions = new HashMap<>();
@@ -299,32 +299,32 @@ public abstract class BasePlacedOrderResourceTestCase {
 	public void testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPageWithPagination()
 		throws Exception {
 
-		String accountExternalReferenceCode =
-			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getAccountExternalReferenceCode();
 		String channelExternalReferenceCode =
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getChannelExternalReferenceCode();
+		String accountExternalReferenceCode =
+			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getAccountExternalReferenceCode();
 
 		Page<PlacedOrder> placedOrderPage =
 			placedOrderResource.
 				getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-					accountExternalReferenceCode, channelExternalReferenceCode,
+					channelExternalReferenceCode, accountExternalReferenceCode,
 					null);
 
 		int totalCount = GetterUtil.getInteger(placedOrderPage.getTotalCount());
 
 		PlacedOrder placedOrder1 =
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_addPlacedOrder(
-				accountExternalReferenceCode, channelExternalReferenceCode,
+				channelExternalReferenceCode, accountExternalReferenceCode,
 				randomPlacedOrder());
 
 		PlacedOrder placedOrder2 =
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_addPlacedOrder(
-				accountExternalReferenceCode, channelExternalReferenceCode,
+				channelExternalReferenceCode, accountExternalReferenceCode,
 				randomPlacedOrder());
 
 		PlacedOrder placedOrder3 =
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_addPlacedOrder(
-				accountExternalReferenceCode, channelExternalReferenceCode,
+				channelExternalReferenceCode, accountExternalReferenceCode,
 				randomPlacedOrder());
 
 		// See com.liferay.portal.vulcan.internal.configuration.HeadlessAPICompanyConfiguration#pageSizeLimit
@@ -335,8 +335,8 @@ public abstract class BasePlacedOrderResourceTestCase {
 			Page<PlacedOrder> page1 =
 				placedOrderResource.
 					getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-						accountExternalReferenceCode,
 						channelExternalReferenceCode,
+						accountExternalReferenceCode,
 						Pagination.of(
 							(int)Math.ceil((totalCount + 1.0) / pageSizeLimit),
 							pageSizeLimit));
@@ -348,8 +348,8 @@ public abstract class BasePlacedOrderResourceTestCase {
 			Page<PlacedOrder> page2 =
 				placedOrderResource.
 					getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-						accountExternalReferenceCode,
 						channelExternalReferenceCode,
+						accountExternalReferenceCode,
 						Pagination.of(
 							(int)Math.ceil((totalCount + 2.0) / pageSizeLimit),
 							pageSizeLimit));
@@ -359,8 +359,8 @@ public abstract class BasePlacedOrderResourceTestCase {
 			Page<PlacedOrder> page3 =
 				placedOrderResource.
 					getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-						accountExternalReferenceCode,
 						channelExternalReferenceCode,
+						accountExternalReferenceCode,
 						Pagination.of(
 							(int)Math.ceil((totalCount + 3.0) / pageSizeLimit),
 							pageSizeLimit));
@@ -371,8 +371,8 @@ public abstract class BasePlacedOrderResourceTestCase {
 			Page<PlacedOrder> page1 =
 				placedOrderResource.
 					getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-						accountExternalReferenceCode,
 						channelExternalReferenceCode,
+						accountExternalReferenceCode,
 						Pagination.of(1, totalCount + 2));
 
 			List<PlacedOrder> placedOrders1 =
@@ -384,8 +384,8 @@ public abstract class BasePlacedOrderResourceTestCase {
 			Page<PlacedOrder> page2 =
 				placedOrderResource.
 					getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-						accountExternalReferenceCode,
 						channelExternalReferenceCode,
+						accountExternalReferenceCode,
 						Pagination.of(2, totalCount + 2));
 
 			Assert.assertEquals(totalCount + 3, page2.getTotalCount());
@@ -399,8 +399,8 @@ public abstract class BasePlacedOrderResourceTestCase {
 			Page<PlacedOrder> page3 =
 				placedOrderResource.
 					getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage(
-						accountExternalReferenceCode,
 						channelExternalReferenceCode,
+						accountExternalReferenceCode,
 						Pagination.of(1, (int)totalCount + 3));
 
 			assertContains(placedOrder1, (List<PlacedOrder>)page3.getItems());
@@ -411,27 +411,12 @@ public abstract class BasePlacedOrderResourceTestCase {
 
 	protected PlacedOrder
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_addPlacedOrder(
-				String accountExternalReferenceCode,
-				String channelExternalReferenceCode, PlacedOrder placedOrder)
+				String channelExternalReferenceCode,
+				String accountExternalReferenceCode, PlacedOrder placedOrder)
 		throws Exception {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
-	}
-
-	protected String
-			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getAccountExternalReferenceCode()
-		throws Exception {
-
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
-	}
-
-	protected String
-			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getIrrelevantAccountExternalReferenceCode()
-		throws Exception {
-
-		return null;
 	}
 
 	protected String
@@ -444,6 +429,21 @@ public abstract class BasePlacedOrderResourceTestCase {
 
 	protected String
 			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getIrrelevantChannelExternalReferenceCode()
+		throws Exception {
+
+		return null;
+	}
+
+	protected String
+			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getAccountExternalReferenceCode()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected String
+			testGetChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage_getIrrelevantAccountExternalReferenceCode()
 		throws Exception {
 
 		return null;
@@ -912,27 +912,27 @@ public abstract class BasePlacedOrderResourceTestCase {
 
 	@Test
 	public void testGetChannelAccountPlacedOrdersPage() throws Exception {
-		Long accountId = testGetChannelAccountPlacedOrdersPage_getAccountId();
-		Long irrelevantAccountId =
-			testGetChannelAccountPlacedOrdersPage_getIrrelevantAccountId();
 		Long channelId = testGetChannelAccountPlacedOrdersPage_getChannelId();
 		Long irrelevantChannelId =
 			testGetChannelAccountPlacedOrdersPage_getIrrelevantChannelId();
+		Long accountId = testGetChannelAccountPlacedOrdersPage_getAccountId();
+		Long irrelevantAccountId =
+			testGetChannelAccountPlacedOrdersPage_getIrrelevantAccountId();
 
 		Page<PlacedOrder> page =
 			placedOrderResource.getChannelAccountPlacedOrdersPage(
-				accountId, channelId, Pagination.of(1, 10));
+				channelId, accountId, Pagination.of(1, 10));
 
 		long totalCount = page.getTotalCount();
 
-		if ((irrelevantAccountId != null) && (irrelevantChannelId != null)) {
+		if ((irrelevantChannelId != null) && (irrelevantAccountId != null)) {
 			PlacedOrder irrelevantPlacedOrder =
 				testGetChannelAccountPlacedOrdersPage_addPlacedOrder(
-					irrelevantAccountId, irrelevantChannelId,
+					irrelevantChannelId, irrelevantAccountId,
 					randomIrrelevantPlacedOrder());
 
 			page = placedOrderResource.getChannelAccountPlacedOrdersPage(
-				irrelevantAccountId, irrelevantChannelId,
+				irrelevantChannelId, irrelevantAccountId,
 				Pagination.of(1, (int)totalCount + 1));
 
 			Assert.assertEquals(totalCount + 1, page.getTotalCount());
@@ -942,19 +942,19 @@ public abstract class BasePlacedOrderResourceTestCase {
 			assertValid(
 				page,
 				testGetChannelAccountPlacedOrdersPage_getExpectedActions(
-					irrelevantAccountId, irrelevantChannelId));
+					irrelevantChannelId, irrelevantAccountId));
 		}
 
 		PlacedOrder placedOrder1 =
 			testGetChannelAccountPlacedOrdersPage_addPlacedOrder(
-				accountId, channelId, randomPlacedOrder());
+				channelId, accountId, randomPlacedOrder());
 
 		PlacedOrder placedOrder2 =
 			testGetChannelAccountPlacedOrdersPage_addPlacedOrder(
-				accountId, channelId, randomPlacedOrder());
+				channelId, accountId, randomPlacedOrder());
 
 		page = placedOrderResource.getChannelAccountPlacedOrdersPage(
-			accountId, channelId, Pagination.of(1, 10));
+			channelId, accountId, Pagination.of(1, 10));
 
 		Assert.assertEquals(totalCount + 2, page.getTotalCount());
 
@@ -963,12 +963,12 @@ public abstract class BasePlacedOrderResourceTestCase {
 		assertValid(
 			page,
 			testGetChannelAccountPlacedOrdersPage_getExpectedActions(
-				accountId, channelId));
+				channelId, accountId));
 	}
 
 	protected Map<String, Map<String, String>>
 			testGetChannelAccountPlacedOrdersPage_getExpectedActions(
-				Long accountId, Long channelId)
+				Long channelId, Long accountId)
 		throws Exception {
 
 		Map<String, Map<String, String>> expectedActions = new HashMap<>();
@@ -980,26 +980,26 @@ public abstract class BasePlacedOrderResourceTestCase {
 	public void testGetChannelAccountPlacedOrdersPageWithPagination()
 		throws Exception {
 
-		Long accountId = testGetChannelAccountPlacedOrdersPage_getAccountId();
 		Long channelId = testGetChannelAccountPlacedOrdersPage_getChannelId();
+		Long accountId = testGetChannelAccountPlacedOrdersPage_getAccountId();
 
 		Page<PlacedOrder> placedOrderPage =
 			placedOrderResource.getChannelAccountPlacedOrdersPage(
-				accountId, channelId, null);
+				channelId, accountId, null);
 
 		int totalCount = GetterUtil.getInteger(placedOrderPage.getTotalCount());
 
 		PlacedOrder placedOrder1 =
 			testGetChannelAccountPlacedOrdersPage_addPlacedOrder(
-				accountId, channelId, randomPlacedOrder());
+				channelId, accountId, randomPlacedOrder());
 
 		PlacedOrder placedOrder2 =
 			testGetChannelAccountPlacedOrdersPage_addPlacedOrder(
-				accountId, channelId, randomPlacedOrder());
+				channelId, accountId, randomPlacedOrder());
 
 		PlacedOrder placedOrder3 =
 			testGetChannelAccountPlacedOrdersPage_addPlacedOrder(
-				accountId, channelId, randomPlacedOrder());
+				channelId, accountId, randomPlacedOrder());
 
 		// See com.liferay.portal.vulcan.internal.configuration.HeadlessAPICompanyConfiguration#pageSizeLimit
 
@@ -1008,7 +1008,7 @@ public abstract class BasePlacedOrderResourceTestCase {
 		if (totalCount >= (pageSizeLimit - 2)) {
 			Page<PlacedOrder> page1 =
 				placedOrderResource.getChannelAccountPlacedOrdersPage(
-					accountId, channelId,
+					channelId, accountId,
 					Pagination.of(
 						(int)Math.ceil((totalCount + 1.0) / pageSizeLimit),
 						pageSizeLimit));
@@ -1019,7 +1019,7 @@ public abstract class BasePlacedOrderResourceTestCase {
 
 			Page<PlacedOrder> page2 =
 				placedOrderResource.getChannelAccountPlacedOrdersPage(
-					accountId, channelId,
+					channelId, accountId,
 					Pagination.of(
 						(int)Math.ceil((totalCount + 2.0) / pageSizeLimit),
 						pageSizeLimit));
@@ -1028,7 +1028,7 @@ public abstract class BasePlacedOrderResourceTestCase {
 
 			Page<PlacedOrder> page3 =
 				placedOrderResource.getChannelAccountPlacedOrdersPage(
-					accountId, channelId,
+					channelId, accountId,
 					Pagination.of(
 						(int)Math.ceil((totalCount + 3.0) / pageSizeLimit),
 						pageSizeLimit));
@@ -1038,7 +1038,7 @@ public abstract class BasePlacedOrderResourceTestCase {
 		else {
 			Page<PlacedOrder> page1 =
 				placedOrderResource.getChannelAccountPlacedOrdersPage(
-					accountId, channelId, Pagination.of(1, totalCount + 2));
+					channelId, accountId, Pagination.of(1, totalCount + 2));
 
 			List<PlacedOrder> placedOrders1 =
 				(List<PlacedOrder>)page1.getItems();
@@ -1048,7 +1048,7 @@ public abstract class BasePlacedOrderResourceTestCase {
 
 			Page<PlacedOrder> page2 =
 				placedOrderResource.getChannelAccountPlacedOrdersPage(
-					accountId, channelId, Pagination.of(2, totalCount + 2));
+					channelId, accountId, Pagination.of(2, totalCount + 2));
 
 			Assert.assertEquals(totalCount + 3, page2.getTotalCount());
 
@@ -1060,7 +1060,7 @@ public abstract class BasePlacedOrderResourceTestCase {
 
 			Page<PlacedOrder> page3 =
 				placedOrderResource.getChannelAccountPlacedOrdersPage(
-					accountId, channelId,
+					channelId, accountId,
 					Pagination.of(1, (int)totalCount + 3));
 
 			assertContains(placedOrder1, (List<PlacedOrder>)page3.getItems());
@@ -1070,25 +1070,11 @@ public abstract class BasePlacedOrderResourceTestCase {
 	}
 
 	protected PlacedOrder testGetChannelAccountPlacedOrdersPage_addPlacedOrder(
-			Long accountId, Long channelId, PlacedOrder placedOrder)
+			Long channelId, Long accountId, PlacedOrder placedOrder)
 		throws Exception {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
-	}
-
-	protected Long testGetChannelAccountPlacedOrdersPage_getAccountId()
-		throws Exception {
-
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
-	}
-
-	protected Long
-			testGetChannelAccountPlacedOrdersPage_getIrrelevantAccountId()
-		throws Exception {
-
-		return null;
 	}
 
 	protected Long testGetChannelAccountPlacedOrdersPage_getChannelId()
@@ -1100,6 +1086,20 @@ public abstract class BasePlacedOrderResourceTestCase {
 
 	protected Long
 			testGetChannelAccountPlacedOrdersPage_getIrrelevantChannelId()
+		throws Exception {
+
+		return null;
+	}
+
+	protected Long testGetChannelAccountPlacedOrdersPage_getAccountId()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected Long
+			testGetChannelAccountPlacedOrdersPage_getIrrelevantAccountId()
 		throws Exception {
 
 		return null;
@@ -1950,6 +1950,14 @@ public abstract class BasePlacedOrderResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("attachments", additionalAssertFieldName)) {
+				if (placedOrder.getAttachments() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("author", additionalAssertFieldName)) {
 				if (placedOrder.getAuthor() == null) {
 					valid = false;
@@ -2417,6 +2425,17 @@ public abstract class BasePlacedOrderResourceTestCase {
 				if (!Objects.deepEquals(
 						placedOrder1.getAccountId(),
 						placedOrder2.getAccountId())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("attachments", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						placedOrder1.getAttachments(),
+						placedOrder2.getAttachments())) {
 
 					return false;
 				}
@@ -3030,6 +3049,11 @@ public abstract class BasePlacedOrderResourceTestCase {
 		}
 
 		if (entityFieldName.equals("accountId")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
+		if (entityFieldName.equals("attachments")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
 		}

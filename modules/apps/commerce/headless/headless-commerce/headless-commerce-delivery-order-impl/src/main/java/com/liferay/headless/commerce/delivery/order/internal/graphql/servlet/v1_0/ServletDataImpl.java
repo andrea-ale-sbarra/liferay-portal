@@ -7,6 +7,7 @@ package com.liferay.headless.commerce.delivery.order.internal.graphql.servlet.v1
 
 import com.liferay.headless.commerce.delivery.order.internal.graphql.mutation.v1_0.Mutation;
 import com.liferay.headless.commerce.delivery.order.internal.graphql.query.v1_0.Query;
+import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.AttachmentResourceImpl;
 import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.OrderTransitionResourceImpl;
 import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.PlacedOrderAddressResourceImpl;
 import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.PlacedOrderCommentResourceImpl;
@@ -14,6 +15,7 @@ import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.Place
 import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.PlacedOrderItemShipmentResourceImpl;
 import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.PlacedOrderResourceImpl;
 import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.TermResourceImpl;
+import com.liferay.headless.commerce.delivery.order.resource.v1_0.AttachmentResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.OrderTransitionResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.PlacedOrderAddressResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.PlacedOrderCommentResource;
@@ -46,6 +48,8 @@ public class ServletDataImpl implements ServletData {
 
 	@Activate
 	public void activate(BundleContext bundleContext) {
+		Mutation.setAttachmentResourceComponentServiceObjects(
+			_attachmentResourceComponentServiceObjects);
 		Mutation.setOrderTransitionResourceComponentServiceObjects(
 			_orderTransitionResourceComponentServiceObjects);
 		Mutation.setPlacedOrderResourceComponentServiceObjects(
@@ -57,6 +61,8 @@ public class ServletDataImpl implements ServletData {
 		Mutation.setPlacedOrderItemShipmentResourceComponentServiceObjects(
 			_placedOrderItemShipmentResourceComponentServiceObjects);
 
+		Query.setAttachmentResourceComponentServiceObjects(
+			_attachmentResourceComponentServiceObjects);
 		Query.setOrderTransitionResourceComponentServiceObjects(
 			_orderTransitionResourceComponentServiceObjects);
 		Query.setPlacedOrderResourceComponentServiceObjects(
@@ -108,6 +114,31 @@ public class ServletDataImpl implements ServletData {
 			new HashMap<String, ObjectValuePair<Class<?>, String>>() {
 				{
 					put(
+						"mutation#createPlacedOrderByExternalReferenceCodeAttachmentByBase64",
+						new ObjectValuePair<>(
+							AttachmentResourceImpl.class,
+							"postPlacedOrderByExternalReferenceCodeAttachmentByBase64"));
+					put(
+						"mutation#deletePlacedOrderByExternalReferenceCodeAttachmentByExternalReferenceCodeAttachmentExternalReferenceCode",
+						new ObjectValuePair<>(
+							AttachmentResourceImpl.class,
+							"deletePlacedOrderByExternalReferenceCodeAttachmentByExternalReferenceCodeAttachmentExternalReferenceCode"));
+					put(
+						"mutation#createPlacedOrderAttachmentsPageExportBatch",
+						new ObjectValuePair<>(
+							AttachmentResourceImpl.class,
+							"postPlacedOrderAttachmentsPageExportBatch"));
+					put(
+						"mutation#createPlacedOrderAttachmentByBase64",
+						new ObjectValuePair<>(
+							AttachmentResourceImpl.class,
+							"postPlacedOrderAttachmentByBase64"));
+					put(
+						"mutation#deletePlacedOrderAttachment",
+						new ObjectValuePair<>(
+							AttachmentResourceImpl.class,
+							"deletePlacedOrderAttachment"));
+					put(
 						"mutation#createPlacedOrderOrderTransitionsPageExportBatch",
 						new ObjectValuePair<>(
 							OrderTransitionResourceImpl.class,
@@ -147,6 +178,16 @@ public class ServletDataImpl implements ServletData {
 							PlacedOrderItemShipmentResourceImpl.class,
 							"postPlacedOrderItemPlacedOrderItemShipmentsPageExportBatch"));
 
+					put(
+						"query#placedOrderByExternalReferenceCodeAttachments",
+						new ObjectValuePair<>(
+							AttachmentResourceImpl.class,
+							"getPlacedOrderByExternalReferenceCodeAttachmentsPage"));
+					put(
+						"query#placedOrderAttachments",
+						new ObjectValuePair<>(
+							AttachmentResourceImpl.class,
+							"getPlacedOrderAttachmentsPage"));
 					put(
 						"query#placedOrderOrderTransitions",
 						new ObjectValuePair<>(
@@ -372,12 +413,21 @@ public class ServletDataImpl implements ServletData {
 							TermResourceImpl.class,
 							"getPlacedOrderByExternalReferenceCodeDeliveryTerm"));
 					put(
+						"query#PlacedOrder.byExternalReferenceCodeAttachments",
+						new ObjectValuePair<>(
+							AttachmentResourceImpl.class,
+							"getPlacedOrderByExternalReferenceCodeAttachmentsPage"));
+					put(
 						"query#PlacedOrder.byExternalReferenceCodePlacedOrderShippingAddress",
 						new ObjectValuePair<>(
 							PlacedOrderAddressResourceImpl.class,
 							"getPlacedOrderByExternalReferenceCodePlacedOrderShippingAddress"));
 				}
 			};
+
+	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
+	private ComponentServiceObjects<AttachmentResource>
+		_attachmentResourceComponentServiceObjects;
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<OrderTransitionResource>
