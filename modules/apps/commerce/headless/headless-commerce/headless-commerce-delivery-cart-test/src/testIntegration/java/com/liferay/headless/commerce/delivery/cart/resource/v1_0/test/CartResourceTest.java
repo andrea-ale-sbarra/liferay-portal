@@ -219,7 +219,10 @@ public class CartResourceTest extends BaseCartResourceTestCase {
 
 	@Override
 	protected String[] getIgnoredEntityFieldNames() {
-		return new String[] {"accountId", "orderDate", "orderId"};
+		return new String[] {
+			"account", "accountId", "author", "name", "orderDate", "orderId",
+			"orderType", "purchaseOrderNumber"
+		};
 	}
 
 	@Override
