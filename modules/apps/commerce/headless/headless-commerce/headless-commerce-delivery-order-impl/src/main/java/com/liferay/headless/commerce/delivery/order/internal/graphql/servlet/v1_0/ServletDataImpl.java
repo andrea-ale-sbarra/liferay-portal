@@ -13,12 +13,14 @@ import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.Place
 import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.PlacedOrderItemResourceImpl;
 import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.PlacedOrderItemShipmentResourceImpl;
 import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.PlacedOrderResourceImpl;
+import com.liferay.headless.commerce.delivery.order.internal.resource.v1_0.TermResourceImpl;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.OrderTransitionResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.PlacedOrderAddressResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.PlacedOrderCommentResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.PlacedOrderItemResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.PlacedOrderItemShipmentResource;
 import com.liferay.headless.commerce.delivery.order.resource.v1_0.PlacedOrderResource;
+import com.liferay.headless.commerce.delivery.order.resource.v1_0.TermResource;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.vulcan.graphql.servlet.ServletData;
 
@@ -67,6 +69,8 @@ public class ServletDataImpl implements ServletData {
 			_placedOrderItemResourceComponentServiceObjects);
 		Query.setPlacedOrderItemShipmentResourceComponentServiceObjects(
 			_placedOrderItemShipmentResourceComponentServiceObjects);
+		Query.setTermResourceComponentServiceObjects(
+			_termResourceComponentServiceObjects);
 	}
 
 	public String getApplicationName() {
@@ -154,6 +158,11 @@ public class ServletDataImpl implements ServletData {
 							PlacedOrderResourceImpl.class,
 							"getChannelByExternalReferenceCodeChannelExternalReferenceCodeAccountByExternalReferenceCodeAccountExternalReferenceCodePlacedOrdersPage"));
 					put(
+						"query#channelByExternalReferenceCodePlacedOrders",
+						new ObjectValuePair<>(
+							PlacedOrderResourceImpl.class,
+							"getChannelByExternalReferenceCodePlacedOrdersPage"));
+					put(
 						"query#channelAccountPlacedOrders",
 						new ObjectValuePair<>(
 							PlacedOrderResourceImpl.class,
@@ -163,11 +172,6 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							PlacedOrderResourceImpl.class,
 							"getChannelPlacedOrdersPage"));
-					put(
-						"query#channelByExternalReferenceCodePlacedOrders",
-						new ObjectValuePair<>(
-							PlacedOrderResourceImpl.class,
-							"getChannelByExternalReferenceCodePlacedOrdersPage"));
 					put(
 						"query#placedOrderByExternalReferenceCode",
 						new ObjectValuePair<>(
@@ -257,6 +261,26 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							PlacedOrderItemShipmentResourceImpl.class,
 							"getPlacedOrderItemPlacedOrderItemShipmentsPage"));
+					put(
+						"query#placedOrderByExternalReferenceCodeDeliveryTerm",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getPlacedOrderByExternalReferenceCodeDeliveryTerm"));
+					put(
+						"query#placedOrderByExternalReferenceCodePaymentTerm",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getPlacedOrderByExternalReferenceCodePaymentTerm"));
+					put(
+						"query#placedOrderDeliveryTerm",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getPlacedOrderDeliveryTerm"));
+					put(
+						"query#placedOrderPaymentTerm",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getPlacedOrderPaymentTerm"));
 
 					put(
 						"query#PlacedOrder.byExternalReferenceCodePlacedOrderBillingAddress",
@@ -264,10 +288,20 @@ public class ServletDataImpl implements ServletData {
 							PlacedOrderAddressResourceImpl.class,
 							"getPlacedOrderByExternalReferenceCodePlacedOrderBillingAddress"));
 					put(
+						"query#PlacedOrder.byExternalReferenceCodePaymentTerm",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getPlacedOrderByExternalReferenceCodePaymentTerm"));
+					put(
 						"query#PlacedOrder.paymentURL",
 						new ObjectValuePair<>(
 							PlacedOrderResourceImpl.class,
 							"getPlacedOrderPaymentURL"));
+					put(
+						"query#PlacedOrder.deliveryTerm",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getPlacedOrderDeliveryTerm"));
 					put(
 						"query#PlacedOrder.channelByExternalReferenceCodePlacedOrders",
 						new ObjectValuePair<>(
@@ -283,6 +317,11 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							PlacedOrderItemResourceImpl.class,
 							"getPlacedOrderByExternalReferenceCodePlacedOrderItemsPage"));
+					put(
+						"query#PlacedOrder.paymentTerm",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getPlacedOrderPaymentTerm"));
 					put(
 						"query#PlacedOrder.byExternalReferenceCodePlacedOrderComments",
 						new ObjectValuePair<>(
@@ -328,6 +367,11 @@ public class ServletDataImpl implements ServletData {
 							PlacedOrderResourceImpl.class,
 							"getPlacedOrderByExternalReferenceCode"));
 					put(
+						"query#PlacedOrder.byExternalReferenceCodeDeliveryTerm",
+						new ObjectValuePair<>(
+							TermResourceImpl.class,
+							"getPlacedOrderByExternalReferenceCodeDeliveryTerm"));
+					put(
 						"query#PlacedOrder.byExternalReferenceCodePlacedOrderShippingAddress",
 						new ObjectValuePair<>(
 							PlacedOrderAddressResourceImpl.class,
@@ -358,5 +402,9 @@ public class ServletDataImpl implements ServletData {
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<PlacedOrderAddressResource>
 		_placedOrderAddressResourceComponentServiceObjects;
+
+	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
+	private ComponentServiceObjects<TermResource>
+		_termResourceComponentServiceObjects;
 
 }

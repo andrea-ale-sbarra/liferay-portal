@@ -97,6 +97,8 @@ public class OpenAPIResourceImpl {
 
 			add(PlacedOrderItemShipmentResourceImpl.class);
 
+			add(TermResourceImpl.class);
+
 			add(OpenAPIResourceImpl.class);
 		}
 	};
