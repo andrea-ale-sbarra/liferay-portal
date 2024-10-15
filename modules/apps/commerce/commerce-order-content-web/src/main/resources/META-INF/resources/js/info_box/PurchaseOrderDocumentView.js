@@ -10,7 +10,7 @@ import {CommerceServiceProvider} from 'commerce-frontend-js';
 import {openToast, sub} from 'frontend-js-web';
 import React, {useRef, useState} from 'react';
 
-import {isEditable} from './DefaultView';
+import {isEditable} from '../util';
 
 function getBase64(file) {
 	return new Promise((resolve, reject) => {
