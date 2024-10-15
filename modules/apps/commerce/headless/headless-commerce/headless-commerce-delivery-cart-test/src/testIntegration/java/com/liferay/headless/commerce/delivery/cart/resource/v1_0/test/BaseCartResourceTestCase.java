@@ -1685,6 +1685,14 @@ public abstract class BaseCartResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("attachments", additionalAssertFieldName)) {
+				if (cart.getAttachments() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("author", additionalAssertFieldName)) {
 				if (cart.getAuthor() == null) {
 					valid = false;
@@ -2205,6 +2213,16 @@ public abstract class BaseCartResourceTestCase {
 			if (Objects.equals("accountId", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
 						cart1.getAccountId(), cart2.getAccountId())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("attachments", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						cart1.getAttachments(), cart2.getAttachments())) {
 
 					return false;
 				}
@@ -2862,6 +2880,11 @@ public abstract class BaseCartResourceTestCase {
 		}
 
 		if (entityFieldName.equals("accountId")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
+		if (entityFieldName.equals("attachments")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
 		}
