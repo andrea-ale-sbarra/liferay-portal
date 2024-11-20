@@ -358,6 +358,11 @@ public class CPDefinitionLocalServiceImpl
 			serviceContext.getAssetLinkEntryIds(),
 			serviceContext.getAssetPriority());
 
+		if (status == WorkflowConstants.STATUS_APPROVED) {
+			return cpDefinitionLocalService.updateStatus(
+				userId, cpDefinitionId, status, serviceContext, null);
+		}
+
 		// Workflow
 
 		if (_workflowDefinitionLinkLocalService.hasWorkflowDefinitionLink(
