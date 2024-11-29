@@ -1276,9 +1276,13 @@ components:
                     format: int64
                     minimum: 0
                     type: integer
+                entityName:
+                    example: ABS Sensor
+                    type: string
                 entityType:
                     enum:
                         - product
+                        - template
                     example: product
                     type: string
                 externalReferenceCode:
@@ -1314,6 +1318,16 @@ components:
                     example: 10.1
                     format: bigdecimal
                     type: number
+                productShippingConfiguration:
+                    $ref: "#/components/schemas/ProductShippingConfiguration"
+                productTaxConfiguration:
+                    $ref: "#/components/schemas/ProductTaxConfiguration"
+                purchasable:
+                    example: true
+                    type: boolean
+                visible:
+                    example: true
+                    type: boolean
             type: object
         ProductConfigurationList:
             properties:
