@@ -205,6 +205,27 @@ public class ProductConfiguration implements Cloneable, Serializable {
 
 	protected Long entityId;
 
+	public String getEntityName() {
+		return entityName;
+	}
+
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
+	}
+
+	public void setEntityName(
+		UnsafeSupplier<String, Exception> entityNameUnsafeSupplier) {
+
+		try {
+			entityName = entityNameUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected String entityName;
+
 	public EntityType getEntityType() {
 		return entityType;
 	}
@@ -401,6 +422,98 @@ public class ProductConfiguration implements Cloneable, Serializable {
 
 	protected BigDecimal multipleOrderQuantity;
 
+	public ProductShippingConfiguration getProductShippingConfiguration() {
+		return productShippingConfiguration;
+	}
+
+	public void setProductShippingConfiguration(
+		ProductShippingConfiguration productShippingConfiguration) {
+
+		this.productShippingConfiguration = productShippingConfiguration;
+	}
+
+	public void setProductShippingConfiguration(
+		UnsafeSupplier<ProductShippingConfiguration, Exception>
+			productShippingConfigurationUnsafeSupplier) {
+
+		try {
+			productShippingConfiguration =
+				productShippingConfigurationUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected ProductShippingConfiguration productShippingConfiguration;
+
+	public ProductTaxConfiguration getProductTaxConfiguration() {
+		return productTaxConfiguration;
+	}
+
+	public void setProductTaxConfiguration(
+		ProductTaxConfiguration productTaxConfiguration) {
+
+		this.productTaxConfiguration = productTaxConfiguration;
+	}
+
+	public void setProductTaxConfiguration(
+		UnsafeSupplier<ProductTaxConfiguration, Exception>
+			productTaxConfigurationUnsafeSupplier) {
+
+		try {
+			productTaxConfiguration =
+				productTaxConfigurationUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected ProductTaxConfiguration productTaxConfiguration;
+
+	public Boolean getPurchasable() {
+		return purchasable;
+	}
+
+	public void setPurchasable(Boolean purchasable) {
+		this.purchasable = purchasable;
+	}
+
+	public void setPurchasable(
+		UnsafeSupplier<Boolean, Exception> purchasableUnsafeSupplier) {
+
+		try {
+			purchasable = purchasableUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Boolean purchasable;
+
+	public Boolean getVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
+
+	public void setVisible(
+		UnsafeSupplier<Boolean, Exception> visibleUnsafeSupplier) {
+
+		try {
+			visible = visibleUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Boolean visible;
+
 	@Override
 	public ProductConfiguration clone() throws CloneNotSupportedException {
 		return (ProductConfiguration)super.clone();
@@ -435,7 +548,7 @@ public class ProductConfiguration implements Cloneable, Serializable {
 
 	public static enum EntityType {
 
-		PRODUCT("product");
+		PRODUCT("product"), TEMPLATE("template");
 
 		public static EntityType create(String value) {
 			for (EntityType entityType : values()) {
