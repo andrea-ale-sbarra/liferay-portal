@@ -19,6 +19,8 @@ import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductConfiguration
 import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.util.BigDecimalUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterContext;
 
@@ -48,14 +50,18 @@ public class ProductConfigurationDTOConverter
 
 		if (FeatureFlagManagerUtil.isEnabled("LPD-10889")) {
 			CPConfigurationEntry cpConfigurationEntry;
+			CPDefinition cpDefinition;
+			String entityName = null;
 
 			if (dtoConverterContext.getId() != null) {
-				CPDefinition cpDefinition =
-					_cpDefinitionService.getCPDefinition(
-						(Long)dtoConverterContext.getId());
+				cpDefinition = _cpDefinitionService.getCPDefinition(
+					(Long)dtoConverterContext.getId());
 
 				cpConfigurationEntry =
 					cpDefinition.fetchMasterCPConfigurationEntry();
+
+				entityName = cpDefinition.getName(
+					LocaleUtil.toLanguageId(dtoConverterContext.getLocale()));
 			}
 			else {
 				ProductConfigurationDTOConverterContext
@@ -67,6 +73,18 @@ public class ProductConfigurationDTOConverter
 					_cpConfigurationEntryService.getCPConfigurationEntry(
 						productConfigurationDTOConverterContext.
 							getCPConfigurationEntryId());
+
+				if (StringUtil.equals(
+						CPDefinition.class.getName(),
+						cpConfigurationEntry.getClassName())) {
+
+					cpDefinition = _cpDefinitionService.getCPDefinition(
+						cpConfigurationEntry.getCPConfigurationEntryId());
+
+					entityName = cpDefinition.getName(
+						LocaleUtil.toLanguageId(
+							dtoConverterContext.getLocale()));
+				}
 			}
 
 			if (cpConfigurationEntry == null) {
@@ -80,6 +98,7 @@ public class ProductConfigurationDTOConverter
 			productConfiguration.setEntityExternalReferenceCode(
 				() -> _getEntityExternalReferenceCode(cpConfigurationEntry));
 			productConfiguration.setEntityId(cpConfigurationEntry::getClassPK);
+			productConfiguration.setEntityName(entityName);
 			productConfiguration.setExternalReferenceCode(
 				cpConfigurationEntry::getExternalReferenceCode);
 			productConfiguration.setId(
