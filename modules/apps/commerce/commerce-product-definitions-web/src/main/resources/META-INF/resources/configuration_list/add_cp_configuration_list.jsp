@@ -36,9 +36,19 @@ List<CommerceCatalog> commerceCatalogs = cpConfigurationListDisplayContext.getCo
 			%>
 
 		</aui:select>
+
+		<label class="control-label" for="parentCPConfigurationId"><liferay-ui:message key="parent-configuration" /></label>
+
+		<div id="autocomplete-root"></div>
+
 	</div>
 </aui:form>
 
 <portlet:renderURL var="editProductDefinitionURL">
 	<portlet:param name="mvcRenderCommandName" value="/cp_definitions/edit_cp_definition" />
 </portlet:renderURL>
+
+<liferay-frontend:component
+	context="<%= cpConfigurationListDisplayContext.getContext() %>"
+	module="{CPConfigurationListAutocomplete} from commerce-product-definitions-web"
+/>

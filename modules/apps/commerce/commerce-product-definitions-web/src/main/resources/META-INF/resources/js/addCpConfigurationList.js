@@ -40,6 +40,10 @@ function openAddCPConfigurationListModal({
 						`#${namespace}name`
 					)?.value;
 
+					formattedData.parentProductConfigurationListId = iframeDocument.querySelector(
+						`#${namespace}parentCPConfigurationId`
+					)?.value;
+
 					formattedData.priority = iframeDocument.querySelector(
 						`#${namespace}priority`
 					)?.value;
@@ -78,6 +82,7 @@ function openAddCPConfigurationListModal({
 				type: 'button',
 			},
 		],
+		height: '32rem',
 		id: 'add-new-product-configuration-modal',
 		size: 'md',
 		title: Liferay.Language.get('add-new-product-configuration'),

@@ -124,7 +124,7 @@ function handleReplacements({initialLabel, initialValue, namespace}) {
 		inputId: 'replacementId',
 		inputName: `${namespace}replacementCPInstanceId`,
 		itemsKey: 'id',
-		itemsLabel: 'sku',
+		itemsLabel: 'product-configuration',
 		showDeleteButton: true,
 	});
 }
