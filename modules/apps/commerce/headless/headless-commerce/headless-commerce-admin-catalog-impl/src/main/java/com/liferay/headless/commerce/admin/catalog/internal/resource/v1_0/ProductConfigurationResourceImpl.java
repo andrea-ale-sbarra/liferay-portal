@@ -226,11 +226,11 @@ public class ProductConfigurationResourceImpl
 		CPConfigurationEntry cpConfigurationEntry =
 			_cpConfigurationEntryService.getCPConfigurationEntry(id);
 
-		ProductTaxConfiguration productTaxConfiguration =
-			_getProductTaxConfiguration(productConfiguration);
-
 		ProductShippingConfiguration productShippingConfiguration =
 			_getProductShippingConfiguration(productConfiguration);
+
+		ProductTaxConfiguration productTaxConfiguration =
+			_getProductTaxConfiguration(productConfiguration);
 
 		return _toProductConfiguration(
 			_cpConfigurationEntryService.updateCPConfigurationEntry(
@@ -343,11 +343,11 @@ public class ProductConfigurationResourceImpl
 			cpDefinition.fetchMasterCPConfigurationEntry();
 
 		if (masterCPConfigurationEntry != null) {
-			ProductTaxConfiguration productTaxConfiguration =
-				_getProductTaxConfiguration(productConfiguration);
-
 			ProductShippingConfiguration productShippingConfiguration =
 				_getProductShippingConfiguration(productConfiguration);
+
+			ProductTaxConfiguration productTaxConfiguration =
+				_getProductTaxConfiguration(productConfiguration);
 
 			_cpConfigurationEntryService.updateCPConfigurationEntry(
 				GetterUtil.getString(
@@ -466,11 +466,10 @@ public class ProductConfigurationResourceImpl
 		CPConfigurationList cpConfigurationList =
 			_cpConfigurationListService.getCPConfigurationList(id);
 
-		ProductConfiguration.EntityType entityType =
-			productConfiguration.getEntityType();
-
 		long classNameId = _portal.getClassNameId(CPDefinition.class.getName());
 		long classPK = GetterUtil.getLong(productConfiguration.getEntityId());
+		ProductConfiguration.EntityType entityType =
+			productConfiguration.getEntityType();
 
 		if ((entityType == null) ||
 			Objects.equals(entityType.getValue(), "product")) {
@@ -495,11 +494,11 @@ public class ProductConfigurationResourceImpl
 			classPK = id;
 		}
 
-		ProductTaxConfiguration productTaxConfiguration =
-			_getProductTaxConfiguration(productConfiguration);
-
 		ProductShippingConfiguration productShippingConfiguration =
 			_getProductShippingConfiguration(productConfiguration);
+
+		ProductTaxConfiguration productTaxConfiguration =
+			_getProductTaxConfiguration(productConfiguration);
 
 		return _toProductConfiguration(
 			_cpConfigurationEntryService.addCPConfigurationEntry(
