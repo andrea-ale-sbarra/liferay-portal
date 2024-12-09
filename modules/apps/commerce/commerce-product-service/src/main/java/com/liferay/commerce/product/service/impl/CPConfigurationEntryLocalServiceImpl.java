@@ -198,7 +198,16 @@ public class CPConfigurationEntryLocalServiceImpl
 		cpConfigurationEntry.setWeight(weight);
 		cpConfigurationEntry.setWidth(width);
 
-		return cpConfigurationEntryPersistence.update(cpConfigurationEntry);
+		cpConfigurationEntry = cpConfigurationEntryPersistence.update(
+			cpConfigurationEntry);
+
+		if (cpConfigurationEntry.getClassNameId() ==
+				_classNameLocalService.getClassNameId(CPDefinition.class)) {
+
+			_reindexCPDefinition(cpConfigurationEntry.getClassPK());
+		}
+
+		return cpConfigurationEntry;
 	}
 
 	private void _reindexCPDefinition(long cpDefinitionId)

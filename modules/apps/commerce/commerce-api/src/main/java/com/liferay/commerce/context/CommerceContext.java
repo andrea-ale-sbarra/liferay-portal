@@ -34,4 +34,6 @@ public interface CommerceContext extends Serializable {
 
 	public int getCommerceSiteType();
 
+	public long[] getCPConfigurationListIds();
+
 }
