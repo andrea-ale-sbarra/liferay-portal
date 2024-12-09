@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {FrameLocator, Locator, Page} from '@playwright/test';
+import {Page} from '@playwright/test';
 
 import {CommerceDNDTablePage} from '../commerceDNDTablePage';
 
@@ -16,6 +16,7 @@ export class CommerceAdminProductConfigurationListsPage extends CommerceDNDTable
 	readonly addConfigurationListPriority: Locator;
 	readonly addConfigurationListSaveButton: Locator;
 	readonly newConfigurationListName: Locator;
+	readonly eligibilitiesTab: Locator;
 	readonly frame: FrameLocator;
 	readonly page: Page;
 
@@ -45,6 +46,9 @@ export class CommerceAdminProductConfigurationListsPage extends CommerceDNDTable
 
 		this.addConfigurationListSaveButton = page.getByRole('button', {
 			name: 'Submit',
+		});
+		this.eligibilitiesTab = page.getByRole('link', {
+			name: 'Eligibility',
 		});
 		this.newConfigurationListName = page.getByTestId('headerDetailsTitle');
 		this.page = page;
