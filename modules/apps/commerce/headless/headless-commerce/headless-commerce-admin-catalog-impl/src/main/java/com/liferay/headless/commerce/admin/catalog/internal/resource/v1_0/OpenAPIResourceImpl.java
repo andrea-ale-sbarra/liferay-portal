@@ -85,11 +85,17 @@ public class OpenAPIResourceImpl {
 
 	private final Set<Class<?>> _resourceClasses = new HashSet<Class<?>>() {
 		{
+			add(AccountResourceImpl.class);
+
+			add(AccountGroupResourceImpl.class);
+
 			add(AttachmentResourceImpl.class);
 
 			add(CatalogResourceImpl.class);
 
 			add(CategoryResourceImpl.class);
+
+			add(ChannelResourceImpl.class);
 
 			add(CurrencyResourceImpl.class);
 
@@ -111,6 +117,8 @@ public class OpenAPIResourceImpl {
 
 			add(OptionValueResourceImpl.class);
 
+			add(OrderTypeResourceImpl.class);
+
 			add(PinResourceImpl.class);
 
 			add(ProductResourceImpl.class);
@@ -122,6 +130,14 @@ public class OpenAPIResourceImpl {
 			add(ProductConfigurationResourceImpl.class);
 
 			add(ProductConfigurationListResourceImpl.class);
+
+			add(ProductConfigurationListAccountResourceImpl.class);
+
+			add(ProductConfigurationListAccountGroupResourceImpl.class);
+
+			add(ProductConfigurationListChannelResourceImpl.class);
+
+			add(ProductConfigurationListOrderTypeResourceImpl.class);
 
 			add(ProductGroupResourceImpl.class);
 
