@@ -5,8 +5,38 @@
 
 package com.liferay.commerce.product.model.impl;
 
+import com.liferay.commerce.product.model.CPConfigurationEntry;
+import com.liferay.commerce.product.model.CPConfigurationList;
+import com.liferay.commerce.product.model.CommerceCatalog;
+import com.liferay.commerce.product.service.CPConfigurationEntryLocalServiceUtil;
+import com.liferay.commerce.product.service.CommerceCatalogLocalServiceUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
+
 /**
  * @author Marco Leo
  */
 public class CPConfigurationListImpl extends CPConfigurationListBaseImpl {
+
+	public CommerceCatalog fetchCommerceCatalog() {
+		return CommerceCatalogLocalServiceUtil.fetchCommerceCatalogByGroupId(
+			getGroupId());
+	}
+
+	public CPConfigurationEntry getTemplateCPConfigurationEntry() {
+		return CPConfigurationEntryLocalServiceUtil.fetchCPConfigurationEntry(
+			PortalUtil.getClassNameId(CPConfigurationList.class),
+			getCPConfigurationListId(), getCPConfigurationListId());
+	}
+
+	public long getTemplateCPConfigurationEntryId() {
+		CPConfigurationEntry cpConfigurationEntry =
+			getTemplateCPConfigurationEntry();
+
+		if (cpConfigurationEntry == null) {
+			return 0;
+		}
+
+		return cpConfigurationEntry.getCPConfigurationEntryId();
+	}
+
 }
