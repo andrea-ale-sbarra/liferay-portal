@@ -43,7 +43,10 @@ export default async function format(
 	{emitSuppressed} = {}
 ) {
 	const suppressedErrors = await fs.readFile(
-		path.join(import.meta.dirname, 'suppressed_errors.txt'),
+		path.join(
+			import.meta.dirname || './_node-scripts/format/',
+			'suppressed_errors.txt'
+		),
 		'utf-8'
 	);
 
