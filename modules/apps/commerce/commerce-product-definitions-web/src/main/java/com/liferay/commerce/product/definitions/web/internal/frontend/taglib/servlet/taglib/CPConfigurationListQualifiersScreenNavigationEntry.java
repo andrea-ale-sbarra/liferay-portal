@@ -5,16 +5,22 @@
 
 package com.liferay.commerce.product.definitions.web.internal.frontend.taglib.servlet.taglib;
 
+import com.liferay.commerce.inventory.CPDefinitionInventoryEngineRegistry;
 import com.liferay.commerce.product.definitions.web.internal.display.context.CPConfigurationListQualifiersDisplayContext;
 import com.liferay.commerce.product.model.CPConfigurationList;
 import com.liferay.commerce.product.service.CPConfigurationEntryService;
 import com.liferay.commerce.product.service.CPConfigurationListRelService;
 import com.liferay.commerce.product.service.CPConfigurationListService;
 import com.liferay.commerce.product.service.CPDefinitionService;
+import com.liferay.commerce.product.service.CPMeasurementUnitLocalService;
+import com.liferay.commerce.product.service.CPTaxCategoryLocalService;
 import com.liferay.commerce.product.service.CommerceCatalogService;
 import com.liferay.commerce.product.service.CommerceChannelRelService;
+import com.liferay.commerce.service.CommerceAvailabilityEstimateService;
+import com.liferay.commerce.stock.activity.CommerceLowStockActivityRegistry;
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -52,15 +58,24 @@ public class CPConfigurationListQualifiersScreenNavigationEntry
 		httpServletRequest.setAttribute(
 			WebKeys.PORTLET_DISPLAY_CONTEXT,
 			new CPConfigurationListQualifiersDisplayContext(
+				_commerceAvailabilityEstimateService,
 				_commerceCatalogService, _commerceChannelRelService,
+				_commerceLowStockActivityRegistry,
 				_cpConfigurationEntryService,
 				_cpConfigurationListModelResourcePermission,
 				_cpConfigurationListRelService, _cpConfigurationListService,
-				_cpDefinitionService, _portal, httpServletRequest));
+				_cpDefinitionInventoryEngineRegistry, _cpDefinitionService,
+				_cpMeasurementUnitLocalService, _cpTaxCategoryLocalService,
+				_portal, httpServletRequest));
 
 		_jspRenderer.renderJSP(
 			httpServletRequest, httpServletResponse,
 			"/configuration_list/qualifiers.jsp");
+	}
+
+	@Override
+	public boolean isVisible(User user, CPConfigurationList cpConfigurationList) {
+		return !cpConfigurationList.isMasterCPConfigurationList();
 	}
 
 	@Reference
@@ -92,5 +107,24 @@ public class CPConfigurationListQualifiersScreenNavigationEntry
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private CommerceAvailabilityEstimateService
+		_commerceAvailabilityEstimateService;
+
+	@Reference
+	private CommerceLowStockActivityRegistry _commerceLowStockActivityRegistry;
+
+	@Reference
+	private CPDefinitionInventoryEngineRegistry
+		_cpDefinitionInventoryEngineRegistry;
+
+	@Reference
+	private CPMeasurementUnitLocalService _cpMeasurementUnitLocalService;
+
+	@Reference
+	private CPTaxCategoryLocalService _cpTaxCategoryLocalService;
+
+
 
 }
