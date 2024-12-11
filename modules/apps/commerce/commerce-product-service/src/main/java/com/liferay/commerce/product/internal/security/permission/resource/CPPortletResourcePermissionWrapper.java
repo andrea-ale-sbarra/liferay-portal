@@ -6,15 +6,11 @@
 package com.liferay.commerce.product.internal.security.permission.resource;
 
 import com.liferay.commerce.product.constants.CPConstants;
-import com.liferay.commerce.product.constants.CPPortletKeys;
-import com.liferay.exportimport.kernel.staging.permission.StagingPermission;
 import com.liferay.portal.kernel.security.permission.resource.BasePortletResourcePermissionWrapper;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermissionFactory;
-import com.liferay.portal.kernel.security.permission.resource.StagedPortletPermissionLogic;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alessio Antonio Rendina
@@ -31,11 +27,7 @@ public class CPPortletResourcePermissionWrapper
 	protected PortletResourcePermission doGetPortletResourcePermission() {
 		return PortletResourcePermissionFactory.create(
 			CPConstants.RESOURCE_NAME_PRODUCT,
-			new StagedPortletPermissionLogic(
-				_stagingPermission, CPPortletKeys.CP_DEFINITIONS));
+			new CommerceProductPortletResourcePermissionLogic());
 	}
-
-	@Reference
-	private StagingPermission _stagingPermission;
 
 }
