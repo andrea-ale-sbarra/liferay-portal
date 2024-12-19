@@ -33,7 +33,7 @@ test('User can add, edit, delete a category and add a subcategory.', async ({
 		await createCategories({
 			apiHelpers,
 			categoryNames: [{name: categoryName}],
-			site,
+			siteId: site.id,
 			vocabularyName,
 		});
 	});
@@ -101,14 +101,14 @@ test('User can move a category to another vocabulary.', async ({
 		await createCategories({
 			apiHelpers,
 			categoryNames: [{name: categoryName}],
-			site,
+			siteId: site.id,
 			vocabularyName: vocabularyName1,
 		});
 
 		await createCategories({
 			apiHelpers,
 			categoryNames: [],
-			site,
+			siteId: site.id,
 			vocabularyName: vocabularyName2,
 		});
 	});
@@ -147,7 +147,7 @@ test('User can add, edit, delete properties in category.', async ({
 	await createCategories({
 		apiHelpers,
 		categoryNames: [{name: categoryName}],
-		site,
+		siteId: site.id,
 		vocabularyName: 'test vocabulary',
 	});
 

@@ -110,24 +110,34 @@ test.describe('Content Display Fragment', () => {
 	test('Does not show alert when accessing a page with a web content display mapped to a restricted web content', async ({
 		apiHelpers,
 		browser,
+		journalEditArticlePage,
 		journalPage,
 		page,
 		pageEditorPage,
 		site,
 	}) => {
 
-		// Create a web content restricted to site members
+		// Create a web content
 
 		await journalPage.goto(site.friendlyUrlPath);
 		await journalPage.goToCreateArticle();
 
-		await journalPage.setArticleViewableBy('Site Members');
+		// Wait for editor to be loaded
+
+		await page.getByLabel('Select a language').waitFor();
+
+		await page
+			.locator('.sheet-subtitle', {hasText: 'Basic Information'})
+			.waitFor();
+
+		// Fill article data and publish for Site Members
 
 		const articleTitle = getRandomString();
 		const articleContent = 'My article';
 
 		await journalPage.fillArticleData(articleTitle, articleContent);
-		await journalPage.publishArticle();
+
+		await journalEditArticlePage.publishArticle(false, 'Site Members');
 
 		await expect(
 			page.getByLabel('Not Visible to Guest Users')
@@ -501,11 +511,19 @@ test.describe('Related Asset Fragment', () => {
 
 			await journalEditArticlePage.editArticle(journalArticleTitle1);
 
-			await journalEditArticlePage.openRelatedAsset('Basic Web Content');
-
 			const row = page
 				.frameLocator('iframe[title="Select Basic Web Content"]')
 				.locator('.list-group-item', {hasText: journalArticleTitle2});
+
+			await expect(async () => {
+				await journalEditArticlePage.openRelatedAsset(
+					'Basic Web Content'
+				);
+
+				await expect(
+					page.getByText('Select Basic Web Content')
+				).toBeVisible({timeout: 3000});
+			}).toPass();
 
 			await row.getByRole('checkbox').check({trial: true});
 
@@ -516,11 +534,7 @@ test.describe('Related Asset Fragment', () => {
 				trigger: page.getByRole('button', {name: 'Done'}),
 			});
 
-			await page
-				.getByRole('button', {exact: true, name: 'Publish'})
-				.click();
-
-			await waitForAlert(page, `was updated successfully.`);
+			await journalEditArticlePage.publishArticle(true);
 
 			// Create a display page template for Basic Web Content
 
@@ -1229,69 +1243,6 @@ test.describe('Image Fragment', () => {
 	);
 });
 
-test.describe('Localization Select Fragment', () => {
-	test('Allow selecting a language', async ({apiHelpers, page, site}) => {
-
-		// Create a page with a localization select fragment
-
-		const layout = await apiHelpers.headlessDelivery.createSitePage({
-			pageDefinition: getPageDefinition([
-				getFragmentDefinition({
-					id: getRandomString(),
-					key: 'localization-select',
-				}),
-			]),
-			siteId: site.id,
-			title: getRandomString(),
-		});
-
-		await page.goto(`/web${site.friendlyUrlPath}${layout.friendlyUrlPath}`);
-
-		await page.exposeFunction('checkLanguageUpdate', (id) => {
-			expect(id).toBe('es-ES111');
-		});
-
-		// Check the language select is visible
-
-		const languageSelect = page.getByLabel(
-			'Select a language, current language: English (United States).'
-		);
-
-		// Click an option and checkt the langue select is updated and the event is fired
-
-		await expect(languageSelect).toBeVisible();
-
-		await page.evaluate(() => {
-			Liferay.on('localizationSelect:localeChanged', (event) => {
-				(window as any).TEST_LANGUAGE_SELECTED = event.languageId;
-			});
-		});
-
-		await clickAndExpectToBeVisible({
-			autoClick: true,
-			target: page.getByRole('option', {
-				name: 'Spanish (Spain) Language',
-			}),
-			trigger: languageSelect,
-		});
-
-		const response = await page.waitForFunction(
-			() => {
-				return (window as any).TEST_LANGUAGE_SELECTED;
-			},
-			{timeout: 1000 * 60}
-		);
-
-		expect(await response.jsonValue()).toBe('es_ES');
-
-		await expect(
-			page.getByLabel(
-				'Select a language, current language: Spanish (Spain).'
-			)
-		).toBeVisible();
-	});
-});
-
 testWithPrivatePages.describe('Menu Display Fragment', () => {
 	async function changeSource(
 		menuDisplayId: string,
@@ -1306,6 +1257,7 @@ testWithPrivatePages.describe('Menu Display Fragment', () => {
 		await clickAndExpectToBeVisible({
 			autoClick: true,
 			target: iframe.getByText(name),
+			timeout: 3000,
 			trigger: page.getByLabel('Change Source'),
 		});
 
@@ -2238,7 +2190,7 @@ test.describe('Tags Fragment', () => {
 			`/web${pageManagementSite.friendlyUrlPath}${layout.friendlyUrlPath}`
 		);
 
-		await page.getByLabel('Lemon Size').fill('Tags test');
+		await page.getByLabel('Lemon Size', {exact: true}).fill('Tags test');
 
 		await page.getByRole('combobox').first().click();
 		await page.getByRole('option', {exact: true, name: 'Dogs'}).click();

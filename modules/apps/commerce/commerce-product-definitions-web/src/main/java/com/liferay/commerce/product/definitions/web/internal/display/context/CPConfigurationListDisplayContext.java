@@ -30,6 +30,7 @@ import com.liferay.commerce.util.comparator.CommerceAvailabilityEstimatePriority
 import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenuBuilder;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -41,6 +42,7 @@ import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -88,6 +90,30 @@ public class CPConfigurationListDisplayContext {
 		cpRequestHelper = new CPRequestHelper(httpServletRequest);
 
 		liferayPortletResponse = cpRequestHelper.getLiferayPortletResponse();
+	}
+
+	public List<DropdownItem> getBulkActionDropdownItems() {
+		return ListUtil.fromArray(
+			new FDSActionDropdownItem(
+				_getEditCPConfigurationEntryActionURL("setVisible"),
+				"view", "update", "set-as-visible",
+				LanguageUtil.get(httpServletRequest, "update"), "update",
+				null),
+			new FDSActionDropdownItem(
+				_getEditCPConfigurationEntryActionURL("setHidden"),
+				"hidden", "update", "set-as-not-visible",
+				LanguageUtil.get(httpServletRequest, "update"), "update",
+				null));
+	}
+
+	private String _getEditCPConfigurationEntryActionURL(String cmd) {
+		return PortletURLBuilder.createActionURL(
+			cpRequestHelper.getRenderResponse()
+		).setActionName(
+			"/cp_configuration_lists/edit_cp_configuration_entry"
+		).setCMD(
+			cmd
+		).buildString();
 	}
 
 	public List<CommerceAvailabilityEstimate> getCommerceAvailabilityEstimates()

@@ -75,6 +75,9 @@ function main() {
 				if (translationInput.getAttribute('value') !== null) {
 					textarea.value = translationInput.value;
 				}
+				else {
+					textarea.value = getDefaultLanguageValue();
+				}
 			});
 
 			textarea.addEventListener('input', (event) => {
@@ -103,7 +106,45 @@ function main() {
 				);
 			}
 		}
+		else if (Liferay.FeatureFlags['LPD-37927']) {
+			Liferay.on('localizationSelect:localeChanged', (event) => {
+				const isDefaultLanguage =
+					event.languageId === themeDisplay.getDefaultLanguageId();
+
+				const unlocalizedInfo = document.getElementById(
+					`${fragmentNamespace}-unlocalized-info`
+				);
+
+				if (isDefaultLanguage) {
+					textarea.removeAttribute(
+						input.attributes.unlocalizedFieldsState === 'disabled'
+							? 'disabled'
+							: 'readonly'
+					);
+
+					unlocalizedInfo?.classList.add('d-none');
+				}
+				else {
+					textarea.setAttribute(
+						input.attributes.unlocalizedFieldsState === 'disabled'
+							? 'disabled'
+							: 'readonly',
+						''
+					);
+
+					unlocalizedInfo?.classList.remove('d-none');
+				}
+			});
+		}
 	}
+}
+
+function getDefaultLanguageValue() {
+	const defaultLanguageInput = getOrCreateTranslationInput(
+		themeDisplay.getDefaultLanguageId()
+	);
+
+	return defaultLanguageInput.value;
 }
 
 function getOrCreateTranslationInput(languageId) {

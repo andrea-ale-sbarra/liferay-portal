@@ -150,7 +150,9 @@ public class CPConfigurationListLocalServiceUtil {
 		return getService().deleteCPConfigurationList(CPConfigurationListId);
 	}
 
-	public static void deleteCPConfigurationLists(long companyId) {
+	public static void deleteCPConfigurationLists(long companyId)
+		throws PortalException {
+
 		getService().deleteCPConfigurationLists(companyId);
 	}
 
@@ -278,7 +280,8 @@ public class CPConfigurationListLocalServiceUtil {
 	}
 
 	public static CPConfigurationList forceDeleteCPConfigurationList(
-		CPConfigurationList cpConfigurationList) {
+			CPConfigurationList cpConfigurationList)
+		throws PortalException {
 
 		return getService().forceDeleteCPConfigurationList(cpConfigurationList);
 	}

@@ -1496,9 +1496,6 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 		_clearCacheCallback(companyId, false);
 	}
 
-	protected void addAssetEntriesFacet(SearchContext searchContext) {
-	}
-
 	protected Company checkLogo(long companyId) throws PortalException {
 		Company company = companyPersistence.findByPrimaryKey(companyId);
 
@@ -2375,7 +2372,7 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 					registerCompany(finalCompany);
 
 					if (newCompany) {
-						PortalInstances.initCompany(finalCompany);
+						PortalInstances.initCompany(finalCompany, true);
 
 						_synchronizePortalInstances();
 					}

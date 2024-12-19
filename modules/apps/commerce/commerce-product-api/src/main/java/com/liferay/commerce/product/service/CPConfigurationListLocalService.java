@@ -151,7 +151,8 @@ public interface CPConfigurationListLocalService
 			long CPConfigurationListId)
 		throws PortalException;
 
-	public void deleteCPConfigurationLists(long companyId);
+	public void deleteCPConfigurationLists(long companyId)
+		throws PortalException;
 
 	/**
 	 * @throws PortalException
@@ -254,7 +255,8 @@ public interface CPConfigurationListLocalService
 	@Indexable(type = IndexableType.DELETE)
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public CPConfigurationList forceDeleteCPConfigurationList(
-		CPConfigurationList cpConfigurationList);
+			CPConfigurationList cpConfigurationList)
+		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();

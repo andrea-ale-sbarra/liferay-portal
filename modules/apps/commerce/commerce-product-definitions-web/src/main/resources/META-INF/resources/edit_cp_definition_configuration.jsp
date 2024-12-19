@@ -65,6 +65,9 @@ boolean shippable = BeanParamUtil.getBoolean(cpDefinition, request, "shippable",
 				<div class="row">
 					<aui:model-context bean="<%= cpDefinitionInventory %>" model="<%= CPDefinitionInventory.class %>" />
 
+					<liferay-ui:error exception="<%= CPConfigurationEntryQuantityException.class %>" message="please-enter-a-valid-quantity" />
+					<liferay-ui:error exception="<%= CPDefinitionInventoryQuantityException.class %>" message="please-enter-a-valid-quantity" />
+
 					<div class="col-6">
 						<aui:select label="inventory-engine" name="CPDefinitionInventoryEngine">
 
@@ -213,6 +216,14 @@ boolean shippable = BeanParamUtil.getBoolean(cpDefinition, request, "shippable",
 		</div>
 
 		<div class="col-4">
+			<c:if test='<%= FeatureFlagManagerUtil.isEnabled(cpDefinition.getCompanyId(), "LPD-10889") %>'>
+				<commerce-ui:panel
+					title='<%= LanguageUtil.get(request, "base-settings") %>'
+				>
+					<aui:input checked="<%= cpDefinitionConfigurationDisplayContext.isPurchasable() %>" data-qa-id="purchasableInput" inlineField="<%= true %>" name="purchasable" type="toggle-switch" />
+				</commerce-ui:panel>
+			</c:if>
+
 			<commerce-ui:panel
 				title='<%= LanguageUtil.get(request, "shipping") %>'
 			>

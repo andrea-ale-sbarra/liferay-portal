@@ -9,10 +9,12 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.test.util.ConfigurationTestUtil;
 import com.liferay.portal.db.partition.db.DBPartitionDB;
 import com.liferay.portal.db.partition.test.util.BaseDBPartitionTestCase;
 import com.liferay.portal.db.partition.util.DBPartitionUtil;
+import com.liferay.portal.kernel.dao.db.DBInspector;
 import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.instance.PortalInstancePool;
@@ -46,6 +48,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,7 +70,6 @@ import org.junit.runner.RunWith;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleListener;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
@@ -225,12 +227,14 @@ public class CompanyLocalServiceDBPartitionTest
 		Configuration configuration = _createFactoryConfiguration(
 			company.getCompanyId());
 
+		String pid = configuration.getPid();
+
 		companyLocalService.extractDBPartitionCompany(company.getCompanyId());
 
 		boolean standaloneDBPartition = true;
 
 		try {
-			_assertConfiguration(configuration.getPid(), false);
+			_assertConfiguration(pid, false);
 
 			String name = "new" + company.getName();
 			String virtualHostName = "new" + company.getVirtualHostname();
@@ -253,7 +257,7 @@ public class CompanyLocalServiceDBPartitionTest
 					CompanyThreadLocal.setCompanyIdWithSafeCloseable(
 						company.getCompanyId())) {
 
-				_assertConfiguration(configuration.getPid(), true);
+				_assertConfiguration(pid, true);
 			}
 		}
 		finally {
@@ -406,6 +410,8 @@ public class CompanyLocalServiceDBPartitionTest
 
 			_assertCopyDBPartitionCompany(
 				copiedCompany, name, virtualHostname, webId);
+			_assertCopyDBPartitionCompanyId(
+				company.getCompanyId(), copiedCompany.getCompanyId());
 
 			Assert.assertEquals(
 				rulesCount,
@@ -518,6 +524,8 @@ public class CompanyLocalServiceDBPartitionTest
 		Configuration configuration = _createFactoryConfiguration(
 			company.getCompanyId());
 
+		String pid = configuration.getPid();
+
 		int dbPartitionsCount = _getDBPartitionsCount();
 
 		companyLocalService.deleteCompany(company);
@@ -537,7 +545,7 @@ public class CompanyLocalServiceDBPartitionTest
 
 		Assert.assertTrue(serviceReferences.isEmpty());
 
-		_assertConfiguration(configuration.getPid(), false);
+		_assertConfiguration(pid, false);
 	}
 
 	@Test
@@ -580,6 +588,8 @@ public class CompanyLocalServiceDBPartitionTest
 			Configuration configuration = _createFactoryConfiguration(
 				company.getCompanyId());
 
+			String pid = configuration.getPid();
+
 			companyLocalService.extractDBPartitionCompany(
 				company.getCompanyId());
 
@@ -604,7 +614,7 @@ public class CompanyLocalServiceDBPartitionTest
 
 			Assert.assertTrue(serviceReferences.isEmpty());
 
-			_assertConfiguration(configuration.getPid(), false);
+			_assertConfiguration(pid, false);
 		}
 		finally {
 			if (standaloneDBPartition) {
@@ -703,16 +713,13 @@ public class CompanyLocalServiceDBPartitionTest
 		}
 	}
 
-	private void _assertConfiguration(String pid, boolean exists) {
-		BundleListener configurationManager = ReflectionTestUtil.invoke(
-			_configurationAdmin, "getConfigurationManager", new Class<?>[0],
-			null);
+	private void _assertConfiguration(String pid, boolean exists)
+		throws Exception {
 
 		if (exists) {
 			Assert.assertNotNull(
-				ReflectionTestUtil.invoke(
-					configurationManager, "getConfiguration",
-					new Class<?>[] {String.class}, pid));
+				_configurationAdmin.listConfigurations(
+					"(service.pid=" + pid + ")"));
 
 			Assert.assertTrue(_persistenceManager.exists(pid));
 
@@ -720,9 +727,8 @@ public class CompanyLocalServiceDBPartitionTest
 		}
 
 		Assert.assertNull(
-			ReflectionTestUtil.invoke(
-				configurationManager, "getConfiguration",
-				new Class<?>[] {String.class}, pid));
+			_configurationAdmin.listConfigurations(
+				"(service.pid=" + pid + ")"));
 
 		Assert.assertFalse(_persistenceManager.exists(pid));
 	}
@@ -738,6 +744,79 @@ public class CompanyLocalServiceDBPartitionTest
 		Assert.assertEquals(webId, company.getWebId());
 
 		_virtualHostLocalService.getVirtualHost(virtualHostname);
+	}
+
+	private void _assertCopyDBPartitionCompanyId(
+			long companyId, long copiedCompanyId)
+		throws Exception {
+
+		DBInspector dbInspector = new DBInspector(connection);
+		List<String> tableNames = new ArrayList<>();
+
+		DatabaseMetaData databaseMetaData = connection.getMetaData();
+
+		try (ResultSet resultSet = databaseMetaData.getTables(
+				dbPartitionDB.getCatalog(
+					connection, getPartitionName(copiedCompanyId)),
+				dbPartitionDB.getCatalog(
+					connection, getPartitionName(copiedCompanyId)),
+				null, new String[] {"TABLE"})) {
+
+			while (resultSet.next()) {
+				String tableName = resultSet.getString("TABLE_NAME");
+
+				if (dbInspector.isControlTable(tableName)) {
+					continue;
+				}
+
+				tableNames.add(tableName);
+			}
+		}
+
+		for (String tableName : tableNames) {
+			try (ResultSet resultSet = databaseMetaData.getColumns(
+					dbPartitionDB.getCatalog(
+						connection, getPartitionName(copiedCompanyId)),
+					dbPartitionDB.getCatalog(
+						connection, getPartitionName(copiedCompanyId)),
+					tableName, null)) {
+
+				while (resultSet.next()) {
+					int columnType = resultSet.getInt("DATA_TYPE");
+
+					if ((columnType != Types.BIGINT) &&
+						(columnType != Types.LONGVARCHAR) &&
+						(columnType != Types.VARCHAR)) {
+
+						continue;
+					}
+
+					String columnName = resultSet.getString("COLUMN_NAME");
+
+					PreparedStatement preparedStatement =
+						connection.prepareStatement(
+							StringBundler.concat(
+								"select ", columnName, " from ",
+								DBPartitionUtil.getPartitionName(
+									copiedCompanyId),
+								StringPool.PERIOD, tableName, " where ",
+								columnName, " like '%", companyId, "%'"));
+
+					try (ResultSet resultSet2 =
+							preparedStatement.executeQuery()) {
+
+						if (resultSet2.next()) {
+							Assert.fail(
+								StringBundler.concat(
+									"Company ID ", companyId,
+									" is present in the copied database ",
+									"schema in ", tableName, StringPool.PERIOD,
+									columnName));
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private void _checkPartitionDoesNotExist(long companyId)

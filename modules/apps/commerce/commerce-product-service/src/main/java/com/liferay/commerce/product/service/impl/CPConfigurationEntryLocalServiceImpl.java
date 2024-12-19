@@ -5,9 +5,18 @@
 
 package com.liferay.commerce.product.service.impl;
 
+import com.liferay.commerce.product.constants.CPConfigurationEntrySettingConstants;
+import com.liferay.commerce.product.exception.RequiredCPConfigurationEntryException;
 import com.liferay.commerce.product.model.CPConfigurationEntry;
+import com.liferay.commerce.product.model.CPConfigurationEntrySetting;
+import com.liferay.commerce.product.model.CPConfigurationList;
 import com.liferay.commerce.product.model.CPDefinition;
+import com.liferay.commerce.product.service.CPConfigurationEntrySettingLocalService;
 import com.liferay.commerce.product.service.base.CPConfigurationEntryLocalServiceBaseImpl;
+import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
+import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
@@ -17,6 +26,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.math.BigDecimal;
 
@@ -101,17 +112,41 @@ public class CPConfigurationEntryLocalServiceImpl
 			_reindexCPDefinition(classPK);
 		}
 
+		if (cpConfigurationEntry.getParentCPConfigurationList() == null) {
+			return cpConfigurationEntry;
+		}
+
+		CPConfigurationEntrySetting cpConfigurationEntrySetting =
+			_fetchCPConfigurationEntrySetting(cpConfigurationEntry);
+
+		cpConfigurationEntrySetting.setSetting(
+			StringUtil.merge(
+				ArrayUtil.filter(
+					TransformUtil.transformToLongArray(
+						StringUtil.split(
+							cpConfigurationEntrySetting.getSetting()),
+						Long::valueOf),
+					filterCPConfigurationListId ->
+						filterCPConfigurationListId != cpConfigurationListId),
+				StringPool.COMMA));
+
+		cpConfigurationEntrySetting =
+			_cpConfigurationEntrySettingLocalService.
+				updateCPConfigurationEntrySetting(cpConfigurationEntrySetting);
+
+		_reindexCPConfigurationEntry(
+			cpConfigurationEntrySetting.getCPConfigurationEntryId());
+
 		return cpConfigurationEntry;
 	}
 
 	@Override
-	public void deleteCPConfigurationEntries(long cpConfigurationListId) {
-		List<CPConfigurationEntry> cpConfigurationEntries =
-			cpConfigurationEntryLocalService.getCPConfigurationEntries(
-				cpConfigurationListId);
+	public void deleteCPConfigurationEntries(long cpConfigurationListId)
+		throws PortalException {
 
 		for (CPConfigurationEntry cpConfigurationEntry :
-				cpConfigurationEntries) {
+				cpConfigurationEntryLocalService.getCPConfigurationEntries(
+					cpConfigurationListId)) {
 
 			cpConfigurationEntryLocalService.deleteCPConfigurationEntry(
 				cpConfigurationEntry);
@@ -119,7 +154,9 @@ public class CPConfigurationEntryLocalServiceImpl
 	}
 
 	@Override
-	public void deleteCPConfigurationEntries(long classNameId, long classPK) {
+	public void deleteCPConfigurationEntries(long classNameId, long classPK)
+		throws PortalException {
+
 		List<CPConfigurationEntry> cpConfigurationEntries =
 			cpConfigurationEntryPersistence.findByC_C(classNameId, classPK);
 
@@ -132,11 +169,88 @@ public class CPConfigurationEntryLocalServiceImpl
 	}
 
 	@Override
+	public CPConfigurationEntry deleteCPConfigurationEntry(
+			CPConfigurationEntry cpConfigurationEntry)
+		throws PortalException {
+
+		CPConfigurationList parentCPConfigurationList =
+			cpConfigurationEntry.getParentCPConfigurationList();
+
+		if (parentCPConfigurationList == null) {
+			throw new RequiredCPConfigurationEntryException();
+		}
+
+		cpConfigurationEntry = cpConfigurationEntryPersistence.remove(
+			cpConfigurationEntry);
+
+		CPConfigurationEntrySetting parentCPConfigurationEntrySetting =
+			_fetchCPConfigurationEntrySetting(cpConfigurationEntry);
+
+		if (parentCPConfigurationEntrySetting == null) {
+			return cpConfigurationEntry;
+		}
+
+		String parentCPConfigurationEntrySettingSetting =
+			parentCPConfigurationEntrySetting.getSetting();
+
+		CPConfigurationEntrySetting cpConfigurationEntrySetting =
+			_cpConfigurationEntrySettingLocalService.
+				fetchCPConfigurationEntrySetting(
+					cpConfigurationEntry.getCPConfigurationEntryId(),
+					CPConfigurationEntrySettingConstants.TYPE_INDEX_IDS);
+
+		String setting = String.valueOf(
+			cpConfigurationEntry.getCPConfigurationListId());
+
+		if ((cpConfigurationEntrySetting != null) &&
+			Validator.isNotNull(cpConfigurationEntrySetting.getSetting())) {
+
+			setting = StringBundler.concat(
+				setting, StringPool.COMMA,
+				cpConfigurationEntrySetting.getSetting());
+		}
+
+		parentCPConfigurationEntrySetting.setSetting(
+			StringBundler.concat(
+				parentCPConfigurationEntrySettingSetting, StringPool.COMMA,
+				setting));
+
+		_cpConfigurationEntrySettingLocalService.
+			updateCPConfigurationEntrySetting(
+				parentCPConfigurationEntrySetting);
+
+		return cpConfigurationEntry;
+	}
+
+	@Override
 	public CPConfigurationEntry fetchCPConfigurationEntry(
 		long classNameId, long classPK, long cpConfigurationListId) {
 
 		return cpConfigurationEntryPersistence.fetchByC_C_C(
 			classNameId, classPK, cpConfigurationListId);
+	}
+
+	@Override
+	public CPConfigurationEntry forceDeleteCPConfigurationEntry(
+		CPConfigurationEntry cpConfigurationEntry) {
+
+		cpConfigurationEntry = cpConfigurationEntryPersistence.remove(
+			cpConfigurationEntry);
+
+		CPConfigurationEntrySetting cpConfigurationEntrySetting =
+			_cpConfigurationEntrySettingLocalService.
+				fetchCPConfigurationEntrySetting(
+					cpConfigurationEntry.getCPConfigurationEntryId(),
+					CPConfigurationEntrySettingConstants.TYPE_INDEX_IDS);
+
+		if (cpConfigurationEntrySetting == null) {
+			return cpConfigurationEntry;
+		}
+
+		_cpConfigurationEntrySettingLocalService.
+			deleteCPConfigurationEntrySetting(cpConfigurationEntrySetting);
+
+		return cpConfigurationEntry;
 	}
 
 	@Override
@@ -214,6 +328,63 @@ public class CPConfigurationEntryLocalServiceImpl
 		return cpConfigurationEntryPersistence.update(cpConfigurationEntry);
 	}
 
+	private CPConfigurationEntrySetting _fetchCPConfigurationEntrySetting(
+			CPConfigurationEntry cpConfigurationEntry)
+		throws PortalException {
+
+		CPConfigurationEntrySetting cpConfigurationEntrySetting =
+			_cpConfigurationEntrySettingLocalService.
+				fetchCPConfigurationEntrySetting(
+					cpConfigurationEntry.getCPConfigurationEntryId(),
+					CPConfigurationEntrySettingConstants.TYPE_INDEX_IDS);
+
+		CPConfigurationList parentCPConfigurationList =
+			cpConfigurationEntry.getParentCPConfigurationList();
+
+		if ((cpConfigurationEntrySetting != null) &&
+			(parentCPConfigurationList == null)) {
+
+			return cpConfigurationEntrySetting;
+		}
+
+		long cpConfigurationListId =
+			parentCPConfigurationList.getCPConfigurationListId();
+
+		CPConfigurationEntry parentCPConfigurationEntry = null;
+
+		while (parentCPConfigurationEntry == null) {
+			parentCPConfigurationEntry =
+				cpConfigurationEntryLocalService.fetchCPConfigurationEntry(
+					cpConfigurationEntry.getClassNameId(),
+					cpConfigurationEntry.getClassPK(), cpConfigurationListId);
+
+			parentCPConfigurationList =
+				parentCPConfigurationList.getParentCPConfigurationList();
+
+			if (parentCPConfigurationList == null) {
+				break;
+			}
+
+			cpConfigurationListId =
+				parentCPConfigurationList.getCPConfigurationListId();
+		}
+
+		return _cpConfigurationEntrySettingLocalService.
+			fetchCPConfigurationEntrySetting(
+				parentCPConfigurationEntry.getCPConfigurationEntryId(),
+				CPConfigurationEntrySettingConstants.TYPE_INDEX_IDS);
+	}
+
+	private void _reindexCPConfigurationEntry(long cpConfigurationEntryId)
+		throws PortalException {
+
+		Indexer<CPConfigurationEntry> indexer =
+			IndexerRegistryUtil.nullSafeGetIndexer(CPConfigurationEntry.class);
+
+		indexer.reindex(
+			CPConfigurationEntry.class.getName(), cpConfigurationEntryId);
+	}
+
 	private void _reindexCPDefinition(long cpDefinitionId)
 		throws PortalException {
 
@@ -225,6 +396,10 @@ public class CPConfigurationEntryLocalServiceImpl
 
 	@Reference
 	private ClassNameLocalService _classNameLocalService;
+
+	@Reference
+	private CPConfigurationEntrySettingLocalService
+		_cpConfigurationEntrySettingLocalService;
 
 	@Reference
 	private UserLocalService _userLocalService;

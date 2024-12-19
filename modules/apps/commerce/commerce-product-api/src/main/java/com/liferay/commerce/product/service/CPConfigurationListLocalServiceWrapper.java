@@ -158,7 +158,9 @@ public class CPConfigurationListLocalServiceWrapper
 	}
 
 	@Override
-	public void deleteCPConfigurationLists(long companyId) {
+	public void deleteCPConfigurationLists(long companyId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
 		_cpConfigurationListLocalService.deleteCPConfigurationLists(companyId);
 	}
 
@@ -311,7 +313,8 @@ public class CPConfigurationListLocalServiceWrapper
 
 	@Override
 	public CPConfigurationList forceDeleteCPConfigurationList(
-		CPConfigurationList cpConfigurationList) {
+			CPConfigurationList cpConfigurationList)
+		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _cpConfigurationListLocalService.forceDeleteCPConfigurationList(
 			cpConfigurationList);
