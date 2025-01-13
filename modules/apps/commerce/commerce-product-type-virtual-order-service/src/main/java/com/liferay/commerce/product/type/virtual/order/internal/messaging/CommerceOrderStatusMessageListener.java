@@ -12,6 +12,7 @@ import com.liferay.commerce.inventory.engine.CommerceInventoryEngine;
 import com.liferay.commerce.model.CPDefinitionInventory;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderItem;
+import com.liferay.commerce.product.discovery.CPConfigurationListDiscovery;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.service.CPInstanceLocalService;
 import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem;
@@ -118,7 +119,7 @@ public class CommerceOrderStatusMessageListener extends BaseMessageListener {
 				stockQuantity,
 				cpDefinitionInventoryEngine.getMinStockQuantity(
 					commerceOrder.getCPConfigurationListId(
-						cpInstance.getGroupId()),
+						cpInstance.getGroupId(), _cpConfigurationListDiscovery),
 					cpInstance))) {
 
 			commerceLowStockActivity.execute(cpInstance);
@@ -137,6 +138,9 @@ public class CommerceOrderStatusMessageListener extends BaseMessageListener {
 	@Reference
 	private CommerceVirtualOrderItemLocalService
 		_commerceVirtualOrderItemLocalService;
+
+	@Reference
+	private CPConfigurationListDiscovery _cpConfigurationListDiscovery;
 
 	@Reference
 	private CPDefinitionInventoryEngineRegistry

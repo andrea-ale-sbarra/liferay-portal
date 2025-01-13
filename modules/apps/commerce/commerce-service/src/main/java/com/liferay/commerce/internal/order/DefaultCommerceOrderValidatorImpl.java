@@ -12,6 +12,7 @@ import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderItem;
 import com.liferay.commerce.order.CommerceOrderValidator;
 import com.liferay.commerce.order.CommerceOrderValidatorResult;
+import com.liferay.commerce.product.discovery.CPConfigurationListDiscovery;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.service.CPDefinitionInventoryLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -76,7 +77,8 @@ public class DefaultCommerceOrderValidatorImpl
 
 		BigDecimal minOrderQuantity =
 			cpDefinitionInventoryEngine.getMinOrderQuantity(
-				commerceOrder.getCPConfigurationListId(cpInstance.getGroupId()),
+				commerceOrder.getCPConfigurationListId(
+					cpInstance.getGroupId(), _cpConfigurationListDiscovery),
 				cpInstance);
 
 		if (BigDecimalUtil.lt(quantity, minOrderQuantity)) {
@@ -89,7 +91,8 @@ public class DefaultCommerceOrderValidatorImpl
 
 		BigDecimal maxOrderQuantity =
 			cpDefinitionInventoryEngine.getMaxOrderQuantity(
-				commerceOrder.getCPConfigurationListId(cpInstance.getGroupId()),
+				commerceOrder.getCPConfigurationListId(
+					cpInstance.getGroupId(), _cpConfigurationListDiscovery),
 				cpInstance);
 
 		if (BigDecimalUtil.gt(maxOrderQuantity, BigDecimal.ZERO) &&
@@ -104,7 +107,8 @@ public class DefaultCommerceOrderValidatorImpl
 
 		String[] allowedOrderQuantities =
 			cpDefinitionInventoryEngine.getAllowedOrderQuantities(
-				commerceOrder.getCPConfigurationListId(cpInstance.getGroupId()),
+				commerceOrder.getCPConfigurationListId(
+					cpInstance.getGroupId(), _cpConfigurationListDiscovery),
 				cpInstance);
 
 		if ((allowedOrderQuantities.length > 0) &&
@@ -119,7 +123,8 @@ public class DefaultCommerceOrderValidatorImpl
 
 		BigDecimal multipleOrderQuantity =
 			cpDefinitionInventoryEngine.getMultipleOrderQuantity(
-				commerceOrder.getCPConfigurationListId(cpInstance.getGroupId()),
+				commerceOrder.getCPConfigurationListId(
+					cpInstance.getGroupId(), _cpConfigurationListDiscovery),
 				cpInstance);
 
 		if (!BigDecimalUtil.eq(
@@ -159,7 +164,8 @@ public class DefaultCommerceOrderValidatorImpl
 
 		BigDecimal minOrderQuantity =
 			cpDefinitionInventoryEngine.getMinOrderQuantity(
-				commerceOrder.getCPConfigurationListId(cpInstance.getGroupId()),
+				commerceOrder.getCPConfigurationListId(
+					cpInstance.getGroupId(), _cpConfigurationListDiscovery),
 				cpInstance);
 
 		BigDecimal quantity = commerceOrderItem.getQuantity();
@@ -174,7 +180,8 @@ public class DefaultCommerceOrderValidatorImpl
 
 		BigDecimal maxOrderQuantity =
 			cpDefinitionInventoryEngine.getMaxOrderQuantity(
-				commerceOrder.getCPConfigurationListId(cpInstance.getGroupId()),
+				commerceOrder.getCPConfigurationListId(
+					cpInstance.getGroupId(), _cpConfigurationListDiscovery),
 				cpInstance);
 
 		if (BigDecimalUtil.gt(maxOrderQuantity, BigDecimal.ZERO) &&
@@ -189,7 +196,8 @@ public class DefaultCommerceOrderValidatorImpl
 
 		String[] allowedOrderQuantities =
 			cpDefinitionInventoryEngine.getAllowedOrderQuantities(
-				commerceOrder.getCPConfigurationListId(cpInstance.getGroupId()),
+				commerceOrder.getCPConfigurationListId(
+					cpInstance.getGroupId(), _cpConfigurationListDiscovery),
 				cpInstance);
 
 		if ((allowedOrderQuantities.length > 0) &&
@@ -204,7 +212,8 @@ public class DefaultCommerceOrderValidatorImpl
 
 		BigDecimal multipleOrderQuantity =
 			cpDefinitionInventoryEngine.getMultipleOrderQuantity(
-				commerceOrder.getCPConfigurationListId(cpInstance.getGroupId()),
+				commerceOrder.getCPConfigurationListId(
+					cpInstance.getGroupId(), _cpConfigurationListDiscovery),
 				cpInstance);
 
 		if (!BigDecimalUtil.eq(
@@ -236,6 +245,9 @@ public class DefaultCommerceOrderValidatorImpl
 
 		return _language.format(resourceBundle, key, arguments);
 	}
+
+	@Reference
+	private CPConfigurationListDiscovery _cpConfigurationListDiscovery;
 
 	@Reference
 	private CPDefinitionInventoryEngineRegistry

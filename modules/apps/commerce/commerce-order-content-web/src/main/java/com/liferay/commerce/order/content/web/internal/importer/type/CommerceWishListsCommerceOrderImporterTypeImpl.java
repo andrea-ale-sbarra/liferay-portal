@@ -14,6 +14,7 @@ import com.liferay.commerce.order.importer.item.CommerceOrderImporterItem;
 import com.liferay.commerce.order.importer.item.CommerceOrderImporterItemImpl;
 import com.liferay.commerce.order.importer.type.CommerceOrderImporterType;
 import com.liferay.commerce.price.CommerceOrderPriceCalculation;
+import com.liferay.commerce.product.discovery.CPConfigurationListDiscovery;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CommerceChannel;
@@ -223,7 +224,7 @@ public class CommerceWishListsCommerceOrderImporterTypeImpl
 			commerceOrderImporterItemImpl.setQuantity(
 				_cpDefinitionInventoryEngine.getMinOrderQuantity(
 					commerceOrder.getCPConfigurationListId(
-						cpInstance.getGroupId()),
+						cpInstance.getGroupId(), _cpConfigurationListDiscovery),
 					cpInstance));
 			commerceOrderImporterItemImpl.setUnitOfMeasureKey(StringPool.BLANK);
 		}
@@ -259,6 +260,9 @@ public class CommerceWishListsCommerceOrderImporterTypeImpl
 
 	@Reference
 	private CommerceWishListService _commerceWishListService;
+
+	@Reference
+	private CPConfigurationListDiscovery _cpConfigurationListDiscovery;
 
 	@Reference
 	private CPDefinitionInventoryEngine _cpDefinitionInventoryEngine;

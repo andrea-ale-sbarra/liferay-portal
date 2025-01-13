@@ -8,7 +8,6 @@ package com.liferay.commerce.model.impl;
 import com.liferay.account.constants.AccountConstants;
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.service.AccountEntryLocalServiceUtil;
-import com.liferay.account.service.AccountGroupLocalServiceUtil;
 import com.liferay.commerce.constants.CommerceConstants;
 import com.liferay.commerce.constants.CommerceOrderConstants;
 import com.liferay.commerce.currency.model.CommerceCurrency;
@@ -19,9 +18,9 @@ import com.liferay.commerce.discount.CommerceDiscountValue;
 import com.liferay.commerce.model.CommerceAddress;
 import com.liferay.commerce.model.CommerceOrderItem;
 import com.liferay.commerce.model.CommerceShippingMethod;
+import com.liferay.commerce.product.discovery.CPConfigurationListDiscovery;
 import com.liferay.commerce.product.model.CPConfigurationList;
 import com.liferay.commerce.product.model.CommerceChannel;
-import com.liferay.commerce.product.service.CPConfigurationListLocalServiceUtil;
 import com.liferay.commerce.product.service.CommerceChannelLocalServiceUtil;
 import com.liferay.commerce.service.CommerceAddressLocalServiceUtil;
 import com.liferay.commerce.service.CommerceOrderItemLocalServiceUtil;
@@ -160,7 +159,11 @@ public class CommerceOrderImpl extends CommerceOrderBaseImpl {
 	}
 
 	@Override
-	public long getCPConfigurationListId(long groupId) throws PortalException {
+	public long getCPConfigurationListId(
+			long groupId,
+			CPConfigurationListDiscovery cpConfigurationListDiscovery)
+		throws PortalException {
+
 		if (!FeatureFlagManagerUtil.isEnabled("LPD-10889")) {
 			return 0;
 		}
@@ -169,15 +172,11 @@ public class CommerceOrderImpl extends CommerceOrderBaseImpl {
 			CommerceChannelLocalServiceUtil.getCommerceChannelByGroupId(
 				getGroupId());
 
-		List<CPConfigurationList> cpConfigurationLists =
-			CPConfigurationListLocalServiceUtil.getCPConfigurationLists(
+		CPConfigurationList cpConfigurationList =
+			cpConfigurationListDiscovery.getCPConfigurationList(
 				getCompanyId(), groupId, getCommerceAccountId(),
-				AccountGroupLocalServiceUtil.getAccountGroupIds(
-					getCommerceAccountId()),
 				commerceChannel.getCommerceChannelId(),
 				getCommerceOrderTypeId());
-
-		CPConfigurationList cpConfigurationList = cpConfigurationLists.get(0);
 
 		return cpConfigurationList.getCPConfigurationListId();
 	}

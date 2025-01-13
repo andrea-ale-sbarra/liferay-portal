@@ -77,7 +77,10 @@ public interface CommerceOrder extends CommerceOrderModel, PersistedModel {
 	public CommerceShippingMethod getCommerceShippingMethod()
 		throws com.liferay.portal.kernel.exception.PortalException;
 
-	public long getCPConfigurationListId(long groupId)
+	public long getCPConfigurationListId(
+			long groupId,
+			com.liferay.commerce.product.discovery.CPConfigurationListDiscovery
+				cpConfigurationListDiscovery)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	public java.util.List<Long> getCustomerCommerceOrderIds();

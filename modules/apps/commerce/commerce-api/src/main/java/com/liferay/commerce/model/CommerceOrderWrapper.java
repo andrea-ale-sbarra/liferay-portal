@@ -908,10 +908,14 @@ public class CommerceOrderWrapper
 	}
 
 	@Override
-	public long getCPConfigurationListId(long groupId)
+	public long getCPConfigurationListId(
+			long groupId,
+			com.liferay.commerce.product.discovery.CPConfigurationListDiscovery
+				cpConfigurationListDiscovery)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return model.getCPConfigurationListId(groupId);
+		return model.getCPConfigurationListId(
+			groupId, cpConfigurationListDiscovery);
 	}
 
 	/**
