@@ -375,6 +375,43 @@ public class WarehouseItemResourceImpl extends BaseWarehouseItemResourceImpl {
 				contextAcceptLanguage.getPreferredLocale()));
 	}
 
+	@Override
+	public WarehouseItem putWarehouseItemByExternalReferenceCode(
+			String externalReferenceCode, WarehouseItem warehouseItem)
+		throws Exception {
+
+		CommerceInventoryWarehouse commerceInventoryWarehouse =
+			_commerceInventoryWarehouseService.
+				fetchCommerceInventoryWarehouseByExternalReferenceCode(
+					GetterUtil.getString(
+						warehouseItem.getWarehouseExternalReferenceCode()),
+					contextCompany.getCompanyId());
+
+		if (commerceInventoryWarehouse == null) {
+			throw new NoSuchInventoryWarehouseException(
+				"Unable to find warehouse with external reference code " +
+					warehouseItem.getWarehouseExternalReferenceCode());
+		}
+
+		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem =
+			_commerceInventoryWarehouseItemService.
+				addOrUpdateCommerceInventoryWarehouseItem(
+					externalReferenceCode,
+					contextCompany.getCompanyId(),
+					commerceInventoryWarehouse.
+						getCommerceInventoryWarehouseId(),
+					BigDecimalUtil.get(
+						warehouseItem.getQuantity(), BigDecimal.ONE),
+					GetterUtil.getString(warehouseItem.getSku()),
+					GetterUtil.getString(warehouseItem.getUnitOfMeasureKey()));
+
+		return _warehouseItemDTOConverter.toDTO(
+			new DefaultDTOConverterContext(
+				commerceInventoryWarehouseItem.
+					getCommerceInventoryWarehouseItemId(),
+				contextAcceptLanguage.getPreferredLocale()));
+	}
+
 	private Date _addDaysToDate(Date date, int increment) {
 		Calendar cal = Calendar.getInstance();
 
