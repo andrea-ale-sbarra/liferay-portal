@@ -65,6 +65,10 @@ public interface WarehouseItemResource {
 			String externalReferenceCode, WarehouseItem warehouseItem)
 		throws Exception;
 
+	public WarehouseItem putWarehouseItemByExternalReferenceCode(
+			String externalReferenceCode, WarehouseItem warehouseItem)
+		throws Exception;
+
 	public Page<WarehouseItem> getWarehouseItemsUpdatedPage(
 			Date end, Date start, Pagination pagination)
 		throws Exception;

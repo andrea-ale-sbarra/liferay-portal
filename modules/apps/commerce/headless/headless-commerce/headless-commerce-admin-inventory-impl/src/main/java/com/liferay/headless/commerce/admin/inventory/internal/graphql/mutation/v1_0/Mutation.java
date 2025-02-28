@@ -631,6 +631,20 @@ public class Mutation {
 	}
 
 	@GraphQLField
+	public WarehouseItem updateWarehouseItemByExternalReferenceCode(
+			@GraphQLName("externalReferenceCode") String externalReferenceCode,
+			@GraphQLName("warehouseItem") WarehouseItem warehouseItem)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_warehouseItemResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			warehouseItemResource ->
+				warehouseItemResource.putWarehouseItemByExternalReferenceCode(
+					externalReferenceCode, warehouseItem));
+	}
+
+	@GraphQLField
 	public Response deleteWarehouseItem(@GraphQLName("id") Long id)
 		throws Exception {
 
