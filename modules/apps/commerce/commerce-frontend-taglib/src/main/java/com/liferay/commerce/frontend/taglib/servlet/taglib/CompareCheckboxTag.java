@@ -40,11 +40,15 @@ public class CompareCheckboxTag extends IncludeTag {
 				(CommerceContext)httpServletRequest.getAttribute(
 					CommerceWebKeys.COMMERCE_CONTEXT);
 
+			_commerceChannelGroupId = 0;
+
+			if (commerceContext != null) {
+				_commerceChannelGroupId =
+					commerceContext.getCommerceChannelGroupId();
+			}
+
 			long commerceAccountId = CommerceUtil.getCommerceAccountId(
 				commerceContext);
-
-			_commerceChannelGroupId =
-				commerceContext.getCommerceChannelGroupId();
 
 			List<Long> cpDefinitionIds = _getCPDefinitionIds(
 				commerceContext.getCommerceChannelGroupId(), commerceAccountId,
