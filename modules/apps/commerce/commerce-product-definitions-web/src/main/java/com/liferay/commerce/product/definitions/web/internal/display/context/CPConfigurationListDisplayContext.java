@@ -9,6 +9,7 @@ import com.liferay.commerce.frontend.model.HeaderActionModel;
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngine;
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngineRegistry;
 import com.liferay.commerce.model.CommerceAvailabilityEstimate;
+import com.liferay.commerce.product.definitions.web.internal.constants.CPConfigurationFDSNames;
 import com.liferay.commerce.product.display.context.helper.CPRequestHelper;
 import com.liferay.commerce.product.model.CPConfigurationEntry;
 import com.liferay.commerce.product.model.CPConfigurationList;
@@ -148,11 +149,39 @@ public class CPConfigurationListDisplayContext {
 
 	public Map<String, Object> getContext() {
 		return HashMapBuilder.<String, Object>put(
+			"addCPConfigurationEntryRenderURL",
+			() -> PortletURLBuilder.createRenderURL(
+				liferayPortletResponse
+			).setMVCRenderCommandName(
+				"/cp_configuration_lists/add_cp_configuration_entry"
+			).setBackURL(
+				cpRequestHelper.getCurrentURL()
+			).setParameter(
+				"cpConfigurationListId", getCPConfigurationListId()
+			).setWindowState(
+				LiferayWindowState.POP_UP
+			).buildString()
+		).<String, Object>put(
 			"addCPConfigurationListRenderURL",
 			() -> PortletURLBuilder.createRenderURL(
 				liferayPortletResponse
 			).setMVCRenderCommandName(
 				"/cp_configuration_lists/add_cp_configuration_list"
+			).setBackURL(
+				cpRequestHelper.getCurrentURL()
+			).setWindowState(
+				LiferayWindowState.POP_UP
+			).buildString()
+		).put(
+			"cpConfigurationListId", getCPConfigurationListId()
+		).put(
+			"dataSetId", CPConfigurationFDSNames.PRODUCT_CONFIGURATIONS
+		).put(
+			"editCPConfigurationEntryRenderURL",
+			() -> PortletURLBuilder.createRenderURL(
+				liferayPortletResponse
+			).setMVCRenderCommandName(
+				"/cp_configuration_lists/edit_cp_configuration_entry"
 			).setBackURL(
 				cpRequestHelper.getCurrentURL()
 			).setWindowState(
@@ -192,6 +221,27 @@ public class CPConfigurationListDisplayContext {
 				cpConfigurationEntryId);
 
 		return _cpConfigurationEntry;
+	}
+
+	public CreationMenu getCPConfigurationEntryCreationMenu() throws Exception {
+		CPConfigurationList cpConfigurationList = getCPConfigurationList();
+
+		if ((cpConfigurationList != null) && !cpConfigurationList.isMaster() &&
+			(cpConfigurationList.getParentCPConfigurationListId() == 0)) {
+
+			return CreationMenuBuilder.addPrimaryDropdownItem(
+				dropdownItem -> {
+					dropdownItem.setHref("addCPConfigurationEntry");
+					dropdownItem.setLabel(
+						LanguageUtil.get(
+							httpServletRequest,
+							"add-new-product-configuration"));
+					dropdownItem.setTarget("event");
+				}
+			).build();
+		}
+
+		return null;
 	}
 
 	public List<FDSActionDropdownItem>
