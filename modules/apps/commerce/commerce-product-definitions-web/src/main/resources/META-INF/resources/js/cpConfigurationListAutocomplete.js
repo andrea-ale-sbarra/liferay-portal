@@ -27,7 +27,6 @@ export default function ({
 			inputName: `${namespace}parentCPConfigurationId`,
 			itemsKey: 'id',
 			itemsLabel: 'name',
-			required: true,
 		});
 	});
 
@@ -38,7 +37,6 @@ export default function ({
 		inputName: `${namespace}parentCPConfigurationId`,
 		itemsKey: 'id',
 		itemsLabel: 'name',
-		required: true,
 	});
 
 	let formSubmitted = false;
