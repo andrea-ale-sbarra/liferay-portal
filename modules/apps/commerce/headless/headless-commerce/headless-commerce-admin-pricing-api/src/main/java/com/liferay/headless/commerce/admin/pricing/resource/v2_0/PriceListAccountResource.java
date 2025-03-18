@@ -55,6 +55,13 @@ public interface PriceListAccountResource {
 			String callbackURL, Object object)
 		throws Exception;
 
+	public void putPriceListAccount(
+			Long priceListAccountId, PriceListAccount priceListAccount)
+		throws Exception;
+
+	public Response putPriceListAccountBatch(String callbackURL, Object object)
+		throws Exception;
+
 	public Page<PriceListAccount>
 			getPriceListByExternalReferenceCodePriceListAccountsPage(
 				String externalReferenceCode, Pagination pagination)

@@ -593,6 +593,16 @@ public class ServletDataImpl implements ServletData {
 							PriceListAccountResourceImpl.class,
 							"deletePriceListAccountBatch"));
 					put(
+						"mutation#updatePriceListAccount",
+						new ObjectValuePair<>(
+							PriceListAccountResourceImpl.class,
+							"putPriceListAccount"));
+					put(
+						"mutation#updatePriceListAccountBatch",
+						new ObjectValuePair<>(
+							PriceListAccountResourceImpl.class,
+							"putPriceListAccountBatch"));
+					put(
 						"mutation#createPriceListByExternalReferenceCodePriceListAccount",
 						new ObjectValuePair<>(
 							PriceListAccountResourceImpl.class,
