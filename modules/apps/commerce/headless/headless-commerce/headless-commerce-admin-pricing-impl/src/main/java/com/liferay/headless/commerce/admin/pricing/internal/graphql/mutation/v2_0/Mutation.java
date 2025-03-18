@@ -1315,6 +1315,36 @@ public class Mutation {
 	}
 
 	@GraphQLField
+	public boolean updatePriceListAccount(
+			@GraphQLName("priceListAccountId") Long priceListAccountId,
+			@GraphQLName("priceListAccount") PriceListAccount priceListAccount)
+		throws Exception {
+
+		_applyVoidComponentServiceObjects(
+			_priceListAccountResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			priceListAccountResource ->
+				priceListAccountResource.putPriceListAccount(
+					priceListAccountId, priceListAccount));
+
+		return true;
+	}
+
+	@GraphQLField
+	public Response updatePriceListAccountBatch(
+			@GraphQLName("callbackURL") String callbackURL,
+			@GraphQLName("object") Object object)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_priceListAccountResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			priceListAccountResource ->
+				priceListAccountResource.putPriceListAccountBatch(
+					callbackURL, object));
+	}
+
+	@GraphQLField
 	public PriceListAccount
 			createPriceListByExternalReferenceCodePriceListAccount(
 				@GraphQLName("externalReferenceCode") String

@@ -196,6 +196,11 @@ public abstract class BasePriceListAccountResourceTestCase {
 	}
 
 	@Test
+	public void testPutPriceListAccount() throws Exception {
+		Assert.assertTrue(false);
+	}
+
+	@Test
 	public void testGetPriceListByExternalReferenceCodePriceListAccountsPage()
 		throws Exception {
 

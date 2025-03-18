@@ -7061,6 +7061,52 @@ paths:
                       - HeadlessCommerceAdminPricing.write
             summary: Deletes a Price List Account by ID.
             tags: ["PriceListAccount"]
+        put:
+            operationId: putPriceListAccount
+            parameters:
+                - in: path
+                  explode: false
+                  name: priceListAccountId
+                  required: true
+                  schema:
+                      description:
+                          The resource Id
+                      example: 30130
+                      format: int64
+                      minimum: 0
+                      type: integer
+                  style: simple
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/PriceListAccount"
+                    application/xml:
+                        schema:
+                            $ref: "#/components/schemas/PriceListAccount"
+                required: true
+            responses:
+                204:
+                    content:
+                        application/json: {}
+                        application/xml: {}
+                401:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                    description:
+                        Authentication information is missing or invalid
+            security:
+                - BasicAuth: []
+                - BearerAuth: []
+                - OAuth2:
+                      - HeadlessCommerceAdminPricing.write
+            summary: Deletes a Price List Account by ID.
+            tags: ["PriceListAccount"]
     /price-list-accounts/{priceListAccountId}/account:
         get:
             operationId: getPriceListAccountAccount
