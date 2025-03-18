@@ -788,7 +788,7 @@ public class Order implements Serializable {
 
 	@Schema
 	@Valid
-	public CustomField[] getCustomFields() {
+	public Map<String, ?> getCustomFields() {
 		if (_customFieldsSupplier != null) {
 			customFields = _customFieldsSupplier.get();
 
@@ -798,7 +798,7 @@ public class Order implements Serializable {
 		return customFields;
 	}
 
-	public void setCustomFields(CustomField[] customFields) {
+	public void setCustomFields(Map<String, ?> customFields) {
 		this.customFields = customFields;
 
 		_customFieldsSupplier = null;
@@ -806,7 +806,7 @@ public class Order implements Serializable {
 
 	@JsonIgnore
 	public void setCustomFields(
-		UnsafeSupplier<CustomField[], Exception> customFieldsUnsafeSupplier) {
+		UnsafeSupplier<Map<String, ?>, Exception> customFieldsUnsafeSupplier) {
 
 		_customFieldsSupplier = () -> {
 			try {
@@ -823,10 +823,10 @@ public class Order implements Serializable {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected CustomField[] customFields;
+	protected Map<String, ?> customFields;
 
 	@JsonIgnore
-	private Supplier<CustomField[]> _customFieldsSupplier;
+	private Supplier<Map<String, ?>> _customFieldsSupplier;
 
 	@Schema(example = "Orders delivery terms description")
 	public String getDeliveryTermDescription() {
@@ -5236,7 +5236,7 @@ public class Order implements Serializable {
 			sb.append(currencyId);
 		}
 
-		CustomField[] customFields = getCustomFields();
+		Map<String, ?> customFields = getCustomFields();
 
 		if (customFields != null) {
 			if (sb.length() > 1) {
@@ -5245,17 +5245,7 @@ public class Order implements Serializable {
 
 			sb.append("\"customFields\": ");
 
-			sb.append("[");
-
-			for (int i = 0; i < customFields.length; i++) {
-				sb.append(String.valueOf(customFields[i]));
-
-				if ((i + 1) < customFields.length) {
-					sb.append(", ");
-				}
-			}
-
-			sb.append("]");
+			sb.append(_toJSON(customFields));
 		}
 
 		String deliveryTermDescription = getDeliveryTermDescription();
