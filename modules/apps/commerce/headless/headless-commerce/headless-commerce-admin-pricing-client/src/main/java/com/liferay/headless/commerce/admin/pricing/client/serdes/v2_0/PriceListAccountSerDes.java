@@ -91,6 +91,20 @@ public class PriceListAccountSerDes {
 			sb.append(_toJSON(priceListAccount.getActions()));
 		}
 
+		if (priceListAccount.getExternalReferenceCode() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"externalReferenceCode\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(priceListAccount.getExternalReferenceCode()));
+
+			sb.append("\"");
+		}
+
 		if (priceListAccount.getOrder() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -187,6 +201,15 @@ public class PriceListAccountSerDes {
 			map.put("actions", String.valueOf(priceListAccount.getActions()));
 		}
 
+		if (priceListAccount.getExternalReferenceCode() == null) {
+			map.put("externalReferenceCode", null);
+		}
+		else {
+			map.put(
+				"externalReferenceCode",
+				String.valueOf(priceListAccount.getExternalReferenceCode()));
+		}
+
 		if (priceListAccount.getOrder() == null) {
 			map.put("order", null);
 		}
@@ -254,6 +277,11 @@ public class PriceListAccountSerDes {
 			else if (Objects.equals(jsonParserFieldName, "actions")) {
 				return true;
 			}
+			else if (Objects.equals(
+						jsonParserFieldName, "externalReferenceCode")) {
+
+				return false;
+			}
 			else if (Objects.equals(jsonParserFieldName, "order")) {
 				return false;
 			}
@@ -304,6 +332,14 @@ public class PriceListAccountSerDes {
 				if (jsonParserFieldValue != null) {
 					priceListAccount.setActions(
 						(Map<String, Map<String, String>>)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(
+						jsonParserFieldName, "externalReferenceCode")) {
+
+				if (jsonParserFieldValue != null) {
+					priceListAccount.setExternalReferenceCode(
+						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "order")) {

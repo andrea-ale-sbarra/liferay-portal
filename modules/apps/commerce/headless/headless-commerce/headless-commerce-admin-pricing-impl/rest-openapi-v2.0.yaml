@@ -907,6 +907,9 @@ components:
                 accountExternalReferenceCode:
                     example: DAB-34098-789-N
                     type: string
+                externalReferenceCode:
+                    example: DAB-34098-789-N
+                    type: string
                 accountId:
                     example: 30324
                     format: int64
@@ -8158,6 +8161,88 @@ paths:
                       - HeadlessCommerceAdminPricing.write
             summary: Creates or updates a Price List Account Group.
             tags: ["PriceListAccountGroup"]
+    /price-lists/{priceListId}/price-list-accounts/by-external-reference-code/{externalReferenceCode}:
+        put:
+            operationId: putPriceListPriceListAccountByExternalReferenceCode
+            parameters:
+                - in: path
+                  explode: false
+                  name: priceListId
+                  required: true
+                  schema:
+                      description:
+                          The resource Id
+                      example: 30130
+                      format: int64
+                      minimum: 0
+                      type: integer
+                  style: simple
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/PriceListAccount"
+                    application/xml:
+                        schema:
+                            $ref: "#/components/schemas/PriceListAccount"
+                required: true
+            responses:
+                201:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/PriceListAccount"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/PriceListAccount"
+                    description:
+                        Created
+                202:
+                    description:
+                        Async
+                204:
+                    description:
+                        Updated
+                400:
+                    description:
+                        Invalid input
+                401:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                    description:
+                        Authentication information is missing or invalid
+                404:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                    description:
+                        The specified resource was not found
+                500:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                    description:
+                        Unexpected error
+            security:
+                - BasicAuth: []
+                - BearerAuth: []
+                - OAuth2:
+                      - HeadlessCommerceAdminPricing.write
+            summary: Creates or updates a Price List Account.
+            tags: ["PriceListAccount"]
     /price-lists/by-externalReferenceCode/{externalReferenceCode}/price-list-accounts:
         get:
             operationId: getPriceListByExternalReferenceCodePriceListAccountsPage
@@ -8963,13 +9048,13 @@ paths:
                       - HeadlessCommerceAdminPricing.write
             summary: Creates or updates a Price List Price Modifier.
             tags: ["PriceModifier"]
-    /price-lists/{id}:
+    /price-lists/{priceListId}:
         delete:
             operationId: deletePriceList
             parameters:
                 - in: path
                   explode: false
-                  name: id
+                  name: priceListId
                   required: true
                   schema:
                       description:
@@ -9006,7 +9091,7 @@ paths:
             parameters:
                 - in: path
                   explode: false
-                  name: id
+                  name: priceListId
                   required: true
                   schema:
                       description:
@@ -9072,7 +9157,7 @@ paths:
             parameters:
                 - in: path
                   explode: false
-                  name: id
+                  name: priceListId
                   required: true
                   schema:
                       description:

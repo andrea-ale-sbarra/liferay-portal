@@ -171,6 +171,7 @@ public abstract class BasePriceListAccountResourceTestCase {
 		PriceListAccount priceListAccount = randomPriceListAccount();
 
 		priceListAccount.setAccountExternalReferenceCode(regex);
+		priceListAccount.setExternalReferenceCode(regex);
 		priceListAccount.setPriceListExternalReferenceCode(regex);
 
 		String json = PriceListAccountSerDes.toJSON(priceListAccount);
@@ -181,6 +182,7 @@ public abstract class BasePriceListAccountResourceTestCase {
 
 		Assert.assertEquals(
 			regex, priceListAccount.getAccountExternalReferenceCode());
+		Assert.assertEquals(regex, priceListAccount.getExternalReferenceCode());
 		Assert.assertEquals(
 			regex, priceListAccount.getPriceListExternalReferenceCode());
 	}
@@ -198,6 +200,58 @@ public abstract class BasePriceListAccountResourceTestCase {
 	@Test
 	public void testPutPriceListAccount() throws Exception {
 		Assert.assertTrue(false);
+	}
+
+	@Test
+	public void testPutPriceListPriceListAccountByExternalReferenceCode()
+		throws Exception {
+
+		Assert.assertTrue(false);
+
+		PriceListAccount newPriceListAccount =
+			testPutPriceListPriceListAccountByExternalReferenceCode_createPriceListAccount();
+
+		putPriceListAccount =
+			priceListAccountResource.
+				putPriceListPriceListAccountByExternalReferenceCode(
+					testPutPriceListPriceListAccountByExternalReferenceCode_getId(),
+					newPriceListAccount);
+
+		assertEquals(newPriceListAccount, putPriceListAccount);
+		assertValid(putPriceListAccount);
+
+		getPriceListAccount =
+			testPutPriceListPriceListAccountByExternalReferenceCode_getPriceListAccount(
+				testPutPriceListPriceListAccountByExternalReferenceCode_getId());
+
+		assertEquals(newPriceListAccount, getPriceListAccount);
+
+		Assert.assertEquals(
+			newPriceListAccount.getExternalReferenceCode(),
+			putPriceListAccount.getExternalReferenceCode());
+	}
+
+	protected PriceListAccount
+		testPutPriceListPriceListAccountByExternalReferenceCode_getPriceListAccount(
+			Long id) {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected Long
+			testPutPriceListPriceListAccountByExternalReferenceCode_getId()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected PriceListAccount
+			testPutPriceListPriceListAccountByExternalReferenceCode_createPriceListAccount()
+		throws Exception {
+
+		return randomPriceListAccount();
 	}
 
 	@Test
@@ -1015,6 +1069,16 @@ public abstract class BasePriceListAccountResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals(
+					"externalReferenceCode", additionalAssertFieldName)) {
+
+				if (priceListAccount.getExternalReferenceCode() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("order", additionalAssertFieldName)) {
 				if (priceListAccount.getOrder() == null) {
 					valid = false;
@@ -1215,6 +1279,19 @@ public abstract class BasePriceListAccountResourceTestCase {
 				if (!equals(
 						(Map)priceListAccount1.getActions(),
 						(Map)priceListAccount2.getActions())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"externalReferenceCode", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						priceListAccount1.getExternalReferenceCode(),
+						priceListAccount2.getExternalReferenceCode())) {
 
 					return false;
 				}
@@ -1441,6 +1518,52 @@ public abstract class BasePriceListAccountResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
+		if (entityFieldName.equals("externalReferenceCode")) {
+			Object object = priceListAccount.getExternalReferenceCode();
+
+			String value = String.valueOf(object);
+
+			if (operator.equals("contains")) {
+				sb = new StringBundler();
+
+				sb.append("contains(");
+				sb.append(entityFieldName);
+				sb.append(",'");
+
+				if ((object != null) && (value.length() > 2)) {
+					sb.append(value.substring(1, value.length() - 1));
+				}
+				else {
+					sb.append(value);
+				}
+
+				sb.append("')");
+			}
+			else if (operator.equals("startswith")) {
+				sb = new StringBundler();
+
+				sb.append("startswith(");
+				sb.append(entityFieldName);
+				sb.append(",'");
+
+				if ((object != null) && (value.length() > 1)) {
+					sb.append(value.substring(0, value.length() - 1));
+				}
+				else {
+					sb.append(value);
+				}
+
+				sb.append("')");
+			}
+			else {
+				sb.append("'");
+				sb.append(value);
+				sb.append("'");
+			}
+
+			return sb.toString();
+		}
+
 		if (entityFieldName.equals("order")) {
 			sb.append(String.valueOf(priceListAccount.getOrder()));
 
@@ -1552,6 +1675,8 @@ public abstract class BasePriceListAccountResourceTestCase {
 				accountExternalReferenceCode = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				accountId = RandomTestUtil.randomLong();
+				externalReferenceCode = StringUtil.toLowerCase(
+					RandomTestUtil.randomString());
 				order = RandomTestUtil.randomInt();
 				priceListAccountId = RandomTestUtil.randomLong();
 				priceListExternalReferenceCode = StringUtil.toLowerCase(
