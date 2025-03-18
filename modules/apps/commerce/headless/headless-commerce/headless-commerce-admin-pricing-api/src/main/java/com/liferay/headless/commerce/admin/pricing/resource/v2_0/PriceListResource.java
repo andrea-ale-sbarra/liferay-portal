@@ -81,14 +81,14 @@ public interface PriceListResource {
 			String externalReferenceCode, PriceList priceList)
 		throws Exception;
 
-	public void deletePriceList(Long id) throws Exception;
+	public void deletePriceList(Long priceListId) throws Exception;
 
 	public Response deletePriceListBatch(String callbackURL, Object object)
 		throws Exception;
 
-	public PriceList getPriceList(Long id) throws Exception;
+	public PriceList getPriceList(Long priceListId) throws Exception;
 
-	public PriceList patchPriceList(Long id, PriceList priceList)
+	public PriceList patchPriceList(Long priceListId, PriceList priceList)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(

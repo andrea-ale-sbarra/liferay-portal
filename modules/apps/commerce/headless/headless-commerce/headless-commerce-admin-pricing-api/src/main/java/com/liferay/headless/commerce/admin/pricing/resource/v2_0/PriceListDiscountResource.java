@@ -72,10 +72,6 @@ public interface PriceListDiscountResource {
 			Long id, PriceListDiscount priceListDiscount)
 		throws Exception;
 
-	public Response postPriceListIdPriceListDiscountBatch(
-			String callbackURL, Object object)
-		throws Exception;
-
 	public default void setContextAcceptLanguage(
 		AcceptLanguage contextAcceptLanguage) {
 	}

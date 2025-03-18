@@ -443,6 +443,8 @@ public abstract class BasePriceListResourceImpl
 			externalReferenceCode, existingPriceList);
 	}
 
+	/* YES With putPriceListByExternalReferenceCode */
+
 	/**
 	 * Invoke this method with the command line:
 	 *
@@ -480,13 +482,13 @@ public abstract class BasePriceListResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'DELETE' 'http://localhost:8080/o/headless-commerce-admin-pricing/v2.0/price-lists/{id}'  -u 'test@liferay.com:test'
+	 * curl -X 'DELETE' 'http://localhost:8080/o/headless-commerce-admin-pricing/v2.0/price-lists/{priceListId}'  -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "id"
+				name = "priceListId"
 			)
 		}
 	)
@@ -494,13 +496,14 @@ public abstract class BasePriceListResourceImpl
 		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "PriceList")}
 	)
 	@javax.ws.rs.DELETE
-	@javax.ws.rs.Path("/price-lists/{id}")
+	@javax.ws.rs.Path("/price-lists/{priceListId}")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
 	public void deletePriceList(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@javax.validation.constraints.NotNull @javax.ws.rs.PathParam("id")
-			Long id)
+			@javax.validation.constraints.NotNull
+			@javax.ws.rs.PathParam("priceListId")
+			Long priceListId)
 		throws Exception {
 	}
 
@@ -551,13 +554,13 @@ public abstract class BasePriceListResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'GET' 'http://localhost:8080/o/headless-commerce-admin-pricing/v2.0/price-lists/{id}'  -u 'test@liferay.com:test'
+	 * curl -X 'GET' 'http://localhost:8080/o/headless-commerce-admin-pricing/v2.0/price-lists/{priceListId}'  -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "id"
+				name = "priceListId"
 			)
 		}
 	)
@@ -565,13 +568,14 @@ public abstract class BasePriceListResourceImpl
 		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "PriceList")}
 	)
 	@javax.ws.rs.GET
-	@javax.ws.rs.Path("/price-lists/{id}")
+	@javax.ws.rs.Path("/price-lists/{priceListId}")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
 	public PriceList getPriceList(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@javax.validation.constraints.NotNull @javax.ws.rs.PathParam("id")
-			Long id)
+			@javax.validation.constraints.NotNull
+			@javax.ws.rs.PathParam("priceListId")
+			Long priceListId)
 		throws Exception {
 
 		return new PriceList();
@@ -580,13 +584,13 @@ public abstract class BasePriceListResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PATCH' 'http://localhost:8080/o/headless-commerce-admin-pricing/v2.0/price-lists/{id}' -d $'{"active": ___, "author": ___, "catalogBasePriceList": ___, "catalogId": ___, "catalogName": ___, "createDate": ___, "currencyCode": ___, "currencyExternalReferenceCode": ___, "currencyId": ___, "customFields": ___, "displayDate": ___, "expirationDate": ___, "externalReferenceCode": ___, "id": ___, "name": ___, "netPrice": ___, "neverExpire": ___, "parentPriceListId": ___, "priceEntries": ___, "priceListAccountGroups": ___, "priceListAccounts": ___, "priceListChannels": ___, "priceListDiscounts": ___, "priceListOrderTypes": ___, "priceModifiers": ___, "priority": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PATCH' 'http://localhost:8080/o/headless-commerce-admin-pricing/v2.0/price-lists/{priceListId}' -d $'{"active": ___, "author": ___, "catalogBasePriceList": ___, "catalogId": ___, "catalogName": ___, "createDate": ___, "currencyCode": ___, "currencyExternalReferenceCode": ___, "currencyId": ___, "customFields": ___, "displayDate": ___, "expirationDate": ___, "externalReferenceCode": ___, "id": ___, "name": ___, "netPrice": ___, "neverExpire": ___, "parentPriceListId": ___, "priceEntries": ___, "priceListAccountGroups": ___, "priceListAccounts": ___, "priceListChannels": ___, "priceListDiscounts": ___, "priceListOrderTypes": ___, "priceModifiers": ___, "priority": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "id"
+				name = "priceListId"
 			)
 		}
 	)
@@ -595,13 +599,14 @@ public abstract class BasePriceListResourceImpl
 	)
 	@javax.ws.rs.Consumes({"application/json", "application/xml"})
 	@javax.ws.rs.PATCH
-	@javax.ws.rs.Path("/price-lists/{id}")
+	@javax.ws.rs.Path("/price-lists/{priceListId}")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
 	public PriceList patchPriceList(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@javax.validation.constraints.NotNull @javax.ws.rs.PathParam("id")
-			Long id,
+			@javax.validation.constraints.NotNull
+			@javax.ws.rs.PathParam("priceListId")
+			Long priceListId,
 			PriceList priceList)
 		throws Exception {
 

@@ -103,9 +103,10 @@ public interface PriceListResource {
 				String externalReferenceCode, PriceList priceList)
 		throws Exception;
 
-	public void deletePriceList(Long id) throws Exception;
+	public void deletePriceList(Long priceListId) throws Exception;
 
-	public HttpInvoker.HttpResponse deletePriceListHttpResponse(Long id)
+	public HttpInvoker.HttpResponse deletePriceListHttpResponse(
+			Long priceListId)
 		throws Exception;
 
 	public void deletePriceListBatch(String callbackURL, Object object)
@@ -115,16 +116,16 @@ public interface PriceListResource {
 			String callbackURL, Object object)
 		throws Exception;
 
-	public PriceList getPriceList(Long id) throws Exception;
+	public PriceList getPriceList(Long priceListId) throws Exception;
 
-	public HttpInvoker.HttpResponse getPriceListHttpResponse(Long id)
+	public HttpInvoker.HttpResponse getPriceListHttpResponse(Long priceListId)
 		throws Exception;
 
-	public PriceList patchPriceList(Long id, PriceList priceList)
+	public PriceList patchPriceList(Long priceListId, PriceList priceList)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse patchPriceListHttpResponse(
-			Long id, PriceList priceList)
+			Long priceListId, PriceList priceList)
 		throws Exception;
 
 	public static class Builder {
@@ -1125,9 +1126,9 @@ public interface PriceListResource {
 			return httpInvoker.invoke();
 		}
 
-		public void deletePriceList(Long id) throws Exception {
+		public void deletePriceList(Long priceListId) throws Exception {
 			HttpInvoker.HttpResponse httpResponse = deletePriceListHttpResponse(
-				id);
+				priceListId);
 
 			String content = httpResponse.getContent();
 
@@ -1188,7 +1189,8 @@ public interface PriceListResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse deletePriceListHttpResponse(Long id)
+		public HttpInvoker.HttpResponse deletePriceListHttpResponse(
+				Long priceListId)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -1215,9 +1217,9 @@ public interface PriceListResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-admin-pricing/v2.0/price-lists/{id}");
+						"/o/headless-commerce-admin-pricing/v2.0/price-lists/{priceListId}");
 
-			httpInvoker.path("id", id);
+			httpInvoker.path("priceListId", priceListId);
 
 			if ((_builder._login != null) && (_builder._password != null)) {
 				httpInvoker.userNameAndPassword(
@@ -1326,9 +1328,9 @@ public interface PriceListResource {
 			return httpInvoker.invoke();
 		}
 
-		public PriceList getPriceList(Long id) throws Exception {
+		public PriceList getPriceList(Long priceListId) throws Exception {
 			HttpInvoker.HttpResponse httpResponse = getPriceListHttpResponse(
-				id);
+				priceListId);
 
 			String content = httpResponse.getContent();
 
@@ -1389,7 +1391,8 @@ public interface PriceListResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse getPriceListHttpResponse(Long id)
+		public HttpInvoker.HttpResponse getPriceListHttpResponse(
+				Long priceListId)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -1416,9 +1419,9 @@ public interface PriceListResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-admin-pricing/v2.0/price-lists/{id}");
+						"/o/headless-commerce-admin-pricing/v2.0/price-lists/{priceListId}");
 
-			httpInvoker.path("id", id);
+			httpInvoker.path("priceListId", priceListId);
 
 			if ((_builder._login != null) && (_builder._password != null)) {
 				httpInvoker.userNameAndPassword(
@@ -1428,11 +1431,11 @@ public interface PriceListResource {
 			return httpInvoker.invoke();
 		}
 
-		public PriceList patchPriceList(Long id, PriceList priceList)
+		public PriceList patchPriceList(Long priceListId, PriceList priceList)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse = patchPriceListHttpResponse(
-				id, priceList);
+				priceListId, priceList);
 
 			String content = httpResponse.getContent();
 
@@ -1494,7 +1497,7 @@ public interface PriceListResource {
 		}
 
 		public HttpInvoker.HttpResponse patchPriceListHttpResponse(
-				Long id, PriceList priceList)
+				Long priceListId, PriceList priceList)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -1523,9 +1526,9 @@ public interface PriceListResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-admin-pricing/v2.0/price-lists/{id}");
+						"/o/headless-commerce-admin-pricing/v2.0/price-lists/{priceListId}");
 
-			httpInvoker.path("id", id);
+			httpInvoker.path("priceListId", priceListId);
 
 			if ((_builder._login != null) && (_builder._password != null)) {
 				httpInvoker.userNameAndPassword(

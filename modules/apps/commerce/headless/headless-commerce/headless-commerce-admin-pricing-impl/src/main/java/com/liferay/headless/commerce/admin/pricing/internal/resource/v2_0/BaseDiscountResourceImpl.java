@@ -463,6 +463,8 @@ public abstract class BaseDiscountResourceImpl
 			externalReferenceCode, existingDiscount);
 	}
 
+	/* YES With putDiscountByExternalReferenceCode */
+
 	/**
 	 * Invoke this method with the command line:
 	 *

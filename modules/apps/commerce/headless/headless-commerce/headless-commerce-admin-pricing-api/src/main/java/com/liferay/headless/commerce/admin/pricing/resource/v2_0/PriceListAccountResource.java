@@ -61,7 +61,7 @@ public interface PriceListAccountResource {
 		throws Exception;
 
 	public PriceListAccount putPriceListPriceListAccountByExternalReferenceCode(
-			Long id, PriceListAccount priceListAccount)
+			Long priceListId, PriceListAccount priceListAccount)
 		throws Exception;
 
 	public Page<PriceListAccount>
@@ -83,10 +83,6 @@ public interface PriceListAccountResource {
 
 	public PriceListAccount postPriceListIdPriceListAccount(
 			Long id, PriceListAccount priceListAccount)
-		throws Exception;
-
-	public Response postPriceListIdPriceListAccountBatch(
-			String callbackURL, Object object)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(

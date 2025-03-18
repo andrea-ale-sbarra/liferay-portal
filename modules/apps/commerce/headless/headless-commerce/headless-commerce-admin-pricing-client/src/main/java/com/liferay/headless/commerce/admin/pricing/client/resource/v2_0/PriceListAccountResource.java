@@ -64,12 +64,12 @@ public interface PriceListAccountResource {
 		throws Exception;
 
 	public PriceListAccount putPriceListPriceListAccountByExternalReferenceCode(
-			Long id, PriceListAccount priceListAccount)
+			Long priceListId, PriceListAccount priceListAccount)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse
 			putPriceListPriceListAccountByExternalReferenceCodeHttpResponse(
-				Long id, PriceListAccount priceListAccount)
+				Long priceListId, PriceListAccount priceListAccount)
 		throws Exception;
 
 	public Page<PriceListAccount>
@@ -109,15 +109,6 @@ public interface PriceListAccountResource {
 
 	public HttpInvoker.HttpResponse postPriceListIdPriceListAccountHttpResponse(
 			Long id, PriceListAccount priceListAccount)
-		throws Exception;
-
-	public void postPriceListIdPriceListAccountBatch(
-			String callbackURL, Object object)
-		throws Exception;
-
-	public HttpInvoker.HttpResponse
-			postPriceListIdPriceListAccountBatchHttpResponse(
-				String callbackURL, Object object)
 		throws Exception;
 
 	public static class Builder {
@@ -644,12 +635,12 @@ public interface PriceListAccountResource {
 
 		public PriceListAccount
 				putPriceListPriceListAccountByExternalReferenceCode(
-					Long id, PriceListAccount priceListAccount)
+					Long priceListId, PriceListAccount priceListAccount)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
 				putPriceListPriceListAccountByExternalReferenceCodeHttpResponse(
-					id, priceListAccount);
+					priceListId, priceListAccount);
 
 			String content = httpResponse.getContent();
 
@@ -712,7 +703,7 @@ public interface PriceListAccountResource {
 
 		public HttpInvoker.HttpResponse
 				putPriceListPriceListAccountByExternalReferenceCodeHttpResponse(
-					Long id, PriceListAccount priceListAccount)
+					Long priceListId, PriceListAccount priceListAccount)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -741,9 +732,9 @@ public interface PriceListAccountResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-admin-pricing/v2.0/price-lists/{id}/price-list-accounts/by-external-reference-code/{externalReferenceCode}");
+						"/o/headless-commerce-admin-pricing/v2.0/price-lists/{priceListId}/price-list-accounts/by-external-reference-code/{externalReferenceCode}");
 
-			httpInvoker.path("id", id);
+			httpInvoker.path("priceListId", priceListId);
 
 			if ((_builder._login != null) && (_builder._password != null)) {
 				httpInvoker.userNameAndPassword(
@@ -1212,108 +1203,6 @@ public interface PriceListAccountResource {
 						"/o/headless-commerce-admin-pricing/v2.0/price-lists/{id}/price-list-accounts");
 
 			httpInvoker.path("id", id);
-
-			if ((_builder._login != null) && (_builder._password != null)) {
-				httpInvoker.userNameAndPassword(
-					_builder._login + ":" + _builder._password);
-			}
-
-			return httpInvoker.invoke();
-		}
-
-		public void postPriceListIdPriceListAccountBatch(
-				String callbackURL, Object object)
-			throws Exception {
-
-			HttpInvoker.HttpResponse httpResponse =
-				postPriceListIdPriceListAccountBatchHttpResponse(
-					callbackURL, object);
-
-			String content = httpResponse.getContent();
-
-			if ((httpResponse.getStatusCode() / 100) != 2) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response content: " + content);
-				_logger.log(
-					Level.WARNING,
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.log(
-					Level.WARNING,
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-
-				Problem.ProblemException problemException = null;
-
-				if (Objects.equals(
-						httpResponse.getContentType(), "application/json")) {
-
-					problemException = new Problem.ProblemException(
-						Problem.toDTO(content));
-				}
-				else {
-					_logger.log(
-						Level.WARNING,
-						"Unable to process content type: " +
-							httpResponse.getContentType());
-
-					Problem problem = new Problem();
-
-					problem.setStatus(
-						String.valueOf(httpResponse.getStatusCode()));
-
-					problemException = new Problem.ProblemException(problem);
-				}
-
-				throw problemException;
-			}
-			else {
-				_logger.fine("HTTP response content: " + content);
-				_logger.fine(
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.fine(
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-			}
-		}
-
-		public HttpInvoker.HttpResponse
-				postPriceListIdPriceListAccountBatchHttpResponse(
-					String callbackURL, Object object)
-			throws Exception {
-
-			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-			httpInvoker.body(object.toString(), "application/json");
-
-			if (_builder._locale != null) {
-				httpInvoker.header(
-					"Accept-Language", _builder._locale.toLanguageTag());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._headers.entrySet()) {
-
-				httpInvoker.header(entry.getKey(), entry.getValue());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._parameters.entrySet()) {
-
-				httpInvoker.parameter(entry.getKey(), entry.getValue());
-			}
-
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
-
-			if (callbackURL != null) {
-				httpInvoker.parameter(
-					"callbackURL", String.valueOf(callbackURL));
-			}
-
-			httpInvoker.path(
-				_builder._scheme + "://" + _builder._host + ":" +
-					_builder._port + _builder._contextPath +
-						"/o/headless-commerce-admin-pricing/v2.0/price-lists/price-list-accounts/batch");
 
 			if ((_builder._login != null) && (_builder._password != null)) {
 				httpInvoker.userNameAndPassword(

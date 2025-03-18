@@ -214,7 +214,8 @@ public abstract class BasePriceListAccountResourceTestCase {
 		putPriceListAccount =
 			priceListAccountResource.
 				putPriceListPriceListAccountByExternalReferenceCode(
-					testPutPriceListPriceListAccountByExternalReferenceCode_getId(),
+					testPutPriceListPriceListAccountByExternalReferenceCode_getPriceListId(
+						newPriceListAccount),
 					newPriceListAccount);
 
 		assertEquals(newPriceListAccount, putPriceListAccount);
@@ -222,7 +223,8 @@ public abstract class BasePriceListAccountResourceTestCase {
 
 		getPriceListAccount =
 			testPutPriceListPriceListAccountByExternalReferenceCode_getPriceListAccount(
-				testPutPriceListPriceListAccountByExternalReferenceCode_getId());
+				testPutPriceListPriceListAccountByExternalReferenceCode_getPriceListId(
+					putPriceListAccount));
 
 		assertEquals(newPriceListAccount, getPriceListAccount);
 
@@ -233,18 +235,18 @@ public abstract class BasePriceListAccountResourceTestCase {
 
 	protected PriceListAccount
 		testPutPriceListPriceListAccountByExternalReferenceCode_getPriceListAccount(
-			Long id) {
+			Long priceListId) {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
 	protected Long
-			testPutPriceListPriceListAccountByExternalReferenceCode_getId()
+			testPutPriceListPriceListAccountByExternalReferenceCode_getPriceListId(
+				PriceListAccount priceListAccount)
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return priceListAccount.getPriceListId();
 	}
 
 	protected PriceListAccount

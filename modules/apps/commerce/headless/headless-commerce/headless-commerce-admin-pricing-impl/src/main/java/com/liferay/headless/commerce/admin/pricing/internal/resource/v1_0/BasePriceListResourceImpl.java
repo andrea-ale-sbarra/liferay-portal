@@ -349,6 +349,8 @@ public abstract class BasePriceListResourceImpl
 		return responseBuilder.build();
 	}
 
+	/* YES With putPriceListByExternalReferenceCode */
+
 	/**
 	 * Invoke this method with the command line:
 	 *

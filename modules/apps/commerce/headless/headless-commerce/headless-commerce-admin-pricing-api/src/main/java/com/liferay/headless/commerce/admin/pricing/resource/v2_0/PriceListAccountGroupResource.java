@@ -75,10 +75,6 @@ public interface PriceListAccountGroupResource {
 			Long id, PriceListAccountGroup priceListAccountGroup)
 		throws Exception;
 
-	public Response postPriceListIdPriceListAccountGroupBatch(
-			String callbackURL, Object object)
-		throws Exception;
-
 	public default void setContextAcceptLanguage(
 		AcceptLanguage contextAcceptLanguage) {
 	}
