@@ -897,7 +897,7 @@ public abstract class BasePriceListResourceTestCase {
 			404, priceListResource.getPriceListHttpResponse(priceList.getId()));
 
 		assertHttpResponseStatusCode(
-			404, priceListResource.getPriceListHttpResponse(priceList.getId()));
+			404, priceListResource.getPriceListHttpResponse(0L));
 	}
 
 	protected PriceList testDeletePriceList_addPriceList() throws Exception {
@@ -919,7 +919,7 @@ public abstract class BasePriceListResourceTestCase {
 						"deletePriceList",
 						new HashMap<String, Object>() {
 							{
-								put("id", priceList1.getId());
+								put("priceListId", priceList1.getId());
 							}
 						})),
 				"JSONObject/data", "Object/deletePriceList"));
@@ -930,7 +930,7 @@ public abstract class BasePriceListResourceTestCase {
 					"priceList",
 					new HashMap<String, Object>() {
 						{
-							put("id", priceList1.getId());
+							put("priceListId", priceList1.getId());
 						}
 					},
 					new GraphQLField("id"))),
@@ -951,7 +951,7 @@ public abstract class BasePriceListResourceTestCase {
 							"deletePriceList",
 							new HashMap<String, Object>() {
 								{
-									put("id", priceList2.getId());
+									put("priceListId", priceList2.getId());
 								}
 							}))),
 				"JSONObject/data",
@@ -966,7 +966,7 @@ public abstract class BasePriceListResourceTestCase {
 						"priceList",
 						new HashMap<String, Object>() {
 							{
-								put("id", priceList2.getId());
+								put("priceListId", priceList2.getId());
 							}
 						},
 						new GraphQLField("id")))),
@@ -1201,7 +1201,7 @@ public abstract class BasePriceListResourceTestCase {
 								"priceList",
 								new HashMap<String, Object>() {
 									{
-										put("id", priceList.getId());
+										put("priceListId", priceList.getId());
 									}
 								},
 								getGraphQLFields())),
@@ -1221,7 +1221,9 @@ public abstract class BasePriceListResourceTestCase {
 									"priceList",
 									new HashMap<String, Object>() {
 										{
-											put("id", priceList.getId());
+											put(
+												"priceListId",
+												priceList.getId());
 										}
 									},
 									getGraphQLFields()))),
@@ -1232,7 +1234,7 @@ public abstract class BasePriceListResourceTestCase {
 
 	@Test
 	public void testGraphQLGetPriceListNotFound() throws Exception {
-		Long irrelevantId = RandomTestUtil.randomLong();
+		Long irrelevantPriceListId = RandomTestUtil.randomLong();
 
 		// No namespace
 
@@ -1244,7 +1246,7 @@ public abstract class BasePriceListResourceTestCase {
 						"priceList",
 						new HashMap<String, Object>() {
 							{
-								put("id", irrelevantId);
+								put("priceListId", irrelevantPriceListId);
 							}
 						},
 						getGraphQLFields())),
@@ -1263,7 +1265,7 @@ public abstract class BasePriceListResourceTestCase {
 							"priceList",
 							new HashMap<String, Object>() {
 								{
-									put("id", irrelevantId);
+									put("priceListId", irrelevantPriceListId);
 								}
 							},
 							getGraphQLFields()))),

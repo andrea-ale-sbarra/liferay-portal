@@ -72,10 +72,6 @@ public interface PriceListOrderTypeResource {
 			Long id, PriceListOrderType priceListOrderType)
 		throws Exception;
 
-	public Response postPriceListIdPriceListOrderTypeBatch(
-			String callbackURL, Object object)
-		throws Exception;
-
 	public default void setContextAcceptLanguage(
 		AcceptLanguage contextAcceptLanguage) {
 	}

@@ -325,6 +325,8 @@ public abstract class BaseDiscountResourceImpl
 		return responseBuilder.build();
 	}
 
+	/* YES With putDiscountByExternalReferenceCode */
+
 	/**
 	 * Invoke this method with the command line:
 	 *
