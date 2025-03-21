@@ -522,6 +522,15 @@ public class CPConfigurationListLocalServiceWrapper
 
 	@Override
 	public CPConfigurationList updateCPConfigurationList(
+		CPConfigurationList cpConfigurationList,
+		com.liferay.portal.kernel.service.ServiceContext serviceContext) {
+
+		return _cpConfigurationListLocalService.updateCPConfigurationList(
+			cpConfigurationList, serviceContext);
+	}
+
+	@Override
+	public CPConfigurationList updateCPConfigurationList(
 			String externalReferenceCode, long cpConfigurationListId,
 			long groupId, long userId, long parentCPConfigurationListId,
 			boolean master, String name, double priority, int displayDateMonth,

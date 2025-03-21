@@ -1431,6 +1431,10 @@ components:
                     example: 2017-07-21
                     format: date
                     type: string
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 displayDate:
                     example: 2017-07-21
                     format: date

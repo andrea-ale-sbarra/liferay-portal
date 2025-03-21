@@ -9,13 +9,17 @@ import com.liferay.commerce.product.model.CPConfigurationList;
 import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.CPConfigurationListService;
 import com.liferay.commerce.product.service.CommerceCatalogLocalService;
+import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
+import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductConfiguration;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductConfigurationList;
+import com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.util.CustomFieldsUtil;
 import com.liferay.headless.commerce.admin.catalog.internal.odata.entity.v1_0.ProductConfigurationListEntityModel;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductConfigurationListResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductConfigurationResource;
 import com.liferay.headless.commerce.core.util.DateConfig;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
+import com.liferay.headless.common.spi.odata.entity.EntityFieldsUtil;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Sort;
@@ -26,13 +30,17 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.odata.entity.EntityModel;
+import com.liferay.portal.search.expando.ExpandoBridgeIndexer;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterRegistry;
 import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.SearchUtil;
+
+import java.io.Serializable;
 
 import java.util.Map;
 
@@ -76,7 +84,11 @@ public class ProductConfigurationListResourceImpl
 	public EntityModel getEntityModel(MultivaluedMap multivaluedMap)
 		throws Exception {
 
-		return _entityModel;
+		return new ProductConfigurationListEntityModel(
+			EntityFieldsUtil.getEntityFields(
+				_portal.getClassNameId(CPConfigurationList.class.getName()),
+				contextCompany.getCompanyId(), _expandoBridgeIndexer,
+				_expandoColumnLocalService, _expandoTableLocalService));
 	}
 
 	@Override
@@ -190,6 +202,13 @@ public class ProductConfigurationListResourceImpl
 				GetterUtil.getBoolean(
 					productConfigurationList.getNeverExpire(), true));
 
+		serviceContext.setExpandoBridgeAttributes(
+			_getExpandoBridgeAttributes(productConfigurationList));
+
+		cpConfigurationList =
+			_cpConfigurationListService.updateCPConfigurationList(
+				cpConfigurationList, serviceContext);
+
 		ProductConfiguration[] productConfigurations =
 			productConfigurationList.getProductConfigurations();
 
@@ -277,6 +296,13 @@ public class ProductConfigurationListResourceImpl
 				GetterUtil.getBoolean(
 					productConfigurationList.getNeverExpire(), true));
 
+		serviceContext.setExpandoBridgeAttributes(
+			_getExpandoBridgeAttributes(productConfigurationList));
+
+		cpConfigurationList =
+			_cpConfigurationListService.updateCPConfigurationList(
+				cpConfigurationList, serviceContext);
+
 		ProductConfiguration[] productConfigurations =
 			productConfigurationList.getProductConfigurations();
 
@@ -331,6 +357,15 @@ public class ProductConfigurationListResourceImpl
 		).build();
 	}
 
+	private Map<String, Serializable> _getExpandoBridgeAttributes(
+		ProductConfigurationList productConfigurationList) {
+
+		return CustomFieldsUtil.toMap(
+			CPConfigurationList.class.getName(), contextCompany.getCompanyId(),
+			productConfigurationList.getCustomFields(),
+			contextAcceptLanguage.getPreferredLocale());
+	}
+
 	private ProductConfigurationList _toProductConfigurationList(
 			CPConfigurationList cpConfigurationList)
 		throws Exception {
@@ -354,9 +389,6 @@ public class ProductConfigurationListResourceImpl
 				cpConfigurationListId));
 	}
 
-	private static final EntityModel _entityModel =
-		new ProductConfigurationListEntityModel();
-
 	@Reference
 	private CommerceCatalogLocalService _commerceCatalogLocalService;
 
@@ -371,6 +403,18 @@ public class ProductConfigurationListResourceImpl
 
 	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
+
+	@Reference
+	private ExpandoBridgeIndexer _expandoBridgeIndexer;
+
+	@Reference
+	private ExpandoColumnLocalService _expandoColumnLocalService;
+
+	@Reference
+	private ExpandoTableLocalService _expandoTableLocalService;
+
+	@Reference
+	private Portal _portal;
 
 	@Reference(
 		target = "(component.name=com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.converter.ProductConfigurationListDTOConverter)"

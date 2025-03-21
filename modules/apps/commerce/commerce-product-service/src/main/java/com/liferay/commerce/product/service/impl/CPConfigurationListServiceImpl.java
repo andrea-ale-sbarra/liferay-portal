@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 
 import java.util.Iterator;
@@ -209,6 +210,20 @@ public class CPConfigurationListServiceImpl
 
 		return cpConfigurationListLocalService.getMasterCPConfigurationList(
 			groupId);
+	}
+
+	@Indexable(type = IndexableType.REINDEX)
+	@Override
+	public CPConfigurationList updateCPConfigurationList(
+			CPConfigurationList cpConfigurationList,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		_checkCommerceCatalog(
+			cpConfigurationList.getGroupId(), ActionKeys.UPDATE);
+
+		return cpConfigurationListLocalService.updateCPConfigurationList(
+			cpConfigurationList, serviceContext);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)

@@ -138,6 +138,15 @@ public class CPConfigurationListServiceUtil {
 	}
 
 	public static CPConfigurationList updateCPConfigurationList(
+			CPConfigurationList cpConfigurationList,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws PortalException {
+
+		return getService().updateCPConfigurationList(
+			cpConfigurationList, serviceContext);
+	}
+
+	public static CPConfigurationList updateCPConfigurationList(
 			String externalReferenceCode, long cpConfigurationListId,
 			long groupId, long parentCPConfigurationListId,
 			boolean masterCPConfigurationList, String name, double priority,

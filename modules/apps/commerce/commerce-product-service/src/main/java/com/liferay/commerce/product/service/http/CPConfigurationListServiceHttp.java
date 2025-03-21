@@ -501,6 +501,52 @@ public class CPConfigurationListServiceHttp {
 
 	public static com.liferay.commerce.product.model.CPConfigurationList
 			updateCPConfigurationList(
+				HttpPrincipal httpPrincipal,
+				com.liferay.commerce.product.model.CPConfigurationList
+					cpConfigurationList,
+				com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CPConfigurationListServiceUtil.class,
+				"updateCPConfigurationList",
+				_updateCPConfigurationListParameterTypes10);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, cpConfigurationList, serviceContext);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (com.liferay.commerce.product.model.CPConfigurationList)
+				returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static com.liferay.commerce.product.model.CPConfigurationList
+			updateCPConfigurationList(
 				HttpPrincipal httpPrincipal, String externalReferenceCode,
 				long cpConfigurationListId, long groupId,
 				long parentCPConfigurationListId,
@@ -516,7 +562,7 @@ public class CPConfigurationListServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPConfigurationListServiceUtil.class,
 				"updateCPConfigurationList",
-				_updateCPConfigurationListParameterTypes10);
+				_updateCPConfigurationListParameterTypes11);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, externalReferenceCode, cpConfigurationListId,
@@ -594,6 +640,11 @@ public class CPConfigurationListServiceHttp {
 	private static final Class<?>[]
 		_getMasterCPConfigurationListParameterTypes9 = new Class[] {long.class};
 	private static final Class<?>[] _updateCPConfigurationListParameterTypes10 =
+		new Class[] {
+			com.liferay.commerce.product.model.CPConfigurationList.class,
+			com.liferay.portal.kernel.service.ServiceContext.class
+		};
+	private static final Class<?>[] _updateCPConfigurationListParameterTypes11 =
 		new Class[] {
 			String.class, long.class, long.class, long.class, boolean.class,
 			String.class, double.class, int.class, int.class, int.class,

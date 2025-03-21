@@ -461,6 +461,14 @@ public class CPConfigurationListLocalServiceUtil {
 	}
 
 	public static CPConfigurationList updateCPConfigurationList(
+		CPConfigurationList cpConfigurationList,
+		com.liferay.portal.kernel.service.ServiceContext serviceContext) {
+
+		return getService().updateCPConfigurationList(
+			cpConfigurationList, serviceContext);
+	}
+
+	public static CPConfigurationList updateCPConfigurationList(
 			String externalReferenceCode, long cpConfigurationListId,
 			long groupId, long userId, long parentCPConfigurationListId,
 			boolean master, String name, double priority, int displayDateMonth,

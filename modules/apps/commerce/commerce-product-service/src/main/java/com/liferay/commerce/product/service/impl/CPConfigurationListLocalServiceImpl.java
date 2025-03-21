@@ -44,6 +44,7 @@ import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.Portal;
@@ -337,6 +338,17 @@ public class CPConfigurationListLocalServiceImpl
 		throws NoSuchCPConfigurationListException {
 
 		return cpConfigurationListPersistence.findByG_M(groupId, true);
+	}
+
+	@Indexable(type = IndexableType.REINDEX)
+	@Override
+	public CPConfigurationList updateCPConfigurationList(
+		CPConfigurationList cpConfigurationList,
+		ServiceContext serviceContext) {
+
+		cpConfigurationList.setExpandoBridgeAttributes(serviceContext);
+
+		return cpConfigurationListPersistence.update(cpConfigurationList);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)

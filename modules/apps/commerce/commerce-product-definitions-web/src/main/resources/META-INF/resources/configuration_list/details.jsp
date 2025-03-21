@@ -68,6 +68,23 @@ long templateCPConfigurationEntryId = cpConfigurationListDisplayContext.getTempl
 			</div>
 		</c:if>
 
+		<c:if test="<%= cpConfigurationListDisplayContext.hasCustomAttributesAvailable() %>">
+			<div class="row">
+				<div class="col-12">
+					<commerce-ui:panel
+						title='<%= LanguageUtil.get(request, "custom-attribute") %>'
+					>
+						<liferay-expando:custom-attribute-list
+							className="<%= CPConfigurationList.class.getName() %>"
+							classPK="<%= cpConfigurationList.getCPConfigurationListId() %>"
+							editable="<%= true %>"
+							label="<%= true %>"
+						/>
+					</commerce-ui:panel>
+				</div>
+			</div>
+		</c:if>
+
 		<c:if test="<%= templateCPConfigurationEntryId > 0 %>">
 			<div class="col-12">
 				<commerce-ui:panel

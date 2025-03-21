@@ -6,9 +6,11 @@
 package com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.converter;
 
 import com.liferay.commerce.product.model.CPConfigurationList;
+import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.service.CPConfigurationListService;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductConfiguration;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductConfigurationList;
+import com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.util.CustomFieldsUtil;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterContext;
 
@@ -42,6 +44,13 @@ public class ProductConfigurationListDTOConverter
 		return new ProductConfigurationList() {
 			{
 				setActions(dtoConverterContext::getActions);
+				setCustomFields(
+					() -> CustomFieldsUtil.toCustomFields(
+						dtoConverterContext.isAcceptAllLanguages(),
+						CPConfigurationList.class.getName(),
+						cpConfigurationList.getCPConfigurationListId(),
+						cpConfigurationList.getCompanyId(),
+						dtoConverterContext.getLocale()));
 				setExternalReferenceCode(
 					cpConfigurationList::getExternalReferenceCode);
 				setId(cpConfigurationList::getCPConfigurationListId);

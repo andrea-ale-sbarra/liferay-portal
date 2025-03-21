@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.change.tracking.CTService;
 import com.liferay.portal.kernel.service.persistence.change.tracking.CTPersistence;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
@@ -387,6 +388,10 @@ public interface CPConfigurationListLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public CPConfigurationList updateCPConfigurationList(
 		CPConfigurationList cpConfigurationList);
+
+	@Indexable(type = IndexableType.REINDEX)
+	public CPConfigurationList updateCPConfigurationList(
+		CPConfigurationList cpConfigurationList, ServiceContext serviceContext);
 
 	@Indexable(type = IndexableType.REINDEX)
 	public CPConfigurationList updateCPConfigurationList(

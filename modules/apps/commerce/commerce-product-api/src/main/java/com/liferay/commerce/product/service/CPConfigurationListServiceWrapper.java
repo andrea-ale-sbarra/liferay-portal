@@ -154,6 +154,16 @@ public class CPConfigurationListServiceWrapper
 
 	@Override
 	public CPConfigurationList updateCPConfigurationList(
+			CPConfigurationList cpConfigurationList,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpConfigurationListService.updateCPConfigurationList(
+			cpConfigurationList, serviceContext);
+	}
+
+	@Override
+	public CPConfigurationList updateCPConfigurationList(
 			String externalReferenceCode, long cpConfigurationListId,
 			long groupId, long parentCPConfigurationListId,
 			boolean masterCPConfigurationList, String name, double priority,

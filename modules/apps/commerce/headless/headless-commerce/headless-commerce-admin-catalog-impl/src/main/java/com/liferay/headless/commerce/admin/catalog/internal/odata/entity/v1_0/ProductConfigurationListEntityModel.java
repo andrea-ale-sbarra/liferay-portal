@@ -7,12 +7,14 @@ package com.liferay.headless.commerce.admin.catalog.internal.odata.entity.v1_0;
 
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.odata.entity.CollectionEntityField;
+import com.liferay.portal.odata.entity.ComplexEntityField;
 import com.liferay.portal.odata.entity.DateTimeEntityField;
 import com.liferay.portal.odata.entity.EntityField;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.odata.entity.IntegerEntityField;
 import com.liferay.portal.odata.entity.StringEntityField;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,7 +22,7 @@ import java.util.Map;
  */
 public class ProductConfigurationListEntityModel implements EntityModel {
 
-	public ProductConfigurationListEntityModel() {
+	public ProductConfigurationListEntityModel(List<EntityField> entityFields) {
 		_entityFieldsMap = EntityModel.toEntityFieldsMap(
 			new CollectionEntityField(
 				new IntegerEntityField(
@@ -36,6 +38,7 @@ public class ProductConfigurationListEntityModel implements EntityModel {
 			new CollectionEntityField(
 				new IntegerEntityField(
 					"orderTypeId", locale -> "commerceOrderTypeId")),
+			new ComplexEntityField("customFields", entityFields),
 			new DateTimeEntityField(
 				"createDate",
 				locale -> Field.getSortableFieldName(Field.CREATE_DATE),
