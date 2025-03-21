@@ -8,6 +8,7 @@ package com.liferay.commerce.product.service.impl;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.currency.model.CommerceCurrencyTable;
 import com.liferay.commerce.product.exception.DuplicateCommerceChannelRelException;
+import com.liferay.commerce.product.model.CPConfigurationList;
 import com.liferay.commerce.product.model.CommerceChannelRel;
 import com.liferay.commerce.product.model.CommerceChannelRelTable;
 import com.liferay.commerce.product.service.base.CommerceChannelRelLocalServiceBaseImpl;
@@ -356,6 +357,15 @@ public class CommerceChannelRelLocalServiceImpl
 						CommerceCurrency.class);
 
 				indexer.reindex(CommerceCurrency.class.getName(), classPK);
+			}
+			else if (classNameId == _classNameLocalService.getClassNameId(
+						CPConfigurationList.class)) {
+
+				Indexer<CPConfigurationList> indexer =
+					IndexerRegistryUtil.nullSafeGetIndexer(
+						CPConfigurationList.class);
+
+				indexer.reindex(CPConfigurationList.class.getName(), classPK);
 			}
 		}
 		catch (PortalException portalException) {
