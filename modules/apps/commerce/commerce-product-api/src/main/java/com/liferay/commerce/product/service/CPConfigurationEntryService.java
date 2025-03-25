@@ -59,6 +59,21 @@ public interface CPConfigurationEntryService extends BaseService {
 			double weight, double width)
 		throws PortalException;
 
+	public CPConfigurationEntry addOrUpdateCPConfigurationEntry(
+			String externalReferenceCode, long groupId, long classNameId,
+			long classPK, long cpConfigurationListId, long cpTaxCategoryId,
+			String allowedOrderQuantities, boolean backOrders,
+			long commerceAvailabilityEstimateId,
+			String cpDefinitionInventoryEngine, double depth,
+			boolean displayAvailability, boolean displayStockQuantity,
+			boolean freeShipping, double height, String lowStockActivity,
+			BigDecimal maxOrderQuantity, BigDecimal minOrderQuantity,
+			BigDecimal minStockQuantity, BigDecimal multipleOrderQuantity,
+			boolean purchasable, boolean shippable, double shippingExtraPrice,
+			boolean shipSeparately, boolean taxExempt, boolean visible,
+			double weight, double width)
+		throws PortalException;
+
 	public void deleteCPConfigurationEntry(long cpConfigurationEntryId)
 		throws PortalException;
 

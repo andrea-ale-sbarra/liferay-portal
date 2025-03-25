@@ -93,6 +93,22 @@ public interface CPConfigurationEntryLocalService
 			double weight, double width)
 		throws PortalException;
 
+	@Indexable(type = IndexableType.REINDEX)
+	public CPConfigurationEntry addOrUpdateCPConfigurationEntry(
+			String externalReferenceCode, long userId, long groupId,
+			long classNameId, long classPK, long cpConfigurationListId,
+			long cpTaxCategoryId, String allowedOrderQuantities,
+			boolean backOrders, long commerceAvailabilityEstimateId,
+			String cpDefinitionInventoryEngine, double depth,
+			boolean displayAvailability, boolean displayStockQuantity,
+			boolean freeShipping, double height, String lowStockActivity,
+			BigDecimal maxOrderQuantity, BigDecimal minOrderQuantity,
+			BigDecimal minStockQuantity, BigDecimal multipleOrderQuantity,
+			boolean purchasable, boolean shippable, double shippingExtraPrice,
+			boolean shipSeparately, boolean taxExempt, boolean visible,
+			double weight, double width)
+		throws PortalException;
+
 	/**
 	 * Creates a new cp configuration entry with the primary key. Does not add the cp configuration entry to the database.
 	 *

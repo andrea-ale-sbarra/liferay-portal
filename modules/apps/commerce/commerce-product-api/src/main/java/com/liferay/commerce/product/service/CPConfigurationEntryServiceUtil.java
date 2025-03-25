@@ -56,6 +56,34 @@ public class CPConfigurationEntryServiceUtil {
 			shipSeparately, taxExempt, visible, weight, width);
 	}
 
+	public static CPConfigurationEntry addOrUpdateCPConfigurationEntry(
+			String externalReferenceCode, long groupId, long classNameId,
+			long classPK, long cpConfigurationListId, long cpTaxCategoryId,
+			String allowedOrderQuantities, boolean backOrders,
+			long commerceAvailabilityEstimateId,
+			String cpDefinitionInventoryEngine, double depth,
+			boolean displayAvailability, boolean displayStockQuantity,
+			boolean freeShipping, double height, String lowStockActivity,
+			java.math.BigDecimal maxOrderQuantity,
+			java.math.BigDecimal minOrderQuantity,
+			java.math.BigDecimal minStockQuantity,
+			java.math.BigDecimal multipleOrderQuantity, boolean purchasable,
+			boolean shippable, double shippingExtraPrice,
+			boolean shipSeparately, boolean taxExempt, boolean visible,
+			double weight, double width)
+		throws PortalException {
+
+		return getService().addOrUpdateCPConfigurationEntry(
+			externalReferenceCode, groupId, classNameId, classPK,
+			cpConfigurationListId, cpTaxCategoryId, allowedOrderQuantities,
+			backOrders, commerceAvailabilityEstimateId,
+			cpDefinitionInventoryEngine, depth, displayAvailability,
+			displayStockQuantity, freeShipping, height, lowStockActivity,
+			maxOrderQuantity, minOrderQuantity, minStockQuantity,
+			multipleOrderQuantity, purchasable, shippable, shippingExtraPrice,
+			shipSeparately, taxExempt, visible, weight, width);
+	}
+
 	public static void deleteCPConfigurationEntry(long cpConfigurationEntryId)
 		throws PortalException {
 
