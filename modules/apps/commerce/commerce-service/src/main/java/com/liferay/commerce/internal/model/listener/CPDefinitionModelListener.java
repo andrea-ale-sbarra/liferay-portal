@@ -86,10 +86,14 @@ public class CPDefinitionModelListener extends BaseModelListener<CPDefinition> {
 					templateCPConfigurationEntry.getWeight(),
 					templateCPConfigurationEntry.getWidth());
 
-			List<CPConfigurationList> cpConfigurationLists =
+			List<CPConfigurationList> cpConfigurationLists = ListUtil.filter(
 				_cpConfigurationListLocalService.getCPConfigurationLists(
 					cpConfigurationList.getGroupId(),
-					cpConfigurationList.getCompanyId());
+					cpConfigurationList.getCompanyId()),
+				curCPConfigurationList ->
+					curCPConfigurationList.isMaster() ||
+					(curCPConfigurationList.getParentCPConfigurationListId() !=
+						0));
 
 			if (ListUtil.isNotEmpty(cpConfigurationLists)) {
 				CPConfigurationEntrySetting cpConfigurationEntrySetting =
