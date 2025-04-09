@@ -142,6 +142,22 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 				searchContext2.setLocale(searchContext1.getLocale());
 				searchContext2.setTimeZone(searchContext1.getTimeZone());
 				searchContext2.setUserId(searchContext1.getUserId());
+
+				boolean secure = GetterUtil.getBoolean(
+					searchContext1.getAttribute("secure"));
+
+				if (secure) {
+					searchContext2.setAttribute(
+						"accountEntryId",
+						searchContext1.getAttribute("accountEntryId"));
+					searchContext2.setAttribute(
+						"commerceAccountGroupIds",
+						searchContext1.getAttribute("commerceAccountGroupIds"));
+					searchContext2.setAttribute(
+						"commerceChannelGroupId",
+						searchContext1.getAttribute("commerceChannelGroupId"));
+					searchContext2.setAttribute("secure", secure);
+				}
 			});
 
 		searchRequestBuilder.size(

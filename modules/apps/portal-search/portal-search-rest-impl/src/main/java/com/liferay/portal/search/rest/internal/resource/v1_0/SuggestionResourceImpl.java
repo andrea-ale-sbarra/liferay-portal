@@ -5,6 +5,13 @@
 
 package com.liferay.portal.search.rest.internal.resource.v1_0;
 
+import com.liferay.account.manager.CurrentAccountEntryManager;
+import com.liferay.account.model.AccountEntry;
+import com.liferay.account.service.AccountGroupLocalService;
+import com.liferay.commerce.product.constants.CPField;
+import com.liferay.commerce.product.model.CommerceChannel;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
+import com.liferay.commerce.util.CommerceAccountHelper;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -217,6 +224,41 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 		searchContext.setTimeZone(contextUser.getTimeZone());
 		searchContext.setUserId(contextUser.getUserId());
 
+		long commerceChannelGroupId = 0;
+
+		CommerceChannel commerceChannel =
+			_commerceChannelLocalService.fetchCommerceChannelBySiteGroupId(
+				groupId);
+
+		if (commerceChannel != null) {
+			commerceChannelGroupId = commerceChannel.getGroupId();
+		}
+
+		if (commerceChannelGroupId > 0) {
+			AccountEntry accountEntry =
+				_commerceAccountHelper.getCurrentAccountEntry(
+					commerceChannelGroupId, themeDisplay.getRequest());
+
+			searchContext.setAttribute(
+				"accountEntryId", accountEntry.getAccountEntryId());
+
+			long[] commerceAccountGroupIds = null;
+
+			if (accountEntry != null) {
+				commerceAccountGroupIds =
+					_accountGroupLocalService.getAccountGroupIds(
+						accountEntry.getAccountEntryId());
+			}
+
+			searchContext.setAttribute(
+				"commerceAccountGroupIds", commerceAccountGroupIds);
+
+			searchContext.setAttribute(
+				CPField.COMMERCE_CHANNEL_GROUP_ID, commerceChannelGroupId);
+
+			searchContext.setAttribute("secure", Boolean.TRUE);
+		}
+
 		return searchContext;
 	}
 
@@ -246,6 +288,18 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 
 		return themeDisplay;
 	}
+
+	@Reference
+	private AccountGroupLocalService _accountGroupLocalService;
+
+	@Reference
+	private CommerceAccountHelper _commerceAccountHelper;
+
+	@Reference
+	private CommerceChannelLocalService _commerceChannelLocalService;
+
+	@Reference
+	private CurrentAccountEntryManager _currentAccountEntryManager;
 
 	@Reference
 	private Language _language;
