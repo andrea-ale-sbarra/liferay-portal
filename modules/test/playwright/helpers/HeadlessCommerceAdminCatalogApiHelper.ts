@@ -630,6 +630,19 @@ export class HeadlessCommerceAdminCatalogApiHelper {
 		return product;
 	}
 
+	async postProductBatch(products: TProduct[]): Promise<TProduct[]> {
+		products = await this.apiHelpers.post(
+			`${this.apiHelpers.baseUrl}${this.basePath}/products/batch`,
+			{data: products}
+		);
+
+		//		if (this.apiHelpers instanceof DataApiHelpers) {
+		//			this.apiHelpers.data.push({id: product.productId, type: 'product'});
+		//		}
+
+		return products;
+	}
+
 	async postProductConfiguration(
 		productConfigurationListId: number,
 		productConfiguration: TProductConfiguration
