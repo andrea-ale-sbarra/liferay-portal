@@ -90,9 +90,11 @@ public class CPDefinitionHelperImpl implements CPDefinitionHelper {
 			Locale locale)
 		throws PortalException {
 
-		_commerceProductViewPermission.check(
+		if(!_commerceProductViewPermission.contains(
 			PermissionThreadLocal.getPermissionChecker(), commerceAccountId,
-			groupId, cpDefinitionId);
+			groupId, cpDefinitionId)) {
+			return null;
+		}
 
 		CPDefinition cpDefinition = _cpDefinitionLocalService.getCPDefinition(
 			cpDefinitionId);
