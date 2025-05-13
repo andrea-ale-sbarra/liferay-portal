@@ -109,30 +109,33 @@ public class AvailabilityLabelInfoItemRenderer
 					cpDefinition.getCPDefinitionId(),
 					_portal.getLocale(httpServletRequest));
 
-			CPSku cpSku = _cpContentHelper.getDefaultCPSku(cpCatalogEntry);
+			if(cpCatalogEntry != null){
 
-			if (cpSku != null) {
-				ProductSettingsModel productSettingsModel =
-					_productHelper.getProductSettingsModel(
-						cpDefinition.getCPDefinitionId(),
-						(CommerceContext)httpServletRequest.getAttribute(
-							CommerceWebKeys.COMMERCE_CONTEXT));
+				CPSku cpSku = _cpContentHelper.getDefaultCPSku(cpCatalogEntry);
 
-				if (productSettingsModel.isShowAvailabilityDot()) {
-					JSONObject availabilityContentContributorValueJSONObject =
-						_cpContentHelper.
-							getAvailabilityContentContributorValueJSONObject(
-								cpCatalogEntry, httpServletRequest);
+				if (cpSku != null) {
+					ProductSettingsModel productSettingsModel =
+						_productHelper.getProductSettingsModel(
+							cpDefinition.getCPDefinitionId(),
+							(CommerceContext)httpServletRequest.getAttribute(
+								CommerceWebKeys.COMMERCE_CONTEXT));
 
-					availabilityLabel =
-						availabilityContentContributorValueJSONObject.getString(
-							CPContentContributorConstants.AVAILABILITY_NAME,
-							availabilityLabel);
-					labelType =
-						availabilityContentContributorValueJSONObject.getString(
-							CPContentContributorConstants.
-								AVAILABILITY_DISPLAY_TYPE,
-							labelType);
+					if (productSettingsModel.isShowAvailabilityDot()) {
+						JSONObject availabilityContentContributorValueJSONObject =
+							_cpContentHelper.
+								getAvailabilityContentContributorValueJSONObject(
+									cpCatalogEntry, httpServletRequest);
+
+						availabilityLabel =
+							availabilityContentContributorValueJSONObject.getString(
+								CPContentContributorConstants.AVAILABILITY_NAME,
+								availabilityLabel);
+						labelType =
+							availabilityContentContributorValueJSONObject.getString(
+								CPContentContributorConstants.
+									AVAILABILITY_DISPLAY_TYPE,
+								labelType);
+					}
 				}
 			}
 
