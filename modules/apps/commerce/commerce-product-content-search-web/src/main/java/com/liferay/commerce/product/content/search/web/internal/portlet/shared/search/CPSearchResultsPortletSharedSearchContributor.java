@@ -17,6 +17,8 @@ import com.liferay.commerce.product.content.search.web.internal.configuration.CP
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CommerceChannel;
 import com.liferay.commerce.product.service.CommerceChannelLocalService;
+import com.liferay.commerce.product.util.AccountEntryHelper;
+import com.liferay.commerce.util.CommerceAccountHelper;
 import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -151,6 +153,17 @@ public class CPSearchResultsPortletSharedSearchContributor
 						"commerceAccountGroupIds",
 						_accountGroupLocalService.getAccountGroupIds(
 							accountEntry.getAccountEntryId()));
+
+					searchContext.setAttribute(
+						"commerceAccountExcludedProductIds",
+						_accountEntryHelper.
+							getAccountExcludedProductsIdsAsArray(accountEntry));
+
+					searchContext.setAttribute(
+						"commerceAccountExcludedCategoriesIds",
+						_accountEntryHelper.
+							getAccountExcludedCategoriesIdsAsArray(
+								accountEntry));
 				}
 			}
 
@@ -227,6 +240,9 @@ public class CPSearchResultsPortletSharedSearchContributor
 		searchContext.setEnd(startAndEnd[1]);
 		searchContext.setStart(startAndEnd[0]);
 	}
+
+	@Reference
+	private AccountEntryHelper _accountEntryHelper;
 
 	@Reference
 	private AccountGroupLocalService _accountGroupLocalService;

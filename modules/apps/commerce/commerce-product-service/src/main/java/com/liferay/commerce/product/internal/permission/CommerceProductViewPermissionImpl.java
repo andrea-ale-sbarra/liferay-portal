@@ -8,6 +8,8 @@ package com.liferay.commerce.product.internal.permission;
 import com.liferay.account.model.AccountGroupRel;
 import com.liferay.account.service.AccountGroupLocalService;
 import com.liferay.account.service.AccountGroupRelLocalService;
+import com.liferay.asset.kernel.model.AssetCategory;
+import com.liferay.asset.kernel.service.AssetCategoryLocalService;
 import com.liferay.commerce.product.discovery.CPConfigurationListDiscovery;
 import com.liferay.commerce.product.model.CPConfigurationList;
 import com.liferay.commerce.product.model.CPDefinition;
@@ -17,6 +19,7 @@ import com.liferay.commerce.product.permission.CommerceProductViewPermission;
 import com.liferay.commerce.product.service.CPDefinitionLocalService;
 import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.commerce.product.service.CommerceChannelRelLocalService;
+import com.liferay.commerce.product.util.AccountEntryHelper;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
@@ -27,7 +30,9 @@ import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -103,7 +108,9 @@ public class CommerceProductViewPermissionImpl
 				cpConfigurationList.getCPConfigurationListId());
 		}
 
-		if (!_isChannelEnabled(groupId, cpDefinition)) {
+		if (!_isChannelEnabled(groupId, cpDefinition) ||
+			_isProductExcluded(commerceAccountId, cpDefinition)) {
+
 			return false;
 		}
 
@@ -128,6 +135,26 @@ public class CommerceProductViewPermissionImpl
 		}
 
 		return 0;
+	}
+
+	private boolean _hasMatchingCategory(
+		List<Long> ids, List<AssetCategory> categories) {
+
+		if ((ids == null) || ids.isEmpty() || (categories == null) ||
+			categories.isEmpty()) {
+
+			return false;
+		}
+
+		Set<Long> idSet = new HashSet<>(ids);
+
+		for (AssetCategory category : categories) {
+			if (idSet.contains(category.getCategoryId())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private boolean _isAccountEnabled(
@@ -180,6 +207,37 @@ public class CommerceProductViewPermissionImpl
 		return false;
 	}
 
+	private boolean _isProductExcluded(
+			long commerceAccountId, CPDefinition cpDefinition)
+		throws PortalException {
+
+		long cpProductId = cpDefinition.getCProductId();
+
+		List<Long> accountExcludedProductsIds =
+			_accountEntryHelper.getAccountExcludedProductsIds(
+				commerceAccountId);
+
+		for (long excludedId : accountExcludedProductsIds) {
+			if (excludedId == cpProductId) {
+				return true;
+			}
+		}
+
+		List<Long> accountExcludedCategoriesIds =
+			_accountEntryHelper.getAccountExcludedCategoriesIds(
+				commerceAccountId);
+
+		List<AssetCategory> categories =
+			assetCategoryLocalService.getCategories(
+				"com.liferay.commerce.product.model.CPDefinition",
+				cpDefinition.getCPDefinitionId());
+
+		return _hasMatchingCategory(accountExcludedCategoriesIds, categories);
+	}
+
+	@Reference
+	private AccountEntryHelper _accountEntryHelper;
+
 	@Reference
 	private AccountGroupLocalService _accountGroupLocalService;
 
@@ -200,5 +258,8 @@ public class CommerceProductViewPermissionImpl
 
 	@Reference
 	private GroupLocalService _groupLocalService;
+
+	@Reference
+	AssetCategoryLocalService assetCategoryLocalService;
 
 }

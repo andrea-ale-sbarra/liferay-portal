@@ -109,30 +109,36 @@ public class AvailabilityLabelInfoItemRenderer
 					cpDefinition.getCPDefinitionId(),
 					_portal.getLocale(httpServletRequest));
 
-			CPSku cpSku = _cpContentHelper.getDefaultCPSku(cpCatalogEntry);
+			if (cpCatalogEntry != null) {
+				CPSku cpSku = _cpContentHelper.getDefaultCPSku(cpCatalogEntry);
 
-			if (cpSku != null) {
-				ProductSettingsModel productSettingsModel =
-					_productHelper.getProductSettingsModel(
-						cpDefinition.getCPDefinitionId(),
-						(CommerceContext)httpServletRequest.getAttribute(
-							CommerceWebKeys.COMMERCE_CONTEXT));
+				if (cpSku != null) {
+					ProductSettingsModel productSettingsModel =
+						_productHelper.getProductSettingsModel(
+							cpDefinition.getCPDefinitionId(),
+							(CommerceContext)httpServletRequest.getAttribute(
+								CommerceWebKeys.COMMERCE_CONTEXT));
 
-				if (productSettingsModel.isShowAvailabilityDot()) {
-					JSONObject availabilityContentContributorValueJSONObject =
-						_cpContentHelper.
-							getAvailabilityContentContributorValueJSONObject(
-								cpCatalogEntry, httpServletRequest);
+					if (productSettingsModel.isShowAvailabilityDot()) {
+						JSONObject
+							availabilityContentContributorValueJSONObject =
+								_cpContentHelper.
+									getAvailabilityContentContributorValueJSONObject(
+										cpCatalogEntry, httpServletRequest);
 
-					availabilityLabel =
-						availabilityContentContributorValueJSONObject.getString(
-							CPContentContributorConstants.AVAILABILITY_NAME,
-							availabilityLabel);
-					labelType =
-						availabilityContentContributorValueJSONObject.getString(
-							CPContentContributorConstants.
-								AVAILABILITY_DISPLAY_TYPE,
-							labelType);
+						availabilityLabel =
+							availabilityContentContributorValueJSONObject.
+								getString(
+									CPContentContributorConstants.
+										AVAILABILITY_NAME,
+									availabilityLabel);
+						labelType =
+							availabilityContentContributorValueJSONObject.
+								getString(
+									CPContentContributorConstants.
+										AVAILABILITY_DISPLAY_TYPE,
+									labelType);
+					}
 				}
 			}
 

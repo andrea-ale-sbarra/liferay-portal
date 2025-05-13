@@ -13,6 +13,7 @@ import com.liferay.commerce.product.model.CommerceChannelAccountEntryRel;
 import com.liferay.commerce.product.service.CommerceCatalogService;
 import com.liferay.commerce.product.service.CommerceChannelAccountEntryRelLocalService;
 import com.liferay.commerce.product.service.CommerceChannelLocalService;
+import com.liferay.commerce.product.util.AccountEntryHelper;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
@@ -73,6 +74,61 @@ public class CPDefinitionModelPreFilterContributor
 		if (_isIndexersSuppressed(searchContext)) {
 			_filterByCommerceCatalogIds(booleanFilter, searchContext);
 		}
+
+		_filterByAccountExcludedProducts(booleanFilter, searchContext);
+
+		_filterByAccountExcludedCategories(booleanFilter, searchContext);
+	}
+
+	private void _filterByAccountExcludedCategories(
+		BooleanFilter booleanFilter, SearchContext searchContext) {
+
+		long[] excludedCatogoriesIds = GetterUtil.getLongValues(
+			searchContext.getAttribute("commerceAccountExcludedCategoriesIds"),
+			null);
+
+		if ((excludedCatogoriesIds == null) ||
+			(excludedCatogoriesIds.length == 0)) {
+
+			return;
+		}
+
+		BooleanFilter excludedCategoriesBooleanFilter = new BooleanFilter();
+
+		TermsFilter assetCategoryIdTermsFilter = new TermsFilter(
+			Field.ASSET_CATEGORY_IDS);
+
+		assetCategoryIdTermsFilter.addValues(
+			ArrayUtil.toStringArray(excludedCatogoriesIds));
+
+		excludedCategoriesBooleanFilter.add(
+			assetCategoryIdTermsFilter, BooleanClauseOccur.SHOULD);
+
+		booleanFilter.add(
+			excludedCategoriesBooleanFilter, BooleanClauseOccur.MUST_NOT);
+	}
+
+	private void _filterByAccountExcludedProducts(
+		BooleanFilter booleanFilter, SearchContext searchContext) {
+
+		long[] excludedProductIds = GetterUtil.getLongValues(
+			searchContext.getAttribute("commerceAccountExcludedProductIds"),
+			null);
+
+		if ((excludedProductIds == null) || (excludedProductIds.length == 0)) {
+			return;
+		}
+
+		BooleanFilter excludedProductsBooleanFilter = new BooleanFilter();
+
+		for (long productId : excludedProductIds) {
+			excludedProductsBooleanFilter.add(
+				new TermFilter("cpProductId", String.valueOf(productId)),
+				BooleanClauseOccur.SHOULD);
+		}
+
+		booleanFilter.add(
+			excludedProductsBooleanFilter, BooleanClauseOccur.MUST_NOT);
 	}
 
 	private void _filterByAccountGroupIds(
@@ -367,6 +423,9 @@ public class CPDefinitionModelPreFilterContributor
 			searchContext.getAttribute(
 				"search.full.query.suppress.indexer.provided.clauses"));
 	}
+
+	@Reference
+	private AccountEntryHelper _accountEntryHelper;
 
 	@Reference
 	private CommerceCatalogService _commerceCatalogService;

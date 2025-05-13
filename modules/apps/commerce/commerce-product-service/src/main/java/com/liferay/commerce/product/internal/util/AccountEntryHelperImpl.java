@@ -5,94 +5,87 @@ import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.commerce.product.util.AccountEntryHelper;
 import com.liferay.expando.kernel.service.ExpandoValueLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 @Component(service = AccountEntryHelper.class)
 public class AccountEntryHelperImpl implements AccountEntryHelper {
 
 	@Override
-	public List<Long> getAccountExcludedProductsIds(long commerceAccountId)
-		throws PortalException{
+	public List<Long> getAccountExcludedCategoriesIds(AccountEntry accountEntry)
+		throws PortalException {
 
-		return getAccountExcludedProductsIds(
-			_accountEntryLocalService.fetchAccountEntry(commerceAccountId)
-		);
-	}
-
-	@Override
-	public List<Long> getAccountExcludedProductsIds(AccountEntry accountEntry)
-		throws PortalException{
-
-		if(accountEntry == null){
+		if (accountEntry == null) {
 			return new ArrayList<>();
 		}
+
 		return _parseToLongArray(
 			_getAccountCustomFieldValue(
-				accountEntry.getCompanyId(),
-				accountEntry.getPrimaryKey(),
-				"excluded_products")
-		);
-	}
-
-	@Override
-	public long[] getAccountExcludedProductsIdsAsArray(AccountEntry accountEntry)
-		throws PortalException{
-
-		return toLongArray(
-			getAccountExcludedProductsIds(accountEntry)
-		);
+				accountEntry.getCompanyId(), accountEntry.getPrimaryKey(),
+				"excluded_categories"));
 	}
 
 	@Override
 	public List<Long> getAccountExcludedCategoriesIds(long accountId)
-		throws PortalException{
+		throws PortalException {
 
 		return getAccountExcludedCategoriesIds(
-			_accountEntryLocalService.fetchAccountEntry(accountId)
-		);
-	}
-
-	@Override
-	public List<Long> getAccountExcludedCategoriesIds(AccountEntry accountEntry)
-		throws PortalException{
-
-		if(accountEntry == null){
-			return new ArrayList<>();
-		}
-		return _parseToLongArray(
-			_getAccountCustomFieldValue(
-				accountEntry.getCompanyId(),
-				accountEntry.getPrimaryKey(),
-				"excluded_categories")
-		);
+			_accountEntryLocalService.fetchAccountEntry(accountId));
 	}
 
 	@Override
 	public long[] getAccountExcludedCategoriesIdsAsArray(
-		AccountEntry accountEntry)
-		throws PortalException{
+			AccountEntry accountEntry)
+		throws PortalException {
 
-		return toLongArray(
-			getAccountExcludedCategoriesIds(accountEntry)
-		);
+		return toLongArray(getAccountExcludedCategoriesIds(accountEntry));
 	}
 
-	private String _getAccountCustomFieldValue(long companyId, long accountId, String fieldName) throws PortalException{
+	@Override
+	public List<Long> getAccountExcludedProductsIds(AccountEntry accountEntry)
+		throws PortalException {
 
-		return _expandoValueLocalService.getData(companyId,
-			"com.liferay.account.model.AccountEntry", "CUSTOM_FIELDS",
-			fieldName, accountId,
-			"");
+		if (accountEntry == null) {
+			return new ArrayList<>();
+		}
+
+		return _parseToLongArray(
+			_getAccountCustomFieldValue(
+				accountEntry.getCompanyId(), accountEntry.getPrimaryKey(),
+				"excluded_products"));
 	}
 
-	private List<Long> _parseToLongArray(String value) throws PortalException{
+	@Override
+	public List<Long> getAccountExcludedProductsIds(long commerceAccountId)
+		throws PortalException {
 
-		if(value == null || value.isEmpty()){
+		return getAccountExcludedProductsIds(
+			_accountEntryLocalService.fetchAccountEntry(commerceAccountId));
+	}
+
+	@Override
+	public long[] getAccountExcludedProductsIdsAsArray(
+			AccountEntry accountEntry)
+		throws PortalException {
+
+		return toLongArray(getAccountExcludedProductsIds(accountEntry));
+	}
+
+	private String _getAccountCustomFieldValue(
+			long companyId, long accountId, String fieldName)
+		throws PortalException {
+
+		return _expandoValueLocalService.getData(
+			companyId, "com.liferay.account.model.AccountEntry",
+			"CUSTOM_FIELDS", fieldName, accountId, "");
+	}
+
+	private List<Long> _parseToLongArray(String value) throws PortalException {
+		if ((value == null) || value.isEmpty()) {
 			return new ArrayList<>();
 		}
 
@@ -100,21 +93,21 @@ public class AccountEntryHelperImpl implements AccountEntryHelper {
 		List<Long> numbers = new ArrayList<>();
 
 		for (String part : parts) {
-
 			try {
 				long num = Long.parseLong(part.trim());
 				numbers.add(num);
-			} catch (NumberFormatException e) {
-				throw new PortalException(String.format("Unable to parse value %s to long ", part));
+			}
+			catch (NumberFormatException e) {
+				throw new PortalException(
+					String.format("Unable to parse value %s to long ", part));
 			}
 		}
 
 		return numbers;
 	}
 
-	private long[] toLongArray(List<Long> list) throws PortalException{
-
-		if(list == null || list.isEmpty()){
+	private long[] toLongArray(List<Long> list) throws PortalException {
+		if ((list == null) || list.isEmpty()) {
 			return null;
 		}
 
@@ -134,4 +127,5 @@ public class AccountEntryHelperImpl implements AccountEntryHelper {
 
 	@Reference
 	private ExpandoValueLocalService _expandoValueLocalService;
+
 }
