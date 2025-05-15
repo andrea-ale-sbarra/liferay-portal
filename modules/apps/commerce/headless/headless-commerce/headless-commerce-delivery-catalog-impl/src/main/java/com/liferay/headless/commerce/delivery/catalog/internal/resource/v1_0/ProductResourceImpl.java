@@ -14,7 +14,6 @@ import com.liferay.commerce.context.CommerceContextFactory;
 import com.liferay.commerce.helper.CommerceAccountHelper;
 import com.liferay.commerce.product.catalog.CPCatalogEntry;
 import com.liferay.commerce.product.catalog.CPQuery;
-import com.liferay.commerce.product.constants.CPField;
 import com.liferay.commerce.product.constants.CommerceChannelAccountEntryRelConstants;
 import com.liferay.commerce.product.data.source.CPDataSourceResult;
 import com.liferay.commerce.product.exception.NoSuchCProductException;
@@ -193,11 +192,14 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 			commerceAccountId, commerceChannel.getGroupId(), null, 0,
 			contextCompany.getCompanyId());
 
+		/*
+
 		if (FeatureFlagManagerUtil.isEnabled("LPD-10889")) {
 			searchContext.setAttribute(
 				CPField.CP_CONFIGURATION_LIST_IDS,
 				commerceContext.getCPConfigurationListIds());
 		}
+		*/
 
 		searchContext.setAttributes(
 			HashMapBuilder.<String, Serializable>put(
