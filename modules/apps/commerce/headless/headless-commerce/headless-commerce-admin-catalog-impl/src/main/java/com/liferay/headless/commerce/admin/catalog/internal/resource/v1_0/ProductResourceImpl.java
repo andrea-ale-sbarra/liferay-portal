@@ -1317,15 +1317,13 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 
 		// Channels visibility
 
-		_cpDefinitionService.updateCPDefinitionChannelFilter(
-			cpDefinition.getCPDefinitionId(),
-			GetterUtil.getBoolean(
-				product.getProductChannelFilter(),
-				cpDefinition.isChannelFilterEnabled()));
+		boolean channelFilter = GetterUtil.getBoolean(
+			product.getProductChannelFilter(),
+			cpDefinition.isChannelFilterEnabled());
 
 		ProductChannel[] productChannels = product.getProductChannels();
 
-		if (productChannels != null) {
+		if (channelFilter && productChannels != null) {
 			_commerceChannelRelService.deleteCommerceChannelRels(
 				CPDefinition.class.getName(), cpDefinition.getCPDefinitionId());
 
@@ -1352,14 +1350,22 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 					cpDefinition.getCPDefinitionId(),
 					commerceChannel.getCommerceChannelId(), serviceContext);
 			}
+
+			_cpDefinitionService.updateCPDefinitionChannelFilter(
+				cpDefinition.getCPDefinitionId(),
+				channelFilter);
 		}
 
 		// Account groups visibility
 
+		boolean accountGroupFilter = GetterUtil.getBoolean(
+			product.getProductAccountGroupFilter(),
+			cpDefinition.isAccountGroupFilterEnabled());
+
 		ProductAccountGroup[] productAccountGroups =
 			product.getProductAccountGroups();
 
-		if (productAccountGroups != null) {
+		if (accountGroupFilter && productAccountGroups != null) {
 			_accountGroupRelLocalService.deleteAccountGroupRels(
 				CPDefinition.class.getName(),
 				new long[] {cpDefinition.getCPDefinitionId()});
@@ -1389,13 +1395,11 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 					CPDefinition.class.getName(),
 					cpDefinition.getCPDefinitionId());
 			}
-		}
 
-		_cpDefinitionService.updateCPDefinitionAccountGroupFilter(
-			cpDefinition.getCPDefinitionId(),
-			GetterUtil.getBoolean(
-				product.getProductAccountGroupFilter(),
-				cpDefinition.isAccountGroupFilterEnabled()));
+			_cpDefinitionService.updateCPDefinitionAccountGroupFilter(
+				cpDefinition.getCPDefinitionId(),
+				accountGroupFilter);
+		}
 
 		CPType cpType = _cpTypeRegistry.getCPType(
 			cpDefinition.getProductTypeName());
