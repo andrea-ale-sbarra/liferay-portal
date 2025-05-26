@@ -15,6 +15,8 @@ import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
 import com.liferay.commerce.currency.util.comparator.CommerceCurrencyPriorityComparator;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.order.CommerceOrderHttpHelper;
+import com.liferay.commerce.product.configuration.CPConfigurationListRelConfiguration;
+import com.liferay.commerce.product.constants.CPConfigurationListConstants;
 import com.liferay.commerce.product.constants.CommerceChannelAccountEntryRelConstants;
 import com.liferay.commerce.product.constants.CommerceChannelConstants;
 import com.liferay.commerce.product.discovery.CPConfigurationListDiscovery;
@@ -37,14 +39,17 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator;
 import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -91,12 +96,20 @@ public class BaseCommerceContextHttp implements CommerceContext {
 						new GroupServiceSettingsLocator(
 							commerceChannel.getGroupId(),
 							CommerceConstants.SERVICE_NAME_COMMERCE_ACCOUNT));
+				_cpConfigurationListRelConfiguration =
+					configurationProvider.getConfiguration(
+						CPConfigurationListRelConfiguration.class,
+						new CompanyServiceSettingsLocator(
+							commerceChannel.getCompanyId(),
+							CPConfigurationListRelConfiguration.class.getName()));
 			}
 		}
 		catch (PortalException portalException) {
 			_log.error(portalException);
 		}
 	}
+
+	private CPConfigurationListRelConfiguration _cpConfigurationListRelConfiguration;
 
 	@Override
 	public AccountEntry getAccountEntry() throws PortalException {
@@ -321,6 +334,38 @@ public class BaseCommerceContextHttp implements CommerceContext {
 
 	@Override
 	public long[] getCPConfigurationListIds() throws PortalException {
+
+		long orderTypeId = 0;
+
+		CommerceOrder commerceOrder = getCommerceOrder();
+
+		if (commerceOrder != null) {
+			orderTypeId = commerceOrder.getCommerceOrderTypeId();
+		}
+
+		if(Objects.equals(
+			CPConfigurationListConstants.ORDER_BY_FLAT,
+			_cpConfigurationListRelConfiguration.cpConfigurationListDiscovery())){
+
+			List<CPConfigurationList> cpConfigurationLists = new ArrayList<>();
+
+			for (long groupId :
+				TransformUtil.transformToLongArray(
+					_commerceCatalogLocalService.getCommerceCatalogs(
+						commerceOrder.getCompanyId()),
+					CommerceCatalog::getGroupId)) {
+
+				cpConfigurationLists.addAll(
+					_cpConfigurationListDiscovery.getCPConfigurationLists(
+						commerceOrder.getCompanyId(), groupId,
+						CommerceUtil.getCommerceAccountId(this),
+						getCommerceChannelId(), orderTypeId));
+			}
+			return TransformUtil.transformToLongArray(
+				cpConfigurationLists,
+				CPConfigurationList::getCPConfigurationListId);
+		}
+
 		Map<Long, CPConfigurationList> cpConfigurationLists =
 			_getCPConfigurationLists();
 

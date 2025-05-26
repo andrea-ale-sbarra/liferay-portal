@@ -22,7 +22,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Danny Situ
  */
 @Component(service = CPConfigurationListDiscovery.class)
-public class CPConfigurationListHierarchyDiscoveryImpl
+public class CPConfigurationListDiscoveryImpl
 	implements CPConfigurationListDiscovery {
 
 	@Override
@@ -45,6 +45,28 @@ public class CPConfigurationListHierarchyDiscoveryImpl
 		}
 
 		return cpConfigurationLists.get(0);
+	}
+
+	@Override
+	public List<CPConfigurationList> getCPConfigurationLists(
+		long companyId, long groupId, long accountEntryId,
+		long commerceChannelId, long commerceOrderTypeId)
+		throws PortalException {
+
+		long[] accountGroupIds = _accountGroupLocalService.getAccountGroupIds(
+			accountEntryId);
+
+		List<CPConfigurationList> cpConfigurationLists =
+			_cpConfigurationListLocalService.getCPConfigurationLists(
+				companyId, groupId, accountEntryId, accountGroupIds,
+				commerceChannelId, commerceOrderTypeId);
+
+		if (ListUtil.isEmpty(cpConfigurationLists)) {
+			return ListUtil.toList(_cpConfigurationListLocalService.
+				getMasterCPConfigurationList(groupId));
+		}
+
+		return cpConfigurationLists;
 	}
 
 	@Override

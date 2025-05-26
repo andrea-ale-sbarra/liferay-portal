@@ -164,6 +164,8 @@ page import="java.util.Objects" %><%@
 page import="java.util.StringJoiner" %><%@
 page import="java.util.TimeZone" %>
 
+<%@ page import="org.apache.commons.lang.StringEscapeUtils"%>
+
 <%@ page import="javax.portlet.PortletURL" %>
 
 <liferay-frontend:defineObjects />

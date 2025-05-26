@@ -147,7 +147,6 @@ public interface CPDefinitionLocalizationModel
 	 *
 	 * @return the name of this cp definition localization
 	 */
-	@AutoEscape
 	public String getName();
 
 	/**
@@ -162,7 +161,6 @@ public interface CPDefinitionLocalizationModel
 	 *
 	 * @return the short description of this cp definition localization
 	 */
-	@AutoEscape
 	public String getShortDescription();
 
 	/**
@@ -192,7 +190,6 @@ public interface CPDefinitionLocalizationModel
 	 *
 	 * @return the meta title of this cp definition localization
 	 */
-	@AutoEscape
 	public String getMetaTitle();
 
 	/**
@@ -207,7 +204,6 @@ public interface CPDefinitionLocalizationModel
 	 *
 	 * @return the meta description of this cp definition localization
 	 */
-	@AutoEscape
 	public String getMetaDescription();
 
 	/**
@@ -222,7 +218,6 @@ public interface CPDefinitionLocalizationModel
 	 *
 	 * @return the meta keywords of this cp definition localization
 	 */
-	@AutoEscape
 	public String getMetaKeywords();
 
 	/**

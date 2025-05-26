@@ -17,7 +17,7 @@ PortletURL portletURL = cpDefinitionsDisplayContext.getEditProductDefinitionURL(
 String headerTitle = LanguageUtil.get(request, "add-product");
 
 if (cpDefinition != null) {
-	headerTitle = cpDefinition.getName(languageId);
+	headerTitle = StringEscapeUtils.unescapeHtml(cpDefinition.getName(languageId));
 }
 
 request.setAttribute("view.jsp-cpDefinition", cpDefinition);

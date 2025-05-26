@@ -15,6 +15,9 @@ import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
 import com.liferay.commerce.currency.util.comparator.CommerceCurrencyPriorityComparator;
 import com.liferay.commerce.model.CommerceOrder;
+import com.liferay.commerce.product.configuration.CPConfigurationListRelConfiguration;
+import com.liferay.commerce.product.configuration.CProductVersionConfiguration;
+import com.liferay.commerce.product.constants.CPConfigurationListConstants;
 import com.liferay.commerce.product.constants.CommerceChannelAccountEntryRelConstants;
 import com.liferay.commerce.product.constants.CommerceChannelConstants;
 import com.liferay.commerce.product.discovery.CPConfigurationListDiscovery;
@@ -35,13 +38,16 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator;
 import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Marco Leo
@@ -92,6 +98,15 @@ public class BaseCommerceContext implements CommerceContext {
 		catch (PortalException portalException) {
 			_log.error(portalException);
 		}
+
+		try {
+			_cpConfigurationListRelConfiguration =
+				configurationProvider.getConfiguration(
+					CPConfigurationListRelConfiguration.class,
+					new CompanyServiceSettingsLocator(
+						companyId,
+						CPConfigurationListRelConfiguration.class.getName()));
+		}catch (PortalException portalException) {_log.error(portalException);}
 	}
 
 	@Override
@@ -256,6 +271,36 @@ public class BaseCommerceContext implements CommerceContext {
 
 	@Override
 	public long[] getCPConfigurationListIds() throws PortalException {
+		long orderTypeId = 0;
+
+		CommerceOrder commerceOrder = getCommerceOrder();
+
+		if (commerceOrder != null) {
+			orderTypeId = commerceOrder.getCommerceOrderTypeId();
+		}
+
+		if(Objects.equals(CPConfigurationListConstants.ORDER_BY_FLAT,
+			_cpConfigurationListRelConfiguration.cpConfigurationListDiscovery())){
+
+			List<CPConfigurationList> cpConfigurationLists = new ArrayList<>();
+
+			for (long groupId :
+				TransformUtil.transformToLongArray(
+					_commerceCatalogLocalService.getCommerceCatalogs(
+						_companyId),
+					CommerceCatalog::getGroupId)) {
+
+				cpConfigurationLists.addAll(
+					_cpConfigurationListDiscovery.getCPConfigurationLists(
+					_companyId, groupId,
+					CommerceUtil.getCommerceAccountId(this),
+					getCommerceChannelId(), orderTypeId));
+			}
+			return TransformUtil.transformToLongArray(
+				cpConfigurationLists,
+				CPConfigurationList::getCPConfigurationListId);
+		}
+
 		Map<Long, CPConfigurationList> cpConfigurationLists =
 			_getCPConfigurationLists();
 
@@ -346,6 +391,7 @@ public class BaseCommerceContext implements CommerceContext {
 	private final AccountEntryLocalService _accountEntryLocalService;
 	private final AccountGroupLocalService _accountGroupLocalService;
 	private long[] _commerceAccountGroupIds;
+	private CPConfigurationListRelConfiguration _cpConfigurationListRelConfiguration;
 	private CommerceAccountGroupServiceConfiguration
 		_commerceAccountGroupServiceConfiguration;
 	private final long _commerceAccountId;
