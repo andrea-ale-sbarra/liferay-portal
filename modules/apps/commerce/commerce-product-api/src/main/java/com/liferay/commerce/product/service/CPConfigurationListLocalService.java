@@ -312,7 +312,7 @@ public interface CPConfigurationListLocalService
 	public List<CPConfigurationList> getCPConfigurationLists(
 		long companyId, long groupId, long accountEntryId,
 		long[] accountGroupIds, long commerceChannelId,
-		long commerceOrderTypeId);
+		long commerceOrderTypeId, boolean includeMaster);
 
 	/**
 	 * Returns all the cp configuration lists matching the UUID and company.

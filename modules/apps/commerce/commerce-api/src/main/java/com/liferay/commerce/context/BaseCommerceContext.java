@@ -16,7 +16,6 @@ import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
 import com.liferay.commerce.currency.util.comparator.CommerceCurrencyPriorityComparator;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.product.configuration.CPConfigurationListRelConfiguration;
-import com.liferay.commerce.product.configuration.CProductVersionConfiguration;
 import com.liferay.commerce.product.constants.CPConfigurationListConstants;
 import com.liferay.commerce.product.constants.CommerceChannelAccountEntryRelConstants;
 import com.liferay.commerce.product.constants.CommerceChannelConstants;
@@ -294,7 +293,8 @@ public class BaseCommerceContext implements CommerceContext {
 					_cpConfigurationListDiscovery.getCPConfigurationLists(
 					_companyId, groupId,
 					CommerceUtil.getCommerceAccountId(this),
-					getCommerceChannelId(), orderTypeId));
+					getCommerceChannelId(), orderTypeId, Objects.equals(CPConfigurationListConstants.ORDER_BY_FLAT,
+							_cpConfigurationListRelConfiguration.cpConfigurationListDiscovery())));
 			}
 			return TransformUtil.transformToLongArray(
 				cpConfigurationLists,

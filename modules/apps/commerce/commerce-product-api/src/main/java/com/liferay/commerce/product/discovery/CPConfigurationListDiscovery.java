@@ -25,7 +25,7 @@ public interface CPConfigurationListDiscovery {
 
 	public List<CPConfigurationList> getCPConfigurationLists(
 		long companyId, long groupId, long accountEntryId,
-		long commerceChannelId, long commerceOrderTypeId)
+		long commerceChannelId, long commerceOrderTypeId, boolean includeMaster)
 		throws PortalException;
 
 	public String getCPConfigurationListDiscoveryKey();

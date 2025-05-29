@@ -352,14 +352,15 @@ public class BaseCommerceContextHttp implements CommerceContext {
 			for (long groupId :
 				TransformUtil.transformToLongArray(
 					_commerceCatalogLocalService.getCommerceCatalogs(
-						commerceOrder.getCompanyId()),
+						_portal.getCompanyId(_httpServletRequest)),
 					CommerceCatalog::getGroupId)) {
 
 				cpConfigurationLists.addAll(
 					_cpConfigurationListDiscovery.getCPConfigurationLists(
-						commerceOrder.getCompanyId(), groupId,
+						_portal.getCompanyId(_httpServletRequest), groupId,
 						CommerceUtil.getCommerceAccountId(this),
-						getCommerceChannelId(), orderTypeId));
+						getCommerceChannelId(), orderTypeId, Objects.equals(CPConfigurationListConstants.ORDER_BY_FLAT,
+							_cpConfigurationListRelConfiguration.cpConfigurationListDiscovery())));
 			}
 			return TransformUtil.transformToLongArray(
 				cpConfigurationLists,

@@ -37,7 +37,7 @@ public class CPConfigurationListDiscoveryImpl
 		List<CPConfigurationList> cpConfigurationLists =
 			_cpConfigurationListLocalService.getCPConfigurationLists(
 				companyId, groupId, accountEntryId, accountGroupIds,
-				commerceChannelId, commerceOrderTypeId);
+				commerceChannelId, commerceOrderTypeId, false);
 
 		if (ListUtil.isEmpty(cpConfigurationLists)) {
 			return _cpConfigurationListLocalService.
@@ -50,7 +50,7 @@ public class CPConfigurationListDiscoveryImpl
 	@Override
 	public List<CPConfigurationList> getCPConfigurationLists(
 		long companyId, long groupId, long accountEntryId,
-		long commerceChannelId, long commerceOrderTypeId)
+		long commerceChannelId, long commerceOrderTypeId, boolean includeMaster)
 		throws PortalException {
 
 		long[] accountGroupIds = _accountGroupLocalService.getAccountGroupIds(
@@ -59,7 +59,7 @@ public class CPConfigurationListDiscoveryImpl
 		List<CPConfigurationList> cpConfigurationLists =
 			_cpConfigurationListLocalService.getCPConfigurationLists(
 				companyId, groupId, accountEntryId, accountGroupIds,
-				commerceChannelId, commerceOrderTypeId);
+				commerceChannelId, commerceOrderTypeId, includeMaster);
 
 		if (ListUtil.isEmpty(cpConfigurationLists)) {
 			return ListUtil.toList(_cpConfigurationListLocalService.

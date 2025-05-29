@@ -320,13 +320,14 @@ public class CPConfigurationListLocalServiceImpl
 	public List<CPConfigurationList> getCPConfigurationLists(
 		long companyId, long groupId, long accountEntryId,
 		long[] accountGroupIds, long commerceChannelId,
-		long commerceOrderTypeId) {
+		long commerceOrderTypeId, boolean includeMaster) {
 
 		return dslQuery(
 			_getGroupByStep(
 				companyId, groupId, accountEntryId, accountGroupIds,
 				commerceChannelId, commerceOrderTypeId,
-				DSLQueryFactoryUtil.select(CPConfigurationListTable.INSTANCE)
+				DSLQueryFactoryUtil.select(CPConfigurationListTable.INSTANCE),
+				includeMaster
 			).orderBy(
 				CPConfigurationListTable.INSTANCE.priority.ascending()
 			));
@@ -392,7 +393,7 @@ public class CPConfigurationListLocalServiceImpl
 	private GroupByStep _getGroupByStep(
 		long companyId, long groupId, Long accountEntryId,
 		long[] accountGroupIds, Long commerceChannelId,
-		Long commerceOrderTypeId, FromStep fromStep) {
+		Long commerceOrderTypeId, FromStep fromStep, boolean includeMaster) {
 
 		CPConfigurationListRelTable accountEntryCPConfigurationListRel =
 			CPConfigurationListRelTable.INSTANCE.as(
@@ -442,7 +443,13 @@ public class CPConfigurationListLocalServiceImpl
 		).and(
 			CPConfigurationListTable.INSTANCE.groupId.eq(groupId)
 		).and(
-			CPConfigurationListTable.INSTANCE.master.eq(false)
+			() -> {
+				if(!includeMaster) {
+					return CPConfigurationListTable.INSTANCE.master.eq(false);
+				}
+
+				return null;
+			}
 		).and(
 			() -> {
 				if (accountEntryId != null) {

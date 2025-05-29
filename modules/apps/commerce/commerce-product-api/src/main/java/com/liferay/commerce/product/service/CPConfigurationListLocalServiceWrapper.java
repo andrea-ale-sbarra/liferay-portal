@@ -399,11 +399,11 @@ public class CPConfigurationListLocalServiceWrapper
 	public java.util.List<CPConfigurationList> getCPConfigurationLists(
 		long companyId, long groupId, long accountEntryId,
 		long[] accountGroupIds, long commerceChannelId,
-		long commerceOrderTypeId) {
+		long commerceOrderTypeId, boolean includeMaster) {
 
 		return _cpConfigurationListLocalService.getCPConfigurationLists(
 			companyId, groupId, accountEntryId, accountGroupIds,
-			commerceChannelId, commerceOrderTypeId);
+			commerceChannelId, commerceOrderTypeId, includeMaster);
 	}
 
 	/**
