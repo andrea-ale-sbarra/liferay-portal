@@ -794,6 +794,27 @@ public class ObjectEntryLocalServiceImpl
 	}
 
 	@Override
+	public ObjectEntry expireObjectEntry(
+			long userId, long objectEntryId, int version,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		ObjectEntry objectEntry = objectEntryPersistence.findByPrimaryKey(
+			objectEntryId);
+
+		if (objectEntry.getVersion() == version) {
+			return updateStatus(
+				userId, objectEntry, WorkflowConstants.STATUS_EXPIRED,
+				serviceContext);
+		}
+
+		_objectEntryVersionLocalService.expireObjectEntryVersion(
+			userId, objectEntryId, version);
+
+		return objectEntry;
+	}
+
+	@Override
 	public ObjectEntry fetchManyToOneObjectEntry(
 			long groupId, long objectRelationshipId, long primaryKey)
 		throws PortalException {
@@ -1803,7 +1824,9 @@ public class ObjectEntryLocalServiceImpl
 
 		_deleteTempFileEntries(dlFileEntriesMap);
 
-		if (objectEntry.isPending() || originalObjectEntry.isDraft()) {
+		if (objectEntry.isPending() || originalObjectEntry.isDraft() ||
+			originalObjectEntry.isExpired()) {
+
 			_updateLatestObjectEntryVersion(objectDefinition, objectEntry);
 
 			return objectEntry;
@@ -1928,6 +1951,21 @@ public class ObjectEntryLocalServiceImpl
 
 		ObjectEntry originalObjectEntry = (ObjectEntry)objectEntry.clone();
 
+		Date date = new Date();
+		Date expirationDate = objectEntry.getExpirationDate();
+
+		if ((status == WorkflowConstants.STATUS_APPROVED) &&
+			(expirationDate != null) && expirationDate.before(date)) {
+
+			objectEntry.setExpirationDate(null);
+		}
+
+		if ((status == WorkflowConstants.STATUS_EXPIRED) &&
+			(expirationDate == null)) {
+
+			objectEntry.setExpirationDate(date);
+		}
+
 		objectEntry.setStatus(status);
 
 		User user = _userLocalService.getUser(userId);
@@ -1988,7 +2026,9 @@ public class ObjectEntryLocalServiceImpl
 				serviceContext.getLanguageId(), user);
 		}
 
-		if (originalObjectEntry.isDraft() || originalObjectEntry.isPending()) {
+		if ((status == WorkflowConstants.STATUS_EXPIRED) ||
+			originalObjectEntry.isDraft() || originalObjectEntry.isPending()) {
+
 			List<ObjectEntryVersion> objectEntryVersions =
 				_objectEntryVersionLocalService.getObjectEntryVersions(
 					objectEntry.getObjectEntryId());
@@ -4084,20 +4124,18 @@ public class ObjectEntryLocalServiceImpl
 					_getQueryExpressions(
 						objectDefinition, primaryKey, String.valueOf(script)));
 
-				Class<?> clazz = Double.class;
-
-				String output = GetterUtil.getString(
-					objectFieldSettingsValues.get("output"));
-
-				if (Objects.equals(output, "Integer")) {
-					clazz = Integer.class;
-				}
-
 				try {
 					Expression<?> expression = ddmExpression.getDSLExpression();
 
-					selectExpressions.add(
-						expression.as(objectField.getName(), clazz));
+					String output = GetterUtil.getString(
+						objectFieldSettingsValues.get("output"));
+
+					if (Objects.equals(output, "Integer")) {
+						expression = DSLFunctionFactoryUtil.castLong(
+							expression);
+					}
+
+					selectExpressions.add(expression.as(objectField.getName()));
 				}
 				catch (Exception exception) {
 					_log.error(exception);

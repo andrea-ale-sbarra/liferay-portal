@@ -112,6 +112,7 @@
 		<field name="objectEntryFolderId" type="long" />
 		<field name="rootObjectEntryId" type="long" />
 		<field name="defaultLanguageId" type="String" />
+		<field name="expirationDate" type="Date" />
 		<field name="treePath" type="String">
 			<hint name="max-length">4000</hint>
 		</field>
@@ -134,6 +135,9 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="parentObjectEntryFolderId" type="long" />
+		<field name="description" type="String">
+			<hint name="max-length">4000</hint>
+		</field>
 		<field localized="true" name="label" type="String" />
 		<field name="name" type="String" />
 		<field name="treePath" type="String">
@@ -154,8 +158,12 @@
 		<field name="content" type="String">
 			<hint-collection name="CLOB" />
 		</field>
+		<field name="expirationDate" type="Date" />
 		<field name="version" type="int" />
 		<field name="status" type="int" />
+		<field name="statusByUserId" type="long" />
+		<field name="statusByUserName" type="String" />
+		<field name="statusDate" type="Date" />
 	</model>
 	<model name="com.liferay.object.model.ObjectField">
 		<field name="mvccVersion" type="long" />

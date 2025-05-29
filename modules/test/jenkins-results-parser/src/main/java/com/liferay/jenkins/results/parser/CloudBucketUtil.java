@@ -41,6 +41,9 @@ public class CloudBucketUtil {
 	public static final String GCP_BUCKET_PATH_TESTRAY_RESULTS =
 		"gs://testray-results";
 
+	public static final String S3_BUCKET_PATH_FILE_PROPAGATOR =
+		"s3://liferayci-file-propagator";
+
 	public static void copyGCPFile(String destination, String source)
 		throws IOException {
 
@@ -50,23 +53,26 @@ public class CloudBucketUtil {
 	}
 
 	public static void copyS3File(String destination, String source) {
+		String replacedDestination = _replaceS3ObjectPath(destination);
+		String replacedSource = _replaceS3ObjectPath(source);
+
 		_executeCommands(
 			_getFileTransferCommand(
-				"aws s3 cp --no-progress", _replaceS3ObjectPath(destination),
-				_replaceS3ObjectPath(source)));
+				"aws s3 cp --no-progress", replacedDestination,
+				replacedSource));
 
 		Matcher destinationS3ObjectPathMatcher = _s3ObjectPathPattern.matcher(
-			destination);
+			replacedDestination);
 
 		if (destinationS3ObjectPathMatcher.find()) {
-			createS3ObjectRef(destination);
+			createS3ObjectRef(replacedDestination);
 		}
 
 		Matcher sourceS3ObjectPathMatcher = _s3ObjectPathPattern.matcher(
-			source);
+			replacedSource);
 
 		if (sourceS3ObjectPathMatcher.find()) {
-			createS3ObjectRef(source);
+			createS3ObjectRef(replacedSource);
 		}
 
 		System.out.println("Copied " + source + " to " + destination);
@@ -507,7 +513,7 @@ public class CloudBucketUtil {
 			}
 		}
 
-		return s3ObjectPath;
+		return s3ObjectPath.trim();
 	}
 
 	private static void _validateS3ObjectPath(String s3ObjectPath) {

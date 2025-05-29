@@ -236,6 +236,10 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 		PortletCategory newPortletCategory =
 			PortletLocalServiceUtil.getWARDisplay(servletContextName, xml);
 
+		for (Portlet portlet : portlets) {
+			_addCategoryNames(portlet, newPortletCategory);
+		}
+
 		CompanyLocalServiceUtil.forEachCompanyId(
 			companyId -> {
 				PortletCategory portletCategory =
@@ -480,6 +484,30 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 					"Unable to dynamically unbind the Liferay data source: " +
 						exception.getMessage());
 			}
+		}
+	}
+
+	private void _addCategoryNames(
+		Portlet portlet, PortletCategory portletCategory) {
+
+		Set<String> portletIds = portletCategory.getPortletIds();
+
+		if (portletIds.contains(portlet.getPortletId())) {
+			Set<String> categoryNames = portlet.getCategoryNames();
+
+			String categoryName = portletCategory.getPath();
+
+			if (categoryName.startsWith("root//")) {
+				categoryName = categoryName.substring(6);
+			}
+
+			categoryNames.add(categoryName);
+		}
+
+		for (PortletCategory childPortletCategory :
+				portletCategory.getCategories()) {
+
+			_addCategoryNames(portlet, childPortletCategory);
 		}
 	}
 

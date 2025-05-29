@@ -355,11 +355,11 @@ public class CPConfigurationListLocalServiceUtil {
 	public static List<CPConfigurationList> getCPConfigurationLists(
 		long companyId, long groupId, long accountEntryId,
 		long[] accountGroupIds, long commerceChannelId,
-		long commerceOrderTypeId) {
+		long commerceOrderTypeId, boolean includeMaster) {
 
 		return getService().getCPConfigurationLists(
 			companyId, groupId, accountEntryId, accountGroupIds,
-			commerceChannelId, commerceOrderTypeId);
+			commerceChannelId, commerceOrderTypeId, includeMaster);
 	}
 
 	/**

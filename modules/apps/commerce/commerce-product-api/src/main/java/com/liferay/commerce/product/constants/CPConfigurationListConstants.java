@@ -12,4 +12,6 @@ public class CPConfigurationListConstants {
 
 	public static final String ORDER_BY_HIERARCHY = "hierarchy";
 
+	public static final String ORDER_BY_FLAT = "flat";
+
 }

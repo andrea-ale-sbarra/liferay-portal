@@ -14,18 +14,27 @@ import {useNewAppContext} from '../../../../context/NewAppContext';
 import {ProductWorkflowStatusCode} from '../../../../enums/Product';
 import {useAccount} from '../../../../hooks/data/useAccounts';
 import i18n from '../../../../i18n';
+import usePublishAppSubmission from '../../hooks/usePublishAppSubmission';
 import usePublishHeader from '../../hooks/usePublishHeader';
 import usePublishNavigation from '../../hooks/usePublishNavigation';
 import {APP_FLOW_ITEMS} from './constants';
 
 import './PublishAppOutlet.scss';
-import usePublishAppSubmission from '../../hooks/usePublishAppSubmission';
+
+const isDraft = (status: number) => status === ProductWorkflowStatusCode.DRAFT;
 
 const PublishAppOutlet = () => {
 	usePublishHeader();
 
 	const {data: account} = useAccount();
 	const [context, dispatch] = useNewAppContext();
+
+	const isSaveAsDraft =
+		!context._product || isDraft(context._product.productStatus);
+
+	const getFlowItems = () => {
+		return APP_FLOW_ITEMS.filter((item) => item.visible(context));
+	};
 
 	const {
 		activeIndex,
@@ -35,7 +44,10 @@ const PublishAppOutlet = () => {
 		onClickPrevious,
 		onExit,
 		steps,
-	} = usePublishNavigation({exitLink: '/', flowItems: APP_FLOW_ITEMS});
+	} = usePublishNavigation({
+		exitLink: '/',
+		flowItems: getFlowItems(),
+	});
 
 	const {onSave, onSaveAsDraft} = usePublishAppSubmission(context, dispatch);
 
@@ -54,11 +66,9 @@ const PublishAppOutlet = () => {
 
 	const isDisabled = parsedSchema ? !parsedSchema.success : false;
 
-	const isDraft = (status: number) =>
-		status === ProductWorkflowStatusCode.DRAFT;
-
-	const isSaveAsDraft =
-		!context._product || isDraft(context._product.productStatus);
+	if (context.loading) {
+		return null;
+	}
 
 	return (
 		<AppPublish>
@@ -67,12 +77,9 @@ const PublishAppOutlet = () => {
 				accountName={account?.name as string}
 				appImage={context.profile.file?.preview}
 				appName={context.profile.name}
+				appStatus={context._product?.productStatus}
 				display={{
-					preview: true,
 					saveAsDraft: isSaveAsDraft,
-					submit:
-						!!context._product &&
-						!isDraft(context._product.productStatus),
 				}}
 				exitProps={{
 					onClick: () => {
@@ -80,10 +87,6 @@ const PublishAppOutlet = () => {
 							? onOpenChange(true)
 							: onExitModal.onOpenChange(true);
 					},
-				}}
-				previewProps={{
-					disabled: false,
-					onClick: () => alert('Preview...'),
 				}}
 				saveAsDraftProps={{
 					disabled: isDisabled,
@@ -99,26 +102,8 @@ const PublishAppOutlet = () => {
 
 				<AppPublish.Content>
 					<h1 className="header-title mb-4">{activeRoute.title}</h1>
-					{activeRoute.description}
 
-					<details>
-						<pre>
-							{JSON.stringify(
-								(function () {
-									const _context: Partial<typeof context> = {
-										...context,
-									};
-
-									delete _context.references;
-									delete _context._product;
-
-									return _context;
-								})(),
-								null,
-								4
-							)}
-						</pre>
-					</details>
+					<p>{activeRoute.description}</p>
 
 					<div className="mt-6 new-app-form">
 						<Outlet />

@@ -12,6 +12,7 @@ import {loginTest} from '../../../../fixtures/loginTest';
 import {clickAndExpectToBeVisible} from '../../../../utils/clickAndExpectToBeVisible';
 import getRandomString from '../../../../utils/getRandomString';
 import {categorizationPagesTest} from '../fixtures/categorizationPagesTest';
+import {DataSetPage} from '../pages/DataSetPage';
 
 const test = mergeTests(
 	categorizationPagesTest,
@@ -233,6 +234,108 @@ test.describe("Category tests that don't focus on creation", () => {
 
 			await expect(
 				page.getByRole('heading', {name: 'Permissions'})
+			).toBeVisible();
+		}
+	);
+
+	test(
+		"Edit a Category's properties",
+		{tag: '@54213'},
+		async ({categoriesPage, editCategoryPage, page}) => {
+			await categoriesPage.goto(vocabularyId, vocabularyName);
+
+			await page.getByRole('link', {name: categoryName}).click();
+
+			await expect(page.getByText(`Edit ${categoryName}`)).toBeVisible();
+
+			await editCategoryPage.clickSidebarTab('Properties');
+
+			await editCategoryPage.fillProperties([
+				{key: 'key1', value: 'value1'},
+				{key: 'key2', value: 'value2'},
+			]);
+			await editCategoryPage.assertProperties([
+				{key: 'key1', value: 'value1'},
+				{key: 'key2', value: 'value2'},
+			]);
+
+			await editCategoryPage.deleteNthPropertyRow(0);
+			await editCategoryPage.assertProperties([
+				{key: 'key2', value: 'value2'},
+			]);
+
+			// Add an empty property row to test that we handle basic linting of empty property row data
+
+			await editCategoryPage.addPropertyRow();
+			await editCategoryPage.assertProperties([
+				{key: 'key2', value: 'value2'},
+				{key: '', value: ''},
+			]);
+
+			await editCategoryPage.addPropertyRow('key3', 'value3');
+			await editCategoryPage.assertProperties([
+				{key: 'key2', value: 'value2'},
+				{key: '', value: ''},
+				{key: 'key3', value: 'value3'},
+			]);
+
+			await page.waitForTimeout(2000);
+
+			await editCategoryPage.clickSave();
+			await editCategoryPage.handleEditConfirmationModal(true);
+
+			await categoriesPage.assertBreadcrumbItemText(0, 'Categorization');
+
+			await expect(categoriesPage.getItem(categoryName)).toBeVisible();
+
+			await page.getByRole('link', {name: categoryName}).click();
+
+			await expect(page.getByText(`Edit ${categoryName}`)).toBeVisible();
+
+			await editCategoryPage.clickSidebarTab('Properties');
+
+			await editCategoryPage.assertProperties([
+				{key: 'key2', value: 'value2'},
+				{key: 'key3', value: 'value3'},
+			]);
+		}
+	);
+
+	test(
+		"View a Category's usages",
+		{tag: '@LPD-54560'},
+		async ({apiHelpers, categoriesPage, page}) => {
+			await categoriesPage.goto(vocabularyId, vocabularyName);
+
+			await categoriesPage.execItemAction({
+				action: 'View Usages',
+				filter: categoryName,
+			});
+
+			await expect(page.getByText('No Results Found')).toBeVisible();
+
+			const basicWebContentObjectEntry = {
+				objectEntryFolderExternalReferenceCode: 'L_CONTENTS',
+				taxonomyCategoryIds: [categoryId],
+				title: getRandomString(),
+			};
+
+			await apiHelpers.objectEntry.postObjectEntry(
+				basicWebContentObjectEntry,
+				'cms/basic-web-contents/scopes/Default'
+			);
+
+			await categoriesPage.goto(vocabularyId, vocabularyName);
+
+			await categoriesPage.execItemAction({
+				action: 'View Usages',
+				filter: categoryName,
+			});
+
+			const dataSetPage = new DataSetPage(page);
+
+			await expect(
+				dataSetPage.getRow(basicWebContentObjectEntry.title)
 			).toBeVisible();
 		}
 	);

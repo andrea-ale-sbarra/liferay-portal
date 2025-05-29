@@ -247,6 +247,7 @@
 		<column name="objectEntryFolderId" type="long" />
 		<column name="rootObjectEntryId" type="long" />
 		<column name="defaultLanguageId" type="String" />
+		<column name="expirationDate" type="Date" />
 		<column name="treePath" type="String" />
 		<column name="version" type="int" />
 		<column name="lastPublishDate" type="Date" />
@@ -332,6 +333,7 @@
 		<!-- Other fields -->
 
 		<column name="parentObjectEntryFolderId" parent-container-model="true" type="long" />
+		<column name="description" type="String" />
 		<column localized="true" name="label" type="String" />
 		<column name="name" type="String" />
 		<column name="treePath" type="String" />
@@ -379,8 +381,12 @@
 		<column name="objectDefinitionId" type="long" />
 		<column name="objectEntryId" type="long" />
 		<column name="content" type="String" />
+		<column name="expirationDate" type="Date" />
 		<column name="version" type="int" />
 		<column name="status" type="int" />
+		<column name="statusByUserId" type="long" />
+		<column name="statusByUserName" type="String" />
+		<column name="statusDate" type="Date" />
 
 		<!-- Finder methods -->
 
@@ -1228,6 +1234,7 @@
 		<exception>ObjectEntryCount</exception>
 		<exception>ObjectEntryDefaultLanguageId</exception>
 		<exception>ObjectEntryFolderName</exception>
+		<exception>ObjectEntryFolderParentObjectEntryFolderId</exception>
 		<exception>ObjectEntryFolderScope</exception>
 		<exception>ObjectEntryValues</exception>
 		<exception>ObjectFieldBusinessType</exception>

@@ -10,6 +10,8 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.commerce.product.model.CPConfigurationList;
 import com.liferay.portal.kernel.exception.PortalException;
 
+import java.util.List;
+
 /**
  * @author Danny Situ
  */
@@ -19,6 +21,11 @@ public interface CPConfigurationListDiscovery {
 	public CPConfigurationList getCPConfigurationList(
 			long companyId, long groupId, long accountEntryId,
 			long commerceChannelId, long commerceOrderTypeId)
+		throws PortalException;
+
+	public List<CPConfigurationList> getCPConfigurationLists(
+		long companyId, long groupId, long accountEntryId,
+		long commerceChannelId, long commerceOrderTypeId, boolean includeMaster)
 		throws PortalException;
 
 	public String getCPConfigurationListDiscoveryKey();

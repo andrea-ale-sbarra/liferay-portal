@@ -8,20 +8,28 @@ package com.liferay.headless.admin.user.internal.resource.v1_0;
 import com.liferay.account.constants.AccountActionKeys;
 import com.liferay.account.constants.AccountConstants;
 import com.liferay.account.constants.AccountListTypeConstants;
+import com.liferay.account.exception.DuplicateAccountGroupRelException;
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.model.AccountGroup;
 import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryOrganizationRelLocalService;
 import com.liferay.account.service.AccountEntryService;
 import com.liferay.account.service.AccountEntryUserRelLocalService;
+import com.liferay.account.service.AccountGroupLocalService;
+import com.liferay.account.service.AccountGroupRelService;
 import com.liferay.account.service.AccountGroupService;
+import com.liferay.asset.kernel.model.AssetCategory;
+import com.liferay.asset.kernel.service.AssetCategoryLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
 import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.headless.admin.user.dto.v1_0.Account;
 import com.liferay.headless.admin.user.dto.v1_0.AccountContactInformation;
+import com.liferay.headless.admin.user.dto.v1_0.AccountGroupBrief;
 import com.liferay.headless.admin.user.dto.v1_0.Organization;
 import com.liferay.headless.admin.user.dto.v1_0.PostalAddress;
+import com.liferay.headless.admin.user.dto.v1_0.TaxonomyCategoryBrief;
+import com.liferay.headless.admin.user.dto.v1_0.TaxonomyCategoryReference;
 import com.liferay.headless.admin.user.dto.v1_0.UserAccount;
 import com.liferay.headless.admin.user.internal.dto.v1_0.converter.constants.DTOConverterConstants;
 import com.liferay.headless.admin.user.internal.dto.v1_0.util.PostalAddressUtil;
@@ -35,10 +43,14 @@ import com.liferay.headless.admin.user.resource.v1_0.AccountResource;
 import com.liferay.headless.common.spi.odata.entity.EntityFieldsUtil;
 import com.liferay.headless.common.spi.service.context.ServiceContextBuilder;
 import com.liferay.petra.function.UnsafeConsumer;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Address;
 import com.liferay.portal.kernel.model.Contact;
 import com.liferay.portal.kernel.model.EmailAddress;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Phone;
 import com.liferay.portal.kernel.model.Website;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -53,7 +65,9 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.service.AddressLocalService;
 import com.liferay.portal.kernel.service.ContactService;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ListTypeLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.OrganizationService;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
@@ -540,6 +554,38 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 		return putAccount(accountEntry.getAccountEntryId(), account);
 	}
 
+	private AccountEntry _addAccountGroupRel(
+			AccountEntry accountEntry, AccountGroupBrief accountGroupBrief)
+		throws Exception {
+
+		String externalReferenceCode =
+			accountGroupBrief.getExternalReferenceCode();
+
+		if (Validator.isNull(externalReferenceCode)) {
+			return accountEntry;
+		}
+
+		try {
+			AccountGroup accountGroup =
+				_accountGroupLocalService.getOrAddIncompleteAccountGroup(
+					externalReferenceCode, accountEntry.getCompanyId(),
+					contextUser.getUserId(), accountGroupBrief.getName());
+
+			_accountGroupRelService.addAccountGroupRel(
+				accountGroup.getAccountGroupId(), AccountEntry.class.getName(),
+				accountEntry.getAccountEntryId());
+		}
+		catch (DuplicateAccountGroupRelException
+					duplicateAccountGroupRelException) {
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(duplicateAccountGroupRelException);
+			}
+		}
+
+		return accountEntry;
+	}
+
 	private void _addAddresses(Long accountId, Account account)
 		throws Exception {
 
@@ -599,6 +645,10 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 
 		ServiceContext serviceContext = ServiceContextBuilder.create(
 			contextCompany.getGroupId(), contextHttpServletRequest, null
+		).assetCategoryIds(
+			_getAssetCategoryIds(account)
+		).assetTagNames(
+			account.getKeywords()
 		).expandoBridgeAttributes(
 			CustomFieldsUtil.toMap(
 				AccountEntry.class.getName(), contextCompany.getCompanyId(),
@@ -610,6 +660,51 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 		serviceContext.setUserId(contextUser.getUserId());
 
 		return serviceContext;
+	}
+
+	private Long[] _getAssetCategoryIds(Account account) {
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-47858")) {
+			return null;
+		}
+
+		TaxonomyCategoryBrief[] taxonomyCategoryBriefs =
+			account.getTaxonomyCategoryBriefs();
+
+		if (ArrayUtil.isEmpty(taxonomyCategoryBriefs)) {
+			return null;
+		}
+
+		return transform(
+			taxonomyCategoryBriefs,
+			taxonomyCategoryBrief -> {
+				TaxonomyCategoryReference taxonomyCategoryReference =
+					taxonomyCategoryBrief.getTaxonomyCategoryReference();
+
+				String externalReferenceCode =
+					taxonomyCategoryReference.getExternalReferenceCode();
+
+				if (Validator.isNull(externalReferenceCode) ||
+					Validator.isNull(taxonomyCategoryReference.getSiteKey())) {
+
+					return null;
+				}
+
+				Group group = _groupLocalService.fetchGroup(
+					contextCompany.getCompanyId(),
+					taxonomyCategoryReference.getSiteKey());
+
+				if (group == null) {
+					return null;
+				}
+
+				AssetCategory assetCategory =
+					_assetCategoryLocalService.getOrAddIncompleteCategory(
+						externalReferenceCode, contextUser.getUserId(),
+						group.getGroupId());
+
+				return assetCategory.getCategoryId();
+			},
+			Long.class);
 	}
 
 	private List<Address> _getContactAddresses(
@@ -876,14 +971,23 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 			return null;
 		}
 
-		if (ArrayUtil.isNotEmpty(organizationIds)) {
-			return ArrayUtil.toArray(organizationIds);
-		}
-
 		if (ArrayUtil.isNotEmpty(organizationExternalReferenceCodes)) {
 			organizationIds = transformToArray(
 				Arrays.asList(organizationExternalReferenceCodes),
 				externalReferenceCode -> {
+					if (FeatureFlagManagerUtil.isEnabled("LPD-47858")) {
+						com.liferay.portal.kernel.model.Organization
+							organization =
+								_organizationLocalService.
+									getOrAddIncompleteOrganization(
+										externalReferenceCode,
+										contextCompany.getCompanyId(),
+										contextUser.getUserId(),
+										StringPool.BLANK);
+
+						return organization.getOrganizationId();
+					}
+
 					com.liferay.portal.kernel.model.Organization organization =
 						_organizationService.
 							fetchOrganizationByExternalReferenceCode(
@@ -901,12 +1005,30 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 			return ArrayUtil.toArray(organizationIds);
 		}
 
+		if (ArrayUtil.isNotEmpty(organizationIds)) {
+			return ArrayUtil.toArray(organizationIds);
+		}
+
 		return new long[0];
 	}
 
 	private long _getParentAccountId(
 			Account account, long defaultParentAccountId)
 		throws Exception {
+
+		if (FeatureFlagManagerUtil.isEnabled("LPD-47858") &&
+			Validator.isNotNull(
+				account.getParentAccountExternalReferenceCode())) {
+
+			AccountEntry accountEntry =
+				_accountEntryLocalService.getOrAddIncompleteAccountEntry(
+					account.getParentAccountExternalReferenceCode(),
+					contextCompany.getCompanyId(), contextUser.getUserId(),
+					account.getParentAccountExternalReferenceCode(),
+					AccountConstants.ACCOUNT_ENTRY_TYPE_BUSINESS);
+
+			return accountEntry.getAccountEntryId();
+		}
 
 		Long parentAccountId = GetterUtil.getLong(account.getParentAccountId());
 
@@ -1146,11 +1268,24 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 			return accountEntry;
 		}
 
+		AccountGroupBrief[] accountGroupBriefs =
+			account.getAccountGroupBriefs();
+
+		if (ArrayUtil.isNotEmpty(accountGroupBriefs)) {
+			for (AccountGroupBrief accountGroupBrief : accountGroupBriefs) {
+				accountEntry = _addAccountGroupRel(
+					accountEntry, accountGroupBrief);
+			}
+		}
+
 		return ResourcePermissionUtil.setResourcePermissions(
 			accountEntry, accountEntry.getCompanyId(), account.getPermissions(),
 			_resourcePermissionLocalService, _roleLocalService,
 			_roleTypeContributorProvider, contextUser.getUserId());
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		AccountResourceImpl.class);
 
 	@Reference
 	private AccountEntryLocalService _accountEntryLocalService;
@@ -1174,6 +1309,12 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 	private AccountEntryUserRelLocalService _accountEntryUserRelLocalService;
 
 	@Reference
+	private AccountGroupLocalService _accountGroupLocalService;
+
+	@Reference
+	private AccountGroupRelService _accountGroupRelService;
+
+	@Reference
 	private AccountGroupService _accountGroupService;
 
 	@Reference(target = DTOConverterConstants.ACCOUNT_RESOURCE_DTO_CONVERTER)
@@ -1181,6 +1322,9 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 
 	@Reference
 	private AddressLocalService _addressLocalService;
+
+	@Reference
+	private AssetCategoryLocalService _assetCategoryLocalService;
 
 	@Reference
 	private ContactService _contactService;
@@ -1204,7 +1348,13 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 	private File _file;
 
 	@Reference
+	private GroupLocalService _groupLocalService;
+
+	@Reference
 	private ListTypeLocalService _listTypeLocalService;
+
+	@Reference
+	private OrganizationLocalService _organizationLocalService;
 
 	@Reference(
 		target = DTOConverterConstants.ORGANIZATION_RESOURCE_DTO_CONVERTER

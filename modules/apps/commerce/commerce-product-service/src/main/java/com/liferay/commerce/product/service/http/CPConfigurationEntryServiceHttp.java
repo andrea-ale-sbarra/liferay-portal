@@ -106,6 +106,71 @@ public class CPConfigurationEntryServiceHttp {
 		}
 	}
 
+	public static com.liferay.commerce.product.model.CPConfigurationEntry
+			addOrUpdateCPConfigurationEntry(
+				HttpPrincipal httpPrincipal, String externalReferenceCode,
+				long groupId, long classNameId, long classPK,
+				long cpConfigurationListId, long cpTaxCategoryId,
+				String allowedOrderQuantities, boolean backOrders,
+				long commerceAvailabilityEstimateId,
+				String cpDefinitionInventoryEngine, double depth,
+				boolean displayAvailability, boolean displayStockQuantity,
+				boolean freeShipping, double height, String lowStockActivity,
+				java.math.BigDecimal maxOrderQuantity,
+				java.math.BigDecimal minOrderQuantity,
+				java.math.BigDecimal minStockQuantity,
+				java.math.BigDecimal multipleOrderQuantity, boolean purchasable,
+				boolean shippable, double shippingExtraPrice,
+				boolean shipSeparately, boolean taxExempt, boolean visible,
+				double weight, double width)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CPConfigurationEntryServiceUtil.class,
+				"addOrUpdateCPConfigurationEntry",
+				_addOrUpdateCPConfigurationEntryParameterTypes1);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, externalReferenceCode, groupId, classNameId, classPK,
+				cpConfigurationListId, cpTaxCategoryId, allowedOrderQuantities,
+				backOrders, commerceAvailabilityEstimateId,
+				cpDefinitionInventoryEngine, depth, displayAvailability,
+				displayStockQuantity, freeShipping, height, lowStockActivity,
+				maxOrderQuantity, minOrderQuantity, minStockQuantity,
+				multipleOrderQuantity, purchasable, shippable,
+				shippingExtraPrice, shipSeparately, taxExempt, visible, weight,
+				width);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (com.liferay.commerce.product.model.CPConfigurationEntry)
+				returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
 	public static void deleteCPConfigurationEntry(
 			HttpPrincipal httpPrincipal, long cpConfigurationEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -114,7 +179,7 @@ public class CPConfigurationEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPConfigurationEntryServiceUtil.class,
 				"deleteCPConfigurationEntry",
-				_deleteCPConfigurationEntryParameterTypes1);
+				_deleteCPConfigurationEntryParameterTypes2);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cpConfigurationEntryId);
@@ -152,7 +217,7 @@ public class CPConfigurationEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPConfigurationEntryServiceUtil.class,
 				"getCPConfigurationEntry",
-				_getCPConfigurationEntryParameterTypes2);
+				_getCPConfigurationEntryParameterTypes3);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cpConfigurationEntryId);
@@ -196,7 +261,7 @@ public class CPConfigurationEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPConfigurationEntryServiceUtil.class,
 				"getCPConfigurationEntry",
-				_getCPConfigurationEntryParameterTypes3);
+				_getCPConfigurationEntryParameterTypes4);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, classNameId, classPK, cpConfigurationListId);
@@ -240,7 +305,7 @@ public class CPConfigurationEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPConfigurationEntryServiceUtil.class,
 				"getCPConfigurationEntryByExternalReferenceCode",
-				_getCPConfigurationEntryByExternalReferenceCodeParameterTypes4);
+				_getCPConfigurationEntryByExternalReferenceCodeParameterTypes5);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, externalReferenceCode, companyId);
@@ -296,7 +361,7 @@ public class CPConfigurationEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPConfigurationEntryServiceUtil.class,
 				"updateCPConfigurationEntry",
-				_updateCPConfigurationEntryParameterTypes5);
+				_updateCPConfigurationEntryParameterTypes6);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, externalReferenceCode, cpConfigurationEntryId,
@@ -351,16 +416,27 @@ public class CPConfigurationEntryServiceHttp {
 			double.class, boolean.class, boolean.class, boolean.class,
 			double.class, double.class
 		};
-	private static final Class<?>[] _deleteCPConfigurationEntryParameterTypes1 =
-		new Class[] {long.class};
-	private static final Class<?>[] _getCPConfigurationEntryParameterTypes2 =
+	private static final Class<?>[]
+		_addOrUpdateCPConfigurationEntryParameterTypes1 = new Class[] {
+			String.class, long.class, long.class, long.class, long.class,
+			long.class, String.class, boolean.class, long.class, String.class,
+			double.class, boolean.class, boolean.class, boolean.class,
+			double.class, String.class, java.math.BigDecimal.class,
+			java.math.BigDecimal.class, java.math.BigDecimal.class,
+			java.math.BigDecimal.class, boolean.class, boolean.class,
+			double.class, boolean.class, boolean.class, boolean.class,
+			double.class, double.class
+		};
+	private static final Class<?>[] _deleteCPConfigurationEntryParameterTypes2 =
 		new Class[] {long.class};
 	private static final Class<?>[] _getCPConfigurationEntryParameterTypes3 =
+		new Class[] {long.class};
+	private static final Class<?>[] _getCPConfigurationEntryParameterTypes4 =
 		new Class[] {long.class, long.class, long.class};
 	private static final Class<?>[]
-		_getCPConfigurationEntryByExternalReferenceCodeParameterTypes4 =
+		_getCPConfigurationEntryByExternalReferenceCodeParameterTypes5 =
 			new Class[] {String.class, long.class};
-	private static final Class<?>[] _updateCPConfigurationEntryParameterTypes5 =
+	private static final Class<?>[] _updateCPConfigurationEntryParameterTypes6 =
 		new Class[] {
 			String.class, long.class, long.class, String.class, boolean.class,
 			long.class, String.class, double.class, boolean.class,

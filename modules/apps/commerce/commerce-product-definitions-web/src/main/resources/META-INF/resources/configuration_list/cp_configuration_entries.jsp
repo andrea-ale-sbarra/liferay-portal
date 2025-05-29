@@ -25,6 +25,7 @@ long cpConfigurationListId = cpConfigurationListDisplayContext.getCPConfiguratio
 		<frontend-data-set:headless-display
 			apiURL='<%= "/o/headless-commerce-admin-catalog/v1.0/product-configuration-lists/" + cpConfigurationListId + "/product-configurations?showDifferences=true" %>'
 			bulkActionDropdownItems="<%= cpConfigurationListDisplayContext.getBulkActionDropdownItems() %>"
+			creationMenu="<%= cpConfigurationListDisplayContext.getCPConfigurationEntryCreationMenu() %>"
 			fdsActionDropdownItems="<%= cpConfigurationListDisplayContext.getCPConfigurationEntryFDSActionDropdownItems() %>"
 			formName="fm"
 			id="<%= CPConfigurationFDSNames.PRODUCT_CONFIGURATIONS %>"
@@ -35,4 +36,9 @@ long cpConfigurationListId = cpConfigurationListDisplayContext.getCPConfiguratio
 			style="fluid"
 		/>
 	</aui:form>
+
+	<liferay-frontend:component
+		context="<%= cpConfigurationListDisplayContext.getContext() %>"
+		module="{addCpConfigurationEntry} from commerce-product-definitions-web"
+	/>
 </commerce-ui:panel>
