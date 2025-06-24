@@ -221,8 +221,8 @@ if ((cpDefinition != null) && (cpDefinition.getExpirationDate() != null)) {
 
 	<aui:script>
 		document
-			.getElementById('<portlet:namespace />commerceCatalogGroupId')
-			.addEventListener('change', (event) => {
+		.getElementById('<portlet:namespace />commerceCatalogGroupId')
+		.addEventListener('change', (event) => {
 				var languageId = event.target.querySelector(
 					'[value="' + event.target.value + '"]'
 				).dataset.languageid;
