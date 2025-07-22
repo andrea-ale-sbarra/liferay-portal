@@ -8,6 +8,7 @@ package com.liferay.commerce.product.content.search.web.internal.display.context
 import com.liferay.commerce.constants.CommerceWebKeys;
 import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.product.catalog.CPCatalogEntry;
+import com.liferay.commerce.product.catalog.CPSku;
 import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.content.render.list.CPContentListRenderer;
 import com.liferay.commerce.product.content.render.list.CPContentListRendererRegistry;
@@ -46,6 +47,8 @@ import jakarta.portlet.RenderRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,6 +149,19 @@ public class CPSearchResultsDisplayContext {
 	public CPDataSourceResult getCPDataSourceResult() {
 		List<CPCatalogEntry> cpCatalogEntries = _getCPCatalogEntries(
 			_portletSharedSearchResponse.getDocuments());
+
+		String keywords = _portletSharedSearchResponse.getKeywords();
+
+		if (Validator.isNotNull(keywords)) {
+			for (CPCatalogEntry cpCatalogEntry: cpCatalogEntries) {
+				for (CPSku cpSku: cpCatalogEntry.getCPSkus()) {
+					if(cpSku.getSku().equals(keywords)) {
+						return new CPDataSourceResult(
+							Arrays.asList(cpCatalogEntry), 1);
+					}
+				}
+			}
+		}
 
 		return new CPDataSourceResult(
 			cpCatalogEntries, _portletSharedSearchResponse.getTotalHits());
