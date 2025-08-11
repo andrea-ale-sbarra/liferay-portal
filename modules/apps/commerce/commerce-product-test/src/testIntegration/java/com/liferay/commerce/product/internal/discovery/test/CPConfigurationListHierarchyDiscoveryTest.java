@@ -227,6 +227,19 @@ public class CPConfigurationListHierarchyDiscoveryTest {
 				calendar.get(Calendar.MINUTE), 0, 0, 0, 0, 0, true,
 				new ServiceContext());
 
+		printCPList(1, _cpConfigurationList1);
+		printCPList(2, _cpConfigurationList2);
+		printCPList(3, _cpConfigurationList3);
+		printCPList(4, _cpConfigurationList4);
+		printCPList(5, _cpConfigurationList5);
+		printCPList(6, _cpConfigurationList6);
+		printCPList(7, _cpConfigurationList7);
+		printCPList(8, _cpConfigurationList8);
+		printCPList(9, _cpConfigurationList9);
+		printCPList(10, _cpConfigurationList10);
+		printCPList(11, _cpConfigurationList11);
+		printCPList(12, _cpConfigurationList12);
+
 		_cpConfigurationListRelLocalService.addCPConfigurationListRel(
 			_user.getUserId(), AccountEntry.class.getName(),
 			_accountEntry1.getAccountEntryId(),
@@ -637,6 +650,13 @@ public class CPConfigurationListHierarchyDiscoveryTest {
 
 	@Rule
 	public final FrutillaRule frutillaRule = new FrutillaRule();
+
+	private void printCPList(int i, CPConfigurationList cpConfigurationList) {
+		System.out.println(
+			"Num: " + i + " ID: " +
+				cpConfigurationList.getCPConfigurationListId() + " Name: " +
+					cpConfigurationList.getName());
+	}
 
 	@DeleteAfterTestRun
 	private AccountEntry _accountEntry1;

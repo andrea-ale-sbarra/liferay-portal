@@ -341,9 +341,6 @@ public class CPConfigurationListLocalServiceImpl
 					List<OrderByExpression> orderByExpressions =
 						new ArrayList<>();
 
-					orderByExpressions.add(
-						CPConfigurationListTable.INSTANCE.priority.ascending());
-
 					if (accountEntryId > 0) {
 						CPConfigurationListRelTable
 							accountEntryCPConfigurationListRel =
@@ -352,7 +349,7 @@ public class CPConfigurationListLocalServiceImpl
 
 						orderByExpressions.add(
 							accountEntryCPConfigurationListRel.classPK.
-								descending());
+								ascending());
 					}
 
 					if (accountGroupIds.length > 0) {
@@ -363,7 +360,7 @@ public class CPConfigurationListLocalServiceImpl
 
 						orderByExpressions.add(
 							accountGroupCPConfigurationListRel.classPK.
-								descending());
+								ascending());
 					}
 
 					if (commerceChannelId > 0) {
@@ -383,7 +380,7 @@ public class CPConfigurationListLocalServiceImpl
 
 						orderByExpressions.add(
 							commerceOrderTypeCPConfigurationListRel.classPK.
-								descending());
+								ascending());
 					}
 
 					return orderByStep.orderBy(
