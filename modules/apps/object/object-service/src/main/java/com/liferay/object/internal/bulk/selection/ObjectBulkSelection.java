@@ -8,8 +8,8 @@ package com.liferay.object.internal.bulk.selection;
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.bulk.selection.BulkSelectionFactory;
+import com.liferay.object.service.ObjectEntryFolderLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
-import com.liferay.object.service.ObjectFolderLocalService;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
@@ -28,12 +28,12 @@ public class ObjectBulkSelection implements BulkSelection<Object> {
 	public ObjectBulkSelection(
 		String[] rowIds, Map<String, String[]> parameterMap,
 		ObjectEntryLocalService objectEntryLocalService,
-		ObjectFolderLocalService objectFolderLocalService) {
+		ObjectEntryFolderLocalService objectEntryFolderLocalService) {
 
 		_rowIds = rowIds;
 		_parameterMap = parameterMap;
 		_objectEntryLocalService = objectEntryLocalService;
-		_objectFolderLocalService = objectFolderLocalService;
+		_objectEntryFolderLocalService = objectEntryFolderLocalService;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class ObjectBulkSelection implements BulkSelection<Object> {
 
 			if (split[0].equals("com.liferay.object.model.ObjectEntryFolder")) {
 				unsafeConsumer.accept(
-					_objectFolderLocalService.getObjectFolder(
+					_objectEntryFolderLocalService.getObjectEntryFolder(
 						GetterUtil.getLong(split[1])));
 			}
 			else {
@@ -84,8 +84,8 @@ public class ObjectBulkSelection implements BulkSelection<Object> {
 		throw new UnsupportedOperationException();
 	}
 
+	private final ObjectEntryFolderLocalService _objectEntryFolderLocalService;
 	private final ObjectEntryLocalService _objectEntryLocalService;
-	private final ObjectFolderLocalService _objectFolderLocalService;
 	private final Map<String, String[]> _parameterMap;
 	private final String[] _rowIds;
 

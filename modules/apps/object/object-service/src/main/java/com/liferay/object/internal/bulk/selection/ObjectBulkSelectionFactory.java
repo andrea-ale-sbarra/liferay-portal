@@ -8,9 +8,8 @@ package com.liferay.object.internal.bulk.selection;
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.bulk.selection.BulkSelectionFactory;
 import com.liferay.bulk.selection.EmptyBulkSelection;
+import com.liferay.object.service.ObjectEntryFolderLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
-import com.liferay.object.service.ObjectFolderLocalService;
-import com.liferay.portal.kernel.util.MapUtil;
 
 import java.util.Map;
 
@@ -29,20 +28,6 @@ public class ObjectBulkSelectionFactory
 
 	@Override
 	public BulkSelection<Object> create(Map<String, String[]> parameterMap) {
-		boolean selectAll = MapUtil.getBoolean(parameterMap, "selectAll");
-
-		if (selectAll) {
-			return null;
-			/*
-
-			return new SearchObjectEntryBulkSelection(
-				BulkSelectionFactoryUtil.getRepositoryId(parameterMap),
-				BulkSelectionFactoryUtil.getFolderId(parameterMap),
-				parameterMap, _repositoryProvider, _dlAppService,
-				_assetEntryLocalService, _dlAssetHelper);
-			 */
-		}
-
 		if (!parameterMap.containsKey("rowIds")) {
 			return new EmptyBulkSelection<>();
 		}
@@ -57,13 +42,13 @@ public class ObjectBulkSelectionFactory
 
 		return new ObjectBulkSelection(
 			values, parameterMap, _objectEntryLocalService,
-			_objectFolderLocalService);
+			_objectEntryFolderLocalService);
 	}
 
 	@Reference
-	private ObjectEntryLocalService _objectEntryLocalService;
+	private ObjectEntryFolderLocalService _objectEntryFolderLocalService;
 
 	@Reference
-	private ObjectFolderLocalService _objectFolderLocalService;
+	private ObjectEntryLocalService _objectEntryLocalService;
 
 }

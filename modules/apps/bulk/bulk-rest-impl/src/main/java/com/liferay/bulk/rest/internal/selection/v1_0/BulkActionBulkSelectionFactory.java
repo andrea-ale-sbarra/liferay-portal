@@ -11,76 +11,518 @@ import com.liferay.bulk.rest.dto.v1_0.SelectionScope;
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.bulk.selection.BulkSelectionFactory;
 import com.liferay.bulk.selection.BulkSelectionFactoryRegistry;
+import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.BooleanClause;
+import com.liferay.portal.kernel.search.BooleanClauseFactoryUtil;
+import com.liferay.portal.kernel.search.BooleanClauseOccur;
+import com.liferay.portal.kernel.search.BooleanQuery;
+import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.IndexerRegistry;
+import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.kernel.search.generic.BooleanQueryImpl;
+import com.liferay.portal.kernel.search.generic.MatchAllQuery;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.Localization;
+import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.search.document.Document;
+import com.liferay.portal.search.hits.SearchHit;
+import com.liferay.portal.search.hits.SearchHits;
+import com.liferay.portal.search.rest.dto.v1_0.SearchRequestBody;
+import com.liferay.portal.search.rest.util.FilterUtil;
+import com.liferay.portal.search.searcher.SearchRequestBuilder;
+import com.liferay.portal.search.searcher.SearchRequestBuilderFactory;
+import com.liferay.portal.search.searcher.SearchResponse;
+import com.liferay.portal.search.searcher.Searcher;
+import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
+import com.liferay.portal.vulcan.pagination.Pagination;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.liferay.portal.kernel.util.ListUtil;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
 /**
  * @author Andrea Sbarra
  */
-@Component(service = BulkActionBulkSelectionFactory.class)
 public class BulkActionBulkSelectionFactory {
 
-	public BulkSelection<Object> create(
-		String search, Filter filter, BulkAction bulkAction) {
-
+	public BulkSelection<Object> create() {
 		BulkSelectionFactory<Object> bulkSelectionFactory =
 			_bulkSelectionFactoryRegistry.getBulkSelectionFactory(
 				Object.class.getName());
 
 		return bulkSelectionFactory.create(
-			_getParameterMap(
-				search, filter, bulkAction.getBulkActionItems(),
-				bulkAction.getSelectionScope()));
+			HashMapBuilder.put(
+				"rowIds",
+				() -> {
+					SelectionScope selectionScope =
+						_bulkAction.getSelectionScope();
+
+					if (GetterUtil.getBoolean(selectionScope.getSelectAll())) {
+						return _searchRowIds();
+					}
+
+					if (ArrayUtil.isEmpty(_bulkAction.getBulkActionItems())) {
+						return new String[0];
+					}
+
+					return _getSelectedItemsRowIds();
+				}
+			).build());
 	}
 
-	private Map<String, String[]> _getParameterMap(
-		String search, Filter filter, BulkActionItem[] bulkActionItems,
-		SelectionScope selectionScope) {
+	public static class Builder {
 
-		if (selectionScope.getSelectAll()) {
-			return HashMapBuilder.put(
-				"filter", new String[] {filter.toString()}
-			).put(
-				"search", new String[] {search}
-			).put(
-				"selectAll",
-				new String[] {Boolean.toString(selectionScope.getSelectAll())}
-			).build();
+		public Builder blueprintExternalReferenceCode(
+			String blueprintExternalReferenceCode) {
+
+			_blueprintExternalReferenceCode = blueprintExternalReferenceCode;
+
+			return this;
 		}
 
-		return HashMapBuilder.put(
-			"rowIds",
-			() -> {
-				if (ArrayUtil.isEmpty(bulkActionItems)) {
-					return null;
-				}
+		public BulkActionBulkSelectionFactory build() {
+			return new BulkActionBulkSelectionFactory(this);
+		}
 
-				List<String> rowIds = new ArrayList<>(bulkActionItems.length);
+		public Builder bulkAction(BulkAction bulkAction) {
+			_bulkAction = bulkAction;
 
-				for (BulkActionItem bulkActionItem : bulkActionItems) {
-					rowIds.add(
-						StringBundler.concat(
-							bulkActionItem.getClassName(), StringPool.SPACE,
-							bulkActionItem.getClassPK(), StringPool.COMMA));
-				}
+			return this;
+		}
 
-				return rowIds.toArray(new String[0]);
-			}
-		).build();
+		public Builder bulkSelectionFactoryRegistry(
+			BulkSelectionFactoryRegistry bulkSelectionFactoryRegistry) {
+
+			_bulkSelectionFactoryRegistry = bulkSelectionFactoryRegistry;
+
+			return this;
+		}
+
+		public Builder contextAcceptLanguage(
+			AcceptLanguage contextAcceptLanguage) {
+
+			_contextAcceptLanguage = contextAcceptLanguage;
+
+			return this;
+		}
+
+		public Builder contextCompany(Company contextCompany) {
+			_contextCompany = contextCompany;
+
+			return this;
+		}
+
+		public Builder contextHttpServletRequest(
+			HttpServletRequest contextHttpServletRequest) {
+
+			_contextHttpServletRequest = contextHttpServletRequest;
+
+			return this;
+		}
+
+		public Builder contextUser(User contextUser) {
+			_contextUser = contextUser;
+
+			return this;
+		}
+
+		public Builder emptySearch(Boolean emptySearch) {
+			_emptySearch = emptySearch;
+
+			return this;
+		}
+
+		public Builder entryClassNames(String entryClassNames) {
+			_entryClassNames = entryClassNames;
+
+			return this;
+		}
+
+		public Builder filter(Filter filter) {
+			_filter = filter;
+
+			return this;
+		}
+
+		public Builder indexerRegistry(IndexerRegistry indexerRegistry) {
+			_indexerRegistry = indexerRegistry;
+
+			return this;
+		}
+
+		public Builder localization(Localization localization) {
+			_localization = localization;
+
+			return this;
+		}
+
+		public Builder pagination(Pagination pagination) {
+			_pagination = pagination;
+
+			return this;
+		}
+
+		public Builder scope(String scope) {
+			_scope = scope;
+
+			return this;
+		}
+
+		public Builder search(String search) {
+			_search = search;
+
+			return this;
+		}
+
+		public Builder searcher(Searcher searcher) {
+			_searcher = searcher;
+
+			return this;
+		}
+
+		public Builder searchRequestBuilderFactory(
+			SearchRequestBuilderFactory searchRequestBuilderFactory) {
+
+			_searchRequestBuilderFactory = searchRequestBuilderFactory;
+
+			return this;
+		}
+
+		public Builder sorts(Sort[] sorts) {
+			_sorts = sorts;
+
+			return this;
+		}
+
+		private String _blueprintExternalReferenceCode;
+		private BulkAction _bulkAction;
+		private BulkSelectionFactoryRegistry _bulkSelectionFactoryRegistry;
+		private AcceptLanguage _contextAcceptLanguage;
+		private Company _contextCompany;
+		private HttpServletRequest _contextHttpServletRequest;
+		private User _contextUser;
+		private Boolean _emptySearch;
+		private String _entryClassNames;
+		private Filter _filter;
+		private IndexerRegistry _indexerRegistry;
+		private Localization _localization;
+		private Pagination _pagination;
+		private String _scope;
+		private String _search;
+		private Searcher _searcher;
+		private SearchRequestBuilderFactory _searchRequestBuilderFactory;
+		private Sort[] _sorts;
+
 	}
 
-	@Reference
-	private BulkSelectionFactoryRegistry _bulkSelectionFactoryRegistry;
+	private BulkActionBulkSelectionFactory(Builder builder) {
+		_bulkSelectionFactoryRegistry = builder._bulkSelectionFactoryRegistry;
+		_indexerRegistry = builder._indexerRegistry;
+		_localization = builder._localization;
+		_searcher = builder._searcher;
+		_searchRequestBuilderFactory = builder._searchRequestBuilderFactory;
+		_contextAcceptLanguage = builder._contextAcceptLanguage;
+		_contextCompany = builder._contextCompany;
+		_blueprintExternalReferenceCode =
+			builder._blueprintExternalReferenceCode;
+		_emptySearch = builder._emptySearch;
+		_entryClassNames = builder._entryClassNames;
+		_scope = builder._scope;
+		_search = builder._search;
+		_filter = builder._filter;
+		_pagination = builder._pagination;
+		_sorts = builder._sorts;
+		_bulkAction = builder._bulkAction;
+		_contextHttpServletRequest = builder._contextHttpServletRequest;
+		_contextUser = builder._contextUser;
+	}
+
+	private BooleanClause<?> _getBooleanClause(
+		UnsafeConsumer<BooleanQuery, Exception> booleanQueryUnsafeConsumer,
+		Filter filter) {
+
+		BooleanQuery booleanQuery = new BooleanQueryImpl() {
+			{
+				add(new MatchAllQuery(), BooleanClauseOccur.MUST);
+
+				BooleanFilter booleanFilter = new BooleanFilter();
+
+				if (filter != null) {
+					booleanFilter.add(filter, BooleanClauseOccur.MUST);
+				}
+
+				setPreBooleanFilter(booleanFilter);
+			}
+		};
+
+		try {
+			booleanQueryUnsafeConsumer.accept(booleanQuery);
+
+			return BooleanClauseFactoryUtil.create(
+				booleanQuery, BooleanClauseOccur.MUST.getName());
+		}
+		catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+
+	private String _getEntryClassName(Document document) {
+		Map<String, com.liferay.portal.search.document.Field> fields =
+			document.getFields();
+
+		com.liferay.portal.search.document.Field entryClassNameField =
+			fields.get(Field.ENTRY_CLASS_NAME);
+
+		if (entryClassNameField != null) {
+			return GetterUtil.getString(entryClassNameField.getValue());
+		}
+
+		return document.getString(Field.ENTRY_CLASS_NAME);
+	}
+
+	private Long _getEntryClassPK(Document document) {
+		Map<String, com.liferay.portal.search.document.Field> fields =
+			document.getFields();
+
+		com.liferay.portal.search.document.Field entryClassNamePK = fields.get(
+			Field.ENTRY_CLASS_PK);
+
+		if (entryClassNamePK != null) {
+			return GetterUtil.getLong(entryClassNamePK.getValue());
+		}
+
+		return document.getLong(Field.ENTRY_CLASS_PK);
+	}
+
+	private String[] _getSelectedItemsRowIds() {
+		BulkActionItem[] bulkActionItems = _bulkAction.getBulkActionItems();
+
+		List<String> rowIds = new ArrayList<>(bulkActionItems.length);
+
+		for (BulkActionItem bulkActionItem : bulkActionItems) {
+			rowIds.add(
+				StringBundler.concat(
+					bulkActionItem.getClassName(), StringPool.SPACE,
+					bulkActionItem.getClassPK()));
+		}
+
+		return rowIds.toArray(new String[0]);
+	}
+
+	private boolean _isAllowedSearchContextAttribute(String key) {
+		if (key.startsWith("search.experiences.") ||
+			key.equals("search.empty.search") || key.equals("status")) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private void _populateSearchContext(
+		Map<String, Object> attributes, Filter filter, String scope,
+		String search, SearchContext searchContext, Sort[] sorts) {
+
+		MapUtil.isNotEmptyForEach(
+			attributes,
+			(key, value) -> {
+				if (_isAllowedSearchContextAttribute(key) && (value != null) &&
+					(value instanceof Serializable)) {
+
+					searchContext.setAttribute(key, (Serializable)value);
+				}
+			});
+
+		if (searchContext.getAttribute("search.experiences.ip.address") ==
+				null) {
+
+			searchContext.setAttribute(
+				"search.experiences.ip.address",
+				_contextHttpServletRequest.getRemoteAddr());
+		}
+
+		if (filter != null) {
+			searchContext.setBooleanClauses(
+				new BooleanClause[] {
+					_getBooleanClause(
+						booleanQuery -> {
+						},
+						filter)
+				});
+		}
+
+		searchContext.setGroupIds(
+			_toGroupIds(_contextCompany.getCompanyId(), scope));
+		searchContext.setKeywords(search);
+		searchContext.setLocale(_contextAcceptLanguage.getPreferredLocale());
+
+		if (ArrayUtil.isNotEmpty(sorts)) {
+			searchContext.setSorts(sorts);
+		}
+
+		searchContext.setTimeZone(_contextUser.getTimeZone());
+		searchContext.setUserId(_contextUser.getUserId());
+	}
+
+	private String[] _searchRowIds() {
+		if (!FeatureFlagManagerUtil.isEnabled(
+				_contextCompany.getCompanyId(), "LPS-179669")) {
+
+			return new String[0];
+		}
+
+		SearchRequestBody searchRequestBody = new SearchRequestBody();
+
+		searchRequestBody.setAttributes(
+			() -> HashMapBuilder.<String, Object>put(
+				"search.empty.search", _emptySearch
+			).put(
+				"search.experiences.blueprint.external.reference.code",
+				_blueprintExternalReferenceCode
+			).put(
+				"status",
+				() -> {
+					int[] statuses = FilterUtil.getStatuses(_filter);
+
+					if (ArrayUtil.isNotEmpty(statuses)) {
+						return statuses;
+					}
+
+					return null;
+				}
+			).build());
+
+		SearchRequestBuilder searchRequestBuilder =
+			_searchRequestBuilderFactory.builder(
+			).companyId(
+				_contextCompany.getCompanyId()
+			).fetchSourceIncludes(
+				new String[] {
+					_localization.getLocalizedName(
+						Field.CONTENT,
+						_contextAcceptLanguage.getPreferredLanguageId()),
+					Field.CREATE_DATE,
+					_localization.getLocalizedName(
+						Field.DESCRIPTION,
+						_contextAcceptLanguage.getPreferredLanguageId()),
+					Field.MODIFIED_DATE
+				}
+			).from(
+				_pagination.getStartPosition()
+			).size(
+				_pagination.getPageSize()
+			).withSearchContext(
+				searchContext -> _populateSearchContext(
+					searchRequestBody.getAttributes(), _filter, _scope, _search,
+					searchContext, _sorts)
+			);
+
+		String[] entryClassNamesArray = _toArray(_entryClassNames);
+
+		if (ArrayUtil.isNotEmpty(entryClassNamesArray)) {
+			searchRequestBuilder.entryClassNames(entryClassNamesArray);
+			searchRequestBuilder.modelIndexerClassNames(entryClassNamesArray);
+		}
+
+		if (!Validator.isBlank(_search)) {
+			searchRequestBuilder.queryString(_search);
+		}
+
+		SearchResponse searchResponse = _searcher.search(
+			searchRequestBuilder.build());
+
+		SearchHits searchHits = searchResponse.getSearchHits();
+
+		List<SearchHit> searchHitsList = searchHits.getSearchHits();
+
+		List<String> searchResults = new ArrayList<>(searchHitsList.size());
+
+		for (SearchHit searchHit : searchHitsList) {
+			Document document = searchHit.getDocument();
+
+			searchResults.add(
+				_getEntryClassName(document) + StringPool.SPACE +
+					_getEntryClassPK(document));
+		}
+
+		return searchResults.toArray(new String[0]);
+	}
+
+	private String[] _toArray(String csv) {
+		if (Validator.isBlank(csv)) {
+			return new String[0];
+		}
+
+		csv = StringUtil.trim(csv);
+
+		return csv.split("\\s*,\\s*");
+	}
+
+	private long[] _toGroupIds(long companyId, String scope) {
+		List<Long> groupIds = new ArrayList<>();
+
+		String[] parts = _toArray(scope);
+
+		for (String part : parts) {
+			Group group =
+				GroupLocalServiceUtil.fetchGroupByExternalReferenceCode(
+					part, companyId);
+
+			if (group != null) {
+				groupIds.add(group.getGroupId());
+
+				continue;
+			}
+
+			try {
+				groupIds.add(Long.parseLong(part));
+			}
+			catch (NumberFormatException numberFormatException) {
+				throw new SystemException(
+					"Invalid external reference code or group ID: " + part,
+					numberFormatException);
+			}
+		}
+
+		return ArrayUtil.toLongArray(groupIds);
+	}
+
+	private final String _blueprintExternalReferenceCode;
+	private final BulkAction _bulkAction;
+	private final BulkSelectionFactoryRegistry _bulkSelectionFactoryRegistry;
+	private final AcceptLanguage _contextAcceptLanguage;
+	private final Company _contextCompany;
+	private final HttpServletRequest _contextHttpServletRequest;
+	private final User _contextUser;
+	private final Boolean _emptySearch;
+	private final String _entryClassNames;
+	private final Filter _filter;
+	private final IndexerRegistry _indexerRegistry;
+	private final Localization _localization;
+	private final Pagination _pagination;
+	private final String _scope;
+	private final String _search;
+	private final Searcher _searcher;
+	private final SearchRequestBuilderFactory _searchRequestBuilderFactory;
+	private final Sort[] _sorts;
 
 }

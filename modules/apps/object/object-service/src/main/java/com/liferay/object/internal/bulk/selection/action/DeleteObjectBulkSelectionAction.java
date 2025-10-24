@@ -5,32 +5,27 @@
 
 package com.liferay.object.internal.bulk.selection.action;
 
-import com.liferay.asset.kernel.model.AssetEntry;
-import com.liferay.asset.kernel.model.AssetRenderer;
-import com.liferay.asset.kernel.service.AssetEntryLocalService;
-import com.liferay.asset.util.AssetHelper;
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.bulk.selection.BulkSelectionAction;
 import com.liferay.object.model.ObjectEntry;
-import com.liferay.object.model.ObjectFolder;
+import com.liferay.object.model.ObjectEntryFolder;
+import com.liferay.object.service.ObjectEntryFolderLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
-import com.liferay.object.service.ObjectFolderLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
-import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionUtil;
-import com.liferay.portal.kernel.util.MapUtil;
-import com.liferay.portal.kernel.util.SetUtil;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import java.io.Serializable;
+
+import java.util.Date;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.GetterUtil;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Andrea Sbarra
@@ -48,33 +43,87 @@ public class DeleteObjectBulkSelectionAction
 			Map<String, Serializable> inputMap)
 		throws Exception {
 
-		bulkSelection.forEach(
-			object -> {
-				try {
-					if (object instanceof ObjectEntry) {
-						ObjectEntry objectEntry = (ObjectEntry)object;
+		ObjectEntry bulkActionTask = _objectEntryLocalService.getObjectEntry(
+			GetterUtil.getLong(inputMap.get("bulkActionTaskId")));
 
-						_objectEntryLocalService.deleteObjectEntry(objectEntry);
-					} else {
-						ObjectFolder objectFolder = (ObjectFolder)object;
-						_objectFolderLocalService.deleteObjectFolder(objectFolder);
+		Map<String, Serializable> bulkActionTaskValues = bulkActionTask.getValues();
+
+		bulkActionTaskValues.put("numberOfItems", bulkSelection.getSize());
+
+		String status = "completed";
+
+		AtomicInteger numberOfSuccessfulItems = new AtomicInteger(0);
+
+		AtomicInteger numberOfFailedItems = new AtomicInteger(0);
+
+		try {
+			bulkActionTaskValues.put("executionStatus", "started");
+
+			bulkActionTask =
+				_partialUpdateObjectEntry(bulkActionTask, bulkActionTaskValues);
+
+			bulkActionTaskValues = bulkActionTask.getValues();
+
+			bulkSelection.forEach(
+				object -> {
+					try {
+						if (object instanceof ObjectEntry) {
+							ObjectEntry objectEntry = (ObjectEntry)object;
+
+							_objectEntryLocalService.deleteObjectEntry(objectEntry);
+						}
+						else {
+							ObjectEntryFolder objectEntryFolder =
+								(ObjectEntryFolder)object;
+
+							_objectEntryFolderLocalService.deleteObjectEntryFolder(
+								objectEntryFolder);
+						}
+						numberOfSuccessfulItems.getAndIncrement();
 					}
-				}
-				catch (PortalException portalException) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(portalException);
+					catch (PortalException portalException) {
+						if (_log.isWarnEnabled()) {
+							_log.warn(portalException);
+						}
+						numberOfFailedItems.getAndIncrement();
 					}
-				}
-			});
+				});
+		}
+		catch (PortalException portalException) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(portalException);
+			}
+			status = "failed";
+		}
+		finally {
+			bulkActionTaskValues.put("completionDate", new Date());
+			bulkActionTaskValues.put("executionStatus", status);
+			bulkActionTaskValues.put("numberOfFailedItems",
+				numberOfFailedItems.get());
+			bulkActionTaskValues.put("numberOfSuccessfulItems",
+				numberOfSuccessfulItems.get());
+
+			_partialUpdateObjectEntry(bulkActionTask, bulkActionTaskValues);
+		}
+	}
+
+	private ObjectEntry _partialUpdateObjectEntry(ObjectEntry objectEntry,
+												  Map<String, Serializable> values)
+		throws PortalException {
+
+		return _objectEntryLocalService.partialUpdateObjectEntry(
+			objectEntry.getUserId(), objectEntry.getObjectEntryId(),
+			objectEntry.getObjectEntryFolderId(), values,
+			new ServiceContext());
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DeleteObjectBulkSelectionAction.class);
 
 	@Reference
-	private ObjectEntryLocalService _objectEntryLocalService;
+	private ObjectEntryFolderLocalService _objectEntryFolderLocalService;
 
 	@Reference
-	private ObjectFolderLocalService _objectFolderLocalService;
+	private ObjectEntryLocalService _objectEntryLocalService;
 
 }
