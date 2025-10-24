@@ -35,10 +35,10 @@ import org.osgi.service.component.annotations.Reference;
  * @author Andrea Sbarra
  */
 @Component(
-	property = "bulk.selection.action.key=object.edit.tags",
+	property = "bulk.selection.action.key=edit.object.tags",
 	service = BulkSelectionAction.class
 )
-public class EditTagsBulkSelectionAction
+public class EditObjectTagsBulkSelectionAction
 	implements BulkSelectionAction<Object> {
 
 	@Override
@@ -140,7 +140,7 @@ public class EditTagsBulkSelectionAction
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		EditTagsBulkSelectionAction.class);
+		EditObjectTagsBulkSelectionAction.class);
 
 	@Reference
 	private AssetEntryLocalService _assetEntryLocalService;

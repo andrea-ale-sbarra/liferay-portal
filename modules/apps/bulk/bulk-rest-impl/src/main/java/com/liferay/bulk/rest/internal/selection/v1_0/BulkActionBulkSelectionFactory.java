@@ -14,10 +14,14 @@ import com.liferay.bulk.selection.BulkSelectionFactoryRegistry;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import com.liferay.portal.kernel.util.ListUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -27,7 +31,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(service = BulkActionBulkSelectionFactory.class)
 public class BulkActionBulkSelectionFactory {
 
-	public BulkSelection<?> create(
+	public BulkSelection<Object> create(
 		String search, Filter filter, BulkAction bulkAction) {
 
 		BulkSelectionFactory<Object> bulkSelectionFactory =
@@ -58,22 +62,20 @@ public class BulkActionBulkSelectionFactory {
 		return HashMapBuilder.put(
 			"rowIds",
 			() -> {
-				if (bulkActionItems == null) {
+				if (ArrayUtil.isEmpty(bulkActionItems)) {
 					return null;
 				}
 
-				StringBundler sb = new StringBundler();
+				List<String> rowIds = new ArrayList<>(bulkActionItems.length);
 
 				for (BulkActionItem bulkActionItem : bulkActionItems) {
-					sb.append(
+					rowIds.add(
 						StringBundler.concat(
 							bulkActionItem.getClassName(), StringPool.SPACE,
 							bulkActionItem.getClassPK(), StringPool.COMMA));
 				}
 
-				String rowIds = sb.toString();
-
-				return rowIds.split(StringPool.COMMA);
+				return rowIds.toArray(new String[0]);
 			}
 		).build();
 	}
