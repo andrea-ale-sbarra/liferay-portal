@@ -9,6 +9,7 @@ import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.bulk.rest.dto.v1_0.BulkAction;
 import com.liferay.bulk.rest.dto.v1_0.BulkActionItem;
 import com.liferay.bulk.rest.dto.v1_0.BulkActionTask;
+import com.liferay.bulk.rest.dto.v1_0.DeleteBulkAction;
 import com.liferay.bulk.rest.dto.v1_0.KeywordBulkAction;
 import com.liferay.bulk.rest.internal.odata.entity.v1_0.BulkActionEntityModel;
 import com.liferay.bulk.rest.internal.selection.v1_0.BulkActionBulkSelectionFactory;
@@ -21,6 +22,7 @@ import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
@@ -28,6 +30,7 @@ import com.liferay.portal.vulcan.pagination.Pagination;
 import jakarta.ws.rs.core.MultivaluedMap;
 
 import java.io.Serializable;
+import java.util.Collections;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -62,6 +65,10 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 
 		BulkAction.Type type = bulkAction.getType();
 
+		if (BulkAction.Type.DELETE_BULK_ACTION.equals(type)) {
+			return _executeDeleteBulkAction(search, filter, bulkAction);
+		}
+
 		if (BulkAction.Type.KEYWORD_BULK_ACTION.equals(type)) {
 			return _executeKeywordBulkAction(search, filter, bulkAction);
 		}
@@ -79,13 +86,32 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 			fetchChildren, search, filter, pagination, sorts, bulkAction);
 	}
 
+	private BulkActionTask _executeDeleteBulkAction(
+		String search, Filter filter, BulkAction bulkAction)
+		throws Exception {
+
+		BulkSelection<Object> bulkSelection = _bulkActionBulkSelectionFactory.create(
+			search, filter, bulkAction);
+
+		if (bulkSelection.getSize() == 0) {
+			return new BulkActionTask();
+		}
+
+		_bulkSelectionRunner.run(
+			contextUser, bulkSelection,
+			_deleteObjectBulkSelectionAction,
+			Collections.emptyMap());
+
+		return new BulkActionTask();
+	}
+
 	private BulkActionTask _executeKeywordBulkAction(
 			String search, Filter filter, BulkAction bulkAction)
 		throws Exception {
 
 		KeywordBulkAction keywordBulkAction = (KeywordBulkAction)bulkAction;
 
-		BulkSelection<?> bulkSelection = _bulkActionBulkSelectionFactory.create(
+		BulkSelection<Object> bulkSelection = _bulkActionBulkSelectionFactory.create(
 			search, filter, keywordBulkAction);
 
 		if (bulkSelection.getSize() == 0) {
@@ -93,8 +119,8 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 		}
 
 		_bulkSelectionRunner.run(
-			contextUser, bulkSelection.toAssetEntryBulkSelection(),
-			_editTagsBulkSelectionAction,
+			contextUser, bulkSelection,
+			_editObjectTagsBulkSelectionAction,
 			HashMapBuilder.<String, Serializable>put(
 				BulkSelectionInputParameters.ASSET_ENTRY_BULK_SELECTION, true
 			).put(
@@ -116,7 +142,10 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 	@Reference
 	private BulkSelectionRunner _bulkSelectionRunner;
 
-	@Reference(target = "(bulk.selection.action.key=edit.tags)")
-	private BulkSelectionAction<AssetEntry> _editTagsBulkSelectionAction;
+	@Reference(target = "(bulk.selection.action.key=edit.object.tags)")
+	private BulkSelectionAction<Object> _editObjectTagsBulkSelectionAction;
+
+	@Reference(target = "(bulk.selection.action.key=delete.object)")
+	private BulkSelectionAction<Object> _deleteObjectBulkSelectionAction;
 
 }
