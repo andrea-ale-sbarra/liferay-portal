@@ -266,13 +266,55 @@ paths:
             operationId: postBulkAction
             parameters:
                 -   in: query
+                    name: blueprintExternalReferenceCode
+                    schema:
+                        type: string
+                -   in: query
+                    name: emptySearch
+                    schema:
+                        type: boolean
+                -   in: query
+                    description:
+                        Model class names to be searched for. Defaults to all.
+                    name: entryClassNames
+                    schema:
+                        type: string
+                -   in: query
+                    description:
+                        The list of fields to be returned.
+                    name: fields
+                    schema:
+                        type: string
+                -   in: query
                     name: filter
-                    required: false
+                    schema:
+                        type: string
+                -   in: query
+                    name: nestedFields
+                    schema:
+                        type: string
+                -   in: query
+                    name: page
+                    schema:
+                        type: integer
+                -   in: query
+                    name: pageSize
+                    schema:
+                        type: integer
+                -   in: query
+                    name: restrictFields
+                    schema:
+                        type: string
+                -   in: query
+                    name: scope
                     schema:
                         type: string
                 -   in: query
                     name: search
-                    required: false
+                    schema:
+                        type: string
+                -   in: query
+                    name: sort
                     schema:
                         type: string
             requestBody:
