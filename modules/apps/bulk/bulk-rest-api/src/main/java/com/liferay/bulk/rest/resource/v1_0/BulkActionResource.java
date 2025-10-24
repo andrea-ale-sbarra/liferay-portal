@@ -46,8 +46,11 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface BulkActionResource {
 
 	public BulkActionTask postBulkAction(
-			String search,
+			String blueprintExternalReferenceCode, Boolean emptySearch,
+			String entryClassNames, String scope, String search,
 			com.liferay.portal.kernel.search.filter.Filter filter,
+			Pagination pagination,
+			com.liferay.portal.kernel.search.Sort[] sorts,
 			BulkAction bulkAction)
 		throws Exception;
 

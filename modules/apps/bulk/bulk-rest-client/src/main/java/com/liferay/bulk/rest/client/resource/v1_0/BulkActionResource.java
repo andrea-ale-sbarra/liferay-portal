@@ -38,11 +38,17 @@ public interface BulkActionResource {
 	}
 
 	public BulkActionTask postBulkAction(
-			String search, String filterString, BulkAction bulkAction)
+			String blueprintExternalReferenceCode, Boolean emptySearch,
+			String entryClassNames, String scope, String search,
+			String filterString, Pagination pagination, String sortString,
+			BulkAction bulkAction)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse postBulkActionHttpResponse(
-			String search, String filterString, BulkAction bulkAction)
+			String blueprintExternalReferenceCode, Boolean emptySearch,
+			String entryClassNames, String scope, String search,
+			String filterString, Pagination pagination, String sortString,
+			BulkAction bulkAction)
 		throws Exception;
 
 	public Page<BulkActionItem> postBulkActionItemPreviewPage(
@@ -164,11 +170,16 @@ public interface BulkActionResource {
 	public static class BulkActionResourceImpl implements BulkActionResource {
 
 		public BulkActionTask postBulkAction(
-				String search, String filterString, BulkAction bulkAction)
+				String blueprintExternalReferenceCode, Boolean emptySearch,
+				String entryClassNames, String scope, String search,
+				String filterString, Pagination pagination, String sortString,
+				BulkAction bulkAction)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse = postBulkActionHttpResponse(
-				search, filterString, bulkAction);
+				blueprintExternalReferenceCode, emptySearch, entryClassNames,
+				scope, search, filterString, pagination, sortString,
+				bulkAction);
 
 			String content = httpResponse.getContent();
 
@@ -230,7 +241,10 @@ public interface BulkActionResource {
 		}
 
 		public HttpInvoker.HttpResponse postBulkActionHttpResponse(
-				String search, String filterString, BulkAction bulkAction)
+				String blueprintExternalReferenceCode, Boolean emptySearch,
+				String entryClassNames, String scope, String search,
+				String filterString, Pagination pagination, String sortString,
+				BulkAction bulkAction)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -256,12 +270,43 @@ public interface BulkActionResource {
 
 			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
 
+			if (blueprintExternalReferenceCode != null) {
+				httpInvoker.parameter(
+					"blueprintExternalReferenceCode",
+					String.valueOf(blueprintExternalReferenceCode));
+			}
+
+			if (emptySearch != null) {
+				httpInvoker.parameter(
+					"emptySearch", String.valueOf(emptySearch));
+			}
+
+			if (entryClassNames != null) {
+				httpInvoker.parameter(
+					"entryClassNames", String.valueOf(entryClassNames));
+			}
+
+			if (scope != null) {
+				httpInvoker.parameter("scope", String.valueOf(scope));
+			}
+
 			if (search != null) {
 				httpInvoker.parameter("search", String.valueOf(search));
 			}
 
 			if (filterString != null) {
 				httpInvoker.parameter("filter", filterString);
+			}
+
+			if (pagination != null) {
+				httpInvoker.parameter(
+					"page", String.valueOf(pagination.getPage()));
+				httpInvoker.parameter(
+					"pageSize", String.valueOf(pagination.getPageSize()));
+			}
+
+			if (sortString != null) {
+				httpInvoker.parameter("sort", sortString);
 			}
 
 			httpInvoker.path(

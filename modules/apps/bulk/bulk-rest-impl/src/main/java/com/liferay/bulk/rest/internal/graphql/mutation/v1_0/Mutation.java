@@ -91,8 +91,16 @@ public class Mutation {
 
 	@GraphQLField(description = "Execute a bulk action")
 	public BulkActionTask createBulkAction(
+			@GraphQLName("blueprintExternalReferenceCode") String
+				blueprintExternalReferenceCode,
+			@GraphQLName("emptySearch") Boolean emptySearch,
+			@GraphQLName("entryClassNames") String entryClassNames,
+			@GraphQLName("scope") String scope,
 			@GraphQLName("search") String search,
 			@GraphQLName("filter") String filterString,
+			@GraphQLName("pageSize") int pageSize,
+			@GraphQLName("page") int page,
+			@GraphQLName("sort") String sortsString,
 			@GraphQLName("bulkAction") BulkAction bulkAction)
 		throws Exception {
 
@@ -100,8 +108,11 @@ public class Mutation {
 			_bulkActionResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			bulkActionResource -> bulkActionResource.postBulkAction(
-				search,
+				blueprintExternalReferenceCode, emptySearch, entryClassNames,
+				scope, search,
 				_filterBiFunction.apply(bulkActionResource, filterString),
+				Pagination.of(page, pageSize),
+				_sortsBiFunction.apply(bulkActionResource, sortsString),
 				bulkAction));
 	}
 
