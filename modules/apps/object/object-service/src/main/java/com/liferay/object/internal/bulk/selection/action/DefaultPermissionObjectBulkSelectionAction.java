@@ -8,8 +8,6 @@ package com.liferay.object.internal.bulk.selection.action;
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.bulk.selection.BulkSelectionAction;
 import com.liferay.object.model.ObjectEntry;
-import com.liferay.object.model.ObjectEntryFolder;
-import com.liferay.object.service.ObjectEntryFolderLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -17,6 +15,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.MapUtil;
 
 import java.io.Serializable;
 
@@ -31,10 +30,10 @@ import org.osgi.service.component.annotations.Reference;
  * @author Andrea Sbarra
  */
 @Component(
-	property = "bulk.selection.action.key=delete.object",
+	property = "bulk.selection.action.key=default.permission.object",
 	service = BulkSelectionAction.class
 )
-public class DeleteObjectBulkSelectionAction
+public class DefaultPermissionObjectBulkSelectionAction
 	implements BulkSelectionAction<Object> {
 
 	@Override
@@ -68,19 +67,16 @@ public class DeleteObjectBulkSelectionAction
 			bulkSelection.forEach(
 				object -> {
 					try {
-						if (object instanceof ObjectEntry) {
-							ObjectEntry objectEntry = (ObjectEntry)object;
+						ObjectEntry objectEntry = (ObjectEntry)object;
 
-							_objectEntryLocalService.deleteObjectEntry(
-								objectEntry);
-						}
-						else {
-							ObjectEntryFolder objectEntryFolder =
-								(ObjectEntryFolder)object;
+						Map<String, Serializable> values =
+							objectEntry.getValues();
 
-							_objectEntryFolderLocalService.
-								deleteObjectEntryFolder(objectEntryFolder);
-						}
+						values.put(
+							"defaultPermissions",
+							MapUtil.getString(inputMap, "defaultPermissions"));
+
+						_partialUpdateObjectEntry(objectEntry, values);
 
 						numberOfSuccessfulItems.getAndIncrement();
 					}
@@ -122,10 +118,7 @@ public class DeleteObjectBulkSelectionAction
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		DeleteObjectBulkSelectionAction.class);
-
-	@Reference
-	private ObjectEntryFolderLocalService _objectEntryFolderLocalService;
+		DefaultPermissionObjectBulkSelectionAction.class);
 
 	@Reference
 	private ObjectEntryLocalService _objectEntryLocalService;

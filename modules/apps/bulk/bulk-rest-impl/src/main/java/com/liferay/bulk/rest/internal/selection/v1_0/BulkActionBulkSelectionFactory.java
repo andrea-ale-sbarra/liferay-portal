@@ -7,13 +7,23 @@ package com.liferay.bulk.rest.internal.selection.v1_0;
 
 import com.liferay.bulk.rest.dto.v1_0.BulkAction;
 import com.liferay.bulk.rest.dto.v1_0.BulkActionItem;
+import com.liferay.bulk.rest.dto.v1_0.DefaultPermissionBulkAction;
 import com.liferay.bulk.rest.dto.v1_0.SelectionScope;
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.bulk.selection.BulkSelectionFactory;
 import com.liferay.bulk.selection.BulkSelectionFactoryRegistry;
+import com.liferay.object.model.ObjectDefinition;
+import com.liferay.object.model.ObjectEntryFolder;
+import com.liferay.object.rest.filter.factory.FilterFactory;
+import com.liferay.object.service.ObjectDefinitionLocalService;
+import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.petra.function.UnsafeConsumer;
+import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.model.Company;
@@ -35,6 +45,7 @@ import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Localization;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -52,6 +63,8 @@ import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 import com.liferay.portal.vulcan.pagination.Pagination;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import jakarta.validation.ValidationException;
 
 import java.io.Serializable;
 
@@ -73,6 +86,8 @@ public class BulkActionBulkSelectionFactory {
 			HashMapBuilder.put(
 				"rowIds",
 				() -> {
+					_validate();
+
 					SelectionScope selectionScope =
 						_bulkAction.getSelectionScope();
 
@@ -163,6 +178,12 @@ public class BulkActionBulkSelectionFactory {
 			return this;
 		}
 
+		public Builder filterFactory(FilterFactory<Predicate> filterFactory) {
+			_filterFactory = filterFactory;
+
+			return this;
+		}
+
 		public Builder indexerRegistry(IndexerRegistry indexerRegistry) {
 			_indexerRegistry = indexerRegistry;
 
@@ -171,6 +192,22 @@ public class BulkActionBulkSelectionFactory {
 
 		public Builder localization(Localization localization) {
 			_localization = localization;
+
+			return this;
+		}
+
+		public Builder objectDefinitionLocalService(
+			ObjectDefinitionLocalService objectDefinitionLocalService) {
+
+			_objectDefinitionLocalService = objectDefinitionLocalService;
+
+			return this;
+		}
+
+		public Builder objectEntryLocalService(
+			ObjectEntryLocalService objectEntryLocalService) {
+
+			_objectEntryLocalService = objectEntryLocalService;
 
 			return this;
 		}
@@ -223,8 +260,11 @@ public class BulkActionBulkSelectionFactory {
 		private Boolean _emptySearch;
 		private String _entryClassNames;
 		private Filter _filter;
+		private FilterFactory _filterFactory;
 		private IndexerRegistry _indexerRegistry;
 		private Localization _localization;
+		private ObjectDefinitionLocalService _objectDefinitionLocalService;
+		private ObjectEntryLocalService _objectEntryLocalService;
 		private Pagination _pagination;
 		private String _scope;
 		private String _search;
@@ -249,6 +289,9 @@ public class BulkActionBulkSelectionFactory {
 		_scope = builder._scope;
 		_search = builder._search;
 		_filter = builder._filter;
+		_filterFactory = builder._filterFactory;
+		_objectDefinitionLocalService = builder._objectDefinitionLocalService;
+		_objectEntryLocalService = builder._objectEntryLocalService;
 		_pagination = builder._pagination;
 		_sorts = builder._sorts;
 		_bulkAction = builder._bulkAction;
@@ -313,16 +356,56 @@ public class BulkActionBulkSelectionFactory {
 		return document.getLong(Field.ENTRY_CLASS_PK);
 	}
 
-	private String[] _getSelectedItemsRowIds() {
+	private String[] _getSelectedItemsRowIds() throws PortalException {
 		BulkActionItem[] bulkActionItems = _bulkAction.getBulkActionItems();
 
 		List<String> rowIds = new ArrayList<>(bulkActionItems.length);
 
-		for (BulkActionItem bulkActionItem : bulkActionItems) {
-			rowIds.add(
-				StringBundler.concat(
-					bulkActionItem.getClassName(), StringPool.SPACE,
-					bulkActionItem.getClassPK()));
+		if (BulkAction.Type.DEFAULT_PERMISSION_BULK_ACTION.equals(
+				_bulkAction.getType())) {
+
+			BulkActionItem bulkActionItem = bulkActionItems[0];
+
+			String filterString = StringBundler.concat(
+				"(className eq '", bulkActionItem.getClassName(), "') and (",
+				StringUtil.merge(
+					TransformUtil.transform(
+						bulkActionItems,
+						item ->
+							"(classExternalReferenceCode eq '" +
+								item.getClassExternalReferenceCode() + "')",
+						String.class),
+					" or "),
+				")");
+
+			ObjectDefinition objectDefinition =
+				_objectDefinitionLocalService.
+					getObjectDefinitionByExternalReferenceCode(
+						"L_CMS_DEFAULT_PERMISSION",
+						_contextCompany.getCompanyId());
+
+			Predicate predicate = _filterFactory.create(
+				filterString, objectDefinition);
+
+			List<Long> primaryKeys = _objectEntryLocalService.getPrimaryKeys(
+				new Long[0], _contextCompany.getCompanyId(),
+				_contextUser.getUserId(),
+				objectDefinition.getObjectDefinitionId(), predicate, false,
+				null, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+
+			for (long primaryKey : primaryKeys) {
+				rowIds.add(
+					objectDefinition.getClassName() + StringPool.SPACE +
+						primaryKey);
+			}
+		}
+		else {
+			for (BulkActionItem bulkActionItem : bulkActionItems) {
+				rowIds.add(
+					StringBundler.concat(
+						bulkActionItem.getClassName(), StringPool.SPACE,
+						bulkActionItem.getClassPK()));
+			}
 		}
 
 		return rowIds.toArray(new String[0]);
@@ -383,7 +466,58 @@ public class BulkActionBulkSelectionFactory {
 		searchContext.setUserId(_contextUser.getUserId());
 	}
 
-	private String[] _searchRowIds() {
+	private String[] _searchRowIds() throws PortalException {
+		if (BulkAction.Type.DEFAULT_PERMISSION_BULK_ACTION.equals(
+				_bulkAction.getType())) {
+
+			DefaultPermissionBulkAction defaultPermissionBulkAction =
+				(DefaultPermissionBulkAction)_bulkAction;
+
+			String filterString = StringBundler.concat(
+				"(className eq '", ObjectEntryFolder.class.getName(),
+				"') and ");
+
+			if (Validator.isNull(defaultPermissionBulkAction.getTreePath())) {
+				filterString = StringBundler.concat(
+					filterString, "(depotGroupId eq ",
+					defaultPermissionBulkAction.getDepotGroupId(), ")");
+			}
+			else {
+				filterString = StringBundler.concat(
+					filterString, "(startswith(treePath, '",
+					defaultPermissionBulkAction.getTreePath(), "'))");
+			}
+
+			ObjectDefinition objectDefinition =
+				_objectDefinitionLocalService.
+					getObjectDefinitionByExternalReferenceCode(
+						"L_CMS_DEFAULT_PERMISSION",
+						_contextCompany.getCompanyId());
+
+			Predicate predicate = _filterFactory.create(
+				filterString, objectDefinition);
+
+			List<Long> primaryKeys = _objectEntryLocalService.getPrimaryKeys(
+				new Long[0], _contextCompany.getCompanyId(),
+				_contextUser.getUserId(),
+				objectDefinition.getObjectDefinitionId(), predicate, false,
+				null, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+
+			if (ListUtil.isEmpty(primaryKeys)) {
+				return new String[0];
+			}
+
+			List<String> rowIds = new ArrayList<>(primaryKeys.size());
+
+			for (long primaryKey : primaryKeys) {
+				rowIds.add(
+					objectDefinition.getClassName() + StringPool.SPACE +
+						primaryKey);
+			}
+
+			return rowIds.toArray(new String[0]);
+		}
+
 		if (!FeatureFlagManagerUtil.isEnabled(
 				_contextCompany.getCompanyId(), "LPS-179669")) {
 
@@ -506,6 +640,40 @@ public class BulkActionBulkSelectionFactory {
 		return ArrayUtil.toLongArray(groupIds);
 	}
 
+	private void _validate() {
+		SelectionScope selectionScope = _bulkAction.getSelectionScope();
+
+		if (BulkAction.Type.DEFAULT_PERMISSION_BULK_ACTION.equals(
+				_bulkAction.getType())) {
+
+			if (GetterUtil.getBoolean(selectionScope.getSelectAll()) &&
+				ArrayUtil.isEmpty(_bulkAction.getBulkActionItems())) {
+
+				DefaultPermissionBulkAction defaultPermissionBulkAction =
+					(DefaultPermissionBulkAction)_bulkAction;
+
+				long depotGroupId = GetterUtil.getLong(
+					defaultPermissionBulkAction.getDepotGroupId());
+
+				if ((depotGroupId == 0) &&
+					Validator.isNull(
+						GetterUtil.getString(
+							defaultPermissionBulkAction.getTreePath()))) {
+
+					throw new ValidationException();
+				}
+			}
+		}
+		else {
+			if (GetterUtil.getBoolean(selectionScope.getSelectAll()) &&
+				ArrayUtil.isEmpty(_bulkAction.getBulkActionItems()) &&
+				(_filter == null)) {
+
+				throw new ValidationException("Filter is null");
+			}
+		}
+	}
+
 	private final String _blueprintExternalReferenceCode;
 	private final BulkAction _bulkAction;
 	private final BulkSelectionFactoryRegistry _bulkSelectionFactoryRegistry;
@@ -516,8 +684,11 @@ public class BulkActionBulkSelectionFactory {
 	private final Boolean _emptySearch;
 	private final String _entryClassNames;
 	private final Filter _filter;
+	private final FilterFactory<Predicate> _filterFactory;
 	private final IndexerRegistry _indexerRegistry;
 	private final Localization _localization;
+	private final ObjectDefinitionLocalService _objectDefinitionLocalService;
+	private final ObjectEntryLocalService _objectEntryLocalService;
 	private final Pagination _pagination;
 	private final String _scope;
 	private final String _search;

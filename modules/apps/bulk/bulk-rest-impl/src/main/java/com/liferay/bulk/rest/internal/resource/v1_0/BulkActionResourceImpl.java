@@ -8,6 +8,7 @@ package com.liferay.bulk.rest.internal.resource.v1_0;
 import com.liferay.bulk.rest.dto.v1_0.BulkAction;
 import com.liferay.bulk.rest.dto.v1_0.BulkActionItem;
 import com.liferay.bulk.rest.dto.v1_0.BulkActionTask;
+import com.liferay.bulk.rest.dto.v1_0.DefaultPermissionBulkAction;
 import com.liferay.bulk.rest.dto.v1_0.KeywordBulkAction;
 import com.liferay.bulk.rest.internal.odata.entity.v1_0.BulkActionEntityModel;
 import com.liferay.bulk.rest.internal.selection.v1_0.BulkActionBulkSelectionFactory;
@@ -17,11 +18,14 @@ import com.liferay.bulk.selection.BulkSelectionAction;
 import com.liferay.bulk.selection.BulkSelectionFactoryRegistry;
 import com.liferay.bulk.selection.BulkSelectionInputParameters;
 import com.liferay.bulk.selection.BulkSelectionRunner;
+import com.liferay.object.constants.ObjectDefinitionConstants;
 import com.liferay.object.constants.ObjectEntryFolderConstants;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntry;
+import com.liferay.object.rest.filter.factory.FilterFactory;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
+import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.search.IndexerRegistry;
 import com.liferay.portal.kernel.search.Sort;
@@ -98,14 +102,23 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 		return bulkActionTask;
 	}
 
-	@Reference
-	private ObjectDefinitionLocalService _objectDefinitionLocalService;
+	@Override
+	public Page<BulkActionItem> postBulkActionItemPreviewPage(
+			Boolean fetchChildren, String search, Filter filter,
+			Pagination pagination, Sort[] sorts, BulkAction bulkAction)
+		throws Exception {
 
+		return super.postBulkActionItemPreviewPage(
+			fetchChildren, search, filter, pagination, sorts, bulkAction);
+	}
 
-	private BulkActionTask _addBulkActionTask(BulkAction.Type type) throws Exception {
-		ObjectDefinition objectDefinition = _objectDefinitionLocalService.
-			getObjectDefinitionByExternalReferenceCode(
-				"L_CMS_BULK_ACTION_TASK", contextCompany.getCompanyId());
+	private BulkActionTask _addBulkActionTask(BulkAction.Type type)
+		throws Exception {
+
+		ObjectDefinition objectDefinition =
+			_objectDefinitionLocalService.
+				getObjectDefinitionByExternalReferenceCode(
+					"L_CMS_BULK_ACTION_TASK", contextCompany.getCompanyId());
 
 		ObjectEntry objectEntry = _objectEntryLocalService.addObjectEntry(
 			0, contextUser.getUserId(),
@@ -138,19 +151,6 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 		};
 	}
 
-	@Reference
-	private ObjectEntryLocalService _objectEntryLocalService;
-
-	@Override
-	public Page<BulkActionItem> postBulkActionItemPreviewPage(
-			Boolean fetchChildren, String search, Filter filter,
-			Pagination pagination, Sort[] sorts, BulkAction bulkAction)
-		throws Exception {
-
-		return super.postBulkActionItemPreviewPage(
-			fetchChildren, search, filter, pagination, sorts, bulkAction);
-	}
-
 	private BulkActionBulkSelectionFactory _getBulkActionBulkSelectionFactory(
 		String blueprintExternalReferenceCode, Boolean emptySearch,
 		String entryClassNames, String scope, String search, Filter filter,
@@ -161,6 +161,8 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 			_bulkSelectionFactoryRegistry
 		).indexerRegistry(
 			_indexerRegistry
+		).filterFactory(
+			_filterFactory
 		).localization(
 			_localization
 		).searcher(
@@ -177,6 +179,10 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 			emptySearch
 		).entryClassNames(
 			entryClassNames
+		).objectDefinitionLocalService(
+			_objectDefinitionLocalService
+		).objectEntryLocalService(
+			_objectEntryLocalService
 		).scope(
 			scope
 		).search(
@@ -199,7 +205,10 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 	private BulkSelectionAction<Object> _getBulkSelectionAction(
 		BulkAction.Type type) {
 
-		if (BulkAction.Type.DELETE_BULK_ACTION.equals(type)) {
+		if (BulkAction.Type.DEFAULT_PERMISSION_BULK_ACTION.equals(type)) {
+			return _defaultPermittionObjectTagsBulkSelectionAction;
+		}
+		else if (BulkAction.Type.DELETE_BULK_ACTION.equals(type)) {
 			return _deleteObjectBulkSelectionAction;
 		}
 		else if (BulkAction.Type.KEYWORD_BULK_ACTION.equals(type)) {
@@ -210,19 +219,34 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 	}
 
 	private Map<String, Serializable> _getInputMap(
-		BulkAction bulkAction, BulkActionTask bulkActionTask, BulkAction.Type type) {
+		BulkAction bulkAction, BulkActionTask bulkActionTask,
+		BulkAction.Type type) {
 
-		if (BulkAction.Type.DELETE_BULK_ACTION.equals(type)) {
-			return HashMapBuilder.<String, Serializable>
-				put("bulkActionTaskId", bulkActionTask.getId())
-				.build();
+		if (BulkAction.Type.DEFAULT_PERMISSION_BULK_ACTION.equals(type)) {
+			return HashMapBuilder.<String, Serializable>put(
+				"bulkActionTaskId", bulkActionTask.getId()
+			).put(
+				"defaultPermissions",
+				() -> {
+					DefaultPermissionBulkAction defaultPermissionBulkAction =
+						(DefaultPermissionBulkAction)bulkAction;
+
+					return defaultPermissionBulkAction.getDefaultPermissions();
+				}
+			).build();
+		}
+		else if (BulkAction.Type.DELETE_BULK_ACTION.equals(type)) {
+			return HashMapBuilder.<String, Serializable>put(
+				"bulkActionTaskId", bulkActionTask.getId()
+			).build();
 		}
 		else if (BulkAction.Type.KEYWORD_BULK_ACTION.equals(type)) {
 			return HashMapBuilder.<String, Serializable>put(
 				BulkSelectionInputParameters.ASSET_ENTRY_BULK_SELECTION, true
-			).put("bulkActionTaskId", bulkActionTask.getId())
-			.put(
+			).put(
 				"append", true
+			).put(
+				"bulkActionTaskId", bulkActionTask.getId()
 			).put(
 				"toAddTagNames",
 				() -> {
@@ -253,17 +277,32 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 	@Reference
 	private BulkSelectionRunner _bulkSelectionRunner;
 
+	@Reference(target = "(bulk.selection.action.key=default.permission.object)")
+	private BulkSelectionAction<Object>
+		_defaultPermittionObjectTagsBulkSelectionAction;
+
 	@Reference(target = "(bulk.selection.action.key=delete.object)")
 	private BulkSelectionAction<Object> _deleteObjectBulkSelectionAction;
 
 	@Reference(target = "(bulk.selection.action.key=edit.object.tags)")
 	private BulkSelectionAction<Object> _editObjectTagsBulkSelectionAction;
 
+	@Reference(
+		target = "(filter.factory.key=" + ObjectDefinitionConstants.STORAGE_TYPE_DEFAULT + ")"
+	)
+	private FilterFactory<Predicate> _filterFactory;
+
 	@Reference
 	private IndexerRegistry _indexerRegistry;
 
 	@Reference
 	private Localization _localization;
+
+	@Reference
+	private ObjectDefinitionLocalService _objectDefinitionLocalService;
+
+	@Reference
+	private ObjectEntryLocalService _objectEntryLocalService;
 
 	@Reference
 	private Searcher _searcher;
