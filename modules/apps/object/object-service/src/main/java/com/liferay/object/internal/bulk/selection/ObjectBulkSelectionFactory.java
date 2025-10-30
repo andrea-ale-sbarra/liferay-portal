@@ -8,6 +8,7 @@ package com.liferay.object.internal.bulk.selection;
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.bulk.selection.BulkSelectionFactory;
 import com.liferay.bulk.selection.EmptyBulkSelection;
+import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.object.service.ObjectEntryFolderLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 
@@ -41,9 +42,12 @@ public class ObjectBulkSelectionFactory
 		String[] values, Map<String, String[]> parameterMap) {
 
 		return new ObjectBulkSelection(
-			values, parameterMap, _objectEntryLocalService,
-			_objectEntryFolderLocalService);
+			values, parameterMap, _depotEntryLocalService,
+			_objectEntryLocalService, _objectEntryFolderLocalService);
 	}
+
+	@Reference
+	private DepotEntryLocalService _depotEntryLocalService;
 
 	@Reference
 	private ObjectEntryFolderLocalService _objectEntryFolderLocalService;

@@ -423,7 +423,8 @@ public class BulkActionBulkSelectionFactory {
 
 	private void _populateSearchContext(
 		Map<String, Object> attributes, Filter filter, String scope,
-		String search, SearchContext searchContext, Sort[] sorts) {
+		String search, SearchContext searchContext, int start, int end,
+		Sort[] sorts) {
 
 		MapUtil.isNotEmptyForEach(
 			attributes,
@@ -453,10 +454,12 @@ public class BulkActionBulkSelectionFactory {
 				});
 		}
 
+		searchContext.setEnd(end);
 		searchContext.setGroupIds(
 			_toGroupIds(_contextCompany.getCompanyId(), scope));
 		searchContext.setKeywords(search);
 		searchContext.setLocale(_contextAcceptLanguage.getPreferredLocale());
+		searchContext.setStart(start);
 
 		if (ArrayUtil.isNotEmpty(sorts)) {
 			searchContext.setSorts(sorts);
@@ -560,14 +563,10 @@ public class BulkActionBulkSelectionFactory {
 						_contextAcceptLanguage.getPreferredLanguageId()),
 					Field.MODIFIED_DATE
 				}
-			).from(
-				_pagination.getStartPosition()
-			).size(
-				_pagination.getPageSize()
 			).withSearchContext(
 				searchContext -> _populateSearchContext(
 					searchRequestBody.getAttributes(), _filter, _scope, _search,
-					searchContext, _sorts)
+					searchContext, -1, -1, _sorts)
 			);
 
 		String[] entryClassNamesArray = _toArray(_entryClassNames);

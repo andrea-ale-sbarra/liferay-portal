@@ -8,6 +8,8 @@ package com.liferay.object.internal.bulk.selection;
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.bulk.selection.BulkSelectionFactory;
+import com.liferay.depot.model.DepotEntry;
+import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.object.service.ObjectEntryFolderLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.petra.function.UnsafeConsumer;
@@ -27,11 +29,13 @@ public class ObjectBulkSelection implements BulkSelection<Object> {
 
 	public ObjectBulkSelection(
 		String[] rowIds, Map<String, String[]> parameterMap,
+		DepotEntryLocalService depotEntryLocalService,
 		ObjectEntryLocalService objectEntryLocalService,
 		ObjectEntryFolderLocalService objectEntryFolderLocalService) {
 
 		_rowIds = rowIds;
 		_parameterMap = parameterMap;
+		_depotEntryLocalService = depotEntryLocalService;
 		_objectEntryLocalService = objectEntryLocalService;
 		_objectEntryFolderLocalService = objectEntryFolderLocalService;
 	}
@@ -44,7 +48,22 @@ public class ObjectBulkSelection implements BulkSelection<Object> {
 		for (String rowId : _rowIds) {
 			String[] split = rowId.split(StringPool.SPACE);
 
-			if (split[0].equals("com.liferay.object.model.ObjectEntryFolder")) {
+			if (split[0].equals("com.liferay.depot.model.DepotEntry")) {
+				DepotEntry depotEntry =
+					_depotEntryLocalService.fetchGroupDepotEntry(
+						GetterUtil.getLong(split[1]));
+
+				if (depotEntry != null) {
+					unsafeConsumer.accept(depotEntry);
+				}
+
+				unsafeConsumer.accept(
+					_depotEntryLocalService.getDepotEntry(
+						GetterUtil.getLong(split[1])));
+			}
+			else if (split[0].equals(
+						"com.liferay.object.model.ObjectEntryFolder")) {
+
 				unsafeConsumer.accept(
 					_objectEntryFolderLocalService.getObjectEntryFolder(
 						GetterUtil.getLong(split[1])));
@@ -84,6 +103,7 @@ public class ObjectBulkSelection implements BulkSelection<Object> {
 		throw new UnsupportedOperationException();
 	}
 
+	private final DepotEntryLocalService _depotEntryLocalService;
 	private final ObjectEntryFolderLocalService _objectEntryFolderLocalService;
 	private final ObjectEntryLocalService _objectEntryLocalService;
 	private final Map<String, String[]> _parameterMap;
