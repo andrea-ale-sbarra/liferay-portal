@@ -231,6 +231,8 @@ public class BulkActionResourceImpl extends BaseBulkActionResourceImpl {
 					"L_CMS_BULK_ACTION_TASK", contextCompany.getCompanyId());
 		String typeString = type.toString();
 
+		String typeString = type.toString();
+
 		ObjectEntry objectEntry = _objectEntryLocalService.addObjectEntry(
 			0, contextUser.getUserId(),
 			objectDefinition.getObjectDefinitionId(),
