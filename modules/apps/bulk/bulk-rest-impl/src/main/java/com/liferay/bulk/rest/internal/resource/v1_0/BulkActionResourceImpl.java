@@ -12,8 +12,6 @@ import com.liferay.bulk.rest.dto.v1_0.DefaultPermissionBulkAction;
 import com.liferay.bulk.rest.dto.v1_0.KeywordBulkAction;
 import com.liferay.bulk.rest.dto.v1_0.PermissionBulkAction;
 import com.liferay.bulk.rest.dto.v1_0.SelectionScope;
-import com.liferay.bulk.rest.dto.v1_0.TaxonomyCategoryBulkAction;
-import com.liferay.bulk.rest.internal.odata.entity.v1_0.BulkActionEntityModel;
 import com.liferay.bulk.rest.internal.selection.v1_0.BulkActionBulkSelectionFactory;
 import com.liferay.bulk.rest.resource.v1_0.BulkActionResource;
 import com.liferay.bulk.selection.BulkSelection;
