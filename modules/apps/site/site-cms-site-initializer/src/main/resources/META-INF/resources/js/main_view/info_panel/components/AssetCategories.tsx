@@ -19,12 +19,14 @@ import type {EntryCategorizationDTO} from '../services/ObjectEntryService';
 
 const AssetCategories = ({
 	cmsGroupId,
+	collapsable = true,
 	hasUpdatePermission,
 	inputSize,
 	objectEntry,
 	updateObjectEntry,
 }: {
 	cmsGroupId: number | string;
+	collapsable?: boolean;
 	hasUpdatePermission?: boolean;
 	inputSize?: CategorizationInputSize;
 	objectEntry: IAssetObjectEntry | EntryCategorizationDTO;
@@ -73,12 +75,16 @@ const AssetCategories = ({
 				return;
 			}
 
+			const updated = [
+				...groupedTaxonomies.taxonomyCategoryIds,
+				taxonomyCategoryId,
+			];
+
 			await updateObjectEntry({
 				lastAddedBrief: item,
-				taxonomyCategoryIds: [
-					...groupedTaxonomies.taxonomyCategoryIds,
-					taxonomyCategoryId,
-				],
+				taxonomyCategoryIds: updated,
+				toAddCategoryIds: updated,
+
 			});
 		},
 		[groupedTaxonomies.taxonomyCategoryIds, updateObjectEntry]
@@ -98,6 +104,11 @@ const AssetCategories = ({
 
 			taxonomyCategoryIds.splice(index, 1);
 
+			/**
+			 * TODO track removed IDs for bulk
+			 * TODO and fill the key: toRemoveCategoryIds
+			 */
+
 			await updateObjectEntry({taxonomyCategoryIds});
 		},
 		[groupedTaxonomies, updateObjectEntry]
@@ -105,7 +116,7 @@ const AssetCategories = ({
 
 	return (
 		<ClayPanel
-			collapsable
+			collapsable={collapsable}
 			defaultExpanded={true}
 			displayTitle={
 				<ClayPanel.Title className="panel-title text-secondary">
@@ -113,7 +124,7 @@ const AssetCategories = ({
 				</ClayPanel.Title>
 			}
 			displayType="unstyled"
-			showCollapseIcon={true}
+			showCollapseIcon={collapsable}
 		>
 			<ClayPanel.Body>
 				<ItemSelector<any>

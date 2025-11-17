@@ -7,25 +7,31 @@ import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayModal from '@clayui/modal';
 import {sub} from 'frontend-js-web';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
-import {IBulkActionTaskStarterDTO} from '../../../common/types/BulkActionTask';
+import {
+	IBulkActionFDSData,
+	IBulkActionTaskStarterDTO,
+} from '../../../common/types/BulkActionTask';
 import {displayErrorToast} from '../../../common/utils/toastUtil';
 import AssetCategories from '../../info_panel/components/AssetCategories';
 import AssetTags from '../../info_panel/components/AssetTags';
 import {EntryCategorizationDTO} from '../../info_panel/services/ObjectEntryService';
 import {triggerAssetBulkAction} from '../../props_transformer/actions/triggerAssetBulkAction';
+import {ClayRadio, ClayRadioGroup} from "@clayui/form";
 
-export default function CategoriesAndTagsModalContent({
+export default function CategorizationModalContent({
 	apiURL,
 	closeModal,
 	cmsGroupId,
 	selectedData,
+	type = 'KeywordBulkAction',
 }: {
 	apiURL?: string;
 	closeModal: () => void;
 	cmsGroupId: number;
-	selectedData: any;
+	selectedData: IBulkActionFDSData;
+	type: 'KeywordBulkAction' | 'TaxonomyCategoryBulkAction';
 }) {
 	const [categorizationDTO, setCategorizationDTO] =
 		useState<EntryCategorizationDTO>({
@@ -34,65 +40,63 @@ export default function CategoriesAndTagsModalContent({
 			taxonomyCategoryIds: [],
 		});
 	const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+	const [selectedOperation, setSelectedOperation] = useState<string>('add');
+
+	const Component = type === 'KeywordBulkAction'
+		? AssetTags
+		: AssetCategories;
 
 	const doBulkSubmit = useCallback(async () => {
 		setSubmitDisabled(true);
 
-		const tasks: Promise<any>[] = [];
-
-		const tasksTemplate: Partial<IBulkActionTaskStarterDTO<any>> = {
+		const taskStarterDTO: Partial<IBulkActionTaskStarterDTO<any>> = {
 			apiURL,
+			onCreateError: ({error}) => {
+				setSubmitDisabled(false);
+
+				displayErrorToast(error as string);
+			},
+			onCreateSuccess: (response) => {
+				if (response.error) {
+					setSubmitDisabled(false);
+
+					displayErrorToast(response.error as string);
+
+					return;
+				}
+
+				closeModal();
+			},
 			overrideDefaultErrorToast: true,
 			overrideDefaultSuccessToast: true,
 			selectedData,
+			type,
 		};
 
-		if (categorizationDTO?.taxonomyCategoryIds?.length) {
-			tasks.push(
-				new Promise((resolve, reject) => {
-					triggerAssetBulkAction({
-						...tasksTemplate,
-						keyValues: {
-							taxonomyCategoryIds:
-								categorizationDTO.taxonomyCategoryIds,
-						},
-						onCreateError: ({error}) => reject(error),
-						onCreateSuccess: (response) =>
-							response.error
-								? reject(response.error)
-								: resolve(response),
-						type: 'TaxonomyCategoryBulkAction',
-					} as IBulkActionTaskStarterDTO<'TaxonomyCategoryBulkAction'>);
-				})
-			);
+		if (type === 'TaxonomyCategoryBulkAction' &&
+			categorizationDTO?.taxonomyCategoryIds?.length) {
+
+			triggerAssetBulkAction({
+				...taskStarterDTO,
+				keyValues: {
+					append: selectedOperation === 'add',
+					taxonomyCategoryIds:
+						categorizationDTO.taxonomyCategoryIds,
+				},
+			} as IBulkActionTaskStarterDTO<'TaxonomyCategoryBulkAction'>);
 		}
 
-		if (categorizationDTO?.keywords?.length) {
-			tasks.push(
-				new Promise((resolve, reject) => {
-					triggerAssetBulkAction({
-						...tasksTemplate,
-						keyValues: {keywords: categorizationDTO.keywords},
-						onCreateError: ({error}) => reject(error),
-						onCreateSuccess: (response) =>
-							response.error
-								? reject(response.error)
-								: resolve(response),
-						type: 'KeywordBulkAction',
-					} as IBulkActionTaskStarterDTO<'KeywordBulkAction'>);
-				})
-			);
-		}
+		if (type === 'KeywordBulkAction' &&
+			categorizationDTO?.keywords?.length) {
 
-		try {
-			await Promise.all(tasks);
-
-			closeModal();
-		}
-		catch (error) {
-			setSubmitDisabled(false);
-
-			displayErrorToast(error as string);
+			triggerAssetBulkAction({
+				...taskStarterDTO,
+				keyValues: {
+					append: selectedOperation === 'add',
+					toAddTagNames: categorizationDTO.keywords,
+					toRemoveTagNames: categorizationDTO.keywords,
+				},
+			} as IBulkActionTaskStarterDTO<'KeywordBulkAction'>);
 		}
 	}, [
 		apiURL,
@@ -102,11 +106,27 @@ export default function CategoriesAndTagsModalContent({
 		setSubmitDisabled,
 	]);
 
+	const getCommonEntries = useCallback(() => {
+		/**
+		 * TODO
+		 * create service for /common endpoint as landing GET
+		 * for base keywords and categories (depending)
+		 */
+	}, []);
+
+	useEffect(() => {
+		getCommonEntries();
+	}, [getCommonEntries]);
+
 	const updateLocalObjectEntry = useCallback(
 		({
 			keywords,
 			lastAddedBrief,
 			taxonomyCategoryIds,
+			toAddCategoryIds,
+			toAddTagNames,
+			toRemoveCategoryIds,
+			toRemoveTagNames,
 		}: EntryCategorizationDTO): void => {
 			setCategorizationDTO(
 				({
@@ -128,6 +148,10 @@ export default function CategoriesAndTagsModalContent({
 					],
 					taxonomyCategoryIds:
 						taxonomyCategoryIds || currentTaxonomyCategoryIds,
+					toAddCategoryIds,
+					toAddTagNames,
+					toRemoveCategoryIds,
+					toRemoveTagNames,
 				})
 			);
 		},
@@ -139,23 +163,44 @@ export default function CategoriesAndTagsModalContent({
 			<ClayModal.Header
 				closeButtonAriaLabel={Liferay.Language.get('close')}
 			>
-				{Liferay.Language.get('add-categories-and-tags')}
+				{type === 'KeywordBulkAction'
+					? Liferay.Language.get('edit-tags')
+					: Liferay.Language.get('edit-categories')
+				}
 			</ClayModal.Header>
 
 			<ClayModal.Body>
-				<ClayAlert displayType="info" hideCloseIcon={true}>
-					{Liferay.Language.get(
-						'adding-categories-and-tags-will-preserve-the-ones-already-applied-to-the-currently-selected-assets'
-					)}
-				</ClayAlert>
+				<ClayRadioGroup
+					name="add-replace"
+					onChange={(value) => setSelectedOperation(value as string)}
+					value={selectedOperation}
+				>
+					<ClayRadio
+						checked={true}
+						label={Liferay.Language.get('edit')}
+						value="add"
+					>
+						<div className="form-text">
+							{Liferay.Language.get(
+								'add-new-categories-or-remove-common-categories'
+							)}
+						</div>
+					</ClayRadio>
 
-				<AssetCategories
-					cmsGroupId={cmsGroupId}
-					objectEntry={categorizationDTO}
-					updateObjectEntry={updateLocalObjectEntry}
-				/>
+					<ClayRadio
+						label={Liferay.Language.get('replace')}
+						value="replace"
+					>
+						<div className="form-text">
+							{Liferay.Language.get(
+								'these-categories-replace-all-existing-categories'
+							)}
+						</div>
+					</ClayRadio>
+				</ClayRadioGroup>
 
-				<AssetTags
+				<Component
+					collapsable={false}
 					cmsGroupId={cmsGroupId}
 					objectEntry={categorizationDTO}
 					updateObjectEntry={updateLocalObjectEntry}
@@ -186,13 +231,13 @@ export default function CategoriesAndTagsModalContent({
 						>
 							{selectedData.selectAll
 								? Liferay.Language.get('add-to-all-assets')
-								: selectedData?.items.length === 1
+								: selectedData?.items?.length === 1
 									? Liferay.Language.get('add-to-1-asset')
 									: sub(
 											Liferay.Language.get(
 												'add-to-x-assets'
 											),
-											selectedData?.items.length
+											selectedData?.items?.length
 										)}
 						</ClayButton>
 					</ClayButton.Group>

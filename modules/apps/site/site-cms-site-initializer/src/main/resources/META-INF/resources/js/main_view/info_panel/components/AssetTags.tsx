@@ -21,6 +21,7 @@ type TKeyword = {
 const AssetTags = ({
 	assetLibraryId,
 	cmsGroupId,
+	collapsable = true,
 	hasUpdatePermission,
 	inputSize,
 	objectEntry,
@@ -28,6 +29,7 @@ const AssetTags = ({
 }: {
 	assetLibraryId?: number | string | null | undefined;
 	cmsGroupId: number | string;
+	collapsable?: boolean;
 	hasUpdatePermission?: boolean;
 	inputSize?: CategorizationInputSize;
 	objectEntry: IAssetObjectEntry | EntryCategorizationDTO;
@@ -47,8 +49,11 @@ const AssetTags = ({
 
 			setKeywords((prevItems) => [...prevItems, keyword.name]);
 
+			const updated = [...keywords, keyword.name];
+
 			await updateObjectEntry({
-				keywords: [...keywords, keyword.name],
+				keywords: updated,
+				toAddTagNames: updated,
 			});
 		},
 		[keywords, updateObjectEntry]
@@ -75,6 +80,11 @@ const AssetTags = ({
 		async (keyword: string) => {
 			const newKeywords = keywords.filter((value) => value !== keyword);
 
+			/**
+			 * TODO track removed Tags for bulk
+			 * TODO and fill the key: toRemoveTagNames
+			 */
+
 			if (newKeywords.length < keywords.length) {
 				setKeywords(newKeywords);
 
@@ -88,7 +98,7 @@ const AssetTags = ({
 
 	return (
 		<ClayPanel
-			collapsable
+			collapsable={collapsable}
 			defaultExpanded={true}
 			displayTitle={
 				<ClayPanel.Title className="panel-title text-secondary">
@@ -96,7 +106,7 @@ const AssetTags = ({
 				</ClayPanel.Title>
 			}
 			displayType="unstyled"
-			showCollapseIcon={true}
+			showCollapseIcon={collapsable}
 		>
 			<ClayPanel.Body>
 				<ItemSelector<TKeyword>

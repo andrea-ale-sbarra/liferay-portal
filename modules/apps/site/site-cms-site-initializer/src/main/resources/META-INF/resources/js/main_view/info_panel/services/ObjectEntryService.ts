@@ -11,6 +11,10 @@ export type EntryCategorizationDTO = {
 	lastAddedBrief?: any;
 	taxonomyCategoryBriefs?: IAssetObjectEntry['taxonomyCategoryBriefs'];
 	taxonomyCategoryIds?: IAssetObjectEntry['taxonomyCategoryIds'];
+	toAddCategoryIds?: number[];
+	toRemoveCategoryIds?: number[];
+	toAddTagNames?: string[];
+	toRemoveTagNames?: string[];
 };
 
 async function getObjectEntry(
