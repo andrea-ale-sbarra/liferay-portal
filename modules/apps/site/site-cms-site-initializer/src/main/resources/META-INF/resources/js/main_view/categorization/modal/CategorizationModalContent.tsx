@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
+import {ClayRadio, ClayRadioGroup} from '@clayui/form';
 import ClayModal from '@clayui/modal';
 import {sub} from 'frontend-js-web';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -18,7 +18,6 @@ import AssetCategories from '../../info_panel/components/AssetCategories';
 import AssetTags from '../../info_panel/components/AssetTags';
 import {EntryCategorizationDTO} from '../../info_panel/services/ObjectEntryService';
 import {triggerAssetBulkAction} from '../../props_transformer/actions/triggerAssetBulkAction';
-import {ClayRadio, ClayRadioGroup} from "@clayui/form";
 
 export default function CategorizationModalContent({
 	apiURL,
@@ -42,9 +41,8 @@ export default function CategorizationModalContent({
 	const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
 	const [selectedOperation, setSelectedOperation] = useState<string>('add');
 
-	const Component = type === 'KeywordBulkAction'
-		? AssetTags
-		: AssetCategories;
+	const Component =
+		type === 'KeywordBulkAction' ? AssetTags : AssetCategories;
 
 	const doBulkSubmit = useCallback(async () => {
 		setSubmitDisabled(true);
@@ -73,28 +71,30 @@ export default function CategorizationModalContent({
 			type,
 		};
 
-		if (type === 'TaxonomyCategoryBulkAction' &&
-			categorizationDTO?.taxonomyCategoryIds?.length) {
-
+		if (
+			type === 'TaxonomyCategoryBulkAction' &&
+			categorizationDTO?.taxonomyCategoryIds?.length
+		) {
 			triggerAssetBulkAction({
 				...taskStarterDTO,
 				keyValues: {
 					append: selectedOperation === 'add',
-					taxonomyCategoryIds:
-						categorizationDTO.taxonomyCategoryIds,
+					toAddCategoryIds: categorizationDTO.toAddCategoryIds,
+					toRemoveCategoryIds: categorizationDTO.toRemoveCategoryIds,
 				},
 			} as IBulkActionTaskStarterDTO<'TaxonomyCategoryBulkAction'>);
 		}
 
-		if (type === 'KeywordBulkAction' &&
-			categorizationDTO?.keywords?.length) {
-
+		if (
+			type === 'KeywordBulkAction' &&
+			categorizationDTO?.keywords?.length
+		) {
 			triggerAssetBulkAction({
 				...taskStarterDTO,
 				keyValues: {
 					append: selectedOperation === 'add',
-					toAddTagNames: categorizationDTO.keywords,
-					toRemoveTagNames: categorizationDTO.keywords,
+					toAddTagNames: categorizationDTO.toAddTagNames,
+					toRemoveTagNames: categorizationDTO.toRemoveTagNames,
 				},
 			} as IBulkActionTaskStarterDTO<'KeywordBulkAction'>);
 		}
@@ -107,6 +107,7 @@ export default function CategorizationModalContent({
 	]);
 
 	const getCommonEntries = useCallback(() => {
+
 		/**
 		 * TODO
 		 * create service for /common endpoint as landing GET
@@ -165,8 +166,7 @@ export default function CategorizationModalContent({
 			>
 				{type === 'KeywordBulkAction'
 					? Liferay.Language.get('edit-tags')
-					: Liferay.Language.get('edit-categories')
-				}
+					: Liferay.Language.get('edit-categories')}
 			</ClayModal.Header>
 
 			<ClayModal.Body>
@@ -200,8 +200,8 @@ export default function CategorizationModalContent({
 				</ClayRadioGroup>
 
 				<Component
-					collapsable={false}
 					cmsGroupId={cmsGroupId}
+					collapsable={false}
 					objectEntry={categorizationDTO}
 					updateObjectEntry={updateLocalObjectEntry}
 				/>

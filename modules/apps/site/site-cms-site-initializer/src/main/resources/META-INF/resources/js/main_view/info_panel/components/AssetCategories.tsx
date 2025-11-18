@@ -84,7 +84,6 @@ const AssetCategories = ({
 				lastAddedBrief: item,
 				taxonomyCategoryIds: updated,
 				toAddCategoryIds: updated,
-
 			});
 		},
 		[groupedTaxonomies.taxonomyCategoryIds, updateObjectEntry]

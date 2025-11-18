@@ -25,6 +25,25 @@ public class SelectionScope implements Cloneable, Serializable {
 		return SelectionScopeSerDes.toDTO(json);
 	}
 
+	public Long getCmsId() {
+		return cmsId;
+	}
+
+	public void setCmsId(Long cmsId) {
+		this.cmsId = cmsId;
+	}
+
+	public void setCmsId(UnsafeSupplier<Long, Exception> cmsIdUnsafeSupplier) {
+		try {
+			cmsId = cmsIdUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Long cmsId;
+
 	public Long getFolderId() {
 		return folderId;
 	}

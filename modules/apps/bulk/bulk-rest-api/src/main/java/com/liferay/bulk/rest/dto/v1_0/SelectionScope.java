@@ -47,6 +47,45 @@ public class SelectionScope implements Serializable {
 	}
 
 	@io.swagger.v3.oas.annotations.media.Schema
+	public Long getCmsId() {
+		if (_cmsIdSupplier != null) {
+			cmsId = _cmsIdSupplier.get();
+
+			_cmsIdSupplier = null;
+		}
+
+		return cmsId;
+	}
+
+	public void setCmsId(Long cmsId) {
+		this.cmsId = cmsId;
+
+		_cmsIdSupplier = null;
+	}
+
+	@JsonIgnore
+	public void setCmsId(UnsafeSupplier<Long, Exception> cmsIdUnsafeSupplier) {
+		_cmsIdSupplier = () -> {
+			try {
+				return cmsIdUnsafeSupplier.get();
+			}
+			catch (RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected Long cmsId;
+
+	@JsonIgnore
+	private Supplier<Long> _cmsIdSupplier;
+
+	@io.swagger.v3.oas.annotations.media.Schema
 	public Long getFolderId() {
 		if (_folderIdSupplier != null) {
 			folderId = _folderIdSupplier.get();
@@ -195,6 +234,18 @@ public class SelectionScope implements Serializable {
 		StringBundler sb = new StringBundler();
 
 		sb.append("{");
+
+		Long cmsId = getCmsId();
+
+		if (cmsId != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"cmsId\": ");
+
+			sb.append(cmsId);
+		}
 
 		Long folderId = getFolderId();
 

@@ -46,6 +46,16 @@ public class SelectionScopeSerDes {
 
 		sb.append("{");
 
+		if (selectionScope.getCmsId() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"cmsId\": ");
+
+			sb.append(selectionScope.getCmsId());
+		}
+
 		if (selectionScope.getFolderId() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -95,6 +105,13 @@ public class SelectionScopeSerDes {
 
 		Map<String, String> map = new TreeMap<>();
 
+		if (selectionScope.getCmsId() == null) {
+			map.put("cmsId", null);
+		}
+		else {
+			map.put("cmsId", String.valueOf(selectionScope.getCmsId()));
+		}
+
 		if (selectionScope.getFolderId() == null) {
 			map.put("folderId", null);
 		}
@@ -136,7 +153,10 @@ public class SelectionScopeSerDes {
 
 		@Override
 		protected boolean parseMaps(String jsonParserFieldName) {
-			if (Objects.equals(jsonParserFieldName, "folderId")) {
+			if (Objects.equals(jsonParserFieldName, "cmsId")) {
+				return false;
+			}
+			else if (Objects.equals(jsonParserFieldName, "folderId")) {
 				return false;
 			}
 			else if (Objects.equals(jsonParserFieldName, "repositoryId")) {
@@ -154,7 +174,13 @@ public class SelectionScopeSerDes {
 			SelectionScope selectionScope, String jsonParserFieldName,
 			Object jsonParserFieldValue) {
 
-			if (Objects.equals(jsonParserFieldName, "folderId")) {
+			if (Objects.equals(jsonParserFieldName, "cmsId")) {
+				if (jsonParserFieldValue != null) {
+					selectionScope.setCmsId(
+						Long.valueOf((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "folderId")) {
 				if (jsonParserFieldValue != null) {
 					selectionScope.setFolderId(
 						Long.valueOf((String)jsonParserFieldValue));

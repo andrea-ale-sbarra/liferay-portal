@@ -27,9 +27,14 @@ import java.util.TreeMap;
 @Generated("")
 public abstract class BaseJSONParser<T> {
 
-	public static final String[][] JSON_ESCAPE_STRINGS = new String[][] {
-		{"\\", "\\\\"}, {"\"", "\\\""}, {"\b", "\\b"}, {"\f", "\\f"},
-		{"\n", "\\n"}, {"\r", "\\r"}, {"\t", "\\t"}
+	public static final String[][] JSON_ESCAPE_STRINGS = new String[][]{
+		{"\\", "\\\\"},
+		{"\"", "\\\""},
+		{"\b", "\\b"},
+		{"\f", "\\f"},
+		{"\n", "\\n"},
+		{"\r", "\\r"},
+		{"\t", "\\t"}
 	};
 
 	public T parseToDTO(String json) {
@@ -59,8 +64,7 @@ public abstract class BaseJSONParser<T> {
 			if (!_isEndOfJSON()) {
 				_readNextChar();
 
-				throw new IllegalArgumentException(
-					"Expected end of JSON, but found '" + _lastChar + "'");
+				throw new IllegalArgumentException("Expected end of JSON, but found '" + _lastChar + "'");
 			}
 
 			return dto;
@@ -169,8 +173,7 @@ public abstract class BaseJSONParser<T> {
 		_readWhileLastCharIsWhiteSpace();
 
 		if (!_ifLastCharMatchesThenRead('}')) {
-			throw new IllegalArgumentException(
-				"Expected either ',' or '}', but found '" + _lastChar + "'");
+			throw new IllegalArgumentException("Expected either ',' or '}', but found '" + _lastChar + "'");
 		}
 
 		return map;
@@ -182,8 +185,7 @@ public abstract class BaseJSONParser<T> {
 
 	protected abstract boolean parseMaps(String jsonParserFieldName);
 
-	protected abstract void setField(
-		T dto, String jsonParserFieldName, Object jsonParserFieldValue);
+	protected abstract void setField(T dto, String jsonParserFieldName, Object jsonParserFieldValue);
 
 	protected BigDecimal[] toBigDecimals(Object[] objects) {
 		BigDecimal[] bigdecimals = new BigDecimal[objects.length];
@@ -200,8 +202,7 @@ public abstract class BaseJSONParser<T> {
 			return _dateFormat.parse(string);
 		}
 		catch (ParseException pe) {
-			throw new IllegalArgumentException(
-				"Unable to parse date from " + string, pe);
+			throw new IllegalArgumentException("Unable to parse date from " + string, pe);
 		}
 	}
 
@@ -252,24 +253,17 @@ public abstract class BaseJSONParser<T> {
 	private void _assertLastChar(char c) {
 		if (_lastChar != c) {
 			throw new IllegalArgumentException(
-				String.format(
-					"Expected last char '%s', but found '%s'", c, _lastChar));
+				String.format("Expected last char '%s', but found '%s'", c, _lastChar));
 		}
 	}
 
 	private void _assertStartsWithAndEndsWith(String prefix, String sufix) {
 		if (!_json.startsWith(prefix)) {
-			throw new IllegalArgumentException(
-				String.format(
-					"Expected starts with '%s', but found '%s' in '%s'", prefix,
-					_json.charAt(0), _json));
+			throw new IllegalArgumentException(String.format("Expected starts with '%s', but found '%s' in '%s'", prefix, _json.charAt(0), _json));
 		}
 
 		if (!_json.endsWith(sufix)) {
-			throw new IllegalArgumentException(
-				String.format(
-					"Expected ends with '%s', but found '%s' in '%s'", sufix,
-					_json.charAt(_json.length() - 1), _json));
+			throw new IllegalArgumentException(String.format("Expected ends with '%s', but found '%s' in '%s'", sufix, _json.charAt(_json.length() - 1), _json));
 		}
 	}
 
@@ -405,7 +399,7 @@ public abstract class BaseJSONParser<T> {
 		else if (_lastChar == '"') {
 			return _readValueAsString();
 		}
-		else if (parseMaps && (_lastChar == '{')) {
+		else if (parseMaps && _lastChar == '{') {
 			try {
 				Class<? extends BaseJSONParser> clazz = getClass();
 
@@ -414,20 +408,13 @@ public abstract class BaseJSONParser<T> {
 				return baseJSONParser.parseToMap(_readValueAsStringJSON());
 			}
 			catch (Exception e) {
-				throw new IllegalArgumentException(
-					"Expected JSON object or map");
+				throw new IllegalArgumentException("Expected JSON object or map");
 			}
 		}
 		else if (_lastChar == '{') {
 			return _readValueAsStringJSON();
 		}
-		else if ((_lastChar == '-') || (_lastChar == '0') ||
-				 (_lastChar == '1') || (_lastChar == '2') ||
-				 (_lastChar == '3') || (_lastChar == '4') ||
-				 (_lastChar == '5') || (_lastChar == '6') ||
-				 (_lastChar == '7') || (_lastChar == '8') ||
-				 (_lastChar == '9')) {
-
+		else if ((_lastChar == '-') || (_lastChar == '0') || (_lastChar == '1') || (_lastChar == '2') || (_lastChar == '3') || (_lastChar == '4') || (_lastChar == '5') || (_lastChar == '6') || (_lastChar == '7') || (_lastChar == '8') || (_lastChar == '9')) {
 			return _readValueAsStringNumber();
 		}
 		else {
@@ -458,8 +445,7 @@ public abstract class BaseJSONParser<T> {
 		while (_ifLastCharMatchesThenRead(','));
 
 		if (!_isLastChar(']')) {
-			throw new IllegalArgumentException(
-				"Expected ']', but found '" + _lastChar + "'");
+			throw new IllegalArgumentException("Expected ']', but found '" + _lastChar + "'");
 		}
 
 		_readNextChar();
@@ -582,8 +568,7 @@ public abstract class BaseJSONParser<T> {
 		_readWhileLastCharIsWhiteSpace();
 
 		if (!_ifLastCharMatchesThenRead('}')) {
-			throw new IllegalArgumentException(
-				"Expected either ',' or '}', but found '" + _lastChar + "'");
+			throw new IllegalArgumentException("Expected either ',' or '}', but found '" + _lastChar + "'");
 		}
 
 		return _getCapturedJSONSubstring();
@@ -597,15 +582,13 @@ public abstract class BaseJSONParser<T> {
 		}
 		while (_isLastCharDigit() || _isLastCharDecimalSeparator() ||
 			   _isLastCharNegative() || _isLastCharPositive() ||
-			   _isLastCharScientificNotation());
+				_isLastCharScientificNotation());
 
 		return _getCapturedSubstring();
 	}
 
 	private void _readWhileLastCharIsWhiteSpace() {
-		while ((_lastChar == ' ') || (_lastChar == '\n') ||
-			   (_lastChar == '\r') || (_lastChar == '\t')) {
-
+		while ((_lastChar == ' ') || (_lastChar == '\n') || (_lastChar == '\r') || (_lastChar == '\t')) {
 			_readNextChar();
 		}
 	}
@@ -622,16 +605,12 @@ public abstract class BaseJSONParser<T> {
 
 			while (index != -1) {
 				if (!_isCharEscaped(string, index)) {
-					string =
-						string.substring(0, index) + escapeStrings[0] +
-							string.substring(index + escapeStrings[1].length());
+					string = string.substring(0, index) + escapeStrings[0] + string.substring(index + escapeStrings[1].length());
 
-					index = string.indexOf(
-						escapeStrings[1], index + escapeStrings[0].length());
+					index = string.indexOf(escapeStrings[1], index + escapeStrings[0].length());
 				}
 				else {
-					index = string.indexOf(
-						escapeStrings[1], index + escapeStrings[1].length());
+					index = string.indexOf(escapeStrings[1], index + escapeStrings[1].length());
 				}
 			}
 		}
