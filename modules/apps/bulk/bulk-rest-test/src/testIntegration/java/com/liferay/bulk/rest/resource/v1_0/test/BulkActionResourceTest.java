@@ -383,7 +383,7 @@ public class BulkActionResourceTest extends BaseBulkActionResourceTestCase {
 			_serviceContext);
 
 		_testPostBulkActionItemPreviewPageWithBulkActionItems(
-			bulkAction, expectedDeletionType, 2L, objectEntry,
+			bulkAction, expectedDeletionType, 1L, objectEntry,
 			objectEntryFolder1);
 
 		ObjectEntryFolder objectEntryFolder2 = _addObjectEntryFolder(
