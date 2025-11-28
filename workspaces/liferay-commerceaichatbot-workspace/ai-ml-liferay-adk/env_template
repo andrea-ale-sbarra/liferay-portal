@@ -1,0 +1,25 @@
+# Google AI API Configuration
+# Get your API key from: https://makersuite.google.com/app/apikey
+GOOGLE_API_KEY=your-api-key
+
+# Alternative: Google Cloud Vertex AI Configuration
+# Uncomment these if using Google Cloud instead of API key
+GOOGLE_CLOUD_PROJECT=dark-yen-467614-d8
+GOOGLE_CLOUD_LOCATION=us-central1
+GOOGLE_CLOUD_STORAGE_BUCKET=liferay-adk-staging
+GOOGLE_GENAI_USE_VERTEXAI=True
+
+# Liferay API Configuration
+LIFERAY_BASE_URL=https://webserver-lct66degrees-uat.lfr.cloud/
+LIFERAY_USERNAME=test@liferay.com
+LIFERAY_PASSWORD=3tcEDmFlp84LgAUeuEZAy00ED0S5FT
+
+# Optional: Custom API configuration
+LIFERAY_API_VERSION=v1.0
+LIFERAY_TIMEOUT=30
+
+# Optional: Advanced model configuration
+GEN_FAST_MODEL=gemini-2.0-flash
+GEN_ADVANCED_MODEL=gemini-2.0-flash
+LIFERAY_SSL_VERIFY=False
+REASONING_ENGINE_ID=your-reasoning-engine-id-after-agent-engine-deployment

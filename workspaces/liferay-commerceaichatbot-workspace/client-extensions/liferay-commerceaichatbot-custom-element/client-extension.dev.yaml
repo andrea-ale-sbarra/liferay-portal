@@ -1,0 +1,10 @@
+liferay-commerceaichatbot-custom-element-app:
+    urls:
+        -   http://localhost:5173/@vite/client
+        -   http://localhost:5173/@vite/refresh.ts
+        -   http://localhost:5173/src/main.tsx
+liferay-commerceaichatbot-custom-element-settings:
+    urls:
+        -   http://localhost:5173/@vite/client
+        -   http://localhost:5173/@vite/refresh.ts
+        -   http://localhost:5173/src/main.tsx

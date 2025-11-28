@@ -1,0 +1,33 @@
+assemble:
+    -   from: build/vite
+        into: static
+liferay-commerceaichatbot-custom-element-app:
+    cssURLs:
+        -   "**/index*.css"
+    friendlyURLMapping: liferay-commerceaichatbot-custom-element
+    htmlElementName: liferay-commerceaichatbot-custom-element
+    instanceable: false
+    name: Liferay Commerce AI Chat Bot
+    portletCategoryName: category.client-extensions
+    properties:
+        route: app
+    type: customElement
+    urls:
+        -   "main.js"
+    useESM: true
+liferay-commerceaichatbot-custom-element-settings:
+    cssURLs:
+        -   "**/index*.css"
+    friendlyURLMapping: liferay-commerceaichatbot-custom-element
+    htmlElementName: liferay-commerceaichatbot-custom-element
+    instanceable: false
+    name: Liferay Commerce AI Chat Bot Settings
+    panelAppOrder: 700
+    panelCategoryKey: applications_menu.applications.custom.apps
+    portletCategoryName: category.client-extensions
+    properties:
+        route: settings
+    type: customElement
+    urls:
+        -   "main.js"
+    useESM: true

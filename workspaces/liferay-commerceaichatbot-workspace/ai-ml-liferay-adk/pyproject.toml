@@ -1,0 +1,90 @@
+[project]
+name = "ai-ml-liferay-adk"
+version = "0.1.0"
+description = "Liferay Customer Service Agent built with Google ADK for order inquiries and customer support"
+authors = [
+    {name = "William Cox", email = "william.cox@66degrees.com"}
+]
+license = {text = "Apache-2.0"}
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "google-adk>=1.10.0",
+    "google-genai>=0.5.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "typing-extensions>=4.5.0",
+    "absl-py>=2.2.1",
+    "deprecated>=1.2.0",
+    "google-cloud-aiplatform[agent_engines]>=1.91.0,!=1.92.0",
+    "pydantic>=2.10.6,<3.0.0",
+    "cloudpickle==3.1.1",
+    "python-dateutil>=2.8.2",
+    "urllib3>=2.0.0",
+    "certifi>=2023.7.22"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0"
+]
+
+[project.scripts]
+liferay-agent = "LiferayAgent.agent:main"
+setup-credentials = "LiferayAgent.setup_credentials:main"
+test-liferay-client = "LiferayAgent.liferay_client:main"
+deploy-agent = "deployment.deploy:main"
+test-deployed-agent = "deployment.test_deploy:main"
+
+[tool.poetry]
+packages = [
+    {include = "LiferayAgent"}
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
