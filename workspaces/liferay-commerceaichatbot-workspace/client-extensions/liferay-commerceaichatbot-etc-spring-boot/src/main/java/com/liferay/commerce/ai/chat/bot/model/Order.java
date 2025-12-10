@@ -1,4 +1,11 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.commerce.ai.chat.bot.model;
+
+import com.liferay.petra.string.StringBundler;
 
 import java.time.OffsetDateTime;
 
@@ -6,163 +13,217 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * @author Ivica Cardic
+ */
 public class Order {
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
+		}
 
-		if ((o == null) || (getClass() != o.getClass()))
-
+		if ((object == null) || (getClass() != object.getClass())) {
 			return false;
-		Order order = (Order)o;
+		}
 
-		return Objects.equals(id, order.id);
-	}
+		Order order = (Order)object;
 
-	public Map<String, String> getBillingAddress() {
-		return billingAddress;
+		return Objects.equals(_id, order.getId());
 	}
 
 	public String getAccountId() {
-		return accountId;
+		return _accountId;
 	}
 
 	public String getAccountName() {
-		return accountName;
+		return _accountName;
+	}
+
+	public Map<String, String> getBillingAddress() {
+		return _billingAddress;
+	}
+
+	public String getCreateDate() {
+		return _createDate;
+	}
+
+	public String getExternalReferenceCode() {
+		return _externalReferenceCode;
 	}
 
 	public String getId() {
-		return id;
+		return _id;
+	}
+
+	public int getItemsQuantity() {
+		return _itemsQuantity;
 	}
 
 	public OffsetDateTime getOrderDate() {
-		return orderDate;
+		return _orderDate;
 	}
 
 	public String getOrderNumber() {
-		return orderNumber;
+		return _orderNumber;
 	}
 
 	public Map<String, String> getShippingAddress() {
-		return shippingAddress;
+		return _shippingAddress;
+	}
+
+	public String getShippingDiscountValueFormatted() {
+		return _shippingDiscountValueFormatted;
+	}
+
+	public String getShippingValueFormatted() {
+		return _shippingValueFormatted;
 	}
 
 	public String getStatus() {
-		return status;
+		return _status;
+	}
+
+	public String getStatusCode() {
+		return _statusCode;
+	}
+
+	public String getStatusLabel() {
+		return _statusLabel;
+	}
+
+	public String getSubtotalFormatted() {
+		return _subtotalFormatted;
+	}
+
+	public String getTaxValueFormatted() {
+		return _taxValueFormatted;
 	}
 
 	public double getTotal() {
-		return total;
+		return _total;
+	}
+
+	public String getTotalFormatted() {
+		return _totalFormatted;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	public void setBillingAddress(Map<String, String> billingAddress) {
-		this.billingAddress =
-			billingAddress != null ? new HashMap<>(billingAddress) :
-				new HashMap<>();
+		return Objects.hash(_id);
 	}
 
 	public void setAccountId(String accountId) {
-		this.accountId = accountId;
+		_accountId = accountId;
 	}
 
 	public void setAccountName(String accountName) {
-		this.accountName = accountName;
+		_accountName = accountName;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public void setOrderDate(OffsetDateTime orderDate) {
-		this.orderDate = orderDate;
-	}
-
-	public void setOrderNumber(String orderNumber) {
-		this.orderNumber = orderNumber;
-	}
-
-	public void setShippingAddress(Map<String, String> shippingAddress) {
-		this.shippingAddress =
-			shippingAddress != null ? new HashMap<>(shippingAddress) :
+	public void setBillingAddress(Map<String, String> billingAddress) {
+		_billingAddress =
+			(billingAddress != null) ? new HashMap<>(billingAddress) :
 				new HashMap<>();
 	}
 
+	public void setCreateDate(String createDate) {
+		_createDate = createDate;
+	}
+
+	public void setExternalReferenceCode(String externalReferenceCode) {
+		_externalReferenceCode = externalReferenceCode;
+	}
+
+	public void setId(String id) {
+		_id = id;
+	}
+
+	public void setItemsQuantity(int itemsQuantity) {
+		_itemsQuantity = itemsQuantity;
+	}
+
+	public void setOrderDate(OffsetDateTime orderDate) {
+		_orderDate = orderDate;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		_orderNumber = orderNumber;
+	}
+
+	public void setShippingAddress(Map<String, String> shippingAddress) {
+		_billingAddress =
+			(shippingAddress != null) ? new HashMap<>(shippingAddress) :
+				new HashMap<>();
+	}
+
+	public void setShippingDiscountValueFormatted(
+		String shippingDiscountValueFormatted) {
+
+		_shippingDiscountValueFormatted = shippingDiscountValueFormatted;
+	}
+
+	public void setShippingValueFormatted(String shippingValueFormatted) {
+		_shippingValueFormatted = shippingValueFormatted;
+	}
+
 	public void setStatus(String status) {
-		this.status = status;
+		_status = status;
+	}
+
+	public void setStatusCode(String statusCode) {
+		_statusCode = statusCode;
+	}
+
+	public void setStatusLabel(String statusLabel) {
+		_statusLabel = statusLabel;
+	}
+
+	public void setSubtotalFormatted(String subtotalFormatted) {
+		_subtotalFormatted = subtotalFormatted;
+	}
+
+	public void setTaxValueFormatted(String taxValueFormatted) {
+		_taxValueFormatted = taxValueFormatted;
 	}
 
 	public void setTotal(double total) {
-		this.total = total;
+		_total = total;
+	}
+
+	public void setTotalFormatted(String totalFormatted) {
+		_totalFormatted = totalFormatted;
 	}
 
 	@Override
 	public String toString() {
-		return "Order{" + "id='" + id + '\'' + ", orderNumber='" + orderNumber +
-			'\'' + ", customerId='" + accountId + '\'' + ", customerName='" +
-			accountName + '\'' + ", orderDate=" + orderDate +
-					", status='" + status + '\'' + ", total=" +
-			total +
-							", shippingAddress=" + shippingAddress +
-								", billingAddress=" + billingAddress + '}';
+		return StringBundler.concat(
+			"Order{id='", _id, "\', orderNumber='", _orderNumber,
+			"\', customerId='", _accountId, "\', customerName='", _accountName,
+			"\', orderDate=", _orderDate, ", status='", _status, "\', total=",
+			_total, ", shippingAddress=", _shippingAddress, ", billingAddress=",
+			_billingAddress, '}');
 	}
 
-	// --- Extra fields merged from former OrderDetails DTO ---
-	public String getCreateDate() { return createDate; }
-	public void setCreateDate(String createDate) { this.createDate = createDate; }
-	public String getStatusLabel() { return statusLabel; }
-	public void setStatusLabel(String statusLabel) { this.statusLabel = statusLabel; }
-	public String getStatusCode() { return statusCode; }
-	public void setStatusCode(String statusCode) { this.statusCode = statusCode; }
-	public String getTotalFormatted() { return totalFormatted; }
-	public void setTotalFormatted(String totalFormatted) { this.totalFormatted = totalFormatted; }
-	public String getExternalReferenceCode() { return externalReferenceCode; }
-	public void setExternalReferenceCode(String externalReferenceCode) { this.externalReferenceCode = externalReferenceCode; }
+	private String _accountId;
+	private String _accountName;
+	private Map<String, String> _billingAddress = new HashMap<>();
+	private String _createDate;
+	private String _externalReferenceCode;
+	private String _id;
+	private int _itemsQuantity;
+	private OffsetDateTime _orderDate;
+	private String _orderNumber;
+	private final Map<String, String> _shippingAddress = new HashMap<>();
+	private String _shippingDiscountValueFormatted;
+	private String _shippingValueFormatted;
+	private String _status;
+	private String _statusCode;
+	private String _statusLabel;
+	private String _subtotalFormatted;
+	private String _taxValueFormatted;
+	private double _total;
+	private String _totalFormatted;
 
-	// --- New summary formatted fields to avoid JSONObject usage ---
-	public String getSubtotalFormatted() { return subtotalFormatted; }
-	public void setSubtotalFormatted(String subtotalFormatted) { this.subtotalFormatted = subtotalFormatted; }
-	public String getShippingValueFormatted() { return shippingValueFormatted; }
-	public void setShippingValueFormatted(String shippingValueFormatted) { this.shippingValueFormatted = shippingValueFormatted; }
-	public String getShippingDiscountValueFormatted() { return shippingDiscountValueFormatted; }
-	public void setShippingDiscountValueFormatted(String shippingDiscountValueFormatted) { this.shippingDiscountValueFormatted = shippingDiscountValueFormatted; }
-	public String getTaxValueFormatted() { return taxValueFormatted; }
-	public void setTaxValueFormatted(String taxValueFormatted) { this.taxValueFormatted = taxValueFormatted; }
-
-	public int getItemsQuantity() {
-		return itemsQuantity;
-	}
-
-	public void setItemsQuantity(int itemsQuantity) {
-		this.itemsQuantity = itemsQuantity;
-	}
-
-	private Map<String, String> billingAddress = new HashMap<>();
-	private String accountId;
-	private String accountName;
-	private String id;
-	private OffsetDateTime orderDate;
-	private String orderNumber;
-	private Map<String, String> shippingAddress = new HashMap<>();
-	private String status;
-	private double total;
-	private int itemsQuantity;
-
-	// Former OrderDetails fields
-	private String createDate; // ISO string for display/sorting
-	private String statusLabel; // orderStatusInfo.label
-	private String statusCode;  // orderStatusInfo.code
-	private String totalFormatted; // summary.totalFormatted or totalFormatted
-	private String externalReferenceCode; // externalReferenceCode
-	private String subtotalFormatted; // summary.subtotalFormatted
-	private String shippingValueFormatted; // summary.shippingValueFormatted
-	private String shippingDiscountValueFormatted; // summary.shippingDiscountValueFormatted
-	private String taxValueFormatted; // summary.taxValueFormatted
 }

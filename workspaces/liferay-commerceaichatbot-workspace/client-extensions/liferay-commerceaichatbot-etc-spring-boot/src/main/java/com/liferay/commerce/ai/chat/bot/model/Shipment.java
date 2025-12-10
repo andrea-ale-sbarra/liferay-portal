@@ -1,7 +1,17 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.commerce.ai.chat.bot.model;
+
+import com.liferay.petra.string.StringBundler;
 
 import java.util.Objects;
 
+/**
+ * @author Ivica Cardic
+ */
 public class Shipment {
 
 	public Shipment() {
@@ -11,121 +21,125 @@ public class Shipment {
 		String id, String carrier, String trackingNumber,
 		String shipmentStatus) {
 
-		this.id = id;
-		this.carrier = carrier;
-		this.trackingNumber = trackingNumber;
-		this.shipmentStatus = shipmentStatus;
+		_id = id;
+		_carrier = carrier;
+		_trackingNumber = trackingNumber;
+		_shipmentStatus = shipmentStatus;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
+		}
 
-		if ((o == null) || (getClass() != o.getClass()))
-
+		if ((object == null) || (getClass() != object.getClass())) {
 			return false;
-		Shipment shipment = (Shipment)o;
+		}
 
-		return Objects.equals(id, shipment.id);
+		Shipment shipment = (Shipment)object;
+
+		return Objects.equals(_id, shipment.getId());
 	}
 
 	public String getCarrier() {
-		return carrier;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public String getShipmentStatus() {
-		return shipmentStatus;
-	}
-
-	public String getTrackingNumber() {
-		return trackingNumber;
-	}
-
-	public String getOneLineAddress() {
-		return oneLineAddress;
-	}
-
-	public String getShippingDate() {
-		return shippingDate;
+		return _carrier;
 	}
 
 	public String getExpectedDate() {
-		return expectedDate;
+		return _expectedDate;
+	}
+
+	public String getId() {
+		return _id;
+	}
+
+	public String getOneLineAddress() {
+		return _oneLineAddress;
+	}
+
+	public String getShipmentStatus() {
+		return _shipmentStatus;
+	}
+
+	public String getShippingDate() {
+		return _shippingDate;
 	}
 
 	public Status getStatus() {
-		return status;
+		return _status;
+	}
+
+	public String getTrackingNumber() {
+		return _trackingNumber;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(_id);
 	}
 
 	public void setCarrier(String carrier) {
-		this.carrier = carrier;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public void setShipmentStatus(String shipmentStatus) {
-		this.shipmentStatus = shipmentStatus;
-	}
-
-	public void setTrackingNumber(String trackingNumber) {
-		this.trackingNumber = trackingNumber;
-	}
-
-	public void setOneLineAddress(String oneLineAddress) {
-		this.oneLineAddress = oneLineAddress;
-	}
-
-	public void setShippingDate(String shippingDate) {
-		this.shippingDate = shippingDate;
+		_carrier = carrier;
 	}
 
 	public void setExpectedDate(String expectedDate) {
-		this.expectedDate = expectedDate;
+		_expectedDate = expectedDate;
+	}
+
+	public void setId(String id) {
+		_id = id;
+	}
+
+	public void setOneLineAddress(String oneLineAddress) {
+		_oneLineAddress = oneLineAddress;
+	}
+
+	public void setShipmentStatus(String shipmentStatus) {
+		_shipmentStatus = shipmentStatus;
+	}
+
+	public void setShippingDate(String shippingDate) {
+		_shippingDate = shippingDate;
 	}
 
 	public void setStatus(Status status) {
-		this.status = status;
+		_status = status;
+	}
+
+	public void setTrackingNumber(String trackingNumber) {
+		_trackingNumber = trackingNumber;
 	}
 
 	@Override
 	public String toString() {
-		return "Shipment{" + "id='" + id + '\'' + ", carrier='" + carrier +
-			'\'' + ", trackingNumber='" + trackingNumber + '\'' +
-				", shipmentStatus='" + shipmentStatus + '\'' + '}';
+		return StringBundler.concat(
+			"Shipment{id='", _id, "\', carrier='", _carrier,
+			"\', trackingNumber='", _trackingNumber, "\', shipmentStatus='",
+			_shipmentStatus, "\'}");
 	}
 
-	private String carrier;
-	private String id;
-	private String shipmentStatus;
-	private String trackingNumber;
-	private String oneLineAddress;
-	private String shippingDate;
-	private String expectedDate;
-	private Status status;
-
 	public static class Status {
-		private String label;
 
 		public String getLabel() {
-			return label;
+			return _label;
 		}
 
 		public void setLabel(String label) {
-			this.label = label;
+			_label = label;
 		}
+
+		private String _label;
+
 	}
+
+	private String _carrier;
+	private String _expectedDate;
+	private String _id;
+	private String _oneLineAddress;
+	private String _shipmentStatus;
+	private String _shippingDate;
+	private Status _status;
+	private String _trackingNumber;
 
 }

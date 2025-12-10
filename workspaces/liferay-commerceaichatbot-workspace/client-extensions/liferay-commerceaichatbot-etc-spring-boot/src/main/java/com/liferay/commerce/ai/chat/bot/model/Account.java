@@ -1,81 +1,91 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.commerce.ai.chat.bot.model;
 
-import org.apache.commons.lang3.StringUtils;
+import com.liferay.petra.string.StringBundler;
 
 import java.util.Objects;
 
+/**
+ * @author Ivica Cardic
+ */
 public class Account {
 
 	public Account() {
 	}
 
 	public Account(String id, String name, String type, String status) {
-		this.id = id;
-		this.name = name;
-		this.type = type;
-		this.status = status;
+		_id = id;
+		_name = name;
+		_type = type;
+		_status = status;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
+		}
 
-		if ((o == null) || (getClass() != o.getClass()))
-
+		if ((object == null) || (getClass() != object.getClass())) {
 			return false;
-		Account account = (Account)o;
+		}
 
-		return Objects.equals(id, account.id);
+		Account account = (Account)object;
+
+		return Objects.equals(_id, account.getId());
 	}
 
 	public String getId() {
-		return id;
+		return _id;
 	}
 
 	public String getName() {
-		return name;
+		return _name;
 	}
 
 	public String getStatus() {
-		return status;
+		return _status;
 	}
 
 	public String getType() {
-		return type;
+		return _type;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(_id);
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		_id = id;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		_name = name;
 	}
 
 	public void setStatus(String status) {
-		this.status = status;
+		_status = status;
 	}
 
 	public void setType(String type) {
-		this.type = type;
+		_type = type;
 	}
 
 	@Override
 	public String toString() {
-		return "Account{" + "id='" + id + '\'' + ", name='" + name + '\'' +
-			", type='" + type + '\'' + ", status='" + status + '\'' + '}';
+		return StringBundler.concat(
+			"Account{id='", _id, "\', name='", _name, "\', type='", _type,
+			"\', status='", _status, "\'}");
 	}
 
-	private String id;
-	private String name;
-	private String status;
-	private String type;
+	private String _id;
+	private String _name;
+	private String _status;
+	private String _type;
 
 }

@@ -3,9 +3,9 @@
 }
 
 .ai-parent-modal .modal-dialog {
+	bottom: 60px;
 	position: absolute !important;
 	right: 20px;
-	bottom: 60px;
 }
 
 .cursor-pointer {
@@ -67,9 +67,9 @@
 }
 
 #AIButton {
+	bottom: 20px;
 	position: absolute;
 	right: 0;
-	bottom: 20px;
 }
 
 #AIButton .button-wrapper {

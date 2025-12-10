@@ -17,6 +17,7 @@ import com.liferay.client.extension.util.spring.boot3.BaseRestController;
 import com.liferay.commerce.ai.chat.bot.model.Settings;
 import com.liferay.commerce.ai.chat.bot.service.SettingsService;
 import com.liferay.commerce.ai.chat.bot.tools.CommerceTools;
+import com.liferay.portal.kernel.util.StringBundler;
 
 import java.util.stream.Collectors;
 
@@ -54,42 +55,50 @@ public class AIRestController extends BaseRestController {
 		JSONObject jsonObject = new JSONObject(json);
 
 		// Register CommerceTools methods as FunctionTools
-		FunctionTool listChannelsAccountsTool = FunctionTool.create(_commerceTools, "listAvailableChannelsAndAccountsTool");
-		FunctionTool findOrderTool = FunctionTool.create(_commerceTools, "findOrderTool");
-		FunctionTool searchOrdersTool = FunctionTool.create(_commerceTools, "searchOrdersTool");
-		FunctionTool searchOrdersByDateRangeTool = FunctionTool.create(_commerceTools, "searchOrdersByDateRangeTool");
-		FunctionTool searchOrdersByProductTool = FunctionTool.create(_commerceTools, "searchOrdersByProductTool");
-		FunctionTool searchOrdersByStatusTool = FunctionTool.create(_commerceTools, "searchOrdersByStatusTool");
-		FunctionTool searchOrdersByShippingAddressTool = FunctionTool.create(_commerceTools, "searchOrdersByShippingAddressTool");
-		FunctionTool getCustomerOrdersTool = FunctionTool.create(_commerceTools, "getCustomerOrdersTool");
-		FunctionTool getTestEmailsTool = FunctionTool.create(_commerceTools, "getTestEmailsTool");
-		FunctionTool getOrderItemsTool = FunctionTool.create(_commerceTools, "getOrderItemsTool");
-		FunctionTool getOrderShippingTool = FunctionTool.create(_commerceTools, "getOrderShippingTool");
-		FunctionTool getAllAccountsOrderSummaryTool = FunctionTool.create(_commerceTools, "getAllAccountsOrderSummaryTool");
-		FunctionTool getFaqInformationTool = FunctionTool.create(_commerceTools, "getFaqInformationTool");
+
+		FunctionTool listChannelsAccountsTool = FunctionTool.create(
+			_commerceTools, "listAvailableChannelsAndAccountsTool");
+		FunctionTool findOrderTool = FunctionTool.create(
+			_commerceTools, "findOrderTool");
+		FunctionTool searchOrdersTool = FunctionTool.create(
+			_commerceTools, "searchOrdersTool");
+		FunctionTool searchOrdersByDateRangeTool = FunctionTool.create(
+			_commerceTools, "searchOrdersByDateRangeTool");
+		FunctionTool searchOrdersByProductTool = FunctionTool.create(
+			_commerceTools, "searchOrdersByProductTool");
+		FunctionTool searchOrdersByStatusTool = FunctionTool.create(
+			_commerceTools, "searchOrdersByStatusTool");
+		FunctionTool searchOrdersByShippingAddressTool = FunctionTool.create(
+			_commerceTools, "searchOrdersByShippingAddressTool");
+		FunctionTool getCustomerOrdersTool = FunctionTool.create(
+			_commerceTools, "getCustomerOrdersTool");
+		FunctionTool getTestEmailsTool = FunctionTool.create(
+			_commerceTools, "getTestEmailsTool");
+		FunctionTool getOrderItemsTool = FunctionTool.create(
+			_commerceTools, "getOrderItemsTool");
+		FunctionTool getOrderShippingTool = FunctionTool.create(
+			_commerceTools, "getOrderShippingTool");
+		FunctionTool getAllAccountsOrderSummaryTool = FunctionTool.create(
+			_commerceTools, "getAllAccountsOrderSummaryTool");
+		FunctionTool getFaqInformationTool = FunctionTool.create(
+			_commerceTools, "getFaqInformationTool");
 
 		LlmAgent rootAgent = LlmAgent.builder(
 		).name(
 			"commerce_assistant"
 		).description(
-			"A professional customer service representative for a Liferay Commerce platform."
+			"A professional customer service representative for a Liferay " +
+				"Commerce platform."
 		).model(
 			new Gemini(settings.modelName, settings.apiKey)
 		).instruction(
-			INSTRUCTION
+			_INSTRUCTION
 		).tools(
-			listChannelsAccountsTool,
-			findOrderTool,
-			searchOrdersTool,
-			searchOrdersByDateRangeTool,
-			searchOrdersByProductTool,
-			searchOrdersByStatusTool,
-			searchOrdersByShippingAddressTool,
-			getCustomerOrdersTool,
-			getTestEmailsTool,
-			getOrderItemsTool,
-			getOrderShippingTool,
-			getAllAccountsOrderSummaryTool,
+			listChannelsAccountsTool, findOrderTool, searchOrdersTool,
+			searchOrdersByDateRangeTool, searchOrdersByProductTool,
+			searchOrdersByStatusTool, searchOrdersByShippingAddressTool,
+			getCustomerOrdersTool, getTestEmailsTool, getOrderItemsTool,
+			getOrderShippingTool, getAllAccountsOrderSummaryTool,
 			getFaqInformationTool
 		).build();
 
@@ -124,38 +133,32 @@ public class AIRestController extends BaseRestController {
 			HttpStatus.OK);
 	}
 
-	private static final String INSTRUCTION = """
-		You are a professional userAccount service representative for a Liferay Commerce platform.\s
-		Your primary role is to help customers find information about their orders.\s
-
-		**Key Responsibilities:**
-		- Help customers locate their orders using order numbers, email addresses, or names
-		- Provide detailed order information including status, items, and pricing
-		- Answer questions about order status and delivery
-		- Assist with customer account inquiries
-
-		**Available Tools:**
-		- handle_customer_inquiry: Handles all order-related inquiries with a single unified tool
-		- Google Search: For general customer service information and troubleshooting
-
-		**Best Practices:**
-		- Always greet customers warmly and professionally
-		- Ask clarifying questions if you need more information
-		- Provide clear, organized responses with order details
-		- Be empathetic and helpful, especially when orders can't be found
-		- Offer to help with additional questions or concerns
-
-		**Example Interactions:**
-		- Customer: 'I need to check my order status'
-		- You: 'I'd be happy to help you check your order status. Could you please provide your order number or the email address you used when placing the order?'
-
-		Start by greeting the customer and asking how you can help them today.""\"
-		""";
-
-	@Autowired
-	private SettingsService _settingsService;
+	private static final String _INSTRUCTION = StringBundler.concat(
+		"You are a professional userAccount service representative for a ",
+		"Liferay Commerce platform.\s Your primary role is to help customers ",
+		"find information about their orders.\s\n\n **Key ",
+		"Responsibilities:**\n - Help customers locate their orders using ",
+		"order numbers, email addresses, or names\n- Provide detailed order ",
+		"information including status, items, and pricing\n- Answer questions ",
+		"about order status and delivery\n- Assist with customer account ",
+		"inquiries\n\n **Available Tools:**\n- handle_customer_inquiry: ",
+		"Handles all order-related inquiries with a single unified tool\n- ",
+		"Google Search: For general customer service information and ",
+		"troubleshooting\n\n**Best Practices:**\n- Always greet customers",
+		"warmly and professionally\n- Ask clarifying questions if you need ",
+		"more information\n- Provide clear, organized responses with order ",
+		"details\n- Be empathetic and helpful, especically when orders can ",
+		"not be found\n- Offer to help with additional questions or concerns\n",
+		"\n**Example Interactions:**\n- Customer: 'I need to check my order ",
+		"status'\n- You: 'I am happy to help you check your order status. ",
+		"Could you\n please provide your order number or the email address ",
+		"you used when\n  placing the order?'\n\nStart by greeting the ",
+		"customer and asking how you can help them today.");
 
 	@Autowired
 	private CommerceTools _commerceTools;
+
+	@Autowired
+	private SettingsService _settingsService;
 
 }

@@ -1,7 +1,17 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.commerce.ai.chat.bot.model;
+
+import com.liferay.petra.string.StringBundler;
 
 import java.util.Objects;
 
+/**
+ * @author Ivica Cardic
+ */
 public class Product {
 
 	public Product() {
@@ -11,74 +21,75 @@ public class Product {
 		String id, String name, String description,
 		String externalReferenceCode) {
 
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.externalReferenceCode = externalReferenceCode;
+		_id = id;
+		_name = name;
+		_description = description;
+		_externalReferenceCode = externalReferenceCode;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
+		}
 
-		if ((o == null) || (getClass() != o.getClass()))
-
+		if ((object == null) || (getClass() != object.getClass())) {
 			return false;
-		Product product = (Product)o;
+		}
 
-		return Objects.equals(id, product.id);
+		Product product = (Product)object;
+
+		return Objects.equals(_id, product.getId());
 	}
 
 	public String getDescription() {
-		return description;
+		return _description;
 	}
 
 	public String getExternalReferenceCode() {
-		return externalReferenceCode;
+		return _externalReferenceCode;
 	}
 
 	public String getId() {
-		return id;
+		return _id;
 	}
 
 	public String getName() {
-		return name;
+		return _name;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(_id);
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		_description = description;
 	}
 
 	public void setExternalReferenceCode(String externalReferenceCode) {
-		this.externalReferenceCode = externalReferenceCode;
+		_externalReferenceCode = externalReferenceCode;
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		_id = id;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		_name = name;
 	}
 
 	@Override
 	public String toString() {
-		return "Product{" + "id='" + id + '\'' + ", name='" + name + '\'' +
-			", description='" + description + '\'' +
-				", externalReferenceCode='" + externalReferenceCode + '\'' +
-					'}';
+		return StringBundler.concat(
+			"Product{id='", _id, "\', name='", _name, "\', description='",
+			_description, "\', externalReferenceCode='", _externalReferenceCode,
+			"\'}");
 	}
 
-	private String description;
-	private String externalReferenceCode;
-	private String id;
-	private String name;
+	private String _description;
+	private String _externalReferenceCode;
+	private String _id;
+	private String _name;
 
 }

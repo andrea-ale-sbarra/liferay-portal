@@ -1,47 +1,56 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.commerce.ai.chat.bot.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ivica Cardic
+ */
 public class PageResult<T> {
 
 	public PageResult() {
 	}
 
 	public PageResult(int totalCount, int lastPage, List<T> items) {
-		this.totalCount = totalCount;
-		this.lastPage = lastPage;
+		_totalCount = totalCount;
+		_lastPage = lastPage;
 
-		if (items != null)
-			this.items = new ArrayList<>(items);
+		if (items != null) {
+			_items = new ArrayList<>(items);
+		}
 	}
 
 	public List<T> getItems() {
-		return items;
+		return _items;
 	}
 
 	public int getLastPage() {
-		return lastPage;
+		return _lastPage;
 	}
 
 	public int getTotalCount() {
-		return totalCount;
+		return _totalCount;
 	}
 
 	public void setItems(List<T> items) {
-		this.items = items != null ? new ArrayList<>(items) : new ArrayList<>();
+		_items = (items != null) ? new ArrayList<>(items) : new ArrayList<>();
 	}
 
 	public void setLastPage(int lastPage) {
-		this.lastPage = lastPage;
+		_lastPage = lastPage;
 	}
 
 	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
+		_totalCount = totalCount;
 	}
 
-	private List<T> items = new ArrayList<>();
-	private int lastPage;
-	private int totalCount;
+	private List<T> _items = new ArrayList<>();
+	private int _lastPage;
+	private int _totalCount;
 
 }

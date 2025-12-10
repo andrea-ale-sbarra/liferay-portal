@@ -1,9 +1,16 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.commerce.ai.chat.bot.model;
+
+import com.liferay.petra.string.StringBundler;
 
 import java.util.Objects;
 
 /**
- * Represents an item within an order
+ * @author Ivica Cardic
  */
 public class OrderItem {
 
@@ -14,104 +21,105 @@ public class OrderItem {
 		String id, String name, String sku, int quantity, double unitPrice,
 		double totalPrice, String status) {
 
-		this.id = id;
-		this.name = name;
-		this.sku = sku;
-		this.quantity = quantity;
-		this.unitPrice = unitPrice;
-		this.totalPrice = totalPrice;
-		this.status = status;
+		_id = id;
+		_name = name;
+		_sku = sku;
+		_quantity = quantity;
+		_unitPrice = unitPrice;
+		_totalPrice = totalPrice;
+		_status = status;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
+		}
 
-		if ((o == null) || (getClass() != o.getClass()))
-
+		if ((object == null) || (getClass() != object.getClass())) {
 			return false;
-		OrderItem orderItem = (OrderItem)o;
+		}
 
-		return Objects.equals(id, orderItem.id);
+		OrderItem orderItem = (OrderItem)object;
+
+		return Objects.equals(_id, orderItem.getId());
 	}
 
 	public String getId() {
-		return id;
+		return _id;
 	}
 
 	public String getName() {
-		return name;
+		return _name;
 	}
 
 	public int getQuantity() {
-		return quantity;
+		return _quantity;
 	}
 
 	public String getSku() {
-		return sku;
+		return _sku;
 	}
 
 	public String getStatus() {
-		return status;
+		return _status;
 	}
 
 	public double getTotalPrice() {
-		return totalPrice;
+		return _totalPrice;
 	}
 
 	public double getUnitPrice() {
-		return unitPrice;
+		return _unitPrice;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(_id);
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		_id = id;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		_name = name;
 	}
 
 	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+		_quantity = quantity;
 	}
 
 	public void setSku(String sku) {
-		this.sku = sku;
+		_sku = sku;
 	}
 
 	public void setStatus(String status) {
-		this.status = status;
+		_status = status;
 	}
 
 	public void setTotalPrice(double totalPrice) {
-		this.totalPrice = totalPrice;
+		_totalPrice = totalPrice;
 	}
 
 	public void setUnitPrice(double unitPrice) {
-		this.unitPrice = unitPrice;
+		_unitPrice = unitPrice;
 	}
 
 	@Override
 	public String toString() {
-		return "OrderItem{" + "id='" + id + '\'' + ", name='" + name + '\'' +
-			", sku='" + sku + '\'' + ", quantity=" + quantity + ", unitPrice=" +
-				unitPrice + ", totalPrice=" + totalPrice + ", status='" +
-					status + '\'' + '}';
+		return StringBundler.concat(
+			"OrderItem{id='", _id, "\', name='", _name, "\', sku='", _sku,
+			"\', quantity=", _quantity, ", unitPrice=", _unitPrice,
+			", totalPrice=", _totalPrice, ", status='", _status, "\'}");
 	}
 
-	private String id;
-	private String name;
-	private int quantity;
-	private String sku;
-	private String status;
-	private double totalPrice;
-	private double unitPrice;
+	private String _id;
+	private String _name;
+	private int _quantity;
+	private String _sku;
+	private String _status;
+	private double _totalPrice;
+	private double _unitPrice;
 
 }

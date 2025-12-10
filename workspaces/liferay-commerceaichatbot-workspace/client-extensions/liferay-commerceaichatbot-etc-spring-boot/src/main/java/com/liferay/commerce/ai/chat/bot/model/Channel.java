@@ -1,79 +1,91 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.commerce.ai.chat.bot.model;
+
+import com.liferay.petra.string.StringBundler;
 
 import java.util.Objects;
 
+/**
+ * @author Ivica Cardic
+ */
 public class Channel {
 
 	public Channel() {
 	}
 
 	public Channel(String id, String name, String type, Boolean active) {
-		this.id = id;
-		this.name = name;
-		this.type = type;
-		this.active = active;
+		_id = id;
+		_name = name;
+		_type = type;
+		_active = active;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
+		}
 
-		if ((o == null) || (getClass() != o.getClass()))
-
+		if ((object == null) || (getClass() != object.getClass())) {
 			return false;
-		Channel channel = (Channel)o;
+		}
 
-		return Objects.equals(id, channel.id);
+		Channel channel = (Channel)object;
+
+		return Objects.equals(_id, channel.getId());
 	}
 
 	public Boolean getActive() {
-		return active;
+		return _active;
 	}
 
 	public String getId() {
-		return id;
+		return _id;
 	}
 
 	public String getName() {
-		return name;
+		return _name;
 	}
 
 	public String getType() {
-		return type;
+		return _type;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(_id);
 	}
 
 	public void setActive(Boolean active) {
-		this.active = active;
+		_active = active;
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		_id = id;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		_name = name;
 	}
 
 	public void setType(String type) {
-		this.type = type;
+		_type = type;
 	}
 
 	@Override
 	public String toString() {
-		return "Channel{" + "id='" + id + '\'' + ", name='" + name + '\'' +
-			", type='" + type + '\'' + ", active=" + active + '}';
+		return StringBundler.concat(
+			"Channel{id='", _id, "\', name='", _name, "\', type='", _type,
+			"\', active=", _active, "}");
 	}
 
-	private Boolean active;
-	private String id;
-	private String name;
-	private String type;
+	private Boolean _active;
+	private String _id;
+	private String _name;
+	private String _type;
 
 }

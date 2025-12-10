@@ -1,96 +1,102 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.commerce.ai.chat.bot.model;
+
+import com.liferay.petra.string.StringBundler;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 /**
- * Represents customer information
+ * @author Ivica Cardic
  */
 public class UserAccount {
 
-
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
+		}
 
-		if ((o == null) || (getClass() != o.getClass()))
-
+		if ((object == null) || (getClass() != object.getClass())) {
 			return false;
-		UserAccount userAccount = (UserAccount)o;
+		}
 
-		return Objects.equals(id, userAccount.id);
+		UserAccount userAccount = (UserAccount)object;
+
+		return Objects.equals(_id, userAccount.getId());
 	}
 
 	public Map<String, String> getAddress() {
-		return address;
+		return _address;
 	}
 
 	public String getEmail() {
-		return email;
+		return _email;
 	}
 
 	public String getFirstName() {
-		return firstName;
+		return _firstName;
 	}
 
 	public String getId() {
-		return id;
+		return _id;
 	}
 
 	public String getLastName() {
-		return lastName;
+		return _lastName;
 	}
 
 	public String getPhone() {
-		return phone;
+		return _phone;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(_id);
 	}
 
 	public void setAddress(Map<String, String> address) {
-		this.address =
-			address != null ? new HashMap<>(address) : new HashMap<>();
+		_address = (address != null) ? new HashMap<>(address) : new HashMap<>();
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		_email = email;
 	}
 
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		_firstName = firstName;
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		_id = id;
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		_lastName = lastName;
 	}
 
 	public void setPhone(String phone) {
-		this.phone = phone;
+		_phone = phone;
 	}
 
 	@Override
 	public String toString() {
-		return "UserAccount{" + "id='" + id + '\'' + ", email='" + email + '\'' +
-			", firstName='" + firstName + '\'' + ", lastName='" + lastName +
-				'\'' + ", phone='" + phone + '\'' + ", address=" + address +
-					'}';
+		return StringBundler.concat(
+			"UserAccount{id='", _id, "\', email='", _email, "\', firstName='",
+			_firstName, "\', lastName='", _lastName, "\', phone='", _phone,
+			"\', address=", _address, '}');
 	}
 
-	private Map<String, String> address = new HashMap<>();
-	private String email;
-	private String firstName;
-	private String id;
-	private String lastName;
-	private String phone;
+	private Map<String, String> _address = new HashMap<>();
+	private String _email;
+	private String _firstName;
+	private String _id;
+	private String _lastName;
+	private String _phone;
 
 }
