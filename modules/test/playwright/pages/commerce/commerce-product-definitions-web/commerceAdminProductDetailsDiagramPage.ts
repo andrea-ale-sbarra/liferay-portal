@@ -30,4 +30,14 @@ export class CommerceAdminProductDetailsDiagramPage extends CommerceDNDTablePage
 		await this.selectFileButton.click();
 		await this.selectFileModal.isVisible();
 	}
+
+    async addPin(
+        number: number, test1: string, notLinkedToACatalog: string,
+        number2: number) {
+        
+    }
+
+	diagramPin(number: number) {
+		return undefined;
+	}
 }

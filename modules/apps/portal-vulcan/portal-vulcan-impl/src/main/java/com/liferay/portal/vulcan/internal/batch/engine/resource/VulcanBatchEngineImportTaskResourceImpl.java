@@ -52,7 +52,7 @@ public class VulcanBatchEngineImportTaskResourceImpl
 		ImportTaskResource importTaskResource = _getImportTaskResource();
 
 		return importTaskResource.postImportTaskObject(
-			name, null, null, callbackURL,
+			name, _getQueryParameterValue("batchExternalReferenceCode"), null, callbackURL,
 			_getQueryParameterValue("createStrategy"),
 			_getExternalReferenceCode(), fields, _getImportStrategy(),
 			_getTaskItemDelegateName(), _getItemsArray(object));

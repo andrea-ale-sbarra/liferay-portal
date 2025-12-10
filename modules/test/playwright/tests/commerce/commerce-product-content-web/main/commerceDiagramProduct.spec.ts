@@ -8,6 +8,9 @@ import {expect, mergeTests} from '@playwright/test';
 import {commercePagesTest} from '../../../../fixtures/commercePagesTest';
 import {dataApiHelpersTest} from '../../../../fixtures/dataApiHelpersTest';
 import {loginTest} from '../../../../fixtures/loginTest';
+import getRandomString from "../../../../utils/getRandomString";
+import {waitForAlert} from "../../../../utils/waitForAlert";
+import {miniumSetUp} from "../../utils/commerce";
 
 export const test = mergeTests(
 	commercePagesTest,
@@ -74,15 +77,13 @@ test('COMMERCE-7025 Add a new pin to a diagram product', async ({
 																	page,
 																}) => {
 	const productName = `Diagram T-Shirt ${getRandomString()}`;
-	const catalogName = 'Master';
 
-	let masterCatalog = (await apiHelpers.headlessCommerceAdminCatalog.getCatalogsPage()).items.find(c => c.name === catalogName);
-	if (!masterCatalog) {
-		masterCatalog = await apiHelpers.headlessCommerceAdminCatalog.postCatalog({ name: catalogName });
-	}
+	const catalog = await apiHelpers.headlessCommerceAdminCatalog.postCatalog({
+		name: getRandomString(),
+	});
 
 	const product = await apiHelpers.headlessCommerceAdminCatalog.postProduct({
-		catalogId: masterCatalog.id,
+		catalogId: catalog.id,
 		name: { en_US: productName },
 		productType: 'diagram',
 	});

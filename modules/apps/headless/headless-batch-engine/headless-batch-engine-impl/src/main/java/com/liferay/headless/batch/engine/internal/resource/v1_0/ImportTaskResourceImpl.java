@@ -492,7 +492,11 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 		}
 
 		if (Validator.isNotNull(batchExternalReferenceCode)) {
-			parameters.put("externalReferenceCode", batchExternalReferenceCode);
+			parameters.put("batchExternalReferenceCode", batchExternalReferenceCode);
+		}
+
+		if (Validator.isNotNull(externalReferenceCode)) {
+			parameters.put("externalReferenceCode", externalReferenceCode);
 		}
 
 		if (createStrategy != null) {
@@ -509,7 +513,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 
 		BatchEngineImportTask batchEngineImportTask =
 			_batchEngineImportTaskService.addBatchEngineImportTask(
-				externalReferenceCode, contextCompany.getCompanyId(),
+				batchExternalReferenceCode, contextCompany.getCompanyId(),
 				contextUser.getUserId(),
 				_itemClassBatchSizeMap.getOrDefault(
 					className,
