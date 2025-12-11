@@ -111,6 +111,32 @@ public class RelatedProduct implements Cloneable, Serializable {
 
 	protected Long productId;
 
+	public String getSourceProductExternalReferenceCode() {
+		return sourceProductExternalReferenceCode;
+	}
+
+	public void setSourceProductExternalReferenceCode(
+		String sourceProductExternalReferenceCode) {
+
+		this.sourceProductExternalReferenceCode =
+			sourceProductExternalReferenceCode;
+	}
+
+	public void setSourceProductExternalReferenceCode(
+		UnsafeSupplier<String, Exception>
+			sourceProductExternalReferenceCodeUnsafeSupplier) {
+
+		try {
+			sourceProductExternalReferenceCode =
+				sourceProductExternalReferenceCodeUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected String sourceProductExternalReferenceCode;
+
 	public String getType() {
 		return type;
 	}

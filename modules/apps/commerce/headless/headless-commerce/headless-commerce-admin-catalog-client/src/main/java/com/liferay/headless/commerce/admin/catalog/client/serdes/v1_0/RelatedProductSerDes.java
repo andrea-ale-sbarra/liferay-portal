@@ -91,6 +91,22 @@ public class RelatedProductSerDes {
 			sb.append(relatedProduct.getProductId());
 		}
 
+		if (relatedProduct.getSourceProductExternalReferenceCode() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"sourceProductExternalReferenceCode\": ");
+
+			sb.append("\"");
+
+			sb.append(
+				_escape(
+					relatedProduct.getSourceProductExternalReferenceCode()));
+
+			sb.append("\"");
+		}
+
 		if (relatedProduct.getType() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -155,6 +171,16 @@ public class RelatedProductSerDes {
 			map.put("productId", String.valueOf(relatedProduct.getProductId()));
 		}
 
+		if (relatedProduct.getSourceProductExternalReferenceCode() == null) {
+			map.put("sourceProductExternalReferenceCode", null);
+		}
+		else {
+			map.put(
+				"sourceProductExternalReferenceCode",
+				String.valueOf(
+					relatedProduct.getSourceProductExternalReferenceCode()));
+		}
+
 		if (relatedProduct.getType() == null) {
 			map.put("type", null);
 		}
@@ -194,6 +220,12 @@ public class RelatedProductSerDes {
 			else if (Objects.equals(jsonParserFieldName, "productId")) {
 				return false;
 			}
+			else if (Objects.equals(
+						jsonParserFieldName,
+						"sourceProductExternalReferenceCode")) {
+
+				return false;
+			}
 			else if (Objects.equals(jsonParserFieldName, "type")) {
 				return false;
 			}
@@ -230,6 +262,15 @@ public class RelatedProductSerDes {
 				if (jsonParserFieldValue != null) {
 					relatedProduct.setProductId(
 						Long.valueOf((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(
+						jsonParserFieldName,
+						"sourceProductExternalReferenceCode")) {
+
+				if (jsonParserFieldValue != null) {
+					relatedProduct.setSourceProductExternalReferenceCode(
+						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "type")) {

@@ -222,6 +222,52 @@ public class RelatedProduct implements Serializable {
 	@JsonIgnore
 	private Supplier<Long> _productIdSupplier;
 
+	@io.swagger.v3.oas.annotations.media.Schema(example = "AB-34098-789-N")
+	public String getSourceProductExternalReferenceCode() {
+		if (_sourceProductExternalReferenceCodeSupplier != null) {
+			sourceProductExternalReferenceCode =
+				_sourceProductExternalReferenceCodeSupplier.get();
+
+			_sourceProductExternalReferenceCodeSupplier = null;
+		}
+
+		return sourceProductExternalReferenceCode;
+	}
+
+	public void setSourceProductExternalReferenceCode(
+		String sourceProductExternalReferenceCode) {
+
+		this.sourceProductExternalReferenceCode =
+			sourceProductExternalReferenceCode;
+
+		_sourceProductExternalReferenceCodeSupplier = null;
+	}
+
+	@JsonIgnore
+	public void setSourceProductExternalReferenceCode(
+		UnsafeSupplier<String, Exception>
+			sourceProductExternalReferenceCodeUnsafeSupplier) {
+
+		_sourceProductExternalReferenceCodeSupplier = () -> {
+			try {
+				return sourceProductExternalReferenceCodeUnsafeSupplier.get();
+			}
+			catch (RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected String sourceProductExternalReferenceCode;
+
+	@JsonIgnore
+	private Supplier<String> _sourceProductExternalReferenceCodeSupplier;
+
 	@io.swagger.v3.oas.annotations.media.Schema(example = "cross-sell")
 	public String getType() {
 		if (_typeSupplier != null) {
@@ -339,6 +385,23 @@ public class RelatedProduct implements Serializable {
 			sb.append("\"productId\": ");
 
 			sb.append(productId);
+		}
+
+		String sourceProductExternalReferenceCode =
+			getSourceProductExternalReferenceCode();
+
+		if (sourceProductExternalReferenceCode != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"sourceProductExternalReferenceCode\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(sourceProductExternalReferenceCode));
+
+			sb.append("\"");
 		}
 
 		String type = getType();
