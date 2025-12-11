@@ -107,13 +107,8 @@ public class RelatedProductResourceImpl extends BaseRelatedProductResourceImpl {
 				fetchCPDefinitionByCProductExternalReferenceCode(
 					externalReferenceCode, contextCompany.getCompanyId());
 
-		if (cpDefinition == null) {
-			throw new NoSuchCPDefinitionException(
-				"Unable to find product with external reference code " +
-					externalReferenceCode);
-		}
-
-		return _addOrUpdateRelatedProduct(cpDefinition, relatedProduct);
+		return _addOrUpdateRelatedProduct(
+			cpDefinition, externalReferenceCode, relatedProduct);
 	}
 
 	@Override
@@ -136,14 +131,37 @@ public class RelatedProductResourceImpl extends BaseRelatedProductResourceImpl {
 			CPDefinition cpDefinition, RelatedProduct relatedProduct)
 		throws Exception {
 
-		CPDefinitionLink cpDefinitionLink =
+		return _toRelatedProduct(
 			RelatedProductUtil.addOrUpdateCPDefinitionLink(
 				_cpDefinitionLinkService, _cpDefinitionService, relatedProduct,
 				cpDefinition.getCPDefinitionId(),
 				_serviceContextHelper.getServiceContext(
-					cpDefinition.getGroupId()));
+					cpDefinition.getGroupId())
+			).getCPDefinitionLinkId());
+	}
 
-		return _toRelatedProduct(cpDefinitionLink.getCPDefinitionLinkId());
+	private RelatedProduct _addOrUpdateRelatedProduct(
+			CPDefinition cpDefinition, String externalReferenceCode,
+			RelatedProduct relatedProduct)
+		throws Exception {
+
+		if (cpDefinition == null) {
+			cpDefinition =
+				_cpDefinitionService.
+					fetchCPDefinitionByCProductExternalReferenceCode(
+						GetterUtil.getString(
+							relatedProduct.
+								getSourceProductExternalReferenceCode()),
+						contextCompany.getCompanyId());
+
+			if (cpDefinition == null) {
+				throw new NoSuchCPDefinitionException(
+					"Unable to find product with external reference code " +
+						externalReferenceCode);
+			}
+		}
+
+		return _addOrUpdateRelatedProduct(cpDefinition, relatedProduct);
 	}
 
 	private Page<RelatedProduct> _getRelatedProductPage(

@@ -5,6 +5,7 @@
 
 package com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.converter;
 
+import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPDefinitionLink;
 import com.liferay.commerce.product.model.CProduct;
 import com.liferay.commerce.product.service.CPDefinitionLinkService;
@@ -40,6 +41,10 @@ public class RelatedProductDTOConverter
 
 		CProduct cProduct = cpDefinitionLink.getCProduct();
 
+		CPDefinition cpDefinition = cpDefinitionLink.getCPDefinition();
+
+		CProduct sourceCProduct = cpDefinition.getCProduct();
+
 		return new RelatedProduct() {
 			{
 				setId(cpDefinitionLink::getCPDefinitionLinkId);
@@ -47,6 +52,8 @@ public class RelatedProductDTOConverter
 				setProductExternalReferenceCode(
 					cProduct::getExternalReferenceCode);
 				setProductId(cProduct::getCProductId);
+				setSourceProductExternalReferenceCode(
+					sourceCProduct.getExternalReferenceCode());
 				setType(cpDefinitionLink::getType);
 			}
 		};
