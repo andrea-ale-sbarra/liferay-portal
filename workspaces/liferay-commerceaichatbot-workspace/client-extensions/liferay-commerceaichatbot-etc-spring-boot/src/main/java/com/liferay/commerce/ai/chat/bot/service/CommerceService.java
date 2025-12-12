@@ -13,11 +13,9 @@ import com.liferay.commerce.ai.chat.bot.model.PageResult;
 import com.liferay.commerce.ai.chat.bot.model.Product;
 import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.BufferedReader;
@@ -40,6 +38,8 @@ import javax.annotation.PostConstruct;
 
 import javax.net.ssl.SSLContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -273,8 +273,7 @@ public class CommerceService {
 			_log.info(
 				StringBundler.concat(
 					"Liferay CommerceService initialized. baseUrl=", _baseUrl,
-					"sslVerify=", String.valueOf(_sslVerify), " timeoutMs=",
-					String.valueOf(_timeoutMs)));
+					"sslVerify=", _sslVerify, " timeoutMs=", _timeoutMs));
 		}
 	}
 
@@ -416,8 +415,8 @@ public class CommerceService {
 				if (_log.isWarnEnabled()) {
 					_log.warn(
 						StringBundler.concat(
-							"GET ", uri.toString(), " -> ",
-							String.valueOf(status), "body: ", _truncate(body)));
+							"GET ", uri, " -> ", status, "body: ",
+							_truncate(body)));
 				}
 
 				return null;
@@ -979,8 +978,7 @@ public class CommerceService {
 		return s;
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		CommerceService.class);
+	private static final Log _log = LogFactory.getLog(CommerceService.class);
 
 	private volatile boolean _authenticated;
 

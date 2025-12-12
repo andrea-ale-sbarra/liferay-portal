@@ -18,7 +18,7 @@ import com.liferay.client.extension.util.spring.boot3.BaseRestController;
 import com.liferay.commerce.ai.chat.bot.model.Settings;
 import com.liferay.commerce.ai.chat.bot.service.SettingsService;
 import com.liferay.commerce.ai.chat.bot.tools.CommerceTools;
-import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.petra.string.StringBundler;
 
 import java.util.ArrayList;
 import java.util.List;

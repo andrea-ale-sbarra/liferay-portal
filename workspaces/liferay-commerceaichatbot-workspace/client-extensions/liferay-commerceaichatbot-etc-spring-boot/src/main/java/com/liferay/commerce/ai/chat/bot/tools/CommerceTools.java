@@ -18,8 +18,6 @@ import com.liferay.commerce.ai.chat.bot.service.CommerceService;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
@@ -44,6 +42,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.springframework.stereotype.Service;
 
@@ -3586,7 +3587,7 @@ public class CommerceTools {
 		return sb.toString();
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(CommerceTools.class);
+	private static final Log _log = LogFactory.getLog(CommerceTools.class);
 
 	private static final Pattern _orderIdPattern = Pattern.compile(
 		"\\b\\d{4,6}\\b");
