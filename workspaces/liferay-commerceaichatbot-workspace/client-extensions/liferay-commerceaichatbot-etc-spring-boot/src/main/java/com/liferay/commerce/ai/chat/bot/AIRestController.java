@@ -6,6 +6,7 @@
 package com.liferay.commerce.ai.chat.bot;
 
 import com.google.adk.agents.LlmAgent;
+import com.google.adk.events.Event;
 import com.google.adk.models.Gemini;
 import com.google.adk.runner.InMemoryRunner;
 import com.google.adk.sessions.Session;
@@ -19,7 +20,8 @@ import com.liferay.commerce.ai.chat.bot.service.SettingsService;
 import com.liferay.commerce.ai.chat.bot.tools.CommerceTools;
 import com.liferay.portal.kernel.util.StringBundler;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -112,25 +114,31 @@ public class AIRestController extends BaseRestController {
 		Content userMsg = Content.fromParts(
 			Part.fromText(jsonObject.getString("question")));
 
-		String output = runner.runAsync(
+		List<Event> events = runner.runAsync(
 			session.userId(), session.id(), userMsg
 		).toList(
-		).blockingGet(
-		).stream(
-		).map(
-			event -> event.content(
-			).orElseThrow(
-			).text()
-		).collect(
-			Collectors.joining()
-		);
+		).blockingGet();
 
-		return new ResponseEntity<>(
-			new JSONObject(
-			).put(
-				"output", output
-			).toString(),
-			HttpStatus.OK);
+		jsonObject = new JSONObject();
+
+		List<String> output = new ArrayList<>();
+
+		for (Event event : events) {
+			Content content = event.content(
+			).orElseThrow();
+
+			output.add(content.text());
+		}
+
+		StringBundler sb = new StringBundler(output.size());
+
+		for (String s : output) {
+			sb.append(s);
+		}
+
+		jsonObject.put("output", sb.toString());
+
+		return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
 	}
 
 	private static final String _INSTRUCTION = StringBundler.concat(
@@ -147,9 +155,9 @@ public class AIRestController extends BaseRestController {
 		"troubleshooting\n\n**Best Practices:**\n- Always greet customers",
 		"warmly and professionally\n- Ask clarifying questions if you need ",
 		"more information\n- Provide clear, organized responses with order ",
-		"details\n- Be empathetic and helpful, especically when orders can ",
-		"not be found\n- Offer to help with additional questions or concerns\n",
-		"\n**Example Interactions:**\n- Customer: 'I need to check my order ",
+		"details\n- Be empathetic and helpful, especially when orders can not ",
+		"be found\n- Offer to help with additional questions or concerns\n\n",
+		"**Example Interactions:**\n- Customer: 'I need to check my order ",
 		"status'\n- You: 'I am happy to help you check your order status. ",
 		"Could you\n please provide your order number or the email address ",
 		"you used when\n  placing the order?'\n\nStart by greeting the ",

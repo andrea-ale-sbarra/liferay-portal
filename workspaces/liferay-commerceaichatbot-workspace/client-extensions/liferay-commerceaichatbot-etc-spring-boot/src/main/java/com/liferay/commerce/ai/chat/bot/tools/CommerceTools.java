@@ -1422,49 +1422,6 @@ public class CommerceTools {
 		return null;
 	}
 
-	private String _formatOrdersList(List<Order> orders) {
-		StringBuilder sb = new StringBuilder();
-
-		DateTimeFormatter dateTimeFormatter =
-			DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-
-		int i = 1;
-
-		for (Order order : orders) {
-			String dateString = "N/A";
-
-			if (order.getOrderDate() != null) {
-				OffsetDateTime offsetDateTime = order.getOrderDate();
-
-				dateString = offsetDateTime.format(dateTimeFormatter);
-			}
-
-			sb.append(
-				i++
-			).append(
-				") Order "
-			).append(
-				GetterUtil.getString(order.getOrderNumber(), "N/A")
-			).append(
-				" — Status: "
-			).append(
-				GetterUtil.getString(order.getStatus(), "N/A")
-			).append(
-				" — Date: "
-			).append(
-				dateString
-			).append(
-				" — Total: "
-			).append(
-				order.getTotal()
-			).append(
-				"\n"
-			);
-		}
-
-		return sb.toString();
-	}
-
 	private String _formatOrderSummary(Order order) {
 		String orderDate = "N/A";
 
