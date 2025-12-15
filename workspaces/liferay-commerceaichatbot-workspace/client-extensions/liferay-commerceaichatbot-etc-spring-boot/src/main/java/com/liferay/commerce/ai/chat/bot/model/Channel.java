@@ -5,8 +5,6 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
-import com.liferay.petra.string.StringBundler;
-
 import java.util.Objects;
 
 /**
@@ -78,9 +76,26 @@ public class Channel {
 
 	@Override
 	public String toString() {
-		return StringBundler.concat(
-			"Channel{id='", _id, "\', name='", _name, "\', type='", _type,
-			"\', active=", _active, "}");
+		return new StringBuilder(
+		).append(
+			"Channel{id='"
+		).append(
+			_id
+		).append(
+			"\', name='"
+		).append(
+			_name
+		).append(
+			"\', type='"
+		).append(
+			_type
+		).append(
+			"\', active="
+		).append(
+			_active
+		).append(
+			"}"
+		).toString();
 	}
 
 	private Boolean _active;

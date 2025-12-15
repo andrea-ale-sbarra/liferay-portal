@@ -5,8 +5,6 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
-import com.liferay.petra.string.StringBundler;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -86,10 +84,34 @@ public class UserAccount {
 
 	@Override
 	public String toString() {
-		return StringBundler.concat(
-			"UserAccount{id='", _id, "\', email='", _email, "\', firstName='",
-			_firstName, "\', lastName='", _lastName, "\', phone='", _phone,
-			"\', address=", _address, '}');
+		return new StringBuilder(
+		).append(
+			"UserAccount{id='"
+		).append(
+			_id
+		).append(
+			"\', email='"
+		).append(
+			_email
+		).append(
+			"\', firstName='"
+		).append(
+			_firstName
+		).append(
+			"\', lastName='"
+		).append(
+			_lastName
+		).append(
+			"\', phone='"
+		).append(
+			_phone
+		).append(
+			"\', address="
+		).append(
+			_address
+		).append(
+			'}'
+		).toString();
 	}
 
 	private Map<String, String> _address = new HashMap<>();

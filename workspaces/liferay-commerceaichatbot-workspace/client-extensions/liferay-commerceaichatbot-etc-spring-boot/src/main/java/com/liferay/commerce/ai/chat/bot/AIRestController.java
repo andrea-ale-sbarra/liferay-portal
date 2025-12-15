@@ -18,7 +18,6 @@ import com.liferay.client.extension.util.spring.boot3.BaseRestController;
 import com.liferay.commerce.ai.chat.bot.model.Settings;
 import com.liferay.commerce.ai.chat.bot.service.SettingsService;
 import com.liferay.commerce.ai.chat.bot.tools.CommerceTools;
-import com.liferay.petra.string.StringBundler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,7 +129,7 @@ public class AIRestController extends BaseRestController {
 			output.add(content.text());
 		}
 
-		StringBundler sb = new StringBundler(output.size());
+		StringBuilder sb = new StringBuilder();
 
 		for (String s : output) {
 			sb.append(s);
@@ -141,27 +140,48 @@ public class AIRestController extends BaseRestController {
 		return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
 	}
 
-	private static final String _INSTRUCTION = StringBundler.concat(
-		"You are a professional userAccount service representative for a ",
-		"Liferay Commerce platform.\s Your primary role is to help customers ",
-		"find information about their orders.\s\n\n **Key ",
-		"Responsibilities:**\n - Help customers locate their orders using ",
-		"order numbers, email addresses, or names\n- Provide detailed order ",
-		"information including status, items, and pricing\n- Answer questions ",
-		"about order status and delivery\n- Assist with customer account ",
-		"inquiries\n\n **Available Tools:**\n- handle_customer_inquiry: ",
-		"Handles all order-related inquiries with a single unified tool\n- ",
-		"Google Search: For general customer service information and ",
-		"troubleshooting\n\n**Best Practices:**\n- Always greet customers",
-		"warmly and professionally\n- Ask clarifying questions if you need ",
-		"more information\n- Provide clear, organized responses with order ",
-		"details\n- Be empathetic and helpful, especially when orders can not ",
-		"be found\n- Offer to help with additional questions or concerns\n\n",
-		"**Example Interactions:**\n- Customer: 'I need to check my order ",
-		"status'\n- You: 'I am happy to help you check your order status. ",
-		"Could you\n please provide your order number or the email address ",
-		"you used when\n  placing the order?'\n\nStart by greeting the ",
-		"customer and asking how you can help them today.");
+	private static final String _INSTRUCTION = new StringBuilder(
+	).append(
+		"You are a professional userAccount service representative for a "
+	).append(
+		"Liferay Commerce platform.\s Your primary role is to help customers "
+	).append(
+		"find information about their orders.\s\n\n **Key "
+	).append(
+		"Responsibilities:**\n - Help customers locate their orders using "
+	).append(
+		"order numbers, email addresses, or names\n- Provide detailed order "
+	).append(
+		"information including status, items, and pricing\n- Answer questions "
+	).append(
+		"about order status and delivery\n- Assist with customer account "
+	).append(
+		"inquiries\n\n **Available Tools:**\n- handle_customer_inquiry: "
+	).append(
+		"Handles all order-related inquiries with a single unified tool\n- "
+	).append(
+		"Google Search: For general customer service information and "
+	).append(
+		"troubleshooting\n\n**Best Practices:**\n- Always greet customers"
+	).append(
+		"warmly and professionally\n- Ask clarifying questions if you need "
+	).append(
+		"more information\n- Provide clear, organized responses with order "
+	).append(
+		"details\n- Be empathetic and helpful, especially when orders can not "
+	).append(
+		"be found\n- Offer to help with additional questions or concerns\n\n"
+	).append(
+		"**Example Interactions:**\n- Customer: 'I need to check my order "
+	).append(
+		"status'\n- You: 'I am happy to help you check your order status. "
+	).append(
+		"Could you\n please provide your order number or the email address "
+	).append(
+		"you used when\n  placing the order?'\n\nStart by greeting the "
+	).append(
+		"customer and asking how you can help them today."
+	).toString();
 
 	@Autowired
 	private CommerceTools _commerceTools;

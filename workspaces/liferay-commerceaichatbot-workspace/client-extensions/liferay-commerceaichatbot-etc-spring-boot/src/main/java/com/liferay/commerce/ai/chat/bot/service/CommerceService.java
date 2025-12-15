@@ -13,7 +13,6 @@ import com.liferay.commerce.ai.chat.bot.model.PageResult;
 import com.liferay.commerce.ai.chat.bot.model.Product;
 import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
-import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -271,9 +270,20 @@ public class CommerceService {
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
-				StringBundler.concat(
-					"Liferay CommerceService initialized. baseUrl=", _baseUrl,
-					"sslVerify=", _sslVerify, " timeoutMs=", _timeoutMs));
+				new StringBuilder(
+				).append(
+					"Liferay CommerceService initialized. baseUrl="
+				).append(
+					_baseUrl
+				).append(
+					"sslVerify="
+				).append(
+					_sslVerify
+				).append(
+					" timeoutMs="
+				).append(
+					_timeoutMs
+				).toString());
 		}
 	}
 
@@ -414,9 +424,20 @@ public class CommerceService {
 
 				if (_log.isWarnEnabled()) {
 					_log.warn(
-						StringBundler.concat(
-							"GET ", uri, " -> ", status, "body: ",
-							_truncate(body)));
+						new StringBuilder(
+						).append(
+							"GET "
+						).append(
+							uri
+						).append(
+							" -> "
+						).append(
+							status
+						).append(
+							"body: "
+						).append(
+							_truncate(body)
+						).toString());
 				}
 
 				return null;

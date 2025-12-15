@@ -5,8 +5,6 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
-import com.liferay.petra.string.StringBundler;
-
 import java.util.Objects;
 
 /**
@@ -113,10 +111,26 @@ public class Shipment {
 
 	@Override
 	public String toString() {
-		return StringBundler.concat(
-			"Shipment{id='", _id, "\', carrier='", _carrier,
-			"\', trackingNumber='", _trackingNumber, "\', shipmentStatus='",
-			_shipmentStatus, "\'}");
+		return new StringBuilder(
+		).append(
+			"Shipment{id='"
+		).append(
+			_id
+		).append(
+			"\', carrier='"
+		).append(
+			_carrier
+		).append(
+			"\', trackingNumber='"
+		).append(
+			_trackingNumber
+		).append(
+			"\', shipmentStatus='"
+		).append(
+			_shipmentStatus
+		).append(
+			"\'}"
+		).toString();
 	}
 
 	public static class Status {

@@ -5,8 +5,6 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
-import com.liferay.petra.string.StringBundler;
-
 import java.util.Objects;
 
 /**
@@ -108,10 +106,38 @@ public class OrderItem {
 
 	@Override
 	public String toString() {
-		return StringBundler.concat(
-			"OrderItem{id='", _id, "\', name='", _name, "\', sku='", _sku,
-			"\', quantity=", _quantity, ", unitPrice=", _unitPrice,
-			", totalPrice=", _totalPrice, ", status='", _status, "\'}");
+		return new StringBuilder(
+		).append(
+			"OrderItem{id='"
+		).append(
+			_id
+		).append(
+			"\', name='"
+		).append(
+			_name
+		).append(
+			"\', sku='"
+		).append(
+			_sku
+		).append(
+			"\', quantity="
+		).append(
+			_quantity
+		).append(
+			", unitPrice="
+		).append(
+			_unitPrice
+		).append(
+			", totalPrice="
+		).append(
+			_totalPrice
+		).append(
+			", status='"
+		).append(
+			_status
+		).append(
+			"\'}"
+		).toString();
 	}
 
 	private String _id;

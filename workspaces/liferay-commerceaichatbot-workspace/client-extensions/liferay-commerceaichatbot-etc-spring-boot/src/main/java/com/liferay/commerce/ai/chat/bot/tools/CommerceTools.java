@@ -16,7 +16,6 @@ import com.liferay.commerce.ai.chat.bot.model.Summary;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 import com.liferay.commerce.ai.chat.bot.service.CommerceService;
 import com.liferay.petra.string.CharPool;
-import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
@@ -94,8 +93,14 @@ public class CommerceTools {
 			if (ListUtil.isEmpty(accounts)) {
 				return Map.of(
 					"error",
-					StringBundler.concat(
-						"No accounts available for channel ", channelId, "."));
+					new StringBuilder(
+					).append(
+						"No accounts available for channel "
+					).append(
+						channelId
+					).append(
+						"."
+					).toString());
 			}
 
 			List<Summary> accountSummaries = new ArrayList<>();
@@ -194,17 +199,29 @@ public class CommerceTools {
 			catch (Exception exception) {
 				return Map.of(
 					"error",
-					StringBundler.concat(
-						"**Error retrieving orders for ", email, "**: ",
-						exception.getMessage()));
+					new StringBuilder(
+					).append(
+						"**Error retrieving orders for "
+					).append(
+						email
+					).append(
+						"**: "
+					).append(
+						String.valueOf(exception.getMessage())
+					).toString());
 			}
 
 			if (ListUtil.isEmpty(orders)) {
 				return Map.of(
 					"error",
-					StringBundler.concat(
-						"I found the account for '", email,
-						"' but no orders are available."));
+					new StringBuilder(
+					).append(
+						"I found the account for '"
+					).append(
+						email
+					).append(
+						"' but no orders are available."
+					).toString());
 			}
 
 			if (orders.size() == 1) {
@@ -773,11 +790,16 @@ public class CommerceTools {
 
 				dateTimeFormatter = dateTimeFormatter.withZone(ZoneOffset.UTC);
 
-				String filter = StringBundler.concat(
-					"createDate ge ",
-					dateTimeFormatter.format(startOffsetDateTime),
-					" and createDate le ",
-					dateTimeFormatter.format(endOffsetDateTime));
+				String filter = new StringBuilder(
+				).append(
+					"createDate ge "
+				).append(
+					dateTimeFormatter.format(startOffsetDateTime)
+				).append(
+					" and createDate le "
+				).append(
+					dateTimeFormatter.format(endOffsetDateTime)
+				).toString();
 
 				PageResult<Order> pageResult =
 					_commerceService.getPlacedOrdersByAccount(
@@ -811,10 +833,20 @@ public class CommerceTools {
 
 				return Map.of(
 					"error",
-					StringBundler.concat(
-						"**No orders found** for ", userEmail, " between ",
-						dateTimeFormatter.format(startOffsetDateTime), " and ",
-						dateTimeFormatter.format(endOffsetDateTime)));
+					new StringBuilder(
+					).append(
+						"**No orders found** for "
+					).append(
+						userEmail
+					).append(
+						" between "
+					).append(
+						dateTimeFormatter.format(startOffsetDateTime)
+					).append(
+						" and "
+					).append(
+						dateTimeFormatter.format(endOffsetDateTime)
+					).toString());
 			}
 
 			return Map.of(
@@ -1406,9 +1438,14 @@ public class CommerceTools {
 
 			account.setId(userAccount.getId());
 
-			String fullName = StringBundler.concat(
-				userAccount.getFirstName(), StringPool.SPACE,
-				userAccount.getLastName());
+			String fullName = new StringBuilder(
+			).append(
+				userAccount.getFirstName()
+			).append(
+				StringPool.SPACE
+			).append(
+				userAccount.getLastName()
+			).toString();
 
 			if (Validator.isNull(fullName)) {
 				account.setName(userAccount.getEmail());
@@ -1794,216 +1831,354 @@ public class CommerceTools {
 			"ordering",
 			LinkedHashMapBuilder.put(
 				"How do I place an order?",
-				StringBundler.concat(
-					"To place an order, browse our selection by vehicle ",
-					"make/model, part category, or using our search bar. Add ",
-					"the desired items to your cart, then proceed to checkout ",
-					"Follow the prompts to enter your shipping information ",
-					"and payment details to complete your purchase.")
+				new StringBuilder(
+				).append(
+					"To place an order, browse our selection by vehicle "
+				).append(
+					"make/model, part category, or using our search bar. Add "
+				).append(
+					"the desired items to your cart, then proceed to checkout "
+				).append(
+					"Follow the prompts to enter your shipping information "
+				).append(
+					"and payment details to complete your purchase."
+				).toString()
 			).put(
 				"Do I need an account to place an order?",
-				StringBundler.concat(
-					"No, you can check out as a guest. However, creating an ",
-					"account allows you to track your order history, save ",
-					"multiple shipping addresses, and enjoy a faster checkout ",
-					"process on future purchases.")
+				new StringBuilder(
+				).append(
+					"No, you can check out as a guest. However, creating an "
+				).append(
+					"account allows you to track your order history, save "
+				).append(
+					"multiple shipping addresses, and enjoy a faster checkout "
+				).append(
+					"process on future purchases."
+				).toString()
 			).build()
 		).put(
 			"payment",
 			LinkedHashMapBuilder.put(
 				"What payment methods do you accept?",
-				StringBundler.concat(
-					"We accept all major credit cards (Visa, MasterCard, ",
-					"American Express, Discover), PayPal, and Google Pay. All ",
-					"transactions are securely processed.")
+				new StringBuilder(
+				).append(
+					"We accept all major credit cards (Visa, MasterCard, "
+				).append(
+					"American Express, Discover), PayPal, and Google Pay. All "
+				).append(
+					"transactions are securely processed."
+				).toString()
 			).put(
 				"Is my payment information secure?",
-				StringBundler.concat(
-					"Absolutely. We use industry-standard SSL encryption and ",
-					"PCI-compliant payment gateways to protect your personal ",
-					"and payment information. Your data is never stored on ",
-					"our servers.")
+				new StringBuilder(
+				).append(
+					"Absolutely. We use industry-standard SSL encryption and "
+				).append(
+					"PCI-compliant payment gateways to protect your personal "
+				).append(
+					"and payment information. Your data is never stored on "
+				).append(
+					"our servers."
+				).toString()
 			).build()
 		).put(
 			"shipping",
 			LinkedHashMapBuilder.put(
 				"What are your shipping options and costs?",
-				StringBundler.concat(
-					"We offer several shipping options, including Standard, ",
-					"Expedited, and Overnight delivery. Shipping costs are ",
-					"calculated at checkout based on your location, the ",
-					"weight/size of your order, and the chosen shipping speed.")
+				new StringBuilder(
+				).append(
+					"We offer several shipping options, including Standard, "
+				).append(
+					"Expedited, and Overnight delivery. Shipping costs are "
+				).append(
+					"calculated at checkout based on your location, the "
+				).append(
+					"weight/size of your order, and the chosen shipping speed."
+				).toString()
 			).put(
 				"How long will it take for my order to arrive?",
-				StringBundler.concat(
-					"Standard Shipping: Typically 3-7 business days. ",
-					"Expedited Shipping: Typically 2-3 business days. ",
-					"Overnight Shipping: 1 business day (orders must be ",
-					"placed by 2 PM PST for same-day dispatch). please note ",
-					"that these are estimates and may vary based on product ",
-					"availability and carrier delays.")
+				new StringBuilder(
+				).append(
+					"Standard Shipping: Typically 3-7 business days. "
+				).append(
+					"Expedited Shipping: Typically 2-3 business days. "
+				).append(
+					"Overnight Shipping: 1 business day (orders must be "
+				).append(
+					"placed by 2 PM PST for same-day dispatch). please note "
+				).append(
+					"that these are estimates and may vary based on product "
+				).append(
+					"availability and carrier delays."
+				).toString()
 			).put(
 				"Do you ship internationally?",
-				StringBundler.concat(
-					"Yes, we ship to select international destinations. ",
-					"International shipping costs and delivery times vary ",
-					"significantly. Please enter your address at checkout to ",
-					"see available options and costs for your country. ",
-					"Customers are responsible for all customs duties, taxes, ",
-					"and fees.")
+				new StringBuilder(
+				).append(
+					"Yes, we ship to select international destinations. "
+				).append(
+					"International shipping costs and delivery times vary "
+				).append(
+					"significantly. Please enter your address at checkout to "
+				).append(
+					"see available options and costs for your country. "
+				).append(
+					"Customers are responsible for all customs duties, taxes, "
+				).append(
+					"and fees."
+				).toString()
 			).put(
 				"How can I track my order?",
-				StringBundler.concat(
-					"Once your order ships, you will receive a shipping ",
-					"confirmation email with a tracking number. You can click ",
-					"on the link in the email or enter your tracking number ",
-					"on our 'Track Your Order' page.")
+				new StringBuilder(
+				).append(
+					"Once your order ships, you will receive a shipping "
+				).append(
+					"confirmation email with a tracking number. You can click "
+				).append(
+					"on the link in the email or enter your tracking number "
+				).append(
+					"on our 'Track Your Order' page."
+				).toString()
 			).build()
 		).put(
 			"order_management",
 			LinkedHashMapBuilder.put(
 				"Can I change or cancel my order after it is placed?",
-				StringBundler.concat(
-					"We process orders quickly to ensure fast delivery. If ",
-					"you need to change or cancel, please contact us ",
-					"immediately by phone or email. We will do our best to ",
-					"accommodate your request if the order has not yet been ",
-					"shipped.")
+				new StringBuilder(
+				).append(
+					"We process orders quickly to ensure fast delivery. If "
+				).append(
+					"you need to change or cancel, please contact us "
+				).append(
+					"immediately by phone or email. We will do our best to "
+				).append(
+					"accommodate your request if the order has not yet been "
+				).append(
+					"shipped."
+				).toString()
 			).put(
 				"What if my package is lost or damaged?",
-				StringBundler.concat(
-					"Please contact our customer support within 48 hours of ",
-					"the expected delivery date for lost packages, or ",
-					"immediately upon receipt for damaged items. We will ",
-					"initiate a claim with the carrier and arrange for a ",
-					"replacement or refund as quickly as possible.")
+				new StringBuilder(
+				).append(
+					"Please contact our customer support within 48 hours of "
+				).append(
+					"the expected delivery date for lost packages, or "
+				).append(
+					"immediately upon receipt for damaged items. We will "
+				).append(
+					"initiate a claim with the carrier and arrange for a "
+				).append(
+					"replacement or refund as quickly as possible."
+				).toString()
 			).build()
 		).put(
 			"returns",
 			LinkedHashMapBuilder.put(
 				"What is your return policy?",
-				StringBundler.concat(
-					"We offer a 30-day return policy for most unused parts in ",
-					"their original, unopened packaging. Some exceptions ",
-					"apply (e.g., electrical components, custom orders, final ",
-					"sale items). Please see our full Return Policy for ",
-					"complete details.")
+				new StringBuilder(
+				).append(
+					"We offer a 30-day return policy for most unused parts in "
+				).append(
+					"their original, unopened packaging. Some exceptions "
+				).append(
+					"apply (e.g., electrical components, custom orders, final "
+				).append(
+					"sale items). Please see our full Return Policy for "
+				).append(
+					"complete details."
+				).toString()
 			).put(
 				"How do I return a part?",
-				StringBundler.concat(
-					"To initiate a return, please visit our Returns Portal or ",
-					"contact customer support to receive an RMA (Return ",
-					"Merchandise Authorization) number and detailed ",
-					"instructions. Do not send items back without an RMA.")
+				new StringBuilder(
+				).append(
+					"To initiate a return, please visit our Returns Portal or "
+				).append(
+					"contact customer support to receive an RMA (Return "
+				).append(
+					"Merchandise Authorization) number and detailed "
+				).append(
+					"instructions. Do not send items back without an RMA."
+				).toString()
 			).put(
 				"How long does it take to process a refund?",
-				StringBundler.concat(
-					"Once we receive your returned item and inspect it, ",
-					"refunds are typically processed within 5-7 business ",
-					"days. The refund will be issued to your original payment ",
-					"method. Please note that it may take additional time for ",
-					"the refund to appear on your bank statement.")
+				new StringBuilder(
+				).append(
+					"Once we receive your returned item and inspect it, "
+				).append(
+					"refunds are typically processed within 5-7 business "
+				).append(
+					"days. The refund will be issued to your original payment "
+				).append(
+					"method. Please note that it may take additional time for "
+				).append(
+					"the refund to appear on your bank statement."
+				).toString()
 			).put(
 				"Are there any non-returnable items?",
-				StringBundler.concat(
-					"Yes, certain items are non-returnable for safety or ",
-					"hygiene reasons, or if they are custom-made or marked as ",
-					"'final sale.' This often includes used parts, opened ",
-					"electrical components, or parts that have been ",
-					"installed. Please refer to our full Return Policy for ",
-					"the complete list.")
+				new StringBuilder(
+				).append(
+					"Yes, certain items are non-returnable for safety or "
+				).append(
+					"hygiene reasons, or if they are custom-made or marked as "
+				).append(
+					"'final sale.' This often includes used parts, opened "
+				).append(
+					"electrical components, or parts that have been "
+				).append(
+					"installed. Please refer to our full Return Policy for "
+				).append(
+					"the complete list."
+				).toString()
 			).build()
 		).put(
 			"parts",
 			LinkedHashMapBuilder.put(
 				"How do I find the right part for my vehicle?",
-				StringBundler.concat(
-					"You can use our 'Vehicle Selector' tool on the homepage ",
-					"by entering your Year, Make, and Model. Our search ",
-					"results will then filter for compatible parts. You can ",
-					"also search by VIN number, OEM part number, or part name.")
+				new StringBuilder(
+				).append(
+					"You can use our 'Vehicle Selector' tool on the homepage "
+				).append(
+					"by entering your Year, Make, and Model. Our search "
+				).append(
+					"results will then filter for compatible parts. You can "
+				).append(
+					"also search by VIN number, OEM part number, or part name."
+				).toString()
 			).put(
 				"What if I can not find the part I need?",
-				StringBundler.concat(
-					"If you are having trouble locating a specific part, ",
-					"please contact our parts specialists. Provide your ",
-					"vehicle's VIN and as much detail about the part as ",
-					"possible, and we will do our best to help you find it or ",
-					"suggest alternatives.")
+				new StringBuilder(
+				).append(
+					"If you are having trouble locating a specific part, "
+				).append(
+					"please contact our parts specialists. Provide your "
+				).append(
+					"vehicle's VIN and as much detail about the part as "
+				).append(
+					"possible, and we will do our best to help you find it or "
+				).append(
+					"suggest alternatives."
+				).toString()
 			).put(
 				"Are your parts new or used?",
-				StringBundler.concat(
-					"Unless explicitly stated otherwise (e.g., in a 'Used ",
-					"Parts' or 'Salvage' section), all products sold on our ",
-					"website are brand new from the manufacturer.")
+				new StringBuilder(
+				).append(
+					"Unless explicitly stated otherwise (e.g., in a 'Used "
+				).append(
+					"Parts' or 'Salvage' section), all products sold on our "
+				).append(
+					"website are brand new from the manufacturer."
+				).toString()
 			).put(
 				"Do your parts come with a warranty?",
-				StringBundler.concat(
-					"Many of our parts come with a manufacturer's warranty. ",
-					"Warranty terms vary by manufacturer and part. Please ",
-					"check the individual product page for specific warranty ",
-					"information. For warranty claims, please contact our ",
-					"support team.")
+				new StringBuilder(
+				).append(
+					"Many of our parts come with a manufacturer's warranty. "
+				).append(
+					"Warranty terms vary by manufacturer and part. Please "
+				).append(
+					"check the individual product page for specific warranty "
+				).append(
+					"information. For warranty claims, please contact our "
+				).append(
+					"support team."
+				).toString()
 			).put(
 				"Do you offer technical support for installation?",
-				StringBundler.concat(
-					"While we sell parts, we are not certified mechanics and ",
-					"cannot provide specific installation advice or ",
-					"instructions. We recommend consulting a qualified ",
-					"mechanic or referring to your vehicle's service manual ",
-					"for proper installation procedures.")
+				new StringBuilder(
+				).append(
+					"While we sell parts, we are not certified mechanics and "
+				).append(
+					"cannot provide specific installation advice or "
+				).append(
+					"instructions. We recommend consulting a qualified "
+				).append(
+					"mechanic or referring to your vehicle's service manual "
+				).append(
+					"for proper installation procedures."
+				).toString()
 			).put(
 				"Do you provide installation instructions?",
-				StringBundler.concat(
-					"Some manufacturers include basic installation guides ",
-					"with their parts. However, for detailed instructions, we ",
-					"strongly advise referring to your vehicle's factory ",
-					"service manual or seeking professional automotive ",
-					"assistance.")
+				new StringBuilder(
+				).append(
+					"Some manufacturers include basic installation guides "
+				).append(
+					"with their parts. However, for detailed instructions, we "
+				).append(
+					"strongly advise referring to your vehicle's factory "
+				).append(
+					"service manual or seeking professional automotive "
+				).append(
+					"assistance."
+				).toString()
 			).build()
 		).put(
 			"account",
 			LinkedHashMapBuilder.put(
 				"How do I reset my password?",
-				StringBundler.concat(
-					"Click on the 'Login' button at the top of the page, then ",
-					"click 'Forgot Password?'. Enter your registered email ",
-					"address, and we will send you a link to reset your ",
-					"password.")
+				new StringBuilder(
+				).append(
+					"Click on the 'Login' button at the top of the page, then "
+				).append(
+					"click 'Forgot Password?'. Enter your registered email "
+				).append(
+					"address, and we will send you a link to reset your "
+				).append(
+					"password."
+				).toString()
 			).put(
 				"How do I update my account information?",
-				StringBundler.concat(
-					"Log in to your account, and navigate to the 'My Account' ",
-					"or 'Account Settings' section. From there, you can ",
-					"update your personal details, shipping addresses, and ",
-					"payment methods.")
+				new StringBuilder(
+				).append(
+					"Log in to your account, and navigate to the 'My Account' "
+				).append(
+					"or 'Account Settings' section. From there, you can "
+				).append(
+					"update your personal details, shipping addresses, and "
+				).append(
+					"payment methods."
+				).toString()
 			).build()
 		).put(
 			"support",
 			LinkedHashMapBuilder.put(
 				"How can I contact customer service?",
-				StringBundler.concat(
-					"You can reach us by: **Phone:** [Your Phone Number] ",
-					"(Mon-Fri, [Hours of Operation]) **Email:** [Your Support ",
-					"Email] (We aim to respond within 24 business hours) ",
-					"**Live Chat:** Available on our website during business ",
-					"hours.")
+				new StringBuilder(
+				).append(
+					"You can reach us by: **Phone:** [Your Phone Number] "
+				).append(
+					"(Mon-Fri, [Hours of Operation]) **Email:** [Your Support "
+				).append(
+					"Email] (We aim to respond within 24 business hours) "
+				).append(
+					"**Live Chat:** Available on our website during business "
+				).append(
+					"hours."
+				).toString()
 			).put(
 				"Do you offer a trade discount for mechanics/shops?",
-				StringBundler.concat(
-					"Yes, we offer special pricing and programs for ",
-					"registered automotive businesses and mechanics. Please ",
-					"visit our 'Trade Program' page or contact our B2B sales ",
-					"team for more information.")
+				new StringBuilder(
+				).append(
+					"Yes, we offer special pricing and programs for "
+				).append(
+					"registered automotive businesses and mechanics. Please "
+				).append(
+					"visit our 'Trade Program' page or contact our B2B sales "
+				).append(
+					"team for more information."
+				).toString()
 			).build()
 		).put(
 			"general",
 			LinkedHashMapBuilder.put(
 				"Can I pick up my order in person?",
-				StringBundler.concat(
-					"No, currently all orders are processed and shipped from ",
-					"our distribution centers. We do not offer local pickup ",
-					"services.")
+				new StringBuilder(
+				).append(
+					"No, currently all orders are processed and shipped from "
+				).append(
+					"our distribution centers. We do not offer local pickup "
+				).append(
+					"services."
+				).toString()
 			).build()
 		).build();
 	}

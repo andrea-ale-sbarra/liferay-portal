@@ -5,8 +5,6 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
-import com.liferay.petra.string.StringBundler;
-
 import java.time.OffsetDateTime;
 
 import java.util.HashMap;
@@ -198,12 +196,46 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return StringBundler.concat(
-			"Order{id='", _id, "\', orderNumber='", _orderNumber,
-			"\', customerId='", _accountId, "\', customerName='", _accountName,
-			"\', orderDate=", _orderDate, ", status='", _status, "\', total=",
-			_total, ", shippingAddress=", _shippingAddress, ", billingAddress=",
-			_billingAddress, '}');
+		return new StringBuilder(
+		).append(
+			"Order{id='"
+		).append(
+			_id
+		).append(
+			"\', orderNumber='"
+		).append(
+			_orderNumber
+		).append(
+			"\', customerId='"
+		).append(
+			_accountId
+		).append(
+			"\', customerName='"
+		).append(
+			_accountName
+		).append(
+			"\', orderDate="
+		).append(
+			_orderDate
+		).append(
+			", status='"
+		).append(
+			_status
+		).append(
+			"\', total="
+		).append(
+			_total
+		).append(
+			", shippingAddress="
+		).append(
+			_shippingAddress
+		).append(
+			", billingAddress="
+		).append(
+			_billingAddress
+		).append(
+			'}'
+		).toString();
 	}
 
 	private String _accountId;

@@ -8,7 +8,6 @@ package com.liferay.commerce.ai.chat.bot;
 import com.liferay.client.extension.util.spring.boot3.BaseRestController;
 import com.liferay.commerce.ai.chat.bot.model.Settings;
 import com.liferay.commerce.ai.chat.bot.service.SettingsService;
-import com.liferay.petra.string.StringBundler;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -148,14 +147,20 @@ public class SettingsRestController extends BaseRestController {
 
 			if (_log.isInfoEnabled()) {
 				_log.info(
-					StringBundler.concat(
-						"Deactivated ", itemJSONObject.getInt("id"),
-						" with provider ",
+					new StringBuilder(
+					).append(
+						"Deactivated "
+					).append(
+						itemJSONObject.getInt("id")
+					).append(
+						" with provider "
+					).append(
 						settingsJSONObject.getJSONObject(
 							"provider"
 						).getString(
 							"name"
-						)));
+						)
+					).toString());
 			}
 		}
 
