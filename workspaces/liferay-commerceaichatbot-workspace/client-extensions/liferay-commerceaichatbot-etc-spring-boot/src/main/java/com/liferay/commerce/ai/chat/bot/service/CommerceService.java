@@ -24,7 +24,7 @@ import java.net.URI;
 
 import java.nio.charset.StandardCharsets;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -756,14 +756,13 @@ public class CommerceService {
 		return map;
 	}
 
-	private OffsetDateTime _parseIsoDate(String string) {
+	private Instant _parseIsoDate(String string) {
 		if ((string == null) || string.isEmpty()) {
 			return null;
 		}
 
 		try {
-			return OffsetDateTime.parse(
-				StringUtil.replace(string, 'Z', "+00:00"));
+			return Instant.parse(StringUtil.replace(string, 'Z', "+00:00"));
 		}
 		catch (Exception exception1) {
 			try {
@@ -771,7 +770,7 @@ public class CommerceService {
 					_log.warn(exception1);
 				}
 
-				return OffsetDateTime.parse(string);
+				return Instant.parse(string);
 			}
 			catch (Exception exception2) {
 				if (_log.isWarnEnabled()) {
@@ -887,7 +886,7 @@ public class CommerceService {
 
 		String createDate = jsonObject.optString("createDate", null);
 
-		order.setCreateDate(createDate);
+		order.setCreateDate(_parseIsoDate(createDate));
 		order.setOrderDate(_parseIsoDate(createDate));
 
 		return order;
@@ -954,8 +953,10 @@ public class CommerceService {
 			jsonObject.optString(
 				"shipmentStatus", jsonObject.optString("status", "")));
 		shipment.setOneLineAddress(jsonObject.optString("oneLineAddress", ""));
-		shipment.setShippingDate(jsonObject.optString("shippingDate", ""));
-		shipment.setExpectedDate(jsonObject.optString("expectedDate", ""));
+		shipment.setShippingDate(
+			_parseIsoDate(jsonObject.optString("shippingDate", "")));
+		shipment.setExpectedDate(
+			_parseIsoDate(jsonObject.optString("expectedDate", "")));
 
 		JSONObject statusJSONObject = jsonObject.optJSONObject("status");
 

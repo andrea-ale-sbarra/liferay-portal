@@ -464,7 +464,7 @@ public class CommerceTools {
 				).append(
 					" | Date: "
 				).append(
-					GetterUtil.getString(order.getCreateDate(), "N/A")
+					order.getCreateDate()
 				).append(
 					" | Total: "
 				).append(
@@ -494,8 +494,7 @@ public class CommerceTools {
 						sb.append(
 							"- **Shipping Date**: "
 						).append(
-							GetterUtil.getString(
-								latestShipment.getShippingDate(), "N/A")
+							latestShipment.getShippingDate()
 						).append(
 							"\n"
 						);
@@ -1132,7 +1131,7 @@ public class CommerceTools {
 
 						orderShipmentDetails.setId(orderId);
 						orderShipmentDetails.setCreateDate(
-							GetterUtil.getString(order.getCreateDate(), "N/A"));
+							order.getCreateDate());
 						orderShipmentDetails.setOneLineAddress(oneLineAddress);
 
 						String shipmentStatus = "N/A";
@@ -1146,11 +1145,9 @@ public class CommerceTools {
 						orderShipmentDetails.setShipmentStatus(shipmentStatus);
 
 						orderShipmentDetails.setShippingDate(
-							GetterUtil.getString(
-								shipment.getShippingDate(), "N/A"));
+							shipment.getShippingDate());
 						orderShipmentDetails.setExpectedDate(
-							GetterUtil.getString(
-								shipment.getExpectedDate(), "N/A"));
+							shipment.getExpectedDate());
 						orderShipmentDetails.setTrackingNumber(
 							GetterUtil.getString(
 								shipment.getTrackingNumber(), "N/A"));
@@ -1237,9 +1234,7 @@ public class CommerceTools {
 				}
 
 				if (order.getOrderDate() != null) {
-					OffsetDateTime orderDate = order.getOrderDate();
-
-					order.setCreateDate(orderDate.toString());
+					order.setCreateDate(order.getOrderDate());
 				}
 
 				filteredOrders.add(order);
@@ -1524,9 +1519,7 @@ public class CommerceTools {
 		String orderDate = "N/A";
 
 		if (order.getOrderDate() != null) {
-			OffsetDateTime offsetDateTime = order.getOrderDate();
-
-			orderDate = String.valueOf(offsetDateTime);
+			orderDate = String.valueOf(order.getOrderDate());
 		}
 
 		StringBuilder result = new StringBuilder();
@@ -1783,7 +1776,7 @@ public class CommerceTools {
 				).append(
 					" - "
 				).append(
-					GetterUtil.getString(order.getCreateDate(), "N/A")
+					order.getCreateDate()
 				).append(
 					" - "
 				).append(
@@ -3191,7 +3184,7 @@ public class CommerceTools {
 			sb.append(
 				"   📅 **Date**: "
 			).append(
-				GetterUtil.getString(order.getCreateDate(), "N/A")
+				order.getCreateDate()
 			).append(
 				"\n"
 			);
@@ -3381,7 +3374,7 @@ public class CommerceTools {
 			sb.append(
 				"- **Shipping Date**: "
 			).append(
-				GetterUtil.getString(shipment.getShippingDate(), "N/A")
+				shipment.getShippingDate()
 			).append(
 				"\n"
 			);
@@ -3578,7 +3571,7 @@ public class CommerceTools {
 		sb.append(
 			"- **Order Date**: "
 		).append(
-			GetterUtil.getString(order.getCreateDate(), "N/A")
+			order.getCreateDate()
 		).append(
 			"\n"
 		);
@@ -3645,7 +3638,7 @@ public class CommerceTools {
 			String createDate = "N/A";
 
 			if (order.getCreateDate() != null) {
-				createDate = order.getCreateDate();
+				createDate = String.valueOf(order.getCreateDate());
 			}
 
 			String status = "N/A";

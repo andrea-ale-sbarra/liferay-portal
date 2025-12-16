@@ -5,7 +5,7 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +43,7 @@ public class Order {
 		return _billingAddress;
 	}
 
-	public String getCreateDate() {
+	public Instant getCreateDate() {
 		return _createDate;
 	}
 
@@ -59,7 +59,7 @@ public class Order {
 		return _itemsQuantity;
 	}
 
-	public OffsetDateTime getOrderDate() {
+	public Instant getOrderDate() {
 		return _orderDate;
 	}
 
@@ -126,7 +126,7 @@ public class Order {
 				new HashMap<>();
 	}
 
-	public void setCreateDate(String createDate) {
+	public void setCreateDate(Instant createDate) {
 		_createDate = createDate;
 	}
 
@@ -142,7 +142,7 @@ public class Order {
 		_itemsQuantity = itemsQuantity;
 	}
 
-	public void setOrderDate(OffsetDateTime orderDate) {
+	public void setOrderDate(Instant orderDate) {
 		_orderDate = orderDate;
 	}
 
@@ -241,11 +241,11 @@ public class Order {
 	private String _accountId;
 	private String _accountName;
 	private Map<String, String> _billingAddress = new HashMap<>();
-	private String _createDate;
+	private Instant _createDate;
 	private String _externalReferenceCode;
 	private String _id;
 	private int _itemsQuantity;
-	private OffsetDateTime _orderDate;
+	private Instant _orderDate;
 	private String _orderNumber;
 	private final Map<String, String> _shippingAddress = new HashMap<>();
 	private String _shippingDiscountValueFormatted;
