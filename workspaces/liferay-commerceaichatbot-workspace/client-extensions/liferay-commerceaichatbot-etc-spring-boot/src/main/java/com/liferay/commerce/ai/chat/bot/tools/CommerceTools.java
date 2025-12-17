@@ -495,13 +495,6 @@ public class CommerceTools {
 			for (int i = 0; i < orderItems.size(); i++) {
 				OrderItem orderItem = orderItems.get(i);
 
-				String itemPrice = "N/A";
-
-				if (orderItem.getTotalPrice() > 0) {
-					itemPrice = String.format(
-						LocaleUtil.ROOT, "$ %.2f", orderItem.getTotalPrice());
-				}
-
 				sb.append(
 					i + 1
 				).append(
@@ -523,7 +516,7 @@ public class CommerceTools {
 				).append(
 					" | Price: "
 				).append(
-					itemPrice
+					GetterUtil.getString(orderItem.getUnitPrice(), "N/A")
 				).append(
 					"\n\n"
 				);

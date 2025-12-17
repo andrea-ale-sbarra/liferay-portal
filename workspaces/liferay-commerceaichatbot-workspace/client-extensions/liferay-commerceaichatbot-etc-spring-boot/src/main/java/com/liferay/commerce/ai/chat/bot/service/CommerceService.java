@@ -612,24 +612,22 @@ public class CommerceService {
 
 			if ((filter != null) && !filter.isEmpty()) {
 				params.put("filter", filter);
-
-				String path = String.format(
-					"/o/headless-commerce-delivery-order/v1.0/channels/%s" +
-						"/accounts/%s/placed-orders",
-					channelId, accountId);
-
-				URI uri = _buildUri(path, params);
-
-				return _executeGetJSONObject(uri);
 			}
+
+			String path = String.format(
+				"/o/headless-commerce-delivery-order/v1.0/channels/%s" +
+					"/accounts/%s/placed-orders",
+				channelId, accountId);
+
+			URI uri = _buildUri(path, params);
+
+			return _executeGetJSONObject(uri);
 		}
 		catch (Exception exception) {
 			_log.error(exception);
 
 			return null;
 		}
-
-		return null;
 	}
 
 	private JSONObject _getProductsByChannelJSONObject(
@@ -896,8 +894,12 @@ public class CommerceService {
 			orderItem.setQuantity(jsonObject.optInt("quantityOrdered", 0));
 		}
 
-		orderItem.setUnitPrice(_getSafeDouble(jsonObject, "unitPrice"));
-		orderItem.setTotalPrice(_getSafeDouble(jsonObject, "totalPrice"));
+		JSONObject priceJSONObject = jsonObject.optJSONObject("price");
+
+		orderItem.setUnitPrice(priceJSONObject.optString("priceFormatted"));
+		orderItem.setTotalPrice(
+			priceJSONObject.optString("finalPriceFormatted"));
+
 		orderItem.setStatus(
 			jsonObject.optString(
 				"orderItemStatus", jsonObject.optString("status", "")));

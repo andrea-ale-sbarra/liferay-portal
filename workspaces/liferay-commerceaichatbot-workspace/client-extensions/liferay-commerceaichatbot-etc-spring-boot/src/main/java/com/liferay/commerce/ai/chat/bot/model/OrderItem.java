@@ -16,8 +16,8 @@ public class OrderItem {
 	}
 
 	public OrderItem(
-		String id, String name, String sku, int quantity, double unitPrice,
-		double totalPrice, String status) {
+		String id, String name, String sku, int quantity, String unitPrice,
+		String totalPrice, String status) {
 
 		_id = id;
 		_name = name;
@@ -63,11 +63,11 @@ public class OrderItem {
 		return _status;
 	}
 
-	public double getTotalPrice() {
+	public String getTotalPrice() {
 		return _totalPrice;
 	}
 
-	public double getUnitPrice() {
+	public String getUnitPrice() {
 		return _unitPrice;
 	}
 
@@ -96,11 +96,11 @@ public class OrderItem {
 		_status = status;
 	}
 
-	public void setTotalPrice(double totalPrice) {
+	public void setTotalPrice(String totalPrice) {
 		_totalPrice = totalPrice;
 	}
 
-	public void setUnitPrice(double unitPrice) {
+	public void setUnitPrice(String unitPrice) {
 		_unitPrice = unitPrice;
 	}
 
@@ -145,7 +145,7 @@ public class OrderItem {
 	private int _quantity;
 	private String _sku;
 	private String _status;
-	private double _totalPrice;
-	private double _unitPrice;
+	private String _totalPrice;
+	private String _unitPrice;
 
 }
