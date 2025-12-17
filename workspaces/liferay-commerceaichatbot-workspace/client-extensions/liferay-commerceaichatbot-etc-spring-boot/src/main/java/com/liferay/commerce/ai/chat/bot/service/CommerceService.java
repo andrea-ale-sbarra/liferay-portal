@@ -810,9 +810,6 @@ public class CommerceService {
 		order.setOrderNumber(jsonObject.optString("orderNumber", ""));
 		order.setAccountId(String.valueOf(jsonObject.opt("accountId")));
 		order.setAccountName(jsonObject.optString("account", ""));
-		order.setStatus(
-			jsonObject.optString(
-				"orderStatus", jsonObject.optString("status", "")));
 		order.setExternalReferenceCode(
 			jsonObject.optString("externalReferenceCode", null));
 
@@ -839,6 +836,11 @@ public class CommerceService {
 			"orderStatusInfo");
 
 		if (statusInfoJSONObject != null) {
+			order.setStatus(
+				jsonObject.optString(
+					"orderStatus",
+					statusInfoJSONObject.optString("label_i18n", "")));
+
 			order.setStatusLabel(statusInfoJSONObject.optString("label", ""));
 
 			Object code = statusInfoJSONObject.opt("code");
