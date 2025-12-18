@@ -89,10 +89,10 @@ public class CommerceService {
 		}
 	}
 
-	public List<Account> getAccounts(String channelId) {
+	public List<Account> getAccounts(String channelId, String search) {
 		List<Account> accounts = new ArrayList<>();
 
-		JSONArray jsonArray = _getAccountsJSONArray(channelId);
+		JSONArray jsonArray = _getAccountsJSONArray(channelId, search);
 
 		if (jsonArray != null) {
 			for (int i = 0; i < jsonArray.length(); i++) {
@@ -108,7 +108,7 @@ public class CommerceService {
 	}
 
 	public List<Order> getAllPlacedOrdersByAccountDto(
-		String channelId, String accountId, String sort) {
+		String channelId, String accountId, String search, String sort) {
 
 		List<Order> orders = new ArrayList<>();
 
@@ -117,7 +117,7 @@ public class CommerceService {
 
 		while (true) {
 			PageResult<Order> pageResult = getPlacedOrdersByAccount(
-				channelId, accountId, page, pageSize, sort, null);
+				channelId, accountId, page, pageSize, search, sort, null);
 
 			List<Order> pageResultOrders = pageResult.getItems();
 
@@ -199,10 +199,10 @@ public class CommerceService {
 
 	public PageResult<Order> getPlacedOrdersByAccount(
 		String channelId, String accountId, Integer page, Integer pageSize,
-		String sort, String filter) {
+		String search, String sort, String filter) {
 
 		JSONObject ordersJSONObject = _getPlacedOrdersByAccountJSONObject(
-			channelId, accountId, page, pageSize, sort, filter);
+			channelId, accountId, page, pageSize, search, sort, filter);
 
 		PageResult<Order> pageResult = new PageResult<>();
 
@@ -445,7 +445,7 @@ public class CommerceService {
 		}
 	}
 
-	private JSONArray _getAccountsJSONArray(String channelId) {
+	private JSONArray _getAccountsJSONArray(String channelId, String search) {
 		_ensureAuthenticated();
 
 		try {
@@ -460,7 +460,11 @@ public class CommerceService {
 				path = "/o/headless-commerce-delivery-catalog/v1.0/accounts";
 			}
 
-			URI uri = _buildUri(path, null);
+			URI uri = _buildUri(
+				path,
+				HashMapBuilder.put(
+					"search", search
+				).build());
 
 			JSONObject jsonObject = _executeGetJSONObject(uri);
 
@@ -591,7 +595,7 @@ public class CommerceService {
 
 	private JSONObject _getPlacedOrdersByAccountJSONObject(
 		String channelId, String accountId, Integer page, Integer pageSize,
-		String sort, String filter) {
+		String search, String sort, String filter) {
 
 		_ensureAuthenticated();
 
@@ -606,6 +610,10 @@ public class CommerceService {
 				params.put("pageSize", String.valueOf(pageSize));
 			}
 
+			if (search != null) {
+				params.put("search", search);
+			}
+
 			if ((sort != null) && !sort.isEmpty()) {
 				params.put("sort", sort);
 			}
@@ -618,6 +626,13 @@ public class CommerceService {
 				"/o/headless-commerce-delivery-order/v1.0/channels/%s" +
 					"/accounts/%s/placed-orders",
 				channelId, accountId);
+
+			if (accountId == null) {
+				path = String.format(
+					"/o/headless-commerce-delivery-order/v1.0/channels/%s" +
+						"/placed-orders",
+					channelId);
+			}
 
 			URI uri = _buildUri(path, params);
 

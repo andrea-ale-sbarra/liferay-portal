@@ -88,7 +88,8 @@ public class CommerceTools {
 
 			String channelId = channel.getId();
 
-			List<Account> accounts = _commerceService.getAccounts(channelId);
+			List<Account> accounts = _commerceService.getAccounts(
+				channelId, "");
 
 			if (ListUtil.isEmpty(accounts)) {
 				return Map.of(
@@ -113,7 +114,7 @@ public class CommerceTools {
 
 					List<Order> orders =
 						_commerceService.getAllPlacedOrdersByAccountDto(
-							channelId, account.getId(), StringPool.BLANK);
+							channelId, "", account.getId(), StringPool.BLANK);
 
 					totalOrders += orders.size();
 
@@ -168,7 +169,9 @@ public class CommerceTools {
 		}
 	}
 
-	public Map<String, String> getCustomerOrdersTool(String email) {
+	public Map<String, String> getCustomerOrdersByAccountTool(
+		String accountName) {
+
 		try {
 			List<Channel> channels = _commerceService.getChannels();
 
@@ -178,14 +181,10 @@ public class CommerceTools {
 
 			Channel channel = channels.get(0);
 
-			Account account = _fetchAccount(email);
+			Account account = _fetchAccount(channel, accountName);
 
 			if (account == null) {
-				account = _fetchAccount(channel, email);
-			}
-
-			if (account == null) {
-				return Map.of("error", _getAccountNotFoundMessage(email));
+				return Map.of("error", _getAccountNotFoundMessage(accountName));
 			}
 
 			String channelId = channel.getId();
@@ -194,7 +193,76 @@ public class CommerceTools {
 
 			try {
 				orders = _commerceService.getAllPlacedOrdersByAccountDto(
-					channelId, account.getId(), "createDate");
+					channelId, account.getId(), null, "createDate");
+			}
+			catch (Exception exception) {
+				return Map.of(
+					"error",
+					new StringBuilder(
+					).append(
+						"**Error retrieving orders for "
+					).append(
+						accountName
+					).append(
+						"**: "
+					).append(
+						String.valueOf(exception.getMessage())
+					).toString());
+			}
+
+			if (ListUtil.isEmpty(orders)) {
+				return Map.of(
+					"error",
+					new StringBuilder(
+					).append(
+						"I found the account for '"
+					).append(
+						accountName
+					).append(
+						"' but no orders are available."
+					).toString());
+			}
+
+			if (orders.size() == 1) {
+				return Map.of(
+					"orders",
+					_getOrderMessage(account, accountName, orders.get(0)));
+			}
+
+			return Map.of(
+				"orders", _getOrdersMessage(account, accountName, orders));
+		}
+		catch (Exception exception) {
+			return Map.of(
+				"error",
+				"Error getting customer orders: " + exception.getMessage());
+		}
+	}
+
+	public Map<String, String> getCustomerOrdersTool(String email) {
+		try {
+			List<Channel> channels = _commerceService.getChannels();
+
+			if (ListUtil.isEmpty(channels)) {
+				return Map.of("error", "No channels available in the system.");
+			}
+
+			UserAccount userAccount = _commerceService.getUserAccountByEmail(
+				email);
+
+			if (userAccount == null) {
+				return Map.of("error", _getUserAccountNotFoundMessage(email));
+			}
+
+			Channel channel = channels.get(0);
+
+			String channelId = channel.getId();
+
+			List<Order> orders;
+
+			try {
+				orders = _commerceService.getAllPlacedOrdersByAccountDto(
+					channelId, null, email, "createDate");
 			}
 			catch (Exception exception) {
 				return Map.of(
@@ -226,10 +294,12 @@ public class CommerceTools {
 
 			if (orders.size() == 1) {
 				return Map.of(
-					"orders", _getOrderMessage(account, email, orders.get(0)));
+					"orders",
+					_getOrderMessage(userAccount, email, orders.get(0)));
 			}
 
-			return Map.of("orders", _getOrdersMessage(account, email, orders));
+			return Map.of(
+				"orders", _getOrdersMessage(userAccount, email, orders));
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -657,7 +727,7 @@ public class CommerceTools {
 					String channelId = channel.getId();
 
 					List<Account> accounts = _commerceService.getAccounts(
-						channelId);
+						channelId, null);
 
 					if ((accounts != null) && !accounts.isEmpty()) {
 						sb.append("**Accounts for Channel ");
@@ -736,7 +806,8 @@ public class CommerceTools {
 			}
 
 			if (account == null) {
-				return Map.of("error", _getAccountNotFoundMessage(userEmail));
+				return Map.of(
+					"error", _getUserAccountNotFoundMessage(userEmail));
 			}
 
 			OffsetDateTime startOffsetDateTime = null;
@@ -797,7 +868,7 @@ public class CommerceTools {
 				PageResult<Order> pageResult =
 					_commerceService.getPlacedOrdersByAccount(
 						channel.getId(), account.getId(), currentPage, pageSize,
-						"orderDate:desc", filter);
+						null, "orderDate:desc", filter);
 
 				if (pageResult == null) {
 					break;
@@ -880,7 +951,8 @@ public class CommerceTools {
 			}
 
 			if (account == null) {
-				return Map.of("error", _getAccountNotFoundMessage(userEmail));
+				return Map.of(
+					"error", _getUserAccountNotFoundMessage(userEmail));
 			}
 
 			String channelId = channel.getId();
@@ -982,7 +1054,8 @@ public class CommerceTools {
 			}
 
 			if (account == null) {
-				return Map.of("error", _getAccountNotFoundMessage(userEmail));
+				return Map.of(
+					"error", _getUserAccountNotFoundMessage(userEmail));
 			}
 
 			String channelId = channel.getId();
@@ -995,7 +1068,7 @@ public class CommerceTools {
 			while (true) {
 				PageResult<Order> pageResult =
 					_commerceService.getPlacedOrdersByAccount(
-						channelId, account.getId(), page, pageSize,
+						channelId, account.getId(), page, pageSize, null,
 						"createDate:desc", null);
 
 				if (pageResult == null) {
@@ -1136,7 +1209,8 @@ public class CommerceTools {
 			}
 
 			if (account == null) {
-				return Map.of("error", _getAccountNotFoundMessage(userEmail));
+				return Map.of(
+					"error", _getUserAccountNotFoundMessage(userEmail));
 			}
 
 			String channelId = channel.getId();
@@ -1405,19 +1479,12 @@ public class CommerceTools {
 		}
 	}
 
-	private Account _fetchAccount(Channel channel, String email) {
-		List<Account> accounts = _commerceService.getAccounts(channel.getId());
+	private Account _fetchAccount(Channel channel, String search) {
+		List<Account> accounts = _commerceService.getAccounts(
+			channel.getId(), search);
 
-		for (Account account : accounts) {
-			String lowerCasedName = StringUtil.toLowerCase(account.getName());
-
-			String lowerCasedEmail = StringUtil.toLowerCase(email);
-
-			if (lowerCasedEmail.contains(lowerCasedName) ||
-				lowerCasedName.contains(lowerCasedEmail)) {
-
-				return account;
-			}
+		if (!accounts.isEmpty()) {
+			return accounts.get(0);
 		}
 
 		return null;
@@ -1583,25 +1650,25 @@ public class CommerceTools {
 		return sb.toString();
 	}
 
-	private String _getAccountNotFoundMessage(String email) {
+	private String _getAccountNotFoundMessage(String accountName) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("**Account not found**");
 		sb.append("\n\n");
-		sb.append("The email '");
-		sb.append(email);
+		sb.append("The account '");
+		sb.append(accountName);
 		sb.append("' was not found in our system.");
 		sb.append("\n\n");
 		sb.append("**Please check:**");
 		sb.append("\n");
-		sb.append("- Email spelling and format");
+		sb.append("- Account spelling and format");
 		sb.append("\n");
 		sb.append("- If you have an account with us");
 		sb.append("\n");
 		sb.append("- Contact customer support if you believe this is an error");
 		sb.append("\n\n");
 		sb.append("**💡 Tip:** Make sure you are using the same ");
-		sb.append("email address you used when placing your ");
+		sb.append("account you used when placing your ");
 		sb.append("orders.");
 
 		return sb.toString();
@@ -2584,6 +2651,42 @@ public class CommerceTools {
 		return sb.toString();
 	}
 
+	private String _getOrderMessage(
+		UserAccount userAccount, String email, Order order) {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("**Customer Orders for ");
+		sb.append(email);
+		sb.append("**");
+		sb.append("\n");
+		sb.append("**User Email**: ");
+		sb.append(userAccount.getEmail());
+		sb.append(" (ID: ");
+		sb.append(userAccount.getId());
+		sb.append(")");
+		sb.append("\n\n");
+		sb.append("**Found 1 order:**");
+		sb.append("\n");
+		sb.append("- **Order ID**: ");
+		sb.append(GetterUtil.getString(order.getId(), "N/A"));
+		sb.append("\n");
+		sb.append("- **Reference**: ");
+		sb.append(
+			GetterUtil.getString(order.getExternalReferenceCode(), "N/A"));
+		sb.append("\n");
+		sb.append("- **Date**: ");
+		sb.append(GetterUtil.getString(order.getOrderDate(), "N/A"));
+		sb.append("\n");
+		sb.append("- **Status**: ");
+		sb.append(GetterUtil.getString(order.getStatus(), "N/A"));
+		sb.append("\n");
+		sb.append("- **Total**: ");
+		sb.append(GetterUtil.getString(order.getTotalFormatted(), "N/A"));
+
+		return sb.toString();
+	}
+
 	private List<Order> _getOrders(
 		Account account, String channelId, String sort) {
 
@@ -2595,7 +2698,8 @@ public class CommerceTools {
 		while (orders.size() < 100) {
 			PageResult<Order> pageResult =
 				_commerceService.getPlacedOrdersByAccount(
-					channelId, account.getId(), page, pageSize, sort, null);
+					channelId, account.getId(), page, pageSize, null, sort,
+					null);
 
 			if (pageResult == null) {
 				break;
@@ -3610,6 +3714,120 @@ public class CommerceTools {
 		return sb.toString();
 	}
 
+	private String _getOrdersMessage(
+		UserAccount userAccount, String email, List<Order> orders) {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(
+			"**Customer Orders for "
+		).append(
+			email
+		).append(
+			"**\n"
+		);
+
+		sb.append(
+			"**User Email**: "
+		).append(
+			userAccount.getEmail()
+		).append(
+			" (ID: "
+		).append(
+			userAccount.getId()
+		).append(
+			")\n\n"
+		);
+
+		sb.append(
+			"**Found "
+		).append(
+			orders.size()
+		).append(
+			" orders:**"
+		);
+
+		for (int i = 0; i < Math.min(10, orders.size()); i++) {
+			Order order = orders.get(i);
+
+			String orderId = "N/A";
+
+			if (order.getId() != null) {
+				orderId = order.getId();
+			}
+
+			String createDate = "N/A";
+
+			if (order.getCreateDate() != null) {
+				createDate = order.getCreateDate();
+			}
+
+			String status = "N/A";
+
+			if (order.getStatus() != null) {
+				status = order.getStatus();
+			}
+
+			String total = "N/A";
+
+			if (order.getTotalFormatted() != null) {
+				total = order.getTotalFormatted();
+			}
+
+			sb.append(
+				"\n"
+			).append(
+				i + 1
+			).append(
+				". **Order "
+			).append(
+				orderId
+			).append(
+				"** - "
+			).append(
+				orderId
+			);
+
+			sb.append(
+				"\n   Date: "
+			).append(
+				createDate
+			).append(
+				", Status: "
+			).append(
+				status
+			).append(
+				", Total: "
+			).append(
+				total
+			);
+		}
+
+		if (orders.size() > 10) {
+			sb.append(
+				"\n\n... and "
+			).append(
+				orders.size() - 10
+			).append(
+				" more orders."
+			);
+		}
+
+		sb.append(
+			"\n\n**Total Orders**: "
+		).append(
+			orders.size()
+		);
+
+		sb.append(
+			"\n**User Email**: "
+		).append(
+			userAccount.getEmail()
+		);
+
+		return sb.toString();
+	}
+
 	private String _getProductEmailRequiredEmailMessage() {
 		StringBuilder sb = new StringBuilder();
 
@@ -3728,6 +3946,30 @@ public class CommerceTools {
 		}
 
 		return statusLabel;
+	}
+
+	private String _getUserAccountNotFoundMessage(String email) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("**Account not found**");
+		sb.append("\n\n");
+		sb.append("The email '");
+		sb.append(email);
+		sb.append("' was not found in our system.");
+		sb.append("\n\n");
+		sb.append("**Please check:**");
+		sb.append("\n");
+		sb.append("- Email spelling and format");
+		sb.append("\n");
+		sb.append("- If you have an account with us");
+		sb.append("\n");
+		sb.append("- Contact customer support if you believe this is an error");
+		sb.append("\n\n");
+		sb.append("**💡 Tip:** Make sure you are using the same ");
+		sb.append("email address you used when placing your ");
+		sb.append("orders.");
+
+		return sb.toString();
 	}
 
 	private String _getUserEmailRequiredMessage() {

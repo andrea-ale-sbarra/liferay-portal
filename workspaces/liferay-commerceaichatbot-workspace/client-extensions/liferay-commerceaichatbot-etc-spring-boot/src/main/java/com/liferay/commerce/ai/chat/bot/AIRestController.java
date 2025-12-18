@@ -71,6 +71,8 @@ public class AIRestController extends BaseRestController {
 			_commerceTools, "searchOrdersByStatusTool");
 		FunctionTool searchOrdersByShippingAddressTool = FunctionTool.create(
 			_commerceTools, "searchOrdersByShippingAddressTool");
+		FunctionTool getCustomerOrdersByAccountTool = FunctionTool.create(
+			_commerceTools, "getCustomerOrdersByAccountTool");
 		FunctionTool getCustomerOrdersTool = FunctionTool.create(
 			_commerceTools, "getCustomerOrdersTool");
 		FunctionTool getTestEmailsTool = FunctionTool.create(
@@ -98,9 +100,9 @@ public class AIRestController extends BaseRestController {
 			listChannelsAccountsTool, findOrderTool, searchOrdersTool,
 			searchOrdersByDateRangeTool, searchOrdersByProductTool,
 			searchOrdersByStatusTool, searchOrdersByShippingAddressTool,
-			getCustomerOrdersTool, getTestEmailsTool, getOrderItemsTool,
-			getOrderShippingTool, getAllAccountsOrderSummaryTool,
-			getFaqInformationTool
+			getCustomerOrdersTool, getCustomerOrdersByAccountTool,
+			getTestEmailsTool, getOrderItemsTool, getOrderShippingTool,
+			getAllAccountsOrderSummaryTool, getFaqInformationTool
 		).build();
 
 		InMemoryRunner runner = new InMemoryRunner(rootAgent);
@@ -180,7 +182,11 @@ public class AIRestController extends BaseRestController {
 	).append(
 		"you used when\n  placing the order?'\n\nStart by greeting the "
 	).append(
-		"customer and asking how you can help them today."
+		"customer and asking how you can help them today.\n\n"
+	).append(
+		"When asked for orders if number of order is not specified, display "
+	).append(
+		"the 10 most recent orders returned."
 	).toString();
 
 	@Autowired
