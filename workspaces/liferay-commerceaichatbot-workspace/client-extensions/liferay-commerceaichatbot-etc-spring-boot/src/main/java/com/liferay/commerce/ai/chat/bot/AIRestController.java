@@ -61,6 +61,8 @@ public class AIRestController extends BaseRestController {
 			_commerceTools, "listAvailableChannelsAndAccountsTool");
 		FunctionTool findOrderTool = FunctionTool.create(
 			_commerceTools, "findOrderTool");
+		FunctionTool searchAccountOrdersByDateRangeTool = FunctionTool.create(
+			_commerceTools, "searchAccountOrdersByDateRangeTool");
 		FunctionTool searchOrdersTool = FunctionTool.create(
 			_commerceTools, "searchOrdersTool");
 		FunctionTool searchOrdersByDateRangeTool = FunctionTool.create(
@@ -85,6 +87,8 @@ public class AIRestController extends BaseRestController {
 			_commerceTools, "getAllAccountsOrderSummaryTool");
 		FunctionTool getFaqInformationTool = FunctionTool.create(
 			_commerceTools, "getFaqInformationTool");
+		FunctionTool getCurrentDateTool = FunctionTool.create(
+			_commerceTools, "getCurrentDateTool");
 
 		LlmAgent rootAgent = LlmAgent.builder(
 		).name(
@@ -97,11 +101,13 @@ public class AIRestController extends BaseRestController {
 		).instruction(
 			_INSTRUCTION
 		).tools(
-			listChannelsAccountsTool, findOrderTool, searchOrdersTool,
+			listChannelsAccountsTool, findOrderTool,
+			searchAccountOrdersByDateRangeTool, searchOrdersTool,
 			searchOrdersByDateRangeTool, searchOrdersByProductTool,
 			searchOrdersByStatusTool, searchOrdersByShippingAddressTool,
-			getCustomerOrdersTool, getCustomerOrdersByAccountTool,
-			getTestEmailsTool, getOrderItemsTool, getOrderShippingTool,
+			getCurrentDateTool, getCustomerOrdersTool,
+			getCustomerOrdersByAccountTool, getTestEmailsTool,
+			getOrderItemsTool, getOrderShippingTool,
 			getAllAccountsOrderSummaryTool, getFaqInformationTool
 		).build();
 
@@ -184,9 +190,12 @@ public class AIRestController extends BaseRestController {
 	).append(
 		"customer and asking how you can help them today.\n\n"
 	).append(
-		"When asked for orders if number of order is not specified, display "
+		"When asked for orders if number of orders is not specified, display "
 	).append(
-		"the 10 most recent orders returned."
+		"at most 5 orders by default."
+	).append(
+		"When asked about orders and no date or year is provided use the " +
+			"getCurrentDateTool to calculate the required date or year."
 	).toString();
 
 	@Autowired

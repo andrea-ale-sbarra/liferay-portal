@@ -168,8 +168,16 @@ public class CommerceTools {
 		}
 	}
 
+	public Map<String, Object> getCurrentDateTool() {
+		LocalDate localDate = LocalDate.now();
+
+		return Map.of(
+			"current_year", localDate.getYear(), "full_date",
+			localDate.toString());
+	}
+
 	public Map<String, String> getCustomerOrdersByAccountTool(
-		String accountName) {
+		String accountName, boolean asc) {
 
 		try {
 			List<Channel> channels = _commerceService.getChannels();
@@ -191,8 +199,14 @@ public class CommerceTools {
 			List<Order> orders;
 
 			try {
+				String orderBy = "desc";
+
+				if (asc) {
+					orderBy = "asc";
+				}
+
 				orders = _commerceService.getAllPlacedOrdersByAccountDto(
-					channelId, account.getId(), null, "createDate");
+					channelId, account.getId(), null, "createDate:" + orderBy);
 			}
 			catch (Exception exception) {
 				return Map.of(
@@ -238,7 +252,9 @@ public class CommerceTools {
 		}
 	}
 
-	public Map<String, String> getCustomerOrdersTool(String email) {
+	public Map<String, String> getCustomerOrdersTool(
+		String email, boolean asc) {
+
 		try {
 			List<Channel> channels = _commerceService.getChannels();
 
@@ -260,8 +276,14 @@ public class CommerceTools {
 			List<Order> orders;
 
 			try {
+				String orderBy = "desc";
+
+				if (asc) {
+					orderBy = "asc";
+				}
+
 				orders = _commerceService.getAllPlacedOrdersByAccountDto(
-					channelId, null, email, "createDate");
+					channelId, null, email, "createDate:" + orderBy);
 			}
 			catch (Exception exception) {
 				return Map.of(
@@ -782,11 +804,40 @@ public class CommerceTools {
 		}
 	}
 
-	public Map<String, String> searchOrdersByDateRangeTool(
-		String startDate, String endDate, String userEmail) {
+	public Map<String, String> searchAccountOrdersByDateRangeTool(
+		String startDate, String endDate, String accountName) {
 
 		try {
-			if (Validator.isNull(userEmail)) {
+			List<Channel> channels = _commerceService.getChannels();
+
+			if (ListUtil.isEmpty(channels)) {
+				return Map.of("error", "No channels available in the system.");
+			}
+
+			Channel channel = channels.get(0);
+
+			Account account = _fetchAccount(channel, accountName);
+
+			if (account == null) {
+				return Map.of("error", _getAccountNotFoundMessage(accountName));
+			}
+
+			return _getOrdersByDateRangeMap(
+				account.getId(), channel.getId(), endDate, null, startDate);
+		}
+		catch (Exception exception) {
+			return Map.of(
+				"error",
+				"**Error searching orders by date**: " +
+					exception.getMessage());
+		}
+	}
+
+	public Map<String, String> searchOrdersByDateRangeTool(
+		String startDate, String endDate, String email) {
+
+		try {
+			if (Validator.isNull(email)) {
 				return Map.of("response", _getUserEmailRequiredMessage());
 			}
 
@@ -796,127 +847,17 @@ public class CommerceTools {
 				return Map.of("error", "No channels available in the system.");
 			}
 
+			UserAccount userAccount = _commerceService.getUserAccountByEmail(
+				email);
+
+			if (userAccount == null) {
+				return Map.of("error", _getUserAccountNotFoundMessage(email));
+			}
+
 			Channel channel = channels.get(0);
 
-			Account account = _fetchAccount(userEmail);
-
-			if (account == null) {
-				account = _fetchAccount(channel, userEmail);
-			}
-
-			if (account == null) {
-				return Map.of(
-					"error", _getUserAccountNotFoundMessage(userEmail));
-			}
-
-			OffsetDateTime startOffsetDateTime = null;
-			OffsetDateTime endOffsetDateTime = null;
-
-			try {
-				startOffsetDateTime = _getOffsetDateTime(startDate);
-				endOffsetDateTime = _getEndOffsetDateTime(endDate);
-			}
-			catch (RuntimeException runtimeException) {
-				StringBuilder sb = new StringBuilder();
-
-				sb.append("**Date Parsing Error**: ");
-				sb.append(runtimeException.getMessage());
-				sb.append("\n\n");
-				sb.append("**Supported formats:**");
-				sb.append("\n");
-				sb.append("- YYYY-MM-DD (2024-01-15)");
-				sb.append("\n");
-				sb.append("- MM/DD/YYYY (01/15/2024)");
-				sb.append("\n");
-				sb.append("- MM-DD-YYYY (01-15-2024)");
-				sb.append("\n");
-				sb.append("- today, yesterday");
-				sb.append("\n");
-				sb.append("- last X days (last 7 days)");
-				sb.append("\n\n");
-				sb.append(
-					"**Example:** 'Search orders from 2024-01-01 to " +
-						"2024-01-31'");
-
-				return Map.of("error", sb.toString());
-			}
-
-			List<Order> orders = new ArrayList<>();
-
-			int currentPage = 1;
-			int maxPages = 3;
-			int pageSize = 50;
-
-			while (currentPage <= maxPages) {
-				DateTimeFormatter dateTimeFormatter =
-					DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
-				dateTimeFormatter = dateTimeFormatter.withZone(ZoneOffset.UTC);
-
-				String filter = new StringBuilder(
-				).append(
-					"createDate ge "
-				).append(
-					dateTimeFormatter.format(startOffsetDateTime)
-				).append(
-					" and createDate le "
-				).append(
-					dateTimeFormatter.format(endOffsetDateTime)
-				).toString();
-
-				PageResult<Order> pageResult =
-					_commerceService.getPlacedOrdersByAccount(
-						channel.getId(), account.getId(), currentPage, pageSize,
-						null, "orderDate:desc", filter);
-
-				if (pageResult == null) {
-					break;
-				}
-
-				List<Order> pageResultOrders = pageResult.getItems();
-
-				if ((pageResult.getItems() == null) ||
-					pageResultOrders.isEmpty()) {
-
-					break;
-				}
-
-				orders.addAll(pageResult.getItems());
-
-				if (currentPage >= pageResult.getLastPage()) {
-					break;
-				}
-
-				currentPage++;
-			}
-
-			if (orders.isEmpty()) {
-				DateTimeFormatter dateTimeFormatter =
-					DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-				return Map.of(
-					"error",
-					new StringBuilder(
-					).append(
-						"**No orders found** for "
-					).append(
-						userEmail
-					).append(
-						" between "
-					).append(
-						dateTimeFormatter.format(startOffsetDateTime)
-					).append(
-						" and "
-					).append(
-						dateTimeFormatter.format(endOffsetDateTime)
-					).toString());
-			}
-
-			return Map.of(
-				"response",
-				_getOrdersByDateRangeMessage(
-					account, endOffsetDateTime, orders, startOffsetDateTime,
-					userEmail));
+			return _getOrdersByDateRangeMap(
+				null, channel.getId(), endDate, email, startDate);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -2853,8 +2794,118 @@ public class CommerceTools {
 		return sb.toString();
 	}
 
+	private Map<String, String> _getOrdersByDateRangeMap(
+		String accountId, String channelId, String endDate, String search,
+		String startDate) {
+
+		OffsetDateTime startOffsetDateTime = null;
+		OffsetDateTime endOffsetDateTime = null;
+
+		try {
+			startOffsetDateTime = _getOffsetDateTime(startDate);
+			endOffsetDateTime = _getEndOffsetDateTime(endDate);
+		}
+		catch (RuntimeException runtimeException) {
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("**Date Parsing Error**: ");
+			sb.append(runtimeException.getMessage());
+			sb.append("\n\n");
+			sb.append("**Supported formats:**");
+			sb.append("\n");
+			sb.append("- YYYY-MM-DD (2024-01-15)");
+			sb.append("\n");
+			sb.append("- MM/DD/YYYY (01/15/2024)");
+			sb.append("\n");
+			sb.append("- MM-DD-YYYY (01-15-2024)");
+			sb.append("\n");
+			sb.append("- today, yesterday");
+			sb.append("\n");
+			sb.append("- last X days (last 7 days)");
+			sb.append("\n\n");
+			sb.append(
+				"**Example:** 'Search orders from 2024-01-01 to 2024-01-31'");
+
+			return Map.of("error", sb.toString());
+		}
+
+		List<Order> orders = new ArrayList<>();
+
+		int currentPage = 1;
+		int maxPages = 3;
+		int pageSize = 50;
+
+		while (currentPage <= maxPages) {
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
+				"yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+			dateTimeFormatter = dateTimeFormatter.withZone(ZoneOffset.UTC);
+
+			String filter = new StringBuilder(
+			).append(
+				"createDate ge "
+			).append(
+				dateTimeFormatter.format(startOffsetDateTime)
+			).append(
+				" and createDate le "
+			).append(
+				dateTimeFormatter.format(endOffsetDateTime)
+			).toString();
+
+			PageResult<Order> pageResult =
+				_commerceService.getPlacedOrdersByAccount(
+					channelId, accountId, currentPage, pageSize, search,
+					"orderDate:desc", filter);
+
+			if (pageResult == null) {
+				break;
+			}
+
+			List<Order> pageResultOrders = pageResult.getItems();
+
+			if ((pageResult.getItems() == null) || pageResultOrders.isEmpty()) {
+				break;
+			}
+
+			orders.addAll(pageResult.getItems());
+
+			if (currentPage >= pageResult.getLastPage()) {
+				break;
+			}
+
+			currentPage++;
+		}
+
+		if (orders.isEmpty()) {
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
+				"yyyy-MM-dd");
+
+			return Map.of(
+				"error",
+				new StringBuilder(
+				).append(
+					"**No orders found** for "
+				).append(
+					search
+				).append(
+					" between "
+				).append(
+					dateTimeFormatter.format(startOffsetDateTime)
+				).append(
+					" and "
+				).append(
+					dateTimeFormatter.format(endOffsetDateTime)
+				).toString());
+		}
+
+		return Map.of(
+			"response",
+			_getOrdersByDateRangeMessage(
+				endOffsetDateTime, orders, startOffsetDateTime, search));
+	}
+
 	private String _getOrdersByDateRangeMessage(
-		Account account, OffsetDateTime endOffsetDateTime, List<Order> orders,
+		OffsetDateTime endOffsetDateTime, List<Order> orders,
 		OffsetDateTime startOffsetDateTime, String userEmail) {
 
 		StringBuilder sb = new StringBuilder();
@@ -2874,7 +2925,7 @@ public class CommerceTools {
 		sb.append(
 			"**Customer**: "
 		).append(
-			GetterUtil.getString(account.getName(), "N/A")
+			GetterUtil.getString(userEmail, "N/A")
 		).append(
 			"\n"
 		);
