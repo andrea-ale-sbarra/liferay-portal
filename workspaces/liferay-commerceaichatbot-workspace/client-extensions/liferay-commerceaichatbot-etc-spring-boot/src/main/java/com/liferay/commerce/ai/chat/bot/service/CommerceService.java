@@ -161,6 +161,13 @@ public class CommerceService {
 		return _toOrder(jsonObject);
 	}
 
+	public Order getOrderByExternelReferenceCode(String externalReferenceCode) {
+		JSONObject jsonObject = _getOrderByExternalReferenceCodeJSONObject(
+			externalReferenceCode);
+
+		return _toOrder(jsonObject);
+	}
+
 	public List<Shipment> getOrderShipmentsDto(String orderId) {
 		List<Shipment> shipments = new ArrayList<>();
 
@@ -525,6 +532,26 @@ public class CommerceService {
 		}
 
 		return jsonObjects;
+	}
+
+	private JSONObject _getOrderByExternalReferenceCodeJSONObject(
+		String externalReferenceCode) {
+
+		_ensureAuthenticated();
+
+		try {
+			URI uri = _buildUri(
+				"/o/headless-commerce-delivery-order/v1.0/placed-orders" +
+					"/by-externalReferenceCode/" + externalReferenceCode,
+				null);
+
+			return _executeGetJSONObject(uri);
+		}
+		catch (Exception exception) {
+			_log.error(exception);
+		}
+
+		return null;
 	}
 
 	private JSONObject _getOrderJSONObject(String orderId) {

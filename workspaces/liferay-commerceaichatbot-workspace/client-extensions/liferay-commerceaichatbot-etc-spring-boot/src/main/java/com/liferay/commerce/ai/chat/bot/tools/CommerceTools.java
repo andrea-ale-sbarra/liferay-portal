@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -57,9 +56,9 @@ public class CommerceTools {
 		_commerceService = commerceService;
 	}
 
-	public Map<String, String> findOrderTool(String orderId) {
+	public Map<String, String> findOrderTool(String identifier) {
 		try {
-			Order order = _commerceService.getOrder(orderId);
+			Order order = _getOrder(identifier);
 
 			if (order != null) {
 				return Map.of("order", _formatOrderSummary(order));
@@ -67,8 +66,8 @@ public class CommerceTools {
 
 			return Map.of(
 				"error",
-				"I could not find an order with ID '" + orderId +
-					"'. Please check the order ID and try again.");
+				"I could not find an order with identifier '" + identifier +
+					"'. Please check the identifier and try again.");
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -114,7 +113,7 @@ public class CommerceTools {
 
 					List<Order> orders =
 						_commerceService.getAllPlacedOrdersByAccountDto(
-							channelId, "", account.getId(), StringPool.BLANK);
+							channelId, account.getId(), null, StringPool.BLANK);
 
 					totalOrders += orders.size();
 
@@ -386,12 +385,15 @@ public class CommerceTools {
 		}
 	}
 
-	public Map<String, String> getOrderItemsTool(String orderId) {
+	public Map<String, String> getOrderItemsTool(String orderIdentifier) {
 		try {
 			List<OrderItem> orderItems;
 
+			Order order = _getOrder(orderIdentifier);
+
 			try {
-				orderItems = _commerceService.getPlacedOrderItems(orderId);
+				orderItems = _commerceService.getPlacedOrderItems(
+					order.getId());
 			}
 			catch (Exception exception) {
 				StringBuilder sb = new StringBuilder();
@@ -399,7 +401,7 @@ public class CommerceTools {
 				sb.append("**🔍 Order Items Lookup Failed**");
 				sb.append("\n\n");
 				sb.append("**Order ID**: ");
-				sb.append(orderId);
+				sb.append(orderIdentifier);
 				sb.append("\n");
 				sb.append("**Error**: ");
 				sb.append(exception.getMessage());
@@ -415,7 +417,7 @@ public class CommerceTools {
 				sb.append("**💡 Try These Alternatives:**");
 				sb.append("\n");
 				sb.append("- \"Find order ");
-				sb.append(orderId);
+				sb.append(orderIdentifier);
 				sb.append("\" - Get complete order details");
 				sb.append("\n");
 				sb.append("- \"Search for orders\" - Browse available orders");
@@ -429,7 +431,7 @@ public class CommerceTools {
 				StringBuilder sb = new StringBuilder();
 
 				sb.append("**📦 Order Items for Order ");
-				sb.append(orderId);
+				sb.append(orderIdentifier);
 				sb.append("**");
 				sb.append("\n\n");
 				sb.append("**Status**: Order exists but has no items");
@@ -437,20 +439,18 @@ public class CommerceTools {
 				sb.append("**Items Count**: 0");
 				sb.append("\n\n");
 				sb.append("**💡 Try**: \"Find order ");
-				sb.append(orderId);
+				sb.append(orderIdentifier);
 				sb.append("\" for complete order information");
 
 				return Map.of("error", sb.toString());
 			}
-
-			Order order = _commerceService.getOrder(orderId);
 
 			StringBuilder sb = new StringBuilder();
 
 			sb.append(
 				"**📦 Order Items for Order "
 			).append(
-				orderId
+				order.getId()
 			).append(
 				"**\n\n"
 			);
@@ -475,7 +475,7 @@ public class CommerceTools {
 
 				try {
 					List<Shipment> shipments =
-						_commerceService.getOrderShipmentsDto(orderId);
+						_commerceService.getOrderShipmentsDto(order.getId());
 
 					if (ListUtil.isEmpty(shipments)) {
 						Shipment latestShipment = shipments.get(0);
@@ -599,7 +599,7 @@ public class CommerceTools {
 			sb.append("**Unexpected Error**");
 			sb.append("\n\n");
 			sb.append("**Order ID**: ");
-			sb.append(orderId);
+			sb.append(orderIdentifier);
 			sb.append("\n");
 			sb.append("**Error**: ");
 			sb.append(exception.getMessage());
@@ -612,7 +612,7 @@ public class CommerceTools {
 			sb.append("**💡 Try These Alternatives:**");
 			sb.append("\n");
 			sb.append("- \"Find order ");
-			sb.append(orderId);
+			sb.append(orderIdentifier);
 			sb.append("\" - Get complete order details");
 			sb.append("\n");
 			sb.append("- \"Search for orders\" - Browse available orders");
@@ -623,20 +623,21 @@ public class CommerceTools {
 		}
 	}
 
-	public Map<String, String> getOrderShippingTool(String orderId) {
+	public Map<String, String> getOrderShippingTool(String identifier) {
 		try {
-			Order order = _commerceService.getOrder(orderId);
+			Order order = _getOrder(identifier);
 
 			if (order == null) {
 				return Map.of(
 					"error",
-					"Order " + orderId + " not found or not accessible.");
+					"Order " + identifier + " not found or not accessible.");
 			}
 
 			List<Shipment> shipments = null;
 
 			try {
-				shipments = _commerceService.getOrderShipmentsDto(orderId);
+				shipments = _commerceService.getOrderShipmentsDto(
+					order.getId());
 			}
 			catch (Exception exception) {
 				if (_log.isInfoEnabled()) {
@@ -647,12 +648,11 @@ public class CommerceTools {
 			}
 
 			return Map.of(
-				"response",
-				_getOrderShippingMessage(order, orderId, shipments));
+				"response", _getOrderShippingMessage(order, shipments));
 		}
 		catch (Exception exception) {
 			return Map.of(
-				"error", _getOrderShippingErrorMessage(exception, orderId));
+				"error", _getOrderShippingErrorMessage(exception, identifier));
 		}
 	}
 
@@ -1101,7 +1101,7 @@ public class CommerceTools {
 			String addressQueryLower = "";
 
 			if (addressQuery != null) {
-				addressQueryLower = addressQuery.toLowerCase(LocaleUtil.ROOT);
+				addressQueryLower = StringUtil.toLowerCase(addressQuery);
 
 				addressQueryLower = addressQueryLower.trim();
 			}
@@ -1263,7 +1263,7 @@ public class CommerceTools {
 			String queryLower = StringPool.BLANK;
 
 			if (query != null) {
-				queryLower = query.toLowerCase(LocaleUtil.ROOT);
+				queryLower = StringUtil.toLowerCase(query);
 			}
 
 			Matcher matcher = _orderIdPattern.matcher(StringPool.BLANK);
@@ -1838,7 +1838,7 @@ public class CommerceTools {
 		sb.append(
 			"- **Average Orders per Account**: "
 		).append(
-			String.format(LocaleUtil.ROOT, "%.1f", avg)
+			String.format("%.1f", avg)
 		).append(
 			"\n"
 		);
@@ -2608,6 +2608,17 @@ public class CommerceTools {
 		return null;
 	}
 
+	private Order _getOrder(String identifier) {
+		Order order = _commerceService.getOrder(identifier);
+
+		if (order == null) {
+			order = _commerceService.getOrderByExternelReferenceCode(
+				identifier);
+		}
+
+		return order;
+	}
+
 	private String _getOrderMessage(
 		Account account, String email, Order order) {
 
@@ -3255,14 +3266,14 @@ public class CommerceTools {
 	}
 
 	private String _getOrderShippingErrorMessage(
-		Exception exception, String orderId) {
+		Exception exception, String identifier) {
 
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("**Error Retrieving Shipping Information**");
 		sb.append("\n\n");
-		sb.append("**Order ID**: ");
-		sb.append(orderId);
+		sb.append("**Identifier**: ");
+		sb.append(identifier);
 		sb.append("\n");
 		sb.append("**Error**: ");
 		sb.append(exception.getMessage());
@@ -3275,11 +3286,11 @@ public class CommerceTools {
 		sb.append("**Try These Alternatives:**");
 		sb.append("\n");
 		sb.append("- \"Find order ");
-		sb.append(orderId);
+		sb.append(identifier);
 		sb.append("\" - Get complete order details");
 		sb.append("\n");
 		sb.append("- \"Get order items for order ");
-		sb.append(orderId);
+		sb.append(identifier);
 		sb.append("\" - View order items");
 		sb.append("\n");
 		sb.append("- \"Search for orders\" - Browse available orders");
@@ -3288,7 +3299,7 @@ public class CommerceTools {
 	}
 
 	private String _getOrderShippingMessage(
-		Order order, String orderId, List<Shipment> shipments) {
+		Order order, List<Shipment> shipments) {
 
 		Map<String, String> shippingAddress = order.getShippingAddress();
 		Map<String, String> billingAddress = order.getBillingAddress();
@@ -3298,7 +3309,7 @@ public class CommerceTools {
 		sb.append(
 			"**Shipping Information for Order "
 		).append(
-			orderId
+			order.getId()
 		).append(
 			"**\n\n"
 		);
@@ -3752,7 +3763,7 @@ public class CommerceTools {
 			String createDate = "N/A";
 
 			if (order.getCreateDate() != null) {
-				createDate = order.getCreateDate();
+				createDate = String.valueOf(order.getCreateDate());
 			}
 
 			String status = "N/A";
