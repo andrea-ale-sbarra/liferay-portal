@@ -5,6 +5,8 @@
 
 package com.liferay.commerce.ai.chat.bot.tools;
 
+import com.google.adk.tools.Annotations;
+
 import com.liferay.commerce.ai.chat.bot.model.Account;
 import com.liferay.commerce.ai.chat.bot.model.Channel;
 import com.liferay.commerce.ai.chat.bot.model.Order;
@@ -56,7 +58,16 @@ public class CommerceTools {
 		_commerceService = commerceService;
 	}
 
-	public Map<String, String> findOrderTool(String identifier) {
+	@Annotations.Schema(
+		description = "Finds an order by identifier", name = "findOrderTool"
+	)
+	public Map<String, String> findOrderTool(
+		@Annotations.Schema(
+			description = "the order id or external reference code",
+			name = "identifier"
+		)
+		String identifier) {
+
 		try {
 			Order order = _getOrder(identifier);
 
@@ -75,6 +86,10 @@ public class CommerceTools {
 		}
 	}
 
+	@Annotations.Schema(
+		description = "Retrieves a summary of orders for all available accounts",
+		name = "getAllAccountsOrderSummaryTool"
+	)
 	public Map<String, String> getAllAccountsOrderSummaryTool() {
 		try {
 			List<Channel> channels = _commerceService.getChannels();
@@ -168,6 +183,10 @@ public class CommerceTools {
 		}
 	}
 
+	@Annotations.Schema(
+		description = "Retrieves the current date and year",
+		name = "getCurrentDateTool"
+	)
 	public Map<String, Object> getCurrentDateTool() {
 		LocalDate localDate = LocalDate.now();
 
@@ -176,8 +195,20 @@ public class CommerceTools {
 			localDate.toString());
 	}
 
+	@Annotations.Schema(
+		description = "Retrieves orders for a specific customer account",
+		name = "getCustomerOrdersByAccountTool"
+	)
 	public Map<String, String> getCustomerOrdersByAccountTool(
-		String accountName, boolean asc) {
+		@Annotations.Schema(
+			description = "the name of the account", name = "accountName"
+		)
+		String accountName,
+		@Annotations.Schema(
+			description = "whether to sort the orders in ascending order",
+			name = "asc"
+		)
+		boolean asc) {
 
 		try {
 			List<Channel> channels = _commerceService.getChannels();
@@ -252,8 +283,20 @@ public class CommerceTools {
 		}
 	}
 
+	@Annotations.Schema(
+		description = "Retrieves orders for a customer by their email address",
+		name = "getCustomerOrdersTool"
+	)
 	public Map<String, String> getCustomerOrdersTool(
-		String email, boolean asc) {
+		@Annotations.Schema(
+			description = "the email address of the customer", name = "email"
+		)
+		String email,
+		@Annotations.Schema(
+			description = "whether to sort the orders in ascending order",
+			name = "asc"
+		)
+		boolean asc) {
 
 		try {
 			List<Channel> channels = _commerceService.getChannels();
@@ -329,7 +372,16 @@ public class CommerceTools {
 		}
 	}
 
-	public Map<String, String> getFaqInformationTool(String query) {
+	@Annotations.Schema(
+		description = "Retrieves information from the Frequently Asked Questions (FAQ) based on a query",
+		name = "getFaqInformationTool"
+	)
+	public Map<String, String> getFaqInformationTool(
+		@Annotations.Schema(
+			description = "the search query for the FAQ", name = "query"
+		)
+		String query) {
+
 		try {
 			Map<String, Map<String, String>> faqData = _getFaqData();
 
@@ -407,7 +459,17 @@ public class CommerceTools {
 		}
 	}
 
-	public Map<String, String> getOrderItemsTool(String orderIdentifier) {
+	@Annotations.Schema(
+		description = "Retrieves the items contained in a specific order",
+		name = "getOrderItemsTool"
+	)
+	public Map<String, String> getOrderItemsTool(
+		@Annotations.Schema(
+			description = "the order id or external reference code",
+			name = "orderIdentifier"
+		)
+		String orderIdentifier) {
+
 		try {
 			List<OrderItem> orderItems;
 
@@ -652,7 +714,17 @@ public class CommerceTools {
 		}
 	}
 
-	public Map<String, String> getOrderShippingTool(String identifier) {
+	@Annotations.Schema(
+		description = "Retrieves shipping and tracking information for a specific order",
+		name = "getOrderShippingTool"
+	)
+	public Map<String, String> getOrderShippingTool(
+		@Annotations.Schema(
+			description = "the order id or external reference code",
+			name = "identifier"
+		)
+		String identifier) {
+
 		try {
 			Order order = _getOrder(identifier);
 
@@ -685,6 +757,10 @@ public class CommerceTools {
 		}
 	}
 
+	@Annotations.Schema(
+		description = "Retrieves information about how to look up customer emails for testing",
+		name = "getTestEmailsTool"
+	)
 	public Map<String, String> getTestEmailsTool() {
 		StringBuilder sb = new StringBuilder();
 
@@ -724,6 +800,10 @@ public class CommerceTools {
 		return Map.of("result", sb.toString());
 	}
 
+	@Annotations.Schema(
+		description = "Lists all available commerce channels and their associated accounts",
+		name = "listAvailableChannelsAndAccountsTool"
+	)
 	public Map<String, String> listAvailableChannelsAndAccountsTool() {
 		try {
 			List<Channel> channels = _commerceService.getChannels();
@@ -811,8 +891,25 @@ public class CommerceTools {
 		}
 	}
 
+	@Annotations.Schema(
+		description = "Searches for orders within a specific date range for a specific account",
+		name = "searchAccountOrdersByDateRangeTool"
+	)
 	public Map<String, String> searchAccountOrdersByDateRangeTool(
-		String startDate, String endDate, String accountName) {
+		@Annotations.Schema(
+			description = "the start date of the range (YYYY-MM-DD)",
+			name = "startDate"
+		)
+		String startDate,
+		@Annotations.Schema(
+			description = "the end date of the range (YYYY-MM-DD)",
+			name = "endDate"
+		)
+		String endDate,
+		@Annotations.Schema(
+			description = "the name of the account", name = "accountName"
+		)
+		String accountName) {
 
 		try {
 			List<Channel> channels = _commerceService.getChannels();
@@ -840,8 +937,25 @@ public class CommerceTools {
 		}
 	}
 
+	@Annotations.Schema(
+		description = "Searches for orders within a specific date range for a customer by email",
+		name = "searchOrdersByDateRangeTool"
+	)
 	public Map<String, String> searchOrdersByDateRangeTool(
-		String startDate, String endDate, String email) {
+		@Annotations.Schema(
+			description = "the start date of the range (YYYY-MM-DD)",
+			name = "startDate"
+		)
+		String startDate,
+		@Annotations.Schema(
+			description = "the end date of the range (YYYY-MM-DD)",
+			name = "endDate"
+		)
+		String endDate,
+		@Annotations.Schema(
+			description = "the email address of the customer", name = "email"
+		)
+		String email) {
 
 		try {
 			if (Validator.isNull(email)) {
@@ -874,8 +988,21 @@ public class CommerceTools {
 		}
 	}
 
+	@Annotations.Schema(
+		description = "Searches for orders containing a specific product for a customer",
+		name = "searchOrdersByProductTool"
+	)
 	public Map<String, String> searchOrdersByProductTool(
-		String productDescription, String userEmail) {
+		@Annotations.Schema(
+			description = "a description or name of the product",
+			name = "productDescription"
+		)
+		String productDescription,
+		@Annotations.Schema(
+			description = "the email address of the customer",
+			name = "userEmail"
+		)
+		String userEmail) {
 
 		try {
 			if (Validator.isNull(userEmail)) {
@@ -987,8 +1114,21 @@ public class CommerceTools {
 		}
 	}
 
+	@Annotations.Schema(
+		description = "Searches for orders by shipping address for a customer",
+		name = "searchOrdersByShippingAddressTool"
+	)
 	public Map<String, String> searchOrdersByShippingAddressTool(
-		String addressQuery, String userEmail) {
+		@Annotations.Schema(
+			description = "the address or part of the address to search for",
+			name = "addressQuery"
+		)
+		String addressQuery,
+		@Annotations.Schema(
+			description = "the email address of the customer",
+			name = "userEmail"
+		)
+		String userEmail) {
 
 		try {
 			if (Validator.isNull(userEmail)) {
@@ -1139,8 +1279,21 @@ public class CommerceTools {
 		}
 	}
 
+	@Annotations.Schema(
+		description = "Searches for orders by their status for a customer",
+		name = "searchOrdersByStatusTool"
+	)
 	public Map<String, String> searchOrdersByStatusTool(
-		String orderStatus, String userEmail) {
+		@Annotations.Schema(
+			description = "the status of the order (e.g., Pending, Shipped, Delivered)",
+			name = "orderStatus"
+		)
+		String orderStatus,
+		@Annotations.Schema(
+			description = "the email address of the customer",
+			name = "userEmail"
+		)
+		String userEmail) {
 
 		try {
 			if (Validator.isNull(userEmail)) {
@@ -1215,7 +1368,14 @@ public class CommerceTools {
 		}
 	}
 
-	public Map<String, String> searchOrdersTool(String query) {
+	@Annotations.Schema(
+		description = "General search for orders based on a query. It can handle order IDs, date ranges, and product searches by routing to more specific tools.",
+		name = "searchOrdersTool"
+	)
+	public Map<String, String> searchOrdersTool(
+		@Annotations.Schema(description = "the search query", name = "query")
+			String query) {
+
 		try {
 			String queryLower = StringPool.BLANK;
 
