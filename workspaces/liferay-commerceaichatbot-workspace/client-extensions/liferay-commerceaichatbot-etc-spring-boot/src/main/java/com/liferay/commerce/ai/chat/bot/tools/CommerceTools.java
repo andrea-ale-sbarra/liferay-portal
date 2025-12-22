@@ -413,6 +413,13 @@ public class CommerceTools {
 
 			Order order = _getOrder(orderIdentifier);
 
+			if (order == null) {
+				return Map.of(
+					"error",
+					"Order " + orderIdentifier +
+						" not found or not accessible.");
+			}
+
 			try {
 				orderItems = _commerceService.getPlacedOrderItems(
 					order.getId());
@@ -499,7 +506,7 @@ public class CommerceTools {
 					List<Shipment> shipments =
 						_commerceService.getOrderShipmentsDto(order.getId());
 
-					if (ListUtil.isEmpty(shipments)) {
+					if (ListUtil.isNotEmpty(shipments)) {
 						Shipment latestShipment = shipments.get(0);
 
 						sb.append("**Shipping Address:**\n");
@@ -914,17 +921,25 @@ public class CommerceTools {
 					List<OrderItem> orderItems =
 						_commerceService.getPlacedOrderItems(orderId);
 
+					List<OrderItem> matchedOrderItems = new ArrayList<>();
+
 					for (OrderItem orderItem : orderItems) {
 						String name = orderItem.getName();
 
-						if (orderItem.getName() != null) {
+						if (name != null) {
 							name = StringUtil.toLowerCase(name);
+						}
+						else {
+							name = StringPool.BLANK;
 						}
 
 						String sku = orderItem.getSku();
 
 						if (sku != null) {
 							sku = StringUtil.toLowerCase(sku);
+						}
+						else {
+							sku = StringPool.BLANK;
 						}
 
 						String term = StringUtil.toLowerCase(
@@ -937,13 +952,14 @@ public class CommerceTools {
 						if (name.contains(term) || sku.contains(term) ||
 							term.contains(name)) {
 
-							orderItems.add(orderItem);
+							matchedOrderItems.add(orderItem);
 						}
 					}
 
-					if (!orderItems.isEmpty()) {
+					if (!matchedOrderItems.isEmpty()) {
 						matches.add(
-							new AbstractMap.SimpleEntry<>(order, orderItems));
+							new AbstractMap.SimpleEntry<>(
+								order, matchedOrderItems));
 					}
 				}
 				catch (Exception exception) {
@@ -1226,7 +1242,15 @@ public class CommerceTools {
 				sb.append("\nLet me get that order directly for ");
 				sb.append("you - this will be much faster than searching.");
 				sb.append("\n\n");
-				sb.append(findOrderTool(orderId));
+
+				Map<String, String> orderToolResult = findOrderTool(orderId);
+
+				if (orderToolResult.containsKey("order")) {
+					sb.append(orderToolResult.get("order"));
+				}
+				else {
+					sb.append(orderToolResult.get("error"));
+				}
 
 				return Map.of("order", sb.toString());
 			}
