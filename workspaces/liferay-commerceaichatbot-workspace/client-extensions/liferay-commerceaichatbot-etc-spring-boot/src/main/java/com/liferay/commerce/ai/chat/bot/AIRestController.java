@@ -191,10 +191,6 @@ public class AIRestController extends BaseRestController {
 		"When asked for orders if number of orders is not specified, display "
 	).append(
 		"at most 5 orders by default."
-	).append(
-		"When asked about orders and no date or year is provided use the "
-	).append(
-		"getCurrentDateTool to calculate the required date or year."
 	).toString();
 
 	@Autowired
