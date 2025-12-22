@@ -17,13 +17,10 @@ import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.Summary;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 import com.liferay.commerce.ai.chat.bot.service.CommerceService;
-import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
-import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.time.LocalDate;
@@ -43,6 +40,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -94,7 +93,7 @@ public class CommerceTools {
 		try {
 			List<Channel> channels = _commerceService.getChannels();
 
-			if (ListUtil.isEmpty(channels)) {
+			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
 
@@ -105,7 +104,7 @@ public class CommerceTools {
 			List<Account> accounts = _commerceService.getAccounts(
 				channelId, "");
 
-			if (ListUtil.isEmpty(accounts)) {
+			if (accounts.isEmpty()) {
 				return Map.of(
 					"error",
 					new StringBuilder(
@@ -132,7 +131,7 @@ public class CommerceTools {
 
 					totalOrders += orders.size();
 
-					if (ListUtil.isNotEmpty(orders)) {
+					if (!orders.isEmpty()) {
 						order = orders.get(0);
 					}
 
@@ -213,7 +212,7 @@ public class CommerceTools {
 		try {
 			List<Channel> channels = _commerceService.getChannels();
 
-			if (ListUtil.isEmpty(channels)) {
+			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
 
@@ -254,7 +253,7 @@ public class CommerceTools {
 					).toString());
 			}
 
-			if (ListUtil.isEmpty(orders)) {
+			if (orders.isEmpty()) {
 				return Map.of(
 					"error",
 					new StringBuilder(
@@ -301,7 +300,7 @@ public class CommerceTools {
 		try {
 			List<Channel> channels = _commerceService.getChannels();
 
-			if (ListUtil.isEmpty(channels)) {
+			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
 
@@ -343,7 +342,7 @@ public class CommerceTools {
 					).toString());
 			}
 
-			if (ListUtil.isEmpty(orders)) {
+			if (orders.isEmpty()) {
 				return Map.of(
 					"error",
 					new StringBuilder(
@@ -395,8 +394,9 @@ public class CommerceTools {
 					faqData.entrySet()) {
 
 				String categoryTitle = _formatTitle(
-					StringUtil.replace(
-						entry.getKey(), CharPool.UNDERLINE, CharPool.SPACE));
+					Strings.CS.replace(
+						entry.getKey(), StringPool.UNDERLINE,
+						StringPool.SPACE));
 
 				Map<String, String> categoriesMap = entry.getValue();
 
@@ -406,10 +406,10 @@ public class CommerceTools {
 					String questionText = question.getKey();
 					String answerText = question.getValue();
 
-					String lowerCasedQuestionText = StringUtil.toLowerCase(
+					String lowerCasedQuestionText = StringUtils.lowerCase(
 						questionText);
 
-					String lowerCasedQuery = StringUtil.toLowerCase(query);
+					String lowerCasedQuery = StringUtils.lowerCase(query);
 
 					boolean questionMatches = lowerCasedQuestionText.contains(
 						lowerCasedQuery);
@@ -419,7 +419,7 @@ public class CommerceTools {
 					String[] words = lowerCasedQuery.split("\\s+");
 
 					for (String word : words) {
-						String lowerCasedAnswerText = StringUtil.toLowerCase(
+						String lowerCasedAnswerText = StringUtils.lowerCase(
 							answerText);
 
 						if ((word.length() > 3) &&
@@ -568,7 +568,7 @@ public class CommerceTools {
 					List<Shipment> shipments =
 						_commerceService.getOrderShipmentsDto(order.getId());
 
-					if (ListUtil.isNotEmpty(shipments)) {
+					if (!shipments.isEmpty()) {
 						Shipment latestShipment = shipments.get(0);
 
 						sb.append("**Shipping Address:**\n");
@@ -914,7 +914,7 @@ public class CommerceTools {
 		try {
 			List<Channel> channels = _commerceService.getChannels();
 
-			if (ListUtil.isEmpty(channels)) {
+			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
 
@@ -964,7 +964,7 @@ public class CommerceTools {
 
 			List<Channel> channels = _commerceService.getChannels();
 
-			if (ListUtil.isEmpty(channels)) {
+			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
 
@@ -1012,7 +1012,7 @@ public class CommerceTools {
 
 			List<Channel> channels = _commerceService.getChannels();
 
-			if (ListUtil.isEmpty(channels)) {
+			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
 
@@ -1054,7 +1054,7 @@ public class CommerceTools {
 						String name = orderItem.getName();
 
 						if (name != null) {
-							name = StringUtil.toLowerCase(name);
+							name = StringUtils.lowerCase(name);
 						}
 						else {
 							name = StringPool.BLANK;
@@ -1063,14 +1063,13 @@ public class CommerceTools {
 						String sku = orderItem.getSku();
 
 						if (sku != null) {
-							sku = StringUtil.toLowerCase(sku);
+							sku = StringUtils.lowerCase(sku);
 						}
 						else {
 							sku = StringPool.BLANK;
 						}
 
-						String term = StringUtil.toLowerCase(
-							productDescription);
+						String term = StringUtils.lowerCase(productDescription);
 
 						if (Validator.isNull(term)) {
 							term = StringPool.BLANK;
@@ -1137,7 +1136,7 @@ public class CommerceTools {
 
 			List<Channel> channels = _commerceService.getChannels();
 
-			if (ListUtil.isEmpty(channels)) {
+			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
 
@@ -1198,7 +1197,7 @@ public class CommerceTools {
 			String addressQueryLower = "";
 
 			if (addressQuery != null) {
-				addressQueryLower = StringUtil.toLowerCase(addressQuery);
+				addressQueryLower = StringUtils.lowerCase(addressQuery);
 
 				addressQueryLower = addressQueryLower.trim();
 			}
@@ -1219,7 +1218,7 @@ public class CommerceTools {
 						continue;
 					}
 
-					String lowerCasedOneLineAddress = StringUtil.toLowerCase(
+					String lowerCasedOneLineAddress = StringUtils.lowerCase(
 						oneLineAddress);
 
 					if (lowerCasedOneLineAddress.contains(addressQueryLower)) {
@@ -1303,7 +1302,7 @@ public class CommerceTools {
 
 			List<Channel> channels = _commerceService.getChannels();
 
-			if (ListUtil.isEmpty(channels)) {
+			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
 
@@ -1337,8 +1336,9 @@ public class CommerceTools {
 				String orderId = order.getId();
 
 				if (Validator.isNull(orderId) ||
-					!StringUtil.equalsIgnoreCase(
-						StringUtil.trim(order.getStatusLabel()), statusLabel)) {
+					!Strings.CI.equals(
+						StringUtils.trim(order.getStatusLabel()),
+						statusLabel)) {
 
 					continue;
 				}
@@ -1380,7 +1380,7 @@ public class CommerceTools {
 			String queryLower = StringPool.BLANK;
 
 			if (query != null) {
-				queryLower = StringUtil.toLowerCase(query);
+				queryLower = StringUtils.lowerCase(query);
 			}
 
 			Matcher matcher = _orderIdPattern.matcher(StringPool.BLANK);
@@ -1746,8 +1746,8 @@ public class CommerceTools {
 
 		StringBuilder sb = new StringBuilder();
 
-		String[] words = StringUtil.split(
-			StringUtil.toLowerCase(title), StringPool.SPACE);
+		String[] words = StringUtils.split(
+			StringUtils.lowerCase(title), StringPool.SPACE);
 
 		for (int i = 0; i < words.length; i++) {
 			String character = words[i];
@@ -2655,8 +2655,8 @@ public class CommerceTools {
 			dateTimeFormatters.add(
 				DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss"));
 
-			String sanitizedDate = StringUtil.trim(
-				StringUtil.toLowerCase(date));
+			String sanitizedDate = StringUtils.trim(
+				StringUtils.lowerCase(date));
 
 			if (sanitizedDate.equals("today") || sanitizedDate.equals("now")) {
 				LocalDate localDate = LocalDate.now();
@@ -2702,14 +2702,14 @@ public class CommerceTools {
 
 					if (dateTimeFormatterString.contains("H")) {
 						LocalDateTime localDateTime = LocalDateTime.parse(
-							StringUtil.trim(date), dateTimeFormatter);
+							StringUtils.trim(date), dateTimeFormatter);
 
 						zonedDateTime = localDateTime.atZone(
 							ZoneId.systemDefault());
 					}
 					else {
 						LocalDate localDate = LocalDate.parse(
-							StringUtil.trim(date), dateTimeFormatter);
+							StringUtils.trim(date), dateTimeFormatter);
 
 						zonedDateTime = localDate.atStartOfDay(
 							ZoneId.systemDefault());
@@ -3605,7 +3605,7 @@ public class CommerceTools {
 		}
 
 		if ((shipment != null) && (shipment.getOneLineAddress() != null) &&
-			!StringUtil.equals(shipment.getOneLineAddress(), "N/A")) {
+			!Strings.CS.equals(shipment.getOneLineAddress(), "N/A")) {
 
 			sb.append("**Shipping Address (from Shipments):**\n");
 
@@ -4162,7 +4162,7 @@ public class CommerceTools {
 				"shipped", "shipping", "delivered", "out for delivery")
 		).build();
 
-		status = StringUtil.trim(StringUtil.toLowerCase(status));
+		status = StringUtils.trim(StringUtils.lowerCase(status));
 
 		for (Map.Entry<String, List<String>> entry :
 				statusMappings.entrySet()) {

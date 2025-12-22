@@ -14,8 +14,6 @@ import com.liferay.commerce.ai.chat.bot.model.Product;
 import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -37,6 +35,7 @@ import javax.annotation.PostConstruct;
 
 import javax.net.ssl.SSLContext;
 
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpHeaders;
@@ -121,7 +120,7 @@ public class CommerceService {
 
 			List<Order> pageResultOrders = pageResult.getItems();
 
-			if (ListUtil.isEmpty(pageResultOrders)) {
+			if (pageResultOrders.isEmpty()) {
 				break;
 			}
 
@@ -789,7 +788,7 @@ public class CommerceService {
 		}
 
 		try {
-			return Instant.parse(StringUtil.replace(string, 'Z', "+00:00"));
+			return Instant.parse(Strings.CS.replace(string, "Z", "+00:00"));
 		}
 		catch (Exception exception1) {
 			try {
