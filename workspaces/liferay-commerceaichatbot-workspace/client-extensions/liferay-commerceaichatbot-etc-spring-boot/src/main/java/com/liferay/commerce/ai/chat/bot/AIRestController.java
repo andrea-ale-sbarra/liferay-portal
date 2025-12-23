@@ -5,10 +5,15 @@
 
 package com.liferay.commerce.ai.chat.bot;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+
 import com.google.adk.agents.LlmAgent;
 import com.google.adk.events.Event;
 import com.google.adk.models.Gemini;
 import com.google.adk.runner.InMemoryRunner;
+import com.google.adk.runner.Runner;
+import com.google.adk.sessions.BaseSessionService;
 import com.google.adk.sessions.Session;
 import com.google.adk.tools.FunctionTool;
 import com.google.genai.types.Content;
@@ -21,6 +26,8 @@ import com.liferay.commerce.ai.chat.bot.tools.CommerceTools;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 
@@ -55,68 +62,92 @@ public class AIRestController extends BaseRestController {
 
 		JSONObject jsonObject = new JSONObject(json);
 
-		// Register CommerceTools methods as FunctionTools
+		String token = jwt.getTokenValue();
 
-		FunctionTool listChannelsAccountsTool = FunctionTool.create(
-			_commerceTools, "listAvailableChannelsAndAccountsTool");
-		FunctionTool findOrderTool = FunctionTool.create(
-			_commerceTools, "findOrderTool");
-		FunctionTool searchAccountOrdersByDateRangeTool = FunctionTool.create(
-			_commerceTools, "searchAccountOrdersByDateRangeTool");
-		FunctionTool searchOrdersTool = FunctionTool.create(
-			_commerceTools, "searchOrdersTool");
-		FunctionTool searchOrdersByDateRangeTool = FunctionTool.create(
-			_commerceTools, "searchOrdersByDateRangeTool");
-		FunctionTool searchOrdersByProductTool = FunctionTool.create(
-			_commerceTools, "searchOrdersByProductTool");
-		FunctionTool searchOrdersByStatusTool = FunctionTool.create(
-			_commerceTools, "searchOrdersByStatusTool");
-		FunctionTool searchOrdersByShippingAddressTool = FunctionTool.create(
-			_commerceTools, "searchOrdersByShippingAddressTool");
-		FunctionTool getCustomerOrdersByAccountTool = FunctionTool.create(
-			_commerceTools, "getCustomerOrdersByAccountTool");
-		FunctionTool getCustomerOrdersTool = FunctionTool.create(
-			_commerceTools, "getCustomerOrdersTool");
-		FunctionTool getTestEmailsTool = FunctionTool.create(
-			_commerceTools, "getTestEmailsTool");
-		FunctionTool getOrderItemsTool = FunctionTool.create(
-			_commerceTools, "getOrderItemsTool");
-		FunctionTool getOrderShippingTool = FunctionTool.create(
-			_commerceTools, "getOrderShippingTool");
-		FunctionTool getAllAccountsOrderSummaryTool = FunctionTool.create(
-			_commerceTools, "getAllAccountsOrderSummaryTool");
-		FunctionTool getFaqInformationTool = FunctionTool.create(
-			_commerceTools, "getFaqInformationTool");
-		FunctionTool getCurrentDateTool = FunctionTool.create(
-			_commerceTools, "getCurrentDateTool");
+		Runner runner = _runners.get(
+			token,
+			key -> {
 
-		LlmAgent rootAgent = LlmAgent.builder(
-		).name(
-			"commerce_assistant"
-		).description(
-			"A professional customer service representative for a Liferay " +
-				"Commerce platform."
-		).model(
-			new Gemini(settings.modelName, settings.apiKey)
-		).instruction(
-			_INSTRUCTION
-		).tools(
-			listChannelsAccountsTool, findOrderTool,
-			searchAccountOrdersByDateRangeTool, searchOrdersTool,
-			searchOrdersByDateRangeTool, searchOrdersByProductTool,
-			searchOrdersByStatusTool, searchOrdersByShippingAddressTool,
-			getCurrentDateTool, getCustomerOrdersTool,
-			getCustomerOrdersByAccountTool, getTestEmailsTool,
-			getOrderItemsTool, getOrderShippingTool,
-			getAllAccountsOrderSummaryTool, getFaqInformationTool
-		).build();
+				// Register CommerceTools methods as FunctionTools
 
-		InMemoryRunner runner = new InMemoryRunner(rootAgent);
+				FunctionTool listChannelsAccountsTool = FunctionTool.create(
+					_commerceTools, "listAvailableChannelsAndAccountsTool");
+				FunctionTool findOrderTool = FunctionTool.create(
+					_commerceTools, "findOrderTool");
+				FunctionTool searchAccountOrdersByDateRangeTool =
+					FunctionTool.create(
+						_commerceTools, "searchAccountOrdersByDateRangeTool");
+				FunctionTool searchOrdersTool = FunctionTool.create(
+					_commerceTools, "searchOrdersTool");
+				FunctionTool searchOrdersByDateRangeTool = FunctionTool.create(
+					_commerceTools, "searchOrdersByDateRangeTool");
+				FunctionTool searchOrdersByProductTool = FunctionTool.create(
+					_commerceTools, "searchOrdersByProductTool");
+				FunctionTool searchOrdersByStatusTool = FunctionTool.create(
+					_commerceTools, "searchOrdersByStatusTool");
+				FunctionTool searchOrdersByShippingAddressTool =
+					FunctionTool.create(
+						_commerceTools, "searchOrdersByShippingAddressTool");
+				FunctionTool getCustomerOrdersByAccountTool =
+					FunctionTool.create(
+						_commerceTools, "getCustomerOrdersByAccountTool");
+				FunctionTool getCustomerOrdersTool = FunctionTool.create(
+					_commerceTools, "getCustomerOrdersTool");
+				FunctionTool getTestEmailsTool = FunctionTool.create(
+					_commerceTools, "getTestEmailsTool");
+				FunctionTool getOrderItemsTool = FunctionTool.create(
+					_commerceTools, "getOrderItemsTool");
+				FunctionTool getOrderShippingTool = FunctionTool.create(
+					_commerceTools, "getOrderShippingTool");
+				FunctionTool getAllAccountsOrderSummaryTool =
+					FunctionTool.create(
+						_commerceTools, "getAllAccountsOrderSummaryTool");
+				FunctionTool getFaqInformationTool = FunctionTool.create(
+					_commerceTools, "getFaqInformationTool");
+				FunctionTool getCurrentDateTool = FunctionTool.create(
+					_commerceTools, "getCurrentDateTool");
 
-		Session session = runner.sessionService(
-		).createSession(
-			runner.appName(), jwt.getTokenValue()
-		).blockingGet();
+				LlmAgent rootAgent = LlmAgent.builder(
+				).name(
+					"commerce_assistant"
+				).description(
+					"A professional customer service representative for a " +
+						"Liferay Commerce platform."
+				).model(
+					new Gemini(settings.modelName, settings.apiKey)
+				).instruction(
+					_INSTRUCTION
+				).tools(
+					listChannelsAccountsTool, findOrderTool,
+					searchAccountOrdersByDateRangeTool, searchOrdersTool,
+					searchOrdersByDateRangeTool, searchOrdersByProductTool,
+					searchOrdersByStatusTool, searchOrdersByShippingAddressTool,
+					getCurrentDateTool, getCustomerOrdersTool,
+					getCustomerOrdersByAccountTool, getTestEmailsTool,
+					getOrderItemsTool, getOrderShippingTool,
+					getAllAccountsOrderSummaryTool, getFaqInformationTool
+				).build();
+
+				return new InMemoryRunner(rootAgent);
+			});
+
+		Session session = null;
+		String sessionId = _sessionIds.get(jwt.getTokenValue(), s -> null);
+		BaseSessionService sessionService = runner.sessionService();
+
+		if (sessionId == null) {
+			session = sessionService.createSession(
+				runner.appName(), jwt.getTokenValue()
+			).blockingGet();
+
+			_sessionIds.put(jwt.getTokenValue(), session.id());
+		}
+		else {
+			session = sessionService.getSession(
+				runner.appName(), jwt.getTokenValue(), sessionId,
+				Optional.empty()
+			).blockingGet();
+		}
 
 		Content userMsg = Content.fromParts(
 			Part.fromText(jsonObject.getString("question")));
@@ -195,6 +226,15 @@ public class AIRestController extends BaseRestController {
 
 	@Autowired
 	private CommerceTools _commerceTools;
+
+	private final Cache<String, Runner> _runners = Caffeine.newBuilder(
+	).expireAfterAccess(
+		30, TimeUnit.MINUTES
+	).build();
+	private final Cache<String, String> _sessionIds = Caffeine.newBuilder(
+	).expireAfterAccess(
+		30, TimeUnit.MINUTES
+	).build();
 
 	@Autowired
 	private SettingsService _settingsService;
