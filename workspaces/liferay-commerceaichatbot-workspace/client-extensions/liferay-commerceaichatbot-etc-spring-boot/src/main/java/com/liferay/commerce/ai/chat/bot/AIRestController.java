@@ -165,7 +165,11 @@ public class AIRestController extends BaseRestController {
 			Content content = event.content(
 			).orElseThrow();
 
-			output.add(content.text());
+			String text = content.text();
+
+			if (text != null) {
+				output.add(text);
+			}
 		}
 
 		StringBuilder sb = new StringBuilder();
@@ -185,7 +189,9 @@ public class AIRestController extends BaseRestController {
 	).append(
 		"Liferay Commerce platform. Your primary role is to help customers "
 	).append(
-		"find information about their orders.\n\n **Key "
+		"find information about their orders and provide general assistance.\n\n"
+	).append(
+		"**Key "
 	).append(
 		"Responsibilities:**\n - Help customers locate their orders using "
 	).append(
@@ -193,7 +199,11 @@ public class AIRestController extends BaseRestController {
 	).append(
 		"information including status, items, and pricing\n- Answer questions "
 	).append(
-		"about order status, delivery, and shipping\n- Assist with customer "
+		"about order status, delivery, and shipping\n- Answer general questions "
+	).append(
+		"about the platform, returns, and other policies using the FAQ tool\n"
+	).append(
+		"- Assist with customer "
 	).append(
 		"account inquiries\n\n**Best Practices:**\n- Always greet customers "
 	).append(

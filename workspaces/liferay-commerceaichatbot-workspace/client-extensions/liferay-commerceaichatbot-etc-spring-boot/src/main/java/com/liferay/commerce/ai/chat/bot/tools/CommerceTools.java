@@ -377,27 +377,35 @@ public class CommerceTools {
 	}
 
 	@Annotations.Schema(
-		description = "Retrieves information from the Frequently Asked Questions (FAQ) based on a query",
+		description = "Retrieves information from the Frequently Asked Questions (FAQ) based on a query. Use this tool for any general inquiries about orders, shipping, returns, account management, and other non-order specific questions.",
 		name = "getFaqInformationTool"
 	)
 	public Map<String, String> getFaqInformationTool(
 		@Annotations.Schema(
-			description = "the search query for the FAQ", name = "query"
+			description = "the search query for the FAQ (e.g., 'return policy'). Use 'all' or empty string to see all available topics.",
+			name = "query"
 		)
 		String query) {
 
 		try {
-			if ((query == null) || query.isEmpty()) {
+			if (StringUtils.isBlank(query) || query.equalsIgnoreCase("all") ||
+				query.equalsIgnoreCase("faq") ||
+				query.equalsIgnoreCase("general")) {
+
 				return Map.of("response", _getNullQueryMessage(_faqData));
 			}
+
+			String lowerCasedQuery = StringUtils.lowerCase(query);
 
 			List<Map<String, String>> matchingAnswers = new ArrayList<>();
 
 			for (Map.Entry<String, Map<String, String>> entry :
 					_faqData.entrySet()) {
 
+				String categoryKey = entry.getKey();
+
 				String categoryTitle = _formatTitle(
-					Strings.CS.replace(entry.getKey(), "_", " "));
+					categoryKey.replace('_', ' '));
 
 				Map<String, String> categoriesMap = entry.getValue();
 
@@ -409,8 +417,6 @@ public class CommerceTools {
 
 					String lowerCasedQuestionText = StringUtils.lowerCase(
 						questionText);
-
-					String lowerCasedQuery = StringUtils.lowerCase(query);
 
 					boolean questionMatches = lowerCasedQuestionText.contains(
 						lowerCasedQuery);
@@ -442,7 +448,7 @@ public class CommerceTools {
 			}
 
 			if (matchingAnswers.isEmpty()) {
-				return Map.of("error", _getFaqErrorMessage());
+				return Map.of("error", _getFaqErrorMessage(query));
 			}
 
 			return Map.of(
@@ -2029,13 +2035,13 @@ public class CommerceTools {
 		}
 	}
 
-	private String _getFaqErrorMessage() {
+	private String _getFaqErrorMessage(String query) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("**FAQ Search Results**");
 		sb.append("\n\n");
-		sb.append("I could not find specific information about \"");
-		sb.append("when will my widget arrive");
+		sb.append("I couldn't find specific information about \"");
+		sb.append(query);
 		sb.append("\" in our FAQ database.");
 		sb.append("\n\n");
 		sb.append("**Try these alternatives:**");
@@ -2115,7 +2121,8 @@ public class CommerceTools {
 			);
 		}
 
-		sb.append("**Source:** [Official FAQ](https://webserver-lct66degrees-");
+		sb.append(
+			"**💡 Source:** [Official FAQ](https://webserver-lct66degrees-");
 		sb.append("uat.lfr.cloud/web/minium-demo/faq)");
 
 		return sb.toString();
@@ -2304,7 +2311,7 @@ public class CommerceTools {
 		}
 
 		sb.append("**💡 How to use:** Ask me about any of these topics, ");
-		sb.append("and I will provide the official answer!\n");
+		sb.append("and I'll provide the official answer!\n");
 		sb.append("**Example:** 'What is your return policy?' or 'How do I ");
 		sb.append("track my order?'");
 
