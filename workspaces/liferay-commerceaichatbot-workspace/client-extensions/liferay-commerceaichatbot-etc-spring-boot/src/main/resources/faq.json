@@ -1,0 +1,45 @@
+{
+	"account": {
+		"How do I reset my password?": "Click on the 'Login' button at the top of the page, then click 'Forgot Password?'. Enter your registered email address, and we will send you a link to reset your password.",
+		"How do I update my account information?": "Log in to your account, and navigate to the 'My Account' or 'Account Settings' section. From there, you can update your personal details, shipping addresses, and payment methods."
+	},
+	"general": {
+		"Can I pick up my order in person?": "No, currently all orders are processed and shipped from our distribution centers. We do not offer local pickup services."
+	},
+	"order_management": {
+		"Can I change or cancel my order after it is placed?": "We process orders quickly to ensure fast delivery. If you need to change or cancel, please contact us immediately by phone or email. We will do our best to accommodate your request if the order has not yet been shipped.",
+		"What if my package is lost or damaged?": "Please contact our customer support within 48 hours of the expected delivery date for lost packages, or immediately upon receipt for damaged items. We will initiate a claim with the carrier and arrange for a replacement or refund as quickly as possible."
+	},
+	"ordering": {
+		"Do I need an account to place an order?": "No, you can check out as a guest. However, creating an account allows you to track your order history, save multiple shipping addresses, and enjoy a faster checkout process on future purchases.",
+		"How do I place an order?": "To place an order, browse our selection by vehicle make/model, part category, or using our search bar. Add the desired items to your cart, then proceed to checkout Follow the prompts to enter your shipping information and payment details to complete your purchase."
+	},
+	"parts": {
+		"Are your parts new or used?": "Unless explicitly stated otherwise (e.g., in a 'Used Parts' or 'Salvage' section), all products sold on our website are brand new from the manufacturer.",
+		"Do you offer technical support for installation?": "While we sell parts, we are not certified mechanics and cannot provide specific installation advice or instructions. We recommend consulting a qualified mechanic or referring to your vehicle's service manual for proper installation procedures.",
+		"Do you provide installation instructions?": "Some manufacturers include basic installation guides with their parts. However, for detailed instructions, we strongly advise referring to your vehicle's factory service manual or seeking professional automotive assistance.",
+		"Do your parts come with a warranty?": "Many of our parts come with a manufacturer's warranty. Warranty terms vary by manufacturer and part. Please check the individual product page for specific warranty information. For warranty claims, please contact our support team.",
+		"How do I find the right part for my vehicle?": "You can use our 'Vehicle Selector' tool on the homepage by entering your Year, Make, and Model. Our search results will then filter for compatible parts. You can also search by VIN number, OEM part number, or part name.",
+		"What if I can not find the part I need?": "If you are having trouble locating a specific part, please contact our parts specialists. Provide your vehicle's VIN and as much detail about the part as possible, and we will do our best to help you find it or suggest alternatives."
+	},
+	"payment": {
+		"Is my payment information secure?": "Absolutely. We use industry-standard SSL encryption and PCI-compliant payment gateways to protect your personal and payment information. Your data is never stored on our servers.",
+		"What payment methods do you accept?": "We accept all major credit cards (Visa, MasterCard, American Express, Discover), PayPal, and Google Pay. All transactions are securely processed."
+	},
+	"returns": {
+		"Are there any non-returnable items?": "Yes, certain items are non-returnable for safety or hygiene reasons, or if they are custom-made or marked as 'final sale.' This often includes used parts, opened electrical components, or parts that have been installed. Please refer to our full Return Policy for the complete list.",
+		"How do I return a part?": "To initiate a return, please visit our Returns Portal or contact customer support to receive an RMA (Return Merchandise Authorization) number and detailed instructions. Do not send items back without an RMA.",
+		"How long does it take to process a refund?": "Once we receive your returned item and inspect it, refunds are typically processed within 5-7 business days. The refund will be issued to your original payment method. Please note that it may take additional time for the refund to appear on your bank statement.",
+		"What is your return policy?": "We offer a 30-day return policy for most unused parts in their original, unopened packaging. Some exceptions apply (e.g., electrical components, custom orders, final sale items). Please see our full Return Policy for complete details."
+	},
+	"shipping": {
+		"Do you ship internationally?": "Yes, we ship to select international destinations. International shipping costs and delivery times vary significantly. Please enter your address at checkout to see available options and costs for your country. Customers are responsible for all customs duties, taxes, and fees.",
+		"How can I track my order?": "Once your order ships, you will receive a shipping confirmation email with a tracking number. You can click on the link in the email or enter your tracking number on our 'Track Your Order' page.",
+		"How long will it take for my order to arrive?": "Standard Shipping: Typically 3-7 business days. Expedited Shipping: Typically 2-3 business days. Overnight Shipping: 1 business day (orders must be placed by 2 PM PST for same-day dispatch). please note that these are estimates and may vary based on product availability and carrier delays.",
+		"What are your shipping options and costs?": "We offer several shipping options, including Standard, Expedited, and Overnight delivery. Shipping costs are calculated at checkout based on your location, the weight/size of your order, and the chosen shipping speed."
+	},
+	"support": {
+		"Do you offer a trade discount for mechanics/shops?": "Yes, we offer special pricing and programs for registered automotive businesses and mechanics. Please visit our 'Trade Program' page or contact our B2B sales team for more information.",
+		"How can I contact customer service?": "You can reach us by: **Phone:** [Your Phone Number] (Mon-Fri, [Hours of Operation]) **Email:** [Your Support Email] (We aim to respond within 24 business hours) **Live Chat:** Available on our website during business hours."
+	}
+}

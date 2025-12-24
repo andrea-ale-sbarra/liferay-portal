@@ -5,6 +5,9 @@
 
 package com.liferay.commerce.ai.chat.bot.tools;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.google.adk.tools.Annotations;
 
 import com.liferay.commerce.ai.chat.bot.model.Account;
@@ -18,6 +21,8 @@ import com.liferay.commerce.ai.chat.bot.model.Summary;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 import com.liferay.commerce.ai.chat.bot.service.CommerceService;
 
+import java.io.InputStream;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -29,18 +34,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 /**
@@ -380,16 +387,14 @@ public class CommerceTools {
 		String query) {
 
 		try {
-			Map<String, Map<String, String>> faqData = _getFaqData();
-
 			if ((query == null) || query.isEmpty()) {
-				return Map.of("response", _getNullQueryMessage(faqData));
+				return Map.of("response", _getNullQueryMessage(_faqData));
 			}
 
 			List<Map<String, String>> matchingAnswers = new ArrayList<>();
 
 			for (Map.Entry<String, Map<String, String>> entry :
-					faqData.entrySet()) {
+					_faqData.entrySet()) {
 
 				String categoryTitle = _formatTitle(
 					Strings.CS.replace(entry.getKey(), "_", " "));
@@ -439,6 +444,7 @@ public class CommerceTools {
 			if (matchingAnswers.isEmpty()) {
 				return Map.of("error", _getFaqErrorMessage());
 			}
+
 			return Map.of(
 				"response", _getFaqResponseMessage(query, matchingAnswers));
 		}
@@ -1602,6 +1608,11 @@ public class CommerceTools {
 		}
 	}
 
+	@PostConstruct
+	protected void afterPropertiesSet() {
+		_faqData = _getFaqData();
+	}
+
 	private Account _fetchAccount(Channel channel, String search) {
 		List<Account> accounts = _commerceService.getAccounts(
 			channel.getId(), search);
@@ -2004,396 +2015,18 @@ public class CommerceTools {
 		return endOffsetDateTime;
 	}
 
-	private LinkedHashMap<String, Map<String, String>> _getFaqData() {
+	private Map<String, Map<String, String>> _getFaqData() {
+		try (InputStream inputStream = _faqResource.getInputStream()) {
+			return _objectMapper.readValue(
+				inputStream,
+				new TypeReference<>() {
+				});
+		}
+		catch (Exception exception) {
+			_log.error("Unable to read FAQ data", exception);
 
-		// Official FAQ content from
-
-		//https://webserver-lct66degrees-uat.lfr.cloud/web/minium-demo/faq
-
-		return new LinkedHashMap<String, Map<String, String>>() {
-			{
-				put(
-					"ordering",
-					new HashMap<String, String>() {
-						{
-							put(
-								"Do I need an account to place an order?",
-								new StringBuilder(
-								).append(
-									"No, you can check out as a guest. However, creating an "
-								).append(
-									"account allows you to track your order history, save "
-								).append(
-									"multiple shipping addresses, and enjoy a faster checkout "
-								).append(
-									"process on future purchases."
-								).toString());
-							put(
-								"How do I place an order?",
-								new StringBuilder(
-								).append(
-									"To place an order, browse our selection by vehicle "
-								).append(
-									"make/model, part category, or using our search bar. Add "
-								).append(
-									"the desired items to your cart, then proceed to checkout "
-								).append(
-									"Follow the prompts to enter your shipping information "
-								).append(
-									"and payment details to complete your purchase."
-								).toString());
-						}
-					});
-				put(
-					"payment",
-					new HashMap<String, String>() {
-						{
-							put(
-								"Is my payment information secure?",
-								new StringBuilder(
-								).append(
-									"Absolutely. We use industry-standard SSL encryption and "
-								).append(
-									"PCI-compliant payment gateways to protect your personal "
-								).append(
-									"and payment information. Your data is never stored on "
-								).append(
-									"our servers."
-								).toString());
-							put(
-								"What payment methods do you accept?",
-								new StringBuilder(
-								).append(
-									"We accept all major credit cards (Visa, MasterCard, "
-								).append(
-									"American Express, Discover), PayPal, and Google Pay. All "
-								).append(
-									"transactions are securely processed."
-								).toString());
-						}
-					});
-				put(
-					"shipping",
-					new HashMap<String, String>() {
-						{
-							put(
-								"Do you ship internationally?",
-								new StringBuilder(
-								).append(
-									"Yes, we ship to select international destinations. "
-								).append(
-									"International shipping costs and delivery times vary "
-								).append(
-									"significantly. Please enter your address at checkout to "
-								).append(
-									"see available options and costs for your country. "
-								).append(
-									"Customers are responsible for all customs duties, taxes, "
-								).append(
-									"and fees."
-								).toString());
-							put(
-								"How can I track my order?",
-								new StringBuilder(
-								).append(
-									"Once your order ships, you will receive a shipping "
-								).append(
-									"confirmation email with a tracking number. You can click "
-								).append(
-									"on the link in the email or enter your tracking number "
-								).append(
-									"on our 'Track Your Order' page."
-								).toString());
-							put(
-								"How long will it take for my order to arrive?",
-								new StringBuilder(
-								).append(
-									"Standard Shipping: Typically 3-7 business days. "
-								).append(
-									"Expedited Shipping: Typically 2-3 business days. "
-								).append(
-									"Overnight Shipping: 1 business day (orders must be "
-								).append(
-									"placed by 2 PM PST for same-day dispatch). please note "
-								).append(
-									"that these are estimates and may vary based on product "
-								).append(
-									"availability and carrier delays."
-								).toString());
-							put(
-								"What are your shipping options and costs?",
-								new StringBuilder(
-								).append(
-									"We offer several shipping options, including Standard, "
-								).append(
-									"Expedited, and Overnight delivery. Shipping costs are "
-								).append(
-									"calculated at checkout based on your location, the "
-								).append(
-									"weight/size of your order, and the chosen shipping speed."
-								).toString());
-						}
-					});
-				put(
-					"order_management",
-					new HashMap<String, String>() {
-						{
-							put(
-								"Can I change or cancel my order after it is placed?",
-								new StringBuilder(
-								).append(
-									"We process orders quickly to ensure fast delivery. If "
-								).append(
-									"you need to change or cancel, please contact us "
-								).append(
-									"immediately by phone or email. We will do our best to "
-								).append(
-									"accommodate your request if the order has not yet been "
-								).append(
-									"shipped."
-								).toString());
-							put(
-								"What if my package is lost or damaged?",
-								new StringBuilder(
-								).append(
-									"Please contact our customer support within 48 hours of "
-								).append(
-									"the expected delivery date for lost packages, or "
-								).append(
-									"immediately upon receipt for damaged items. We will "
-								).append(
-									"initiate a claim with the carrier and arrange for a "
-								).append(
-									"replacement or refund as quickly as possible."
-								).toString());
-						}
-					});
-				put(
-					"returns",
-					new HashMap<String, String>() {
-						{
-							put(
-								"Are there any non-returnable items?",
-								new StringBuilder(
-								).append(
-									"Yes, certain items are non-returnable for safety or "
-								).append(
-									"hygiene reasons, or if they are custom-made or marked as "
-								).append(
-									"'final sale.' This often includes used parts, opened "
-								).append(
-									"electrical components, or parts that have been "
-								).append(
-									"installed. Please refer to our full Return Policy for "
-								).append(
-									"the complete list."
-								).toString());
-							put(
-								"How do I return a part?",
-								new StringBuilder(
-								).append(
-									"To initiate a return, please visit our Returns Portal or "
-								).append(
-									"contact customer support to receive an RMA (Return "
-								).append(
-									"Merchandise Authorization) number and detailed "
-								).append(
-									"instructions. Do not send items back without an RMA."
-								).toString());
-							put(
-								"How long does it take to process a refund?",
-								new StringBuilder(
-								).append(
-									"Once we receive your returned item and inspect it, "
-								).append(
-									"refunds are typically processed within 5-7 business "
-								).append(
-									"days. The refund will be issued to your original payment "
-								).append(
-									"method. Please note that it may take additional time for "
-								).append(
-									"the refund to appear on your bank statement."
-								).toString());
-							put(
-								"What is your return policy?",
-								new StringBuilder(
-								).append(
-									"We offer a 30-day return policy for most unused parts in "
-								).append(
-									"their original, unopened packaging. Some exceptions "
-								).append(
-									"apply (e.g., electrical components, custom orders, final "
-								).append(
-									"sale items). Please see our full Return Policy for "
-								).append(
-									"complete details."
-								).toString());
-						}
-					});
-				put(
-					"parts",
-					new HashMap<String, String>() {
-						{
-							put(
-								"Are your parts new or used?",
-								new StringBuilder(
-								).append(
-									"Unless explicitly stated otherwise (e.g., in a 'Used "
-								).append(
-									"Parts' or 'Salvage' section), all products sold on our "
-								).append(
-									"website are brand new from the manufacturer."
-								).toString());
-							put(
-								"Do you offer technical support for installation?",
-								new StringBuilder(
-								).append(
-									"While we sell parts, we are not certified mechanics and "
-								).append(
-									"cannot provide specific installation advice or "
-								).append(
-									"instructions. We recommend consulting a qualified "
-								).append(
-									"mechanic or referring to your vehicle's service manual "
-								).append(
-									"for proper installation procedures."
-								).toString());
-							put(
-								"Do you provide installation instructions?",
-								new StringBuilder(
-								).append(
-									"Some manufacturers include basic installation guides "
-								).append(
-									"with their parts. However, for detailed instructions, we "
-								).append(
-									"strongly advise referring to your vehicle's factory "
-								).append(
-									"service manual or seeking professional automotive "
-								).append(
-									"assistance."
-								).toString());
-							put(
-								"Do your parts come with a warranty?",
-								new StringBuilder(
-								).append(
-									"Many of our parts come with a manufacturer's warranty. "
-								).append(
-									"Warranty terms vary by manufacturer and part. Please "
-								).append(
-									"check the individual product page for specific warranty "
-								).append(
-									"information. For warranty claims, please contact our "
-								).append(
-									"support team."
-								).toString());
-							put(
-								"How do I find the right part for my vehicle?",
-								new StringBuilder(
-								).append(
-									"You can use our 'Vehicle Selector' tool on the homepage "
-								).append(
-									"by entering your Year, Make, and Model. Our search "
-								).append(
-									"results will then filter for compatible parts. You can "
-								).append(
-									"also search by VIN number, OEM part number, or part name."
-								).toString());
-							put(
-								"What if I can not find the part I need?",
-								new StringBuilder(
-								).append(
-									"If you are having trouble locating a specific part, "
-								).append(
-									"please contact our parts specialists. Provide your "
-								).append(
-									"vehicle's VIN and as much detail about the part as "
-								).append(
-									"possible, and we will do our best to help you find it or "
-								).append(
-									"suggest alternatives."
-								).toString());
-						}
-					});
-				put(
-					"account",
-					new HashMap<String, String>() {
-						{
-							put(
-								"How do I reset my password?",
-								new StringBuilder(
-								).append(
-									"Click on the 'Login' button at the top of the page, then "
-								).append(
-									"click 'Forgot Password?'. Enter your registered email "
-								).append(
-									"address, and we will send you a link to reset your "
-								).append(
-									"password."
-								).toString());
-							put(
-								"How do I update my account information?",
-								new StringBuilder(
-								).append(
-									"Log in to your account, and navigate to the 'My Account' "
-								).append(
-									"or 'Account Settings' section. From there, you can "
-								).append(
-									"update your personal details, shipping addresses, and "
-								).append(
-									"payment methods."
-								).toString());
-						}
-					});
-				put(
-					"support",
-					new HashMap<String, String>() {
-						{
-							put(
-								"Do you offer a trade discount for mechanics/shops?",
-								new StringBuilder(
-								).append(
-									"Yes, we offer special pricing and programs for "
-								).append(
-									"registered automotive businesses and mechanics. Please "
-								).append(
-									"visit our 'Trade Program' page or contact our B2B sales "
-								).append(
-									"team for more information."
-								).toString());
-							put(
-								"How can I contact customer service?",
-								new StringBuilder(
-								).append(
-									"You can reach us by: **Phone:** [Your Phone Number] "
-								).append(
-									"(Mon-Fri, [Hours of Operation]) **Email:** [Your Support "
-								).append(
-									"Email] (We aim to respond within 24 business hours) "
-								).append(
-									"**Live Chat:** Available on our website during business "
-								).append(
-									"hours."
-								).toString());
-						}
-					});
-				put(
-					"general",
-					new HashMap<String, String>() {
-						{
-							put(
-								"Can I pick up my order in person?",
-								new StringBuilder(
-								).append(
-									"No, currently all orders are processed and shipped from "
-								).append(
-									"our distribution centers. We do not offer local pickup "
-								).append(
-									"services."
-								).toString());
-						}
-					});
-			}
-		};
+			return Map.of();
+		}
 	}
 
 	private String _getFaqErrorMessage() {
@@ -4237,7 +3870,8 @@ public class CommerceTools {
 				}
 			}
 
-			if (statusLabel != null) {				break;
+			if (statusLabel != null) {
+				break;
 			}
 		}
 
@@ -4305,5 +3939,11 @@ public class CommerceTools {
 		"last (\\d+) days?");
 
 	private final CommerceService _commerceService;
+	private Map<String, Map<String, String>> _faqData;
+
+	@Value("classpath:faq.json")
+	private Resource _faqResource;
+
+	private final ObjectMapper _objectMapper = new ObjectMapper();
 
 }
