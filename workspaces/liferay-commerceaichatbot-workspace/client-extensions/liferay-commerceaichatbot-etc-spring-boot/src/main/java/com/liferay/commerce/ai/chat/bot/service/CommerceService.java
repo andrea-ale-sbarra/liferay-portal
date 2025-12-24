@@ -13,7 +13,6 @@ import com.liferay.commerce.ai.chat.bot.model.PageResult;
 import com.liferay.commerce.ai.chat.bot.model.Product;
 import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
-import com.liferay.portal.kernel.util.HashMapBuilder;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -35,7 +34,7 @@ import javax.annotation.PostConstruct;
 
 import javax.net.ssl.SSLContext;
 
-import org.apache.commons.lang3.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpHeaders;
@@ -466,11 +465,7 @@ public class CommerceService {
 				path = "/o/headless-commerce-delivery-catalog/v1.0/accounts";
 			}
 
-			URI uri = _buildUri(
-				path,
-				HashMapBuilder.put(
-					"search", search
-				).build());
+			URI uri = _buildUri(path, Map.of("search", search));
 
 			JSONObject jsonObject = _executeGetJSONObject(uri);
 
@@ -740,9 +735,7 @@ public class CommerceService {
 		try {
 			URI uri = _buildUri(
 				"/o/headless-admin-user/v1.0/user-accounts",
-				HashMapBuilder.put(
-					"filter", "emailAddress eq '" + email + "'"
-				).build());
+				Map.of("filter", "emailAddress eq '" + email + "'"));
 
 			JSONObject jsonObject = _executeGetJSONObject(uri);
 
@@ -788,19 +781,19 @@ public class CommerceService {
 		}
 
 		try {
-			return Instant.parse(Strings.CS.replace(string, "Z", "+00:00"));
+			return Instant.parse(StringUtils.replace(string, "Z", "+00:00"));
 		}
 		catch (Exception exception1) {
 			try {
 				if (_log.isWarnEnabled()) {
-					_log.warn(exception1);
+					_log.warn(exception1.getMessage(), exception1);
 				}
 
 				return Instant.parse(string);
 			}
 			catch (Exception exception2) {
 				if (_log.isWarnEnabled()) {
-					_log.warn(exception2);
+					_log.warn(exception2.getMessage(), exception2);
 				}
 
 				return null;
@@ -1014,11 +1007,16 @@ public class CommerceService {
 		try {
 			JSONArray phonesJSONArray = jsonObject.optJSONArray("phoneNumbers");
 
-			if ((phonesJSONArray != null) && (phonesJSONArray.length() > 0)) {
-				JSONObject phoneJSONObject = phonesJSONArray.optJSONObject(0);
+			if (phonesJSONArray != null) {
+				for (int i = 0; i < phonesJSONArray.length(); i++) {
+					JSONObject phoneJSONObject = phonesJSONArray.optJSONObject(
+						i);
 
-				if (phoneJSONObject != null) {
-					phone = phoneJSONObject.optString("phoneNumber", null);
+					if (phoneJSONObject != null) {
+						phone = phoneJSONObject.optString("phoneNumber", null);
+
+						break;
+					}
 				}
 			}
 		}

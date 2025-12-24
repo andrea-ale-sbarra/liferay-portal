@@ -17,11 +17,6 @@ import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.Summary;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 import com.liferay.commerce.ai.chat.bot.service.CommerceService;
-import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,7 +123,7 @@ public class CommerceTools {
 
 					List<Order> orders =
 						_commerceService.getAllPlacedOrdersByAccountDto(
-							channelId, account.getId(), null, StringPool.BLANK);
+							channelId, account.getId(), null, "");
 
 					totalOrders += orders.size();
 
@@ -139,10 +135,11 @@ public class CommerceTools {
 
 					summary.setId(account.getId());
 					summary.setName(
-						GetterUtil.getString(
-							account.getName(), "Unknown Account"));
+						(account.getName() != null) ? account.getName() :
+							"Unknown Account");
 					summary.setType(
-						GetterUtil.getString(account.getType(), "N/A"));
+						(account.getType() != null) ? account.getType() :
+							"N/A");
 					summary.setOrderCount(orders.size());
 					summary.setOrder(order);
 
@@ -153,11 +150,12 @@ public class CommerceTools {
 
 					summary.setId(account.getId());
 					summary.setName(
-						GetterUtil.getString(
-							account.getName(), "Unknown Account"));
+						(account.getName() != null) ? account.getName() :
+							"Unknown Account");
 					summary.setType("N/A");
 					summary.setType(
-						GetterUtil.getString(account.getType(), "N/A"));
+						(account.getType() != null) ? account.getType() :
+							"N/A");
 					summary.setOrderCount(0);
 					summary.setOrder(null);
 					summary.setError(exception.getMessage());
@@ -384,7 +382,7 @@ public class CommerceTools {
 		try {
 			Map<String, Map<String, String>> faqData = _getFaqData();
 
-			if (Validator.isNull(query)) {
+			if ((query == null) || query.isEmpty()) {
 				return Map.of("response", _getNullQueryMessage(faqData));
 			}
 
@@ -394,9 +392,7 @@ public class CommerceTools {
 					faqData.entrySet()) {
 
 				String categoryTitle = _formatTitle(
-					Strings.CS.replace(
-						entry.getKey(), StringPool.UNDERLINE,
-						StringPool.SPACE));
+					Strings.CS.replace(entry.getKey(), "_", " "));
 
 				Map<String, String> categoriesMap = entry.getValue();
 
@@ -433,13 +429,9 @@ public class CommerceTools {
 
 					if (questionMatches || answerMatches) {
 						matchingAnswers.add(
-							LinkedHashMapBuilder.put(
-								"question", questionText
-							).put(
-								"answer", answerText
-							).put(
-								"category", categoryTitle
-							).build());
+							Map.of(
+								"question", questionText, "answer", answerText,
+								"category", categoryTitle));
 					}
 				}
 			}
@@ -447,7 +439,6 @@ public class CommerceTools {
 			if (matchingAnswers.isEmpty()) {
 				return Map.of("error", _getFaqErrorMessage());
 			}
-
 			return Map.of(
 				"response", _getFaqResponseMessage(query, matchingAnswers));
 		}
@@ -521,7 +512,7 @@ public class CommerceTools {
 			if (orderItems.isEmpty()) {
 				StringBuilder sb = new StringBuilder();
 
-				sb.append("**📦 Order Items for Order ");
+				sb.append("**Order Items for Order ");
 				sb.append(orderIdentifier);
 				sb.append("**");
 				sb.append("\n\n");
@@ -529,7 +520,7 @@ public class CommerceTools {
 				sb.append("\n");
 				sb.append("**Items Count**: 0");
 				sb.append("\n\n");
-				sb.append("**💡 Try**: \"Find order ");
+				sb.append("**Try**: \"Find order ");
 				sb.append(orderIdentifier);
 				sb.append("\" for complete order information");
 
@@ -539,7 +530,7 @@ public class CommerceTools {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append(
-				"**📦 Order Items for Order "
+				"**Order Items for Order "
 			).append(
 				order.getId()
 			).append(
@@ -550,8 +541,8 @@ public class CommerceTools {
 				sb.append(
 					"**Order Details:** "
 				).append(
-					GetterUtil.getString(
-						order.getExternalReferenceCode(), "N/A")
+					(order.getExternalReferenceCode() != null) ?
+						order.getExternalReferenceCode() : "N/A"
 				).append(
 					" | Date: "
 				).append(
@@ -559,7 +550,8 @@ public class CommerceTools {
 				).append(
 					" | Total: "
 				).append(
-					GetterUtil.getString(order.getTotalFormatted(), "N/A")
+					(order.getTotalFormatted() != null) ?
+						order.getTotalFormatted() : "N/A"
 				).append(
 					"\n\n"
 				);
@@ -576,8 +568,8 @@ public class CommerceTools {
 						sb.append(
 							"- **Address**: "
 						).append(
-							GetterUtil.getString(
-								latestShipment.getOneLineAddress(), "N/A")
+							(latestShipment.getOneLineAddress() != null) ?
+								latestShipment.getOneLineAddress() : "N/A"
 						).append(
 							"\n"
 						);
@@ -593,8 +585,8 @@ public class CommerceTools {
 						sb.append(
 							"- **Tracking Number**: "
 						).append(
-							GetterUtil.getString(
-								latestShipment.getTrackingNumber(), "N/A")
+							(latestShipment.getTrackingNumber() != null) ?
+								latestShipment.getTrackingNumber() : "N/A"
 						).append(
 							"\n"
 						);
@@ -602,8 +594,8 @@ public class CommerceTools {
 						sb.append(
 							"- **Carrier**: "
 						).append(
-							GetterUtil.getString(
-								latestShipment.getCarrier(), "N/A")
+							(latestShipment.getCarrier() != null) ?
+								latestShipment.getCarrier() : "N/A"
 						).append(
 							"\n"
 						);
@@ -614,8 +606,8 @@ public class CommerceTools {
 							sb.append(
 								"- **Status**: "
 							).append(
-								GetterUtil.getString(
-									statusInfo.getLabel(), "N/A")
+								(statusInfo.getLabel() != null) ?
+									statusInfo.getLabel() : "N/A"
 							).append(
 								"\n\n"
 							);
@@ -624,8 +616,8 @@ public class CommerceTools {
 							sb.append(
 								"- **Status**: "
 							).append(
-								GetterUtil.getString(
-									latestShipment.getShipmentStatus(), "N/A")
+								(latestShipment.getShipmentStatus() != null) ?
+									latestShipment.getShipmentStatus() : "N/A"
 							).append(
 								"\n\n"
 							);
@@ -660,7 +652,7 @@ public class CommerceTools {
 				).append(
 					". **"
 				).append(
-					GetterUtil.getString(orderItem.getName(), "N/A")
+					(orderItem.getName() != null) ? orderItem.getName() : "N/A"
 				).append(
 					"**\n"
 				);
@@ -668,7 +660,7 @@ public class CommerceTools {
 				sb.append(
 					"   SKU: "
 				).append(
-					GetterUtil.getString(orderItem.getSku(), "N/A")
+					(orderItem.getSku() != null) ? orderItem.getSku() : "N/A"
 				).append(
 					" | Qty: "
 				).append(
@@ -676,7 +668,8 @@ public class CommerceTools {
 				).append(
 					" | Price: "
 				).append(
-					GetterUtil.getString(orderItem.getUnitPrice(), "N/A")
+					(orderItem.getUnitPrice() != null) ?
+						orderItem.getUnitPrice() : "N/A"
 				).append(
 					"\n\n"
 				);
@@ -819,12 +812,17 @@ public class CommerceTools {
 
 					sb.append(i + 1);
 					sb.append(". **");
-					sb.append(GetterUtil.getString(channel.getName(), "N/A"));
+					sb.append(
+						(channel.getName() != null) ? channel.getName() :
+							"N/A");
 					sb.append("** (ID: ");
-					sb.append(GetterUtil.getString(channel.getId(), "N/A"));
+					sb.append(
+						(channel.getId() != null) ? channel.getId() : "N/A");
 					sb.append(")\n");
 					sb.append("   - Type: ");
-					sb.append(GetterUtil.getString(channel.getType(), "N/A"));
+					sb.append(
+						(channel.getType() != null) ? channel.getType() :
+							"N/A");
 					sb.append("\n");
 					sb.append("   - Active: ");
 					sb.append(channel.getActive());
@@ -852,19 +850,22 @@ public class CommerceTools {
 							sb.append(i + 1);
 							sb.append(". **");
 							sb.append(
-								GetterUtil.getString(account.getName(), "N/A"));
+								(account.getName() != null) ?
+									account.getName() : "N/A");
 							sb.append("** (ID: ");
 							sb.append(
-								GetterUtil.getString(account.getId(), "N/A"));
+								(account.getId() != null) ? account.getId() :
+									"N/A");
 							sb.append(")\n");
 							sb.append("   - Type: ");
 							sb.append(
-								GetterUtil.getString(account.getType(), "N/A"));
+								(account.getType() != null) ?
+									account.getType() : "N/A");
 							sb.append("\n");
 							sb.append("   - Status: ");
 							sb.append(
-								GetterUtil.getString(
-									account.getStatus(), "N/A"));
+								(account.getStatus() != null) ?
+									account.getStatus() : "N/A");
 							sb.append("\n\n");
 						}
 					}
@@ -958,7 +959,7 @@ public class CommerceTools {
 		String email) {
 
 		try {
-			if (Validator.isNull(email)) {
+			if (StringUtils.isEmpty(email)) {
 				return Map.of("response", _getUserEmailRequiredMessage());
 			}
 
@@ -1005,7 +1006,7 @@ public class CommerceTools {
 		String userEmail) {
 
 		try {
-			if (Validator.isNull(userEmail)) {
+			if (StringUtils.isEmpty(userEmail)) {
 				return Map.of(
 					"response", _getProductEmailRequiredEmailMessage());
 			}
@@ -1043,7 +1044,8 @@ public class CommerceTools {
 
 			for (Order order : orders) {
 				try {
-					String orderId = GetterUtil.getString(order.getId(), "N/A");
+					String orderId =
+						(order.getId() != null) ? order.getId() : "N/A";
 
 					List<OrderItem> orderItems =
 						_commerceService.getPlacedOrderItems(orderId);
@@ -1057,7 +1059,7 @@ public class CommerceTools {
 							name = StringUtils.lowerCase(name);
 						}
 						else {
-							name = StringPool.BLANK;
+							name = "";
 						}
 
 						String sku = orderItem.getSku();
@@ -1066,13 +1068,13 @@ public class CommerceTools {
 							sku = StringUtils.lowerCase(sku);
 						}
 						else {
-							sku = StringPool.BLANK;
+							sku = "";
 						}
 
 						String term = StringUtils.lowerCase(productDescription);
 
-						if (Validator.isNull(term)) {
-							term = StringPool.BLANK;
+						if ((term == null) || term.isEmpty()) {
+							term = "";
 						}
 
 						if (name.contains(term) || sku.contains(term) ||
@@ -1130,7 +1132,7 @@ public class CommerceTools {
 		String userEmail) {
 
 		try {
-			if (Validator.isNull(userEmail)) {
+			if (StringUtils.isEmpty(userEmail)) {
 				return Map.of("error", _getShippingEmailRequiredEmailMessage());
 			}
 
@@ -1205,7 +1207,7 @@ public class CommerceTools {
 			for (Order order : orders) {
 				String orderId = order.getId();
 
-				if (Validator.isNull(orderId)) {
+				if (StringUtils.isEmpty(orderId)) {
 					continue;
 				}
 
@@ -1214,7 +1216,7 @@ public class CommerceTools {
 
 					String oneLineAddress = shipment.getOneLineAddress();
 
-					if (Validator.isNull(oneLineAddress)) {
+					if (StringUtils.isEmpty(oneLineAddress)) {
 						continue;
 					}
 
@@ -1245,13 +1247,14 @@ public class CommerceTools {
 						orderShipmentDetails.setExpectedDate(
 							shipment.getExpectedDate());
 						orderShipmentDetails.setTrackingNumber(
-							GetterUtil.getString(
-								shipment.getTrackingNumber(), "N/A"));
+							(shipment.getTrackingNumber() != null) ?
+								shipment.getTrackingNumber() : "N/A");
 						orderShipmentDetails.setCarrier(
-							GetterUtil.getString(shipment.getCarrier(), "N/A"));
+							(shipment.getCarrier() != null) ?
+								shipment.getCarrier() : "N/A");
 						orderShipmentDetails.setTotalFormatted(
-							GetterUtil.getString(
-								order.getTotalFormatted(), "N/A"));
+							(order.getTotalFormatted() != null) ?
+								order.getTotalFormatted() : "N/A");
 
 						orderShipmentDetailsList.add(orderShipmentDetails);
 
@@ -1295,7 +1298,7 @@ public class CommerceTools {
 		String userEmail) {
 
 		try {
-			if (Validator.isNull(userEmail)) {
+			if (StringUtils.isEmpty(userEmail)) {
 				return Map.of(
 					"error", _getOrdersByStatusRequiredEmailMessage());
 			}
@@ -1335,7 +1338,7 @@ public class CommerceTools {
 			for (Order order : orders) {
 				String orderId = order.getId();
 
-				if (Validator.isNull(orderId) ||
+				if ((orderId == null) || orderId.isEmpty() ||
 					!Strings.CI.equals(
 						StringUtils.trim(order.getStatusLabel()),
 						statusLabel)) {
@@ -1377,13 +1380,13 @@ public class CommerceTools {
 			String query) {
 
 		try {
-			String queryLower = StringPool.BLANK;
+			String queryLower = "";
 
 			if (query != null) {
 				queryLower = StringUtils.lowerCase(query);
 			}
 
-			Matcher matcher = _orderIdPattern.matcher(StringPool.BLANK);
+			Matcher matcher = _orderIdPattern.matcher("");
 
 			if (query != null) {
 				matcher = _orderIdPattern.matcher(query);
@@ -1622,12 +1625,12 @@ public class CommerceTools {
 			).append(
 				userAccount.getFirstName()
 			).append(
-				StringPool.SPACE
+				" "
 			).append(
 				userAccount.getLastName()
 			).toString();
 
-			if (Validator.isNull(fullName)) {
+			if (StringUtils.isEmpty(fullName)) {
 				account.setName(userAccount.getEmail());
 			}
 			else {
@@ -1652,7 +1655,7 @@ public class CommerceTools {
 		result.append(
 			"**Order Details for Order "
 		).append(
-			GetterUtil.getString(order.getId(), "N/A")
+			(order.getId() != null) ? order.getId() : "N/A"
 		).append(
 			"**\n"
 		).append(
@@ -1664,7 +1667,7 @@ public class CommerceTools {
 		).append(
 			"- **Status**: "
 		).append(
-			GetterUtil.getString(order.getStatus(), "N/A")
+			(order.getStatus() != null) ? order.getStatus() : "N/A"
 		).append(
 			"\n"
 		).append(
@@ -1704,25 +1707,27 @@ public class CommerceTools {
 			).append(
 				"- **Name**: "
 			).append(
-				GetterUtil.getString(shippingAddress.get("name"), "N/A")
+				(shippingAddress.get("name") != null) ?
+					shippingAddress.get("name") : "N/A"
 			).append(
 				"\n"
 			).append(
 				"- **City**: "
 			).append(
-				GetterUtil.getString(shippingAddress.get("city"), "N/A")
+				(shippingAddress.get("city") != null) ?
+					shippingAddress.get("city") : "N/A"
 			).append(
 				", "
 			).append(
-				GetterUtil.getString(
-					shippingAddress.get("regionISOCode"), "N/A")
+				(shippingAddress.get("regionISOCode") != null) ?
+					shippingAddress.get("regionISOCode") : "N/A"
 			).append(
 				"\n"
 			).append(
 				"- **Country**: "
 			).append(
-				GetterUtil.getString(
-					shippingAddress.get("countryISOCode"), "N/A")
+				(shippingAddress.get("countryISOCode") != null) ?
+					shippingAddress.get("countryISOCode") : "N/A"
 			).append(
 				"\n"
 			).append(
@@ -1730,7 +1735,7 @@ public class CommerceTools {
 			).append(
 				"info for order "
 			).append(
-				GetterUtil.getString(order.getId(), "N/A")
+				(order.getId() != null) ? order.getId() : "N/A"
 			).append(
 				"'\n"
 			);
@@ -1740,14 +1745,13 @@ public class CommerceTools {
 	}
 
 	private String _formatTitle(String title) {
-		if (Validator.isNull(title)) {
-			return StringPool.BLANK;
+		if ((title == null) || title.isEmpty()) {
+			return "";
 		}
 
 		StringBuilder sb = new StringBuilder();
 
-		String[] words = StringUtils.split(
-			StringUtils.lowerCase(title), StringPool.SPACE);
+		String[] words = StringUtils.split(StringUtils.lowerCase(title), " ");
 
 		for (int i = 0; i < words.length; i++) {
 			String character = words[i];
@@ -1761,7 +1765,7 @@ public class CommerceTools {
 			}
 
 			if (i < (words.length - 1)) {
-				sb.append(StringPool.SPACE);
+				sb.append(" ");
 			}
 		}
 
@@ -1831,7 +1835,7 @@ public class CommerceTools {
 		sb.append(
 			"**Channel**: "
 		).append(
-			GetterUtil.getString(channel.getName(), "N/A")
+			(channel.getName() != null) ? channel.getName() : "N/A"
 		).append(
 			" (ID: "
 		).append(
@@ -1905,7 +1909,8 @@ public class CommerceTools {
 				).append(
 					" - "
 				).append(
-					GetterUtil.getString(order.getTotalFormatted(), "N/A")
+					(order.getTotalFormatted() != null) ?
+						order.getTotalFormatted() : "N/A"
 				).append(
 					"\n"
 				);
@@ -2005,360 +2010,390 @@ public class CommerceTools {
 
 		//https://webserver-lct66degrees-uat.lfr.cloud/web/minium-demo/faq
 
-		return LinkedHashMapBuilder.<String, Map<String, String>>put(
-			"ordering",
-			LinkedHashMapBuilder.put(
-				"How do I place an order?",
-				new StringBuilder(
-				).append(
-					"To place an order, browse our selection by vehicle "
-				).append(
-					"make/model, part category, or using our search bar. Add "
-				).append(
-					"the desired items to your cart, then proceed to checkout "
-				).append(
-					"Follow the prompts to enter your shipping information "
-				).append(
-					"and payment details to complete your purchase."
-				).toString()
-			).put(
-				"Do I need an account to place an order?",
-				new StringBuilder(
-				).append(
-					"No, you can check out as a guest. However, creating an "
-				).append(
-					"account allows you to track your order history, save "
-				).append(
-					"multiple shipping addresses, and enjoy a faster checkout "
-				).append(
-					"process on future purchases."
-				).toString()
-			).build()
-		).put(
-			"payment",
-			LinkedHashMapBuilder.put(
-				"What payment methods do you accept?",
-				new StringBuilder(
-				).append(
-					"We accept all major credit cards (Visa, MasterCard, "
-				).append(
-					"American Express, Discover), PayPal, and Google Pay. All "
-				).append(
-					"transactions are securely processed."
-				).toString()
-			).put(
-				"Is my payment information secure?",
-				new StringBuilder(
-				).append(
-					"Absolutely. We use industry-standard SSL encryption and "
-				).append(
-					"PCI-compliant payment gateways to protect your personal "
-				).append(
-					"and payment information. Your data is never stored on "
-				).append(
-					"our servers."
-				).toString()
-			).build()
-		).put(
-			"shipping",
-			LinkedHashMapBuilder.put(
-				"What are your shipping options and costs?",
-				new StringBuilder(
-				).append(
-					"We offer several shipping options, including Standard, "
-				).append(
-					"Expedited, and Overnight delivery. Shipping costs are "
-				).append(
-					"calculated at checkout based on your location, the "
-				).append(
-					"weight/size of your order, and the chosen shipping speed."
-				).toString()
-			).put(
-				"How long will it take for my order to arrive?",
-				new StringBuilder(
-				).append(
-					"Standard Shipping: Typically 3-7 business days. "
-				).append(
-					"Expedited Shipping: Typically 2-3 business days. "
-				).append(
-					"Overnight Shipping: 1 business day (orders must be "
-				).append(
-					"placed by 2 PM PST for same-day dispatch). please note "
-				).append(
-					"that these are estimates and may vary based on product "
-				).append(
-					"availability and carrier delays."
-				).toString()
-			).put(
-				"Do you ship internationally?",
-				new StringBuilder(
-				).append(
-					"Yes, we ship to select international destinations. "
-				).append(
-					"International shipping costs and delivery times vary "
-				).append(
-					"significantly. Please enter your address at checkout to "
-				).append(
-					"see available options and costs for your country. "
-				).append(
-					"Customers are responsible for all customs duties, taxes, "
-				).append(
-					"and fees."
-				).toString()
-			).put(
-				"How can I track my order?",
-				new StringBuilder(
-				).append(
-					"Once your order ships, you will receive a shipping "
-				).append(
-					"confirmation email with a tracking number. You can click "
-				).append(
-					"on the link in the email or enter your tracking number "
-				).append(
-					"on our 'Track Your Order' page."
-				).toString()
-			).build()
-		).put(
-			"order_management",
-			LinkedHashMapBuilder.put(
-				"Can I change or cancel my order after it is placed?",
-				new StringBuilder(
-				).append(
-					"We process orders quickly to ensure fast delivery. If "
-				).append(
-					"you need to change or cancel, please contact us "
-				).append(
-					"immediately by phone or email. We will do our best to "
-				).append(
-					"accommodate your request if the order has not yet been "
-				).append(
-					"shipped."
-				).toString()
-			).put(
-				"What if my package is lost or damaged?",
-				new StringBuilder(
-				).append(
-					"Please contact our customer support within 48 hours of "
-				).append(
-					"the expected delivery date for lost packages, or "
-				).append(
-					"immediately upon receipt for damaged items. We will "
-				).append(
-					"initiate a claim with the carrier and arrange for a "
-				).append(
-					"replacement or refund as quickly as possible."
-				).toString()
-			).build()
-		).put(
-			"returns",
-			LinkedHashMapBuilder.put(
-				"What is your return policy?",
-				new StringBuilder(
-				).append(
-					"We offer a 30-day return policy for most unused parts in "
-				).append(
-					"their original, unopened packaging. Some exceptions "
-				).append(
-					"apply (e.g., electrical components, custom orders, final "
-				).append(
-					"sale items). Please see our full Return Policy for "
-				).append(
-					"complete details."
-				).toString()
-			).put(
-				"How do I return a part?",
-				new StringBuilder(
-				).append(
-					"To initiate a return, please visit our Returns Portal or "
-				).append(
-					"contact customer support to receive an RMA (Return "
-				).append(
-					"Merchandise Authorization) number and detailed "
-				).append(
-					"instructions. Do not send items back without an RMA."
-				).toString()
-			).put(
-				"How long does it take to process a refund?",
-				new StringBuilder(
-				).append(
-					"Once we receive your returned item and inspect it, "
-				).append(
-					"refunds are typically processed within 5-7 business "
-				).append(
-					"days. The refund will be issued to your original payment "
-				).append(
-					"method. Please note that it may take additional time for "
-				).append(
-					"the refund to appear on your bank statement."
-				).toString()
-			).put(
-				"Are there any non-returnable items?",
-				new StringBuilder(
-				).append(
-					"Yes, certain items are non-returnable for safety or "
-				).append(
-					"hygiene reasons, or if they are custom-made or marked as "
-				).append(
-					"'final sale.' This often includes used parts, opened "
-				).append(
-					"electrical components, or parts that have been "
-				).append(
-					"installed. Please refer to our full Return Policy for "
-				).append(
-					"the complete list."
-				).toString()
-			).build()
-		).put(
-			"parts",
-			LinkedHashMapBuilder.put(
-				"How do I find the right part for my vehicle?",
-				new StringBuilder(
-				).append(
-					"You can use our 'Vehicle Selector' tool on the homepage "
-				).append(
-					"by entering your Year, Make, and Model. Our search "
-				).append(
-					"results will then filter for compatible parts. You can "
-				).append(
-					"also search by VIN number, OEM part number, or part name."
-				).toString()
-			).put(
-				"What if I can not find the part I need?",
-				new StringBuilder(
-				).append(
-					"If you are having trouble locating a specific part, "
-				).append(
-					"please contact our parts specialists. Provide your "
-				).append(
-					"vehicle's VIN and as much detail about the part as "
-				).append(
-					"possible, and we will do our best to help you find it or "
-				).append(
-					"suggest alternatives."
-				).toString()
-			).put(
-				"Are your parts new or used?",
-				new StringBuilder(
-				).append(
-					"Unless explicitly stated otherwise (e.g., in a 'Used "
-				).append(
-					"Parts' or 'Salvage' section), all products sold on our "
-				).append(
-					"website are brand new from the manufacturer."
-				).toString()
-			).put(
-				"Do your parts come with a warranty?",
-				new StringBuilder(
-				).append(
-					"Many of our parts come with a manufacturer's warranty. "
-				).append(
-					"Warranty terms vary by manufacturer and part. Please "
-				).append(
-					"check the individual product page for specific warranty "
-				).append(
-					"information. For warranty claims, please contact our "
-				).append(
-					"support team."
-				).toString()
-			).put(
-				"Do you offer technical support for installation?",
-				new StringBuilder(
-				).append(
-					"While we sell parts, we are not certified mechanics and "
-				).append(
-					"cannot provide specific installation advice or "
-				).append(
-					"instructions. We recommend consulting a qualified "
-				).append(
-					"mechanic or referring to your vehicle's service manual "
-				).append(
-					"for proper installation procedures."
-				).toString()
-			).put(
-				"Do you provide installation instructions?",
-				new StringBuilder(
-				).append(
-					"Some manufacturers include basic installation guides "
-				).append(
-					"with their parts. However, for detailed instructions, we "
-				).append(
-					"strongly advise referring to your vehicle's factory "
-				).append(
-					"service manual or seeking professional automotive "
-				).append(
-					"assistance."
-				).toString()
-			).build()
-		).put(
-			"account",
-			LinkedHashMapBuilder.put(
-				"How do I reset my password?",
-				new StringBuilder(
-				).append(
-					"Click on the 'Login' button at the top of the page, then "
-				).append(
-					"click 'Forgot Password?'. Enter your registered email "
-				).append(
-					"address, and we will send you a link to reset your "
-				).append(
-					"password."
-				).toString()
-			).put(
-				"How do I update my account information?",
-				new StringBuilder(
-				).append(
-					"Log in to your account, and navigate to the 'My Account' "
-				).append(
-					"or 'Account Settings' section. From there, you can "
-				).append(
-					"update your personal details, shipping addresses, and "
-				).append(
-					"payment methods."
-				).toString()
-			).build()
-		).put(
-			"support",
-			LinkedHashMapBuilder.put(
-				"How can I contact customer service?",
-				new StringBuilder(
-				).append(
-					"You can reach us by: **Phone:** [Your Phone Number] "
-				).append(
-					"(Mon-Fri, [Hours of Operation]) **Email:** [Your Support "
-				).append(
-					"Email] (We aim to respond within 24 business hours) "
-				).append(
-					"**Live Chat:** Available on our website during business "
-				).append(
-					"hours."
-				).toString()
-			).put(
-				"Do you offer a trade discount for mechanics/shops?",
-				new StringBuilder(
-				).append(
-					"Yes, we offer special pricing and programs for "
-				).append(
-					"registered automotive businesses and mechanics. Please "
-				).append(
-					"visit our 'Trade Program' page or contact our B2B sales "
-				).append(
-					"team for more information."
-				).toString()
-			).build()
-		).put(
-			"general",
-			LinkedHashMapBuilder.put(
-				"Can I pick up my order in person?",
-				new StringBuilder(
-				).append(
-					"No, currently all orders are processed and shipped from "
-				).append(
-					"our distribution centers. We do not offer local pickup "
-				).append(
-					"services."
-				).toString()
-			).build()
-		).build();
+		return new LinkedHashMap<String, Map<String, String>>() {
+			{
+				put(
+					"ordering",
+					new HashMap<String, String>() {
+						{
+							put(
+								"Do I need an account to place an order?",
+								new StringBuilder(
+								).append(
+									"No, you can check out as a guest. However, creating an "
+								).append(
+									"account allows you to track your order history, save "
+								).append(
+									"multiple shipping addresses, and enjoy a faster checkout "
+								).append(
+									"process on future purchases."
+								).toString());
+							put(
+								"How do I place an order?",
+								new StringBuilder(
+								).append(
+									"To place an order, browse our selection by vehicle "
+								).append(
+									"make/model, part category, or using our search bar. Add "
+								).append(
+									"the desired items to your cart, then proceed to checkout "
+								).append(
+									"Follow the prompts to enter your shipping information "
+								).append(
+									"and payment details to complete your purchase."
+								).toString());
+						}
+					});
+				put(
+					"payment",
+					new HashMap<String, String>() {
+						{
+							put(
+								"Is my payment information secure?",
+								new StringBuilder(
+								).append(
+									"Absolutely. We use industry-standard SSL encryption and "
+								).append(
+									"PCI-compliant payment gateways to protect your personal "
+								).append(
+									"and payment information. Your data is never stored on "
+								).append(
+									"our servers."
+								).toString());
+							put(
+								"What payment methods do you accept?",
+								new StringBuilder(
+								).append(
+									"We accept all major credit cards (Visa, MasterCard, "
+								).append(
+									"American Express, Discover), PayPal, and Google Pay. All "
+								).append(
+									"transactions are securely processed."
+								).toString());
+						}
+					});
+				put(
+					"shipping",
+					new HashMap<String, String>() {
+						{
+							put(
+								"Do you ship internationally?",
+								new StringBuilder(
+								).append(
+									"Yes, we ship to select international destinations. "
+								).append(
+									"International shipping costs and delivery times vary "
+								).append(
+									"significantly. Please enter your address at checkout to "
+								).append(
+									"see available options and costs for your country. "
+								).append(
+									"Customers are responsible for all customs duties, taxes, "
+								).append(
+									"and fees."
+								).toString());
+							put(
+								"How can I track my order?",
+								new StringBuilder(
+								).append(
+									"Once your order ships, you will receive a shipping "
+								).append(
+									"confirmation email with a tracking number. You can click "
+								).append(
+									"on the link in the email or enter your tracking number "
+								).append(
+									"on our 'Track Your Order' page."
+								).toString());
+							put(
+								"How long will it take for my order to arrive?",
+								new StringBuilder(
+								).append(
+									"Standard Shipping: Typically 3-7 business days. "
+								).append(
+									"Expedited Shipping: Typically 2-3 business days. "
+								).append(
+									"Overnight Shipping: 1 business day (orders must be "
+								).append(
+									"placed by 2 PM PST for same-day dispatch). please note "
+								).append(
+									"that these are estimates and may vary based on product "
+								).append(
+									"availability and carrier delays."
+								).toString());
+							put(
+								"What are your shipping options and costs?",
+								new StringBuilder(
+								).append(
+									"We offer several shipping options, including Standard, "
+								).append(
+									"Expedited, and Overnight delivery. Shipping costs are "
+								).append(
+									"calculated at checkout based on your location, the "
+								).append(
+									"weight/size of your order, and the chosen shipping speed."
+								).toString());
+						}
+					});
+				put(
+					"order_management",
+					new HashMap<String, String>() {
+						{
+							put(
+								"Can I change or cancel my order after it is placed?",
+								new StringBuilder(
+								).append(
+									"We process orders quickly to ensure fast delivery. If "
+								).append(
+									"you need to change or cancel, please contact us "
+								).append(
+									"immediately by phone or email. We will do our best to "
+								).append(
+									"accommodate your request if the order has not yet been "
+								).append(
+									"shipped."
+								).toString());
+							put(
+								"What if my package is lost or damaged?",
+								new StringBuilder(
+								).append(
+									"Please contact our customer support within 48 hours of "
+								).append(
+									"the expected delivery date for lost packages, or "
+								).append(
+									"immediately upon receipt for damaged items. We will "
+								).append(
+									"initiate a claim with the carrier and arrange for a "
+								).append(
+									"replacement or refund as quickly as possible."
+								).toString());
+						}
+					});
+				put(
+					"returns",
+					new HashMap<String, String>() {
+						{
+							put(
+								"Are there any non-returnable items?",
+								new StringBuilder(
+								).append(
+									"Yes, certain items are non-returnable for safety or "
+								).append(
+									"hygiene reasons, or if they are custom-made or marked as "
+								).append(
+									"'final sale.' This often includes used parts, opened "
+								).append(
+									"electrical components, or parts that have been "
+								).append(
+									"installed. Please refer to our full Return Policy for "
+								).append(
+									"the complete list."
+								).toString());
+							put(
+								"How do I return a part?",
+								new StringBuilder(
+								).append(
+									"To initiate a return, please visit our Returns Portal or "
+								).append(
+									"contact customer support to receive an RMA (Return "
+								).append(
+									"Merchandise Authorization) number and detailed "
+								).append(
+									"instructions. Do not send items back without an RMA."
+								).toString());
+							put(
+								"How long does it take to process a refund?",
+								new StringBuilder(
+								).append(
+									"Once we receive your returned item and inspect it, "
+								).append(
+									"refunds are typically processed within 5-7 business "
+								).append(
+									"days. The refund will be issued to your original payment "
+								).append(
+									"method. Please note that it may take additional time for "
+								).append(
+									"the refund to appear on your bank statement."
+								).toString());
+							put(
+								"What is your return policy?",
+								new StringBuilder(
+								).append(
+									"We offer a 30-day return policy for most unused parts in "
+								).append(
+									"their original, unopened packaging. Some exceptions "
+								).append(
+									"apply (e.g., electrical components, custom orders, final "
+								).append(
+									"sale items). Please see our full Return Policy for "
+								).append(
+									"complete details."
+								).toString());
+						}
+					});
+				put(
+					"parts",
+					new HashMap<String, String>() {
+						{
+							put(
+								"Are your parts new or used?",
+								new StringBuilder(
+								).append(
+									"Unless explicitly stated otherwise (e.g., in a 'Used "
+								).append(
+									"Parts' or 'Salvage' section), all products sold on our "
+								).append(
+									"website are brand new from the manufacturer."
+								).toString());
+							put(
+								"Do you offer technical support for installation?",
+								new StringBuilder(
+								).append(
+									"While we sell parts, we are not certified mechanics and "
+								).append(
+									"cannot provide specific installation advice or "
+								).append(
+									"instructions. We recommend consulting a qualified "
+								).append(
+									"mechanic or referring to your vehicle's service manual "
+								).append(
+									"for proper installation procedures."
+								).toString());
+							put(
+								"Do you provide installation instructions?",
+								new StringBuilder(
+								).append(
+									"Some manufacturers include basic installation guides "
+								).append(
+									"with their parts. However, for detailed instructions, we "
+								).append(
+									"strongly advise referring to your vehicle's factory "
+								).append(
+									"service manual or seeking professional automotive "
+								).append(
+									"assistance."
+								).toString());
+							put(
+								"Do your parts come with a warranty?",
+								new StringBuilder(
+								).append(
+									"Many of our parts come with a manufacturer's warranty. "
+								).append(
+									"Warranty terms vary by manufacturer and part. Please "
+								).append(
+									"check the individual product page for specific warranty "
+								).append(
+									"information. For warranty claims, please contact our "
+								).append(
+									"support team."
+								).toString());
+							put(
+								"How do I find the right part for my vehicle?",
+								new StringBuilder(
+								).append(
+									"You can use our 'Vehicle Selector' tool on the homepage "
+								).append(
+									"by entering your Year, Make, and Model. Our search "
+								).append(
+									"results will then filter for compatible parts. You can "
+								).append(
+									"also search by VIN number, OEM part number, or part name."
+								).toString());
+							put(
+								"What if I can not find the part I need?",
+								new StringBuilder(
+								).append(
+									"If you are having trouble locating a specific part, "
+								).append(
+									"please contact our parts specialists. Provide your "
+								).append(
+									"vehicle's VIN and as much detail about the part as "
+								).append(
+									"possible, and we will do our best to help you find it or "
+								).append(
+									"suggest alternatives."
+								).toString());
+						}
+					});
+				put(
+					"account",
+					new HashMap<String, String>() {
+						{
+							put(
+								"How do I reset my password?",
+								new StringBuilder(
+								).append(
+									"Click on the 'Login' button at the top of the page, then "
+								).append(
+									"click 'Forgot Password?'. Enter your registered email "
+								).append(
+									"address, and we will send you a link to reset your "
+								).append(
+									"password."
+								).toString());
+							put(
+								"How do I update my account information?",
+								new StringBuilder(
+								).append(
+									"Log in to your account, and navigate to the 'My Account' "
+								).append(
+									"or 'Account Settings' section. From there, you can "
+								).append(
+									"update your personal details, shipping addresses, and "
+								).append(
+									"payment methods."
+								).toString());
+						}
+					});
+				put(
+					"support",
+					new HashMap<String, String>() {
+						{
+							put(
+								"Do you offer a trade discount for mechanics/shops?",
+								new StringBuilder(
+								).append(
+									"Yes, we offer special pricing and programs for "
+								).append(
+									"registered automotive businesses and mechanics. Please "
+								).append(
+									"visit our 'Trade Program' page or contact our B2B sales "
+								).append(
+									"team for more information."
+								).toString());
+							put(
+								"How can I contact customer service?",
+								new StringBuilder(
+								).append(
+									"You can reach us by: **Phone:** [Your Phone Number] "
+								).append(
+									"(Mon-Fri, [Hours of Operation]) **Email:** [Your Support "
+								).append(
+									"Email] (We aim to respond within 24 business hours) "
+								).append(
+									"**Live Chat:** Available on our website during business "
+								).append(
+									"hours."
+								).toString());
+						}
+					});
+				put(
+					"general",
+					new HashMap<String, String>() {
+						{
+							put(
+								"Can I pick up my order in person?",
+								new StringBuilder(
+								).append(
+									"No, currently all orders are processed and shipped from "
+								).append(
+									"our distribution centers. We do not offer local pickup "
+								).append(
+									"services."
+								).toString());
+						}
+					});
+			}
+		};
 	}
 
 	private String _getFaqErrorMessage() {
@@ -2471,7 +2506,7 @@ public class CommerceTools {
 		sb.append(
 			"**Customer**: "
 		).append(
-			GetterUtil.getString(account.getName(), "N/A")
+			(account.getName() != null) ? account.getName() : "N/A"
 		).append(
 			"\n"
 		);
@@ -2681,7 +2716,7 @@ public class CommerceTools {
 			Matcher matcher = _pattern.matcher(sanitizedDate);
 
 			if (matcher.find()) {
-				int days = GetterUtil.getInteger(matcher.group(1));
+				int days = Integer.parseInt(matcher.group(1));
 
 				LocalDate localDate = LocalDate.now();
 
@@ -2762,20 +2797,24 @@ public class CommerceTools {
 		sb.append("**Found 1 order:**");
 		sb.append("\n");
 		sb.append("- **Order ID**: ");
-		sb.append(GetterUtil.getString(order.getId(), "N/A"));
+		sb.append((order.getId() != null) ? order.getId() : "N/A");
 		sb.append("\n");
 		sb.append("- **Reference**: ");
 		sb.append(
-			GetterUtil.getString(order.getExternalReferenceCode(), "N/A"));
+			(order.getExternalReferenceCode() != null) ?
+				order.getExternalReferenceCode() : "N/A");
 		sb.append("\n");
 		sb.append("- **Date**: ");
-		sb.append(GetterUtil.getString(order.getOrderDate(), "N/A"));
+		sb.append(
+			(order.getOrderDate() != null) ? order.getOrderDate() : "N/A");
 		sb.append("\n");
 		sb.append("- **Status**: ");
-		sb.append(GetterUtil.getString(order.getStatus(), "N/A"));
+		sb.append((order.getStatus() != null) ? order.getStatus() : "N/A");
 		sb.append("\n");
 		sb.append("- **Total**: ");
-		sb.append(GetterUtil.getString(order.getTotalFormatted(), "N/A"));
+		sb.append(
+			(order.getTotalFormatted() != null) ? order.getTotalFormatted() :
+				"N/A");
 
 		return sb.toString();
 	}
@@ -2798,20 +2837,24 @@ public class CommerceTools {
 		sb.append("**Found 1 order:**");
 		sb.append("\n");
 		sb.append("- **Order ID**: ");
-		sb.append(GetterUtil.getString(order.getId(), "N/A"));
+		sb.append((order.getId() != null) ? order.getId() : "N/A");
 		sb.append("\n");
 		sb.append("- **Reference**: ");
 		sb.append(
-			GetterUtil.getString(order.getExternalReferenceCode(), "N/A"));
+			(order.getExternalReferenceCode() != null) ?
+				order.getExternalReferenceCode() : "N/A");
 		sb.append("\n");
 		sb.append("- **Date**: ");
-		sb.append(GetterUtil.getString(order.getOrderDate(), "N/A"));
+		sb.append(
+			(order.getOrderDate() != null) ? order.getOrderDate() : "N/A");
 		sb.append("\n");
 		sb.append("- **Status**: ");
-		sb.append(GetterUtil.getString(order.getStatus(), "N/A"));
+		sb.append((order.getStatus() != null) ? order.getStatus() : "N/A");
 		sb.append("\n");
 		sb.append("- **Total**: ");
-		sb.append(GetterUtil.getString(order.getTotalFormatted(), "N/A"));
+		sb.append(
+			(order.getTotalFormatted() != null) ? order.getTotalFormatted() :
+				"N/A");
 
 		return sb.toString();
 	}
@@ -2904,7 +2947,8 @@ public class CommerceTools {
 			).append(
 				". Order #"
 			).append(
-				GetterUtil.getString(orderShipmentDetails.getId(), "N/A")
+				(orderShipmentDetails.getId() != null) ?
+					orderShipmentDetails.getId() : "N/A"
 			).append(
 				"**\n"
 			);
@@ -2936,18 +2980,20 @@ public class CommerceTools {
 			sb.append(
 				"**Address**: "
 			).append(
-				GetterUtil.getString(
-					orderShipmentDetails.getOneLineAddress(), "N/A")
+				(orderShipmentDetails.getOneLineAddress() != null) ?
+					orderShipmentDetails.getOneLineAddress() : "N/A"
 			).append(
 				"\n"
 			);
 
-			String shippingDate = GetterUtil.getString(
-				orderShipmentDetails.getShippingDate(), "N/A");
+			String shippingDate =
+				(orderShipmentDetails.getShippingDate() != null) ?
+					String.valueOf(orderShipmentDetails.getShippingDate()) :
+						"N/A";
 
 			if (!shippingDate.equals("N/A")) {
 				sb.append(
-					"   🚚 **Shipped**: "
+					"**Shipped**: "
 				).append(
 					shippingDate
 				).append(
@@ -2955,12 +3001,13 @@ public class CommerceTools {
 				);
 			}
 
-			String trackingNumber = GetterUtil.getString(
-				orderShipmentDetails.getTrackingNumber(), "N/A");
+			String trackingNumber =
+				(orderShipmentDetails.getTrackingNumber() != null) ?
+					orderShipmentDetails.getTrackingNumber() : "N/A";
 
 			if ((trackingNumber != null) && !trackingNumber.equals("N/A")) {
 				sb.append(
-					"   📦 **Tracking**: "
+					"**Tracking**: "
 				).append(
 					trackingNumber
 				).append(
@@ -3109,7 +3156,7 @@ public class CommerceTools {
 		sb.append(
 			"**Customer**: "
 		).append(
-			GetterUtil.getString(userEmail, "N/A")
+			(userEmail != null) ? userEmail : "N/A"
 		).append(
 			"\n"
 		);
@@ -3140,14 +3187,14 @@ public class CommerceTools {
 		for (int i = 0; i < Math.min(20, orders.size()); i++) {
 			Order order = orders.get(i);
 
-			String orderId = GetterUtil.getString(order.getId(), "N/A");
+			String orderId = (order.getId() != null) ? order.getId() : "N/A";
 
 			String externalReferenceCode = "N/A";
 			String dateString;
 
 			try {
-				dateString = GetterUtil.getString(
-					dateTimeFormatter.format(order.getOrderDate()), "N/A");
+				dateString = (order.getOrderDate() != null) ?
+					dateTimeFormatter.format(order.getOrderDate()) : "N/A";
 			}
 			catch (Exception exception) {
 				if (_log.isInfoEnabled()) {
@@ -3178,11 +3225,12 @@ public class CommerceTools {
 			).append(
 				", Status: "
 			).append(
-				GetterUtil.getString(order.getStatus(), "N/A")
+				(order.getStatus() != null) ? order.getStatus() : "N/A"
 			).append(
 				", Total: "
 			).append(
-				GetterUtil.getString(order.getTotalFormatted(), "N/A")
+				(order.getTotalFormatted() != null) ?
+					order.getTotalFormatted() : "N/A"
 			).append(
 				"\n\n"
 			);
@@ -3229,7 +3277,7 @@ public class CommerceTools {
 		sb.append(
 			"**Customer**: "
 		).append(
-			GetterUtil.getString(account.getName(), "N/A")
+			(account.getName() != null) ? account.getName() : "N/A"
 		).append(
 			"\n"
 		);
@@ -3253,9 +3301,10 @@ public class CommerceTools {
 
 			List<OrderItem> orderItems = entry.getValue();
 
-			String orderId = GetterUtil.getString(order.getId(), "N/A");
+			String orderId = (order.getId() != null) ? order.getId() : "N/A";
 			String externalReferenceCode = "N/A";
-			String status = GetterUtil.getString(order.getStatus(), "N/A");
+			String status =
+				(order.getStatus() != null) ? order.getStatus() : "N/A";
 			String total = "N/A";
 			String dateString;
 
@@ -3314,12 +3363,13 @@ public class CommerceTools {
 					sb.append(
 						"   - "
 					).append(
-						GetterUtil.getString(
-							orderItem.getName(), "Unknown Product")
+						(orderItem.getName() != null) ? orderItem.getName() :
+							"Unknown Product"
 					).append(
 						" (SKU: "
 					).append(
-						GetterUtil.getString(orderItem.getSku(), "N/A")
+						(orderItem.getSku() != null) ? orderItem.getSku() :
+							"N/A"
 					).append(
 						") x"
 					).append(
@@ -3364,7 +3414,7 @@ public class CommerceTools {
 		sb.append(
 			"**Customer**: "
 		).append(
-			GetterUtil.getString(account.getName(), "N/A")
+			(account.getName() != null) ? account.getName() : "N/A"
 		).append(
 			"\n\n"
 		);
@@ -3422,7 +3472,7 @@ public class CommerceTools {
 			).append(
 				". Order #"
 			).append(
-				GetterUtil.getString(order.getId(), "N/A")
+				(order.getId() != null) ? order.getId() : "N/A"
 			).append(
 				"**\n"
 			);
@@ -3439,14 +3489,15 @@ public class CommerceTools {
 				"   📊 **Status**: "
 			).append(
 				_formatTitle(
-					GetterUtil.getString(order.getStatusLabel(), "N/A"))
+					(order.getStatusLabel() != null) ? order.getStatusLabel() :
+						"N/A")
 			).append(
 				"\n"
 			);
 
 			String statusCode = order.getStatusCode();
 
-			if (Validator.isNull(statusCode)) {
+			if (StringUtils.isEmpty(statusCode)) {
 				sb.append(
 					"   🔢 **Status Code**: "
 				).append(
@@ -3459,7 +3510,8 @@ public class CommerceTools {
 			sb.append(
 				"   💰 **Total**: "
 			).append(
-				GetterUtil.getString(order.getTotalFormatted(), "N/A")
+				(order.getTotalFormatted() != null) ?
+					order.getTotalFormatted() : "N/A"
 			).append(
 				"\n\n"
 			);
@@ -3554,7 +3606,8 @@ public class CommerceTools {
 		sb.append(
 			"- **Subtotal**: "
 		).append(
-			GetterUtil.getString(order.getSubtotalFormatted(), "N/A")
+			(order.getSubtotalFormatted() != null) ?
+				order.getSubtotalFormatted() : "N/A"
 		).append(
 			"\n"
 		);
@@ -3562,13 +3615,15 @@ public class CommerceTools {
 		sb.append(
 			"- **Shipping Cost**: "
 		).append(
-			GetterUtil.getString(order.getShippingValueFormatted(), "N/A")
+			(order.getShippingValueFormatted() != null) ?
+				order.getShippingValueFormatted() : "N/A"
 		).append(
 			"\n"
 		);
 
-		String shippingDiscount = GetterUtil.getString(
-			order.getShippingDiscountValueFormatted(), "N/A");
+		String shippingDiscount =
+			(order.getShippingDiscountValueFormatted() != null) ?
+				order.getShippingDiscountValueFormatted() : "N/A";
 
 		if (!shippingDiscount.equals("N/A") &&
 			!shippingDiscount.equals("$ 0.00")) {
@@ -3585,7 +3640,8 @@ public class CommerceTools {
 		sb.append(
 			"- **Tax**: "
 		).append(
-			GetterUtil.getString(order.getTaxValueFormatted(), "N/A")
+			(order.getTaxValueFormatted() != null) ?
+				order.getTaxValueFormatted() : "N/A"
 		).append(
 			"\n"
 		);
@@ -3593,7 +3649,8 @@ public class CommerceTools {
 		sb.append(
 			"- **Total**: "
 		).append(
-			GetterUtil.getString(order.getTotalFormatted(), "N/A")
+			(order.getTotalFormatted() != null) ? order.getTotalFormatted() :
+				"N/A"
 		).append(
 			"\n\n"
 		);
@@ -3605,14 +3662,15 @@ public class CommerceTools {
 		}
 
 		if ((shipment != null) && (shipment.getOneLineAddress() != null) &&
-			!Strings.CS.equals(shipment.getOneLineAddress(), "N/A")) {
+			!StringUtils.equals(shipment.getOneLineAddress(), "N/A")) {
 
 			sb.append("**Shipping Address (from Shipments):**\n");
 
 			sb.append(
 				"- **Address**: "
 			).append(
-				GetterUtil.getString(shipment.getOneLineAddress(), "N/A")
+				(shipment.getOneLineAddress() != null) ?
+					shipment.getOneLineAddress() : "N/A"
 			).append(
 				"\n"
 			);
@@ -3628,7 +3686,8 @@ public class CommerceTools {
 			sb.append(
 				"- **Tracking Number**: "
 			).append(
-				GetterUtil.getString(shipment.getTrackingNumber(), "N/A")
+				(shipment.getTrackingNumber() != null) ?
+					shipment.getTrackingNumber() : "N/A"
 			).append(
 				"\n"
 			);
@@ -3636,7 +3695,7 @@ public class CommerceTools {
 			sb.append(
 				"- **Carrier**: "
 			).append(
-				GetterUtil.getString(shipment.getCarrier(), "N/A")
+				(shipment.getCarrier() != null) ? shipment.getCarrier() : "N/A"
 			).append(
 				"\n"
 			);
@@ -3657,7 +3716,7 @@ public class CommerceTools {
 			sb.append(
 				"- **Status**: "
 			).append(
-				GetterUtil.getString(status, "N/A")
+				(status != null) ? status : "N/A"
 			).append(
 				"\n\n"
 			);
@@ -3825,7 +3884,7 @@ public class CommerceTools {
 		sb.append(
 			"- **Order Status**: "
 		).append(
-			GetterUtil.getString(order.getStatus(), "N/A")
+			(order.getStatus() != null) ? order.getStatus() : "N/A"
 		).append(
 			"\n"
 		);
@@ -3833,7 +3892,8 @@ public class CommerceTools {
 		sb.append(
 			"- **Order Reference**: "
 		).append(
-			GetterUtil.getString(order.getExternalReferenceCode(), "N/A")
+			(order.getExternalReferenceCode() != null) ?
+				order.getExternalReferenceCode() : "N/A"
 		);
 
 		return sb.toString();
@@ -4141,26 +4201,28 @@ public class CommerceTools {
 	private String _getStatusLabel(String status) {
 		String statusLabel = null;
 
-		Map<String, List<String>> statusMappings = new HashMapBuilder<>().put(
-			"canceled", Arrays.asList("canceled", "cancelled", "cancel")
-		).put(
-			"completed", Arrays.asList("completed", "complete", "done")
-		).put(
-			"on hold", Arrays.asList("on hold", "hold", "on-hold", "onhold")
-		).put(
-			"partially shipped",
-			Arrays.asList(
-				"partially shipped", "partial", "partially", "part shipped")
-		).put(
-			"pending", Arrays.asList("pending", "pend", "waiting")
-		).put(
-			"processing",
-			Arrays.asList("processing", "process", "in process", "in progress")
-		).put(
-			"shipped",
-			Arrays.asList(
-				"shipped", "shipping", "delivered", "out for delivery")
-		).build();
+		Map<String, List<String>> statusMappings = Map.ofEntries(
+			Map.entry(
+				"canceled", Arrays.asList("canceled", "cancelled", "cancel")),
+			Map.entry(
+				"completed", Arrays.asList("completed", "complete", "done")),
+			Map.entry(
+				"on hold",
+				Arrays.asList("on hold", "hold", "on-hold", "onhold")),
+			Map.entry(
+				"partially shipped",
+				Arrays.asList(
+					"partially shipped", "partial", "partially",
+					"part shipped")),
+			Map.entry("pending", Arrays.asList("pending", "pend", "waiting")),
+			Map.entry(
+				"processing",
+				Arrays.asList(
+					"processing", "process", "in process", "in progress")),
+			Map.entry(
+				"shipped",
+				Arrays.asList(
+					"shipped", "shipping", "delivered", "out for delivery")));
 
 		status = StringUtils.trim(StringUtils.lowerCase(status));
 
@@ -4175,8 +4237,7 @@ public class CommerceTools {
 				}
 			}
 
-			if (statusLabel != null) {
-				break;
+			if (statusLabel != null) {				break;
 			}
 		}
 
