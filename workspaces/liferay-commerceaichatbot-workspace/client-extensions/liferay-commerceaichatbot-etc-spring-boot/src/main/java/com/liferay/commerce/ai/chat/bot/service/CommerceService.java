@@ -15,6 +15,8 @@ import com.liferay.commerce.ai.chat.bot.model.Product;
 import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 
+import java.time.Instant;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -515,8 +518,7 @@ public class CommerceService {
 
 		try {
 			return Date.from(
-				java.time.Instant.parse(
-					StringUtils.replace(string, "Z", "+00:00")));
+				Instant.parse(Strings.CS.replace(string, "Z", "+00:00")));
 		}
 		catch (Exception exception1) {
 			try {
@@ -524,7 +526,7 @@ public class CommerceService {
 					_log.warn(exception1.getMessage(), exception1);
 				}
 
-				return Date.from(java.time.Instant.parse(string));
+				return Date.from(Instant.parse(string));
 			}
 			catch (Exception exception2) {
 				if (_log.isWarnEnabled()) {
