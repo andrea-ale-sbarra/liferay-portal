@@ -52,7 +52,7 @@ import org.springframework.stereotype.Component;
  * @author Ivica Cardic
  */
 @Component
-public class CommerceClient {
+public class HttpClient {
 
 	public JSONObject delete(String path) throws Exception {
 		return execute(new HttpDelete(_buildUri(path, null)));
@@ -311,7 +311,7 @@ public class CommerceClient {
 		return s;
 	}
 
-	private static final Log _log = LogFactory.getLog(CommerceClient.class);
+	private static final Log _log = LogFactory.getLog(HttpClient.class);
 
 	@Value(
 		"${liferay.base.url:${LIFERAY_BASE_URL:https://webserver-lct66degrees-uat.lfr.cloud/}}"

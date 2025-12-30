@@ -5,7 +5,7 @@
 
 package com.liferay.commerce.ai.chat.bot.service;
 
-import com.liferay.commerce.ai.chat.bot.client.CommerceClient;
+import com.liferay.commerce.ai.chat.bot.client.HttpClient;
 import com.liferay.commerce.ai.chat.bot.model.Account;
 import com.liferay.commerce.ai.chat.bot.model.Channel;
 import com.liferay.commerce.ai.chat.bot.model.Order;
@@ -38,8 +38,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommerceService {
 
-	public CommerceService(CommerceClient commerceClient) {
-		_commerceClient = commerceClient;
+	public CommerceService(HttpClient httpClient) {
+		_httpClient = httpClient;
 	}
 
 	public List<Account> getAccounts(String channelId, String search) {
@@ -236,7 +236,7 @@ public class CommerceService {
 				path = "/o/headless-commerce-delivery-catalog/v1.0/accounts";
 			}
 
-			JSONObject jsonObject = _commerceClient.get(
+			JSONObject jsonObject = _httpClient.get(
 				path, Map.of("search", search));
 
 			if (jsonObject != null) {
@@ -254,7 +254,7 @@ public class CommerceService {
 
 	private JSONArray _getAvailableChannelsJSONArray() {
 		try {
-			JSONObject jsonObject = _commerceClient.get(
+			JSONObject jsonObject = _httpClient.get(
 				"/o/headless-commerce-delivery-catalog/v1.0/channels");
 
 			if (jsonObject != null) {
@@ -298,7 +298,7 @@ public class CommerceService {
 		String externalReferenceCode) {
 
 		try {
-			return _commerceClient.get(
+			return _httpClient.get(
 				"/o/headless-commerce-delivery-order/v1.0/placed-orders" +
 					"/by-externalReferenceCode/" + externalReferenceCode);
 		}
@@ -311,7 +311,7 @@ public class CommerceService {
 
 	private JSONObject _getOrderJSONObject(String orderId) {
 		try {
-			return _commerceClient.get(
+			return _httpClient.get(
 				"/o/headless-commerce-delivery-order/v1.0/placed-orders/" +
 					orderId);
 		}
@@ -324,7 +324,7 @@ public class CommerceService {
 
 	private JSONArray _getOrderShipmentsJSONArray(String orderId) {
 		try {
-			JSONObject jsonObject = _commerceClient.get(
+			JSONObject jsonObject = _httpClient.get(
 				"/o/headless-commerce-delivery-order/v1.0/placed-orders/" +
 					orderId + "/shipments");
 
@@ -343,7 +343,7 @@ public class CommerceService {
 
 	private JSONArray _getPlacedOrderItemsJSONArray(String orderId) {
 		try {
-			JSONObject jsonObject = _commerceClient.get(
+			JSONObject jsonObject = _httpClient.get(
 				"/o/headless-commerce-delivery-order/v1.0/placed-orders/" +
 					orderId + "/placed-order-items");
 
@@ -399,7 +399,7 @@ public class CommerceService {
 					channelId);
 			}
 
-			return _commerceClient.get(path, params);
+			return _httpClient.get(path, params);
 		}
 		catch (Exception exception) {
 			_log.error(exception);
@@ -426,7 +426,7 @@ public class CommerceService {
 				params.put("accountId", accountId);
 			}
 
-			return _commerceClient.get(
+			return _httpClient.get(
 				"/o/headless-commerce-delivery-catalog/v1.0/channels/" +
 					channelId + "/products",
 				params);
@@ -469,7 +469,7 @@ public class CommerceService {
 
 	private JSONObject _getUserAccountByEmailJSONObject(String email) {
 		try {
-			JSONObject jsonObject = _commerceClient.get(
+			JSONObject jsonObject = _httpClient.get(
 				"/o/headless-admin-user/v1.0/user-accounts",
 				Map.of("filter", "emailAddress eq '" + email + "'"));
 
@@ -767,6 +767,6 @@ public class CommerceService {
 
 	private static final Log _log = LogFactory.getLog(CommerceService.class);
 
-	private final CommerceClient _commerceClient;
+	private final HttpClient _httpClient;
 
 }
