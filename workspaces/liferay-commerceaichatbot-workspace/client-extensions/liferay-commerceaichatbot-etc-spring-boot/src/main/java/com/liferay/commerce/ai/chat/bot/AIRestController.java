@@ -57,10 +57,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AIRestController extends BaseRestController {
 
 	public AIRestController(
-		CommerceTools _commerceTools, SettingsService _settingsService) {
+		CommerceTools commerceTools, SettingsService settingsService) {
 
-		this._commerceTools = _commerceTools;
-		this._settingsService = _settingsService;
+		_commerceTools = commerceTools;
+		_settingsService = settingsService;
 	}
 
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/chat")
