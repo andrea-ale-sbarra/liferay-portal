@@ -34,6 +34,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -42,8 +43,11 @@ import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import org.jetbrains.annotations.NotNull;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -62,7 +66,7 @@ public class CommerceTools {
 	@Annotations.Schema(
 		description = "Finds an order by identifier", name = "findOrderTool"
 	)
-	public Map<String, String> findOrderTool(
+	public Map<String, Object> findOrderTool(
 		@Annotations.Schema(
 			description = "the order id or external reference code",
 			name = "identifier"
@@ -73,7 +77,7 @@ public class CommerceTools {
 			Order order = _getOrder(identifier);
 
 			if (order != null) {
-				return Map.of("order", _formatOrderSummary(order));
+				return Map.of("order", order);
 			}
 
 			return Map.of(
@@ -91,7 +95,7 @@ public class CommerceTools {
 		description = "Retrieves a summary of orders for all available accounts",
 		name = "getAllAccountsOrderSummaryTool"
 	)
-	public Map<String, String> getAllAccountsOrderSummaryTool() {
+	public Map<String, Object> getAllAccountsOrderSummaryTool() {
 		try {
 			List<Channel> channels = _commerceService.getChannels();
 
@@ -125,17 +129,11 @@ public class CommerceTools {
 
 			for (Account account : accounts) {
 				try {
-					Order order = null;
-
 					List<Order> orders =
 						_commerceService.getAllPlacedOrdersByAccountDto(
 							channelId, account.getId(), null, "");
 
 					totalOrders += orders.size();
-
-					if (!orders.isEmpty()) {
-						order = orders.get(0);
-					}
 
 					Summary summary = new Summary();
 
@@ -147,7 +145,6 @@ public class CommerceTools {
 						(account.getType() != null) ? account.getType() :
 							"N/A");
 					summary.setOrderCount(orders.size());
-					summary.setOrder(order);
 
 					accountSummaries.add(summary);
 				}
@@ -163,7 +160,6 @@ public class CommerceTools {
 						(account.getType() != null) ? account.getType() :
 							"N/A");
 					summary.setOrderCount(0);
-					summary.setOrder(null);
 					summary.setError(exception.getMessage());
 
 					accountSummaries.add(summary);
@@ -175,10 +171,8 @@ public class CommerceTools {
 					b.getOrderCount(), a.getOrderCount()));
 
 			return Map.of(
-				"response",
-				_getAllAccountsOrderSummaryMessage(
-					accountSummaries, accounts, channel, channelId,
-					totalOrders));
+				"accountSummaries", accountSummaries, "channel", channel,
+				"totalOrders", totalOrders);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -202,7 +196,7 @@ public class CommerceTools {
 		description = "Retrieves orders for a specific customer account",
 		name = "getCustomerOrdersByAccountTool"
 	)
-	public Map<String, String> getCustomerOrdersByAccountTool(
+	public Map<String, Object> getCustomerOrdersByAccountTool(
 		@Annotations.Schema(
 			description = "the name of the account", name = "accountName"
 		)
@@ -270,14 +264,7 @@ public class CommerceTools {
 					).toString());
 			}
 
-			if (orders.size() == 1) {
-				return Map.of(
-					"orders",
-					_getOrderMessage(account, accountName, orders.get(0)));
-			}
-
-			return Map.of(
-				"orders", _getOrdersMessage(account, accountName, orders));
+			return Map.of("account", account, "orders", orders);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -290,7 +277,7 @@ public class CommerceTools {
 		description = "Retrieves orders for a customer by their email address",
 		name = "getCustomerOrdersTool"
 	)
-	public Map<String, String> getCustomerOrdersTool(
+	public Map<String, Object> getCustomerOrdersTool(
 		@Annotations.Schema(
 			description = "the email address of the customer", name = "email"
 		)
@@ -359,14 +346,7 @@ public class CommerceTools {
 					).toString());
 			}
 
-			if (orders.size() == 1) {
-				return Map.of(
-					"orders",
-					_getOrderMessage(userAccount, email, orders.get(0)));
-			}
-
-			return Map.of(
-				"orders", _getOrdersMessage(userAccount, email, orders));
+			return Map.of("orders", orders, "userAccount", userAccount);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -379,7 +359,7 @@ public class CommerceTools {
 		description = "Retrieves information from the Frequently Asked Questions (FAQ) based on a query. Use this tool for any general inquiries about orders, shipping, returns, account management, and other non-order specific questions.",
 		name = "getFaqInformationTool"
 	)
-	public Map<String, String> getFaqInformationTool(
+	public Map<String, Object> getFaqInformationTool(
 		@Annotations.Schema(
 			description = "the search query for the FAQ (e.g., 'return policy'). Use 'all' or empty string to see all available topics.",
 			name = "query"
@@ -388,9 +368,9 @@ public class CommerceTools {
 
 		try {
 			if (StringUtils.isBlank(query) ||
-				StringUtils.equalsIgnoreCase(query, "all") ||
-				StringUtils.equalsIgnoreCase(query, "faq") ||
-				StringUtils.equalsIgnoreCase(query, "general")) {
+				Strings.CI.equals(query, "all") ||
+				Strings.CI.equals(query, "faq") ||
+				Strings.CI.equals(query, "general")) {
 
 				return Map.of("response", _getNullQueryMessage(_faqData));
 			}
@@ -466,7 +446,7 @@ public class CommerceTools {
 		description = "Retrieves the items contained in a specific order",
 		name = "getOrderItemsTool"
 	)
-	public Map<String, String> getOrderItemsTool(
+	public Map<String, Object> getOrderItemsTool(
 		@Annotations.Schema(
 			description = "the order id or external reference code",
 			name = "orderIdentifier"
@@ -474,8 +454,6 @@ public class CommerceTools {
 		String orderIdentifier) {
 
 		try {
-			List<OrderItem> orderItems;
-
 			Order order = _getOrder(orderIdentifier);
 
 			if (order == null) {
@@ -485,237 +463,16 @@ public class CommerceTools {
 						" not found or not accessible.");
 			}
 
-			try {
-				orderItems = _commerceService.getPlacedOrderItems(
-					order.getId());
-			}
-			catch (Exception exception) {
-				StringBuilder sb = new StringBuilder();
-
-				sb.append("**🔍 Order Items Lookup Failed**");
-				sb.append("\n\n");
-				sb.append("**Order ID**: ");
-				sb.append(orderIdentifier);
-				sb.append("\n");
-				sb.append("**Error**: ");
-				sb.append(exception.getMessage());
-				sb.append("\n\n");
-				sb.append("**Possible Causes:**");
-				sb.append("\n");
-				sb.append("1. The order may not have items in the system");
-				sb.append("\n");
-				sb.append("2. The Liferay API endpoint may be unavailable");
-				sb.append("\n");
-				sb.append("3. There may be an authentication issue");
-				sb.append("\n\n");
-				sb.append("**💡 Try These Alternatives:**");
-				sb.append("\n");
-				sb.append("- \"Find order ");
-				sb.append(orderIdentifier);
-				sb.append("\" - Get complete order details");
-				sb.append("\n");
-				sb.append("- \"Search for orders\" - Browse available orders");
-				sb.append("\n");
-				sb.append("- Check if the order exists in the system");
-
-				return Map.of("error", sb.toString());
-			}
-
-			if (orderItems.isEmpty()) {
-				StringBuilder sb = new StringBuilder();
-
-				sb.append("**Order Items for Order ");
-				sb.append(orderIdentifier);
-				sb.append("**");
-				sb.append("\n\n");
-				sb.append("**Status**: Order exists but has no items");
-				sb.append("\n");
-				sb.append("**Items Count**: 0");
-				sb.append("\n\n");
-				sb.append("**Try**: \"Find order ");
-				sb.append(orderIdentifier);
-				sb.append("\" for complete order information");
-
-				return Map.of("error", sb.toString());
-			}
-
-			StringBuilder sb = new StringBuilder();
-
-			sb.append(
-				"**Order Items for Order "
-			).append(
-				order.getId()
-			).append(
-				"**\n\n"
-			);
-
-			if (order != null) {
-				sb.append(
-					"**Order Details:** "
-				).append(
-					(order.getExternalReferenceCode() != null) ?
-						order.getExternalReferenceCode() : "N/A"
-				).append(
-					" | Date: "
-				).append(
-					order.getCreateDate()
-				).append(
-					" | Total: "
-				).append(
-					(order.getTotalFormatted() != null) ?
-						order.getTotalFormatted() : "N/A"
-				).append(
-					"\n\n"
-				);
-
-				try {
-					List<Shipment> shipments =
-						_commerceService.getOrderShipmentsDto(order.getId());
-
-					if (!shipments.isEmpty()) {
-						Shipment latestShipment = shipments.get(0);
-
-						sb.append("**Shipping Address:**\n");
-
-						sb.append(
-							"- **Address**: "
-						).append(
-							(latestShipment.getOneLineAddress() != null) ?
-								latestShipment.getOneLineAddress() : "N/A"
-						).append(
-							"\n"
-						);
-
-						sb.append(
-							"- **Shipping Date**: "
-						).append(
-							latestShipment.getShippingDate()
-						).append(
-							"\n"
-						);
-
-						sb.append(
-							"- **Tracking Number**: "
-						).append(
-							(latestShipment.getTrackingNumber() != null) ?
-								latestShipment.getTrackingNumber() : "N/A"
-						).append(
-							"\n"
-						);
-
-						sb.append(
-							"- **Carrier**: "
-						).append(
-							(latestShipment.getCarrier() != null) ?
-								latestShipment.getCarrier() : "N/A"
-						).append(
-							"\n"
-						);
-
-						Shipment.Status statusInfo = latestShipment.getStatus();
-
-						if (statusInfo != null) {
-							sb.append(
-								"- **Status**: "
-							).append(
-								(statusInfo.getLabel() != null) ?
-									statusInfo.getLabel() : "N/A"
-							).append(
-								"\n\n"
-							);
-						}
-						else {
-							sb.append(
-								"- **Status**: "
-							).append(
-								(latestShipment.getShipmentStatus() != null) ?
-									latestShipment.getShipmentStatus() : "N/A"
-							).append(
-								"\n\n"
-							);
-						}
-					}
-					else {
-						sb.append("**Shipping Address**: Not available\n\n");
-					}
-				}
-				catch (Exception exception) {
-					if (_log.isInfoEnabled()) {
-						_log.info(exception);
-					}
-
-					sb.append("**Shipping Address**: Not available\n\n");
-				}
-			}
-
-			sb.append(
-				"**Found "
-			).append(
-				orderItems.size()
-			).append(
-				" items:**\n\n"
-			);
-
-			for (int i = 0; i < orderItems.size(); i++) {
-				OrderItem orderItem = orderItems.get(i);
-
-				sb.append(
-					i + 1
-				).append(
-					". **"
-				).append(
-					(orderItem.getName() != null) ? orderItem.getName() : "N/A"
-				).append(
-					"**\n"
-				);
-
-				sb.append(
-					"   SKU: "
-				).append(
-					(orderItem.getSku() != null) ? orderItem.getSku() : "N/A"
-				).append(
-					" | Qty: "
-				).append(
-					orderItem.getQuantity()
-				).append(
-					" | Price: "
-				).append(
-					(orderItem.getUnitPrice() != null) ?
-						orderItem.getUnitPrice() : "N/A"
-				).append(
-					"\n\n"
-				);
-			}
-
-			return Map.of("response", sb.toString());
+			return Map.of(
+				"order", order, "orderItems",
+				_commerceService.getPlacedOrderItems(order.getId()),
+				"shipments",
+				_commerceService.getOrderShipmentsDto(order.getId()));
 		}
 		catch (Exception exception) {
-			StringBuilder sb = new StringBuilder();
-
-			sb.append("**Unexpected Error**");
-			sb.append("\n\n");
-			sb.append("**Order ID**: ");
-			sb.append(orderIdentifier);
-			sb.append("\n");
-			sb.append("**Error**: ");
-			sb.append(exception.getMessage());
-			sb.append("\n");
-			sb.append("**Error Type**: ");
-			sb.append(
-				exception.getClass(
-				).getSimpleName());
-			sb.append("\n\n");
-			sb.append("**💡 Try These Alternatives:**");
-			sb.append("\n");
-			sb.append("- \"Find order ");
-			sb.append(orderIdentifier);
-			sb.append("\" - Get complete order details");
-			sb.append("\n");
-			sb.append("- \"Search for orders\" - Browse available orders");
-			sb.append("\n");
-			sb.append("- Check system status with \"Show me system status\"");
-
-			return Map.of("error", sb.toString());
+			return Map.of(
+				"error",
+				_getOrderItemsErrorMessage(exception, orderIdentifier));
 		}
 	}
 
@@ -723,7 +480,7 @@ public class CommerceTools {
 		description = "Retrieves shipping and tracking information for a specific order",
 		name = "getOrderShippingTool"
 	)
-	public Map<String, String> getOrderShippingTool(
+	public Map<String, Object> getOrderShippingTool(
 		@Annotations.Schema(
 			description = "the order id or external reference code",
 			name = "identifier"
@@ -739,22 +496,9 @@ public class CommerceTools {
 					"Order " + identifier + " not found or not accessible.");
 			}
 
-			List<Shipment> shipments = null;
-
-			try {
-				shipments = _commerceService.getOrderShipmentsDto(
-					order.getId());
-			}
-			catch (Exception exception) {
-				if (_log.isInfoEnabled()) {
-					_log.info(exception);
-				}
-
-				shipments = new ArrayList<>();
-			}
-
 			return Map.of(
-				"response", _getOrderShippingMessage(order, shipments));
+				"order", order, "shipments",
+				_commerceService.getOrderShipmentsDto(order.getId()));
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -809,93 +553,20 @@ public class CommerceTools {
 		description = "Lists all available commerce channels and their associated accounts",
 		name = "listAvailableChannelsAndAccountsTool"
 	)
-	public Map<String, String> listAvailableChannelsAndAccountsTool() {
+	public Map<String, Object> listAvailableChannelsAndAccountsTool() {
 		try {
 			List<Channel> channels = _commerceService.getChannels();
 
-			StringBuilder sb = new StringBuilder(
-				"**Available Channels and Accounts**\n\n");
+			Map<String, List<Account>> channelAccounts = new HashMap<>();
 
-			if ((channels != null) && !channels.isEmpty()) {
-				sb.append("**Channels:**\n");
-
-				for (int i = 0; i < channels.size(); i++) {
-					Channel channel = channels.get(i);
-
-					sb.append(i + 1);
-					sb.append(". **");
-					sb.append(
-						(channel.getName() != null) ? channel.getName() :
-							"N/A");
-					sb.append("** (ID: ");
-					sb.append(
-						(channel.getId() != null) ? channel.getId() : "N/A");
-					sb.append(")\n");
-					sb.append("   - Type: ");
-					sb.append(
-						(channel.getType() != null) ? channel.getType() :
-							"N/A");
-					sb.append("\n");
-					sb.append("   - Active: ");
-					sb.append(channel.getActive());
-					sb.append("\n\n");
-				}
-
-				for (Channel channel : channels) {
-					String channelId = channel.getId();
-
-					List<Account> accounts = _commerceService.getAccounts(
-						channelId, null);
-
-					if ((accounts != null) && !accounts.isEmpty()) {
-						sb.append("**Accounts for Channel ");
-
-						sb.append(
-							channelId
-						).append(
-							":**\n"
-						);
-
-						for (int i = 0; i < accounts.size(); i++) {
-							Account account = accounts.get(i);
-
-							sb.append(i + 1);
-							sb.append(". **");
-							sb.append(
-								(account.getName() != null) ?
-									account.getName() : "N/A");
-							sb.append("** (ID: ");
-							sb.append(
-								(account.getId() != null) ? account.getId() :
-									"N/A");
-							sb.append(")\n");
-							sb.append("   - Type: ");
-							sb.append(
-								(account.getType() != null) ?
-									account.getType() : "N/A");
-							sb.append("\n");
-							sb.append("   - Status: ");
-							sb.append(
-								(account.getStatus() != null) ?
-									account.getStatus() : "N/A");
-							sb.append("\n\n");
-						}
-					}
-					else {
-						sb.append("**No accounts found for this channel**\n\n");
-					}
-				}
-			}
-			else {
-				sb.append("**No channels available**\n\n");
+			for (Channel channel : channels) {
+				channelAccounts.put(
+					channel.getId(),
+					_commerceService.getAccounts(channel.getId(), null));
 			}
 
-			sb.append("**How to use:**\n- ");
-			sb.append("Use these IDs in your API calls\n- ");
-			sb.append("Ask me to 'Find orders for account [ID]'\n- ");
-			sb.append("Ask me to 'Show products for channel [ID]'\n");
-
-			return Map.of("response", sb.toString());
+			return Map.of(
+				"channels", channels, "channelAccounts", channelAccounts);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -908,7 +579,7 @@ public class CommerceTools {
 		description = "Searches for orders within a specific date range for a specific account",
 		name = "searchAccountOrdersByDateRangeTool"
 	)
-	public Map<String, String> searchAccountOrdersByDateRangeTool(
+	public Map<String, Object> searchAccountOrdersByDateRangeTool(
 		@Annotations.Schema(
 			description = "the start date of the range (YYYY-MM-DD)",
 			name = "startDate"
@@ -954,7 +625,7 @@ public class CommerceTools {
 		description = "Searches for orders within a specific date range for a customer by email",
 		name = "searchOrdersByDateRangeTool"
 	)
-	public Map<String, String> searchOrdersByDateRangeTool(
+	public Map<String, Object> searchOrdersByDateRangeTool(
 		@Annotations.Schema(
 			description = "the start date of the range (YYYY-MM-DD)",
 			name = "startDate"
@@ -972,7 +643,9 @@ public class CommerceTools {
 
 		try {
 			if (StringUtils.isEmpty(email)) {
-				return Map.of("response", _getUserEmailRequiredMessage());
+				return Map.of(
+					"error",
+					_getSearchOrdersByDateRangeUserEmailRequiredMessage());
 			}
 
 			List<Channel> channels = _commerceService.getChannels();
@@ -1005,7 +678,7 @@ public class CommerceTools {
 		description = "Searches for orders containing a specific product for a customer",
 		name = "searchOrdersByProductTool"
 	)
-	public Map<String, String> searchOrdersByProductTool(
+	public Map<String, Object> searchOrdersByProductTool(
 		@Annotations.Schema(
 			description = "a description or name of the product",
 			name = "productDescription"
@@ -1020,7 +693,8 @@ public class CommerceTools {
 		try {
 			if (StringUtils.isEmpty(userEmail)) {
 				return Map.of(
-					"response", _getProductEmailRequiredEmailMessage());
+					"error",
+					_getSearchOrdersByProductToolUserEmailRequiredMessage());
 			}
 
 			List<Channel> channels = _commerceService.getChannels();
@@ -1048,7 +722,7 @@ public class CommerceTools {
 				account, channelId, "orderDate:desc");
 
 			if (orders.isEmpty()) {
-				return Map.of("error", "**No orders found** for " + userEmail);
+				return Map.of("error", "No orders found for " + userEmail);
 			}
 
 			List<AbstractMap.SimpleEntry<Order, List<OrderItem>>> matches =
@@ -1089,9 +763,9 @@ public class CommerceTools {
 							term = "";
 						}
 
-						if (StringUtils.contains(name, term) ||
-							StringUtils.contains(sku, term) ||
-							StringUtils.contains(term, name)) {
+						if (Strings.CS.contains(name, term) ||
+							Strings.CS.contains(sku, term) ||
+							Strings.CS.contains(term, name)) {
 
 							matchedOrderItems.add(orderItem);
 						}
@@ -1112,14 +786,11 @@ public class CommerceTools {
 
 			if (matches.isEmpty()) {
 				return Map.of(
-					"response",
+					"error",
 					_getNoOrdersByProductMessage(account, productDescription));
 			}
 
-			return Map.of(
-				"response",
-				_getOrdersByProductMessage(
-					account, matches, productDescription));
+			return Map.of("orders", matches);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -1132,7 +803,7 @@ public class CommerceTools {
 		description = "Searches for orders by shipping address for a customer",
 		name = "searchOrdersByShippingAddressTool"
 	)
-	public Map<String, String> searchOrdersByShippingAddressTool(
+	public Map<String, Object> searchOrdersByShippingAddressTool(
 		@Annotations.Schema(
 			description = "the address or part of the address to search for",
 			name = "addressQuery"
@@ -1146,7 +817,9 @@ public class CommerceTools {
 
 		try {
 			if (StringUtils.isEmpty(userEmail)) {
-				return Map.of("error", _getShippingEmailRequiredEmailMessage());
+				return Map.of(
+					"error",
+					_getSearchOrdersByShippingAddressUserEmailRequiredMessage());
 			}
 
 			List<Channel> channels = _commerceService.getChannels();
@@ -1165,7 +838,7 @@ public class CommerceTools {
 
 			if (account == null) {
 				return Map.of(
-					"error", _getUserAccountNotFoundMessage(userEmail));
+					"error", "User account not found for email: " + userEmail);
 			}
 
 			String channelId = channel.getId();
@@ -1203,7 +876,7 @@ public class CommerceTools {
 			}
 
 			if (orders.isEmpty()) {
-				return Map.of("error", "**No orders found** for " + userEmail);
+				return Map.of("error", "No orders found for " + userEmail);
 			}
 
 			List<OrderShipmentDetails> orderShipmentDetailsList =
@@ -1236,7 +909,7 @@ public class CommerceTools {
 					String lowerCasedOneLineAddress = StringUtils.lowerCase(
 						oneLineAddress);
 
-					if (StringUtils.contains(
+					if (Strings.CS.contains(
 							lowerCasedOneLineAddress, addressQueryLower)) {
 
 						OrderShipmentDetails orderShipmentDetails =
@@ -1285,10 +958,7 @@ public class CommerceTools {
 						addressQuery, account));
 			}
 
-			return Map.of(
-				"response",
-				_getOrdersByAshippingAddressMessage(
-					account, addressQuery, orderShipmentDetailsList));
+			return Map.of("orderShipmentDetailsList", orderShipmentDetailsList);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -1300,7 +970,7 @@ public class CommerceTools {
 		description = "Searches for orders by their status for a customer",
 		name = "searchOrdersByStatusTool"
 	)
-	public Map<String, String> searchOrdersByStatusTool(
+	public Map<String, Object> searchOrdersByStatusTool(
 		@Annotations.Schema(
 			description = "the status of the order (e.g., Pending, Shipped, Delivered)",
 			name = "orderStatus"
@@ -1315,7 +985,7 @@ public class CommerceTools {
 		try {
 			if (StringUtils.isEmpty(userEmail)) {
 				return Map.of(
-					"error", _getOrdersByStatusRequiredEmailMessage());
+					"error", _getOrdersByStatusUserEmailRequiredMessage());
 			}
 
 			List<Channel> channels = _commerceService.getChannels();
@@ -1334,7 +1004,7 @@ public class CommerceTools {
 
 			if (account == null) {
 				return Map.of(
-					"error", _getUserAccountNotFoundMessage(userEmail));
+					"error", "User account not found for email: " + userEmail);
 			}
 
 			String channelId = channel.getId();
@@ -1343,7 +1013,7 @@ public class CommerceTools {
 				account, channelId, "createDate:desc");
 
 			if (orders.isEmpty()) {
-				return Map.of("error", "**No orders found** for " + userEmail);
+				return Map.of("error", "No orders found for " + userEmail);
 			}
 
 			String statusLabel = _getStatusLabel(orderStatus);
@@ -1370,14 +1040,11 @@ public class CommerceTools {
 
 			if (filteredOrders.isEmpty()) {
 				return Map.of(
-					"response",
+					"error",
 					_getNoOrdersFoundByStatusMessage(account, orderStatus));
 			}
 
-			return Map.of(
-				"response",
-				_getOrdersByStatusMessage(
-					account, filteredOrders, orderStatus));
+			return Map.of("orders", filteredOrders);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -1390,7 +1057,7 @@ public class CommerceTools {
 		description = "General search for orders based on a query. It can handle order IDs, date ranges, and product searches by routing to more specific tools.",
 		name = "searchOrdersTool"
 	)
-	public Map<String, String> searchOrdersTool(
+	public Map<String, Object> searchOrdersTool(
 		@Annotations.Schema(description = "the search query", name = "query")
 			String query) {
 
@@ -1410,27 +1077,7 @@ public class CommerceTools {
 			if (matcher.find()) {
 				String orderId = matcher.group();
 
-				StringBuilder sb = new StringBuilder();
-
-				sb.append("**Fast Route: Direct Order Lookup**");
-				sb.append("\n\n");
-				sb.append("I found what looks like an order ID (");
-				sb.append(orderId);
-				sb.append(") in your query.");
-				sb.append("\nLet me get that order directly for ");
-				sb.append("you - this will be much faster than searching.");
-				sb.append("\n\n");
-
-				Map<String, String> orderToolResult = findOrderTool(orderId);
-
-				if (orderToolResult.containsKey("order")) {
-					sb.append(orderToolResult.get("order"));
-				}
-				else {
-					sb.append(orderToolResult.get("error"));
-				}
-
-				return Map.of("order", sb.toString());
+				return findOrderTool(orderId);
 			}
 
 			if (StringUtils.contains(queryLower, "from") ||
@@ -1671,107 +1318,6 @@ public class CommerceTools {
 		return null;
 	}
 
-	private String _formatOrderSummary(Order order) {
-		String orderDate = "N/A";
-
-		if (order.getOrderDate() != null) {
-			orderDate = String.valueOf(order.getOrderDate());
-		}
-
-		StringBuilder result = new StringBuilder();
-
-		result.append(
-			"**Order Details for Order "
-		).append(
-			(order.getId() != null) ? order.getId() : "N/A"
-		).append(
-			"**\n"
-		).append(
-			"- **Reference**: "
-		).append(
-			order.getExternalReferenceCode()
-		).append(
-			"\n"
-		).append(
-			"- **Status**: "
-		).append(
-			(order.getStatus() != null) ? order.getStatus() : "N/A"
-		).append(
-			"\n"
-		).append(
-			"- **Order Date**: "
-		).append(
-			orderDate
-		).append(
-			"\n"
-		).append(
-			"- **Account**: "
-		).append(
-			order.getAccountName()
-		).append(
-			"\n"
-		).append(
-			"- **Total Amount**: "
-		).append(
-			order.getTotalFormatted()
-		).append(
-			"\n"
-		).append(
-			"- **Items**: "
-		).append(
-			order.getItemsQuantity()
-		).append(
-			" items\n"
-		);
-
-		if ((order.getShippingAddress() != null) &&
-			!order.getShippingAddress(
-			).isEmpty()) {
-
-			Map<String, String> shippingAddress = order.getShippingAddress();
-
-			result.append(
-				"\n**Shipping Address:**\n"
-			).append(
-				"- **Name**: "
-			).append(
-				(shippingAddress.get("name") != null) ?
-					shippingAddress.get("name") : "N/A"
-			).append(
-				"\n"
-			).append(
-				"- **City**: "
-			).append(
-				(shippingAddress.get("city") != null) ?
-					shippingAddress.get("city") : "N/A"
-			).append(
-				", "
-			).append(
-				(shippingAddress.get("regionISOCode") != null) ?
-					shippingAddress.get("regionISOCode") : "N/A"
-			).append(
-				"\n"
-			).append(
-				"- **Country**: "
-			).append(
-				(shippingAddress.get("countryISOCode") != null) ?
-					shippingAddress.get("countryISOCode") : "N/A"
-			).append(
-				"\n"
-			).append(
-				"\n💡 **For complete shipping details, ask**: 'Get shipping "
-			).append(
-				"info for order "
-			).append(
-				(order.getId() != null) ? order.getId() : "N/A"
-			).append(
-				"'\n"
-			);
-		}
-
-		return result.toString();
-	}
-
 	private String _formatTitle(String title) {
 		if ((title == null) || title.isEmpty()) {
 			return "";
@@ -1848,158 +1394,6 @@ public class CommerceTools {
 		sb.append("- List available resources");
 		sb.append("\n");
 		sb.append("- Check individual accounts one by one");
-
-		return sb.toString();
-	}
-
-	private String _getAllAccountsOrderSummaryMessage(
-		List<Summary> accountSummaries, List<Account> accounts, Channel channel,
-		String channelId, int totalOrders) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("**Order Summary for All Accounts**\n\n");
-
-		sb.append(
-			"**Channel**: "
-		).append(
-			(channel.getName() != null) ? channel.getName() : "N/A"
-		).append(
-			" (ID: "
-		).append(
-			channelId
-		).append(
-			")\n"
-		);
-
-		sb.append(
-			"**Total Accounts**: "
-		).append(
-			accounts.size()
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"**Total Orders**: "
-		).append(
-			totalOrders
-		).append(
-			"\n\n"
-		);
-
-		sb.append("**Account Breakdown:**\n\n");
-
-		for (int i = 0; i < accountSummaries.size(); i++) {
-			Summary summary = accountSummaries.get(i);
-
-			sb.append(
-				i + 1
-			).append(
-				". **"
-			).append(
-				summary.getName()
-			).append(
-				"** (ID: "
-			).append(
-				summary.getId()
-			).append(
-				")\n"
-			);
-
-			sb.append(
-				"   **Type**: "
-			).append(
-				summary.getType()
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"   **Orders**: "
-			).append(
-				summary.getOrderCount()
-			).append(
-				"\n"
-			);
-
-			if (summary.getOrder() != null) {
-				Order order = summary.getOrder();
-
-				sb.append(
-					"   **Sample Order**: "
-				).append(
-					(order.getId() == null) ? "N/A" : order.getId()
-				).append(
-					" - "
-				).append(
-					order.getCreateDate()
-				).append(
-					" - "
-				).append(
-					(order.getTotalFormatted() != null) ?
-						order.getTotalFormatted() : "N/A"
-				).append(
-					"\n"
-				);
-			}
-
-			if (summary.getError() != null) {
-				sb.append(
-					"   **⚠Error**: "
-				).append(
-					summary.getError()
-				).append(
-					"\n"
-				);
-			}
-
-			sb.append("\n");
-		}
-
-		int activeAccounts = 0;
-		int inactiveAccounts = 0;
-
-		for (Summary summary : accountSummaries) {
-			if (summary.getOrderCount() > 0) {
-				activeAccounts++;
-			}
-			else {
-				inactiveAccounts++;
-			}
-		}
-
-		sb.append("**📈 Summary Statistics:**\n");
-
-		sb.append(
-			"- **Active Accounts** (with orders): "
-		).append(
-			activeAccounts
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"- **Inactive Accounts** (no orders): "
-		).append(
-			inactiveAccounts
-		).append(
-			"\n"
-		);
-
-		double avg = 0.0;
-
-		if (!accounts.isEmpty()) {
-			avg = (double)totalOrders / (double)accounts.size();
-		}
-
-		sb.append(
-			"- **Average Orders per Account**: "
-		).append(
-			String.format("%.1f", avg)
-		).append(
-			"\n"
-		);
 
 		return sb.toString();
 	}
@@ -2428,84 +1822,36 @@ public class CommerceTools {
 		return order;
 	}
 
-	private String _getOrderMessage(
-		Account account, String email, Order order) {
+	@NotNull
+	private StringBuilder _getOrderItemsErrorMessage(
+		Exception exception, String orderIdentifier) {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("**Customer Orders for ");
-		sb.append(email);
-		sb.append("**");
-		sb.append("\n");
-		sb.append("**Account**: ");
-		sb.append(account.getName());
-		sb.append(" (ID: ");
-		sb.append(account.getId());
-		sb.append(")");
+		sb.append("**Unexpected Error**");
 		sb.append("\n\n");
-		sb.append("**Found 1 order:**");
+		sb.append("**Order ID**: ");
+		sb.append(orderIdentifier);
 		sb.append("\n");
-		sb.append("- **Order ID**: ");
-		sb.append((order.getId() != null) ? order.getId() : "N/A");
+		sb.append("**Error**: ");
+		sb.append(exception.getMessage());
 		sb.append("\n");
-		sb.append("- **Reference**: ");
+		sb.append("**Error Type**: ");
 		sb.append(
-			(order.getExternalReferenceCode() != null) ?
-				order.getExternalReferenceCode() : "N/A");
-		sb.append("\n");
-		sb.append("- **Date**: ");
-		sb.append(
-			(order.getOrderDate() != null) ? order.getOrderDate() : "N/A");
-		sb.append("\n");
-		sb.append("- **Status**: ");
-		sb.append((order.getStatus() != null) ? order.getStatus() : "N/A");
-		sb.append("\n");
-		sb.append("- **Total**: ");
-		sb.append(
-			(order.getTotalFormatted() != null) ? order.getTotalFormatted() :
-				"N/A");
-
-		return sb.toString();
-	}
-
-	private String _getOrderMessage(
-		UserAccount userAccount, String email, Order order) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("**Customer Orders for ");
-		sb.append(email);
-		sb.append("**");
-		sb.append("\n");
-		sb.append("**User Email**: ");
-		sb.append(userAccount.getEmail());
-		sb.append(" (ID: ");
-		sb.append(userAccount.getId());
-		sb.append(")");
+			exception.getClass(
+			).getSimpleName());
 		sb.append("\n\n");
-		sb.append("**Found 1 order:**");
+		sb.append("**💡 Try These Alternatives:**");
 		sb.append("\n");
-		sb.append("- **Order ID**: ");
-		sb.append((order.getId() != null) ? order.getId() : "N/A");
+		sb.append("- \"Find order ");
+		sb.append(orderIdentifier);
+		sb.append("\" - Get complete order details");
 		sb.append("\n");
-		sb.append("- **Reference**: ");
-		sb.append(
-			(order.getExternalReferenceCode() != null) ?
-				order.getExternalReferenceCode() : "N/A");
+		sb.append("- \"Search for orders\" - Browse available orders");
 		sb.append("\n");
-		sb.append("- **Date**: ");
-		sb.append(
-			(order.getOrderDate() != null) ? order.getOrderDate() : "N/A");
-		sb.append("\n");
-		sb.append("- **Status**: ");
-		sb.append((order.getStatus() != null) ? order.getStatus() : "N/A");
-		sb.append("\n");
-		sb.append("- **Total**: ");
-		sb.append(
-			(order.getTotalFormatted() != null) ? order.getTotalFormatted() :
-				"N/A");
+		sb.append("- Check system status with \"Show me system status\"");
 
-		return sb.toString();
+		return sb;
 	}
 
 	private List<Order> _getOrders(
@@ -2551,132 +1897,7 @@ public class CommerceTools {
 		return orders;
 	}
 
-	private String _getOrdersByAshippingAddressMessage(
-		Account account, String addressQuery,
-		List<OrderShipmentDetails> orderShipmentDetailsList) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(
-			"**🔍 Enhanced Address Search Results: "
-		).append(
-			orderShipmentDetailsList.size()
-		).append(
-			" orders with address containing '"
-		).append(
-			addressQuery
-		).append(
-			"'**\n"
-		);
-
-		sb.append(
-			"**Customer**: "
-		).append(
-			account.getName()
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"**Address Filter**: "
-		).append(
-			addressQuery
-		).append(
-			"\n\n"
-		);
-
-		for (int i = 0; i < orderShipmentDetailsList.size(); i++) {
-			OrderShipmentDetails orderShipmentDetails =
-				orderShipmentDetailsList.get(i);
-
-			sb.append(
-				"**"
-			).append(
-				i + 1
-			).append(
-				". Order #"
-			).append(
-				(orderShipmentDetails.getId() != null) ?
-					orderShipmentDetails.getId() : "N/A"
-			).append(
-				"**\n"
-			);
-
-			sb.append(
-				"**Date**: "
-			).append(
-				orderShipmentDetails.getCreateDate()
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"**Shipment Status**: "
-			).append(
-				_formatTitle(orderShipmentDetails.getShipmentStatus())
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"**Total**: "
-			).append(
-				orderShipmentDetails.getTotalFormatted()
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"**Address**: "
-			).append(
-				(orderShipmentDetails.getOneLineAddress() != null) ?
-					orderShipmentDetails.getOneLineAddress() : "N/A"
-			).append(
-				"\n"
-			);
-
-			String shippingDate =
-				(orderShipmentDetails.getShippingDate() != null) ?
-					String.valueOf(orderShipmentDetails.getShippingDate()) :
-						"N/A";
-
-			if (!StringUtils.equals(shippingDate, "N/A")) {
-				sb.append(
-					"**Shipped**: "
-				).append(
-					shippingDate
-				).append(
-					"\n"
-				);
-			}
-
-			String trackingNumber =
-				(orderShipmentDetails.getTrackingNumber() != null) ?
-					orderShipmentDetails.getTrackingNumber() : "N/A";
-
-			if ((trackingNumber != null) &&
-				!StringUtils.equals(trackingNumber, "N/A")) {
-
-				sb.append(
-					"**Tracking**: "
-				).append(
-					trackingNumber
-				).append(
-					"\n"
-				);
-			}
-
-			sb.append("\n");
-		}
-
-		sb.append(
-			"**For detailed shipping info, ask**: 'Get shipping info for " +
-				"order [ORDER_ID]'");
-
-		return sb.toString();
-	}
-
-	private Map<String, String> _getOrdersByDateRangeMap(
+	private Map<String, Object> _getOrdersByDateRangeMap(
 		String accountId, String channelId, String endDate, String search,
 		String startDate) {
 
@@ -2688,27 +1909,9 @@ public class CommerceTools {
 			endOffsetDateTime = _getEndOffsetDateTime(endDate);
 		}
 		catch (RuntimeException runtimeException) {
-			StringBuilder sb = new StringBuilder();
-
-			sb.append("**Date Parsing Error**: ");
-			sb.append(runtimeException.getMessage());
-			sb.append("\n\n");
-			sb.append("**Supported formats:**");
-			sb.append("\n");
-			sb.append("- YYYY-MM-DD (2024-01-15)");
-			sb.append("\n");
-			sb.append("- MM/DD/YYYY (01/15/2024)");
-			sb.append("\n");
-			sb.append("- MM-DD-YYYY (01-15-2024)");
-			sb.append("\n");
-			sb.append("- today, yesterday");
-			sb.append("\n");
-			sb.append("- last X days (last 7 days)");
-			sb.append("\n\n");
-			sb.append(
-				"**Example:** 'Search orders from 2024-01-01 to 2024-01-31'");
-
-			return Map.of("error", sb.toString());
+			return Map.of(
+				"error",
+				"Date Parsing Error: " + runtimeException.getMessage());
 		}
 
 		List<Order> orders = new ArrayList<>();
@@ -2759,422 +1962,13 @@ public class CommerceTools {
 		}
 
 		if (orders.isEmpty()) {
-			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
-				"yyyy-MM-dd");
-
-			return Map.of(
-				"error",
-				new StringBuilder(
-				).append(
-					"**No orders found** for "
-				).append(
-					search
-				).append(
-					" between "
-				).append(
-					dateTimeFormatter.format(startOffsetDateTime)
-				).append(
-					" and "
-				).append(
-					dateTimeFormatter.format(endOffsetDateTime)
-				).toString());
+			return Map.of("error", "No orders found for the given criteria.");
 		}
 
-		return Map.of(
-			"response",
-			_getOrdersByDateRangeMessage(
-				endOffsetDateTime, orders, startOffsetDateTime, search));
+		return Map.of("orders", orders);
 	}
 
-	private String _getOrdersByDateRangeMessage(
-		OffsetDateTime endOffsetDateTime, List<Order> orders,
-		OffsetDateTime startOffsetDateTime, String userEmail) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(
-			"**Orders Found: "
-		).append(
-			orders.size()
-		).append(
-			" orders for "
-		).append(
-			userEmail
-		).append(
-			"**\n"
-		);
-
-		sb.append(
-			"**Customer**: "
-		).append(
-			(userEmail != null) ? userEmail : "N/A"
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"**Date Range**: "
-		).append(
-			DateTimeFormatter.ofPattern(
-				"yyyy-MM-dd"
-			).format(
-				startOffsetDateTime
-			)
-		).append(
-			" to "
-		).append(
-			DateTimeFormatter.ofPattern(
-				"yyyy-MM-dd"
-			).format(
-				endOffsetDateTime
-			)
-		).append(
-			"\n\n"
-		);
-
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
-			"yyyy-MM-dd HH:mm");
-
-		for (int i = 0; i < Math.min(20, orders.size()); i++) {
-			Order order = orders.get(i);
-
-			String orderId = (order.getId() != null) ? order.getId() : "N/A";
-
-			String externalReferenceCode = "N/A";
-			String dateString;
-
-			try {
-				dateString = (order.getOrderDate() != null) ?
-					dateTimeFormatter.format(order.getOrderDate()) : "N/A";
-			}
-			catch (Exception exception) {
-				if (_log.isInfoEnabled()) {
-					_log.info(exception);
-				}
-
-				dateString = "N/A";
-			}
-
-			sb.append(
-				i + 1
-			).append(
-				". **Order "
-			).append(
-				orderId
-			).append(
-				"** - "
-			).append(
-				externalReferenceCode
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"   Date: "
-			).append(
-				dateString
-			).append(
-				", Status: "
-			).append(
-				(order.getStatus() != null) ? order.getStatus() : "N/A"
-			).append(
-				", Total: "
-			).append(
-				(order.getTotalFormatted() != null) ?
-					order.getTotalFormatted() : "N/A"
-			).append(
-				"\n\n"
-			);
-		}
-
-		if (orders.size() > 20) {
-			sb.append(
-				"... and "
-			).append(
-				orders.size() - 20
-			).append(
-				" more orders.\n"
-			);
-		}
-
-		sb.append("\n**💡 Tips:**\n");
-		sb.append("- Use 'Find order [ID]' for detailed order information\n");
-		sb.append("- Use 'Get order items for order [ID]' for item details\n");
-		sb.append(
-			"- Use 'Get shipping info for order [ID]' for shipping details\n");
-
-		return sb.toString();
-	}
-
-	private String _getOrdersByProductMessage(
-		Account account,
-		List<AbstractMap.SimpleEntry<Order, List<OrderItem>>> matches,
-		String productDescription) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(
-			"**🔍 Product Search Results: "
-		).append(
-			matches.size()
-		).append(
-			" orders containing '"
-		).append(
-			productDescription
-		).append(
-			"'**\n"
-		);
-
-		sb.append(
-			"**Customer**: "
-		).append(
-			(account.getName() != null) ? account.getName() : "N/A"
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"**Search Term**: "
-		).append(
-			productDescription
-		).append(
-			"\n\n"
-		);
-
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
-			"yyyy-MM-dd HH:mm");
-
-		for (int i = 0; i < Math.min(10, matches.size()); i++) {
-			AbstractMap.SimpleEntry<Order, List<OrderItem>> entry = matches.get(
-				i);
-
-			Order order = entry.getKey();
-
-			List<OrderItem> orderItems = entry.getValue();
-
-			String orderId = (order.getId() != null) ? order.getId() : "N/A";
-			String externalReferenceCode = "N/A";
-			String status =
-				(order.getStatus() != null) ? order.getStatus() : "N/A";
-			String total = "N/A";
-			String dateString;
-
-			try {
-				if (order.getOrderDate() != null) {
-					dateString = dateTimeFormatter.format(order.getOrderDate());
-				}
-				else {
-					dateString = "N/A";
-				}
-			}
-			catch (Exception exception) {
-				if (_log.isInfoEnabled()) {
-					_log.info(exception);
-				}
-
-				dateString = "N/A";
-			}
-
-			sb.append(
-				i + 1
-			).append(
-				". **Order "
-			).append(
-				orderId
-			).append(
-				"** - "
-			).append(
-				externalReferenceCode
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"   Date: "
-			).append(
-				dateString
-			).append(
-				", Status: "
-			).append(
-				status
-			).append(
-				", Total: "
-			).append(
-				total
-			).append(
-				"\n"
-			);
-
-			if ((orderItems != null) && !orderItems.isEmpty()) {
-				sb.append("   **Matching Products:**\n");
-
-				for (int j = 0; j < Math.min(3, orderItems.size()); j++) {
-					OrderItem orderItem = orderItems.get(j);
-
-					sb.append(
-						"   - "
-					).append(
-						(orderItem.getName() != null) ? orderItem.getName() :
-							"Unknown Product"
-					).append(
-						" (SKU: "
-					).append(
-						(orderItem.getSku() != null) ? orderItem.getSku() :
-							"N/A"
-					).append(
-						") x"
-					).append(
-						orderItem.getQuantity()
-					).append(
-						"\n"
-					);
-				}
-
-				if (orderItems.size() > 3) {
-					sb.append(
-						"   - ... and "
-					).append(
-						orderItems.size() - 3
-					).append(
-						" more items\n"
-					);
-				}
-			}
-
-			sb.append("\n");
-		}
-
-		if (matches.size() > 10) {
-			sb.append(
-				"... and "
-			).append(
-				matches.size() - 10
-			).append(
-				" more orders.\n\n"
-			);
-		}
-
-		sb.append(
-			"**Total Orders Found**: "
-		).append(
-			matches.size()
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"**Customer**: "
-		).append(
-			(account.getName() != null) ? account.getName() : "N/A"
-		).append(
-			"\n\n"
-		);
-
-		sb.append("**💡 Tips:**\n");
-		sb.append("- Use 'Find order [ID]' for detailed order information\n");
-		sb.append(
-			"- Use 'Get order items for order [ID]' for complete item " +
-				"details\n");
-		sb.append("- Try different search terms for better results\n");
-
-		return sb.toString();
-	}
-
-	private String _getOrdersByStatusMessage(
-		Account account, List<Order> filteredOrders, String orderStatus) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(
-			"**🔍 Enhanced Status Search Results: "
-		).append(
-			filteredOrders.size()
-		).append(
-			" orders with status '"
-		).append(
-			orderStatus
-		).append(
-			"'**\n"
-		);
-
-		sb.append(
-			"**Customer**: "
-		).append(
-			account.getName()
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"**Status Filter**: "
-		).append(
-			orderStatus
-		).append(
-			"\n\n"
-		);
-
-		for (int i = 0; i < filteredOrders.size(); i++) {
-			Order order = filteredOrders.get(i);
-
-			sb.append(
-				"**"
-			).append(
-				i + 1
-			).append(
-				". Order #"
-			).append(
-				(order.getId() != null) ? order.getId() : "N/A"
-			).append(
-				"**\n"
-			);
-
-			sb.append(
-				"   📅 **Date**: "
-			).append(
-				order.getCreateDate()
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"   📊 **Status**: "
-			).append(
-				_formatTitle(
-					(order.getStatusLabel() != null) ? order.getStatusLabel() :
-						"N/A")
-			).append(
-				"\n"
-			);
-
-			String statusCode = order.getStatusCode();
-
-			if (StringUtils.isEmpty(statusCode)) {
-				sb.append(
-					"   🔢 **Status Code**: "
-				).append(
-					statusCode
-				).append(
-					"\n"
-				);
-			}
-
-			sb.append(
-				"   💰 **Total**: "
-			).append(
-				(order.getTotalFormatted() != null) ?
-					order.getTotalFormatted() : "N/A"
-			).append(
-				"\n\n"
-			);
-		}
-
-		sb.append(
-			"**💡 For detailed order info, ask**: 'Find order [ORDER_ID]'");
-
-		return sb.toString();
-	}
-
-	private String _getOrdersByStatusRequiredEmailMessage() {
+	private String _getOrdersByStatusUserEmailRequiredMessage() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("**User Identification Required**");
@@ -3236,549 +2030,32 @@ public class CommerceTools {
 		return sb.toString();
 	}
 
-	private String _getOrderShippingMessage(
-		Order order, List<Shipment> shipments) {
-
-		Map<String, String> shippingAddress = order.getShippingAddress();
-		Map<String, String> billingAddress = order.getBillingAddress();
-
+	private String _getSearchOrdersByDateRangeUserEmailRequiredMessage() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(
-			"**Shipping Information for Order "
-		).append(
-			order.getId()
-		).append(
-			"**\n\n"
-		);
-
-		sb.append("**Order Summary:**\n");
-
-		sb.append(
-			"- **Subtotal**: "
-		).append(
-			(order.getSubtotalFormatted() != null) ?
-				order.getSubtotalFormatted() : "N/A"
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"- **Shipping Cost**: "
-		).append(
-			(order.getShippingValueFormatted() != null) ?
-				order.getShippingValueFormatted() : "N/A"
-		).append(
-			"\n"
-		);
-
-		String shippingDiscount =
-			(order.getShippingDiscountValueFormatted() != null) ?
-				order.getShippingDiscountValueFormatted() : "N/A";
-
-		if (!StringUtils.equals(shippingDiscount, "N/A") &&
-			!StringUtils.equals(shippingDiscount, "$ 0.00")) {
-
-			sb.append(
-				"- **Shipping Discount**: "
-			).append(
-				shippingDiscount
-			).append(
-				"\n"
-			);
-		}
-
-		sb.append(
-			"- **Tax**: "
-		).append(
-			(order.getTaxValueFormatted() != null) ?
-				order.getTaxValueFormatted() : "N/A"
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"- **Total**: "
-		).append(
-			(order.getTotalFormatted() != null) ? order.getTotalFormatted() :
-				"N/A"
-		).append(
-			"\n\n"
-		);
-
-		Shipment shipment = null;
-
-		if ((shipments != null) && !shipments.isEmpty()) {
-			shipment = shipments.get(0);
-		}
-
-		if ((shipment != null) && (shipment.getOneLineAddress() != null) &&
-			!StringUtils.equals(shipment.getOneLineAddress(), "N/A")) {
-
-			sb.append("**Shipping Address (from Shipments):**\n");
-
-			sb.append(
-				"- **Address**: "
-			).append(
-				(shipment.getOneLineAddress() != null) ?
-					shipment.getOneLineAddress() : "N/A"
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **Shipping Date**: "
-			).append(
-				shipment.getShippingDate()
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **Tracking Number**: "
-			).append(
-				(shipment.getTrackingNumber() != null) ?
-					shipment.getTrackingNumber() : "N/A"
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **Carrier**: "
-			).append(
-				(shipment.getCarrier() != null) ? shipment.getCarrier() : "N/A"
-			).append(
-				"\n"
-			);
-
-			String status = null;
-
-			Shipment.Status shipmentStatus = shipment.getStatus();
-
-			if ((shipmentStatus != null) &&
-				(shipmentStatus.getLabel() != null)) {
-
-				status = shipmentStatus.getLabel();
-			}
-			else {
-				status = shipment.getShipmentStatus();
-			}
-
-			sb.append(
-				"- **Status**: "
-			).append(
-				(status != null) ? status : "N/A"
-			).append(
-				"\n\n"
-			);
-		}
-		else if ((shippingAddress != null) && !shippingAddress.isEmpty()) {
-			sb.append("**Shipping Address (from Order):**\n");
-
-			sb.append(
-				"- **Name**: "
-			).append(
-				shippingAddress.getOrDefault("name", "N/A")
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **Street**: "
-			).append(
-				shippingAddress.getOrDefault("street1", "N/A")
-			).append(
-				"\n"
-			);
-
-			String street2 = shippingAddress.get("street2");
-
-			if ((street2 != null) && !street2.isEmpty()) {
-				sb.append(
-					"- **Street 2**: "
-				).append(
-					street2
-				).append(
-					"\n"
-				);
-			}
-
-			sb.append(
-				"- **City**: "
-			).append(
-				shippingAddress.getOrDefault("city", "N/A")
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **State/Province**: "
-			).append(
-				shippingAddress.getOrDefault("regionISOCode", "N/A")
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **Postal Code**: "
-			).append(
-				shippingAddress.getOrDefault("zip", "N/A")
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **Country**: "
-			).append(
-				shippingAddress.getOrDefault("countryISOCode", "N/A")
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **Phone**: "
-			).append(
-				shippingAddress.getOrDefault("phoneNumber", "N/A")
-			).append(
-				"\n\n"
-			);
-		}
-		else {
-			sb.append("**Shipping Address**: Not available\n\n");
-		}
-
-		if ((billingAddress != null) && !billingAddress.isEmpty()) {
-			sb.append("**Billing Address:**\n");
-
-			sb.append(
-				"- **Name**: "
-			).append(
-				billingAddress.getOrDefault("name", "N/A")
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **Street**: "
-			).append(
-				billingAddress.getOrDefault("street1", "N/A")
-			).append(
-				"\n"
-			);
-
-			String billStreet2 = billingAddress.get("street2");
-
-			if ((billStreet2 != null) && !billStreet2.isEmpty()) {
-				sb.append(
-					"- **Street 2**: "
-				).append(
-					billStreet2
-				).append(
-					"\n"
-				);
-			}
-
-			sb.append(
-				"- **City**: "
-			).append(
-				billingAddress.getOrDefault("city", "N/A")
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **State/Province**: "
-			).append(
-				billingAddress.getOrDefault("regionISOCode", "N/A")
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **Postal Code**: "
-			).append(
-				billingAddress.getOrDefault("zip", "N/A")
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **Country**: "
-			).append(
-				billingAddress.getOrDefault("countryISOCode", "N/A")
-			).append(
-				"\n"
-			);
-
-			sb.append(
-				"- **Phone**: "
-			).append(
-				billingAddress.getOrDefault("phoneNumber", "N/A")
-			).append(
-				"\n\n"
-			);
-		}
-		else {
-			sb.append("**💳 Billing Address**: Not available\n\n");
-		}
-
-		sb.append("**Additional Information:**\n");
-
-		sb.append(
-			"- **Order Date**: "
-		).append(
-			order.getCreateDate()
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"- **Order Status**: "
-		).append(
-			(order.getStatus() != null) ? order.getStatus() : "N/A"
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"- **Order Reference**: "
-		).append(
-			(order.getExternalReferenceCode() != null) ?
-				order.getExternalReferenceCode() : "N/A"
-		);
+		sb.append("**User Identification Required**");
+		sb.append("\n\n");
+		sb.append("To search for orders by date range, I need to know ");
+		sb.append("which customer you are.");
+		sb.append("\n\n");
+		sb.append("**Please provide your email address:**");
+		sb.append("\n- ");
+		sb.append("Search my orders from 2024-01-01 to 2024-01-31 ");
+		sb.append("using your.email@example.com");
+		sb.append("\n- ");
+		sb.append("Find orders since 2024-01-01 for ");
+		sb.append("customer@company.com");
+		sb.append("\n- ");
+		sb.append("Show orders from last 7 days using ");
+		sb.append("myemail@domain.com");
+		sb.append("\n\n");
+		sb.append("**Use the same email address you used when placing ");
+		sb.append("your orders.**");
 
 		return sb.toString();
 	}
 
-	private String _getOrdersMessage(
-		Account account, String email, List<Order> orders) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(
-			"**Customer Orders for "
-		).append(
-			email
-		).append(
-			"**\n"
-		);
-
-		sb.append(
-			"**Account**: "
-		).append(
-			account.getName()
-		).append(
-			" (ID: "
-		).append(
-			account.getId()
-		).append(
-			")\n\n"
-		);
-
-		sb.append(
-			"**Found "
-		).append(
-			orders.size()
-		).append(
-			" orders:**"
-		);
-
-		for (int i = 0; i < Math.min(10, orders.size()); i++) {
-			Order order = orders.get(i);
-
-			String orderId = "N/A";
-
-			if (order.getId() != null) {
-				orderId = order.getId();
-			}
-
-			String createDate = "N/A";
-
-			if (order.getCreateDate() != null) {
-				createDate = String.valueOf(order.getCreateDate());
-			}
-
-			String status = "N/A";
-
-			if (order.getStatus() != null) {
-				status = order.getStatus();
-			}
-
-			String total = "N/A";
-
-			if (order.getTotalFormatted() != null) {
-				total = order.getTotalFormatted();
-			}
-
-			sb.append(
-				"\n"
-			).append(
-				i + 1
-			).append(
-				". **Order "
-			).append(
-				orderId
-			).append(
-				"** - "
-			).append(
-				orderId
-			);
-
-			sb.append(
-				"\n   Date: "
-			).append(
-				createDate
-			).append(
-				", Status: "
-			).append(
-				status
-			).append(
-				", Total: "
-			).append(
-				total
-			);
-		}
-
-		if (orders.size() > 10) {
-			sb.append(
-				"\n\n... and "
-			).append(
-				orders.size() - 10
-			).append(
-				" more orders."
-			);
-		}
-
-		sb.append(
-			"\n\n**Total Orders**: "
-		).append(
-			orders.size()
-		);
-
-		sb.append(
-			"\n**Account**: "
-		).append(
-			account.getName()
-		);
-
-		return sb.toString();
-	}
-
-	private String _getOrdersMessage(
-		UserAccount userAccount, String email, List<Order> orders) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(
-			"**Customer Orders for "
-		).append(
-			email
-		).append(
-			"**\n"
-		);
-
-		sb.append(
-			"**User Email**: "
-		).append(
-			userAccount.getEmail()
-		).append(
-			" (ID: "
-		).append(
-			userAccount.getId()
-		).append(
-			")\n\n"
-		);
-
-		sb.append(
-			"**Found "
-		).append(
-			orders.size()
-		).append(
-			" orders:**"
-		);
-
-		for (int i = 0; i < Math.min(10, orders.size()); i++) {
-			Order order = orders.get(i);
-
-			String orderId = "N/A";
-
-			if (order.getId() != null) {
-				orderId = order.getId();
-			}
-
-			String createDate = "N/A";
-
-			if (order.getCreateDate() != null) {
-				createDate = String.valueOf(order.getCreateDate());
-			}
-
-			String status = "N/A";
-
-			if (order.getStatus() != null) {
-				status = order.getStatus();
-			}
-
-			String total = "N/A";
-
-			if (order.getTotalFormatted() != null) {
-				total = order.getTotalFormatted();
-			}
-
-			sb.append(
-				"\n"
-			).append(
-				i + 1
-			).append(
-				". **Order "
-			).append(
-				orderId
-			).append(
-				"** - "
-			).append(
-				orderId
-			);
-
-			sb.append(
-				"\n   Date: "
-			).append(
-				createDate
-			).append(
-				", Status: "
-			).append(
-				status
-			).append(
-				", Total: "
-			).append(
-				total
-			);
-		}
-
-		if (orders.size() > 10) {
-			sb.append(
-				"\n\n... and "
-			).append(
-				orders.size() - 10
-			).append(
-				" more orders."
-			);
-		}
-
-		sb.append(
-			"\n\n**Total Orders**: "
-		).append(
-			orders.size()
-		);
-
-		sb.append(
-			"\n**User Email**: "
-		).append(
-			userAccount.getEmail()
-		);
-
-		return sb.toString();
-	}
-
-	private String _getProductEmailRequiredEmailMessage() {
+	private String _getSearchOrdersByProductToolUserEmailRequiredMessage() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("**User Identification Required**");
@@ -3805,7 +2082,7 @@ public class CommerceTools {
 		return sb.toString();
 	}
 
-	private String _getShippingEmailRequiredEmailMessage() {
+	private String _getSearchOrdersByShippingAddressUserEmailRequiredMessage() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("**User Identification Required**");
@@ -3922,31 +2199,6 @@ public class CommerceTools {
 		sb.append("**💡 Tip:** Make sure you are using the same ");
 		sb.append("email address you used when placing your ");
 		sb.append("orders.");
-
-		return sb.toString();
-	}
-
-	private String _getUserEmailRequiredMessage() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("**User Identification Required**");
-		sb.append("\n\n");
-		sb.append("To search for orders by date range, I need to know ");
-		sb.append("which customer you are.");
-		sb.append("\n\n");
-		sb.append("**Please provide your email address:**");
-		sb.append("\n- ");
-		sb.append("Search my orders from 2024-01-01 to 2024-01-31 ");
-		sb.append("using your.email@example.com");
-		sb.append("\n- ");
-		sb.append("Find orders since 2024-01-01 for ");
-		sb.append("customer@company.com");
-		sb.append("\n- ");
-		sb.append("Show orders from last 7 days using ");
-		sb.append("myemail@domain.com");
-		sb.append("\n\n");
-		sb.append("**Use the same email address you used when placing ");
-		sb.append("your orders.**");
 
 		return sb.toString();
 	}

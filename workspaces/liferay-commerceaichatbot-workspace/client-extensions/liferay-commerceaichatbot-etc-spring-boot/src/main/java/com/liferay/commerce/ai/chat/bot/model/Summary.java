@@ -14,13 +14,11 @@ public class Summary {
 	}
 
 	public Summary(
-		String error, String id, String name, Order order, int orderCount,
-		String type) {
+		String error, String id, String name, int orderCount, String type) {
 
 		_error = error;
 		_id = id;
 		_name = name;
-		_order = order;
 		_orderCount = orderCount;
 		_type = type;
 	}
@@ -35,10 +33,6 @@ public class Summary {
 
 	public String getName() {
 		return _name;
-	}
-
-	public Order getOrder() {
-		return _order;
 	}
 
 	public int getOrderCount() {
@@ -61,10 +55,6 @@ public class Summary {
 		_name = name;
 	}
 
-	public void setOrder(Order order) {
-		_order = order;
-	}
-
 	public void setOrderCount(int orderCount) {
 		_orderCount = orderCount;
 	}
@@ -76,7 +66,6 @@ public class Summary {
 	private String _error;
 	private String _id;
 	private String _name;
-	private Order _order;
 	private int _orderCount;
 	private String _type;
 
