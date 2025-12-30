@@ -42,7 +42,6 @@ import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -388,9 +387,10 @@ public class CommerceTools {
 		String query) {
 
 		try {
-			if (StringUtils.isBlank(query) || query.equalsIgnoreCase("all") ||
-				query.equalsIgnoreCase("faq") ||
-				query.equalsIgnoreCase("general")) {
+			if (StringUtils.isBlank(query) ||
+				StringUtils.equalsIgnoreCase(query, "all") ||
+				StringUtils.equalsIgnoreCase(query, "faq") ||
+				StringUtils.equalsIgnoreCase(query, "general")) {
 
 				return Map.of("response", _getNullQueryMessage(_faqData));
 			}
@@ -405,7 +405,7 @@ public class CommerceTools {
 				String categoryKey = entry.getKey();
 
 				String categoryTitle = _formatTitle(
-					categoryKey.replace('_', ' '));
+					StringUtils.replace(categoryKey, "_", " "));
 
 				Map<String, String> categoriesMap = entry.getValue();
 
@@ -418,19 +418,19 @@ public class CommerceTools {
 					String lowerCasedQuestionText = StringUtils.lowerCase(
 						questionText);
 
-					boolean questionMatches = lowerCasedQuestionText.contains(
-						lowerCasedQuery);
+					boolean questionMatches = StringUtils.contains(
+						lowerCasedQuestionText, lowerCasedQuery);
 
 					boolean answerMatches = false;
 
-					String[] words = lowerCasedQuery.split("\\s+");
+					String[] words = StringUtils.split(lowerCasedQuery);
 
 					for (String word : words) {
 						String lowerCasedAnswerText = StringUtils.lowerCase(
 							answerText);
 
-						if ((word.length() > 3) &&
-							lowerCasedAnswerText.contains(word)) {
+						if ((StringUtils.length(word) > 3) &&
+							StringUtils.contains(lowerCasedAnswerText, word)) {
 
 							answerMatches = true;
 
@@ -1085,12 +1085,13 @@ public class CommerceTools {
 
 						String term = StringUtils.lowerCase(productDescription);
 
-						if ((term == null) || term.isEmpty()) {
+						if (StringUtils.isEmpty(term)) {
 							term = "";
 						}
 
-						if (name.contains(term) || sku.contains(term) ||
-							term.contains(name)) {
+						if (StringUtils.contains(name, term) ||
+							StringUtils.contains(sku, term) ||
+							StringUtils.contains(term, name)) {
 
 							matchedOrderItems.add(orderItem);
 						}
@@ -1213,7 +1214,7 @@ public class CommerceTools {
 			if (addressQuery != null) {
 				addressQueryLower = StringUtils.lowerCase(addressQuery);
 
-				addressQueryLower = addressQueryLower.trim();
+				addressQueryLower = StringUtils.trim(addressQueryLower);
 			}
 
 			for (Order order : orders) {
@@ -1235,7 +1236,9 @@ public class CommerceTools {
 					String lowerCasedOneLineAddress = StringUtils.lowerCase(
 						oneLineAddress);
 
-					if (lowerCasedOneLineAddress.contains(addressQueryLower)) {
+					if (StringUtils.contains(
+							lowerCasedOneLineAddress, addressQueryLower)) {
+
 						OrderShipmentDetails orderShipmentDetails =
 							new OrderShipmentDetails();
 
@@ -1350,8 +1353,8 @@ public class CommerceTools {
 			for (Order order : orders) {
 				String orderId = order.getId();
 
-				if ((orderId == null) || orderId.isEmpty() ||
-					!Strings.CI.equals(
+				if (StringUtils.isEmpty(orderId) ||
+					!StringUtils.equalsIgnoreCase(
 						StringUtils.trim(order.getStatusLabel()),
 						statusLabel)) {
 
@@ -1430,11 +1433,13 @@ public class CommerceTools {
 				return Map.of("order", sb.toString());
 			}
 
-			if (queryLower.contains("from") || queryLower.contains("between") ||
-				queryLower.contains("since") || queryLower.contains("after") ||
-				queryLower.contains("before") ||
-				queryLower.contains("date range") ||
-				queryLower.contains("last ")) {
+			if (StringUtils.contains(queryLower, "from") ||
+				StringUtils.contains(queryLower, "between") ||
+				StringUtils.contains(queryLower, "since") ||
+				StringUtils.contains(queryLower, "after") ||
+				StringUtils.contains(queryLower, "before") ||
+				StringUtils.contains(queryLower, "date range") ||
+				StringUtils.contains(queryLower, "last ")) {
 
 				String doc =
 					"Search for orders within a specific date range for a " +
@@ -1462,10 +1467,13 @@ public class CommerceTools {
 				return Map.of("search", sb.toString());
 			}
 
-			if (queryLower.contains("product") || queryLower.contains("item") ||
-				queryLower.contains("contains") ||
-				queryLower.contains("battery") || queryLower.contains("tire") ||
-				queryLower.contains("brake") || queryLower.contains("oil")) {
+			if (StringUtils.contains(queryLower, "product") ||
+				StringUtils.contains(queryLower, "item") ||
+				StringUtils.contains(queryLower, "contains") ||
+				StringUtils.contains(queryLower, "battery") ||
+				StringUtils.contains(queryLower, "tire") ||
+				StringUtils.contains(queryLower, "brake") ||
+				StringUtils.contains(queryLower, "oil")) {
 
 				StringBuilder sb = new StringBuilder();
 
@@ -1494,12 +1502,13 @@ public class CommerceTools {
 				return Map.of("search", sb.toString());
 			}
 
-			if (queryLower.contains("pending") ||
-				queryLower.contains("shipped") ||
-				queryLower.contains("completed") ||
-				queryLower.contains("canceled") ||
-				queryLower.contains("processing") ||
-				queryLower.contains("hold") || queryLower.contains("status")) {
+			if (StringUtils.contains(queryLower, "pending") ||
+				StringUtils.contains(queryLower, "shipped") ||
+				StringUtils.contains(queryLower, "completed") ||
+				StringUtils.contains(queryLower, "canceled") ||
+				StringUtils.contains(queryLower, "processing") ||
+				StringUtils.contains(queryLower, "hold") ||
+				StringUtils.contains(queryLower, "status")) {
 
 				StringBuilder sb = new StringBuilder();
 
@@ -1528,11 +1537,13 @@ public class CommerceTools {
 				return Map.of("search", sb.toString());
 			}
 
-			if (queryLower.contains("address") ||
-				queryLower.contains("shipped to") ||
-				queryLower.contains("delivery") ||
-				queryLower.contains("city") || queryLower.contains("state") ||
-				queryLower.contains("zip") || queryLower.contains("postal")) {
+			if (StringUtils.contains(queryLower, "address") ||
+				StringUtils.contains(queryLower, "shipped to") ||
+				StringUtils.contains(queryLower, "delivery") ||
+				StringUtils.contains(queryLower, "city") ||
+				StringUtils.contains(queryLower, "state") ||
+				StringUtils.contains(queryLower, "zip") ||
+				StringUtils.contains(queryLower, "postal")) {
 
 				StringBuilder sb = new StringBuilder();
 
@@ -1773,11 +1784,11 @@ public class CommerceTools {
 		for (int i = 0; i < words.length; i++) {
 			String character = words[i];
 
-			if (!character.isEmpty()) {
+			if (!StringUtils.isEmpty(character)) {
 				sb.append(Character.toUpperCase(character.charAt(0)));
 
-				if (character.length() > 1) {
-					sb.append(character.substring(1));
+				if (StringUtils.length(character) > 1) {
+					sb.append(StringUtils.substring(character, 1));
 				}
 			}
 
@@ -1997,8 +2008,7 @@ public class CommerceTools {
 		OffsetDateTime endOffsetDateTime;
 
 		if ((endDate != null) &&
-			!endDate.trim(
-			).isEmpty()) {
+			!StringUtils.isEmpty(StringUtils.trim(endDate))) {
 
 			endOffsetDateTime = _getOffsetDateTime(endDate);
 		}
@@ -2040,7 +2050,7 @@ public class CommerceTools {
 
 		sb.append("**FAQ Search Results**");
 		sb.append("\n\n");
-		sb.append("I couldn't find specific information about \"");
+		sb.append("I could not find specific information about \"");
 		sb.append(query);
 		sb.append("\" in our FAQ database.");
 		sb.append("\n\n");
@@ -2281,10 +2291,7 @@ public class CommerceTools {
 				faqData.entrySet()) {
 
 			String categoryName = _formatTitle(
-				entry.getKey(
-				).replace(
-					'_', ' '
-				));
+				StringUtils.replace(entry.getKey(), "_", " "));
 
 			sb.append(
 				"**"
@@ -2311,7 +2318,7 @@ public class CommerceTools {
 		}
 
 		sb.append("**💡 How to use:** Ask me about any of these topics, ");
-		sb.append("and I'll provide the official answer!\n");
+		sb.append("and I will provide the official answer!\n");
 		sb.append("**Example:** 'What is your return policy?' or 'How do I ");
 		sb.append("track my order?'");
 
@@ -2333,7 +2340,9 @@ public class CommerceTools {
 			String sanitizedDate = StringUtils.trim(
 				StringUtils.lowerCase(date));
 
-			if (sanitizedDate.equals("today") || sanitizedDate.equals("now")) {
+			if (StringUtils.equals(sanitizedDate, "today") ||
+				StringUtils.equals(sanitizedDate, "now")) {
+
 				LocalDate localDate = LocalDate.now();
 
 				ZonedDateTime zonedDateTime = localDate.atStartOfDay(
@@ -2342,7 +2351,7 @@ public class CommerceTools {
 				return zonedDateTime.toOffsetDateTime();
 			}
 
-			if (sanitizedDate.equals("yesterday")) {
+			if (StringUtils.equals(sanitizedDate, "yesterday")) {
 				LocalDate localDate = LocalDate.now();
 
 				localDate = localDate.minusDays(1);
@@ -2631,7 +2640,7 @@ public class CommerceTools {
 					String.valueOf(orderShipmentDetails.getShippingDate()) :
 						"N/A";
 
-			if (!shippingDate.equals("N/A")) {
+			if (!StringUtils.equals(shippingDate, "N/A")) {
 				sb.append(
 					"**Shipped**: "
 				).append(
@@ -2645,7 +2654,9 @@ public class CommerceTools {
 				(orderShipmentDetails.getTrackingNumber() != null) ?
 					orderShipmentDetails.getTrackingNumber() : "N/A";
 
-			if ((trackingNumber != null) && !trackingNumber.equals("N/A")) {
+			if ((trackingNumber != null) &&
+				!StringUtils.equals(trackingNumber, "N/A")) {
+
 				sb.append(
 					"**Tracking**: "
 				).append(
@@ -3265,8 +3276,8 @@ public class CommerceTools {
 			(order.getShippingDiscountValueFormatted() != null) ?
 				order.getShippingDiscountValueFormatted() : "N/A";
 
-		if (!shippingDiscount.equals("N/A") &&
-			!shippingDiscount.equals("$ 0.00")) {
+		if (!StringUtils.equals(shippingDiscount, "N/A") &&
+			!StringUtils.equals(shippingDiscount, "$ 0.00")) {
 
 			sb.append(
 				"- **Shipping Discount**: "
@@ -3870,7 +3881,9 @@ public class CommerceTools {
 				statusMappings.entrySet()) {
 
 			for (String value : entry.getValue()) {
-				if (status.equals(value) || status.contains(value)) {
+				if (StringUtils.equals(status, value) ||
+					StringUtils.contains(status, value)) {
+
 					statusLabel = entry.getKey();
 
 					break;
