@@ -24,6 +24,11 @@ import com.liferay.commerce.ai.chat.bot.model.Settings;
 import com.liferay.commerce.ai.chat.bot.service.SettingsService;
 import com.liferay.commerce.ai.chat.bot.tools.CommerceTools;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.nio.charset.StandardCharsets;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,12 +36,14 @@ import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +55,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/commerce/ai")
 @RestController
 public class AIRestController extends BaseRestController {
+
+	public AIRestController(
+		CommerceTools _commerceTools, SettingsService _settingsService) {
+
+		this._commerceTools = _commerceTools;
+		this._settingsService = _settingsService;
+	}
 
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/chat")
 	public ResponseEntity<String> chat(
@@ -116,7 +130,7 @@ public class AIRestController extends BaseRestController {
 				).model(
 					new Gemini(settings.modelName, settings.apiKey)
 				).instruction(
-					_INSTRUCTION
+					_getInstruction()
 				).tools(
 					listChannelsAccountsTool, findOrderTool,
 					searchAccountOrdersByDateRangeTool, searchOrdersTool,
@@ -183,59 +197,27 @@ public class AIRestController extends BaseRestController {
 		return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
 	}
 
-	private static final String _INSTRUCTION = new StringBuilder(
-	).append(
-		"You are a professional customer service representative for a "
-	).append(
-		"Liferay Commerce platform. Your primary role is to help customers "
-	).append(
-		"find information about their orders and provide general assistance.\n\n"
-	).append(
-		"**Key "
-	).append(
-		"Responsibilities:**\n - Help customers locate their orders using "
-	).append(
-		"order numbers, email addresses, or names\n- Provide detailed order "
-	).append(
-		"information including status, items, and pricing\n- Answer questions "
-	).append(
-		"about order status, delivery, and shipping\n- Answer general questions "
-	).append(
-		"about the platform, returns, and other policies using the FAQ tool\n"
-	).append(
-		"- Assist with customer "
-	).append(
-		"account inquiries\n\n**Best Practices:**\n- Always greet customers "
-	).append(
-		"warmly and professionally\n- Ask clarifying questions if you need "
-	).append(
-		"more information\n- Provide clear, organized responses with order "
-	).append(
-		"details\n- Be empathetic and helpful, especially when orders can not "
-	).append(
-		"be found\n- **IMPORTANT**: Always keep the conversation going. "
-	).append(
-		"After providing information, always ask a follow-up question or "
-	).append(
-		"offer further assistance to see if there is anything else the "
-	).append(
-		"customer needs.\n\n **Example Interactions:**\n- Customer: 'I need "
-	).append(
-		"to check my order status'\n- You: 'I am happy to help you check "
-	).append(
-		"your order status. Could you\n please provide your order number or "
-	).append(
-		"the email address you used when\n  placing the order?'\n\nStart by "
-	).append(
-		"greeting the customer and asking how you can help them today.\n\n"
-	).append(
-		"When asked for orders if number of orders is not specified, display "
-	).append(
-		"at most 5 orders by default."
-	).toString();
+	private String _getInstruction() {
+		if (_instruction != null) {
+			return _instruction;
+		}
 
-	@Autowired
-	private CommerceTools _commerceTools;
+		try (InputStream inputStream = _instructionResource.getInputStream()) {
+			_instruction = StreamUtils.copyToString(
+				inputStream, StandardCharsets.UTF_8);
+
+			return _instruction;
+		}
+		catch (IOException ioException) {
+			throw new RuntimeException(ioException);
+		}
+	}
+
+	private final CommerceTools _commerceTools;
+	private String _instruction;
+
+	@Value("classpath:instruction.txt")
+	private Resource _instructionResource;
 
 	private final Cache<String, Runner> _runners = Caffeine.newBuilder(
 	).expireAfterAccess(
@@ -245,8 +227,6 @@ public class AIRestController extends BaseRestController {
 	).expireAfterAccess(
 		30, TimeUnit.MINUTES
 	).build();
-
-	@Autowired
-	private SettingsService _settingsService;
+	private final SettingsService _settingsService;
 
 }
