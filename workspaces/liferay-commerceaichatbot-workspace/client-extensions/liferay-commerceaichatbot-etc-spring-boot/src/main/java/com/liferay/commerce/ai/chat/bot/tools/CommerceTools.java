@@ -59,8 +59,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommerceTools {
 
-	public CommerceTools(CommerceService commerceService) {
+	public CommerceTools(
+		CommerceService commerceService, ObjectMapper objectMapper) {
+
 		_commerceService = commerceService;
+		_objectMapper = objectMapper;
 	}
 
 	@Annotations.Schema(
@@ -188,7 +191,7 @@ public class CommerceTools {
 		LocalDate localDate = LocalDate.now();
 
 		return Map.of(
-			"current_year", localDate.getYear(), "full_date",
+			"current_year", String.valueOf(localDate.getYear()), "full_date",
 			localDate.toString());
 	}
 
@@ -2215,6 +2218,6 @@ public class CommerceTools {
 	@Value("classpath:faq.json")
 	private Resource _faqResource;
 
-	private final ObjectMapper _objectMapper = new ObjectMapper();
+	private final ObjectMapper _objectMapper;
 
 }

@@ -15,10 +15,9 @@ import com.liferay.commerce.ai.chat.bot.model.Product;
 import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 
-import java.time.Instant;
-
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -509,13 +508,15 @@ public class CommerceService {
 		return map;
 	}
 
-	private Instant _parseIsoDate(String string) {
+	private Date _parseIsoDate(String string) {
 		if (StringUtils.isEmpty(string)) {
 			return null;
 		}
 
 		try {
-			return Instant.parse(StringUtils.replace(string, "Z", "+00:00"));
+			return Date.from(
+				java.time.Instant.parse(
+					StringUtils.replace(string, "Z", "+00:00")));
 		}
 		catch (Exception exception1) {
 			try {
@@ -523,7 +524,7 @@ public class CommerceService {
 					_log.warn(exception1.getMessage(), exception1);
 				}
 
-				return Instant.parse(string);
+				return Date.from(java.time.Instant.parse(string));
 			}
 			catch (Exception exception2) {
 				if (_log.isWarnEnabled()) {

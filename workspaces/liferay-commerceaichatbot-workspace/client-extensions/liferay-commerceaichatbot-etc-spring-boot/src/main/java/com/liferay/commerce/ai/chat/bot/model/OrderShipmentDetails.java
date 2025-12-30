@@ -5,7 +5,7 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
-import java.time.Instant;
+import java.util.Date;
 
 /**
  * @author Ivica Cardic
@@ -16,11 +16,11 @@ public class OrderShipmentDetails {
 		return _carrier;
 	}
 
-	public Instant getCreateDate() {
+	public Date getCreateDate() {
 		return _createDate;
 	}
 
-	public Instant getExpectedDate() {
+	public Date getExpectedDate() {
 		return _expectedDate;
 	}
 
@@ -36,7 +36,7 @@ public class OrderShipmentDetails {
 		return _shipmentStatus;
 	}
 
-	public Instant getShippingDate() {
+	public Date getShippingDate() {
 		return _shippingDate;
 	}
 
@@ -52,11 +52,11 @@ public class OrderShipmentDetails {
 		_carrier = carrier;
 	}
 
-	public void setCreateDate(Instant createDate) {
+	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
-	public void setExpectedDate(Instant expectedDate) {
+	public void setExpectedDate(Date expectedDate) {
 		_expectedDate = expectedDate;
 	}
 
@@ -72,7 +72,7 @@ public class OrderShipmentDetails {
 		_shipmentStatus = shipmentStatus;
 	}
 
-	public void setShippingDate(Instant shippingDate) {
+	public void setShippingDate(Date shippingDate) {
 		_shippingDate = shippingDate;
 	}
 
@@ -85,12 +85,12 @@ public class OrderShipmentDetails {
 	}
 
 	private String _carrier;
-	private Instant _createDate;
-	private Instant _expectedDate;
+	private Date _createDate;
+	private Date _expectedDate;
 	private String _id;
 	private String _oneLineAddress;
 	private String _shipmentStatus;
-	private Instant _shippingDate;
+	private Date _shippingDate;
 	private String _totalFormatted;
 	private String _trackingNumber;
 
