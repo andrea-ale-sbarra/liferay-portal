@@ -5,6 +5,7 @@
 
 package com.liferay.commerce.ai.chat.bot.service;
 
+import com.liferay.commerce.ai.chat.bot.client.CommerceClient;
 import com.liferay.commerce.ai.chat.bot.model.Account;
 import com.liferay.commerce.ai.chat.bot.model.Channel;
 import com.liferay.commerce.ai.chat.bot.model.Order;
@@ -14,44 +15,21 @@ import com.liferay.commerce.ai.chat.bot.model.Product;
 import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-import java.net.URI;
-
-import java.nio.charset.StandardCharsets;
-
 import java.time.Instant;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
-import javax.net.ssl.SSLContext;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpHeaders;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContexts;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -60,31 +38,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommerceService {
 
-	public void authenticate() {
-		try {
-			URI uri = _buildUri(
-				"/o/headless-admin-user/v1.0/my-user-account", null);
-
-			JSONObject jsonObject = _executeGetJSONObject(uri);
-
-			if (jsonObject != null) {
-				_authenticated = true;
-			}
-
-			if (_log.isInfoEnabled()) {
-				if (_authenticated) {
-					_log.info(
-						"Authentication successful for user " + _userName);
-				}
-				else {
-					_log.error("Authentication failed for user " + _userName);
-				}
-			}
-		}
-		catch (Exception exception) {
-			_authenticated = false;
-			_log.error(exception);
-		}
+	public CommerceService(CommerceClient commerceClient) {
+		_commerceClient = commerceClient;
 	}
 
 	public List<Account> getAccounts(String channelId, String search) {
@@ -268,195 +223,11 @@ public class CommerceService {
 		return _toUserAccount(jsonObject);
 	}
 
-	@PostConstruct
-	public void init() {
-		_basicAuthHeader = _buildBasicAuthHeader(_userName, _password);
-		_closeableHttpClient = _buildHttpClient(_sslVerify, _timeoutMs);
-
-		if (_log.isInfoEnabled()) {
-			_log.info(
-				new StringBuilder(
-				).append(
-					"Liferay CommerceService initialized. baseUrl="
-				).append(
-					_baseUrl
-				).append(
-					"sslVerify="
-				).append(
-					_sslVerify
-				).append(
-					" timeoutMs="
-				).append(
-					_timeoutMs
-				).toString());
-		}
-	}
-
-	private String _buildBasicAuthHeader(String user, String pass) {
-		Base64.Encoder encoder = Base64.getEncoder();
-
-		String credentials = user + ":" + pass;
-
-		String token = encoder.encodeToString(
-			credentials.getBytes(StandardCharsets.UTF_8));
-
-		return "Basic " + token;
-	}
-
-	private CloseableHttpClient _buildHttpClient(
-		boolean verifySsl, int timeoutMs) {
-
-		RequestConfig requestConfig = RequestConfig.custom(
-		).setConnectTimeout(
-			timeoutMs
-		).setConnectionRequestTimeout(
-			timeoutMs
-		).setSocketTimeout(
-			timeoutMs
-		).build();
-
-		if (verifySsl) {
-			return HttpClients.custom(
-			).setDefaultRequestConfig(
-				requestConfig
-			).build();
-		}
-
-		try {
-			SSLContext sslContext = SSLContexts.custom(
-			).loadTrustMaterial(
-				null, (chain, authType) -> true
-			).build();
-
-			SSLConnectionSocketFactory sslConnectionSocketFactory =
-				new SSLConnectionSocketFactory(
-					sslContext, NoopHostnameVerifier.INSTANCE);
-
-			return HttpClients.custom(
-			).setSSLSocketFactory(
-				sslConnectionSocketFactory
-			).setDefaultRequestConfig(
-				requestConfig
-			).build();
-		}
-		catch (Exception exception) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"Failed to create insecure SSL context, falling back to " +
-						"default client",
-					exception);
-			}
-
-			return HttpClients.custom(
-			).setDefaultRequestConfig(
-				requestConfig
-			).build();
-		}
-	}
-
-	private URI _buildUri(String path, Map<String, String> params)
-		throws Exception {
-
-		String trimmedBase = _baseUrl;
-
-		if (_baseUrl.endsWith("/")) {
-			trimmedBase = _baseUrl.substring(0, _baseUrl.length() - 1);
-		}
-
-		String trimmedPath = path;
-
-		if (!path.startsWith("/")) {
-			trimmedPath = "/" + path;
-		}
-
-		URIBuilder builder = new URIBuilder(trimmedBase + trimmedPath);
-
-		if (params != null) {
-			for (Map.Entry<String, String> entry : params.entrySet()) {
-				if (entry.getValue() != null) {
-					builder.addParameter(entry.getKey(), entry.getValue());
-				}
-			}
-		}
-
-		return builder.build();
-	}
-
-	private void _ensureAuthenticated() {
-		if (!_authenticated) {
-			authenticate();
-		}
-	}
-
-	private JSONObject _executeGetJSONObject(URI uri) throws Exception {
-		HttpGet get = new HttpGet(uri);
-
-		get.addHeader(
-			HttpHeaders.USER_AGENT, "Liferay-Customer-Service-Agent/1.0");
-		get.addHeader(HttpHeaders.ACCEPT, "application/json");
-		get.addHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-		get.addHeader(HttpHeaders.AUTHORIZATION, _basicAuthHeader);
-
-		try (CloseableHttpResponse response = _closeableHttpClient.execute(
-				get)) {
-
-			int status = response.getStatusLine(
-			).getStatusCode();
-
-			try (BufferedReader bufferedReader = new BufferedReader(
-					new InputStreamReader(
-						response.getEntity(
-						).getContent(),
-						StandardCharsets.UTF_8))) {
-
-				StringBuilder sb = new StringBuilder();
-
-				String line;
-
-				while ((line = bufferedReader.readLine()) != null) {
-					sb.append(line);
-				}
-
-				String body = sb.toString();
-
-				if ((status >= 200) && (status < 300)) {
-					if ((body == null) || body.isEmpty()) {
-						return new JSONObject();
-					}
-
-					return new JSONObject(body);
-				}
-
-				if (_log.isWarnEnabled()) {
-					_log.warn(
-						new StringBuilder(
-						).append(
-							"GET "
-						).append(
-							uri
-						).append(
-							" -> "
-						).append(
-							status
-						).append(
-							"body: "
-						).append(
-							_truncate(body)
-						).toString());
-				}
-
-				return null;
-			}
-		}
-	}
-
 	private JSONArray _getAccountsJSONArray(String channelId, String search) {
-		_ensureAuthenticated();
-
 		try {
 			String path;
 
-			if ((channelId != null) && !channelId.isEmpty()) {
+			if (!StringUtils.isEmpty(channelId)) {
 				path =
 					"/o/headless-commerce-delivery-catalog/v1.0/channels/" +
 						channelId + "/accounts";
@@ -465,9 +236,8 @@ public class CommerceService {
 				path = "/o/headless-commerce-delivery-catalog/v1.0/accounts";
 			}
 
-			URI uri = _buildUri(path, Map.of("search", search));
-
-			JSONObject jsonObject = _executeGetJSONObject(uri);
+			JSONObject jsonObject = _commerceClient.get(
+				path, Map.of("search", search));
 
 			if (jsonObject != null) {
 				return jsonObject.optJSONArray("items");
@@ -483,13 +253,9 @@ public class CommerceService {
 	}
 
 	private JSONArray _getAvailableChannelsJSONArray() {
-		_ensureAuthenticated();
-
 		try {
-			URI uri = _buildUri(
-				"/o/headless-commerce-delivery-catalog/v1.0/channels", null);
-
-			JSONObject jsonObject = _executeGetJSONObject(uri);
+			JSONObject jsonObject = _commerceClient.get(
+				"/o/headless-commerce-delivery-catalog/v1.0/channels");
 
 			if (jsonObject != null) {
 				return jsonObject.optJSONArray("items");
@@ -531,15 +297,10 @@ public class CommerceService {
 	private JSONObject _getOrderByExternalReferenceCodeJSONObject(
 		String externalReferenceCode) {
 
-		_ensureAuthenticated();
-
 		try {
-			URI uri = _buildUri(
+			return _commerceClient.get(
 				"/o/headless-commerce-delivery-order/v1.0/placed-orders" +
-					"/by-externalReferenceCode/" + externalReferenceCode,
-				null);
-
-			return _executeGetJSONObject(uri);
+					"/by-externalReferenceCode/" + externalReferenceCode);
 		}
 		catch (Exception exception) {
 			_log.error(exception);
@@ -549,15 +310,10 @@ public class CommerceService {
 	}
 
 	private JSONObject _getOrderJSONObject(String orderId) {
-		_ensureAuthenticated();
-
 		try {
-			URI uri = _buildUri(
+			return _commerceClient.get(
 				"/o/headless-commerce-delivery-order/v1.0/placed-orders/" +
-					orderId,
-				null);
-
-			return _executeGetJSONObject(uri);
+					orderId);
 		}
 		catch (Exception exception) {
 			_log.error(exception);
@@ -567,15 +323,10 @@ public class CommerceService {
 	}
 
 	private JSONArray _getOrderShipmentsJSONArray(String orderId) {
-		_ensureAuthenticated();
-
 		try {
-			URI uri = _buildUri(
+			JSONObject jsonObject = _commerceClient.get(
 				"/o/headless-commerce-delivery-order/v1.0/placed-orders/" +
-					orderId + "/shipments",
-				null);
-
-			JSONObject jsonObject = _executeGetJSONObject(uri);
+					orderId + "/shipments");
 
 			if (jsonObject != null) {
 				return jsonObject.optJSONArray("items");
@@ -591,15 +342,10 @@ public class CommerceService {
 	}
 
 	private JSONArray _getPlacedOrderItemsJSONArray(String orderId) {
-		_ensureAuthenticated();
-
 		try {
-			URI uri = _buildUri(
+			JSONObject jsonObject = _commerceClient.get(
 				"/o/headless-commerce-delivery-order/v1.0/placed-orders/" +
-					orderId + "/placed-order-items",
-				null);
-
-			JSONObject jsonObject = _executeGetJSONObject(uri);
+					orderId + "/placed-order-items");
 
 			if (jsonObject != null) {
 				return jsonObject.optJSONArray("items");
@@ -618,8 +364,6 @@ public class CommerceService {
 		String channelId, String accountId, Integer page, Integer pageSize,
 		String search, String sort, String filter) {
 
-		_ensureAuthenticated();
-
 		try {
 			Map<String, String> params = new HashMap<>();
 
@@ -635,11 +379,11 @@ public class CommerceService {
 				params.put("search", search);
 			}
 
-			if ((sort != null) && !sort.isEmpty()) {
+			if (!StringUtils.isEmpty(sort)) {
 				params.put("sort", sort);
 			}
 
-			if ((filter != null) && !filter.isEmpty()) {
+			if (!StringUtils.isEmpty(filter)) {
 				params.put("filter", filter);
 			}
 
@@ -655,9 +399,7 @@ public class CommerceService {
 					channelId);
 			}
 
-			URI uri = _buildUri(path, params);
-
-			return _executeGetJSONObject(uri);
+			return _commerceClient.get(path, params);
 		}
 		catch (Exception exception) {
 			_log.error(exception);
@@ -668,8 +410,6 @@ public class CommerceService {
 
 	private JSONObject _getProductsByChannelJSONObject(
 		String channelId, String accountId, Integer page, Integer pageSize) {
-
-		_ensureAuthenticated();
 
 		try {
 			Map<String, String> params = new HashMap<>();
@@ -682,16 +422,14 @@ public class CommerceService {
 				params.put("pageSize", String.valueOf(pageSize));
 			}
 
-			if ((accountId != null) && !accountId.isEmpty()) {
+			if (!StringUtils.isEmpty(accountId)) {
 				params.put("accountId", accountId);
 			}
 
-			URI uri = _buildUri(
+			return _commerceClient.get(
 				"/o/headless-commerce-delivery-catalog/v1.0/channels/" +
 					channelId + "/products",
 				params);
-
-			return _executeGetJSONObject(uri);
 		}
 		catch (Exception exception) {
 			_log.error(exception);
@@ -730,14 +468,10 @@ public class CommerceService {
 	}
 
 	private JSONObject _getUserAccountByEmailJSONObject(String email) {
-		_ensureAuthenticated();
-
 		try {
-			URI uri = _buildUri(
+			JSONObject jsonObject = _commerceClient.get(
 				"/o/headless-admin-user/v1.0/user-accounts",
 				Map.of("filter", "emailAddress eq '" + email + "'"));
-
-			JSONObject jsonObject = _executeGetJSONObject(uri);
 
 			List<JSONObject> jsonObjects = _getJSONObjects(jsonObject);
 
@@ -776,7 +510,7 @@ public class CommerceService {
 	}
 
 	private Instant _parseIsoDate(String string) {
-		if ((string == null) || string.isEmpty()) {
+		if (StringUtils.isEmpty(string)) {
 			return null;
 		}
 
@@ -1031,40 +765,8 @@ public class CommerceService {
 		return userAccount;
 	}
 
-	private String _truncate(String s) {
-		if (s == null) {
-			return null;
-		}
-
-		if (s.length() > 500) {
-			return s.substring(0, 500) + "...";
-		}
-
-		return s;
-	}
-
 	private static final Log _log = LogFactory.getLog(CommerceService.class);
 
-	private volatile boolean _authenticated;
-
-	@Value(
-		"${liferay.base.url:${LIFERAY_BASE_URL:https://webserver-lct66degrees-uat.lfr.cloud/}}"
-	)
-	private String _baseUrl;
-
-	private String _basicAuthHeader;
-	private CloseableHttpClient _closeableHttpClient;
-
-	@Value("${liferay.password:${LIFERAY_PASSWORD:test}}")
-	private String _password;
-
-	@Value("${liferay.ssl.verify:${LIFERAY_SSL_VERIFY:true}}")
-	private boolean _sslVerify;
-
-	@Value("${liferay.timeout.ms:${LIFERAY_TIMEOUT:30000}}")
-	private int _timeoutMs;
-
-	@Value("${liferay.username:${LIFERAY_USERNAME:test@liferay.com}}")
-	private String _userName;
+	private final CommerceClient _commerceClient;
 
 }
