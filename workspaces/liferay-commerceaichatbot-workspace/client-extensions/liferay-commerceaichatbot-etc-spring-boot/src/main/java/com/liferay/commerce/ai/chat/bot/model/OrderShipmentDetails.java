@@ -5,6 +5,8 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -85,11 +87,20 @@ public class OrderShipmentDetails {
 	}
 
 	private String _carrier;
+	@JsonFormat(
+		shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ"
+	)
 	private Date _createDate;
+	@JsonFormat(
+		shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ"
+	)
 	private Date _expectedDate;
 	private long _id;
 	private String _oneLineAddress;
 	private String _shipmentStatus;
+	@JsonFormat(
+		shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ"
+	)
 	private Date _shippingDate;
 	private String _totalFormatted;
 	private String _trackingNumber;

@@ -5,6 +5,8 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -243,10 +245,16 @@ public class Order {
 	private String _accountId;
 	private String _accountName;
 	private Map<String, String> _billingAddress = new HashMap<>();
+	@JsonFormat(
+		shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ"
+	)
 	private Date _createDate;
 	private String _externalReferenceCode;
 	private long _id;
 	private int _itemsQuantity;
+	@JsonFormat(
+		shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ"
+	)
 	private Date _orderDate;
 	private String _orderNumber;
 	private final Map<String, String> _shippingAddress = new HashMap<>();
