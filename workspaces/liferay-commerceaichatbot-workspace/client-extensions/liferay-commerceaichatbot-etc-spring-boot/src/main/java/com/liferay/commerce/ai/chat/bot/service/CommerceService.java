@@ -7,11 +7,13 @@ package com.liferay.commerce.ai.chat.bot.service;
 
 import com.liferay.commerce.ai.chat.bot.client.HttpClient;
 import com.liferay.commerce.ai.chat.bot.model.Account;
+import com.liferay.commerce.ai.chat.bot.model.AccountBrief;
 import com.liferay.commerce.ai.chat.bot.model.Channel;
 import com.liferay.commerce.ai.chat.bot.model.Order;
 import com.liferay.commerce.ai.chat.bot.model.OrderItem;
 import com.liferay.commerce.ai.chat.bot.model.PageResult;
 import com.liferay.commerce.ai.chat.bot.model.Product;
+import com.liferay.commerce.ai.chat.bot.model.RoleBrief;
 import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 
@@ -764,6 +766,74 @@ public class CommerceService {
 		}
 
 		userAccount.setPhone(phone);
+
+		try {
+			JSONArray accountBriefsJSONArray = jsonObject.optJSONArray(
+				"accountBriefs");
+
+			if (accountBriefsJSONArray != null) {
+				List<AccountBrief> accountBriefs = new ArrayList<>();
+
+				for (int i = 0; i < accountBriefsJSONArray.length(); i++) {
+					JSONObject accountBriefJSONObject =
+						accountBriefsJSONArray.optJSONObject(i);
+
+					if (accountBriefJSONObject == null) {
+						continue;
+					}
+
+					AccountBrief accountBrief = new AccountBrief();
+
+					accountBrief.setExternalReferenceCode(
+						accountBriefJSONObject.optString(
+							"externalReferenceCode", null));
+					accountBrief.setId(accountBriefJSONObject.optLong("id"));
+					accountBrief.setName(
+						accountBriefJSONObject.optString("name", ""));
+					accountBrief.setType(
+						accountBriefJSONObject.optString("type", ""));
+
+					JSONArray roleBriefsJSONArray =
+						accountBriefJSONObject.optJSONArray("roleBriefs");
+
+					if (roleBriefsJSONArray != null) {
+						List<RoleBrief> roleBriefs = new ArrayList<>();
+
+						for (int j = 0; j < roleBriefsJSONArray.length(); j++) {
+							JSONObject roleBriefJSONObject =
+								roleBriefsJSONArray.optJSONObject(j);
+
+							if (roleBriefJSONObject == null) {
+								continue;
+							}
+
+							RoleBrief roleBrief = new RoleBrief();
+
+							roleBrief.setExternalReferenceCode(
+								roleBriefJSONObject.optString(
+									"externalReferenceCode", null));
+							roleBrief.setId(
+								roleBriefJSONObject.optLong("id"));
+							roleBrief.setName(
+								roleBriefJSONObject.optString("name", ""));
+
+							roleBriefs.add(roleBrief);
+						}
+
+						accountBrief.setRoleBriefs(roleBriefs);
+					}
+
+					accountBriefs.add(accountBrief);
+				}
+
+				userAccount.setAccountBriefs(accountBriefs);
+			}
+		}
+		catch (Exception exception) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(exception);
+			}
+		}
 
 		return userAccount;
 	}

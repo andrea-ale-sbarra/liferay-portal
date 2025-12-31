@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.adk.tools.Annotations;
 
 import com.liferay.commerce.ai.chat.bot.model.Account;
+import com.liferay.commerce.ai.chat.bot.model.AccountBrief;
 import com.liferay.commerce.ai.chat.bot.model.Channel;
 import com.liferay.commerce.ai.chat.bot.model.Order;
 import com.liferay.commerce.ai.chat.bot.model.OrderItem;
@@ -309,7 +310,7 @@ public class CommerceTools {
 
 			String channelId = channel.getId();
 
-			List<Order> orders;
+			List<Order> orders = new ArrayList<>();
 
 			try {
 				String orderBy = "desc";
@@ -318,8 +319,14 @@ public class CommerceTools {
 					orderBy = "asc";
 				}
 
-				orders = _commerceService.getAllPlacedOrdersByAccountDto(
-					channelId, null, email, "createDate:" + orderBy);
+				for (AccountBrief accountBrief :
+					userAccount.getAccountBriefs()) {
+
+					orders.addAll(
+						_commerceService.getAllPlacedOrdersByAccountDto(
+							channelId, String.valueOf(accountBrief.getId()), null,
+							"createDate:" + orderBy));
+				}
 			}
 			catch (Exception exception) {
 				return Map.of(
@@ -707,11 +714,7 @@ public class CommerceTools {
 
 			Channel channel = channels.get(0);
 
-			Account account = _fetchAccount(userEmail);
-
-			if (account == null) {
-				account = _fetchAccount(channel, userEmail);
-			}
+			Account account = _fetchAccount(channel, userEmail);
 
 			if (account == null) {
 				return Map.of(
@@ -832,11 +835,7 @@ public class CommerceTools {
 
 			Channel channel = channels.get(0);
 
-			Account account = _fetchAccount(userEmail);
-
-			if (account == null) {
-				account = _fetchAccount(channel, userEmail);
-			}
+			Account account = _fetchAccount(channel, userEmail);
 
 			if (account == null) {
 				return Map.of(
@@ -998,10 +997,10 @@ public class CommerceTools {
 
 			Channel channel = channels.get(0);
 
-			Account account = _fetchAccount(userEmail);
+			Account account = _fetchAccount(channel, userEmail);
 
 			if (account == null) {
-				account = _fetchAccount(channel, userEmail);
+
 			}
 
 			if (account == null) {
@@ -1285,36 +1284,6 @@ public class CommerceTools {
 
 		if (!accounts.isEmpty()) {
 			return accounts.get(0);
-		}
-
-		return null;
-	}
-
-	private Account _fetchAccount(String email) {
-		UserAccount userAccount = _commerceService.getUserAccountByEmail(email);
-
-		if (userAccount != null) {
-			Account account = new Account();
-
-			account.setId(userAccount.getId());
-
-			String fullName = new StringBuilder(
-			).append(
-				userAccount.getFirstName()
-			).append(
-				" "
-			).append(
-				userAccount.getLastName()
-			).toString();
-
-			if (StringUtils.isEmpty(fullName)) {
-				account.setName(userAccount.getEmail());
-			}
-			else {
-				account.setName(fullName);
-			}
-
-			return account;
 		}
 
 		return null;

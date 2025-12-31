@@ -6,6 +6,7 @@
 package com.liferay.commerce.ai.chat.bot.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,6 +32,10 @@ public class UserAccount {
 
 	public Map<String, String> getAddress() {
 		return _address;
+	}
+
+	public List<AccountBrief> getAccountBriefs() {
+		return _accountBriefs;
 	}
 
 	public String getEmail() {
@@ -60,6 +65,10 @@ public class UserAccount {
 
 	public void setAddress(Map<String, String> address) {
 		_address = (address != null) ? new HashMap<>(address) : new HashMap<>();
+	}
+
+	public void setAccountBriefs(List<AccountBrief> accountBriefs) {
+		_accountBriefs = accountBriefs;
 	}
 
 	public void setEmail(String email) {
@@ -115,6 +124,7 @@ public class UserAccount {
 	}
 
 	private Map<String, String> _address = new HashMap<>();
+	private List<AccountBrief> _accountBriefs;
 	private String _email;
 	private String _firstName;
 	private String _id;
