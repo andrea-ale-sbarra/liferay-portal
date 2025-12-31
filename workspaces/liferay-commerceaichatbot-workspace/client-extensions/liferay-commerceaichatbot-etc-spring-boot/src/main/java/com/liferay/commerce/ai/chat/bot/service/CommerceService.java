@@ -46,10 +46,11 @@ public class CommerceService {
 		_httpClient = httpClient;
 	}
 
-	public List<Account> getAccounts(String channelId, String search) {
+	public List<Account> getAccounts(long channelId, String search) {
 		List<Account> accounts = new ArrayList<>();
 
-		JSONArray jsonArray = _getAccountsJSONArray(channelId, search);
+		JSONArray jsonArray = _getAccountsJSONArray(
+			String.valueOf(channelId), search);
 
 		if (jsonArray != null) {
 			for (int i = 0; i < jsonArray.length(); i++) {
@@ -65,7 +66,7 @@ public class CommerceService {
 	}
 
 	public List<Order> getAllPlacedOrdersByAccountDto(
-		String channelId, String accountId, String search, String sort) {
+		long channelId, long accountId, String search, String sort) {
 
 		List<Order> orders = new ArrayList<>();
 
@@ -112,23 +113,24 @@ public class CommerceService {
 		return channels;
 	}
 
-	public Order getOrder(String orderId) {
+	public Order getOrder(long orderId) {
 		JSONObject jsonObject = _getOrderJSONObject(orderId);
 
 		return _toOrder(jsonObject);
 	}
 
-	public Order getOrderByExternelReferenceCode(String externalReferenceCode) {
+	public Order getOrderByExternalReferenceCode(String externalReferenceCode) {
 		JSONObject jsonObject = _getOrderByExternalReferenceCodeJSONObject(
 			externalReferenceCode);
 
 		return _toOrder(jsonObject);
 	}
 
-	public List<Shipment> getOrderShipmentsDto(String orderId) {
+	public List<Shipment> getOrderShipmentsDto(long orderId) {
 		List<Shipment> shipments = new ArrayList<>();
 
-		JSONArray jsonArray = _getOrderShipmentsJSONArray(orderId);
+		JSONArray jsonArray = _getOrderShipmentsJSONArray(
+			String.valueOf(orderId));
 
 		if (jsonArray != null) {
 			for (int i = 0; i < jsonArray.length(); i++) {
@@ -143,10 +145,11 @@ public class CommerceService {
 		return shipments;
 	}
 
-	public List<OrderItem> getPlacedOrderItems(String orderId) {
+	public List<OrderItem> getPlacedOrderItems(long orderId) {
 		List<OrderItem> orderItems = new ArrayList<>();
 
-		JSONArray jsonArray = _getPlacedOrderItemsJSONArray(orderId);
+		JSONArray jsonArray = _getPlacedOrderItemsJSONArray(
+			String.valueOf(orderId));
 
 		if (jsonArray != null) {
 			for (int i = 0; i < jsonArray.length(); i++) {
@@ -162,11 +165,12 @@ public class CommerceService {
 	}
 
 	public PageResult<Order> getPlacedOrdersByAccount(
-		String channelId, String accountId, Integer page, Integer pageSize,
+		long channelId, long accountId, Integer page, Integer pageSize,
 		String search, String sort, String filter) {
 
 		JSONObject ordersJSONObject = _getPlacedOrdersByAccountJSONObject(
-			channelId, accountId, page, pageSize, search, sort, filter);
+			String.valueOf(channelId), String.valueOf(accountId), page,
+			pageSize, search, sort, filter);
 
 		PageResult<Order> pageResult = new PageResult<>();
 
@@ -193,10 +197,11 @@ public class CommerceService {
 	}
 
 	public PageResult<Product> getProductsByChannelDto(
-		String channelId, String accountId, Integer page, Integer pageSize) {
+		long channelId, long accountId, Integer page, Integer pageSize) {
 
 		JSONObject productsJSONObject = _getProductsByChannelJSONObject(
-			channelId, accountId, page, pageSize);
+			String.valueOf(channelId), String.valueOf(accountId), page,
+			pageSize);
 		PageResult<Product> pageResult = new PageResult<>();
 
 		if (productsJSONObject == null) {
@@ -313,7 +318,7 @@ public class CommerceService {
 		return null;
 	}
 
-	private JSONObject _getOrderJSONObject(String orderId) {
+	private JSONObject _getOrderJSONObject(long orderId) {
 		try {
 			return _httpClient.get(
 				"/o/headless-commerce-delivery-order/v1.0/placed-orders/" +
@@ -547,7 +552,7 @@ public class CommerceService {
 
 		Account account = new Account();
 
-		account.setId(String.valueOf(jsonObject.opt("id")));
+		account.setId(jsonObject.optLong("id"));
 		account.setName(jsonObject.optString("name", ""));
 		account.setType(jsonObject.optString("type", ""));
 		account.setStatus(jsonObject.optString("status", ""));
@@ -562,7 +567,7 @@ public class CommerceService {
 
 		Channel channel = new Channel();
 
-		channel.setId(String.valueOf(jsonObject.opt("id")));
+		channel.setId(jsonObject.optLong("id"));
 		channel.setName(jsonObject.optString("name", ""));
 		channel.setType(jsonObject.optString("type", ""));
 		channel.setActive(
@@ -578,7 +583,7 @@ public class CommerceService {
 
 		Order order = new Order();
 
-		order.setId(String.valueOf(jsonObject.opt("id")));
+		order.setId(jsonObject.optLong("id"));
 		order.setOrderNumber(jsonObject.optString("orderNumber", ""));
 		order.setAccountId(String.valueOf(jsonObject.opt("accountId")));
 		order.setAccountName(jsonObject.optString("account", ""));
@@ -657,7 +662,7 @@ public class CommerceService {
 
 		OrderItem orderItem = new OrderItem();
 
-		orderItem.setId(String.valueOf(jsonObject.opt("id")));
+		orderItem.setId(jsonObject.optLong("id"));
 		orderItem.setName(jsonObject.optString("name", ""));
 		orderItem.setSku(jsonObject.optString("sku", ""));
 
@@ -688,7 +693,7 @@ public class CommerceService {
 
 		Product product = new Product();
 
-		product.setId(String.valueOf(jsonObject.opt("id")));
+		product.setId(jsonObject.optLong("id"));
 		product.setName(jsonObject.optString("name", ""));
 		product.setDescription(jsonObject.optString("description", ""));
 		product.setExternalReferenceCode(
@@ -704,7 +709,7 @@ public class CommerceService {
 
 		Shipment shipment = new Shipment();
 
-		shipment.setId(String.valueOf(jsonObject.opt("id")));
+		shipment.setId(jsonObject.optLong("id"));
 		shipment.setCarrier(jsonObject.optString("carrier", ""));
 		shipment.setTrackingNumber(jsonObject.optString("trackingNumber", ""));
 		shipment.setShipmentStatus(
@@ -736,7 +741,7 @@ public class CommerceService {
 
 		UserAccount userAccount = new UserAccount();
 
-		userAccount.setId(String.valueOf(jsonObject.opt("id")));
+		userAccount.setId(jsonObject.optLong("id"));
 		userAccount.setEmail(jsonObject.optString("emailAddress", null));
 		userAccount.setFirstName(jsonObject.optString("givenName", ""));
 		userAccount.setLastName(jsonObject.optString("familyName", ""));
@@ -812,8 +817,7 @@ public class CommerceService {
 							roleBrief.setExternalReferenceCode(
 								roleBriefJSONObject.optString(
 									"externalReferenceCode", null));
-							roleBrief.setId(
-								roleBriefJSONObject.optLong("id"));
+							roleBrief.setId(roleBriefJSONObject.optLong("id"));
 							roleBrief.setName(
 								roleBriefJSONObject.optString("name", ""));
 

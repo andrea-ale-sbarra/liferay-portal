@@ -8,7 +8,6 @@ package com.liferay.commerce.ai.chat.bot.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author Ivica Cardic
@@ -27,15 +26,19 @@ public class UserAccount {
 
 		UserAccount userAccount = (UserAccount)object;
 
-		return Objects.equals(_id, userAccount.getId());
-	}
+		if (_id != userAccount.getId()) {
+			return false;
+		}
 
-	public Map<String, String> getAddress() {
-		return _address;
+		return true;
 	}
 
 	public List<AccountBrief> getAccountBriefs() {
 		return _accountBriefs;
+	}
+
+	public Map<String, String> getAddress() {
+		return _address;
 	}
 
 	public String getEmail() {
@@ -46,7 +49,7 @@ public class UserAccount {
 		return _firstName;
 	}
 
-	public String getId() {
+	public long getId() {
 		return _id;
 	}
 
@@ -60,15 +63,15 @@ public class UserAccount {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(_id);
-	}
-
-	public void setAddress(Map<String, String> address) {
-		_address = (address != null) ? new HashMap<>(address) : new HashMap<>();
+		return (int)(_id ^ (_id >>> 32));
 	}
 
 	public void setAccountBriefs(List<AccountBrief> accountBriefs) {
 		_accountBriefs = accountBriefs;
+	}
+
+	public void setAddress(Map<String, String> address) {
+		_address = (address != null) ? new HashMap<>(address) : new HashMap<>();
 	}
 
 	public void setEmail(String email) {
@@ -79,7 +82,7 @@ public class UserAccount {
 		_firstName = firstName;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		_id = id;
 	}
 
@@ -95,27 +98,27 @@ public class UserAccount {
 	public String toString() {
 		return new StringBuilder(
 		).append(
-			"UserAccount{id='"
+			"UserAccount{id="
 		).append(
 			_id
 		).append(
-			"\', email='"
+			", email='"
 		).append(
 			_email
 		).append(
-			"\', firstName='"
+			"', firstName='"
 		).append(
 			_firstName
 		).append(
-			"\', lastName='"
+			"', lastName='"
 		).append(
 			_lastName
 		).append(
-			"\', phone='"
+			"', phone='"
 		).append(
 			_phone
 		).append(
-			"\', address="
+			"', address="
 		).append(
 			_address
 		).append(
@@ -123,11 +126,11 @@ public class UserAccount {
 		).toString();
 	}
 
-	private Map<String, String> _address = new HashMap<>();
 	private List<AccountBrief> _accountBriefs;
+	private Map<String, String> _address = new HashMap<>();
 	private String _email;
 	private String _firstName;
-	private String _id;
+	private long _id;
 	private String _lastName;
 	private String _phone;
 

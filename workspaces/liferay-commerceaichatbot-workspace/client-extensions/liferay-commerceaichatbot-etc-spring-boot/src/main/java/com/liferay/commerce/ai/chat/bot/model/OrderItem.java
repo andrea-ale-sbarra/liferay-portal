@@ -5,8 +5,6 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
-import java.util.Objects;
-
 /**
  * @author Ivica Cardic
  */
@@ -16,7 +14,7 @@ public class OrderItem {
 	}
 
 	public OrderItem(
-		String id, String name, String sku, int quantity, String unitPrice,
+		long id, String name, String sku, int quantity, String unitPrice,
 		String totalPrice, String status) {
 
 		_id = id;
@@ -40,10 +38,14 @@ public class OrderItem {
 
 		OrderItem orderItem = (OrderItem)object;
 
-		return Objects.equals(_id, orderItem.getId());
+		if (_id != orderItem.getId()) {
+			return false;
+		}
+
+		return true;
 	}
 
-	public String getId() {
+	public long getId() {
 		return _id;
 	}
 
@@ -73,10 +75,10 @@ public class OrderItem {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(_id);
+		return (int)(_id ^ (_id >>> 32));
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		_id = id;
 	}
 
@@ -108,19 +110,19 @@ public class OrderItem {
 	public String toString() {
 		return new StringBuilder(
 		).append(
-			"OrderItem{id='"
+			"OrderItem{id="
 		).append(
 			_id
 		).append(
-			"\', name='"
+			", name='"
 		).append(
 			_name
 		).append(
-			"\', sku='"
+			"', sku='"
 		).append(
 			_sku
 		).append(
-			"\', quantity="
+			"', quantity="
 		).append(
 			_quantity
 		).append(
@@ -136,11 +138,11 @@ public class OrderItem {
 		).append(
 			_status
 		).append(
-			"\'}"
+			"'}"
 		).toString();
 	}
 
-	private String _id;
+	private long _id;
 	private String _name;
 	private int _quantity;
 	private String _sku;

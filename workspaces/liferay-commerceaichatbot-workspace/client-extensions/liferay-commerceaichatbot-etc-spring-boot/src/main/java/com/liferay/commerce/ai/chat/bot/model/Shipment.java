@@ -6,7 +6,6 @@
 package com.liferay.commerce.ai.chat.bot.model;
 
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * @author Ivica Cardic
@@ -17,8 +16,7 @@ public class Shipment {
 	}
 
 	public Shipment(
-		String id, String carrier, String trackingNumber,
-		String shipmentStatus) {
+		long id, String carrier, String trackingNumber, String shipmentStatus) {
 
 		_id = id;
 		_carrier = carrier;
@@ -38,7 +36,11 @@ public class Shipment {
 
 		Shipment shipment = (Shipment)object;
 
-		return Objects.equals(_id, shipment.getId());
+		if (_id != shipment.getId()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public String getCarrier() {
@@ -49,7 +51,7 @@ public class Shipment {
 		return _expectedDate;
 	}
 
-	public String getId() {
+	public long getId() {
 		return _id;
 	}
 
@@ -75,7 +77,7 @@ public class Shipment {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(_id);
+		return (int)(_id ^ (_id >>> 32));
 	}
 
 	public void setCarrier(String carrier) {
@@ -86,7 +88,7 @@ public class Shipment {
 		_expectedDate = expectedDate;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		_id = id;
 	}
 
@@ -114,23 +116,23 @@ public class Shipment {
 	public String toString() {
 		return new StringBuilder(
 		).append(
-			"Shipment{id='"
+			"Shipment{id="
 		).append(
 			_id
 		).append(
-			"\', carrier='"
+			", carrier='"
 		).append(
 			_carrier
 		).append(
-			"\', trackingNumber='"
+			"', trackingNumber='"
 		).append(
 			_trackingNumber
 		).append(
-			"\', shipmentStatus='"
+			"', shipmentStatus='"
 		).append(
 			_shipmentStatus
 		).append(
-			"\'}"
+			"'}"
 		).toString();
 	}
 
@@ -150,7 +152,7 @@ public class Shipment {
 
 	private String _carrier;
 	private Date _expectedDate;
-	private String _id;
+	private long _id;
 	private String _oneLineAddress;
 	private String _shipmentStatus;
 	private Date _shippingDate;

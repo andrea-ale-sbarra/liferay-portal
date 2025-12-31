@@ -14,7 +14,7 @@ public class Summary {
 	}
 
 	public Summary(
-		String error, String id, String name, int orderCount, String type) {
+		String error, long id, String name, int orderCount, String type) {
 
 		_error = error;
 		_id = id;
@@ -27,7 +27,7 @@ public class Summary {
 		return _error;
 	}
 
-	public String getId() {
+	public long getId() {
 		return _id;
 	}
 
@@ -47,7 +47,7 @@ public class Summary {
 		_error = error;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		_id = id;
 	}
 
@@ -64,7 +64,7 @@ public class Summary {
 	}
 
 	private String _error;
-	private String _id;
+	private long _id;
 	private String _name;
 	private int _orderCount;
 	private String _type;

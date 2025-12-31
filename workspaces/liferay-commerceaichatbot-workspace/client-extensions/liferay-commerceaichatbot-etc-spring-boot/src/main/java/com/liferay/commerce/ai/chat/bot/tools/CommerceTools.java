@@ -48,8 +48,6 @@ import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.jetbrains.annotations.NotNull;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -109,7 +107,7 @@ public class CommerceTools {
 
 			Channel channel = channels.get(0);
 
-			String channelId = channel.getId();
+			long channelId = channel.getId();
 
 			List<Account> accounts = _commerceService.getAccounts(
 				channelId, "");
@@ -226,7 +224,7 @@ public class CommerceTools {
 				return Map.of("error", _getAccountNotFoundMessage(accountName));
 			}
 
-			String channelId = channel.getId();
+			long channelId = channel.getId();
 
 			List<Order> orders;
 
@@ -308,7 +306,7 @@ public class CommerceTools {
 
 			Channel channel = channels.get(0);
 
-			String channelId = channel.getId();
+			long channelId = channel.getId();
 
 			List<Order> orders = new ArrayList<>();
 
@@ -320,11 +318,11 @@ public class CommerceTools {
 				}
 
 				for (AccountBrief accountBrief :
-					userAccount.getAccountBriefs()) {
+						userAccount.getAccountBriefs()) {
 
 					orders.addAll(
 						_commerceService.getAllPlacedOrdersByAccountDto(
-							channelId, String.valueOf(accountBrief.getId()), null,
+							channelId, accountBrief.getId(), null,
 							"createDate:" + orderBy));
 				}
 			}
@@ -566,7 +564,7 @@ public class CommerceTools {
 		try {
 			List<Channel> channels = _commerceService.getChannels();
 
-			Map<String, List<Account>> channelAccounts = new HashMap<>();
+			Map<Long, List<Account>> channelAccounts = new HashMap<>();
 
 			for (Channel channel : channels) {
 				channelAccounts.put(
@@ -721,7 +719,7 @@ public class CommerceTools {
 					"error", _getUserAccountNotFoundMessage(userEmail));
 			}
 
-			String channelId = channel.getId();
+			long channelId = channel.getId();
 
 			List<Order> orders = _getOrders(
 				account, channelId, "orderDate:desc");
@@ -735,8 +733,7 @@ public class CommerceTools {
 
 			for (Order order : orders) {
 				try {
-					String orderId =
-						(order.getId() != null) ? order.getId() : "N/A";
+					long orderId = order.getId();
 
 					List<OrderItem> orderItems =
 						_commerceService.getPlacedOrderItems(orderId);
@@ -842,7 +839,7 @@ public class CommerceTools {
 					"error", "User account not found for email: " + userEmail);
 			}
 
-			String channelId = channel.getId();
+			long channelId = channel.getId();
 
 			List<Order> orders = new ArrayList<>();
 
@@ -892,11 +889,7 @@ public class CommerceTools {
 			}
 
 			for (Order order : orders) {
-				String orderId = order.getId();
-
-				if (StringUtils.isEmpty(orderId)) {
-					continue;
-				}
+				long orderId = order.getId();
 
 				for (Shipment shipment :
 						_commerceService.getOrderShipmentsDto(orderId)) {
@@ -1000,15 +993,11 @@ public class CommerceTools {
 			Account account = _fetchAccount(channel, userEmail);
 
 			if (account == null) {
-
-			}
-
-			if (account == null) {
 				return Map.of(
 					"error", "User account not found for email: " + userEmail);
 			}
 
-			String channelId = channel.getId();
+			long channelId = channel.getId();
 
 			List<Order> orders = _getOrders(
 				account, channelId, "createDate:desc");
@@ -1022,10 +1011,7 @@ public class CommerceTools {
 			List<Order> filteredOrders = new ArrayList<>();
 
 			for (Order order : orders) {
-				String orderId = order.getId();
-
-				if (StringUtils.isEmpty(orderId) ||
-					!Strings.CI.equals(
+				if (!Strings.CI.equals(
 						StringUtils.trim(order.getStatusLabel()),
 						statusLabel)) {
 
@@ -1783,17 +1769,21 @@ public class CommerceTools {
 	}
 
 	private Order _getOrder(String identifier) {
-		Order order = _commerceService.getOrder(identifier);
+		Order order = _commerceService.getOrderByExternalReferenceCode(
+			identifier);
 
 		if (order == null) {
-			order = _commerceService.getOrderByExternelReferenceCode(
-				identifier);
+			try {
+				order = _commerceService.getOrder(Long.parseLong(identifier));
+			}
+			catch (NumberFormatException exception) {
+				throw new IllegalArgumentException(exception);
+			}
 		}
 
 		return order;
 	}
 
-	@NotNull
 	private StringBuilder _getOrderItemsErrorMessage(
 		Exception exception, String orderIdentifier) {
 
@@ -1826,7 +1816,7 @@ public class CommerceTools {
 	}
 
 	private List<Order> _getOrders(
-		Account account, String channelId, String sort) {
+		Account account, long channelId, String sort) {
 
 		int page = 1;
 		int pageSize = 50;
@@ -1869,7 +1859,7 @@ public class CommerceTools {
 	}
 
 	private Map<String, Object> _getOrdersByDateRangeMap(
-		String accountId, String channelId, String endDate, String search,
+		Long accountId, long channelId, String endDate, String search,
 		String startDate) {
 
 		OffsetDateTime startOffsetDateTime = null;
@@ -1908,10 +1898,13 @@ public class CommerceTools {
 				dateTimeFormatter.format(endOffsetDateTime)
 			).toString();
 
-			PageResult<Order> pageResult =
-				_commerceService.getPlacedOrdersByAccount(
+			PageResult<Order> pageResult = null;
+
+			if (accountId != null) {
+				pageResult = _commerceService.getPlacedOrdersByAccount(
 					channelId, accountId, currentPage, pageSize, search,
 					"orderDate:desc", filter);
+			}
 
 			if (pageResult == null) {
 				break;

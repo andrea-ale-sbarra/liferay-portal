@@ -8,7 +8,6 @@ package com.liferay.commerce.ai.chat.bot.model;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author Ivica Cardic
@@ -27,7 +26,11 @@ public class Order {
 
 		Order order = (Order)object;
 
-		return Objects.equals(_id, order.getId());
+		if (_id != order.getId()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public String getAccountId() {
@@ -50,7 +53,7 @@ public class Order {
 		return _externalReferenceCode;
 	}
 
-	public String getId() {
+	public long getId() {
 		return _id;
 	}
 
@@ -108,7 +111,7 @@ public class Order {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(_id);
+		return (int)(_id ^ (_id >>> 32));
 	}
 
 	public void setAccountId(String accountId) {
@@ -133,7 +136,7 @@ public class Order {
 		_externalReferenceCode = externalReferenceCode;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		_id = id;
 	}
 
@@ -197,23 +200,23 @@ public class Order {
 	public String toString() {
 		return new StringBuilder(
 		).append(
-			"Order{id='"
+			"Order{id="
 		).append(
 			_id
 		).append(
-			"\', orderNumber='"
+			", orderNumber='"
 		).append(
 			_orderNumber
 		).append(
-			"\', customerId='"
+			"', customerId='"
 		).append(
 			_accountId
 		).append(
-			"\', customerName='"
+			"', customerName='"
 		).append(
 			_accountName
 		).append(
-			"\', orderDate="
+			"', orderDate="
 		).append(
 			_orderDate
 		).append(
@@ -221,7 +224,7 @@ public class Order {
 		).append(
 			_status
 		).append(
-			"\', total="
+			"', total="
 		).append(
 			_total
 		).append(
@@ -242,7 +245,7 @@ public class Order {
 	private Map<String, String> _billingAddress = new HashMap<>();
 	private Date _createDate;
 	private String _externalReferenceCode;
-	private String _id;
+	private long _id;
 	private int _itemsQuantity;
 	private Date _orderDate;
 	private String _orderNumber;

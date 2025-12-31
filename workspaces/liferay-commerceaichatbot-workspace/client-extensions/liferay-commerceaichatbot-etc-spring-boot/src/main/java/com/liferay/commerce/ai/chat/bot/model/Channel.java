@@ -5,8 +5,6 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
-import java.util.Objects;
-
 /**
  * @author Ivica Cardic
  */
@@ -15,7 +13,7 @@ public class Channel {
 	public Channel() {
 	}
 
-	public Channel(String id, String name, String type, Boolean active) {
+	public Channel(long id, String name, String type, Boolean active) {
 		_id = id;
 		_name = name;
 		_type = type;
@@ -34,14 +32,18 @@ public class Channel {
 
 		Channel channel = (Channel)object;
 
-		return Objects.equals(_id, channel.getId());
+		if (_id != channel.getId()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public Boolean getActive() {
 		return _active;
 	}
 
-	public String getId() {
+	public long getId() {
 		return _id;
 	}
 
@@ -55,14 +57,14 @@ public class Channel {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(_id);
+		return (int)(_id ^ (_id >>> 32));
 	}
 
 	public void setActive(Boolean active) {
 		_active = active;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		_id = id;
 	}
 
@@ -78,19 +80,19 @@ public class Channel {
 	public String toString() {
 		return new StringBuilder(
 		).append(
-			"Channel{id='"
+			"Channel{id="
 		).append(
 			_id
 		).append(
-			"\', name='"
+			", name='"
 		).append(
 			_name
 		).append(
-			"\', type='"
+			"', type='"
 		).append(
 			_type
 		).append(
-			"\', active="
+			"', active="
 		).append(
 			_active
 		).append(
@@ -99,7 +101,7 @@ public class Channel {
 	}
 
 	private Boolean _active;
-	private String _id;
+	private long _id;
 	private String _name;
 	private String _type;
 

@@ -24,7 +24,7 @@ public class OrderShipmentDetails {
 		return _expectedDate;
 	}
 
-	public String getId() {
+	public long getId() {
 		return _id;
 	}
 
@@ -60,7 +60,7 @@ public class OrderShipmentDetails {
 		_expectedDate = expectedDate;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		_id = id;
 	}
 
@@ -87,7 +87,7 @@ public class OrderShipmentDetails {
 	private String _carrier;
 	private Date _createDate;
 	private Date _expectedDate;
-	private String _id;
+	private long _id;
 	private String _oneLineAddress;
 	private String _shipmentStatus;
 	private Date _shippingDate;

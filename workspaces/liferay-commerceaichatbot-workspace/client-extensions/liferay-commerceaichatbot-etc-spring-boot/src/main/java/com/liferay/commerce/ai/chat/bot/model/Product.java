@@ -5,8 +5,6 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
-import java.util.Objects;
-
 /**
  * @author Ivica Cardic
  */
@@ -16,7 +14,7 @@ public class Product {
 	}
 
 	public Product(
-		String id, String name, String description,
+		long id, String name, String description,
 		String externalReferenceCode) {
 
 		_id = id;
@@ -37,7 +35,11 @@ public class Product {
 
 		Product product = (Product)object;
 
-		return Objects.equals(_id, product.getId());
+		if (_id != product.getId()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public String getDescription() {
@@ -48,7 +50,7 @@ public class Product {
 		return _externalReferenceCode;
 	}
 
-	public String getId() {
+	public long getId() {
 		return _id;
 	}
 
@@ -58,7 +60,7 @@ public class Product {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(_id);
+		return (int)(_id ^ (_id >>> 32));
 	}
 
 	public void setDescription(String description) {
@@ -69,7 +71,7 @@ public class Product {
 		_externalReferenceCode = externalReferenceCode;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		_id = id;
 	}
 
@@ -81,29 +83,29 @@ public class Product {
 	public String toString() {
 		return new StringBuilder(
 		).append(
-			"Product{id='"
+			"Product{id="
 		).append(
 			_id
 		).append(
-			"\', name='"
+			", name='"
 		).append(
 			_name
 		).append(
-			"\', description='"
+			"', description='"
 		).append(
 			_description
 		).append(
-			"\', externalReferenceCode='"
+			"', externalReferenceCode='"
 		).append(
 			_externalReferenceCode
 		).append(
-			"\'}"
+			"'}"
 		).toString();
 	}
 
 	private String _description;
 	private String _externalReferenceCode;
-	private String _id;
+	private long _id;
 	private String _name;
 
 }

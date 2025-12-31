@@ -5,8 +5,6 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
-import java.util.Objects;
-
 /**
  * @author Ivica Cardic
  */
@@ -15,7 +13,7 @@ public class Account {
 	public Account() {
 	}
 
-	public Account(String id, String name, String type, String status) {
+	public Account(long id, String name, String type, String status) {
 		_id = id;
 		_name = name;
 		_type = type;
@@ -34,10 +32,14 @@ public class Account {
 
 		Account account = (Account)object;
 
-		return Objects.equals(_id, account.getId());
+		if (_id != account.getId()) {
+			return false;
+		}
+
+		return true;
 	}
 
-	public String getId() {
+	public long getId() {
 		return _id;
 	}
 
@@ -55,10 +57,10 @@ public class Account {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(_id);
+		return (int)(_id ^ (_id >>> 32));
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		_id = id;
 	}
 
@@ -78,27 +80,27 @@ public class Account {
 	public String toString() {
 		return new StringBuilder(
 		).append(
-			"Account{id='"
+			"Account{id="
 		).append(
 			_id
 		).append(
-			"\', name='"
+			", name='"
 		).append(
 			_name
 		).append(
-			"\', type='"
+			"', type='"
 		).append(
 			_type
 		).append(
-			"\', status='"
+			"', status='"
 		).append(
 			_status
 		).append(
-			"\'}"
+			"'}"
 		).toString();
 	}
 
-	private String _id;
+	private long _id;
 	private String _name;
 	private String _status;
 	private String _type;
