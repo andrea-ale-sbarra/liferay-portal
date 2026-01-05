@@ -60,6 +60,7 @@ export default function Setting() {
 					{title: 'Model', value: setting.model.name},
 					{title: 'Model Image', value: setting.imageModel.name},
 					{title: 'Description', value: setting.description},
+                    {title: 'FAQ', value: setting.faq},
 				]}
 				orientation="HORIZONTAL"
 			/>

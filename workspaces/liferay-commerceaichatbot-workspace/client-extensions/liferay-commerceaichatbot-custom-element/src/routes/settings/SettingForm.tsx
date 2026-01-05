@@ -34,6 +34,7 @@ export default function SettingsBody() {
 			? {
 					active: setting.active,
 					apiKey: setting.apiKey,
+                    faq: setting.faq,
 					description: setting.description,
 					id: setting.id,
 					imageModel: setting.imageModel.key,
@@ -44,6 +45,7 @@ export default function SettingsBody() {
 					active: true,
 					apiKey: '',
 					description: '',
+                    faq: '',
 					imageModel: '',
 					model: '',
 					provider: '',
@@ -167,6 +169,15 @@ export default function SettingsBody() {
 						{...form.register('description')}
 					/>
 				</ClayForm.Group>
+
+                <ClayForm.Group className="form-group-sm">
+                    <label htmlFor="basicInput">FAQ</label>
+                    <textarea
+                        className="form-control"
+                        placeholder="FAQ"
+                        {...form.register('faq')}
+                    />
+                </ClayForm.Group>
 
 				<ClayCheckbox
 					aria-label="Active Setting"

@@ -5,6 +5,7 @@
 
 package com.liferay.commerce.ai.chat.bot.tools;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,12 +18,12 @@ import com.liferay.commerce.ai.chat.bot.model.Order;
 import com.liferay.commerce.ai.chat.bot.model.OrderItem;
 import com.liferay.commerce.ai.chat.bot.model.OrderShipmentDetails;
 import com.liferay.commerce.ai.chat.bot.model.PageResult;
+import com.liferay.commerce.ai.chat.bot.model.Settings;
 import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.Summary;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 import com.liferay.commerce.ai.chat.bot.service.CommerceService;
-
-import java.io.InputStream;
+import com.liferay.commerce.ai.chat.bot.service.SettingsService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -48,8 +49,10 @@ import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 /**
@@ -59,10 +62,12 @@ import org.springframework.stereotype.Service;
 public class CommerceTools {
 
 	public CommerceTools(
-		CommerceService commerceService, ObjectMapper objectMapper) {
+		CommerceService commerceService, ObjectMapper objectMapper,
+		SettingsService settingsService) {
 
 		_commerceService = commerceService;
 		_objectMapper = objectMapper;
+		_settingsService = settingsService;
 	}
 
 	@Annotations.Schema(
@@ -1383,14 +1388,22 @@ public class CommerceTools {
 	}
 
 	private Map<String, Map<String, String>> _getFaqData() {
-		try (InputStream inputStream = _faqResource.getInputStream()) {
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+
+		Authentication authentication = securityContext.getAuthentication();
+
+		Jwt jwt = (Jwt)authentication.getPrincipal();
+
+		Settings settings = _settingsService.getActiveSettings(jwt);
+
+		try {
 			return _objectMapper.readValue(
-				inputStream,
+				settings.faq,
 				new TypeReference<>() {
 				});
 		}
-		catch (Exception exception) {
-			_log.error("Unable to read FAQ data", exception);
+		catch (JsonProcessingException jsonProcessingException) {
+			_log.error("Unable to read FAQ data", jsonProcessingException);
 
 			return Map.of();
 		}
@@ -2176,10 +2189,7 @@ public class CommerceTools {
 
 	private final CommerceService _commerceService;
 	private Map<String, Map<String, String>> _faqData;
-
-	@Value("classpath:faq.json")
-	private Resource _faqResource;
-
 	private final ObjectMapper _objectMapper;
+	private final SettingsService _settingsService;
 
 }

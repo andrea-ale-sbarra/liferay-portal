@@ -14,6 +14,7 @@ public class Settings {
 
 	public Settings(JSONObject jsonObject) {
 		apiKey = jsonObject.getString("apiKey");
+		faq = jsonObject.getString("faq");
 		modelName = jsonObject.getJSONObject(
 			"model"
 		).getString(
@@ -27,6 +28,7 @@ public class Settings {
 	}
 
 	public String apiKey;
+	public String faq;
 	public String modelName;
 	public String providerName;
 
