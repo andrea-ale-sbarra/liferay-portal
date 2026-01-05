@@ -153,17 +153,21 @@ public class Shipment {
 	}
 
 	private String _carrier;
+
 	@JsonFormat(
-		shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ"
+		pattern = "yyyy-MM-dd'T'HH:mm:ssZ", shape = JsonFormat.Shape.STRING
 	)
 	private Date _expectedDate;
+
 	private long _id;
 	private String _oneLineAddress;
 	private String _shipmentStatus;
+
 	@JsonFormat(
-		shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ"
+		pattern = "yyyy-MM-dd'T'HH:mm:ssZ", shape = JsonFormat.Shape.STRING
 	)
 	private Date _shippingDate;
+
 	private Status _status;
 	private String _trackingNumber;
 

@@ -245,17 +245,21 @@ public class Order {
 	private String _accountId;
 	private String _accountName;
 	private Map<String, String> _billingAddress = new HashMap<>();
+
 	@JsonFormat(
-		shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ"
+		pattern = "yyyy-MM-dd'T'HH:mm:ssZ", shape = JsonFormat.Shape.STRING
 	)
 	private Date _createDate;
+
 	private String _externalReferenceCode;
 	private long _id;
 	private int _itemsQuantity;
+
 	@JsonFormat(
-		shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ"
+		pattern = "yyyy-MM-dd'T'HH:mm:ssZ", shape = JsonFormat.Shape.STRING
 	)
 	private Date _orderDate;
+
 	private String _orderNumber;
 	private final Map<String, String> _shippingAddress = new HashMap<>();
 	private String _shippingDiscountValueFormatted;

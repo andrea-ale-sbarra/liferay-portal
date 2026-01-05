@@ -1776,8 +1776,8 @@ public class CommerceTools {
 			try {
 				order = _commerceService.getOrder(Long.parseLong(identifier));
 			}
-			catch (NumberFormatException exception) {
-				throw new IllegalArgumentException(exception);
+			catch (NumberFormatException numberFormatException) {
+				throw new IllegalArgumentException(numberFormatException);
 			}
 		}
 
