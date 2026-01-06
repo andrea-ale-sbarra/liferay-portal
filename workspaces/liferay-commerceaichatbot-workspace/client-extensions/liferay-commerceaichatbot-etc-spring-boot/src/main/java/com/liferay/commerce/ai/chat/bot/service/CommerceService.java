@@ -66,7 +66,8 @@ public class CommerceService {
 	}
 
 	public List<Order> getAllPlacedOrdersByAccountDto(
-		long channelId, long accountId, String search, String sort) {
+		long channelId, long accountId, String search, String sort,
+		String filter) {
 
 		List<Order> orders = new ArrayList<>();
 
@@ -75,7 +76,7 @@ public class CommerceService {
 
 		while (true) {
 			PageResult<Order> pageResult = getPlacedOrdersByAccount(
-				channelId, accountId, page, pageSize, search, sort, null);
+				channelId, accountId, page, pageSize, search, sort, filter);
 
 			List<Order> pageResultOrders = pageResult.getItems();
 

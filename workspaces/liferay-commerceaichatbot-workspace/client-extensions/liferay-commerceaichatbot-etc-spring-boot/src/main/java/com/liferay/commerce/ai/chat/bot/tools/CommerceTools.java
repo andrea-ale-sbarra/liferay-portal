@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.google.adk.tools.Annotations;
 
+import com.liferay.commerce.ai.chat.bot.constants.CommerceOrderConstants;
 import com.liferay.commerce.ai.chat.bot.model.Account;
 import com.liferay.commerce.ai.chat.bot.model.AccountBrief;
 import com.liferay.commerce.ai.chat.bot.model.Channel;
@@ -35,7 +36,6 @@ import java.time.format.DateTimeFormatter;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,7 +138,7 @@ public class CommerceTools {
 				try {
 					List<Order> orders =
 						_commerceService.getAllPlacedOrdersByAccountDto(
-							channelId, account.getId(), null, "");
+							channelId, account.getId(), null, "", null);
 
 					totalOrders += orders.size();
 
@@ -241,7 +241,8 @@ public class CommerceTools {
 				}
 
 				orders = _commerceService.getAllPlacedOrdersByAccountDto(
-					channelId, account.getId(), null, "createDate:" + orderBy);
+					channelId, account.getId(), null, "createDate:" + orderBy,
+					null);
 			}
 			catch (Exception exception) {
 				return Map.of(
@@ -328,7 +329,7 @@ public class CommerceTools {
 					orders.addAll(
 						_commerceService.getAllPlacedOrdersByAccountDto(
 							channelId, accountBrief.getId(), null,
-							"createDate:" + orderBy));
+							"createDate:" + orderBy, null));
 				}
 			}
 			catch (Exception exception) {
@@ -727,7 +728,7 @@ public class CommerceTools {
 			long channelId = channel.getId();
 
 			List<Order> orders = _getOrders(
-				account, channelId, "orderDate:desc");
+				account, channelId, null, "orderDate:desc", null);
 
 			if (orders.isEmpty()) {
 				return Map.of("error", "No orders found for " + userEmail);
@@ -971,72 +972,65 @@ public class CommerceTools {
 	)
 	public Map<String, Object> searchOrdersByStatusTool(
 		@Annotations.Schema(
-			description = "the status of the order (e.g., Pending, Shipped, Delivered)",
+			description = "this can be an email or an account name",
+			name = "identifier"
+		)
+		String identifier,
+		@Annotations.Schema(
+			description = "The order status must be exactly one of: [awaiting pickup, cancelled, completed, declined, disputed, in progress, on hold, open, partially refunded, partially shipped, pending, processing, quote processed, quote requested, refunded, shipped, subscription]",
 			name = "orderStatus"
 		)
-		String orderStatus,
-		@Annotations.Schema(
-			description = "the email address of the customer",
-			name = "userEmail"
-		)
-		String userEmail) {
+		String orderStatus) {
 
 		try {
-			if (StringUtils.isEmpty(userEmail)) {
-				return Map.of(
-					"error", _getOrdersByStatusUserEmailRequiredMessage());
-			}
-
 			List<Channel> channels = _commerceService.getChannels();
 
 			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
 
+			List<Order> orders = new ArrayList<>();
+
 			Channel channel = channels.get(0);
-
-			Account account = _fetchAccount(channel, userEmail);
-
-			if (account == null) {
-				return Map.of(
-					"error", "User account not found for email: " + userEmail);
-			}
 
 			long channelId = channel.getId();
 
-			List<Order> orders = _getOrders(
-				account, channelId, "createDate:desc");
+			Map<String, Integer> statusMap =
+				CommerceOrderConstants.getOrderStatusMap();
+
+			Account account = _fetchAccount(channel, identifier);
+
+			if (account != null) {
+				orders = _commerceService.getAllPlacedOrdersByAccountDto(
+					channelId, account.getId(), identifier, "createDate:desc",
+					"(orderStatus/any(x:(x eq " + statusMap.get(orderStatus) +
+						")))");
+			}
+			else {
+				UserAccount userAccount =
+					_commerceService.getUserAccountByEmail(identifier);
+
+				if (userAccount == null) {
+					return Map.of("orders", orders);
+				}
+
+				for (AccountBrief accountBrief :
+						userAccount.getAccountBriefs()) {
+
+					orders.addAll(
+						_commerceService.getAllPlacedOrdersByAccountDto(
+							channelId, accountBrief.getId(), identifier,
+							"createDate:desc",
+							"(orderStatus/any(x:(x eq " +
+								statusMap.get(orderStatus) + ")))"));
+				}
+			}
 
 			if (orders.isEmpty()) {
-				return Map.of("error", "No orders found for " + userEmail);
+				return Map.of("error", "No orders found for " + identifier);
 			}
 
-			String statusLabel = _getStatusLabel(orderStatus);
-
-			List<Order> filteredOrders = new ArrayList<>();
-
-			for (Order order : orders) {
-				if (!Strings.CI.equals(
-						StringUtils.trim(order.getStatusLabel()),
-						statusLabel)) {
-
-					continue;
-				}
-
-				if (order.getOrderDate() != null) {
-					order.setCreateDate(order.getOrderDate());
-				}
-
-				filteredOrders.add(order);
-			}
-
-			if (filteredOrders.isEmpty()) {
-				return Map.of(
-					"error",
-					_getNoOrdersFoundByStatusMessage(account, orderStatus));
-			}
-
-			return Map.of("orders", filteredOrders);
+			return Map.of("orders", orders);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -1591,55 +1585,6 @@ public class CommerceTools {
 		return sb.toString();
 	}
 
-	private String _getNoOrdersFoundByStatusMessage(
-		Account account, String orderStatus) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("**No Orders Found**\n\n");
-
-		sb.append(
-			"No orders found with status: **\""
-		).append(
-			orderStatus
-		).append(
-			"\"**\n\n"
-		);
-
-		sb.append(
-			"**Customer**: "
-		).append(
-			account.getName()
-		).append(
-			"\n"
-		);
-
-		sb.append(
-			"**Search Status**: "
-		).append(
-			orderStatus
-		).append(
-			"\n\n"
-		);
-
-		sb.append("**💡 Available Status Options:**\n");
-		sb.append("- **Canceled** - Orders that have been cancelled\n");
-		sb.append("- **Completed** - Orders that are fully completed\n");
-		sb.append("- **On Hold** - Orders temporarily paused\n");
-		sb.append("- **Partially Shipped** - Orders with some items shipped\n");
-		sb.append("- **Pending** - Orders awaiting processing\n");
-		sb.append("- **Processing** - Orders currently being processed\n");
-		sb.append("- **Shipped** - Orders that have been shipped\n\n");
-		sb.append("**Try:**\n");
-		sb.append("- Use any of the status names above\n");
-		sb.append("- Partial names work too (e.g., \"cancel\"");
-		sb.append("for \"Canceled\")\n");
-		sb.append(
-			"- Check available statuses with \"Show me system status\"\n");
-
-		return sb.toString();
-	}
-
 	private String _getNullQueryMessage(
 		Map<String, Map<String, String>> faqData) {
 
@@ -1829,7 +1774,8 @@ public class CommerceTools {
 	}
 
 	private List<Order> _getOrders(
-		Account account, long channelId, String sort) {
+		Account account, long channelId, String search, String sort,
+		String filter) {
 
 		int page = 1;
 		int pageSize = 50;
@@ -1839,8 +1785,8 @@ public class CommerceTools {
 		while (orders.size() < 100) {
 			PageResult<Order> pageResult =
 				_commerceService.getPlacedOrdersByAccount(
-					channelId, account.getId(), page, pageSize, null, sort,
-					null);
+					channelId, account.getId(), page, pageSize, search, sort,
+					filter);
 
 			if (pageResult == null) {
 				break;
@@ -1943,35 +1889,6 @@ public class CommerceTools {
 		}
 
 		return Map.of("orders", orders);
-	}
-
-	private String _getOrdersByStatusUserEmailRequiredMessage() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("**User Identification Required**");
-		sb.append("\n\n");
-		sb.append("To search for orders by status, I need to know which ");
-		sb.append("customer you are.");
-		sb.append("\n\n");
-		sb.append("**Please provide your email address:**");
-		sb.append(
-			"\n- \"Search my pending orders using your.email@example.com\"");
-		sb.append("\n");
-		sb.append("- \"Find shipped orders for customer@company.com\"");
-		sb.append("\n");
-		sb.append("- \"Show me canceled orders using myemail@domain.com\"");
-		sb.append("\n\n");
-		sb.append("**Available Status Options:**");
-		sb.append("\n");
-		sb.append(
-			"- Canceled, Completed, On Hold, Partially Shipped,  Pending, " +
-				"Processing, Shipped");
-		sb.append("\n\n");
-		sb.append(
-			"**💡 Use the same email address you used when placing your " +
-				"orders.**");
-
-		return sb.toString();
 	}
 
 	private String _getOrderShippingErrorMessage(
@@ -2101,59 +2018,6 @@ public class CommerceTools {
 				"orders.**");
 
 		return sb.toString();
-	}
-
-	private String _getStatusLabel(String status) {
-		String statusLabel = null;
-
-		Map<String, List<String>> statusMappings = Map.ofEntries(
-			Map.entry(
-				"canceled", Arrays.asList("canceled", "cancelled", "cancel")),
-			Map.entry(
-				"completed", Arrays.asList("completed", "complete", "done")),
-			Map.entry(
-				"on hold",
-				Arrays.asList("on hold", "hold", "on-hold", "onhold")),
-			Map.entry(
-				"partially shipped",
-				Arrays.asList(
-					"partially shipped", "partial", "partially",
-					"part shipped")),
-			Map.entry("pending", Arrays.asList("pending", "pend", "waiting")),
-			Map.entry(
-				"processing",
-				Arrays.asList(
-					"processing", "process", "in process", "in progress")),
-			Map.entry(
-				"shipped",
-				Arrays.asList(
-					"shipped", "shipping", "delivered", "out for delivery")));
-
-		status = StringUtils.trim(StringUtils.lowerCase(status));
-
-		for (Map.Entry<String, List<String>> entry :
-				statusMappings.entrySet()) {
-
-			for (String value : entry.getValue()) {
-				if (Strings.CS.equals(status, value) ||
-					Strings.CS.contains(status, value)) {
-
-					statusLabel = entry.getKey();
-
-					break;
-				}
-			}
-
-			if (statusLabel != null) {
-				break;
-			}
-		}
-
-		if (statusLabel == null) {
-			statusLabel = status;
-		}
-
-		return statusLabel;
 	}
 
 	private String _getUserAccountNotFoundMessage(String email) {
