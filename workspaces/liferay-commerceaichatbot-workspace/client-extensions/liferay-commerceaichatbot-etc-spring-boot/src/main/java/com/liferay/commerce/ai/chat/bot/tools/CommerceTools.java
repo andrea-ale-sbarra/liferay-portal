@@ -693,45 +693,56 @@ public class CommerceTools {
 	)
 	public Map<String, Object> searchOrdersByProductTool(
 		@Annotations.Schema(
+			description = "this can be an email or an account name",
+			name = "identifier"
+		)
+		String identifier,
+		@Annotations.Schema(
 			description = "a description or name of the product",
 			name = "productDescription"
 		)
-		String productDescription,
-		@Annotations.Schema(
-			description = "the email address of the customer",
-			name = "userEmail"
-		)
-		String userEmail) {
+		String productDescription) {
 
 		try {
-			if (StringUtils.isEmpty(userEmail)) {
-				return Map.of(
-					"error",
-					_getSearchOrdersByProductToolUserEmailRequiredMessage());
-			}
-
 			List<Channel> channels = _commerceService.getChannels();
 
 			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
 
+			List<Order> orders = new ArrayList<>();
+
 			Channel channel = channels.get(0);
-
-			Account account = _fetchAccount(channel, userEmail);
-
-			if (account == null) {
-				return Map.of(
-					"error", _getUserAccountNotFoundMessage(userEmail));
-			}
 
 			long channelId = channel.getId();
 
-			List<Order> orders = _getOrders(
-				account, channelId, null, "orderDate:desc", null);
+			Account account = _fetchAccount(channel, identifier);
+
+			if (account != null) {
+				orders = _getOrders(
+					account.getId(), channelId, productDescription,
+					"orderDate:desc", null);
+			}
+			else {
+				UserAccount userAccount =
+					_commerceService.getUserAccountByEmail(identifier);
+
+				if (userAccount == null) {
+					return Map.of("orders", orders);
+				}
+
+				for (AccountBrief accountBrief :
+						userAccount.getAccountBriefs()) {
+
+					orders.addAll(
+						_getOrders(
+							accountBrief.getId(), channelId, productDescription,
+							"orderDate:desc", null));
+				}
+			}
 
 			if (orders.isEmpty()) {
-				return Map.of("error", "No orders found for " + userEmail);
+				return Map.of("error", "No orders found for " + identifier);
 			}
 
 			List<AbstractMap.SimpleEntry<Order, List<OrderItem>>> matches =
@@ -795,7 +806,8 @@ public class CommerceTools {
 			if (matches.isEmpty()) {
 				return Map.of(
 					"error",
-					_getNoOrdersByProductMessage(account, productDescription));
+					_getNoOrdersByProductMessage(
+						identifier, productDescription));
 			}
 
 			return Map.of("orders", matches);
@@ -813,23 +825,17 @@ public class CommerceTools {
 	)
 	public Map<String, Object> searchOrdersByShippingAddressTool(
 		@Annotations.Schema(
+			description = "this can be an email or an account name",
+			name = "identifier"
+		)
+		String identifier,
+		@Annotations.Schema(
 			description = "the address or part of the address to search for",
 			name = "addressQuery"
 		)
-		String addressQuery,
-		@Annotations.Schema(
-			description = "the email address of the customer",
-			name = "userEmail"
-		)
-		String userEmail) {
+		String addressQuery) {
 
 		try {
-			if (StringUtils.isEmpty(userEmail)) {
-				return Map.of(
-					"error",
-					_getSearchOrdersByShippingAddressUserEmailRequiredMessage());
-			}
-
 			List<Channel> channels = _commerceService.getChannels();
 
 			if (channels.isEmpty()) {
@@ -838,49 +844,66 @@ public class CommerceTools {
 
 			Channel channel = channels.get(0);
 
-			Account account = _fetchAccount(channel, userEmail);
-
-			if (account == null) {
-				return Map.of(
-					"error", "User account not found for email: " + userEmail);
-			}
-
 			long channelId = channel.getId();
 
 			List<Order> orders = new ArrayList<>();
 
-			int page = 1;
-			int pageSize = 50;
+			List<Long> accountIds = new ArrayList<>();
 
-			while (true) {
-				PageResult<Order> pageResult =
-					_commerceService.getPlacedOrdersByAccount(
-						channelId, account.getId(), page, pageSize, null,
-						"createDate:desc", null);
+			Account account = _fetchAccount(channel, identifier);
 
-				if (pageResult == null) {
-					break;
+			if (account != null) {
+				accountIds.add(account.getId());
+			}
+			else {
+				UserAccount userAccount =
+					_commerceService.getUserAccountByEmail(identifier);
+
+				if (userAccount == null) {
+					return Map.of("orders", orders);
 				}
 
-				List<Order> pageResultOrders = pageResult.getItems();
+				for (AccountBrief accountBrief :
+						userAccount.getAccountBriefs()) {
 
-				if ((pageResult.getItems() == null) ||
-					pageResultOrders.isEmpty()) {
-
-					break;
+					accountIds.add(accountBrief.getId());
 				}
+			}
 
-				orders.addAll(pageResult.getItems());
+			for (long accountId : accountIds) {
+				int page = 1;
+				int pageSize = 50;
 
-				if (page >= pageResult.getLastPage()) {
-					break;
+				while (true) {
+					PageResult<Order> pageResult =
+						_commerceService.getPlacedOrdersByAccount(
+							channelId, accountId, page, pageSize, null,
+							"createDate:desc", null);
+
+					if (pageResult == null) {
+						break;
+					}
+
+					List<Order> pageResultOrders = pageResult.getItems();
+
+					if ((pageResult.getItems() == null) ||
+						pageResultOrders.isEmpty()) {
+
+						break;
+					}
+
+					orders.addAll(pageResult.getItems());
+
+					if (page >= pageResult.getLastPage()) {
+						break;
+					}
+
+					page++;
 				}
-
-				page++;
 			}
 
 			if (orders.isEmpty()) {
-				return Map.of("error", "No orders found for " + userEmail);
+				return Map.of("error", "No orders found for " + identifier);
 			}
 
 			List<OrderShipmentDetails> orderShipmentDetailsList =
@@ -1497,7 +1520,7 @@ public class CommerceTools {
 	}
 
 	private String _getNoOrdersByProductMessage(
-		Account account, String productDescription) {
+		String identifier, String productDescription) {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -1514,7 +1537,7 @@ public class CommerceTools {
 		sb.append(
 			"**Customer**: "
 		).append(
-			(account.getName() != null) ? account.getName() : "N/A"
+			identifier
 		).append(
 			"\n"
 		);
@@ -1774,7 +1797,7 @@ public class CommerceTools {
 	}
 
 	private List<Order> _getOrders(
-		Account account, long channelId, String search, String sort,
+		long accountId, long channelId, String search, String sort,
 		String filter) {
 
 		int page = 1;
@@ -1785,8 +1808,7 @@ public class CommerceTools {
 		while (orders.size() < 100) {
 			PageResult<Order> pageResult =
 				_commerceService.getPlacedOrdersByAccount(
-					channelId, account.getId(), page, pageSize, search, sort,
-					filter);
+					channelId, accountId, page, pageSize, search, sort, filter);
 
 			if (pageResult == null) {
 				break;
@@ -1945,77 +1967,6 @@ public class CommerceTools {
 		sb.append("\n\n");
 		sb.append("**Use the same email address you used when placing ");
 		sb.append("your orders.**");
-
-		return sb.toString();
-	}
-
-	private String _getSearchOrdersByProductToolUserEmailRequiredMessage() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("**User Identification Required**");
-		sb.append("\n\n");
-		sb.append(
-			"To search for orders by product, I need to know which customer " +
-				"you are.");
-		sb.append("\n\n");
-		sb.append("**Please provide your email address:**");
-		sb.append("\n");
-		sb.append(
-			"- \"Search my orders for brake pads using " +
-				"your.email@example.com\"");
-		sb.append("\n");
-		sb.append(
-			"- \"Find orders containing 'tires' for customer@company.com\"");
-		sb.append("\n");
-		sb.append("- \"Show me orders with 'oil' using myemail@domain.com\"");
-		sb.append("\n\n");
-		sb.append(
-			"**💡 Use the same email address you used when placing your " +
-				"orders.**");
-
-		return sb.toString();
-	}
-
-	private String _getSearchOrdersByShippingAddressUserEmailRequiredMessage() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("**User Identification Required**");
-		sb.append("\n\n");
-		sb.append(
-			"To search for orders by shipping address, I need to know which " +
-				"customer you are.");
-		sb.append("\n\n");
-		sb.append("**Please provide your email address:**");
-		sb.append("\n");
-		sb.append(
-			"- \"Search orders shipped to New York using " +
-				"your.email@example.com\"");
-		sb.append("\n");
-		sb.append(
-			"- \"Find orders with address containing 'Main Street' for " +
-				"customer@company.com\"");
-		sb.append("\n");
-		sb.append(
-			"- \"Show me orders shipped to California using " +
-				"myemail@domain.com\"");
-		sb.append("\n\n");
-		sb.append("**Available Address Search Options:**");
-		sb.append("\n");
-		sb.append("- Street name or number");
-		sb.append("\n");
-		sb.append("- City name");
-		sb.append("\n");
-		sb.append("- State/Province");
-		sb.append("\n");
-		sb.append("- Postal/ZIP code");
-		sb.append("\n");
-		sb.append("- Country");
-		sb.append("\n");
-		sb.append("- Partial address matches");
-		sb.append("\n\n");
-		sb.append(
-			"**💡 Use the same email address you used when placing your " +
-				"orders.**");
 
 		return sb.toString();
 	}
