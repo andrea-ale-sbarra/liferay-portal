@@ -17,10 +17,8 @@ import com.liferay.commerce.ai.chat.bot.model.AccountBrief;
 import com.liferay.commerce.ai.chat.bot.model.Channel;
 import com.liferay.commerce.ai.chat.bot.model.Order;
 import com.liferay.commerce.ai.chat.bot.model.OrderItem;
-import com.liferay.commerce.ai.chat.bot.model.OrderShipmentDetails;
 import com.liferay.commerce.ai.chat.bot.model.PageResult;
 import com.liferay.commerce.ai.chat.bot.model.Settings;
-import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.Summary;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 import com.liferay.commerce.ai.chat.bot.service.CommerceService;
@@ -878,7 +876,8 @@ public class CommerceTools {
 					PageResult<Order> pageResult =
 						_commerceService.getPlacedOrdersByAccount(
 							channelId, accountId, page, pageSize, null,
-							"createDate:desc", null);
+							"createDate:desc", null,
+							"placedOrderShippingAddress");
 
 					if (pageResult == null) {
 						break;
@@ -906,82 +905,22 @@ public class CommerceTools {
 				return Map.of("error", "No orders found for " + identifier);
 			}
 
-			List<OrderShipmentDetails> orderShipmentDetailsList =
-				new ArrayList<>();
-
-			String addressQueryLower = "";
-
-			if (addressQuery != null) {
-				addressQueryLower = StringUtils.lowerCase(addressQuery);
-
-				addressQueryLower = StringUtils.trim(addressQueryLower);
-			}
+			List<Order> orderList = new ArrayList<>();
 
 			for (Order order : orders) {
-				long orderId = order.getId();
-
-				for (Shipment shipment :
-						_commerceService.getOrderShipmentsDto(orderId)) {
-
-					String oneLineAddress = shipment.getOneLineAddress();
-
-					if (StringUtils.isEmpty(oneLineAddress)) {
-						continue;
-					}
-
-					String lowerCasedOneLineAddress = StringUtils.lowerCase(
-						oneLineAddress);
-
-					if (Strings.CS.contains(
-							lowerCasedOneLineAddress, addressQueryLower)) {
-
-						OrderShipmentDetails orderShipmentDetails =
-							new OrderShipmentDetails();
-
-						orderShipmentDetails.setId(orderId);
-						orderShipmentDetails.setCreateDate(
-							order.getCreateDate());
-						orderShipmentDetails.setOneLineAddress(oneLineAddress);
-
-						String shipmentStatus = "N/A";
-
-						if (shipment.getStatus() != null) {
-							Shipment.Status status = shipment.getStatus();
-
-							shipmentStatus = status.getLabel();
-						}
-
-						orderShipmentDetails.setShipmentStatus(shipmentStatus);
-
-						orderShipmentDetails.setShippingDate(
-							shipment.getShippingDate());
-						orderShipmentDetails.setExpectedDate(
-							shipment.getExpectedDate());
-						orderShipmentDetails.setTrackingNumber(
-							(shipment.getTrackingNumber() != null) ?
-								shipment.getTrackingNumber() : "N/A");
-						orderShipmentDetails.setCarrier(
-							(shipment.getCarrier() != null) ?
-								shipment.getCarrier() : "N/A");
-						orderShipmentDetails.setTotalFormatted(
-							(order.getTotalFormatted() != null) ?
-								order.getTotalFormatted() : "N/A");
-
-						orderShipmentDetailsList.add(orderShipmentDetails);
-
-						break;
-					}
+				if (_isMatch(order.getShippingAddress(), addressQuery)) {
+					orderList.add(order);
 				}
 			}
 
-			if (orderShipmentDetailsList.isEmpty()) {
+			if (orderList.isEmpty()) {
 				return Map.of(
 					"error",
 					_getNoOrdersByShippingAddressMessage(
 						addressQuery, account));
 			}
 
-			return Map.of("orderShipmentDetailsList", orderShipmentDetailsList);
+			return Map.of("orderList", orderList);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -1808,7 +1747,8 @@ public class CommerceTools {
 		while (orders.size() < 100) {
 			PageResult<Order> pageResult =
 				_commerceService.getPlacedOrdersByAccount(
-					channelId, accountId, page, pageSize, search, sort, filter);
+					channelId, accountId, page, pageSize, search, sort, filter,
+					null);
 
 			if (pageResult == null) {
 				break;
@@ -1884,7 +1824,7 @@ public class CommerceTools {
 			if (accountId != null) {
 				pageResult = _commerceService.getPlacedOrdersByAccount(
 					channelId, accountId, currentPage, pageSize, search,
-					"orderDate:desc", filter);
+					"orderDate:desc", filter, null);
 			}
 
 			if (pageResult == null) {
@@ -1993,6 +1933,38 @@ public class CommerceTools {
 		sb.append("orders.");
 
 		return sb.toString();
+	}
+
+	private boolean _isMatch(Map<String, String> addressMap, String query) {
+		if ((query == null) || query.isEmpty()) {
+			return false;
+		}
+
+		String normalizedQuery = StringUtils.lowerCase(query);
+
+		normalizedQuery = StringUtils.trim(normalizedQuery);
+
+		for (String value : addressMap.values()) {
+			if (value == null) {
+				continue;
+			}
+
+			value = StringUtils.lowerCase(value);
+
+			if (value.contains(normalizedQuery)) {
+				return true;
+			}
+		}
+
+		String fullAddress = String.join(
+			" ", String.valueOf(addressMap.getOrDefault("street1", "")),
+			String.valueOf(addressMap.getOrDefault("city", "")),
+			String.valueOf(addressMap.getOrDefault("region", "")),
+			String.valueOf(addressMap.getOrDefault("regionISOCode", "")),
+			String.valueOf(addressMap.getOrDefault("zip", ""))
+		).toLowerCase();
+
+		return fullAddress.contains(normalizedQuery);
 	}
 
 	private static final Log _log = LogFactory.getLog(CommerceTools.class);

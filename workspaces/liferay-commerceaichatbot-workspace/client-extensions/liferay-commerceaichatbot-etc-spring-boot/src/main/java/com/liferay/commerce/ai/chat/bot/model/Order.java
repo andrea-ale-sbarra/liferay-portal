@@ -155,7 +155,7 @@ public class Order {
 	}
 
 	public void setShippingAddress(Map<String, String> shippingAddress) {
-		_billingAddress =
+		_shippingAddress =
 			(shippingAddress != null) ? new HashMap<>(shippingAddress) :
 				new HashMap<>();
 	}
@@ -261,7 +261,7 @@ public class Order {
 	private Date _orderDate;
 
 	private String _orderNumber;
-	private final Map<String, String> _shippingAddress = new HashMap<>();
+	private Map<String, String> _shippingAddress = new HashMap<>();
 	private String _shippingDiscountValueFormatted;
 	private String _shippingValueFormatted;
 	private String _status;

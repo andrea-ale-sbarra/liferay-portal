@@ -76,7 +76,8 @@ public class CommerceService {
 
 		while (true) {
 			PageResult<Order> pageResult = getPlacedOrdersByAccount(
-				channelId, accountId, page, pageSize, search, sort, filter);
+				channelId, accountId, page, pageSize, search, sort, filter,
+				null);
 
 			List<Order> pageResultOrders = pageResult.getItems();
 
@@ -167,11 +168,11 @@ public class CommerceService {
 
 	public PageResult<Order> getPlacedOrdersByAccount(
 		long channelId, long accountId, Integer page, Integer pageSize,
-		String search, String sort, String filter) {
+		String search, String sort, String filter, String nestedFields) {
 
 		JSONObject ordersJSONObject = _getPlacedOrdersByAccountJSONObject(
 			String.valueOf(channelId), String.valueOf(accountId), page,
-			pageSize, search, sort, filter);
+			pageSize, search, sort, filter, nestedFields);
 
 		PageResult<Order> pageResult = new PageResult<>();
 
@@ -372,7 +373,7 @@ public class CommerceService {
 
 	private JSONObject _getPlacedOrdersByAccountJSONObject(
 		String channelId, String accountId, Integer page, Integer pageSize,
-		String search, String sort, String filter) {
+		String search, String sort, String filter, String nestedFields) {
 
 		try {
 			Map<String, String> params = new HashMap<>();
@@ -395,6 +396,10 @@ public class CommerceService {
 
 			if (!StringUtils.isEmpty(filter)) {
 				params.put("filter", filter);
+			}
+
+			if (!StringUtils.isEmpty(nestedFields)) {
+				params.put("nestedFields", nestedFields);
 			}
 
 			String path = String.format(
@@ -629,7 +634,7 @@ public class CommerceService {
 		}
 
 		JSONObject shippingJSONObject = jsonObject.optJSONObject(
-			"shippingAddress");
+			"placedOrderShippingAddress");
 
 		if (shippingJSONObject != null) {
 			order.getShippingAddress(
