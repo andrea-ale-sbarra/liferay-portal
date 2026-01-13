@@ -40,8 +40,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
@@ -378,12 +376,14 @@ public class CommerceTools {
 		)
 		String query) {
 
+		Map<String, Map<String, String>> faqData = _getFaqData();
+
 		try {
 			if (StringUtils.isBlank(query) || Strings.CI.equals(query, "all") ||
 				Strings.CI.equals(query, "faq") ||
 				Strings.CI.equals(query, "general")) {
 
-				return Map.of("response", _getNullQueryMessage(_faqData));
+				return Map.of("response", _getNullQueryMessage(faqData));
 			}
 
 			String lowerCasedQuery = StringUtils.lowerCase(query);
@@ -391,7 +391,7 @@ public class CommerceTools {
 			List<Map<String, String>> matchingAnswers = new ArrayList<>();
 
 			for (Map.Entry<String, Map<String, String>> entry :
-					_faqData.entrySet()) {
+					faqData.entrySet()) {
 
 				String categoryKey = entry.getKey();
 
@@ -1220,11 +1220,6 @@ public class CommerceTools {
 		}
 	}
 
-	@PostConstruct
-	protected void afterPropertiesSet() {
-		_faqData = _getFaqData();
-	}
-
 	private Account _fetchAccount(Channel channel, String search) {
 		List<Account> accounts = _commerceService.getAccounts(
 			channel.getId(), search);
@@ -1975,7 +1970,6 @@ public class CommerceTools {
 		"last (\\d+) days?");
 
 	private final CommerceService _commerceService;
-	private Map<String, Map<String, String>> _faqData;
 	private final ObjectMapper _objectMapper;
 	private final SettingsService _settingsService;
 
