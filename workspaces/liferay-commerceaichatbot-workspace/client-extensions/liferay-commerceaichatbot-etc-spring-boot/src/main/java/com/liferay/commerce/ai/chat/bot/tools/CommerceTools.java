@@ -621,14 +621,17 @@ public class CommerceTools {
 				return Map.of("error", _getAccountNotFoundMessage(accountName));
 			}
 
-			return _getOrdersByDateRangeMap(
-				account.getId(), channel.getId(), endDate, null, startDate);
+			return Map.of(
+				"orders",
+				_getOrdersByDateRangeMap(
+					account.getId(), channel.getId(),
+					_getEndOffsetDateTime(endDate), null,
+					_getOffsetDateTime(startDate)));
 		}
 		catch (Exception exception) {
 			return Map.of(
 				"error",
-				"**Error searching orders by date**: " +
-					exception.getMessage());
+				"Error searching orders by date: " + exception.getMessage());
 		}
 	}
 
@@ -672,16 +675,32 @@ public class CommerceTools {
 				return Map.of("error", _getUserAccountNotFoundMessage(email));
 			}
 
-			Channel channel = channels.get(0);
+			List<AccountBrief> accountBriefs = userAccount.getAccountBriefs();
 
-			return _getOrdersByDateRangeMap(
-				null, channel.getId(), endDate, email, startDate);
+			if (accountBriefs.isEmpty()) {
+				return Map.of(
+					"error", "No accounts found for the given email.");
+			}
+
+			Channel channel = channels.get(0);
+			List<Order> orders = new ArrayList<>();
+
+			for (AccountBrief accountBrief : accountBriefs) {
+				Long accountId = accountBrief.getId();
+
+				orders.addAll(
+					_getOrdersByDateRangeMap(
+						accountId, channel.getId(),
+						_getEndOffsetDateTime(endDate), null,
+						_getOffsetDateTime(startDate)));
+			}
+
+			return Map.of("orders", orders);
 		}
 		catch (Exception exception) {
 			return Map.of(
 				"error",
-				"**Error searching orders by date**: " +
-					exception.getMessage());
+				"Error searching orders by date: " + exception.getMessage());
 		}
 	}
 
@@ -1774,22 +1793,9 @@ public class CommerceTools {
 		return orders;
 	}
 
-	private Map<String, Object> _getOrdersByDateRangeMap(
-		Long accountId, long channelId, String endDate, String search,
-		String startDate) {
-
-		OffsetDateTime startOffsetDateTime = null;
-		OffsetDateTime endOffsetDateTime = null;
-
-		try {
-			startOffsetDateTime = _getOffsetDateTime(startDate);
-			endOffsetDateTime = _getEndOffsetDateTime(endDate);
-		}
-		catch (RuntimeException runtimeException) {
-			return Map.of(
-				"error",
-				"Date Parsing Error: " + runtimeException.getMessage());
-		}
+	private List<Order> _getOrdersByDateRangeMap(
+		Long accountId, long channelId, OffsetDateTime endOffsetDateTime,
+		String search, OffsetDateTime startOffsetDateTime) {
 
 		List<Order> orders = new ArrayList<>();
 
@@ -1841,11 +1847,7 @@ public class CommerceTools {
 			currentPage++;
 		}
 
-		if (orders.isEmpty()) {
-			return Map.of("error", "No orders found for the given criteria.");
-		}
-
-		return Map.of("orders", orders);
+		return orders;
 	}
 
 	private String _getOrderShippingErrorMessage(
