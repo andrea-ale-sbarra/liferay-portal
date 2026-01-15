@@ -198,36 +198,6 @@ public class CommerceService {
 		return pageResult;
 	}
 
-	public PageResult<Product> getProductsByChannelDto(
-		long channelId, long accountId, Integer page, Integer pageSize) {
-
-		JSONObject productsJSONObject = _getProductsByChannelJSONObject(
-			String.valueOf(channelId), String.valueOf(accountId), page,
-			pageSize);
-		PageResult<Product> pageResult = new PageResult<>();
-
-		if (productsJSONObject == null) {
-			return pageResult;
-		}
-
-		pageResult.setTotalCount(productsJSONObject.optInt("totalCount", 0));
-		pageResult.setLastPage(productsJSONObject.optInt("lastPage", 1));
-
-		List<Product> products = new ArrayList<>();
-
-		for (JSONObject jsonObject : _getJSONObjects(productsJSONObject)) {
-			Product product = _toProduct(jsonObject);
-
-			if (product != null) {
-				products.add(product);
-			}
-		}
-
-		pageResult.setItems(products);
-
-		return pageResult;
-	}
-
 	public UserAccount getUserAccountByEmail(String email) {
 		JSONObject jsonObject = _getUserAccountByEmailJSONObject(email);
 
