@@ -133,7 +133,7 @@ public class CommerceTools {
 			for (Account account : accounts) {
 				try {
 					List<Order> orders =
-						_commerceService.getAllPlacedOrdersByAccountDto(
+						_commerceService.getAllPlacedOrdersByAccount(
 							channelId, account.getId(), null, "", null);
 
 					totalOrders += orders.size();
@@ -236,7 +236,7 @@ public class CommerceTools {
 					orderBy = "asc";
 				}
 
-				orders = _commerceService.getAllPlacedOrdersByAccountDto(
+				orders = _commerceService.getAllPlacedOrdersByAccount(
 					channelId, account.getId(), null, "createDate:" + orderBy,
 					null);
 			}
@@ -323,7 +323,7 @@ public class CommerceTools {
 						userAccount.getAccountBriefs()) {
 
 					orders.addAll(
-						_commerceService.getAllPlacedOrdersByAccountDto(
+						_commerceService.getAllPlacedOrdersByAccount(
 							channelId, accountBrief.getId(), null,
 							"createDate:" + orderBy, null));
 				}
@@ -982,7 +982,7 @@ public class CommerceTools {
 			Account account = _fetchAccount(channel, identifier);
 
 			if (account != null) {
-				orders = _commerceService.getAllPlacedOrdersByAccountDto(
+				orders = _commerceService.getAllPlacedOrdersByAccount(
 					channelId, account.getId(), identifier, "createDate:desc",
 					"(orderStatus/any(x:(x eq " + statusMap.get(orderStatus) +
 						")))");
@@ -999,7 +999,7 @@ public class CommerceTools {
 						userAccount.getAccountBriefs()) {
 
 					orders.addAll(
-						_commerceService.getAllPlacedOrdersByAccountDto(
+						_commerceService.getAllPlacedOrdersByAccount(
 							channelId, accountBrief.getId(), identifier,
 							"createDate:desc",
 							"(orderStatus/any(x:(x eq " +

@@ -65,7 +65,7 @@ public class CommerceService {
 		return accounts;
 	}
 
-	public List<Order> getAllPlacedOrdersByAccountDto(
+	public List<Order> getAllPlacedOrdersByAccount(
 		long channelId, long accountId, String search, String sort,
 		String filter) {
 
