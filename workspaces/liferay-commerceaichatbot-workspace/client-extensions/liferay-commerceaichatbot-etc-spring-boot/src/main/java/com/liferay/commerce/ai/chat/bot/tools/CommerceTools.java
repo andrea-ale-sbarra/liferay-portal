@@ -518,49 +518,6 @@ public class CommerceTools {
 	}
 
 	@Annotations.Schema(
-		description = "Retrieves information about how to look up customer emails for testing",
-		name = "getTestEmailsTool"
-	)
-	public Map<String, String> getTestEmailsTool() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("**Customer Email Lookup Information:**");
-		sb.append("\n\n");
-		sb.append("**How Customer Lookup Works:**");
-		sb.append("\n- ");
-		sb.append("Enter any email address that exists in our system");
-		sb.append("\n- ");
-		sb.append("The system will automatically find the customer's account");
-		sb.append(
-			"\n- Orders will be retrieved for that specific customer only");
-		sb.append("\n\n");
-		sb.append("**How to Use:**");
-		sb.append("\n1. **Customer Order Lookup**: \"Get my ");
-		sb.append("orders using your.email@example.com");
-		sb.append("\n2. **Order Search**: ");
-		sb.append("\"Search for orders customer@company.com");
-		sb.append("\n3. **Date Range ");
-		sb.append("Search**: \"Search orders from 2024-01-01 to 2024-01-31 ");
-		sb.append("using myemail@domain.com\"");
-		sb.append("\n\n");
-		sb.append("**What You Need:**");
-		sb.append("\n- ");
-		sb.append("A valid email address that exists in our customer database");
-		sb.append("\n- ");
-		sb.append("The same email address used when placing orders");
-		sb.append("\n- ");
-		sb.append("Proper email format (e.g., user@domain.com)");
-		sb.append("\n\n");
-		sb.append("**If Email Not Found:**");
-		sb.append("\n- Check spelling and format");
-		sb.append("\n- Verify the email exists in our system");
-		sb.append("\n- ");
-		sb.append("Contact customer support if needed");
-
-		return Map.of("result", sb.toString());
-	}
-
-	@Annotations.Schema(
 		description = "Lists all available commerce channels and their associated accounts",
 		name = "listAvailableChannelsAndAccountsTool"
 	)
