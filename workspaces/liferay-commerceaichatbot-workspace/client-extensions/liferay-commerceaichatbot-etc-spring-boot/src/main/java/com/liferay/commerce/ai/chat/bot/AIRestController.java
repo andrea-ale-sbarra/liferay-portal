@@ -107,8 +107,6 @@ public class AIRestController extends BaseRestController {
 						_commerceTools, "getCustomerOrdersByAccountTool");
 				FunctionTool getCustomerOrdersTool = FunctionTool.create(
 					_commerceTools, "getCustomerOrdersTool");
-				FunctionTool getTestEmailsTool = FunctionTool.create(
-					_commerceTools, "getTestEmailsTool");
 				FunctionTool getOrderItemsTool = FunctionTool.create(
 					_commerceTools, "getOrderItemsTool");
 				FunctionTool getOrderShippingTool = FunctionTool.create(
@@ -137,9 +135,9 @@ public class AIRestController extends BaseRestController {
 					searchOrdersByDateRangeTool, searchOrdersByProductTool,
 					searchOrdersByStatusTool, searchOrdersByShippingAddressTool,
 					getCurrentDateTool, getCustomerOrdersTool,
-					getCustomerOrdersByAccountTool, getTestEmailsTool,
-					getOrderItemsTool, getOrderShippingTool,
-					getAllAccountsOrderSummaryTool, getFaqInformationTool
+					getCustomerOrdersByAccountTool, getOrderItemsTool,
+					getOrderShippingTool, getAllAccountsOrderSummaryTool,
+					getFaqInformationTool
 				).build();
 
 				return new InMemoryRunner(rootAgent);
