@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 
 import javax.net.ssl.SSLContext;
 
+import com.liferay.commerce.ai.chat.bot.util.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -71,16 +72,9 @@ public class HttpClient {
 				HttpHeaders.AUTHORIZATION, _basicAuthHeader);
 		}
 		else {
-			SecurityContext securityContext =
-				SecurityContextHolder.getContext();
+			Jwt jwt = SecurityUtils.getJwt();
 
-			Authentication authentication = securityContext.getAuthentication();
-
-			if ((authentication != null) &&
-				(authentication.getPrincipal() instanceof Jwt)) {
-
-				Jwt jwt = (Jwt)authentication.getPrincipal();
-
+			if (jwt != null) {
 				httpRequestBase.addHeader(
 					HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue());
 			}
