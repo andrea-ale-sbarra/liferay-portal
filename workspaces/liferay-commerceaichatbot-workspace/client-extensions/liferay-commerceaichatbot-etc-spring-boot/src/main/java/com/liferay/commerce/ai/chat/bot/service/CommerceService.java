@@ -12,7 +12,6 @@ import com.liferay.commerce.ai.chat.bot.model.Channel;
 import com.liferay.commerce.ai.chat.bot.model.Order;
 import com.liferay.commerce.ai.chat.bot.model.OrderItem;
 import com.liferay.commerce.ai.chat.bot.model.PageResult;
-import com.liferay.commerce.ai.chat.bot.model.Product;
 import com.liferay.commerce.ai.chat.bot.model.RoleBrief;
 import com.liferay.commerce.ai.chat.bot.model.Shipment;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
@@ -393,36 +392,6 @@ public class CommerceService {
 		}
 	}
 
-	private JSONObject _getProductsByChannelJSONObject(
-		String channelId, String accountId, Integer page, Integer pageSize) {
-
-		try {
-			Map<String, String> params = new HashMap<>();
-
-			if (page != null) {
-				params.put("page", String.valueOf(page));
-			}
-
-			if (pageSize != null) {
-				params.put("pageSize", String.valueOf(pageSize));
-			}
-
-			if (!StringUtils.isEmpty(accountId)) {
-				params.put("accountId", accountId);
-			}
-
-			return _httpClient.get(
-				"/o/headless-commerce-delivery-catalog/v1.0/channels/" +
-					channelId + "/products",
-				params);
-		}
-		catch (Exception exception) {
-			_log.error(exception);
-
-			return null;
-		}
-	}
-
 	private double _getSafeDouble(JSONObject jsonObject, String key) {
 		if (jsonObject == null) {
 			return 0.0;
@@ -561,7 +530,7 @@ public class CommerceService {
 
 		order.setId(jsonObject.optLong("id"));
 		order.setOrderNumber(jsonObject.optString("orderNumber", ""));
-		order.setAccountId(String.valueOf(jsonObject.opt("accountId")));
+		order.setAccountId(jsonObject.optLong("accountId"));
 		order.setAccountName(jsonObject.optString("account", ""));
 		order.setExternalReferenceCode(
 			jsonObject.optString("externalReferenceCode", null));
@@ -660,22 +629,6 @@ public class CommerceService {
 				"orderItemStatus", jsonObject.optString("status", "")));
 
 		return orderItem;
-	}
-
-	private Product _toProduct(JSONObject jsonObject) {
-		if (jsonObject == null) {
-			return null;
-		}
-
-		Product product = new Product();
-
-		product.setId(jsonObject.optLong("id"));
-		product.setName(jsonObject.optString("name", ""));
-		product.setDescription(jsonObject.optString("description", ""));
-		product.setExternalReferenceCode(
-			jsonObject.optString("externalReferenceCode", ""));
-
-		return product;
 	}
 
 	private Shipment _toShipment(JSONObject jsonObject) {

@@ -1,24 +1,29 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.commerce.ai.chat.bot.util;
+
+import java.util.Map;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-import java.util.Map;
-
 /**
  * @author Ivica Cardic
  */
 public class SecurityUtils {
 
-	public static String getUsername() {
+	public static String getEmail() {
 		Jwt jwt = getJwt();
 
 		if (jwt != null) {
 			Map<String, Object> claims = jwt.getClaims();
 
-			return (String) claims.get("username");
+			return (String)claims.get("username");
 		}
 
 		throw new IllegalStateException("No JWT found");
@@ -37,4 +42,5 @@ public class SecurityUtils {
 
 		return null;
 	}
+
 }

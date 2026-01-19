@@ -23,6 +23,7 @@ import com.liferay.commerce.ai.chat.bot.model.Summary;
 import com.liferay.commerce.ai.chat.bot.model.UserAccount;
 import com.liferay.commerce.ai.chat.bot.service.CommerceService;
 import com.liferay.commerce.ai.chat.bot.service.SettingsService;
+import com.liferay.commerce.ai.chat.bot.util.SecurityUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,7 +41,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.liferay.commerce.ai.chat.bot.util.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
@@ -107,29 +107,20 @@ public class CommerceTools {
 				return Map.of("error", "No channels available in the system.");
 			}
 
-			Channel channel = channels.get(0);
+			UserAccount userAccount = _commerceService.getUserAccountByEmail(
+				SecurityUtils.getEmail());
 
-			long channelId = channel.getId();
-
-			List<Account> accounts = _commerceService.getAccounts(
-				channelId, "");
+			List<Account> accounts = userAccount.getAccounts();
 
 			if (accounts.isEmpty()) {
-				return Map.of(
-					"error",
-					new StringBuilder(
-					).append(
-						"No accounts available for channel "
-					).append(
-						channelId
-					).append(
-						"."
-					).toString());
+				return Map.of("error", "No accounts available.");
 			}
 
+			Channel channel = channels.get(0);
 			List<Summary> accountSummaries = new ArrayList<>();
-
 			int totalOrders = 0;
+
+			long channelId = channel.getId();
 
 			for (Account account : accounts) {
 				try {
@@ -296,10 +287,10 @@ public class CommerceTools {
 				return Map.of("error", "No channels available in the system.");
 			}
 
-			String email = SecurityUtils.getUsername();
+			String email = SecurityUtils.getEmail();
 
 			UserAccount userAccount = _commerceService.getUserAccountByEmail(
-				email);
+				SecurityUtils.getEmail());
 
 			if (userAccount == null) {
 				return Map.of("error", _getUserAccountNotFoundMessage(email));
@@ -524,16 +515,23 @@ public class CommerceTools {
 		try {
 			List<Channel> channels = _commerceService.getChannels();
 
-			Map<Long, List<Account>> channelAccounts = new HashMap<>();
+			Map<Long, List<Account>> channelAccountsMap = new HashMap<>();
+
+			UserAccount userAccount = _commerceService.getUserAccountByEmail(
+				SecurityUtils.getEmail());
 
 			for (Channel channel : channels) {
-				channelAccounts.put(
-					channel.getId(),
-					_commerceService.getAccounts(channel.getId(), null));
+				List<Account> channelAccounts = _commerceService.getAccounts(
+					channel.getId(), null);
+
+				channelAccounts.removeIf(
+					account -> !userAccount.containsAccount(account.getId()));
+
+				channelAccountsMap.put(channel.getId(), channelAccounts);
 			}
 
 			return Map.of(
-				"channels", channels, "channelAccounts", channelAccounts);
+				"channels", channels, "channelAccounts", channelAccountsMap);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -607,20 +605,14 @@ public class CommerceTools {
 		)
 		String endDate) {
 
-		String email = SecurityUtils.getUsername();
-
 		try {
-			if (StringUtils.isEmpty(email)) {
-				return Map.of(
-					"error",
-					_getSearchOrdersByDateRangeUserEmailRequiredMessage());
-			}
-
 			List<Channel> channels = _commerceService.getChannels();
 
 			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
+
+			String email = SecurityUtils.getEmail();
 
 			UserAccount userAccount = _commerceService.getUserAccountByEmail(
 				email);
@@ -1669,6 +1661,16 @@ public class CommerceTools {
 			}
 		}
 
+		if (order != null) {
+			UserAccount userAccount = _commerceService.getUserAccountByEmail(
+				SecurityUtils.getEmail());
+
+			if (!userAccount.containsAccount(order.getAccountId())) {
+				throw new IllegalArgumentException(
+					"User does not belong to account");
+			}
+		}
+
 		return order;
 	}
 
@@ -1833,31 +1835,6 @@ public class CommerceTools {
 		sb.append("\" - View order items");
 		sb.append("\n");
 		sb.append("- \"Search for orders\" - Browse available orders");
-
-		return sb.toString();
-	}
-
-	private String _getSearchOrdersByDateRangeUserEmailRequiredMessage() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("**User Identification Required**");
-		sb.append("\n\n");
-		sb.append("To search for orders by date range, I need to know ");
-		sb.append("which customer you are.");
-		sb.append("\n\n");
-		sb.append("**Please provide your email address:**");
-		sb.append("\n- ");
-		sb.append("Search my orders from 2024-01-01 to 2024-01-31 ");
-		sb.append("using your.email@example.com");
-		sb.append("\n- ");
-		sb.append("Find orders since 2024-01-01 for ");
-		sb.append("customer@company.com");
-		sb.append("\n- ");
-		sb.append("Show orders from last 7 days using ");
-		sb.append("myemail@domain.com");
-		sb.append("\n\n");
-		sb.append("**Use the same email address you used when placing ");
-		sb.append("your orders.**");
 
 		return sb.toString();
 	}

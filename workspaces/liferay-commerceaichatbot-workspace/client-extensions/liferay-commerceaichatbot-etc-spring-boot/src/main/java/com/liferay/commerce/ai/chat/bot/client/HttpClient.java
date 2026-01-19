@@ -5,6 +5,8 @@
 
 package com.liferay.commerce.ai.chat.bot.client;
 
+import com.liferay.commerce.ai.chat.bot.util.SecurityUtils;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -19,7 +21,6 @@ import javax.annotation.PostConstruct;
 
 import javax.net.ssl.SSLContext;
 
-import com.liferay.commerce.ai.chat.bot.util.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,9 +44,6 @@ import org.apache.http.ssl.SSLContexts;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 

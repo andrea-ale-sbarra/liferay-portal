@@ -5,6 +5,7 @@
 
 package com.liferay.commerce.ai.chat.bot.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,16 @@ import java.util.Map;
  * @author Ivica Cardic
  */
 public class UserAccount {
+
+	public boolean containsAccount(long accountId) {
+		for (AccountBrief accountBrief : _accountBriefs) {
+			if (accountBrief.getId() == accountId) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	@Override
 	public boolean equals(Object object) {
@@ -35,6 +46,19 @@ public class UserAccount {
 
 	public List<AccountBrief> getAccountBriefs() {
 		return _accountBriefs;
+	}
+
+	public List<Account> getAccounts() {
+		List<Account> accounts = new ArrayList<>();
+
+		for (AccountBrief accountBrief : _accountBriefs) {
+			accounts.add(
+				new Account(
+					accountBrief.getId(), accountBrief.getName(),
+					accountBrief.getType(), null));
+		}
+
+		return accounts;
 	}
 
 	public Map<String, String> getAddress() {

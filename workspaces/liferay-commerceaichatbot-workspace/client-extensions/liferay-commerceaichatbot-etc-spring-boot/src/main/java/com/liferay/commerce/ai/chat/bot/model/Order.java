@@ -35,7 +35,7 @@ public class Order {
 		return true;
 	}
 
-	public String getAccountId() {
+	public long getAccountId() {
 		return _accountId;
 	}
 
@@ -116,7 +116,7 @@ public class Order {
 		return (int)(_id ^ (_id >>> 32));
 	}
 
-	public void setAccountId(String accountId) {
+	public void setAccountId(long accountId) {
 		_accountId = accountId;
 	}
 
@@ -242,7 +242,7 @@ public class Order {
 		).toString();
 	}
 
-	private String _accountId;
+	private long _accountId;
 	private String _accountName;
 	private Map<String, String> _billingAddress = new HashMap<>();
 
