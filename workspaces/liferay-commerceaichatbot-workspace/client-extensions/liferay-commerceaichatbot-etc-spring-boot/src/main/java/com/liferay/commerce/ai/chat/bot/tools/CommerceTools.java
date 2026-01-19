@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.liferay.commerce.ai.chat.bot.util.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
@@ -278,14 +279,10 @@ public class CommerceTools {
 	}
 
 	@Annotations.Schema(
-		description = "Retrieves orders for a customer by their email address",
+		description = "Retrieves orders for a customer",
 		name = "getCustomerOrdersTool"
 	)
 	public Map<String, Object> getCustomerOrdersTool(
-		@Annotations.Schema(
-			description = "the email address of the customer", name = "email"
-		)
-		String email,
 		@Annotations.Schema(
 			description = "whether to sort the orders in ascending order",
 			name = "asc"
@@ -298,6 +295,8 @@ public class CommerceTools {
 			if (channels.isEmpty()) {
 				return Map.of("error", "No channels available in the system.");
 			}
+
+			String email = SecurityUtils.getUsername();
 
 			UserAccount userAccount = _commerceService.getUserAccountByEmail(
 				email);
@@ -593,7 +592,7 @@ public class CommerceTools {
 	}
 
 	@Annotations.Schema(
-		description = "Searches for orders within a specific date range for a customer by email",
+		description = "Searches for orders within a specific date range for a customer",
 		name = "searchOrdersByDateRangeTool"
 	)
 	public Map<String, Object> searchOrdersByDateRangeTool(
@@ -606,11 +605,9 @@ public class CommerceTools {
 			description = "the end date of the range (YYYY-MM-DD)",
 			name = "endDate"
 		)
-		String endDate,
-		@Annotations.Schema(
-			description = "the email address of the customer", name = "email"
-		)
-		String email) {
+		String endDate) {
+
+		String email = SecurityUtils.getUsername();
 
 		try {
 			if (StringUtils.isEmpty(email)) {
