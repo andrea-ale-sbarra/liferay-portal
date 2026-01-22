@@ -17,6 +17,7 @@ import {KeyedMutator} from 'swr';
 import {z} from 'zod';
 
 import useAIWizardContentOAuth2 from '../../hooks/useAIWizardOAuth2';
+import useChannels from '../../hooks/useChannels';
 import useListTypeDefinition from '../../hooks/useListTypeDefinition';
 import {contentWizardSettings as zodSchema} from '../../schema';
 import {Liferay} from '../../services/liferay';
@@ -34,8 +35,9 @@ export default function SettingsBody() {
 			? {
 					active: setting.active,
 					apiKey: setting.apiKey,
-                    faq: setting.faq,
+					channelId: setting.channelId,
 					description: setting.description,
+					faq: setting.faq,
 					id: setting.id,
 					imageModel: setting.imageModel.key,
 					model: setting.model.key,
@@ -44,8 +46,9 @@ export default function SettingsBody() {
 			: {
 					active: true,
 					apiKey: '',
+					channelId: undefined,
 					description: '',
-                    faq: '',
+					faq: '',
 					imageModel: '',
 					model: '',
 					provider: '',
@@ -61,8 +64,10 @@ export default function SettingsBody() {
 	const {data: providers = []} = useListTypeDefinition(
 		'L9M7_COMMERCE_AI_CHAT_BOT_PROVIDERS'
 	);
+	const {data: channels = []} = useChannels();
 
 	const active = form.watch('active');
+	const channelId = form.watch('channelId');
 	const imageModel = form.watch('imageModel') || '';
 	const model = form.watch('model') || '';
 	const provider = form.watch('provider') || '';
@@ -107,6 +112,32 @@ export default function SettingsBody() {
 					<ClayInput
 						placeholder="API Key"
 						{...form.register('apiKey')}
+					/>
+				</ClayForm.Group>
+
+				<ClayForm.Group className="form-group-sm">
+					<label htmlFor="channelId">Channel</label>
+
+					<ClaySelectWithOption
+						value={channelId ?? ''}
+						{...form.register('channelId', {
+							onChange: (event) =>
+								form.setValue(
+									'channelId',
+									event.target.value
+										? Number(event.target.value)
+										: undefined
+								),
+							setValueAs: (value) =>
+								value ? Number(value) : undefined,
+						})}
+						options={[
+							{label: 'Select a Channel', value: ''},
+							...channels.map((channel: any) => ({
+								label: channel.name,
+								value: channel.id,
+							})),
+						]}
 					/>
 				</ClayForm.Group>
 

@@ -34,6 +34,10 @@ export default class CommerceAIChatBotContentOAuth2 extends OAuth2Client {
 		}) as unknown as Promise<{output: string}>;
 	}
 
+	async getChannels(): Promise<any[]> {
+		return this.fetch('/settings/channels') as Promise<any[]>;
+	}
+
 	async getSettingsStatus(): Promise<any> {
 		const response = await this.fetch('/settings/status');
 
