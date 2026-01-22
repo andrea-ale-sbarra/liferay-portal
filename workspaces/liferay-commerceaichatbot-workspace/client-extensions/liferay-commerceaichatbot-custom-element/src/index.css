@@ -68,6 +68,7 @@
 
 #AIButton {
 	bottom: 20px;
+	margin-right: 20px;
 	position: absolute;
 	right: 0;
 }
@@ -79,20 +80,41 @@
 }
 
 #AIButton .button-wrapper .button {
+	align-items: center !important;
+	aspect-ratio: 1 !important;
 	background-color: black !important;
 	border: 0px !important;
-	border-radius: 50px !important;
+	border-radius: 50% !important;
 	color: white !important;
 	cursor: pointer !important;
-	display: block !important;
-	font-size: 13px !important;
-	font-weight: 700 !important;
-	letter-spacing: 2px !important;
-	line-height: 32px !important;
-	padding: 4px 24px !important;
+	display: flex !important;
+	height: 44px !important;
+	justify-content: center !important;
+	padding: 0 !important;
 	position: relative !important;
-	text-transform: uppercase !important;
+	width: 44px !important;
 	z-index: 11 !important;
+}
+
+#AIButton .button-wrapper .button .icon-monospaced {
+	display: block !important;
+	height: 18px !important;
+	left: 50% !important;
+	margin: 0 !important;
+	margin-left: -9px !important;
+	margin-top: -9px !important;
+	padding: 0 !important;
+	position: absolute !important;
+	top: 50% !important;
+	width: 18px !important;
+}
+
+#AIButton .button-wrapper .button .lexicon-icon {
+	display: block !important;
+	height: 18px !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	width: 18px !important;
 }
 
 #AIButton .button-wrapper .button-bg {
@@ -110,7 +132,7 @@
 	) !important;
 	animation: AnimateBorder 4s ease infinite !important;
 	background-size: 600% 600% !important;
-	border-radius: 50px !important;
+	border-radius: 50% !important;
 	-webkit-animation: AnimateBorder 4s ease infinite;
 	-moz-animation: AnimateBorder 4s ease infinite !important;
 	cursor: pointer !important;
