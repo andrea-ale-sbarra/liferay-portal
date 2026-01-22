@@ -6,8 +6,12 @@
 package com.liferay.commerce.ai.chat.bot;
 
 import com.liferay.client.extension.util.spring.boot3.BaseRestController;
+import com.liferay.commerce.ai.chat.bot.model.Channel;
 import com.liferay.commerce.ai.chat.bot.model.Settings;
+import com.liferay.commerce.ai.chat.bot.service.CommerceService;
 import com.liferay.commerce.ai.chat.bot.service.SettingsService;
+
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -51,6 +55,14 @@ public class SettingsRestController extends BaseRestController {
 	@GetMapping
 	public ResponseEntity<String> get(@AuthenticationPrincipal Jwt jwt) {
 		return new ResponseEntity<>(_get(jwt, null), HttpStatus.OK);
+	}
+
+	@GetMapping("/channels")
+	public ResponseEntity<List<Channel>> getChannels(
+		@AuthenticationPrincipal Jwt jwt) {
+
+		return new ResponseEntity<>(
+			_commerceService.getChannels(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
@@ -185,6 +197,9 @@ public class SettingsRestController extends BaseRestController {
 
 	private static final Log _log = LogFactory.getLog(
 		SettingsRestController.class);
+
+	@Autowired
+	private CommerceService _commerceService;
 
 	@Autowired
 	private SettingsService _settingsService;
