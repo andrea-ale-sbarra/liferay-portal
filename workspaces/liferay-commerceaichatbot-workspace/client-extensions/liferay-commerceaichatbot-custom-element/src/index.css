@@ -8,6 +8,32 @@
 	right: 20px;
 }
 
+.ai-parent-modal .modal-dialog.modal-lg {
+	max-width: 500px;
+	width: 500px;
+}
+
+.ai-parent-modal .modal-dialog.modal-lg .modal-body {
+	height: 400px;
+	overflow-y: auto;
+}
+
+.chat-input-container {
+	position: relative;
+	width: 100%;
+}
+
+.chat-input-container textarea {
+	padding-right: 50px;
+	resize: none;
+}
+
+.chat-input-submit {
+	bottom: 8px;
+	position: absolute;
+	right: 8px;
+}
+
 .cursor-pointer {
 	cursor: pointer;
 }
