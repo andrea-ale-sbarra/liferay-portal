@@ -41,6 +41,25 @@
 					"type": "Boolean"
 				},
 				{
+					"DBType": "Long",
+					"businessType": "Integer",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Channel"
+					},
+					"name": "channelId",
+					"objectFieldSettings": [
+					],
+					"readOnly": "false",
+					"readOnlyConditionExpression": "",
+					"required": true,
+					"state": false,
+					"system": false,
+					"type": "Long"
+				},
+				{
 					"DBType": "String",
 					"businessType": "Text",
 					"indexed": false,
