@@ -1,11 +1,10 @@
-import ClayForm, { ClayInput } from '@clayui/form';
-import ClayLayout from '@clayui/layout';
-import ClayIcon from '@clayui/icon';
 import ClayButton from '@clayui/button';
+import ClayForm, { ClayInput } from '@clayui/form';
+import ClayIcon from '@clayui/icon';
+import { useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { Schema } from '../CommerceAIChatBot.tsx';
-import { useRef } from 'react';
 
 type Props = {
 	form: UseFormReturn<Schema>;
@@ -21,6 +20,7 @@ export default function ChatInput(props: Props) {
 
 	const handleKeyDown = (event: any) => {
 		if (event.key === 'Enter') {
+			event.stopPropagation();
 			if (!event.shiftKey && text.trim() !== '') {
 				event.preventDefault();
 				formRef.current?.requestSubmit();
@@ -29,60 +29,44 @@ export default function ChatInput(props: Props) {
 	};
 
 	return (
-		<>
-			<ClayLayout.ContentRow className="w-100">
-				<ClayLayout.ContentCol expand>
-					<ClayForm
-						ref={formRef}
-						className="d-flex w-100"
-						onSubmit={() => handleSubmit((data) => props.onSubmit(data, () => {
-							if (inputRef.current) {
-								inputRef.current.value = ''
-							}
-						}))}
-					>
-						<ClayInput
-							{...register('input')}
-							value={text}
-							onKeyDown={handleKeyDown}
-							component="textarea"
-							disabled={
-								formState.isSubmitting || formState.isLoading
-							}
-							placeholder={
-								props.placeholder ||
-								'Ask the Assistant for help'
-							}
-						/>
-					</ClayForm>
-				</ClayLayout.ContentCol>
-				<ClayLayout.ContentCol>
-					<ClayLayout.ContentSection>
-						<ClayButton.Group>
-							<ClayButton
-								disabled={
-									formState.isSubmitting ||
-									formState.isLoading ||
-									!text?.trim()?.length
-								}
-								displayType="primary"
-								aria-label="Submit button"
-								onClick={(event) => handleSubmit((data) => props.onSubmit(data, () => {
-									if (inputRef.current) {
-										inputRef.current.value = ''
-									}
-
-								}))(event)}
-							>
-								<ClayIcon
-									aria-label="Submit Prompt"
-									symbol="order-arrow-right"
-								/>
-							</ClayButton>
-						</ClayButton.Group>
-					</ClayLayout.ContentSection>
-				</ClayLayout.ContentCol>
-			</ClayLayout.ContentRow>
-		</>
+		<ClayForm
+			ref={formRef}
+			className="chat-input-container"
+			onSubmit={handleSubmit((data) => props.onSubmit(data, () => {
+				if (inputRef.current) {
+					inputRef.current.value = ''
+				}
+			}))}
+		>
+			<ClayInput
+				{...register('input')}
+				value={text}
+				onKeyDown={handleKeyDown}
+				component="textarea"
+				disabled={
+					formState.isSubmitting || formState.isLoading
+				}
+				placeholder={
+					props.placeholder ||
+					'Ask the Assistant for help'
+				}
+			/>
+			<ClayButton
+				className="chat-input-submit"
+				disabled={
+					formState.isSubmitting ||
+					formState.isLoading ||
+					!text?.trim()?.length
+				}
+				displayType="primary"
+				aria-label="Submit button"
+				type="submit"
+			>
+				<ClayIcon
+					aria-label="Submit Prompt"
+					symbol="order-arrow-right"
+				/>
+			</ClayButton>
+		</ClayForm>
 	);
 }
