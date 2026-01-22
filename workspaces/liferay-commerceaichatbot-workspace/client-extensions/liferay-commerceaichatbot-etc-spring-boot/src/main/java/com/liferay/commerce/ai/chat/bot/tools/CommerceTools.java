@@ -14,7 +14,6 @@ import com.google.adk.tools.Annotations;
 import com.liferay.commerce.ai.chat.bot.constants.CommerceOrderConstants;
 import com.liferay.commerce.ai.chat.bot.model.Account;
 import com.liferay.commerce.ai.chat.bot.model.AccountBrief;
-import com.liferay.commerce.ai.chat.bot.model.Channel;
 import com.liferay.commerce.ai.chat.bot.model.Order;
 import com.liferay.commerce.ai.chat.bot.model.OrderItem;
 import com.liferay.commerce.ai.chat.bot.model.PageResult;
@@ -35,7 +34,6 @@ import java.time.format.DateTimeFormatter;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -101,12 +99,6 @@ public class CommerceTools {
 	)
 	public Map<String, Object> getAllAccountsOrderSummaryTool() {
 		try {
-			List<Channel> channels = _commerceService.getChannels();
-
-			if (channels.isEmpty()) {
-				return Map.of("error", "No channels available in the system.");
-			}
-
 			UserAccount userAccount = _commerceService.getUserAccountByEmail(
 				SecurityUtils.getEmail());
 
@@ -116,11 +108,10 @@ public class CommerceTools {
 				return Map.of("error", "No accounts available.");
 			}
 
-			Channel channel = channels.get(0);
 			List<Summary> accountSummaries = new ArrayList<>();
 			int totalOrders = 0;
 
-			long channelId = channel.getId();
+			long channelId = _getChannelId();
 
 			for (Account account : accounts) {
 				try {
@@ -166,7 +157,7 @@ public class CommerceTools {
 					b.getOrderCount(), a.getOrderCount()));
 
 			return Map.of(
-				"accountSummaries", accountSummaries, "channel", channel,
+				"accountSummaries", accountSummaries, "channelId", channelId,
 				"totalOrders", totalOrders);
 		}
 		catch (Exception exception) {
@@ -203,21 +194,13 @@ public class CommerceTools {
 		boolean asc) {
 
 		try {
-			List<Channel> channels = _commerceService.getChannels();
+			long channelId = _getChannelId();
 
-			if (channels.isEmpty()) {
-				return Map.of("error", "No channels available in the system.");
-			}
-
-			Channel channel = channels.get(0);
-
-			Account account = _fetchAccount(channel, accountName);
+			Account account = _fetchAccount(channelId, accountName);
 
 			if (account == null) {
 				return Map.of("error", _getAccountNotFoundMessage(accountName));
 			}
-
-			long channelId = channel.getId();
 
 			List<Order> orders;
 
@@ -281,24 +264,16 @@ public class CommerceTools {
 		boolean asc) {
 
 		try {
-			List<Channel> channels = _commerceService.getChannels();
-
-			if (channels.isEmpty()) {
-				return Map.of("error", "No channels available in the system.");
-			}
-
 			String email = SecurityUtils.getEmail();
 
 			UserAccount userAccount = _commerceService.getUserAccountByEmail(
-				SecurityUtils.getEmail());
+				email);
 
 			if (userAccount == null) {
 				return Map.of("error", _getUserAccountNotFoundMessage(email));
 			}
 
-			Channel channel = channels.get(0);
-
-			long channelId = channel.getId();
+			long channelId = _getChannelId();
 
 			List<Order> orders = new ArrayList<>();
 
@@ -508,30 +483,23 @@ public class CommerceTools {
 	}
 
 	@Annotations.Schema(
-		description = "Lists all available commerce channels and their associated accounts",
+		description = "Lists the configured commerce channel and its associated accounts",
 		name = "listAvailableChannelsAndAccountsTool"
 	)
 	public Map<String, Object> listAvailableChannelsAndAccountsTool() {
 		try {
-			List<Channel> channels = _commerceService.getChannels();
-
-			Map<Long, List<Account>> channelAccountsMap = new HashMap<>();
+			long channelId = _getChannelId();
 
 			UserAccount userAccount = _commerceService.getUserAccountByEmail(
 				SecurityUtils.getEmail());
 
-			for (Channel channel : channels) {
-				List<Account> channelAccounts = _commerceService.getAccounts(
-					channel.getId(), null);
+			List<Account> accounts = _commerceService.getAccounts(
+				channelId, null);
 
-				channelAccounts.removeIf(
-					account -> !userAccount.containsAccount(account.getId()));
+			accounts.removeIf(
+				account -> !userAccount.containsAccount(account.getId()));
 
-				channelAccountsMap.put(channel.getId(), channelAccounts);
-			}
-
-			return Map.of(
-				"channels", channels, "channelAccounts", channelAccountsMap);
+			return Map.of("accounts", accounts, "channelId", channelId);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -561,15 +529,9 @@ public class CommerceTools {
 		String accountName) {
 
 		try {
-			List<Channel> channels = _commerceService.getChannels();
+			long channelId = _getChannelId();
 
-			if (channels.isEmpty()) {
-				return Map.of("error", "No channels available in the system.");
-			}
-
-			Channel channel = channels.get(0);
-
-			Account account = _fetchAccount(channel, accountName);
+			Account account = _fetchAccount(channelId, accountName);
 
 			if (account == null) {
 				return Map.of("error", _getAccountNotFoundMessage(accountName));
@@ -578,9 +540,8 @@ public class CommerceTools {
 			return Map.of(
 				"orders",
 				_getOrdersByDateRangeMap(
-					account.getId(), channel.getId(),
-					_getEndOffsetDateTime(endDate), null,
-					_getOffsetDateTime(startDate)));
+					account.getId(), channelId, _getEndOffsetDateTime(endDate),
+					null, _getOffsetDateTime(startDate)));
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -606,12 +567,6 @@ public class CommerceTools {
 		String endDate) {
 
 		try {
-			List<Channel> channels = _commerceService.getChannels();
-
-			if (channels.isEmpty()) {
-				return Map.of("error", "No channels available in the system.");
-			}
-
 			String email = SecurityUtils.getEmail();
 
 			UserAccount userAccount = _commerceService.getUserAccountByEmail(
@@ -628,7 +583,7 @@ public class CommerceTools {
 					"error", "No accounts found for the given email.");
 			}
 
-			Channel channel = channels.get(0);
+			long channelId = _getChannelId();
 			List<Order> orders = new ArrayList<>();
 
 			for (AccountBrief accountBrief : accountBriefs) {
@@ -636,9 +591,8 @@ public class CommerceTools {
 
 				orders.addAll(
 					_getOrdersByDateRangeMap(
-						accountId, channel.getId(),
-						_getEndOffsetDateTime(endDate), null,
-						_getOffsetDateTime(startDate)));
+						accountId, channelId, _getEndOffsetDateTime(endDate),
+						null, _getOffsetDateTime(startDate)));
 			}
 
 			return Map.of("orders", orders);
@@ -667,19 +621,11 @@ public class CommerceTools {
 		String productDescription) {
 
 		try {
-			List<Channel> channels = _commerceService.getChannels();
-
-			if (channels.isEmpty()) {
-				return Map.of("error", "No channels available in the system.");
-			}
+			long channelId = _getChannelId();
 
 			List<Order> orders = new ArrayList<>();
 
-			Channel channel = channels.get(0);
-
-			long channelId = channel.getId();
-
-			Account account = _fetchAccount(channel, identifier);
+			Account account = _fetchAccount(channelId, identifier);
 
 			if (account != null) {
 				orders = _getOrders(
@@ -799,21 +745,13 @@ public class CommerceTools {
 		String addressQuery) {
 
 		try {
-			List<Channel> channels = _commerceService.getChannels();
-
-			if (channels.isEmpty()) {
-				return Map.of("error", "No channels available in the system.");
-			}
-
-			Channel channel = channels.get(0);
-
-			long channelId = channel.getId();
+			long channelId = _getChannelId();
 
 			List<Order> orders = new ArrayList<>();
 
 			List<Long> accountIds = new ArrayList<>();
 
-			Account account = _fetchAccount(channel, identifier);
+			Account account = _fetchAccount(channelId, identifier);
 
 			if (account != null) {
 				accountIds.add(account.getId());
@@ -910,22 +848,14 @@ public class CommerceTools {
 		String orderStatus) {
 
 		try {
-			List<Channel> channels = _commerceService.getChannels();
-
-			if (channels.isEmpty()) {
-				return Map.of("error", "No channels available in the system.");
-			}
+			long channelId = _getChannelId();
 
 			List<Order> orders = new ArrayList<>();
-
-			Channel channel = channels.get(0);
-
-			long channelId = channel.getId();
 
 			Map<String, Integer> statusMap =
 				CommerceOrderConstants.getOrderStatusMap();
 
-			Account account = _fetchAccount(channel, identifier);
+			Account account = _fetchAccount(channelId, identifier);
 
 			if (account != null) {
 				orders = _commerceService.getAllPlacedOrdersByAccount(
@@ -1185,9 +1115,9 @@ public class CommerceTools {
 		}
 	}
 
-	private Account _fetchAccount(Channel channel, String search) {
+	private Account _fetchAccount(long channelId, String search) {
 		List<Account> accounts = _commerceService.getAccounts(
-			channel.getId(), search);
+			channelId, search);
 
 		if (!accounts.isEmpty()) {
 			return accounts.get(0);
@@ -1274,6 +1204,18 @@ public class CommerceTools {
 		sb.append("- Check individual accounts one by one");
 
 		return sb.toString();
+	}
+
+	private long _getChannelId() {
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+
+		Authentication authentication = securityContext.getAuthentication();
+
+		Jwt jwt = (Jwt)authentication.getPrincipal();
+
+		Settings settings = _settingsService.getActiveSettings(jwt);
+
+		return settings.channelId;
 	}
 
 	private OffsetDateTime _getEndOffsetDateTime(String endDate) {
