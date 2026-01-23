@@ -923,15 +923,6 @@ public class CommerceTools {
 					"1. **Fast alternative**: If you know the order ID, use " +
 						"\"Find order [ID]\" (1 second)");
 				sb.append("\n");
-				sb.append(
-					"2. **Continue with product search**: Provide your email " +
-						"address");
-				sb.append("\n\n");
-				sb.append("**Please provide your email address:**");
-				sb.append("\n");
-				sb.append(
-					"- \"Search my orders for brake pads using " +
-						"your.email@example.com\"");
 
 				return Map.of("search", sb.toString());
 			}
@@ -958,15 +949,6 @@ public class CommerceTools {
 					"1. **Fast alternative**: If you know the order ID, use " +
 						"\"Find order [ID]\" (1 second)");
 				sb.append("\n");
-				sb.append(
-					"2. **Continue with status search**: Provide your email " +
-						"address");
-				sb.append("\n\n");
-				sb.append("**Please provide your email address:**");
-				sb.append("\n");
-				sb.append(
-					"- \"Search my pending orders using " +
-						"your.email@example.com\"");
 
 				return Map.of("search", sb.toString());
 			}
@@ -997,15 +979,6 @@ public class CommerceTools {
 					"2. **Medium speed**: Try date range search if you know " +
 						"the timeframe (6 seconds)");
 				sb.append("\n");
-				sb.append(
-					"3. **Continue with address search**: Provide your email " +
-						"address (5+ minutes)");
-				sb.append("\n\n");
-				sb.append("**Please provide your email address:**");
-				sb.append("\n");
-				sb.append(
-					"- \"Search orders shipped to New York using " +
-						"your.email@example.com\"");
 
 				return Map.of("search", sb.toString());
 			}
@@ -1046,10 +1019,8 @@ public class CommerceTools {
 			sb.append("\n");
 			sb.append("1. What type of search you need");
 			sb.append("\n");
-			sb.append("2. Your email address (if searching your orders)");
-			sb.append("\n");
 			sb.append(
-				"3. Any specific criteria (dates, products, status, etc.)");
+				"2. Any specific criteria (dates, products, status, etc.)");
 
 			return Map.of("search", sb.toString());
 		}
