@@ -226,7 +226,7 @@ public class CommerceTools {
 					).append(
 						"**: "
 					).append(
-						String.valueOf(exception.getMessage())
+						exception.getMessage()
 					).toString());
 			}
 
@@ -425,18 +425,17 @@ public class CommerceTools {
 	public Map<String, Object> getOrderItemsTool(
 		@Annotations.Schema(
 			description = "the order id or external reference code",
-			name = "orderIdentifier"
+			name = "identifier"
 		)
-		String orderIdentifier) {
+		String identifier) {
 
 		try {
-			Order order = _getOrder(orderIdentifier);
+			Order order = _getOrder(identifier);
 
 			if (order == null) {
 				return Map.of(
 					"error",
-					"Order " + orderIdentifier +
-						" not found or not accessible.");
+					"Order " + identifier + " not found or not accessible.");
 			}
 
 			return Map.of(
@@ -447,8 +446,7 @@ public class CommerceTools {
 		}
 		catch (Exception exception) {
 			return Map.of(
-				"error",
-				_getOrderItemsErrorMessage(exception, orderIdentifier));
+				"error", _getOrderItemsErrorMessage(exception, identifier));
 		}
 	}
 
@@ -490,16 +488,9 @@ public class CommerceTools {
 		try {
 			long channelId = _getChannelId();
 
-			UserAccount userAccount = _commerceService.getUserAccountByEmail(
-				SecurityUtils.getEmail());
-
-			List<Account> accounts = _commerceService.getAccounts(
-				channelId, null);
-
-			accounts.removeIf(
-				account -> !userAccount.containsAccount(account.getId()));
-
-			return Map.of("accounts", accounts, "channelId", channelId);
+			return Map.of(
+				"accounts", _getAccounts(channelId, null), "channelId",
+				channelId);
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -610,10 +601,9 @@ public class CommerceTools {
 	)
 	public Map<String, Object> searchOrdersByProductTool(
 		@Annotations.Schema(
-			description = "this can be an email or an account name",
-			name = "identifier"
+			description = "the name of the account", name = "accountName"
 		)
-		String identifier,
+		String accountName,
 		@Annotations.Schema(
 			description = "a description or name of the product",
 			name = "productDescription"
@@ -621,37 +611,26 @@ public class CommerceTools {
 		String productDescription) {
 
 		try {
-			long channelId = _getChannelId();
-
 			List<Order> orders = new ArrayList<>();
 
-			Account account = _fetchAccount(channelId, identifier);
+			UserAccount userAccount = _commerceService.getUserAccountByEmail(
+				SecurityUtils.getEmail());
 
-			if (account != null) {
-				orders = _getOrders(
-					account.getId(), channelId, productDescription,
-					"orderDate:desc", null);
+			if (userAccount == null) {
+				return Map.of("orders", orders);
 			}
-			else {
-				UserAccount userAccount =
-					_commerceService.getUserAccountByEmail(identifier);
 
-				if (userAccount == null) {
-					return Map.of("orders", orders);
-				}
+			long channelId = _getChannelId();
 
-				for (AccountBrief accountBrief :
-						userAccount.getAccountBriefs()) {
-
-					orders.addAll(
-						_getOrders(
-							accountBrief.getId(), channelId, productDescription,
-							"orderDate:desc", null));
-				}
+			for (AccountBrief accountBrief : userAccount.getAccountBriefs()) {
+				orders.addAll(
+					_getOrders(
+						accountBrief.getId(), channelId, productDescription,
+						"orderDate:desc", null));
 			}
 
 			if (orders.isEmpty()) {
-				return Map.of("error", "No orders found for " + identifier);
+				return Map.of("error", "No orders found");
 			}
 
 			List<AbstractMap.SimpleEntry<Order, List<OrderItem>>> matches =
@@ -714,9 +693,7 @@ public class CommerceTools {
 
 			if (matches.isEmpty()) {
 				return Map.of(
-					"error",
-					_getNoOrdersByProductMessage(
-						identifier, productDescription));
+					"error", _getNoOrdersByProductMessage(productDescription));
 			}
 
 			return Map.of("orders", matches);
@@ -734,42 +711,28 @@ public class CommerceTools {
 	)
 	public Map<String, Object> searchOrdersByShippingAddressTool(
 		@Annotations.Schema(
-			description = "this can be an email or an account name",
-			name = "identifier"
-		)
-		String identifier,
-		@Annotations.Schema(
 			description = "the address or part of the address to search for",
 			name = "addressQuery"
 		)
 		String addressQuery) {
 
 		try {
-			long channelId = _getChannelId();
+			UserAccount userAccount = _commerceService.getUserAccountByEmail(
+				SecurityUtils.getEmail());
+
+			if (userAccount == null) {
+				return Map.of("orders", Map.of());
+			}
 
 			List<Order> orders = new ArrayList<>();
 
 			List<Long> accountIds = new ArrayList<>();
 
-			Account account = _fetchAccount(channelId, identifier);
-
-			if (account != null) {
-				accountIds.add(account.getId());
+			for (AccountBrief accountBrief : userAccount.getAccountBriefs()) {
+				accountIds.add(accountBrief.getId());
 			}
-			else {
-				UserAccount userAccount =
-					_commerceService.getUserAccountByEmail(identifier);
 
-				if (userAccount == null) {
-					return Map.of("orders", orders);
-				}
-
-				for (AccountBrief accountBrief :
-						userAccount.getAccountBriefs()) {
-
-					accountIds.add(accountBrief.getId());
-				}
-			}
+			long channelId = _getChannelId();
 
 			for (long accountId : accountIds) {
 				int page = 1;
@@ -805,7 +768,7 @@ public class CommerceTools {
 			}
 
 			if (orders.isEmpty()) {
-				return Map.of("error", "No orders found for " + identifier);
+				return Map.of("error", "No orders found");
 			}
 
 			List<Order> orderList = new ArrayList<>();
@@ -819,8 +782,7 @@ public class CommerceTools {
 			if (orderList.isEmpty()) {
 				return Map.of(
 					"error",
-					_getNoOrdersByShippingAddressMessage(
-						addressQuery, account));
+					_getNoOrdersByShippingAddressMessage(addressQuery));
 			}
 
 			return Map.of("orderList", orderList);
@@ -837,54 +799,36 @@ public class CommerceTools {
 	)
 	public Map<String, Object> searchOrdersByStatusTool(
 		@Annotations.Schema(
-			description = "this can be an email or an account name",
-			name = "identifier"
-		)
-		String identifier,
-		@Annotations.Schema(
 			description = "The order status must be exactly one of: [awaiting pickup, cancelled, completed, declined, disputed, in progress, on hold, open, partially refunded, partially shipped, pending, processing, quote processed, quote requested, refunded, shipped, subscription]",
 			name = "orderStatus"
 		)
 		String orderStatus) {
 
 		try {
-			long channelId = _getChannelId();
-
 			List<Order> orders = new ArrayList<>();
 
+			UserAccount userAccount = _commerceService.getUserAccountByEmail(
+				SecurityUtils.getEmail());
+
+			if (userAccount == null) {
+				return Map.of("orders", orders);
+			}
+
+			long channelId = _getChannelId();
 			Map<String, Integer> statusMap =
 				CommerceOrderConstants.getOrderStatusMap();
 
-			Account account = _fetchAccount(channelId, identifier);
-
-			if (account != null) {
-				orders = _commerceService.getAllPlacedOrdersByAccount(
-					channelId, account.getId(), identifier, "createDate:desc",
-					"(orderStatus/any(x:(x eq " + statusMap.get(orderStatus) +
-						")))");
-			}
-			else {
-				UserAccount userAccount =
-					_commerceService.getUserAccountByEmail(identifier);
-
-				if (userAccount == null) {
-					return Map.of("orders", orders);
-				}
-
-				for (AccountBrief accountBrief :
-						userAccount.getAccountBriefs()) {
-
-					orders.addAll(
-						_commerceService.getAllPlacedOrdersByAccount(
-							channelId, accountBrief.getId(), identifier,
-							"createDate:desc",
-							"(orderStatus/any(x:(x eq " +
-								statusMap.get(orderStatus) + ")))"));
-				}
+			for (AccountBrief accountBrief : userAccount.getAccountBriefs()) {
+				orders.addAll(
+					_commerceService.getAllPlacedOrdersByAccount(
+						channelId, accountBrief.getId(), null,
+						"createDate:desc",
+						"(orderStatus/any(x:(x eq " +
+							statusMap.get(orderStatus) + ")))"));
 			}
 
 			if (orders.isEmpty()) {
-				return Map.of("error", "No orders found for " + identifier);
+				return Map.of("error", "No orders found");
 			}
 
 			return Map.of("orders", orders);
@@ -1116,8 +1060,7 @@ public class CommerceTools {
 	}
 
 	private Account _fetchAccount(long channelId, String search) {
-		List<Account> accounts = _commerceService.getAccounts(
-			channelId, search);
+		List<Account> accounts = _getAccounts(channelId, search);
 
 		if (!accounts.isEmpty()) {
 			return accounts.get(0);
@@ -1176,6 +1119,19 @@ public class CommerceTools {
 		sb.append("orders.");
 
 		return sb.toString();
+	}
+
+	private List<Account> _getAccounts(long channelId, String search) {
+		UserAccount userAccount = _commerceService.getUserAccountByEmail(
+			SecurityUtils.getEmail());
+
+		List<Account> accounts = _commerceService.getAccounts(
+			channelId, search);
+
+		accounts.removeIf(
+			account -> !userAccount.containsAccount(account.getId()));
+
+		return accounts;
 	}
 
 	private String _getAllAccountsOrderSummaryErrorMessage(
@@ -1360,9 +1316,7 @@ public class CommerceTools {
 		return sb.toString();
 	}
 
-	private String _getNoOrdersByProductMessage(
-		String identifier, String productDescription) {
-
+	private String _getNoOrdersByProductMessage(String productDescription) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("**🔍 No Orders Found**\n\n");
@@ -1373,14 +1327,6 @@ public class CommerceTools {
 			productDescription
 		).append(
 			"\"**\n\n"
-		);
-
-		sb.append(
-			"**Customer**: "
-		).append(
-			identifier
-		).append(
-			"\n"
 		);
 
 		sb.append(
@@ -1402,9 +1348,7 @@ public class CommerceTools {
 		return sb.toString();
 	}
 
-	private String _getNoOrdersByShippingAddressMessage(
-		String addressQuery, Account account) {
-
+	private String _getNoOrdersByShippingAddressMessage(String addressQuery) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("**No Orders Found**");
@@ -1412,9 +1356,6 @@ public class CommerceTools {
 		sb.append("No orders found with shipping address containing: **\"");
 		sb.append(addressQuery);
 		sb.append("\"**");
-		sb.append("\n\n");
-		sb.append("**Customer**: ");
-		sb.append(account.getName());
 		sb.append("\n\n");
 		sb.append("**Address Search**: ");
 		sb.append(addressQuery);
