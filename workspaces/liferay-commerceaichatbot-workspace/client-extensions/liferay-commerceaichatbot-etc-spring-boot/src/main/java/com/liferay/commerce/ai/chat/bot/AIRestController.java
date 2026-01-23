@@ -84,10 +84,10 @@ public class AIRestController extends BaseRestController {
 
 				// Register CommerceTools methods as FunctionTools
 
-				FunctionTool listChannelsAccountsTool = FunctionTool.create(
-					_commerceTools, "listAvailableChannelsAndAccountsTool");
 				FunctionTool findOrderTool = FunctionTool.create(
 					_commerceTools, "findOrderTool");
+				FunctionTool listAccountsTool = FunctionTool.create(
+					_commerceTools, "listAccountsTool");
 				FunctionTool searchAccountOrdersByDateRangeTool =
 					FunctionTool.create(
 						_commerceTools, "searchAccountOrdersByDateRangeTool");
@@ -130,7 +130,7 @@ public class AIRestController extends BaseRestController {
 				).instruction(
 					_getInstruction()
 				).tools(
-					listChannelsAccountsTool, findOrderTool,
+					findOrderTool, listAccountsTool,
 					searchAccountOrdersByDateRangeTool, searchOrdersTool,
 					searchOrdersByDateRangeTool, searchOrdersByProductTool,
 					searchOrdersByStatusTool, searchOrdersByShippingAddressTool,

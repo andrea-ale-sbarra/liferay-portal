@@ -45,25 +45,6 @@ public class CommerceService {
 		_httpClient = httpClient;
 	}
 
-	public List<Account> getAccounts(long channelId, String search) {
-		List<Account> accounts = new ArrayList<>();
-
-		JSONArray jsonArray = _getAccountsJSONArray(
-			String.valueOf(channelId), search);
-
-		if (jsonArray != null) {
-			for (int i = 0; i < jsonArray.length(); i++) {
-				Account account = _toAccount(jsonArray.optJSONObject(i));
-
-				if (account != null) {
-					accounts.add(account);
-				}
-			}
-		}
-
-		return accounts;
-	}
-
 	public List<Order> getAllPlacedOrdersByAccount(
 		long channelId, long accountId, String search, String sort,
 		String filter) {

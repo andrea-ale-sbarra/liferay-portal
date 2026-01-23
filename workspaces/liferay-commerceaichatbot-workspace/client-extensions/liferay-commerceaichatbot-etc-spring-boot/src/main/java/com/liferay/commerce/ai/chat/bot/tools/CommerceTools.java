@@ -196,7 +196,7 @@ public class CommerceTools {
 		try {
 			long channelId = _getChannelId();
 
-			Account account = _fetchAccount(channelId, accountName);
+			Account account = _fetchAccount();
 
 			if (account == null) {
 				return Map.of("error", _getAccountNotFoundMessage(accountName));
@@ -481,16 +481,12 @@ public class CommerceTools {
 	}
 
 	@Annotations.Schema(
-		description = "Lists the configured commerce channel and its associated accounts",
-		name = "listAvailableChannelsAndAccountsTool"
+		description = "Lists user associated accounts",
+		name = "listAccountsTool"
 	)
-	public Map<String, Object> listAvailableChannelsAndAccountsTool() {
+	public Map<String, Object> listAccountsTool() {
 		try {
-			long channelId = _getChannelId();
-
-			return Map.of(
-				"accounts", _getAccounts(channelId, null), "channelId",
-				channelId);
+			return Map.of("accounts", _getAccounts());
 		}
 		catch (Exception exception) {
 			return Map.of(
@@ -520,13 +516,13 @@ public class CommerceTools {
 		String accountName) {
 
 		try {
-			long channelId = _getChannelId();
-
-			Account account = _fetchAccount(channelId, accountName);
+			Account account = _fetchAccount();
 
 			if (account == null) {
 				return Map.of("error", _getAccountNotFoundMessage(accountName));
 			}
+
+			long channelId = _getChannelId();
 
 			return Map.of(
 				"orders",
@@ -1030,8 +1026,8 @@ public class CommerceTools {
 		}
 	}
 
-	private Account _fetchAccount(long channelId, String search) {
-		List<Account> accounts = _getAccounts(channelId, search);
+	private Account _fetchAccount() {
+		List<Account> accounts = _getAccounts();
 
 		if (!accounts.isEmpty()) {
 			return accounts.get(0);
@@ -1092,17 +1088,11 @@ public class CommerceTools {
 		return sb.toString();
 	}
 
-	private List<Account> _getAccounts(long channelId, String search) {
+	private List<Account> _getAccounts() {
 		UserAccount userAccount = _commerceService.getUserAccountByEmail(
 			SecurityUtils.getEmail());
 
-		List<Account> accounts = _commerceService.getAccounts(
-			channelId, search);
-
-		accounts.removeIf(
-			account -> !userAccount.containsAccount(account.getId()));
-
-		return accounts;
+		return userAccount.getAccounts();
 	}
 
 	private String _getAllAccountsOrderSummaryErrorMessage(
