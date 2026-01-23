@@ -597,10 +597,6 @@ public class CommerceTools {
 	)
 	public Map<String, Object> searchOrdersByProductTool(
 		@Annotations.Schema(
-			description = "the name of the account", name = "accountName"
-		)
-		String accountName,
-		@Annotations.Schema(
 			description = "a description or name of the product",
 			name = "productDescription"
 		)
