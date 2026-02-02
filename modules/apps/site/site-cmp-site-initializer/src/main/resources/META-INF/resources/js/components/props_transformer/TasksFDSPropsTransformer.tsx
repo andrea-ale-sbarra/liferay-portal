@@ -17,6 +17,7 @@ import React from 'react';
 
 import {openCMPModal} from '../../utils/openCMPModal';
 import StateLabel from '../StateLabel';
+import BulkEditAssigneeModalContent from '../modal/BulkEditAssigneeModalContent';
 import BulkEditDueDateModalContent from '../modal/BulkEditDueDateModalContent';
 import BulkEditStateModalContent from '../modal/BulkEditStateModalContent';
 import EditAssigneeModalContent from '../modal/EditAssigneeModalContent';
@@ -98,7 +99,7 @@ export default function TasksFDSPropsTransformer({
 	...otherProps
 }: {
 	additionalProps: any;
-	apiURL?: string;
+	apiURL: string;
 	creationMenu: any;
 	itemsActions?: any[];
 	otherProps: any;
@@ -318,6 +319,24 @@ export default function TasksFDSPropsTransformer({
 				deleteAssetEntriesBulkAction({
 					apiURL: otherProps.apiURL,
 					selectedData,
+				});
+			}
+			else if (action?.data?.id === 'assign-task') {
+				await openCMPModal({
+					center: true,
+					contentComponent: ({
+						closeModal,
+					}: {
+						closeModal: () => void;
+					}) => (
+						<BulkEditAssigneeModalContent
+							apiURL={otherProps.apiURL}
+							closeModal={closeModal}
+							selectedData={selectedData}
+							value={{name: null}}
+						/>
+					),
+					size: 'md',
 				});
 			}
 		},
