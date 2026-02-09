@@ -12,11 +12,6 @@ export {
 	IBulkActionTaskStarterDTO,
 } from './common/types/BulkActionTask';
 
-export {
-	IBulkActionFDSData,
-	IBulkActionTaskStarterDTO,
-} from './common/types/BulkActionTask';
-
 export {default as ContentEditorSidePanel} from './content_editor/components/ContentEditorSidePanel';
 
 // Content Editor
