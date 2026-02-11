@@ -39,7 +39,7 @@ public class CSDiagramEntryModelDocumentContributor
 
 		CPDefinition cpDefinition =
 			_cpDefinitionLocalService.fetchCPDefinitionByCProductId(
-				csDiagramEntry.getCProductId());
+				csDiagramEntry.getCProductId(), false);
 
 		if (cpDefinition == null) {
 			return;

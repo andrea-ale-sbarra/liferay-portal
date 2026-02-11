@@ -313,7 +313,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 		throws PortalException {
 
 		CPDefinition cpDefinition =
-			cpDefinitionLocalService.fetchCPDefinitionByCProductId(cProductId);
+			cpDefinitionLocalService.fetchCPDefinitionByCProductId(cProductId,
+				false);
 
 		if (cpDefinition != null) {
 			_checkCommerceCatalogByCPDefinitionId(
