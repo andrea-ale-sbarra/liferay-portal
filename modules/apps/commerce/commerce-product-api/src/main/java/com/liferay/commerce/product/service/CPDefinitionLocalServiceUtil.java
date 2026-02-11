@@ -440,8 +440,11 @@ public class CPDefinitionLocalServiceUtil {
 			externalReferenceCode, companyId);
 	}
 
-	public static CPDefinition fetchCPDefinitionByCProductId(long cProductId) {
-		return getService().fetchCPDefinitionByCProductId(cProductId);
+	public static CPDefinition fetchCPDefinitionByCProductId(
+		long cProductId, boolean published) {
+
+		return getService().fetchCPDefinitionByCProductId(
+			cProductId, published);
 	}
 
 	public static CPDefinition fetchCPDefinitionByFriendlyURL(

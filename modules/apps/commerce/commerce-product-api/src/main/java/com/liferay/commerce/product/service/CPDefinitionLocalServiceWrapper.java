@@ -474,9 +474,11 @@ public class CPDefinitionLocalServiceWrapper
 	}
 
 	@Override
-	public CPDefinition fetchCPDefinitionByCProductId(long cProductId) {
+	public CPDefinition fetchCPDefinitionByCProductId(
+		long cProductId, boolean published) {
+
 		return _cpDefinitionLocalService.fetchCPDefinitionByCProductId(
-			cProductId);
+			cProductId, published);
 	}
 
 	@Override
