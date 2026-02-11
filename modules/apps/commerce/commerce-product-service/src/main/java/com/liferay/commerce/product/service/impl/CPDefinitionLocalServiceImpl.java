@@ -1489,7 +1489,8 @@ public class CPDefinitionLocalServiceImpl
 	}
 
 	@Override
-	public CPDefinition fetchCPDefinitionByCProductId(long cProductId) {
+	public CPDefinition fetchCPDefinitionByCProductId(long cProductId,
+													  boolean published) {
 		CProduct cProduct = _cProductLocalService.fetchCProduct(cProductId);
 
 		if (cProduct == null) {
@@ -1501,6 +1502,10 @@ public class CPDefinitionLocalServiceImpl
 
 		if (cpDefinition != null) {
 			return cpDefinition;
+		}
+
+		if (published) {
+			return null;
 		}
 
 		return cpDefinitionPersistence.fetchByC_V_First(
@@ -1521,7 +1526,7 @@ public class CPDefinitionLocalServiceImpl
 		}
 
 		return cpDefinitionLocalService.fetchCPDefinitionByCProductId(
-			friendlyURLEntry.getClassPK());
+			friendlyURLEntry.getClassPK(), false);
 	}
 
 	@Override
