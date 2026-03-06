@@ -20,6 +20,7 @@ import com.liferay.headless.commerce.admin.catalog.dto.v1_0.OptionCategory;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.OptionValue;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Pin;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Product;
+import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductAccountGroup;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductConfiguration;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductConfigurationList;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductConfigurationListAccount;
@@ -1817,6 +1818,53 @@ public class Mutation {
 			productAccountGroupResource ->
 				productAccountGroupResource.deleteProductAccountGroupBatch(
 					callbackURL, object));
+	}
+
+	@GraphQLField
+	public ProductAccountGroup
+			createProductByExternalReferenceCodeProductAccountGroup(
+				@GraphQLName("externalReferenceCode") String
+					externalReferenceCode,
+				@GraphQLName("productAccountGroup") ProductAccountGroup
+					productAccountGroup)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_productAccountGroupResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			productAccountGroupResource ->
+				productAccountGroupResource.
+					postProductByExternalReferenceCodeProductAccountGroup(
+						externalReferenceCode, productAccountGroup));
+	}
+
+	@GraphQLField
+	public ProductAccountGroup createProductIdProductAccountGroup(
+			@GraphQLName("id") String id,
+			@GraphQLName("productAccountGroup") ProductAccountGroup
+				productAccountGroup)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_productAccountGroupResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			productAccountGroupResource ->
+				productAccountGroupResource.postProductIdProductAccountGroup(
+					id, productAccountGroup));
+	}
+
+	@GraphQLField
+	public Response createProductIdProductAccountGroupBatch(
+			@GraphQLName("callbackURL") String callbackURL,
+			@GraphQLName("object") Object object)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_productAccountGroupResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			productAccountGroupResource ->
+				productAccountGroupResource.
+					postProductIdProductAccountGroupBatch(callbackURL, object));
 	}
 
 	@GraphQLField

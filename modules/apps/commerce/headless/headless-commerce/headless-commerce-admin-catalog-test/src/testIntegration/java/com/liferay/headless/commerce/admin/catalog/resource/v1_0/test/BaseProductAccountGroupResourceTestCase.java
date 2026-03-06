@@ -1108,6 +1108,52 @@ public abstract class BaseProductAccountGroupResourceTestCase {
 	}
 
 	@Test
+	public void testPostProductByExternalReferenceCodeProductAccountGroup()
+		throws Exception {
+
+		ProductAccountGroup randomProductAccountGroup =
+			randomProductAccountGroup();
+
+		ProductAccountGroup postProductAccountGroup =
+			testPostProductByExternalReferenceCodeProductAccountGroup_addProductAccountGroup(
+				randomProductAccountGroup);
+
+		assertEquals(randomProductAccountGroup, postProductAccountGroup);
+		assertValid(postProductAccountGroup);
+	}
+
+	protected ProductAccountGroup
+			testPostProductByExternalReferenceCodeProductAccountGroup_addProductAccountGroup(
+				ProductAccountGroup productAccountGroup)
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	@Test
+	public void testPostProductIdProductAccountGroup() throws Exception {
+		ProductAccountGroup randomProductAccountGroup =
+			randomProductAccountGroup();
+
+		ProductAccountGroup postProductAccountGroup =
+			testPostProductIdProductAccountGroup_addProductAccountGroup(
+				randomProductAccountGroup);
+
+		assertEquals(randomProductAccountGroup, postProductAccountGroup);
+		assertValid(postProductAccountGroup);
+	}
+
+	protected ProductAccountGroup
+			testPostProductIdProductAccountGroup_addProductAccountGroup(
+				ProductAccountGroup productAccountGroup)
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	@Test
 	public void testBatchEngineDeleteImportTask() throws Exception {
 		ProductAccountGroup productAccountGroup1 =
 			testBatchEngineDeleteImportTask_addProductAccountGroup();
