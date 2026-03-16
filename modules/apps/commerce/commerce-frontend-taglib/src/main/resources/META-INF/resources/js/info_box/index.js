@@ -32,6 +32,9 @@ export default function ModalActionContextHandler({
 				},
 				{
 					formId,
+					onClick: () => {
+						Liferay.fire('isLoadingModal', {id, loading: true});
+					},
 					label: Liferay.Language.get('submit'),
 					type: 'submit',
 				},
@@ -39,14 +42,12 @@ export default function ModalActionContextHandler({
 			containerProps: {
 				className,
 			},
+			disableAutoClose: true,
+			disableButtonsOnLoading: true,
 			id,
 			onClose: () => {
 				if (refreshOnClose) {
-					const refreshTimeout = setTimeout(() => {
-						clearTimeout(refreshTimeout);
-
-						window.top.location.reload();
-					}, 200);
+					window.top.location.reload();
 				}
 			},
 			onOpen: ({iframeWindow}) => {
@@ -56,15 +57,25 @@ export default function ModalActionContextHandler({
 
 				if (formElement) {
 					const {
-						[`${namespace}redirect`]: {value: redirect = null} = {},
+						[`${namespace}requestProcessed`]: {value = "false"} = {},
 					} = formElement;
 
-					formElement.addEventListener('submit', () => {
-						Liferay.fire('closeModal', {
-							id,
-							redirect,
-						});
-					});
+					try {
+						const requestProcessed = JSON.parse(value);
+
+						if (requestProcessed) {
+							Liferay.fire('isLoadingModal', {
+								id,
+								loading: false
+							});
+
+							Liferay.fire('closeModal', {
+								id,
+							});
+						}
+					} catch(_e) {
+						console.error('Unable to process the request.');
+					}
 				}
 			},
 			size,
