@@ -107,7 +107,8 @@ boolean hasMultipleCPSkus = cpContentHelper.hasMultipleCPSkus(cpCatalogEntry);
 								alignment="full-width"
 								CPCatalogEntry="<%= cpCatalogEntry %>"
 								inline="<%= false %>"
-								namespace="<%= portletDisplay.getNamespace() %>"
+								namespace="<%= portletDisplay.getNamespace() + cpCatalogEntry.getCPDefinitionId() %>"
+								showUnitOfMeasureSelector="true"
 								size="md"
 								skuOptions="[]"
 							/>
