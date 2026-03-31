@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.search.ParseException;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.WildcardQuery;
 import com.liferay.portal.kernel.search.generic.BooleanQueryImpl;
+import com.liferay.portal.kernel.search.generic.MatchQuery;
 import com.liferay.portal.kernel.search.generic.MultiMatchQuery;
 import com.liferay.portal.kernel.search.generic.TermQueryImpl;
 import com.liferay.portal.kernel.search.generic.WildcardQueryImpl;
@@ -40,6 +41,17 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class CPDefinitionKeywordQueryContributor
 	implements KeywordQueryContributor {
+
+
+	private MatchQuery _getMatchQuery(
+		String field, String keywords, MatchQuery.Type phrase) {
+
+		MatchQuery matchPhraseQuery = new MatchQuery(field, keywords);
+
+		matchPhraseQuery.setType(phrase);
+
+		return matchPhraseQuery;
+	}
 
 	@Override
 	public void contribute(
@@ -113,7 +125,7 @@ public class CPDefinitionKeywordQueryContributor
 				BooleanQuery searchQuery = new BooleanQueryImpl();
 
 				searchQuery.add(
-					new TermQueryImpl(CPField.SKUS + ".1_10_ngram", keywords),
+					_getMatchQuery(CPField.SKUS + ".1_10_ngram", keywords, MatchQuery.Type.PHRASE),
 					BooleanClauseOccur.SHOULD);
 
 				MultiMatchQuery multiMatchQuery = new MultiMatchQuery(keywords);

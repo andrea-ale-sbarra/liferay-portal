@@ -185,6 +185,52 @@ public class CPDefinitionIndexerTest {
 			expectedDocument.get("gtins"), cpInstance.getGtin());
 	}
 
+	@Test
+	public void testSearchBySku() throws Exception {
+		CommerceCatalog commerceCatalog =
+			_commerceCatalogLocalService.addCommerceCatalog(
+				null, RandomTestUtil.randomString(),
+				RandomTestUtil.randomString(),
+				LocaleUtil.US.getDisplayLanguage(),
+				ServiceContextTestUtil.getServiceContext(_group.getGroupId()));
+
+		CPInstance cpInstance = CPTestUtil.addCPInstanceFromCatalog(
+			commerceCatalog.getGroupId());
+
+		cpInstance.setSku("kw-1");
+
+		cpInstance = _cpInstanceLocalService.updateCPInstance(cpInstance);
+
+		_indexer.reindex(cpInstance.getCPDefinition());
+
+		SearchContext searchContext = new SearchContext();
+
+		searchContext.setCompanyId(_group.getCompanyId());
+		searchContext.setEntryClassNames(
+			new String[] {CPDefinition.class.getName()});
+		searchContext.setGroupIds(new long[] {commerceCatalog.getGroupId()});
+		searchContext.setKeywords("book");
+
+		Hits hits = _indexer.search(searchContext);
+
+		HitsAssert.assertNoHits(hits);
+
+		searchContext.setKeywords("kw");
+
+		hits = _indexer.search(searchContext);
+
+		Document actualDocument = HitsAssert.assertOnlyOne(hits);
+
+		Document expectedDocument = _indexer.getDocument(
+			cpInstance.getCPDefinition());
+
+		Assert.assertEquals(
+			expectedDocument.get("entryClassPK"),
+			actualDocument.get("entryClassPK"));
+		Assert.assertEquals(
+			expectedDocument.getValues("skus")[0], cpInstance.getSku());
+	}
+
 	private void _setUp(String expandoValue, CPInstance cpInstance)
 		throws Exception {
 
