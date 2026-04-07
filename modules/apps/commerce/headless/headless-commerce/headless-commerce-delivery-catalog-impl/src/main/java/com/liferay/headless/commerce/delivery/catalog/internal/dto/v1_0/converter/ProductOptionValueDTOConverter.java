@@ -434,15 +434,40 @@ public class ProductOptionValueDTOConverter
 							return true;
 						}
 
+						Boolean removeExpired =
+							(Boolean)dtoConverterContext.getAttribute(
+								"removeExpired");
+
+						if (removeExpired == null) {
+							removeExpired = false;
+						}
+
 						Long skuId = (Long)dtoConverterContext.getAttribute(
 							"skuId");
 
-						if (Validator.isNull(skuId)) {
+						if (!removeExpired && Validator.isNull(skuId)) {
 							return true;
 						}
 
-						CPInstance selectedCPInstance =
-							_cpInstanceLocalService.fetchCPInstance(skuId);
+						CPInstance selectedCPInstance = null;
+
+						if (Validator.isNotNull(skuId)) {
+							selectedCPInstance =
+								_cpInstanceLocalService.fetchCPInstance(skuId);
+						}
+						else {
+							CPDefinition cpDefinition =
+								cpDefinitionOptionRel.getCPDefinition();
+
+							List<CPInstance> cpInstances =
+								cpDefinition.getCPInstances();
+
+							if (cpInstances.isEmpty()) {
+								return true;
+							}
+
+							selectedCPInstance = cpInstances.get(0);
+						}
 
 						if (selectedCPInstance == null) {
 							return true;

@@ -101,6 +101,9 @@ public class ProductOptionDTOConverter
 				"productOptionValueId",
 				dtoConverterContext.getAttribute("productOptionValueId"));
 			defaultDTOConverterContext.setAttribute(
+				"removeExpired",
+				dtoConverterContext.getAttribute("removeExpired"));
+			defaultDTOConverterContext.setAttribute(
 				"skuId", dtoConverterContext.getAttribute("skuId"));
 
 			productOptionValues.add(
