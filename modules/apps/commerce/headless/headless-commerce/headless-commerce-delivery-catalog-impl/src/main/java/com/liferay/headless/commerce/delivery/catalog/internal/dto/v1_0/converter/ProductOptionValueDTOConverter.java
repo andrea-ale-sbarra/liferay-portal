@@ -448,6 +448,10 @@ public class ProductOptionValueDTOConverter
 							return true;
 						}
 
+						if (selectedCPInstance.isExpired()) {
+							return false;
+						}
+
 						JSONArray clonedJSONArray = _getClonedJSONArray(
 							cpDefinitionOptionRel, cpDefinitionOptionValueRel,
 							selectedCPInstance.getCPInstanceId());
