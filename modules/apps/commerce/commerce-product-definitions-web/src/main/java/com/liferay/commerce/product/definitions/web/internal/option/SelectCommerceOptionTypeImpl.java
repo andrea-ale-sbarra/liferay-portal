@@ -161,8 +161,6 @@ public class SelectCommerceOptionTypeImpl implements CommerceOptionType {
 					cpDefinitionOptionRel.getCPDefinitionOptionRelId(),
 					defaultCPInstanceId));
 			defaultDTOConverterContext.setAttribute(
-				"removeExpired", Boolean.TRUE);
-			defaultDTOConverterContext.setAttribute(
 				"skuId", defaultCPInstanceId);
 
 			productOption = _productOptionDTOConverter.toDTO(
