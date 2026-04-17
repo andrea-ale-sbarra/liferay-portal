@@ -83,30 +83,14 @@ public class ProductOptionDTOConverter
 			DTOConverterContext dtoConverterContext)
 		throws Exception {
 
-		List<CPDefinitionOptionValueRel> cpDefinitionOptionValueRels =
-			new ArrayList<>();
+		List<CPDefinitionOptionValueRel> cpDefinitionOptionValueRels;
 		List<ProductOptionValue> productOptionValues = new ArrayList<>();
 
 		if (cpDefinitionOptionRel.isSkuContributor()) {
-			List<CPInstanceOptionValueRel> cpInstanceOptionValueRels =
-				_cpInstanceOptionValueRelLocalService.
-					getCPDefinitionOptionRelCPInstanceOptionValueRels(
+			cpDefinitionOptionValueRels =
+				_cpDefinitionOptionValueRelLocalService.
+					getApprovedCPInstanceCPDefinitionOptionValueRels(
 						cpDefinitionOptionRel.getCPDefinitionOptionRelId());
-
-			for (CPInstanceOptionValueRel cpInstanceOptionValueRel :
-					cpInstanceOptionValueRels) {
-
-				CPInstance cpInstance = _cpInstanceLocalService.getCPInstance(
-					cpInstanceOptionValueRel.getCPInstanceId());
-
-				if (cpInstance.isApproved()) {
-					cpDefinitionOptionValueRels.add(
-						_cpDefinitionOptionValueRelLocalService.
-							getCPDefinitionOptionValueRel(
-								cpInstanceOptionValueRel.
-									getCPDefinitionOptionValueRelId()));
-				}
-			}
 		}
 		else {
 			cpDefinitionOptionValueRels =
