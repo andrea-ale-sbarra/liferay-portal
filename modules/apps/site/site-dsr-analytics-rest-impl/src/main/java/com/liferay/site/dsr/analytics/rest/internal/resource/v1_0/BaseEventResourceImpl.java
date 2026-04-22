@@ -95,7 +95,6 @@ public abstract class BaseEventResourceImpl implements EventResource {
 	@Override
 	public EventsPage getEvent(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@jakarta.validation.constraints.NotNull
 			@jakarta.ws.rs.QueryParam("channelId")
 			String channelId,
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
@@ -574,4 +573,4 @@ public abstract class BaseEventResourceImpl implements EventResource {
 		LogFactoryUtil.getLog(BaseEventResourceImpl.class);
 
 }
-// LIFERAY-REST-BUILDER-HASH:62197753
+// LIFERAY-REST-BUILDER-HASH:-216421662

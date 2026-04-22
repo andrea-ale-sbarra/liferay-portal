@@ -6,6 +6,7 @@
 package com.liferay.site.dsr.analytics.rest.internal.resource.v1_0;
 
 import com.liferay.analytics.settings.rest.manager.AnalyticsSettingsManager;
+import com.liferay.analytics.settings.rest.resource.v1_0.ChannelResource;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.site.dsr.analytics.rest.dto.v1_0.UserSessionsPage;
 import com.liferay.site.dsr.analytics.rest.internal.client.DSRAnalyticsCloudClient;
@@ -31,17 +32,20 @@ public class UserSessionResourceImpl extends BaseUserSessionResourceImpl {
 		throws Exception {
 
 		DSRAnalyticsCloudClient dsrAnalyticsCloudClient =
-			new DSRAnalyticsCloudClient(_http);
+			new DSRAnalyticsCloudClient(
+				_channelResourceFactory, _http, contextUser);
 
 		return dsrAnalyticsCloudClient.getUserSessionsPage(
 			_analyticsSettingsManager.getAnalyticsConfiguration(
 				contextCompany.getCompanyId()),
-			channelId, entityType, keywords, page, rangeEnd, rangeKey,
-			rangeStart, size);
+			entityType, keywords, page, rangeEnd, rangeKey, rangeStart, size);
 	}
 
 	@Reference
 	private AnalyticsSettingsManager _analyticsSettingsManager;
+
+	@Reference
+	private volatile ChannelResource.Factory _channelResourceFactory;
 
 	@Reference
 	private Http _http;

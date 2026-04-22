@@ -15,25 +15,14 @@ import MostActiveVisitorsQuery from '../queries/MostActiveVisitorsQuery';
 import AnalyticsFrame from './AnalyticsFrame';
 import Loader from './Loader';
 
-const MostActiveVisitors = ({
-	dsrDevEnvEnabled: useDevEnvData,
-	namespace,
-}: {
-	dsrDevEnvEnabled: boolean;
-	namespace: string;
-}) => {
+const MostActiveVisitors = ({namespace}: {namespace: string}) => {
 	const [data, setData] = useState<TVisitor[]>([]);
 	const [element, setElement] = useState<HTMLElement | null>(null);
 
 	const {isLoading, response} = useAnalyticsQuery({
 		element,
 		query: MostActiveVisitorsQuery,
-		settings: {
-			checkViewportVisibility: true,
-			useDevEnvData,
-		},
 		variables: {
-			channelId: '',
 			rangeKey: 7,
 			size: 10,
 			start: 0,

@@ -17,25 +17,14 @@ import AnalyticsFrame from './AnalyticsFrame';
 import Loader from './Loader';
 import {TimeDataRenderer} from './data_renderers/TimeDataRenderer';
 
-const LatestActivity = ({
-	dsrDevEnvEnabled: useDevEnvData,
-	namespace,
-}: {
-	dsrDevEnvEnabled: boolean;
-	namespace: string;
-}) => {
+const LatestActivity = ({namespace}: {namespace: string}) => {
 	const [data, setData] = useState<TLatestActivity[]>([]);
 	const [element, setElement] = useState<HTMLElement | null>(null);
 
 	const {isLoading, response} = useAnalyticsQuery({
 		element,
 		query: LatestActivityQuery,
-		settings: {
-			checkViewportVisibility: true,
-			useDevEnvData,
-		},
 		variables: {
-			channelId: '',
 			includeAnonymousUsers: false,
 			page: 0,
 			rangeKey: 7,

@@ -12,23 +12,14 @@ import AnalyticsFrame from './AnalyticsFrame';
 import EngagementChart from './EngagementChart';
 import Loader from './Loader';
 
-function TimelineEngagementChart({
-	dsrDevEnvEnabled: useDevEnvData,
-}: {
-	dsrDevEnvEnabled: boolean;
-}) {
+function TimelineEngagementChart() {
 	const [data, setData] = useState<IEngagementChartItem[]>([]);
 	const [element, setElement] = useState<HTMLElement | null>(null);
 
 	const {isLoading, response} = useAnalyticsQuery({
 		element,
 		query: TimelineEngagementChartQuery,
-		settings: {
-			checkViewportVisibility: true,
-			useDevEnvData,
-		},
 		variables: {
-			channelId: '',
 			devices: 'Any',
 			emailAddresses: [],
 			interval: 'D',

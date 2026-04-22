@@ -115,23 +115,14 @@ const formatData = (data: IActivityLogEntry[]) => {
 	}, {});
 };
 
-function ActivityLog({
-	dsrDevEnvEnabled: useDevEnvData,
-}: {
-	dsrDevEnvEnabled: boolean;
-}) {
+function ActivityLog() {
 	const [data, setData] = useState<TActivityLog>({});
 	const [element, setElement] = useState<HTMLElement | null>(null);
 
 	const {isLoading, response} = useAnalyticsQuery({
 		element,
 		query: ActivityLogQuery,
-		settings: {
-			checkViewportVisibility: true,
-			useDevEnvData,
-		},
 		variables: {
-			channelId: '',
 			entityType: 'INDIVIDUAL',
 			keywords: '',
 			page: 1,

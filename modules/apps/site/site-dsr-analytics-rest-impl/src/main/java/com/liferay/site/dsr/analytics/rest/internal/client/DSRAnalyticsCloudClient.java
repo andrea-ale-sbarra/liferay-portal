@@ -13,10 +13,17 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import com.liferay.analytics.settings.configuration.AnalyticsConfiguration;
+import com.liferay.analytics.settings.rest.dto.v1_0.Channel;
+import com.liferay.analytics.settings.rest.resource.v1_0.ChannelResource;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.Http;
+import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.vulcan.pagination.Page;
+import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.site.dsr.analytics.rest.dto.v1_0.DocumentMetricsPage;
 import com.liferay.site.dsr.analytics.rest.dto.v1_0.EventsPage;
 import com.liferay.site.dsr.analytics.rest.dto.v1_0.MostActiveVisitorsPage;
@@ -24,9 +31,12 @@ import com.liferay.site.dsr.analytics.rest.dto.v1_0.SiteHistogramMetric;
 import com.liferay.site.dsr.analytics.rest.dto.v1_0.UserSessionsPage;
 import com.liferay.site.dsr.analytics.rest.dto.v1_0.VisitFrequency;
 
+import java.io.IOException;
+
 import java.net.HttpURLConnection;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,192 +44,214 @@ import java.util.Map;
  */
 public class DSRAnalyticsCloudClient {
 
-	public DSRAnalyticsCloudClient(Http http) {
+	public DSRAnalyticsCloudClient(
+		ChannelResource.Factory channelResourceFactory, Http http, User user) {
+
+		_channelResourceFactory = channelResourceFactory;
 		_http = http;
+		_user = user;
 	}
 
 	public DocumentMetricsPage getDocumentMetricsPage(
-			AnalyticsConfiguration analyticsConfiguration, String channelId,
-			String keywords, String rangeEnd, Integer rangeKey,
-			String rangeStart, Integer size, String sortColumn, String sortType,
-			Integer start)
+			AnalyticsConfiguration analyticsConfiguration, String keywords,
+			String rangeEnd, Integer rangeKey, String rangeStart, Integer size,
+			String sortColumn, String sortType, Integer start)
 		throws Exception {
 
-		ObjectNode variables = _objectMapper.createObjectNode();
+		ObjectNode variablesObjectNode = _objectMapper.createObjectNode();
 
-		variables.put("channelId", channelId);
-		variables.put("keywords", keywords);
-		_putNullable(variables, "rangeEnd", rangeEnd);
-		_putNullable(variables, "rangeKey", rangeKey);
-		_putNullable(variables, "rangeStart", rangeStart);
-		variables.put("size", size);
-		variables.put("start", start);
+		variablesObjectNode.put("keywords", keywords);
 
-		ObjectNode sort = variables.putObject("sort");
+		_putNullable("rangeEnd", variablesObjectNode, rangeEnd);
+		_putNullable("rangeKey", variablesObjectNode, rangeKey);
+		_putNullable("rangeStart", variablesObjectNode, rangeStart);
 
-		sort.put("column", sortColumn);
-		sort.put("type", sortType);
+		variablesObjectNode.put("size", size);
+		variablesObjectNode.put("start", start);
 
-		JsonNode data = _executeQuery(
-			analyticsConfiguration, _QUERY_DOCUMENTS, variables, "documents");
+		ObjectNode sortObjectNode = variablesObjectNode.putObject("sort");
 
-		_renameKey(data, "documentMetrics", "assetMetrics");
+		sortObjectNode.put("column", sortColumn);
+		sortObjectNode.put("type", sortType);
 
-		return _objectMapper.treeToValue(data, DocumentMetricsPage.class);
+		JsonNode dataJsonNode = _executeQuery(
+			analyticsConfiguration, _QUERY_DOCUMENTS, "documents",
+			variablesObjectNode);
+
+		_renameKey(dataJsonNode, "documentMetrics", "assetMetrics");
+
+		return _objectMapper.treeToValue(
+			dataJsonNode, DocumentMetricsPage.class);
 	}
 
 	public EventsPage getEventsPage(
-			AnalyticsConfiguration analyticsConfiguration, String channelId,
+			AnalyticsConfiguration analyticsConfiguration,
 			Boolean includeAnonymousUsers, String individualId, String keywords,
 			Integer page, String rangeEnd, Integer rangeKey, String rangeStart,
 			Integer size)
 		throws Exception {
 
-		ObjectNode variables = _objectMapper.createObjectNode();
+		ObjectNode variablesObjectNode = _objectMapper.createObjectNode();
 
-		variables.put("channelId", channelId);
-		_putNullable(variables, "includeAnonymousUsers", includeAnonymousUsers);
-		_putNullable(variables, "individualId", individualId);
-		_putNullable(variables, "keywords", keywords);
-		variables.put("page", page);
-		_putNullable(variables, "rangeEnd", rangeEnd);
-		_putNullable(variables, "rangeKey", rangeKey);
-		_putNullable(variables, "rangeStart", rangeStart);
-		variables.put("size", size);
+		_putNullable(
+			"includeAnonymousUsers", variablesObjectNode,
+			includeAnonymousUsers);
+		_putNullable("individualId", variablesObjectNode, individualId);
+		_putNullable("keywords", variablesObjectNode, keywords);
 
-		JsonNode data = _executeQuery(
-			analyticsConfiguration, _QUERY_EVENTS, variables, "events");
+		variablesObjectNode.put("page", page);
 
-		_renameKey(data, "eventEntries", "events");
+		_putNullable("rangeEnd", variablesObjectNode, rangeEnd);
+		_putNullable("rangeKey", variablesObjectNode, rangeKey);
+		_putNullable("rangeStart", variablesObjectNode, rangeStart);
 
-		return _objectMapper.treeToValue(data, EventsPage.class);
+		variablesObjectNode.put("size", size);
+
+		JsonNode dataJsonNode = _executeQuery(
+			analyticsConfiguration, _QUERY_EVENTS, "events",
+			variablesObjectNode);
+
+		_renameKey(dataJsonNode, "eventEntries", "events");
+
+		return _objectMapper.treeToValue(dataJsonNode, EventsPage.class);
 	}
 
 	public MostActiveVisitorsPage getMostActiveVisitorsPage(
-			AnalyticsConfiguration analyticsConfiguration, String channelId,
-			Integer rangeKey, Integer size, Integer start)
+			AnalyticsConfiguration analyticsConfiguration, Integer rangeKey,
+			Integer size, Integer start)
 		throws Exception {
 
-		ObjectNode variables = _objectMapper.createObjectNode();
+		ObjectNode variablesObjectNode = _objectMapper.createObjectNode();
 
-		variables.put("channelId", channelId);
-		_putNullable(variables, "rangeKey", rangeKey);
-		variables.put("size", size);
-		variables.put("start", start);
+		_putNullable("rangeKey", variablesObjectNode, rangeKey);
 
-		JsonNode data = _executeQuery(
-			analyticsConfiguration, _QUERY_MOST_ACTIVE_VISITORS, variables,
-			"mostActiveVisitors");
+		variablesObjectNode.put("size", size);
+		variablesObjectNode.put("start", start);
 
-		return _objectMapper.treeToValue(data, MostActiveVisitorsPage.class);
+		JsonNode dataJsonNode = _executeQuery(
+			analyticsConfiguration, _QUERY_MOST_ACTIVE_VISITORS,
+			"mostActiveVisitors", variablesObjectNode);
+
+		return _objectMapper.treeToValue(
+			dataJsonNode, MostActiveVisitorsPage.class);
 	}
 
 	public SiteHistogramMetric getSiteSessionsMetric(
-			AnalyticsConfiguration analyticsConfiguration, String channelId,
+			AnalyticsConfiguration analyticsConfiguration,
 			String[] emailAddresses, String interval, String rangeEnd,
 			Integer rangeKey, String rangeStart)
 		throws Exception {
 
-		ObjectNode variables = _objectMapper.createObjectNode();
+		ObjectNode variablesObjectNode = _objectMapper.createObjectNode();
 
-		_putNullable(variables, "channelId", channelId);
-
-		ArrayNode emailAddressesNode = variables.putArray("emailAddresses");
+		ArrayNode emailAddressesArrayNode = variablesObjectNode.putArray(
+			"emailAddresses");
 
 		if (emailAddresses != null) {
 			for (String emailAddress : emailAddresses) {
-				emailAddressesNode.add(emailAddress);
+				emailAddressesArrayNode.add(emailAddress);
 			}
 		}
 
-		variables.put("interval", interval);
-		_putNullable(variables, "rangeEnd", rangeEnd);
-		_putNullable(variables, "rangeKey", rangeKey);
-		_putNullable(variables, "rangeStart", rangeStart);
+		variablesObjectNode.put("interval", interval);
 
-		JsonNode data = _executeQuery(
-			analyticsConfiguration, _QUERY_SITE_SESSIONS_METRIC, variables,
-			"site");
+		_putNullable("rangeEnd", variablesObjectNode, rangeEnd);
+		_putNullable("rangeKey", variablesObjectNode, rangeKey);
+		_putNullable("rangeStart", variablesObjectNode, rangeStart);
 
-		return _toSiteHistogramMetric(data, "sessionsMetric");
+		JsonNode dataJsonNode = _executeQuery(
+			analyticsConfiguration, _QUERY_SITE_SESSIONS_METRIC, "site",
+			variablesObjectNode);
+
+		return _toSiteHistogramMetric("sessionsMetric", dataJsonNode);
 	}
 
 	public SiteHistogramMetric getSiteVisitorsMetric(
-			AnalyticsConfiguration analyticsConfiguration, String channelId,
-			String interval, String rangeEnd, Integer rangeKey,
-			String rangeStart)
+			AnalyticsConfiguration analyticsConfiguration, String interval,
+			String rangeEnd, Integer rangeKey, String rangeStart)
 		throws Exception {
 
-		ObjectNode variables = _objectMapper.createObjectNode();
+		ObjectNode variablesObjectNode = _objectMapper.createObjectNode();
 
-		_putNullable(variables, "channelId", channelId);
-		variables.put("interval", interval);
-		_putNullable(variables, "rangeEnd", rangeEnd);
-		_putNullable(variables, "rangeKey", rangeKey);
-		_putNullable(variables, "rangeStart", rangeStart);
+		variablesObjectNode.put("interval", interval);
 
-		JsonNode data = _executeQuery(
-			analyticsConfiguration, _QUERY_SITE_VISITORS_METRIC, variables,
-			"site");
+		_putNullable("rangeEnd", variablesObjectNode, rangeEnd);
+		_putNullable("rangeKey", variablesObjectNode, rangeKey);
+		_putNullable("rangeStart", variablesObjectNode, rangeStart);
 
-		return _toSiteHistogramMetric(data, "visitorsMetric");
+		JsonNode dataJsonNode = _executeQuery(
+			analyticsConfiguration, _QUERY_SITE_VISITORS_METRIC, "site",
+			variablesObjectNode);
+
+		return _toSiteHistogramMetric("visitorsMetric", dataJsonNode);
 	}
 
 	public UserSessionsPage getUserSessionsPage(
-			AnalyticsConfiguration analyticsConfiguration, String channelId,
-			String entityType, String keywords, Integer page, String rangeEnd,
-			Integer rangeKey, String rangeStart, Integer size)
+			AnalyticsConfiguration analyticsConfiguration, String entityType,
+			String keywords, Integer page, String rangeEnd, Integer rangeKey,
+			String rangeStart, Integer size)
 		throws Exception {
 
-		ObjectNode variables = _objectMapper.createObjectNode();
+		ObjectNode variablesObjectNode = _objectMapper.createObjectNode();
 
-		variables.put("channelId", channelId);
-		variables.put("entityType", entityType);
-		_putNullable(variables, "keywords", keywords);
-		variables.put("page", page);
-		_putNullable(variables, "rangeEnd", rangeEnd);
-		_putNullable(variables, "rangeKey", rangeKey);
-		_putNullable(variables, "rangeStart", rangeStart);
-		variables.put("size", size);
+		variablesObjectNode.put("entityType", entityType);
 
-		JsonNode data = _executeQuery(
-			analyticsConfiguration, _QUERY_EVENTS_BY_USER_SESSIONS, variables,
-			"eventsByUserSessions");
+		_putNullable("keywords", variablesObjectNode, keywords);
 
-		_renameKey(data, "userSessionEvents", "events");
+		variablesObjectNode.put("page", page);
 
-		return _objectMapper.treeToValue(data, UserSessionsPage.class);
+		_putNullable("rangeEnd", variablesObjectNode, rangeEnd);
+		_putNullable("rangeKey", variablesObjectNode, rangeKey);
+		_putNullable("rangeStart", variablesObjectNode, rangeStart);
+
+		variablesObjectNode.put("size", size);
+
+		JsonNode dataJsonNode = _executeQuery(
+			analyticsConfiguration, _QUERY_EVENTS_BY_USER_SESSIONS,
+			"eventsByUserSessions", variablesObjectNode);
+
+		_renameKey(dataJsonNode, "userSessionEvents", "events");
+
+		return _objectMapper.treeToValue(dataJsonNode, UserSessionsPage.class);
 	}
 
 	public VisitFrequency getVisitFrequency(
-			AnalyticsConfiguration analyticsConfiguration, String channelId,
-			Integer rangeKey)
+			AnalyticsConfiguration analyticsConfiguration, Integer rangeKey)
 		throws Exception {
 
-		ObjectNode variables = _objectMapper.createObjectNode();
+		ObjectNode variablesObjectNode = _objectMapper.createObjectNode();
 
-		variables.put("channelId", channelId);
-		_putNullable(variables, "rangeKey", rangeKey);
+		_putNullable("rangeKey", variablesObjectNode, rangeKey);
 
-		JsonNode data = _executeQuery(
-			analyticsConfiguration, _QUERY_VISIT_FREQUENCY, variables,
-			"visitFrequency");
+		JsonNode dataJsonNode = _executeQuery(
+			analyticsConfiguration, _QUERY_VISIT_FREQUENCY, "visitFrequency",
+			variablesObjectNode);
 
-		_renameKey(data, "visitFrequencyItems", "visitFrequency");
+		_renameKey(dataJsonNode, "visitFrequencyItems", "visitFrequency");
 
-		return _objectMapper.treeToValue(data, VisitFrequency.class);
+		return _objectMapper.treeToValue(dataJsonNode, VisitFrequency.class);
+	}
+
+	private static String _readQuery(String fileName) throws IOException {
+		return StringUtil.read(
+			DSRAnalyticsCloudClient.class, "dependencies/" + fileName);
 	}
 
 	private JsonNode _executeQuery(
 			AnalyticsConfiguration analyticsConfiguration, String query,
-			ObjectNode variables, String rootField)
+			String rootField, ObjectNode variablesObjectNode)
 		throws Exception {
 
 		try {
-			ObjectNode body = _objectMapper.createObjectNode();
+			ObjectNode bodyObjectNode = _objectMapper.createObjectNode();
 
-			body.put("query", query);
-			body.set("variables", variables);
+			bodyObjectNode.put("query", query);
+
+			Channel channel = _getOrAddAnalyticsChannel();
+
+			variablesObjectNode.put("channelId", channel.getChannelId());
+
+			bodyObjectNode.set("variables", variablesObjectNode);
 
 			Http.Options options = new Http.Options();
 
@@ -236,11 +268,11 @@ public class DSRAnalyticsCloudClient {
 				analyticsConfiguration.liferayAnalyticsProjectId());
 
 			options.setBody(
-				_objectMapper.writeValueAsString(body), "application/json",
-				"UTF-8");
+				_objectMapper.writeValueAsString(bodyObjectNode),
+				"application/json", "UTF-8");
 			options.setLocation(
 				analyticsConfiguration.liferayAnalyticsFaroBackendURL() +
-					"/graphql");
+					"/api/1.0/graphql");
 			options.setPost(true);
 
 			String content = _http.URLtoString(options);
@@ -256,9 +288,13 @@ public class DSRAnalyticsCloudClient {
 					"Unable to execute DSR analytics query " + rootField);
 			}
 
-			JsonNode root = _objectMapper.readTree(content);
+			JsonNode rootJsonNode = _objectMapper.readTree(content);
 
-			return root.path("data").path(rootField);
+			return rootJsonNode.path(
+				"data"
+			).path(
+				rootField
+			);
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
@@ -271,30 +307,59 @@ public class DSRAnalyticsCloudClient {
 		}
 	}
 
-	private void _putNullable(ObjectNode node, String key, Integer value) {
+	private Channel _getOrAddAnalyticsChannel() throws Exception {
+		ChannelResource channelResource = _channelResourceFactory.create(
+		).checkPermissions(
+			false
+		).user(
+			_user
+		).build();
+
+		Page<Channel> channelsPage = channelResource.getChannelsPage(
+			_DSR_CHANNEL_NAME, Pagination.of(1, 1), null);
+
+		List<Channel> channels = ListUtil.fromCollection(
+			channelsPage.getItems());
+
+		if (!channels.isEmpty()) {
+			return channels.get(0);
+		}
+
+		Channel channel = new Channel();
+
+		channel.setName(() -> _DSR_CHANNEL_NAME);
+
+		return channelResource.postChannel(channel);
+	}
+
+	private void _putNullable(
+		String key, ObjectNode objectNode, Boolean value) {
+
 		if (value == null) {
-			node.putNull(key);
+			objectNode.putNull(key);
 		}
 		else {
-			node.put(key, value);
+			objectNode.put(key, value);
 		}
 	}
 
-	private void _putNullable(ObjectNode node, String key, Boolean value) {
+	private void _putNullable(
+		String key, ObjectNode objectNode, Integer value) {
+
 		if (value == null) {
-			node.putNull(key);
+			objectNode.putNull(key);
 		}
 		else {
-			node.put(key, value);
+			objectNode.put(key, value);
 		}
 	}
 
-	private void _putNullable(ObjectNode node, String key, String value) {
+	private void _putNullable(String key, ObjectNode objectNode, String value) {
 		if (value == null) {
-			node.putNull(key);
+			objectNode.putNull(key);
 		}
 		else {
-			node.put(key, value);
+			objectNode.put(key, value);
 		}
 	}
 
@@ -307,125 +372,59 @@ public class DSRAnalyticsCloudClient {
 			ObjectNode objectNode = (ObjectNode)jsonNode;
 
 			if (objectNode.has(oldKey)) {
-				JsonNode value = objectNode.remove(oldKey);
+				JsonNode valueJsonNode = objectNode.remove(oldKey);
 
-				objectNode.set(newKey, value);
+				objectNode.set(newKey, valueJsonNode);
 			}
 
-			Iterator<Map.Entry<String, JsonNode>> fields = objectNode.fields();
+			Iterator<Map.Entry<String, JsonNode>> fieldsIterator =
+				objectNode.fields();
 
-			fields.forEachRemaining(
+			fieldsIterator.forEachRemaining(
 				entry -> _renameKey(entry.getValue(), newKey, oldKey));
 		}
 		else if (jsonNode.isArray()) {
-			for (JsonNode element : jsonNode) {
-				_renameKey(element, newKey, oldKey);
+			for (JsonNode elementJsonNode : jsonNode) {
+				_renameKey(elementJsonNode, newKey, oldKey);
 			}
 		}
 	}
 
 	private SiteHistogramMetric _toSiteHistogramMetric(
-			JsonNode siteNode, String metricField)
+			String metricField, JsonNode siteJsonNode)
 		throws Exception {
 
-		JsonNode metricNode = siteNode.path(metricField);
+		JsonNode metricJsonNode = siteJsonNode.path(metricField);
 
-		if (metricNode.isMissingNode() || metricNode.isNull()) {
+		if (metricJsonNode.isMissingNode() || metricJsonNode.isNull()) {
 			return new SiteHistogramMetric();
 		}
 
-		_renameKey(metricNode, "histogramMetrics", "metrics");
+		_renameKey(metricJsonNode, "histogramMetrics", "metrics");
 
-		ObjectNode wrapper = _objectMapper.createObjectNode();
+		ObjectNode wrapperObjectNode = _objectMapper.createObjectNode();
 
-		wrapper.set("histogram", metricNode.path("histogram"));
+		wrapperObjectNode.set("histogram", metricJsonNode.path("histogram"));
 
-		return _objectMapper.treeToValue(wrapper, SiteHistogramMetric.class);
+		return _objectMapper.treeToValue(
+			wrapperObjectNode, SiteHistogramMetric.class);
 	}
 
-	private static final String _QUERY_DOCUMENTS =
-		"query DocumentsAndMediaList($channelId: String, $keywords: String, " +
-			"$rangeEnd: String, $rangeKey: Int, $rangeStart: String, " +
-				"$size: Int!, $sort: Sort!, $start: Int!) { documents(" +
-					"channelId: $channelId, keywords: $keywords, " +
-						"rangeEnd: $rangeEnd, rangeKey: $rangeKey, " +
-							"rangeStart: $rangeStart, size: $size, " +
-								"sort: $sort, start: $start) { assetMetrics " +
-									"{ ... on DocumentMetric { assetId " +
-										"assetTitle commentsMetric { value } " +
-											"downloadsMetric { value } " +
-												"impressionMadeMetric { " +
-													"value } lastViewedMetric" +
-														" { value } " +
-															"ratingsMetric { " +
-																"value } " +
-																	"usersInvolvedMetric " +
-																		"{ value } urls } } total } }";
+	private static final String _DSR_CHANNEL_NAME = "DSR";
 
-	private static final String _QUERY_EVENTS =
-		"query EventQuery($channelId: String!, " +
-			"$includeAnonymousUsers: Boolean, $individualId: String, " +
-				"$keywords: String, $page: Int!, $rangeEnd: String, " +
-					"$rangeKey: Int, $rangeStart: String, $size: Int!) { " +
-						"events(channelId: $channelId, " +
-							"includeAnonymousUsers: $includeAnonymousUsers, " +
-								"individualId: $individualId, " +
-									"keywords: $keywords, page: $page, " +
-										"rangeEnd: $rangeEnd, " +
-											"rangeKey: $rangeKey, " +
-												"rangeStart: $rangeStart, " +
-													"size: $size) { events { " +
-														"emailAddressHashed " +
-															"name createDate " +
-																"} } }";
+	private static final String _QUERY_DOCUMENTS;
 
-	private static final String _QUERY_EVENTS_BY_USER_SESSIONS =
-		"query UserSession($channelId: String!, $entityType: EntityType!, " +
-			"$keywords: String, $page: Int!, $rangeEnd: String, " +
-				"$rangeKey: Int, $rangeStart: String, $size: Int!) { " +
-					"eventsByUserSessions(channelId: $channelId, " +
-						"entityType: $entityType, keywords: $keywords, " +
-							"page: $page, rangeEnd: $rangeEnd, " +
-								"rangeKey: $rangeKey, rangeStart: " +
-									"$rangeStart, size: $size) { userSessions" +
-										" { ... on UserSession { events { " +
-											"createDate emailAddressHashed " +
-												"name } } } totalEvents } }";
+	private static final String _QUERY_EVENTS;
 
-	private static final String _QUERY_MOST_ACTIVE_VISITORS =
-		"query MostActiveVisitors($channelId: String!, $rangeKey: Int, " +
-			"$size: Int!, $start: Int!) { mostActiveVisitors(" +
-				"channelId: $channelId, rangeKey: $rangeKey, size: $size, " +
-					"start: $start) { mostActiveVisitors { activitiesCount " +
-						"emailAddress firstName id lastName } total } }";
+	private static final String _QUERY_EVENTS_BY_USER_SESSIONS;
 
-	private static final String _QUERY_SITE_SESSIONS_METRIC =
-		"query SitesMetricQuery($channelId: String, " +
-			"$emailAddresses: [String], $interval: String!, " +
-				"$rangeEnd: String, $rangeKey: Int, $rangeStart: String) { " +
-					"site(channelId: $channelId, " +
-						"emailAddresses: $emailAddresses, " +
-							"interval: $interval, rangeEnd: $rangeEnd, " +
-								"rangeKey: $rangeKey, " +
-									"rangeStart: $rangeStart) { " +
-										"sessionsMetric { histogram { " +
-											"asymmetricComparison metrics { " +
-												"key value valueKey } total } " +
-													"} } }";
+	private static final String _QUERY_MOST_ACTIVE_VISITORS;
 
-	private static final String _QUERY_SITE_VISITORS_METRIC =
-		"query SitesMetricQuery($channelId: String, $interval: String!, " +
-			"$rangeEnd: String, $rangeKey: Int, $rangeStart: String) { " +
-				"site(channelId: $channelId, interval: $interval, " +
-					"rangeEnd: $rangeEnd, rangeKey: $rangeKey, " +
-						"rangeStart: $rangeStart) { visitorsMetric { " +
-							"histogram { asymmetricComparison metrics { key " +
-								"value valueKey } total } } } }";
+	private static final String _QUERY_SITE_SESSIONS_METRIC;
 
-	private static final String _QUERY_VISIT_FREQUENCY =
-		"query VisitFrequency($channelId: String!, $rangeKey: Int) { " +
-			"visitFrequency(channelId: $channelId, rangeKey: $rangeKey) { " +
-				"visitFrequency { count name } totalCount } }";
+	private static final String _QUERY_SITE_VISITORS_METRIC;
+
+	private static final String _QUERY_VISIT_FREQUENCY;
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DSRAnalyticsCloudClient.class);
@@ -437,6 +436,27 @@ public class DSRAnalyticsCloudClient {
 		}
 	};
 
+	static {
+		try {
+			_QUERY_DOCUMENTS = _readQuery("documents.graphql");
+			_QUERY_EVENTS = _readQuery("events.graphql");
+			_QUERY_EVENTS_BY_USER_SESSIONS = _readQuery(
+				"events_by_user_sessions.graphql");
+			_QUERY_MOST_ACTIVE_VISITORS = _readQuery(
+				"most_active_visitors.graphql");
+			_QUERY_SITE_SESSIONS_METRIC = _readQuery(
+				"site_sessions_metric.graphql");
+			_QUERY_SITE_VISITORS_METRIC = _readQuery(
+				"site_visitors_metric.graphql");
+			_QUERY_VISIT_FREQUENCY = _readQuery("visit_frequency.graphql");
+		}
+		catch (IOException ioException) {
+			throw new ExceptionInInitializerError(ioException);
+		}
+	}
+
+	private final ChannelResource.Factory _channelResourceFactory;
 	private final Http _http;
+	private final User _user;
 
 }

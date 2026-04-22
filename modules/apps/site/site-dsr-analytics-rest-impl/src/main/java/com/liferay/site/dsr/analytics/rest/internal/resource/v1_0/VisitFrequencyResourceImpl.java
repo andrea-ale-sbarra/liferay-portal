@@ -6,6 +6,7 @@
 package com.liferay.site.dsr.analytics.rest.internal.resource.v1_0;
 
 import com.liferay.analytics.settings.rest.manager.AnalyticsSettingsManager;
+import com.liferay.analytics.settings.rest.resource.v1_0.ChannelResource;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.site.dsr.analytics.rest.dto.v1_0.VisitFrequency;
 import com.liferay.site.dsr.analytics.rest.internal.client.DSRAnalyticsCloudClient;
@@ -25,21 +26,24 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class VisitFrequencyResourceImpl extends BaseVisitFrequencyResourceImpl {
 
 	@Override
-	public VisitFrequency getVisitFrequency(
-			String channelId, Integer rangeKey)
+	public VisitFrequency getVisitFrequency(String channelId, Integer rangeKey)
 		throws Exception {
 
 		DSRAnalyticsCloudClient dsrAnalyticsCloudClient =
-			new DSRAnalyticsCloudClient(_http);
+			new DSRAnalyticsCloudClient(
+				_channelResourceFactory, _http, contextUser);
 
 		return dsrAnalyticsCloudClient.getVisitFrequency(
 			_analyticsSettingsManager.getAnalyticsConfiguration(
 				contextCompany.getCompanyId()),
-			channelId, rangeKey);
+			rangeKey);
 	}
 
 	@Reference
 	private AnalyticsSettingsManager _analyticsSettingsManager;
+
+	@Reference
+	private volatile ChannelResource.Factory _channelResourceFactory;
 
 	@Reference
 	private Http _http;

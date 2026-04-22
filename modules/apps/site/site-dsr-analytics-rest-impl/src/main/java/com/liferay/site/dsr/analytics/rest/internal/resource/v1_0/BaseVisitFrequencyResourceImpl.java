@@ -70,7 +70,6 @@ public abstract class BaseVisitFrequencyResourceImpl
 	@Override
 	public VisitFrequency getVisitFrequency(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@jakarta.validation.constraints.NotNull
 			@jakarta.ws.rs.QueryParam("channelId")
 			String channelId,
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
@@ -526,4 +525,4 @@ public abstract class BaseVisitFrequencyResourceImpl
 		LogFactoryUtil.getLog(BaseVisitFrequencyResourceImpl.class);
 
 }
-// LIFERAY-REST-BUILDER-HASH:429559819
+// LIFERAY-REST-BUILDER-HASH:581545842

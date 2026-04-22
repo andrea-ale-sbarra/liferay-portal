@@ -48,6 +48,24 @@ jest.mock(
 	})
 );
 
+jest.mock(
+	'../../../src/main/resources/META-INF/resources/js/common/hooks/useAnalyticsQuery',
+	() => {
+		const {
+			activityLogDevEnvData,
+		} = require('../fixtures/analyticsDevEnvData');
+
+		return {
+			__esModule: true,
+			default: jest.fn(() => ({
+				isLoading: false,
+				response: activityLogDevEnvData,
+				sendRequest: jest.fn(),
+			})),
+		};
+	}
+);
+
 describe('ActivityLog Component', () => {
 	beforeAll(() => {
 		window['Liferay'] = {
@@ -106,14 +124,14 @@ describe('ActivityLog Component', () => {
 	});
 
 	it('renders the correct number of date headers', () => {
-		render(<ActivityLog dsrDevEnvEnabled={true} />);
+		render(<ActivityLog />);
 
 		expect(screen.getByText('2026-03-06')).toBeInTheDocument();
 		expect(screen.getByText('2026-03-07')).toBeInTheDocument();
 	});
 
 	it('groups consecutive logs for the same user', () => {
-		render(<ActivityLog dsrDevEnvEnabled={true} />);
+		render(<ActivityLog />);
 
 		const userNames = screen.getAllByText('John Doe');
 
@@ -121,7 +139,7 @@ describe('ActivityLog Component', () => {
 	});
 
 	it('displays localized labels using the sub utility', () => {
-		render(<ActivityLog dsrDevEnvEnabled={true} />);
+		render(<ActivityLog />);
 
 		expect(screen.getAllByText('Commented on')[0]).toBeInTheDocument();
 		expect(
@@ -131,7 +149,7 @@ describe('ActivityLog Component', () => {
 	});
 
 	it('renders descriptions only when they exist', () => {
-		render(<ActivityLog dsrDevEnvEnabled={true} />);
+		render(<ActivityLog />);
 
 		const descriptions = screen.getAllByText(/Lorem ipsum/i);
 

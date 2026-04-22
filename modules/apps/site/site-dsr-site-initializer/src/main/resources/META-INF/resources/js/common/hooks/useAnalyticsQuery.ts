@@ -4,7 +4,7 @@
  */
 
 import {useIsMounted} from '@liferay/frontend-js-react-web';
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 
 import {
 	AnalyticsFilters,
@@ -13,8 +13,8 @@ import {
 	TDateRangeAnalyticsFilterValue,
 	TRoomAnalyticsFilterValue,
 } from '../../main_view/analytics/types';
+import {toFilters} from '../../main_view/analytics/utils';
 import AnalyticsService from '../services/AnalyticsService';
-import useAnalyticsFilters from './useAnalyticsFilters';
 import useIsInViewport from './useIsInViewport';
 
 function toRequestParams(
@@ -27,9 +27,12 @@ function toRequestParams(
 		.value as TDateRangeAnalyticsFilterValue;
 	const userFilter = filters[AnalyticsFilters.USER] as IAnalyticsUserFilter;
 
+	const channelId =
+		roomFilterValue.channelId || (variables.channelId as string) || undefined;
+
 	return {
 		...variables,
-		channelId: roomFilterValue.channelId || variables.channelId,
+		channelId,
 		emailAddresses: userFilter.value,
 		rangeEnd: dateRangeFilterValue.to,
 		rangeStart: dateRangeFilterValue.from,
@@ -39,65 +42,73 @@ function toRequestParams(
 export default function useAnalyticsQuery({
 	element,
 	query,
-	settings = {checkViewportVisibility: true, useDevEnvData: true},
+	settings = {checkViewportVisibility: true},
 	variables,
 }: {
 	element: HTMLElement | null;
-	query: {devEnvData: any; path: string};
+	query: {path: string};
 	settings?: {
 		checkViewportVisibility: boolean;
-		useDevEnvData: boolean;
 	};
 	variables: Record<string, unknown>;
 }) {
 	const [isLoading, setIsLoading] = useState(true);
+	const [response, setResponse] = useState(null);
+	const [filters, setFilters] = useState<TAnalyticsFilter>(toFilters(null));
+
 	const isMounted = useIsMounted();
 	const isVisible = useIsInViewport(element);
 
-	const [filters] = useAnalyticsFilters(null);
-	const [response, setResponse] = useState(null);
+	const variablesRef = useRef(variables);
+	const settingsRef = useRef(settings);
+
+	variablesRef.current = variables;
+	settingsRef.current = settings;
 
 	const sendRequest = useCallback(
-		async (filters: TAnalyticsFilter) => {
+		async (activeFilters: TAnalyticsFilter) => {
+			const currentSettings = settingsRef.current;
+
+			if (currentSettings.checkViewportVisibility && !isVisible) {
+				return;
+			}
+
 			setIsLoading(true);
 
-			if (settings.checkViewportVisibility && isVisible) {
-				if (settings.useDevEnvData) {
-					setResponse(query.devEnvData);
+			try {
+				const result = await AnalyticsService.get(
+					query.path,
+					toRequestParams(activeFilters, variablesRef.current)
+				);
 
-					setIsLoading(false);
-
-					return;
-				}
-
-				try {
-					const result = await AnalyticsService.get(
-						query.path,
-						toRequestParams(filters, variables)
-					);
-
+				if (isMounted()) {
 					setResponse(result as any);
 				}
-				catch (_ignore) {
+			}
+			catch (_ignore) {
+				if (isMounted()) {
 					setResponse(null);
 				}
+			}
 
+			if (isMounted()) {
 				setIsLoading(false);
 			}
 		},
-		[isVisible, query, setResponse, settings, variables]
+		[isVisible, query, isMounted]
 	);
 
 	useEffect(() => {
-		if (isVisible && !response) {
-			sendRequest(filters as TAnalyticsFilter);
-		}
-	}, [filters, isVisible, response, sendRequest]);
-
-	useEffect(() => {
-		const handleFiltersUpdate = () => {
-			setIsLoading(true);
-			setResponse(null);
+		const handleFiltersUpdate = ({
+			filters: incoming,
+		}: {
+			filters: TAnalyticsFilter;
+		}) => {
+			setFilters((current) =>
+				JSON.stringify(current) === JSON.stringify(incoming)
+					? current
+					: incoming
+			);
 		};
 
 		if (isMounted()) {
@@ -109,7 +120,11 @@ export default function useAnalyticsQuery({
 				Liferay.detach('dsr-filters-updated', handleFiltersUpdate);
 			}
 		};
-	}, [isMounted, sendRequest]);
+	}, [isMounted]);
+
+	useEffect(() => {
+		sendRequest(filters);
+	}, [filters, isVisible, sendRequest]);
 
 	return {isLoading, response, sendRequest};
 }

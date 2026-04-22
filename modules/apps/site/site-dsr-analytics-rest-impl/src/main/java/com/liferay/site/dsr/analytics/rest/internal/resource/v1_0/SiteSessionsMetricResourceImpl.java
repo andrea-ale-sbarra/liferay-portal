@@ -6,6 +6,7 @@
 package com.liferay.site.dsr.analytics.rest.internal.resource.v1_0;
 
 import com.liferay.analytics.settings.rest.manager.AnalyticsSettingsManager;
+import com.liferay.analytics.settings.rest.resource.v1_0.ChannelResource;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.site.dsr.analytics.rest.dto.v1_0.SiteHistogramMetric;
 import com.liferay.site.dsr.analytics.rest.internal.client.DSRAnalyticsCloudClient;
@@ -20,8 +21,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	properties = "OSGI-INF/liferay/rest/v1_0/site-sessions-metric.properties",
-	scope = ServiceScope.PROTOTYPE,
-	service = SiteSessionsMetricResource.class
+	scope = ServiceScope.PROTOTYPE, service = SiteSessionsMetricResource.class
 )
 public class SiteSessionsMetricResourceImpl
 	extends BaseSiteSessionsMetricResourceImpl {
@@ -33,17 +33,20 @@ public class SiteSessionsMetricResourceImpl
 		throws Exception {
 
 		DSRAnalyticsCloudClient dsrAnalyticsCloudClient =
-			new DSRAnalyticsCloudClient(_http);
+			new DSRAnalyticsCloudClient(
+				_channelResourceFactory, _http, contextUser);
 
 		return dsrAnalyticsCloudClient.getSiteSessionsMetric(
 			_analyticsSettingsManager.getAnalyticsConfiguration(
 				contextCompany.getCompanyId()),
-			channelId, emailAddresses, interval, rangeEnd, rangeKey,
-			rangeStart);
+			emailAddresses, interval, rangeEnd, rangeKey, rangeStart);
 	}
 
 	@Reference
 	private AnalyticsSettingsManager _analyticsSettingsManager;
+
+	@Reference
+	private volatile ChannelResource.Factory _channelResourceFactory;
 
 	@Reference
 	private Http _http;

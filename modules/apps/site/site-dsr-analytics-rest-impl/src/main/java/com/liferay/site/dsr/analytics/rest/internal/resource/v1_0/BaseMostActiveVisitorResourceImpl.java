@@ -78,7 +78,6 @@ public abstract class BaseMostActiveVisitorResourceImpl
 	@Override
 	public MostActiveVisitorsPage getMostActiveVisitor(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@jakarta.validation.constraints.NotNull
 			@jakarta.ws.rs.QueryParam("channelId")
 			String channelId,
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
@@ -542,4 +541,4 @@ public abstract class BaseMostActiveVisitorResourceImpl
 		LogFactoryUtil.getLog(BaseMostActiveVisitorResourceImpl.class);
 
 }
-// LIFERAY-REST-BUILDER-HASH:378138292
+// LIFERAY-REST-BUILDER-HASH:1277435579

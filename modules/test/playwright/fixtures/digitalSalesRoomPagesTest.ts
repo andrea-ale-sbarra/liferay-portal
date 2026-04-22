@@ -5,15 +5,20 @@
 
 import {test} from '@playwright/test';
 
+import {DSRAnalyticsPage} from '../pages/site-dsr-site-initializer/DSRAnalyticsPage';
 import {DigitalSalesRoomUsersPage} from '../pages/site-dsr-site-initializer/DigitalSalesRoomUsersPage';
 import {DigitalSalesRoomsPage} from '../pages/site-dsr-site-initializer/DigitalSalesRoomsPage';
 import {EditDigitalSalesRoomPage} from '../pages/site-dsr-site-initializer/EditDigitalSalesRoomPage';
 
 const digitalSalesRoomPagesTest = test.extend<{
+	dsrAnalyticsPage: DSRAnalyticsPage;
 	digitalSalesRoomUsersPage: DigitalSalesRoomUsersPage;
 	digitalSalesRoomsPage: DigitalSalesRoomsPage;
 	editDigitalSalesRoomPage: EditDigitalSalesRoomPage;
 }>({
+	dsrAnalyticsPage: async ({page}, use) => {
+		await use(new DSRAnalyticsPage(page));
+	},
 	digitalSalesRoomUsersPage: async ({page}, use) => {
 		await use(new DigitalSalesRoomUsersPage(page));
 	},

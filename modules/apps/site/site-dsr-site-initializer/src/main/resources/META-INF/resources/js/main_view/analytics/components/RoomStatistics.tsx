@@ -102,23 +102,14 @@ const formatData = (data: IRoomStatistics): IRoomStatisticsItem[] => {
 	];
 };
 
-function RoomStatistics({
-	dsrDevEnvEnabled: useDevEnvData,
-}: {
-	dsrDevEnvEnabled: boolean;
-}) {
+function RoomStatistics() {
 	const [data, setData] = useState<IRoomStatisticsItem[]>([]);
 	const [element, setElement] = useState<HTMLElement | null>(null);
 
 	const {isLoading, response} = useAnalyticsQuery({
 		element,
 		query: RoomStatisticsQuery,
-		settings: {
-			checkViewportVisibility: true,
-			useDevEnvData,
-		},
 		variables: {
-			channelId: '',
 			entityType: 'INDIVIDUAL',
 			keywords: '',
 			page: 1,

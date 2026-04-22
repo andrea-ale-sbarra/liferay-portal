@@ -18,34 +18,21 @@ import RoomDocumentsStatisticsQuery from '../queries/RoomDocumentsStatisticsQuer
 import AnalyticsFrame from './AnalyticsFrame';
 import Loader from './Loader';
 
-const RoomDocumentsStatistics = ({
-	dsrDevEnvEnabled: useDevEnvData,
-	namespace,
-}: {
-	dsrDevEnvEnabled: boolean;
-	namespace: string;
-}) => {
+const RoomDocumentsStatistics = ({namespace}: {namespace: string}) => {
 	const [data, setData] = useState<TRoomDocumentsStatistics[]>([]);
 	const [element, setElement] = useState<HTMLElement | null>(null);
 
 	const {isLoading, response} = useAnalyticsQuery({
 		element,
 		query: RoomDocumentsStatisticsQuery,
-		settings: {
-			checkViewportVisibility: true,
-			useDevEnvData,
-		},
 		variables: {
-			channelId: '',
 			keywords: '',
 			rangeEnd: null,
 			rangeKey: 7,
 			rangeStart: null,
 			size: 20,
-			sort: {
-				column: 'downloadsMetric',
-				type: 'DESC',
-			},
+			sortColumn: 'downloadsMetric',
+			sortType: 'DESC',
 			start: 0,
 		},
 	});

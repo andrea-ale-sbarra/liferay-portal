@@ -92,7 +92,6 @@ public abstract class BaseUserSessionResourceImpl
 	@Override
 	public UserSessionsPage getEventsByUserSession(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@jakarta.validation.constraints.NotNull
 			@jakarta.ws.rs.QueryParam("channelId")
 			String channelId,
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
@@ -569,4 +568,4 @@ public abstract class BaseUserSessionResourceImpl
 		LogFactoryUtil.getLog(BaseUserSessionResourceImpl.class);
 
 }
-// LIFERAY-REST-BUILDER-HASH:1904060674
+// LIFERAY-REST-BUILDER-HASH:1080254745

@@ -62,23 +62,14 @@ const formatData = (
 	}));
 };
 
-function FrequencyChart({
-	dsrDevEnvEnabled: useDevEnvData,
-}: {
-	dsrDevEnvEnabled: boolean;
-}) {
+function FrequencyChart() {
 	const [data, setData] = useState<IFrequencyChartItem[]>([]);
 	const [element, setElement] = useState<HTMLElement | null>(null);
 
 	const {isLoading, response} = useAnalyticsQuery({
 		element,
 		query: FrequencyChartQuery,
-		settings: {
-			checkViewportVisibility: true,
-			useDevEnvData,
-		},
 		variables: {
-			channelId: '',
 			rangeKey: 30,
 		},
 	});

@@ -86,13 +86,13 @@ components:
                     type: string
         MostActiveVisitorsPage:
             properties:
-                total:
-                    format: int64
-                    type: integer
                 mostActiveVisitors:
                     items:
                         $ref: "#/components/schemas/MostActiveVisitor"
                     type: array
+                total:
+                    format: int64
+                    type: integer
         SiteHistogramMetric:
             properties:
                 histogram:
@@ -122,13 +122,13 @@ components:
                     type: array
         VisitFrequency:
             properties:
+                totalCount:
+                    format: int64
+                    type: integer
                 visitFrequencyItems:
                     items:
                         $ref: "#/components/schemas/VisitFrequencyItem"
                     type: array
-                totalCount:
-                    format: int64
-                    type: integer
         VisitFrequencyItem:
             properties:
                 count:
@@ -203,7 +203,6 @@ paths:
             parameters:
                 -   in: query
                     name: channelId
-                    required: true
                     schema:
                         type: string
                 -   in: query
@@ -256,7 +255,6 @@ paths:
             parameters:
                 -   in: query
                     name: channelId
-                    required: true
                     schema:
                         type: string
                 -   in: query
@@ -306,7 +304,6 @@ paths:
             parameters:
                 -   in: query
                     name: channelId
-                    required: true
                     schema:
                         type: string
                 -   in: query
@@ -413,7 +410,6 @@ paths:
             parameters:
                 -   in: query
                     name: channelId
-                    required: true
                     schema:
                         type: string
                 -   in: query

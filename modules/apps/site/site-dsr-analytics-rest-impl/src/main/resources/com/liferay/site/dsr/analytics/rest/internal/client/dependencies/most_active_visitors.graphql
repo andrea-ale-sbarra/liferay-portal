@@ -1,0 +1,1 @@
+query MostActiveVisitors($channelId: String, $rangeKey: Int, $size: Int!, $start: Int!) { mostActiveVisitors(channelId: $channelId, rangeKey: $rangeKey, size: $size, start: $start) { mostActiveVisitors { activitiesCount emailAddress firstName id lastName } total } }
