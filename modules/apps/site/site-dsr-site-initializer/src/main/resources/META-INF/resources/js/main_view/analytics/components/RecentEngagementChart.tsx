@@ -41,7 +41,16 @@ function RecentEngagementChart({
 
 	useEffect(() => {
 		if (response) {
-			setData(response);
+			const histogramMetrics =
+				response.histogram?.histogramMetrics ?? [];
+
+			setData(
+				histogramMetrics.map((histogramMetric: any) => ({
+					date: histogramMetric.key,
+					numberOfVisits: histogramMetric.value ?? 0,
+					timeSpent: 0,
+				}))
+			);
 		}
 
 		return () => {};

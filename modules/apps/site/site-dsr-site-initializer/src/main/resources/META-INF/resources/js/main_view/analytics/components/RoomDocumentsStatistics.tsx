@@ -52,7 +52,32 @@ const RoomDocumentsStatistics = ({
 
 	useEffect(() => {
 		if (response) {
-			setData(response);
+			const documentMetrics = response.documentMetrics ?? [];
+
+			setData(
+				documentMetrics.map((documentMetric: any) => {
+					const url: string = documentMetric.urls?.[0] ?? '';
+					const extension = url.includes('.')
+						? url.split('.').pop() ?? ''
+						: '';
+
+					const lastViewedValue =
+						documentMetric.lastViewedMetric?.value;
+
+					return {
+						download: documentMetric.downloadsMetric?.value ?? 0,
+						lastViewed: lastViewedValue
+							? new Date(lastViewedValue).toISOString()
+							: '',
+						title: documentMetric.assetTitle ?? '',
+						totalTimeViewingAsset: 0,
+						totalViews:
+							documentMetric.impressionMadeMetric?.value ?? 0,
+						type: extension || 'document',
+						userInvolved: [],
+					};
+				})
+			);
 		}
 
 		return () => {};

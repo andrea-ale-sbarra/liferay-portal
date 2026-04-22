@@ -38,6 +38,32 @@ export const TYPES = [
 	},
 ];
 
+interface IUserSessionEvent {
+	createDate: string;
+	emailAddressHashed: string;
+	name: string;
+}
+
+interface IUserSessionsPage {
+	totalEvents?: number;
+	userSessions?: Array<{userSessionEvents?: IUserSessionEvent[]}>;
+}
+
+const toActivityLogEntries = (
+	response: IUserSessionsPage
+): IActivityLogEntry[] => {
+	const userSessions = response?.userSessions ?? [];
+
+	return userSessions.flatMap((userSession) =>
+		(userSession.userSessionEvents ?? []).map((event) => ({
+			createDate: Date.parse(event.createDate),
+			title: event.name,
+			type: event.name,
+			userName: event.emailAddressHashed,
+		}))
+	);
+};
+
 const formatData = (data: IActivityLogEntry[]) => {
 	return data.reduce((activityLog: TActivityLog, item: IActivityLogEntry) => {
 		const date = new Date(item.createDate);
@@ -118,9 +144,7 @@ function ActivityLog({
 
 	useEffect(() => {
 		if (response) {
-			const formattedData = formatData(response);
-
-			setData(formattedData);
+			setData(formatData(toActivityLogEntries(response)));
 		}
 
 		return () => {};

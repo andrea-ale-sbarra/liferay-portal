@@ -45,7 +45,15 @@ const LatestActivity = ({
 
 	useEffect(() => {
 		if (response) {
-			setData(response);
+			const eventEntries = response.eventEntries ?? [];
+
+			setData(
+				eventEntries.map((eventEntry: any) => ({
+					action: eventEntry.name,
+					createDate: eventEntry.createDate,
+					name: eventEntry.emailAddressHashed,
+				}))
+			);
 		}
 
 		return () => {};

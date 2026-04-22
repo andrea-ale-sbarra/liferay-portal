@@ -41,7 +41,16 @@ function TimelineEngagementChart({
 
 	useEffect(() => {
 		if (response) {
-			setData(response);
+			const histogramMetrics =
+				response.histogram?.histogramMetrics ?? [];
+
+			setData(
+				histogramMetrics.map((histogramMetric: any) => ({
+					date: histogramMetric.key,
+					numberOfVisits: 0,
+					timeSpent: histogramMetric.value ?? 0,
+				}))
+			);
 		}
 	}, [response]);
 

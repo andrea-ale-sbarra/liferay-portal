@@ -42,7 +42,7 @@ const MostActiveVisitors = ({
 
 	useEffect(() => {
 		if (response) {
-			setData(response);
+			setData(response.mostActiveVisitors ?? []);
 		}
 	}, [response]);
 

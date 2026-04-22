@@ -44,6 +44,24 @@ const formatTime = (minutes?: number): string => {
 	return `${hoursLabel} ${minutesLabel}`;
 };
 
+const toRoomStatistics = (response: any): IRoomStatistics => {
+	const userSessions = response?.userSessions ?? [];
+	const events = userSessions.flatMap(
+		(userSession: any) => userSession.userSessionEvents ?? []
+	);
+
+	return {
+		timeViewedMinutes: 0,
+		totalActions: events.length,
+		totalComments: events.filter((event: any) => event.name === 'comment')
+			.length,
+		totalVisits: response?.totalEvents ?? userSessions.length,
+		uniqueVisitors: new Set(
+			events.map((event: any) => event.emailAddressHashed)
+		).size,
+	};
+};
+
 const formatData = (data: IRoomStatistics): IRoomStatisticsItem[] => {
 	return [
 		{
@@ -113,7 +131,7 @@ function RoomStatistics({
 
 	useEffect(() => {
 		if (response) {
-			setData(formatData(response));
+			setData(formatData(toRoomStatistics(response)));
 		}
 
 		return () => {};

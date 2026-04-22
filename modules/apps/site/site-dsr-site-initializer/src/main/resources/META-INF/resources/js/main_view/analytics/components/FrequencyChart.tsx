@@ -20,6 +20,11 @@ import FrequencyChartQuery from '../queries/FrequencyChartQuery';
 import AnalyticsFrame from './AnalyticsFrame';
 import Loader from './Loader';
 
+interface IVisitFrequencyItem {
+	count: number;
+	name: string;
+}
+
 const margin = {
 	bottom: 5,
 	left: 20,
@@ -45,15 +50,15 @@ const getFrequencyLabel = (type: string): string => {
 };
 
 const formatData = (
-	frequencyChartItems: IFrequencyChartItem[]
+	visitFrequencyItems: IVisitFrequencyItem[]
 ): IFrequencyChartItem[] => {
-	if (!frequencyChartItems) {
+	if (!visitFrequencyItems) {
 		return [];
 	}
 
-	return frequencyChartItems.map((frequencyChartItem) => ({
-		frequencyType: getFrequencyLabel(frequencyChartItem.frequencyType),
-		visitCount: frequencyChartItem.visitCount || 0,
+	return visitFrequencyItems.map((visitFrequencyItem) => ({
+		frequencyType: getFrequencyLabel(visitFrequencyItem.name),
+		visitCount: visitFrequencyItem.count || 0,
 	}));
 };
 
@@ -80,9 +85,7 @@ function FrequencyChart({
 
 	useEffect(() => {
 		if (response) {
-			const formattedData = formatData(response);
-
-			setData(formattedData);
+			setData(formatData(response.visitFrequencyItems));
 		}
 
 		return () => {};
