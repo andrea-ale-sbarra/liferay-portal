@@ -5,9 +5,14 @@
 
 package com.liferay.site.dsr.analytics.rest.internal.resource.v1_0;
 
+import com.liferay.analytics.settings.rest.manager.AnalyticsSettingsManager;
+import com.liferay.portal.kernel.util.Http;
+import com.liferay.site.dsr.analytics.rest.dto.v1_0.DocumentMetricsPage;
+import com.liferay.site.dsr.analytics.rest.internal.client.DSRAnalyticsCloudClient;
 import com.liferay.site.dsr.analytics.rest.resource.v1_0.DocumentMetricResource;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
@@ -18,5 +23,28 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.PROTOTYPE, service = DocumentMetricResource.class
 )
 public class DocumentMetricResourceImpl extends BaseDocumentMetricResourceImpl {
+
+	@Override
+	public DocumentMetricsPage getDocument(
+			String channelId, String keywords, String rangeEnd,
+			Integer rangeKey, String rangeStart, Integer size,
+			String sortColumn, String sortType, Integer start)
+		throws Exception {
+
+		DSRAnalyticsCloudClient dsrAnalyticsCloudClient =
+			new DSRAnalyticsCloudClient(_http);
+
+		return dsrAnalyticsCloudClient.getDocumentMetricsPage(
+			_analyticsSettingsManager.getAnalyticsConfiguration(
+				contextCompany.getCompanyId()),
+			channelId, keywords, rangeEnd, rangeKey, rangeStart, size,
+			sortColumn, sortType, start);
+	}
+
+	@Reference
+	private AnalyticsSettingsManager _analyticsSettingsManager;
+
+	@Reference
+	private Http _http;
+
 }
-// LIFERAY-REST-BUILDER-HASH:480812544

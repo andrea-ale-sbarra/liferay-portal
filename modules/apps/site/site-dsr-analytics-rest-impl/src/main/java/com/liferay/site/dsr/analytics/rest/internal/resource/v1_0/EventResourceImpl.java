@@ -5,9 +5,14 @@
 
 package com.liferay.site.dsr.analytics.rest.internal.resource.v1_0;
 
+import com.liferay.analytics.settings.rest.manager.AnalyticsSettingsManager;
+import com.liferay.portal.kernel.util.Http;
+import com.liferay.site.dsr.analytics.rest.dto.v1_0.EventsPage;
+import com.liferay.site.dsr.analytics.rest.internal.client.DSRAnalyticsCloudClient;
 import com.liferay.site.dsr.analytics.rest.resource.v1_0.EventResource;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
@@ -18,5 +23,28 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.PROTOTYPE, service = EventResource.class
 )
 public class EventResourceImpl extends BaseEventResourceImpl {
+
+	@Override
+	public EventsPage getEvent(
+			String channelId, Boolean includeAnonymousUsers,
+			String individualId, String keywords, Integer page, String rangeEnd,
+			Integer rangeKey, String rangeStart, Integer size)
+		throws Exception {
+
+		DSRAnalyticsCloudClient dsrAnalyticsCloudClient =
+			new DSRAnalyticsCloudClient(_http);
+
+		return dsrAnalyticsCloudClient.getEventsPage(
+			_analyticsSettingsManager.getAnalyticsConfiguration(
+				contextCompany.getCompanyId()),
+			channelId, includeAnonymousUsers, individualId, keywords, page,
+			rangeEnd, rangeKey, rangeStart, size);
+	}
+
+	@Reference
+	private AnalyticsSettingsManager _analyticsSettingsManager;
+
+	@Reference
+	private Http _http;
+
 }
-// LIFERAY-REST-BUILDER-HASH:-767334174

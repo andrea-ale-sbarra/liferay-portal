@@ -5,9 +5,14 @@
 
 package com.liferay.site.dsr.analytics.rest.internal.resource.v1_0;
 
+import com.liferay.analytics.settings.rest.manager.AnalyticsSettingsManager;
+import com.liferay.portal.kernel.util.Http;
+import com.liferay.site.dsr.analytics.rest.dto.v1_0.MostActiveVisitorsPage;
+import com.liferay.site.dsr.analytics.rest.internal.client.DSRAnalyticsCloudClient;
 import com.liferay.site.dsr.analytics.rest.resource.v1_0.MostActiveVisitorResource;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
@@ -19,5 +24,25 @@ import org.osgi.service.component.annotations.ServiceScope;
 )
 public class MostActiveVisitorResourceImpl
 	extends BaseMostActiveVisitorResourceImpl {
+
+	@Override
+	public MostActiveVisitorsPage getMostActiveVisitor(
+			String channelId, Integer rangeKey, Integer size, Integer start)
+		throws Exception {
+
+		DSRAnalyticsCloudClient dsrAnalyticsCloudClient =
+			new DSRAnalyticsCloudClient(_http);
+
+		return dsrAnalyticsCloudClient.getMostActiveVisitorsPage(
+			_analyticsSettingsManager.getAnalyticsConfiguration(
+				contextCompany.getCompanyId()),
+			channelId, rangeKey, size, start);
+	}
+
+	@Reference
+	private AnalyticsSettingsManager _analyticsSettingsManager;
+
+	@Reference
+	private Http _http;
+
 }
-// LIFERAY-REST-BUILDER-HASH:342973625
