@@ -6,11 +6,35 @@
 import {useIsMounted} from '@liferay/frontend-js-react-web';
 import {useCallback, useEffect, useState} from 'react';
 
-import {TAnalyticsFilter} from '../../main_view/analytics/types';
+import {
+	AnalyticsFilters,
+	IAnalyticsUserFilter,
+	TAnalyticsFilter,
+	TDateRangeAnalyticsFilterValue,
+	TRoomAnalyticsFilterValue,
+} from '../../main_view/analytics/types';
 import AnalyticsService from '../services/AnalyticsService';
-import formatVariables from '../utils/formatVariables';
 import useAnalyticsFilters from './useAnalyticsFilters';
 import useIsInViewport from './useIsInViewport';
+
+function toRequestParams(
+	filters: TAnalyticsFilter,
+	variables: Record<string, unknown>
+) {
+	const roomFilterValue = filters[AnalyticsFilters.ROOM]
+		.value as TRoomAnalyticsFilterValue;
+	const dateRangeFilterValue = filters[AnalyticsFilters.DATE_RANGE]
+		.value as TDateRangeAnalyticsFilterValue;
+	const userFilter = filters[AnalyticsFilters.USER] as IAnalyticsUserFilter;
+
+	return {
+		...variables,
+		channelId: roomFilterValue.channelId || variables.channelId,
+		emailAddresses: userFilter.value,
+		rangeEnd: dateRangeFilterValue.to,
+		rangeStart: dateRangeFilterValue.from,
+	};
+}
 
 export default function useAnalyticsQuery({
 	element,
@@ -19,12 +43,12 @@ export default function useAnalyticsQuery({
 	variables,
 }: {
 	element: HTMLElement | null;
-	query: {devEnvData: any; query: string};
+	query: {devEnvData: any; path: string};
 	settings?: {
 		checkViewportVisibility: boolean;
 		useDevEnvData: boolean;
 	};
-	variables: any;
+	variables: Record<string, unknown>;
 }) {
 	const [isLoading, setIsLoading] = useState(true);
 	const isMounted = useIsMounted();
@@ -38,10 +62,8 @@ export default function useAnalyticsQuery({
 			setIsLoading(true);
 
 			if (settings.checkViewportVisibility && isVisible) {
-				const {devEnvData, query: queryString} = query;
-
 				if (settings.useDevEnvData) {
-					setResponse(devEnvData);
+					setResponse(query.devEnvData);
 
 					setIsLoading(false);
 
@@ -49,18 +71,12 @@ export default function useAnalyticsQuery({
 				}
 
 				try {
-					const response = await AnalyticsService.post(
-						JSON.stringify({
-							query: queryString,
-							variables: formatVariables(
-								filters,
-								queryString,
-								variables
-							),
-						})
+					const result = await AnalyticsService.get(
+						query.path,
+						toRequestParams(filters, variables)
 					);
 
-					setResponse(response?.data?.[0]);
+					setResponse(result as any);
 				}
 				catch (_ignore) {
 					setResponse(null);
