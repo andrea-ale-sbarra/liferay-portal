@@ -7,33 +7,5 @@ import {activityLogDevEnvData} from '../../../dev_env_data';
 
 export default {
 	devEnvData: activityLogDevEnvData,
-	query: `
-query UserSession($channelId: String!, $entityType: EntityType!, $keywords: String, $page: Int!, $rangeEnd: String, $rangeKey: Int, $rangeStart: String, $size: Int!) {
-  eventsByUserSessions(
-    channelId: $channelId
-    entityType: $entityType
-    keywords: $keywords
-    page: $page
-    rangeEnd: $rangeEnd
-    rangeKey: $rangeKey
-    rangeStart: $rangeStart
-    size: $size
-  ) {
-    userSessions {
-      ... on UserSession {
-        events {
-          createDate
-          emailAddressHashed
-          name
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }
-    totalEvents
-    __typename
-  }
-}
-`,
+	path: '/events-by-user-sessions',
 };

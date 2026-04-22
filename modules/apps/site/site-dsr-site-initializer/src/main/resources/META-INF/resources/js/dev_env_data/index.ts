@@ -3,188 +3,238 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-export const activityLogDevEnvData = [
-	{
-		createDate: 1772757506000,
-		label: 'tab',
-		title: 'Shared Document',
-		type: 'view',
-		userName: 'John Doe',
-	},
-	{
-		createDate: 1772774004000,
-		description: 'Lorem ipsum dolor sit amet...',
-		title: 'Technical Requirements',
-		type: 'comment',
-		userName: 'John Doe',
-	},
-	{
-		createDate: 1772788091000,
-		label: 'document',
-		title: 'Quote Software License.pdf',
-		type: 'upload',
-		userName: 'John Doe',
-	},
-	{
-		createDate: 1772831368491,
-		description: 'Lorem ipsum dolor sit amet...',
-		title: 'Quote Software License',
-		type: 'comment',
-		userName: 'Paul Gerome',
-	},
-	{
-		createDate: 1772795460014,
-		description: 'Lorem ipsum dolor sit amet...',
-		title: 'Roadmap Plan 2026',
-		type: 'comment',
-		userName: 'Emily Blunt',
-	},
-	{
-		createDate: 1772857149296,
-		description: 'Lorem ipsum dolor sit amet...',
-		title: 'Quote Software License',
-		type: 'comment',
-		userName: 'Paul Gerome',
-	},
-	{
-		createDate: 1772859315713,
-		description: 'Lorem ipsum dolor sit amet...',
-		title: 'Roadmap Plan 2026',
-		type: 'comment',
-		userName: 'Emily Blunt',
-	},
-	{
-		createDate: 1772902574223,
-		description: 'Lorem ipsum dolor sit amet...',
-		title: 'Roadmap Plan 2026',
-		type: 'comment',
-		userName: 'Paul Gerome',
-	},
-];
+export const activityLogDevEnvData = {
+	totalEvents: 8,
+	userSessions: [
+		{
+			userSessionEvents: [
+				{
+					createDate: '2026-03-04T14:38:26Z',
+					emailAddressHashed: 'John Doe',
+					name: 'view',
+				},
+				{
+					createDate: '2026-03-04T19:13:24Z',
+					emailAddressHashed: 'John Doe',
+					name: 'comment',
+				},
+				{
+					createDate: '2026-03-04T23:08:11Z',
+					emailAddressHashed: 'John Doe',
+					name: 'upload',
+				},
+			],
+		},
+		{
+			userSessionEvents: [
+				{
+					createDate: '2026-03-05T11:09:28Z',
+					emailAddressHashed: 'Paul Gerome',
+					name: 'comment',
+				},
+				{
+					createDate: '2026-03-05T19:17:29Z',
+					emailAddressHashed: 'Paul Gerome',
+					name: 'comment',
+				},
+				{
+					createDate: '2026-03-06T12:12:29Z',
+					emailAddressHashed: 'Paul Gerome',
+					name: 'comment',
+				},
+			],
+		},
+		{
+			userSessionEvents: [
+				{
+					createDate: '2026-03-05T13:11:00Z',
+					emailAddressHashed: 'Emily Blunt',
+					name: 'comment',
+				},
+				{
+					createDate: '2026-03-06T00:16:14Z',
+					emailAddressHashed: 'Emily Blunt',
+					name: 'comment',
+				},
+			],
+		},
+	],
+};
 
-export const engagementChartDevEnvData = [
-	{
-		date: '2026-02-20T00:00:00Z',
-		numberOfVisits: 400,
-		timeSpent: 2400,
+export const engagementChartDevEnvData = {
+	histogram: {
+		asymmetricComparison: 0,
+		histogramMetrics: [
+			{
+				key: '2026-02-20T00:00:00Z',
+				value: 400,
+				valueKey: 'numberOfVisits',
+			},
+			{
+				key: '2026-02-21T00:00:00Z',
+				value: 300,
+				valueKey: 'numberOfVisits',
+			},
+			{
+				key: '2026-02-22T00:00:00Z',
+				value: 320,
+				valueKey: 'numberOfVisits',
+			},
+			{
+				key: '2026-02-23T00:00:00Z',
+				value: 200,
+				valueKey: 'numberOfVisits',
+			},
+			{
+				key: '2026-02-24T00:00:00Z',
+				value: 278,
+				valueKey: 'numberOfVisits',
+			},
+			{
+				key: '2026-02-25T00:00:00Z',
+				value: 189,
+				valueKey: 'numberOfVisits',
+			},
+			{
+				key: '2026-02-26T00:00:00Z',
+				value: 199,
+				valueKey: 'numberOfVisits',
+			},
+		],
+		total: 1886,
 	},
-	{
-		date: '2026-02-21T00:00:00Z',
-		numberOfVisits: 300,
-		timeSpent: 4567,
-	},
-	{
-		date: '2026-02-22T00:00:00Z',
-		numberOfVisits: 320,
-		timeSpent: 1398,
-	},
-	{
-		date: '2026-02-23T00:00:00Z',
-		numberOfVisits: 200,
-		timeSpent: 9800,
-	},
-	{
-		date: '2026-02-24T00:00:00Z',
-		numberOfVisits: 278,
-		timeSpent: 3908,
-	},
-	{
-		date: '2026-02-25T00:00:00Z',
-		numberOfVisits: 189,
-		timeSpent: 4800,
-	},
-	{
-		date: '2026-02-26T00:00:00Z',
-		numberOfVisits: 199,
-		timeSpent: 1800,
-	},
-];
+};
 
-export const frequencyChartDevEnvData = [
-	{frequencyType: 'DAILY', visitCount: 320},
-	{frequencyType: 'WEEKLY', visitCount: 30},
-	{frequencyType: 'BIWEEKLY', visitCount: 100},
-	{frequencyType: 'MONTHLY', visitCount: 200},
-];
+export const frequencyChartDevEnvData = {
+	totalCount: 650,
+	visitFrequencyItems: [
+		{count: 320, name: 'DAILY'},
+		{count: 30, name: 'WEEKLY'},
+		{count: 100, name: 'BIWEEKLY'},
+		{count: 200, name: 'MONTHLY'},
+	],
+};
 
-export const latestActivityDevEnvData = [
-	{
-		action: 'Created a new document',
-		createDate: '2026-03-26T14:30:00Z',
-		name: 'John Doe',
-	},
-];
+export const latestActivityDevEnvData = {
+	eventEntries: [
+		{
+			createDate: '2026-03-26T14:30:00Z',
+			emailAddressHashed: 'John Doe',
+			name: 'Created a new document',
+		},
+	],
+};
 
-export const mostActiveVisitorsDevEnvData = [
-	{
-		activitiesCount: 150,
-		emailAddress: 'john.doe@liferay.com',
-		firstName: 'John',
-		lastName: 'Doe',
-	},
-];
+export const mostActiveVisitorsDevEnvData = {
+	mostActiveVisitors: [
+		{
+			activitiesCount: 150,
+			emailAddress: 'john.doe@liferay.com',
+			firstName: 'John',
+			id: '1',
+			lastName: 'Doe',
+		},
+	],
+	total: 1,
+};
 
-export const roomDocumentsStatisticsDevEnvData = [
-	{
-		download: 324,
-		lastViewed: '2026-03-02T15:30:00Z',
-		title: 'pdf_test',
-		totalTimeViewingAsset: 500000,
-		totalViews: 89,
-		type: 'pdf',
-		userInvolved: ['Sara', 'Lorenzo', 'Chiara', 'Mik'],
-	},
-	{
-		download: 342,
-		lastViewed: '2026-03-03T15:30:00Z',
-		title: 'doc_test2',
-		totalTimeViewingAsset: 65747465,
-		totalViews: 34,
-		type: 'document',
-		userInvolved: ['Lorenzo', 'Chiara', 'Mik'],
-	},
-	{
-		download: 45,
-		lastViewed: '2026-04-03T15:30:00Z',
-		title: 'pdf_test2',
-		totalTimeViewingAsset: 453345,
-		totalViews: 34,
-		type: 'pdf',
-		userInvolved: ['Sara', 'Lorenzo', 'Chiara', 'Mik'],
-	},
-	{
-		download: 23,
-		lastViewed: '2026-03-03T15:30:00Z',
-		title: 'document_test',
-		totalTimeViewingAsset: 565464,
-		totalViews: 23,
-		type: 'document',
-		userInvolved: ['Sara', 'Lorenzo'],
-	},
-	{
-		download: 768,
-		lastViewed: '2026-03-09T15:30:00Z',
-		title: 'pdf_test3',
-		totalTimeViewingAsset: 78968,
-		totalViews: 67,
-		type: 'pdf',
-		userInvolved: ['Sara', 'Lorenzo', 'Chiara', 'Mik'],
-	},
-	{
-		download: 324,
-		lastViewed: '2026-03-05T15:30:00Z',
-		title: 'pdf_test4',
-		totalTimeViewingAsset: 42566345,
-		totalViews: 85,
-		type: 'pdf',
-		userInvolved: ['Sara', 'Chiara', 'Mik'],
-	},
-];
+export const roomDocumentsStatisticsDevEnvData = {
+	documentMetrics: [
+		{
+			assetId: '1',
+			assetTitle: 'pdf_test',
+			commentsMetric: {value: 0},
+			downloadsMetric: {value: 324},
+			impressionMadeMetric: {value: 89},
+			lastViewedMetric: {value: 1740929400000},
+			ratingsMetric: {value: 0},
+			urls: ['pdf_test.pdf'],
+			usersInvolvedMetric: {value: 4},
+		},
+		{
+			assetId: '2',
+			assetTitle: 'doc_test2',
+			commentsMetric: {value: 0},
+			downloadsMetric: {value: 342},
+			impressionMadeMetric: {value: 34},
+			lastViewedMetric: {value: 1741015800000},
+			ratingsMetric: {value: 0},
+			urls: ['doc_test2.docx'],
+			usersInvolvedMetric: {value: 3},
+		},
+		{
+			assetId: '3',
+			assetTitle: 'pdf_test2',
+			commentsMetric: {value: 0},
+			downloadsMetric: {value: 45},
+			impressionMadeMetric: {value: 34},
+			lastViewedMetric: {value: 1743694200000},
+			ratingsMetric: {value: 0},
+			urls: ['pdf_test2.pdf'],
+			usersInvolvedMetric: {value: 4},
+		},
+		{
+			assetId: '4',
+			assetTitle: 'document_test',
+			commentsMetric: {value: 0},
+			downloadsMetric: {value: 23},
+			impressionMadeMetric: {value: 23},
+			lastViewedMetric: {value: 1741015800000},
+			ratingsMetric: {value: 0},
+			urls: ['document_test.docx'],
+			usersInvolvedMetric: {value: 2},
+		},
+		{
+			assetId: '5',
+			assetTitle: 'pdf_test3',
+			commentsMetric: {value: 0},
+			downloadsMetric: {value: 768},
+			impressionMadeMetric: {value: 67},
+			lastViewedMetric: {value: 1741534200000},
+			ratingsMetric: {value: 0},
+			urls: ['pdf_test3.pdf'],
+			usersInvolvedMetric: {value: 4},
+		},
+		{
+			assetId: '6',
+			assetTitle: 'pdf_test4',
+			commentsMetric: {value: 0},
+			downloadsMetric: {value: 324},
+			impressionMadeMetric: {value: 85},
+			lastViewedMetric: {value: 1741188600000},
+			ratingsMetric: {value: 0},
+			urls: ['pdf_test4.pdf'],
+			usersInvolvedMetric: {value: 3},
+		},
+	],
+	total: 6,
+};
 
 export const roomStatisticsDevEnvData = {
-	timeViewedMinutes: 45,
-	totalActions: 10,
-	totalComments: 5,
-	totalVisits: 100,
-	uniqueVisitors: 20,
+	totalEvents: 100,
+	userSessions: [
+		{
+			userSessionEvents: [
+				{
+					createDate: '2026-03-04T14:38:26Z',
+					emailAddressHashed: 'visitor1@example.com',
+					name: 'view',
+				},
+				{
+					createDate: '2026-03-04T19:13:24Z',
+					emailAddressHashed: 'visitor1@example.com',
+					name: 'comment',
+				},
+			],
+		},
+		{
+			userSessionEvents: [
+				{
+					createDate: '2026-03-05T11:09:28Z',
+					emailAddressHashed: 'visitor2@example.com',
+					name: 'view',
+				},
+			],
+		},
+	],
 };

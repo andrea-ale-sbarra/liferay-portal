@@ -7,13 +7,5 @@ import {frequencyChartDevEnvData} from '../../../dev_env_data';
 
 export default {
 	devEnvData: frequencyChartDevEnvData,
-	query: `query VisitFrequency($channelId: String!, $rangeKey: Int) {
-    visitFrequency(channelId: $channelId, rangeKey: $rangeKey) {
-        visitFrequency {
-            count
-            name
-        },
-        totalCount
-    }
-}`,
+	path: '/visit-frequency',
 };

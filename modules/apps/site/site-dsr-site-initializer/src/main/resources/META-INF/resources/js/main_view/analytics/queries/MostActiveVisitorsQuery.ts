@@ -7,17 +7,5 @@ import {mostActiveVisitorsDevEnvData} from '../../../dev_env_data';
 
 export default {
 	devEnvData: mostActiveVisitorsDevEnvData,
-	query: `
-    query MostActiveVisitors($channelId: String!, $rangeKey: Int, $size: Int!, $start: Int!) {
-    mostActiveVisitors(channelId: $channelId, rangeKey: $rangeKey, size: $size, start: $start) {
-        mostActiveVisitors {
-            activitiesCount
-            emailAddress
-            firstName
-            id
-            lastName
-        }
-        total
-    }
-}`,
+	path: '/most-active-visitors',
 };
