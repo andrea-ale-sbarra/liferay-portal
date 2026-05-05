@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {expect, mergeTests} from '@playwright/test';
+import {Page, expect, mergeTests} from '@playwright/test';
 
 import {commercePagesTest} from '../../../../fixtures/commercePagesTest';
 import {dataApiHelpersTest} from '../../../../fixtures/dataApiHelpersTest';
+import {globalMenuPagesTest} from '../../../../fixtures/globalMenuPagesTest';
 import {isolatedSiteTest} from '../../../../fixtures/isolatedSiteTest';
 import {loginTest} from '../../../../fixtures/loginTest';
 import {getRandomInt} from '../../../../utils/getRandomInt';
@@ -14,6 +15,7 @@ import {getRandomInt} from '../../../../utils/getRandomInt';
 export const test = mergeTests(
 	commercePagesTest,
 	dataApiHelpersTest,
+	globalMenuPagesTest,
 	isolatedSiteTest,
 	loginTest()
 );
@@ -156,3 +158,96 @@ test(
 		).toBeVisible();
 	}
 );
+
+test(
+	'Admin can view UOM information for a SKU from the Price Lists and Promotions admin panels',
+	{tag: ['@LPD-87067', '@COMMERCE-12471']},
+	async ({apiHelpers, globalMenuPage, page}) => {
+		const catalog =
+			await apiHelpers.headlessCommerceAdminCatalog.postCatalog();
+
+		const product =
+			await apiHelpers.headlessCommerceAdminCatalog.postProduct({
+				catalogId: catalog.id,
+			});
+
+		const productSkus = await apiHelpers.headlessCommerceAdminCatalog
+			.getProduct(product.productId)
+			.then((product) => product.skus);
+
+		const sku = productSkus[0];
+
+		for (const index of [1, 2]) {
+			await apiHelpers.headlessCommerceAdminCatalog.postSkuUnitOfMeasure(
+				sku.id,
+				{
+					basePrice: index,
+					key: `uomKey${index}`,
+					name: {en_US: `uomName${index}`},
+					primary: index === 1,
+					priority: index,
+					promoPrice: index,
+				}
+			);
+		}
+
+		await test.step('Verify UOM is shown for each entry in the Price List', async () => {
+			await globalMenuPage.goToCommerce('Price Lists');
+
+			await page
+				.getByRole('link', {name: `${catalog.name} Base Price List`})
+				.first()
+				.click();
+
+			await page.getByRole('link', {name: 'Entries'}).click();
+
+			await assertUOMSelectedInSidePanel(page, sku.sku);
+		});
+
+		await test.step('Verify UOM is shown for each entry in the Promotion', async () => {
+			await globalMenuPage.goToCommerce('Promotions');
+
+			await page
+				.getByRole('link', {name: `${catalog.name} Base Promotion`})
+				.first()
+				.click();
+
+			await page.getByRole('link', {name: 'Entries'}).click();
+
+			await assertUOMSelectedInSidePanel(page, sku.sku);
+		});
+	}
+);
+
+async function assertUOMSelectedInSidePanel(page: Page, skuName: string) {
+	const searchInput = page
+		.getByTestId('managementToolbar')
+		.getByRole('searchbox', {name: 'Search'});
+
+	await searchInput.fill(skuName);
+	await searchInput.press('Enter');
+
+	const sidePanelFrame = page.frameLocator('.is-visible iframe');
+
+	const closeButton = sidePanelFrame
+		.locator('.side-panel-iframe-header')
+		.getByRole('button');
+
+	for (const index of [1, 2]) {
+		const row = page
+			.getByRole('row')
+			.filter({hasText: skuName})
+			.filter({hasText: `uomKey${index}`});
+
+		await row.getByRole('link', {name: skuName}).click();
+
+		const uomSelect = sidePanelFrame.getByLabel('Unit of Measure');
+
+		await expect(uomSelect).toBeDisabled();
+		await expect(uomSelect).toHaveValue(`uomKey${index}`);
+
+		await closeButton.click();
+
+		await expect(page.locator('.side-panel.is-visible')).toBeHidden();
+	}
+}

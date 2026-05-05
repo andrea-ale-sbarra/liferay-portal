@@ -212,6 +212,7 @@ type TSkuUnitOfMeasure = {
 	pricingQuantity?: number;
 	primary?: boolean;
 	priority?: number;
+	promoPrice?: number;
 	rate?: number;
 };
 
