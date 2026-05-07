@@ -56,6 +56,7 @@ import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsValues;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -111,6 +112,8 @@ public class AgentInstanceResourceTest
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
+		BaseAgentInstanceResourceTestCase.setUpClass();
+
 		_accountEntry = _accountEntryLocalService.addAccountEntry(
 			RandomTestUtil.randomString(), TestPropsValues.getUserId(),
 			AccountConstants.PARENT_ACCOUNT_ENTRY_ID_DEFAULT,
@@ -141,7 +144,8 @@ public class AgentInstanceResourceTest
 			).put(
 				"clientSecret", RandomTestUtil.randomString()
 			).put(
-				"serviceURL", "http://localhost:8080"
+				"serviceURL",
+				"http://localhost:" + PortalUtil.getPortalServerPort(false)
 			).build());
 
 		PrincipalThreadLocal.setName(TestPropsValues.getUserId());
@@ -220,7 +224,9 @@ public class AgentInstanceResourceTest
 				"r_accountToAIHubMCPServers_accountEntryId",
 				aiHubAccountEntry.getAccountEntryId()
 			).put(
-				"url", "http://localhost:8080/o/mcp"
+				"url",
+				"http://localhost:" + PortalUtil.getPortalServerPort(false) +
+					"/o/mcp"
 			).build(),
 			ServiceContextTestUtil.getServiceContext(
 				GroupTestUtil.addGroup(), TestPropsValues.getUserId()));

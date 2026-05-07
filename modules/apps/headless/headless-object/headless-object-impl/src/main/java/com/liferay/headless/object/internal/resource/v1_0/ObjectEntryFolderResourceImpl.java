@@ -9,6 +9,7 @@ import com.liferay.depot.model.DepotEntry;
 import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
 import com.liferay.expando.kernel.service.ExpandoTableLocalService;
+import com.liferay.exportimport.constants.ExportImportConstants;
 import com.liferay.exportimport.kernel.lar.ExportImportThreadLocal;
 import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngineTaskItemDelegate;
 import com.liferay.headless.common.spi.odata.entity.EntityFieldsUtil;
@@ -229,6 +230,11 @@ public class ObjectEntryFolderResourceImpl
 				getScope() {
 
 				return Scope.DEPOT;
+			}
+
+			@Override
+			public String getSectionKey() {
+				return ExportImportConstants.SECTION_KEY_OBJECTS;
 			}
 
 		};
@@ -864,6 +870,31 @@ public class ObjectEntryFolderResourceImpl
 					addAction(
 						ActionKeys.DELETE, serviceBuilderObjectEntryFolder,
 						"deleteObjectEntryFolder")
+				).put(
+					"duplicate",
+					() -> {
+						if (!FeatureFlagManagerUtil.isEnabled(
+								contextCompany.getCompanyId(), "LPD-17564")) {
+
+							return null;
+						}
+
+						return ActionUtil.addAction(
+							ActionKeys.UPDATE,
+							ObjectEntryFolderResourceImpl.class,
+							serviceBuilderObjectEntryFolder.
+								getObjectEntryFolderId(),
+							"postObjectEntryFolderByParentObjectEntryFolder" +
+								"Copy",
+							null, _objectEntryFolderModelResourcePermission,
+							HashMapBuilder.put(
+								"parentObjectEntryFolderId",
+								String.valueOf(
+									serviceBuilderObjectEntryFolder.
+										getParentObjectEntryFolderId())
+							).build(),
+							contextUriInfo);
+					}
 				).put(
 					"get",
 					addAction(

@@ -22,6 +22,7 @@ import com.liferay.layout.test.util.ContentLayoutTestUtil;
 import com.liferay.layout.utility.page.model.LayoutUtilityPageEntry;
 import com.liferay.layout.utility.page.service.LayoutUtilityPageEntryLocalService;
 import com.liferay.petra.function.UnsafeRunnable;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
@@ -44,6 +45,7 @@ import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsValues;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
@@ -335,9 +337,10 @@ public class UtilityPageResourceTest extends BaseUtilityPageResourceTestCase {
 			{
 				setExternalReferenceCode(RandomTestUtil.randomString());
 				setUrl(
-					() ->
-						"http://localhost:8080/" +
-							RandomTestUtil.randomString());
+					() -> StringBundler.concat(
+						"http://localhost:",
+						PortalUtil.getPortalServerPort(false), "/",
+						RandomTestUtil.randomString()));
 			}
 		};
 
@@ -679,7 +682,8 @@ public class UtilityPageResourceTest extends BaseUtilityPageResourceTestCase {
 		).authentication(
 			user.getEmailAddress(), PropsValues.DEFAULT_ADMIN_PASSWORD
 		).endpoint(
-			testCompany.getVirtualHostname(), 8080, "http"
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
 		).locale(
 			LocaleUtil.getDefault()
 		).parameters(
@@ -977,9 +981,10 @@ public class UtilityPageResourceTest extends BaseUtilityPageResourceTestCase {
 				{
 					setExternalReferenceCode(RandomTestUtil.randomString());
 					setUrl(
-						() ->
-							"http://localhost:8080/" +
-								RandomTestUtil.randomString());
+						() -> StringBundler.concat(
+							"http://localhost:",
+							PortalUtil.getPortalServerPort(false), "/",
+							RandomTestUtil.randomString()));
 				}
 			};
 
@@ -1263,9 +1268,10 @@ public class UtilityPageResourceTest extends BaseUtilityPageResourceTestCase {
 				{
 					setExternalReferenceCode(RandomTestUtil.randomString());
 					setUrl(
-						() ->
-							"http://localhost:8080/" +
-								RandomTestUtil.randomString());
+						() -> StringBundler.concat(
+							"http://localhost:",
+							PortalUtil.getPortalServerPort(false), "/",
+							RandomTestUtil.randomString()));
 				}
 			};
 

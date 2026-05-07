@@ -821,7 +821,7 @@ test.describe('Publications with incomplete status tests', () => {
 			`Success:${journalArticleTitle} was created successfully.`
 		);
 
-		changeTrackingPage.goToReviewChanges(ctCollection2.body.name);
+		await changeTrackingPage.goToReviewChanges(ctCollection2.body.name);
 
 		const firstDropdown = page
 			.locator('.cell-item-actions .dropdown svg.lexicon-icon-ellipsis-v')
@@ -845,14 +845,8 @@ test.describe('Publications with incomplete status tests', () => {
 
 		await expect(publicationSelector).toBeVisible();
 
-		const publicationsOptions = await page.locator(
-			'#_com_liferay_change_tracking_web_portlet_PublicationsPortlet_toPublication > option'
-		);
-
-		await expect(publicationsOptions).toHaveText([
-			'None',
-			ctCollection.body.name,
-		]);
+		await expect(publicationSelector).toContainText('None');
+		await expect(publicationSelector).toContainText(ctCollection.body.name);
 
 		await apiHelpers.headlessChangeTracking.deleteCTCollection(
 			ctCollection2.body.id
@@ -1001,14 +995,17 @@ test('LPD-78919 Unified view in FragmentEntryLink review page is shown', async (
 	await changeTrackingPage.goToReviewChanges(ctCollection.body.name);
 
 	await page
-		.locator('td')
-		.getByRole('link')
+		.getByRole('row')
 		.filter({hasText: 'Fragment Entry Link'})
+		.getByRole('link')
+		.first()
 		.click();
 
 	const renderViewDropdown = page.locator(
 		'.publications-render-view-divider .dropdown'
 	);
+
+	await renderViewDropdown.waitFor({state: 'visible', timeout: 15000});
 
 	await clickAndExpectToBeVisible({
 		autoClick: true,

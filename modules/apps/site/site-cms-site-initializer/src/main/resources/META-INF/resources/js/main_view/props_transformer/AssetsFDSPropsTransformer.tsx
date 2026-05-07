@@ -20,7 +20,10 @@ import {
 	IBreadcrumbItem,
 	ISearchAssetObjectEntry,
 } from '../../common/types/AssetType';
-import {OBJECT_ENTRY_FOLDER_CLASS_NAME} from '../../common/utils/constants';
+import {
+	CMSSiteInitializerFDSNames,
+	OBJECT_ENTRY_FOLDER_CLASS_NAME,
+} from '../../common/utils/constants';
 import {getFormattedLabel} from '../../common/utils/getFormattedText';
 import {getScopeExternalReferenceCode} from '../../common/utils/getScopeExternalReferenceCode';
 import {openCMSModal} from '../../common/utils/openCMSModal';
@@ -53,6 +56,7 @@ import SimpleActionLinkRenderer from './cell_renderers/SimpleActionLinkRenderer'
 import SpaceRendererWithCache from './cell_renderers/SpaceRendererWithCache';
 import TypeRenderer from './cell_renderers/TypeRenderer';
 import addOnClickToCreationMenuItems from './utils/addOnClickToCreationMenuItems';
+import {executeAsyncItemAction} from './utils/executeAsyncItemAction';
 import transformFDSBulkActions from './utils/transformFDSBulkActions';
 import transformViewsItemsProps from './utils/transformViewsItemProps';
 import GalleryView from './views/GalleryView';
@@ -166,11 +170,20 @@ export default function AssetsFDSPropsTransformer({
 	apiURL?: string;
 	bulkActions?: Array<IBulkActionItem>;
 	creationMenu: any;
+	hideManagementBarInEmptyState?: boolean;
 	id?: string;
 	itemsActions?: any[];
 	views: IView[];
 }) {
 	let mergedViews = views;
+
+	const isAllSectionView = otherProps?.id?.endsWith(
+		CMSSiteInitializerFDSNames.ALL_SECTION
+	);
+
+	const hideManagementBarInEmptyState = isAllSectionView
+		? otherProps?.hideManagementBarInEmptyState
+		: true;
 
 	if (additionalProps.galleryViewEnabled) {
 		const galleryViewRenderer: IView = {
@@ -204,6 +217,13 @@ export default function AssetsFDSPropsTransformer({
 		rootFolder,
 		...remainingAdditionalProps
 	} = additionalProps || {};
+
+	const bulkActionAPIURL =
+		additionalAPIURLParameters && otherProps.apiURL
+			? `${otherProps.apiURL}${
+					otherProps.apiURL.includes('?') ? '&' : '?'
+				}${additionalAPIURLParameters}`
+			: otherProps.apiURL;
 
 	return {
 		...otherProps,
@@ -319,7 +339,7 @@ export default function AssetsFDSPropsTransformer({
 			],
 		},
 		groupedFilters: getCMSItemSelectorGroupedFilters('scopeGroupId'),
-		hideManagementBarInEmptyState: true,
+		hideManagementBarInEmptyState,
 		infoPanelComponent: (items: {items: ISearchAssetObjectEntry[]}) => (
 			<AssetTypeInfoPanel
 				additionalProps={additionalProps as any}
@@ -418,6 +438,25 @@ export default function AssetsFDSPropsTransformer({
 						additionalProps.parentObjectEntryFolderExternalReferenceCode
 				);
 			}
+			else if (action?.data?.id === 'duplicate') {
+				const href = itemData.actions.duplicate?.href;
+
+				if (!href) {
+					return;
+				}
+
+				event?.preventDefault();
+
+				executeAsyncItemAction({
+					method: 'POST',
+					refreshData: loadData,
+					successMessage: sub(
+						Liferay.Language.get('x-was-successfully-duplicated'),
+						`<strong>"${Liferay.Util.escapeHTML(itemData.title)}"</strong>`
+					),
+					url: href,
+				});
+			}
 			else if (
 				action?.data?.id === 'default-permissions' ||
 				action?.data?.id === 'edit-and-propagate-default-permissions'
@@ -434,7 +473,7 @@ export default function AssetsFDSPropsTransformer({
 							allowPropagate:
 								action.data.id ===
 								'edit-and-propagate-default-permissions',
-							apiURL: otherProps.apiURL,
+							apiURL: bulkActionAPIURL,
 							classExternalReferenceCode:
 								itemData.embedded.externalReferenceCode,
 							className: itemData.entryClassName,
@@ -591,7 +630,7 @@ export default function AssetsFDSPropsTransformer({
 						closeModal: () => void;
 					}) =>
 						EditAssetCategoriesModalContent({
-							apiURL: otherProps.apiURL,
+							apiURL: bulkActionAPIURL,
 							assetLibraries:
 								additionalProps.candidateAssetLibraries,
 							closeModal,
@@ -613,7 +652,7 @@ export default function AssetsFDSPropsTransformer({
 						closeModal: () => void;
 					}) =>
 						EditAssetTagsModalContent({
-							apiURL: otherProps?.apiURL,
+							apiURL: bulkActionAPIURL,
 							assetLibraries:
 								additionalProps.candidateAssetLibraries,
 							closeModal,
@@ -625,7 +664,7 @@ export default function AssetsFDSPropsTransformer({
 			}
 			else if (action?.data?.id === 'default-permissions') {
 				defaultPermissionsBulkAction({
-					apiURL: otherProps.apiURL,
+					apiURL: bulkActionAPIURL,
 					className: OBJECT_ENTRY_FOLDER_CLASS_NAME,
 					defaultPermissionAdditionalProps:
 						additionalProps.defaultPermissionAdditionalProps || {},
@@ -638,11 +677,11 @@ export default function AssetsFDSPropsTransformer({
 			else if (action?.data?.id === 'delete') {
 				if (additionalProps.brokenLinksCheckerEnabled) {
 					openAssetUsageListModal({
-						apiURL: otherProps.apiURL,
+						apiURL: bulkActionAPIURL,
 						itemsData: selectedData.items,
 						onDelete: async () => {
 							executeBulkDeleteAction(
-								otherProps.apiURL as string,
+								bulkActionAPIURL as string,
 								otherProps.id || '',
 								selectedData
 							);
@@ -655,7 +694,7 @@ export default function AssetsFDSPropsTransformer({
 
 						onSkip: async () => {
 							deleteAssetEntriesBulkAction({
-								apiURL: otherProps.apiURL,
+								apiURL: bulkActionAPIURL,
 								dataSetId: otherProps.id,
 								selectedData,
 							});
@@ -665,14 +704,14 @@ export default function AssetsFDSPropsTransformer({
 				}
 				else {
 					deleteAssetEntriesBulkAction({
-						apiURL: otherProps.apiURL,
+						apiURL: bulkActionAPIURL,
 						selectedData,
 					});
 				}
 			}
 			else if (action?.data?.id === 'download') {
 				triggerAssetDownloadBulkAction({
-					apiURL: otherProps.apiURL,
+					apiURL: bulkActionAPIURL,
 					selectedData,
 					type: 'DownloadBulkAction',
 				});
@@ -680,7 +719,7 @@ export default function AssetsFDSPropsTransformer({
 			else if (action?.data?.id === 'export-for-translation') {
 				exportTranslationBulkAction({
 					additionalProps,
-					apiURL: otherProps.apiURL,
+					apiURL: bulkActionAPIURL,
 					selectedData,
 				});
 			}
@@ -688,7 +727,7 @@ export default function AssetsFDSPropsTransformer({
 				action?.data?.id === 'edit-default-permissions-by-role'
 			) {
 				defaultPermissionsBulkAction({
-					apiURL: otherProps.apiURL,
+					apiURL: bulkActionAPIURL,
 					className: OBJECT_ENTRY_FOLDER_CLASS_NAME,
 					defaultPermissionAdditionalProps:
 						additionalProps.defaultPermissionAdditionalProps || {},
@@ -701,7 +740,7 @@ export default function AssetsFDSPropsTransformer({
 			}
 			else if (action?.data?.id === 'edit-permissions-by-role') {
 				permissionsBulkAction({
-					apiURL: otherProps.apiURL,
+					apiURL: bulkActionAPIURL,
 					className: OBJECT_ENTRY_FOLDER_CLASS_NAME,
 					defaultPermissionAdditionalProps:
 						additionalProps.defaultPermissionAdditionalProps || {},
@@ -714,7 +753,7 @@ export default function AssetsFDSPropsTransformer({
 			}
 			else if (action?.data.id === 'expire') {
 				expireEntriesBulkAction({
-					apiURL: otherProps.apiURL,
+					apiURL: bulkActionAPIURL,
 					dataSetId: otherProps.id,
 					selectedData,
 				});
@@ -737,7 +776,7 @@ export default function AssetsFDSPropsTransformer({
 			}
 			else if (action?.data?.id === 'permissions') {
 				permissionsBulkAction({
-					apiURL: otherProps.apiURL,
+					apiURL: bulkActionAPIURL,
 					className: OBJECT_ENTRY_FOLDER_CLASS_NAME,
 					defaultPermissionAdditionalProps:
 						additionalProps.defaultPermissionAdditionalProps || {},
@@ -751,7 +790,7 @@ export default function AssetsFDSPropsTransformer({
 				openResetAssetPermissionModal({
 					loadData: () => {
 						executeResetPermissionObjectBulkSelectionAction({
-							apiURL: otherProps.apiURL,
+							apiURL: bulkActionAPIURL,
 							selectedData,
 						});
 					},
@@ -764,7 +803,7 @@ export default function AssetsFDSPropsTransformer({
 				copyOrMoveBulkAction({
 					action: action.data.id === 'copy-to' ? 'copy' : 'move',
 					additionalProps,
-					apiURL: otherProps.apiURL,
+					apiURL: bulkActionAPIURL,
 					dataSetId: otherProps.id,
 					selectedData,
 				});

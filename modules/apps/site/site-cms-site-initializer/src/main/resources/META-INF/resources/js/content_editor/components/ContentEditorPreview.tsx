@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {PanelResizer as Resizer, useObservedMaxWidth} from '@clayui/shared';
+import {ResizeHandle} from '@clayui/core';
+import {useObservedMaxWidth} from '@clayui/shared';
 import {useEventListener} from '@liferay/frontend-js-react-web';
 import classNames from 'classnames';
 import {useSessionState} from 'frontend-js-components-web';
@@ -101,7 +102,7 @@ export default function ContentEditorPreview({
 	return (
 		<div
 			aria-labelledby={titleId}
-			className={classNames('content-editor__preview c-slideout-end', {
+			className={classNames('content-editor__preview', {
 				resizing,
 				visible: isVisible,
 			})}
@@ -132,15 +133,15 @@ export default function ContentEditorPreview({
 				</>
 			) : null}
 
-			<Resizer
-				onPanelWidthChange={(width) => {
+			<ResizeHandle
+				maxWidth={previewWidthMax}
+				minWidth={PREVIEW_WIDTH_MIN}
+				onWidthChange={(width: number) => {
 					setResizeWidth(width);
 					setResizing(true);
 				}}
-				panelWidth={previewWidth}
-				panelWidthMax={previewWidthMax}
-				panelWidthMin={PREVIEW_WIDTH_MIN}
 				position="right"
+				width={previewWidth}
 			/>
 		</div>
 	);

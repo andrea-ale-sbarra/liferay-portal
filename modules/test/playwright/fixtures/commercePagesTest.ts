@@ -20,8 +20,10 @@ import {CheckoutPage} from '../pages/commerce/commerce-checkout-web/checkoutPage
 import {CommerceAdminCurrenciesPage} from '../pages/commerce/commerce-currency-web/commerceAdminCurrenciesPage';
 import {CommerceAdminCurrencyDetailsPage} from '../pages/commerce/commerce-currency-web/commerceAdminCurrencyDetailsPage';
 import {CommerceAdminHealthCheckPage} from '../pages/commerce/commerce-health-status-web/commerceAdminHealthCheckPage';
+import {CommerceAdminInventoryItemPage} from '../pages/commerce/commerce-inventory-web/commerceAdminInventoryItemPage';
 import {CommerceAdminInventoryPage} from '../pages/commerce/commerce-inventory-web/commerceAdminInventoryPage';
 import {CommerceLayoutsPage} from '../pages/commerce/commerce-order-content-web/commerceLayoutsPage';
+import {OrderDetailsPage} from '../pages/commerce/commerce-order-content-web/orderDetailsPage';
 import {PendingOrdersPage} from '../pages/commerce/commerce-order-content-web/pendingOrdersPage';
 import {PlacedOrderPage} from '../pages/commerce/commerce-order-content-web/placedOrderPage';
 import {PlacedOrdersPage} from '../pages/commerce/commerce-order-content-web/placedOrdersPage';
@@ -93,6 +95,7 @@ const commercePagesTest = test.extend<{
 	commerceAdminDiscountDetailsPage: CommerceAdminDiscountDetailsPage;
 	commerceAdminDiscountsPage: CommerceAdminDiscountsPage;
 	commerceAdminHealthCheckPage: CommerceAdminHealthCheckPage;
+	commerceAdminInventoryItemPage: CommerceAdminInventoryItemPage;
 	commerceAdminInventoryPage: CommerceAdminInventoryPage;
 	commerceAdminOrderAttachmentsPage: CommerceAdminOrderAttachmentsPage;
 	commerceAdminOrderDetailsPage: CommerceAdminOrderDetailsPage;
@@ -136,6 +139,7 @@ const commercePagesTest = test.extend<{
 	commerceThemeMiniumPage: CommerceThemeMiniumPage;
 	commerceWishListPage: CommerceWishListPage;
 	offlinePaymentMethodsSystemSettingPage: OfflinePaymentMethodsSystemSettingPage;
+	orderDetailsPage: OrderDetailsPage;
 	organizationManagementPage: OrganizationManagementPage;
 	pendingOrdersPage: PendingOrdersPage;
 	placedOrderPage: PlacedOrderPage;
@@ -199,6 +203,9 @@ const commercePagesTest = test.extend<{
 	},
 	commerceAdminHealthCheckPage: async ({page}, use) => {
 		await use(new CommerceAdminHealthCheckPage(page));
+	},
+	commerceAdminInventoryItemPage: async ({page}, use) => {
+		await use(new CommerceAdminInventoryItemPage(page));
 	},
 	commerceAdminInventoryPage: async ({page}, use) => {
 		await use(new CommerceAdminInventoryPage(page));
@@ -328,6 +335,9 @@ const commercePagesTest = test.extend<{
 	},
 	offlinePaymentMethodsSystemSettingPage: async ({page}, use) => {
 		await use(new OfflinePaymentMethodsSystemSettingPage(page));
+	},
+	orderDetailsPage: async ({page}, use) => {
+		await use(new OrderDetailsPage(page));
 	},
 	organizationManagementPage: async ({page}, use) => {
 		await use(new OrganizationManagementPage(page));
