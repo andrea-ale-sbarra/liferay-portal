@@ -5,6 +5,7 @@
 
 package com.liferay.ai.hub.internal.notification;
 
+import com.liferay.ai.hub.internal.constants.AIHubDestinationNames;
 import com.liferay.portal.kernel.audit.AuditMessage;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -25,16 +26,17 @@ import org.osgi.service.component.annotations.Reference;
 public class AIGuardrailAlertAuditMessageProcessor
 	implements AuditMessageProcessor {
 
-	public static final String DESTINATION_NAME = "liferay/ai_incident_routing";
-
 	@Override
 	public void process(AuditMessage auditMessage) {
 		try {
 			Message message = new Message();
 
-			message.setPayload(auditMessage.toJSONObject().toString());
+			message.setPayload(
+				auditMessage.toJSONObject(
+				).toString());
 
-			_messageBus.sendMessage(DESTINATION_NAME, message);
+			_messageBus.sendMessage(
+				AIHubDestinationNames.AI_HUB_ALERT_ROUTING, message);
 		}
 		catch (Exception exception) {
 			_log.error(

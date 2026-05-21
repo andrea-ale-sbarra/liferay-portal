@@ -8,8 +8,8 @@ package com.liferay.ai.hub.internal.messaging;
 import com.liferay.account.constants.AccountRoleConstants;
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.service.AccountEntryLocalService;
+import com.liferay.ai.hub.internal.constants.AIHubDestinationNames;
 import com.liferay.ai.hub.internal.constants.NotificationConstants;
-import com.liferay.ai.hub.internal.notification.AIGuardrailAlertAuditMessageProcessor;
 import com.liferay.notification.context.NotificationContextBuilder;
 import com.liferay.notification.model.NotificationTemplate;
 import com.liferay.notification.service.NotificationTemplateLocalService;
@@ -47,6 +47,8 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.io.Serializable;
 
+import java.text.DateFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -64,17 +66,16 @@ import org.osgi.service.component.annotations.Reference;
  * @author Danny Situ
  */
 @Component(
-	property = "destination.name=" +
-		AIGuardrailAlertAuditMessageProcessor.DESTINATION_NAME,
+	property = "destination.name=" + AIHubDestinationNames.AI_HUB_ALERT_ROUTING,
 	service = MessageListener.class
 )
-public class AIIncidentRoutingMessageListener extends BaseMessageListener {
+public class AIHubAlertRoutingMessageListener extends BaseMessageListener {
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		Destination destination = _destinationFactory.createDestination(
 			DestinationConfiguration.createParallelDestinationConfiguration(
-				AIGuardrailAlertAuditMessageProcessor.DESTINATION_NAME));
+				AIHubDestinationNames.AI_HUB_ALERT_ROUTING));
 
 		_serviceRegistration = bundleContext.registerService(
 			Destination.class, destination,
@@ -99,7 +100,8 @@ public class AIIncidentRoutingMessageListener extends BaseMessageListener {
 		// Not sure if these are provided or we need to implement logic to
 		// classify.
 
-		String alertTrigger = additionalInfoJSONObject.getString("alertTrigger");
+		String alertTrigger = additionalInfoJSONObject.getString(
+			"alertTrigger");
 		String severity = additionalInfoJSONObject.getString("severity");
 
 		if (Validator.isNull(alertTrigger) || Validator.isNull(severity)) {
@@ -277,10 +279,11 @@ public class AIIncidentRoutingMessageListener extends BaseMessageListener {
 			}
 		).put(
 			"[%TIMESTAMP%]",
-			DateUtil.getISO8601Format(
-			).format(
-				auditMessage.getTimestamp()
-			)
+			() -> {
+				DateFormat dateFormat = DateUtil.getISO8601Format();
+
+				return dateFormat.format(auditMessage.getTimestamp());
+			}
 		).put(
 			"[%TO%]", emailAddress
 		).put(
@@ -393,12 +396,12 @@ public class AIIncidentRoutingMessageListener extends BaseMessageListener {
 		}
 	}
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		AIHubAlertRoutingMessageListener.class);
+
 	private static final List<String> _defaultNotificationTypes = Arrays.asList(
 		NotificationConstants.NOTIFICATION_TYPE_EMAIL,
 		NotificationConstants.NOTIFICATION_TYPE_USER_NOTIFICATION);
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		AIIncidentRoutingMessageListener.class);
 
 	@Reference
 	private AccountEntryLocalService _accountEntryLocalService;
