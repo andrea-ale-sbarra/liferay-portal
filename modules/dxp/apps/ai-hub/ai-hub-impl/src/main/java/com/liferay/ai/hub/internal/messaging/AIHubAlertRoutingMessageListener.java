@@ -20,6 +20,7 @@ import com.liferay.object.model.ObjectEntry;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.audit.AuditMessage;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -39,13 +40,12 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-
-import java.io.Serializable;
 
 import java.text.DateFormat;
 
@@ -218,24 +218,15 @@ public class AIHubAlertRoutingMessageListener extends BaseMessageListener {
 			return _defaultNotificationTypes;
 		}
 
-		Map<String, Serializable> values = objectEntry.getValues();
+		String notificationTypes = MapUtil.getString(
+			objectEntry.getValues(), "notificationTypes");
 
-		Object value = values.get("notificationTypes");
-
-		if (!(value instanceof List)) {
+		if (Validator.isNull(notificationTypes)) {
 			return Collections.emptyList();
 		}
 
-		List<String> notificationTypes = new ArrayList<>();
-
-		for (Object entry : (List<Object>)value) {
-			if (entry instanceof Map) {
-				notificationTypes.add(
-					MapUtil.getString((Map<String, String>)entry, "key"));
-			}
-		}
-
-		return notificationTypes;
+		return ListUtil.fromString(
+			notificationTypes, StringPool.COMMA_AND_SPACE);
 	}
 
 	private Map<String, Object> _getTermValues(
@@ -300,26 +291,13 @@ public class AIHubAlertRoutingMessageListener extends BaseMessageListener {
 			return severity.equals(NotificationConstants.SEVERITY_CRITICAL);
 		}
 
-		Map<String, Serializable> values = objectEntry.getValues();
+		String notificationSeverities = MapUtil.getString(
+			objectEntry.getValues(), "notificationSeverities");
 
-		Object value = values.get("notificationSeverities");
+		List<String> severities = ListUtil.fromString(
+			notificationSeverities, StringPool.COMMA_AND_SPACE);
 
-		if (!(value instanceof List)) {
-			return false;
-		}
-
-		for (Object entry : (List<Object>)value) {
-			if (entry instanceof Map) {
-				String key = MapUtil.getString(
-					(Map<String, String>)entry, "key");
-
-				if (severity.equals(key)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return severities.contains(severity);
 	}
 
 	private void _sendNotification(
@@ -333,6 +311,10 @@ public class AIHubAlertRoutingMessageListener extends BaseMessageListener {
 
 		notificationType.sendNotification(
 			new NotificationContextBuilder(
+			).className(
+				auditMessage.getClassName()
+			).classPK(
+				GetterUtil.getLong(auditMessage.getClassPK())
 			).companyId(
 				auditMessage.getCompanyId()
 			).notificationTemplate(
@@ -340,7 +322,7 @@ public class AIHubAlertRoutingMessageListener extends BaseMessageListener {
 			).termValues(
 				_getTermValues(emailAddress, auditMessage)
 			).userId(
-				0L
+				_userLocalService.getDefaultUserId(auditMessage.getCompanyId())
 			).build());
 	}
 
