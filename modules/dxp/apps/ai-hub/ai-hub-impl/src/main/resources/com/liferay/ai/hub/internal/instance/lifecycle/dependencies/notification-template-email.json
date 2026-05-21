@@ -1,0 +1,32 @@
+{
+	"body": {
+		"en_US": "<p>An AI Hub alert was triggered.</p>\n<ul>\n<li><b>Severity</b>: [%INCIDENT_SEVERITY%]</li>\n<li><b>Alert Trigger</b>: [%ALERT_TRIGGER%]</li>\n<li><b>Affected Agent</b>: [%AGENT_CLASS_PK%]</li>\n<li><b>Time</b>: [%TIMESTAMP%]</li>\n<li><b>Tenant</b>: [%COMPANY_ID%]</li>\n<li><b>Trace ID</b>: [%TRACE_ID%]</li>\n<li><b>Use ID</b>: [%USE_ID%]</li>\n</ul>"
+	},
+	"editorType": "richText",
+	"externalReferenceCode": "L_AI_HUB_ALERT_EMAIL_TEMPLATE",
+	"name": "AI Hub Alert Email",
+	"name_i18n": {
+		"en_US": "AI Hub Alert Email"
+	},
+	"recipientType": "email",
+	"recipients": [
+		{
+			"bcc": "",
+			"cc": "",
+			"from": "[%FROM_ADDRESS%]",
+			"fromName": {
+				"en_US": "[%FROM_NAME%]"
+			},
+			"singleRecipient": false,
+			"to": {
+				"en_US": "[%TO%]"
+			}
+		}
+	],
+	"subject": {
+		"en_US": "[Liferay AI Hub] [%INCIDENT_SEVERITY%] alert - [%ALERT_TRIGGER%]"
+	},
+	"system": false,
+	"type": "email",
+	"typeLabel": "Email"
+}
