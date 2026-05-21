@@ -1,0 +1,23 @@
+{
+	"body": {
+		"en_US": "<p>An AI Hub alert was triggered.</p>\n<ul>\n<li><b>Severity</b>: [%INCIDENT_SEVERITY%]</li>\n<li><b>Alert Trigger</b>: [%ALERT_TRIGGER%]</li>\n<li><b>Affected Agent</b>: [%AGENT_CLASS_PK%]</li>\n<li><b>Time</b>: [%TIMESTAMP%]</li>\n<li><b>Tenant</b>: [%COMPANY_ID%]</li>\n<li><b>Trace ID</b>: [%TRACE_ID%]</li>\n<li><b>Use ID</b>: [%USE_ID%]</li>\n</ul>"
+	},
+	"editorType": "richText",
+	"externalReferenceCode": "L_AI_HUB_ALERT_USER_NOTIFICATION_TEMPLATE",
+	"name": "AI Hub Alert User Notification",
+	"name_i18n": {
+		"en_US": "AI Hub Alert User Notification"
+	},
+	"recipientType": "term",
+	"recipients": [
+		{
+			"term": "[%RECIPIENT_USER_ID%]"
+		}
+	],
+	"subject": {
+		"en_US": "[%INCIDENT_SEVERITY%] alert - [%ALERT_TRIGGER%]"
+	},
+	"system": false,
+	"type": "userNotification",
+	"typeLabel": "User Notification"
+}
