@@ -18,8 +18,8 @@ import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntry;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.audit.AuditMessage;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -40,12 +41,9 @@ import com.liferay.portal.security.audit.AuditMessageProcessor;
 
 import java.io.Serializable;
 
-import java.text.DateFormat;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -88,8 +86,8 @@ public class AIGuardrailAlertAuditMessageProcessor
 		if (Validator.isNull(alertTrigger) || Validator.isNull(severity)) {
 			if (_log.isWarnEnabled()) {
 				_log.warn(
-					"Skipping AI guardrail alert with missing incident " +
-						"type or severity");
+					"Skipping AI guardrail alert with missing incident type " +
+						"or severity");
 			}
 
 			return;
@@ -127,8 +125,9 @@ public class AIGuardrailAlertAuditMessageProcessor
 		}
 		catch (Exception exception) {
 			_log.error(
-				"Unable to fetch AI Hub notification setting for company " +
-					companyId + " and account " + accountEntryId,
+				StringBundler.concat(
+					"Unable to fetch AI Hub notification setting for company ",
+					companyId, " and account ", accountEntryId),
 				exception);
 
 			return null;
@@ -137,7 +136,7 @@ public class AIGuardrailAlertAuditMessageProcessor
 
 	private List<String> _getAdminEmailAddresses(
 			long companyId, long accountEntryId)
-		throws PortalException {
+		throws Exception {
 
 		Role role = _roleLocalService.fetchRole(
 			companyId,
@@ -166,7 +165,7 @@ public class AIGuardrailAlertAuditMessageProcessor
 
 	private List<String> _getEmailAddresses(
 			long companyId, long accountEntryId, ObjectEntry objectEntry)
-		throws PortalException {
+		throws Exception {
 
 		List<String> emailAddresses = _getAdminEmailAddresses(
 			companyId, accountEntryId);
@@ -195,7 +194,7 @@ public class AIGuardrailAlertAuditMessageProcessor
 
 	private List<String> _getNotificationTypes(ObjectEntry objectEntry) {
 		if (objectEntry == null) {
-			return _DEFAULT_NOTIFICATION_TYPES;
+			return _defaultNotificationTypes;
 		}
 
 		Map<String, Serializable> values = objectEntry.getValues();
@@ -228,43 +227,48 @@ public class AIGuardrailAlertAuditMessageProcessor
 		// Not sure if these are provided or we need to implement logic to
 		// classify.
 
-		String alertTrigger = additionalInfoJSONObject.getString(
-			"alertTrigger");
-		String severity = additionalInfoJSONObject.getString("severity");
-
-		DateFormat dateFormat = DateUtil.getISO8601Format();
-
-		Map<String, Object> termValues = new HashMap<>();
-
-		termValues.put("[%AGENT_CLASS_PK%]", auditMessage.getClassPK());
-		termValues.put("[%COMPANY_ID%]", String.valueOf(companyId));
-		termValues.put(
+		return HashMapBuilder.<String, Object>put(
+			"[%AGENT_CLASS_PK%]", auditMessage.getClassPK()
+		).put(
+			"[%ALERT_TRIGGER%]",
+			additionalInfoJSONObject.getString("alertTrigger")
+		).put(
+			"[%COMPANY_ID%]", String.valueOf(companyId)
+		).put(
 			"[%FROM_ADDRESS%]",
 			PrefsPropsUtil.getString(
-				companyId, PropsKeys.ADMIN_EMAIL_FROM_ADDRESS));
-		termValues.put(
+				companyId, PropsKeys.ADMIN_EMAIL_FROM_ADDRESS)
+		).put(
 			"[%FROM_NAME%]",
-			PrefsPropsUtil.getString(
-				companyId, PropsKeys.ADMIN_EMAIL_FROM_NAME));
-		termValues.put("[%INCIDENT_SEVERITY%]", severity);
-		termValues.put("[%ALERT_TRIGGER%]", alertTrigger);
-		termValues.put(
-			"[%TIMESTAMP%]", dateFormat.format(auditMessage.getTimestamp()));
-		termValues.put("[%TO%]", emailAddress);
-		termValues.put(
-			"[%TRACE_ID%]", additionalInfoJSONObject.getString("traceId"));
-		termValues.put(
-			"[%USE_ID%]", additionalInfoJSONObject.getString("useId"));
+			PrefsPropsUtil.getString(companyId, PropsKeys.ADMIN_EMAIL_FROM_NAME)
+		).put(
+			"[%INCIDENT_SEVERITY%]",
+			additionalInfoJSONObject.getString("severity")
+		).put(
+			"[%RECIPIENT_USER_ID%]",
+			() -> {
+				User user = _userLocalService.fetchUserByEmailAddress(
+					companyId, emailAddress);
 
-		User user = _userLocalService.fetchUserByEmailAddress(
-			companyId, emailAddress);
+				if (user == null) {
+					return null;
+				}
 
-		if (user != null) {
-			termValues.put(
-				"[%RECIPIENT_USER_ID%]", String.valueOf(user.getUserId()));
-		}
-
-		return termValues;
+				return String.valueOf(user.getUserId());
+			}
+		).put(
+			"[%TIMESTAMP%]",
+			DateUtil.getISO8601Format(
+			).format(
+				auditMessage.getTimestamp()
+			)
+		).put(
+			"[%TO%]", emailAddress
+		).put(
+			"[%TRACE_ID%]", additionalInfoJSONObject.getString("traceId")
+		).put(
+			"[%USE_ID%]", additionalInfoJSONObject.getString("useId")
+		).build();
 	}
 
 	private boolean _isSeverityEnabled(
@@ -321,7 +325,7 @@ public class AIGuardrailAlertAuditMessageProcessor
 	private void _sendNotifications(
 			AuditMessage auditMessage, long accountEntryId,
 			ObjectEntry objectEntry)
-		throws PortalException {
+		throws Exception {
 
 		long companyId = auditMessage.getCompanyId();
 
@@ -361,21 +365,21 @@ public class AIGuardrailAlertAuditMessageProcessor
 				}
 				catch (Exception exception) {
 					_log.error(
-						"Unable to send AI guardrail alert to " + emailAddress +
-							" via " + notificationType,
+						StringBundler.concat(
+							"Unable to send AI guardrail alert to ",
+							emailAddress, " via ", notificationType),
 						exception);
 				}
 			}
 		}
 	}
 
-	private static final List<String> _DEFAULT_NOTIFICATION_TYPES =
-		Arrays.asList(
-			NotificationConstants.NOTIFICATION_TYPE_EMAIL,
-			NotificationConstants.NOTIFICATION_TYPE_USER_NOTIFICATION);
-
 	private static final Log _log = LogFactoryUtil.getLog(
 		AIGuardrailAlertAuditMessageProcessor.class);
+
+	private static final List<String> _defaultNotificationTypes = Arrays.asList(
+		NotificationConstants.NOTIFICATION_TYPE_EMAIL,
+		NotificationConstants.NOTIFICATION_TYPE_USER_NOTIFICATION);
 
 	@Reference
 	private AccountEntryLocalService _accountEntryLocalService;
