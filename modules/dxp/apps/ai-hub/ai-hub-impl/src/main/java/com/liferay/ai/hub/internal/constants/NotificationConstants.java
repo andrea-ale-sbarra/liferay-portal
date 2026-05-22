@@ -31,7 +31,8 @@ public class NotificationConstants {
 		if (NOTIFICATION_TYPE_EMAIL.equals(notificationType)) {
 			return NOTIFICATION_TEMPLATE_EMAIL_EXTERNAL_REFERENCE_CODE;
 		}
-		else if (NOTIFICATION_TYPE_USER_NOTIFICATION.equals(notificationType)) {
+
+		if (NOTIFICATION_TYPE_USER_NOTIFICATION.equals(notificationType)) {
 			return NOTIFICATION_TEMPLATE_USER_NOTIFICATION_EXTERNAL_REFERENCE_CODE;
 		}
 

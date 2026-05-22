@@ -56,7 +56,6 @@ import java.io.Serializable;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
@@ -170,24 +169,22 @@ public class AIHubAlertRoutingMessageListenerTest {
 
 		Assert.assertNotNull(objectDefinition);
 
-		Map<String, Serializable> values =
-			HashMapBuilder.<String, Serializable>put(
-				"additionalEmailAddresses", ""
-			).put(
-				"notificationSeverities", "critical"
-			).put(
-				"notificationTypes", "email, userNotification"
-			).put(
-				"r_accountToNotificationSettings_accountEntryId",
-				_accountEntry.getAccountEntryId()
-			).build();
-
 		_notificationSettingObjectEntry =
 			_objectEntryLocalService.addOrUpdateObjectEntry(
 				"ai-hub-notification-setting-" +
 					_accountEntry.getAccountEntryId(),
 				0L, _user.getUserId(), objectDefinition.getObjectDefinitionId(),
-				0L, values,
+				0L,
+				HashMapBuilder.<String, Serializable>put(
+					"additionalEmailAddresses", ""
+				).put(
+					"notificationSeverities", "critical"
+				).put(
+					"notificationTypes", "email, userNotification"
+				).put(
+					"r_accountToNotificationSettings_accountEntryId",
+					_accountEntry.getAccountEntryId()
+				).build(),
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), _user.getUserId()));
 

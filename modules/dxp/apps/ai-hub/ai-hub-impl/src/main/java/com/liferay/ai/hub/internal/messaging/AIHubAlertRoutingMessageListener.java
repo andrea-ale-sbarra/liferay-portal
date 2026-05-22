@@ -77,7 +77,7 @@ public class AIHubAlertRoutingMessageListener extends BaseMessageListener {
 			DestinationConfiguration.createParallelDestinationConfiguration(
 				AIHubDestinationNames.AI_HUB_ALERT_ROUTING));
 
-		_serviceRegistration = bundleContext.registerService(
+		_destinationServiceRegistration = bundleContext.registerService(
 			Destination.class, destination,
 			MapUtil.singletonDictionary(
 				"destination.name", destination.getName()));
@@ -85,9 +85,7 @@ public class AIHubAlertRoutingMessageListener extends BaseMessageListener {
 
 	@Deactivate
 	protected void deactivate() {
-		if (_serviceRegistration != null) {
-			_serviceRegistration.unregister();
-		}
+		_destinationServiceRegistration.unregister();
 	}
 
 	@Override
@@ -391,6 +389,8 @@ public class AIHubAlertRoutingMessageListener extends BaseMessageListener {
 	@Reference
 	private DestinationFactory _destinationFactory;
 
+	private ServiceRegistration<Destination> _destinationServiceRegistration;
+
 	@Reference
 	private NotificationTemplateLocalService _notificationTemplateLocalService;
 
@@ -405,8 +405,6 @@ public class AIHubAlertRoutingMessageListener extends BaseMessageListener {
 
 	@Reference
 	private RoleLocalService _roleLocalService;
-
-	private ServiceRegistration<Destination> _serviceRegistration;
 
 	@Reference
 	private UserGroupRoleLocalService _userGroupRoleLocalService;
