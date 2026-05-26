@@ -806,6 +806,21 @@ public class ServletDataImpl implements ServletData {
 							ProductAccountGroupResourceImpl.class,
 							"deleteProductAccountGroupBatch"));
 					put(
+						"mutation#createProductByExternalReferenceCodeProductAccountGroup",
+						new ObjectValuePair<>(
+							ProductAccountGroupResourceImpl.class,
+							"postProductByExternalReferenceCodeProductAccountGroup"));
+					put(
+						"mutation#createProductIdProductAccountGroup",
+						new ObjectValuePair<>(
+							ProductAccountGroupResourceImpl.class,
+							"postProductIdProductAccountGroup"));
+					put(
+						"mutation#createProductIdProductAccountGroupBatch",
+						new ObjectValuePair<>(
+							ProductAccountGroupResourceImpl.class,
+							"postProductIdProductAccountGroupBatch"));
+					put(
 						"mutation#deleteProductChannel",
 						new ObjectValuePair<>(
 							ProductChannelResourceImpl.class,

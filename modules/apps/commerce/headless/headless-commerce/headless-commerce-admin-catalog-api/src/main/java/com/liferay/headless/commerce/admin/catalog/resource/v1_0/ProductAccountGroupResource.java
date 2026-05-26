@@ -63,6 +63,20 @@ public interface ProductAccountGroupResource {
 			Long id, Pagination pagination)
 		throws Exception;
 
+	public ProductAccountGroup
+			postProductByExternalReferenceCodeProductAccountGroup(
+				String externalReferenceCode,
+				ProductAccountGroup productAccountGroup)
+		throws Exception;
+
+	public ProductAccountGroup postProductIdProductAccountGroup(
+			String id, ProductAccountGroup productAccountGroup)
+		throws Exception;
+
+	public Response postProductIdProductAccountGroupBatch(
+			String callbackURL, Object object)
+		throws Exception;
+
 	public default void setContextAcceptLanguage(
 		AcceptLanguage contextAcceptLanguage) {
 	}
