@@ -18,7 +18,6 @@ import com.liferay.commerce.product.test.util.CPTestUtil;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.Attachment;
-import com.liferay.headless.commerce.core.helper.ServiceContextHelper;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.test.util.CompanyConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -130,9 +129,8 @@ public class AttachmentResourceTest extends BaseAttachmentResourceTestCase {
 	public void testPostProductIdAttachment() throws Exception {
 		super.testPostProductIdAttachment();
 
-		_testPostProductIdAttachmentWithFileEntryExternalReferenceCode();
-
 		_testPostProductIdAttachmentProductVersioning();
+		_testPostProductIdAttachmentWithFileEntryExternalReferenceCode();
 	}
 
 	@Override
@@ -705,9 +703,6 @@ public class AttachmentResourceTest extends BaseAttachmentResourceTestCase {
 	private DLAppLocalService _dlAppLocalService;
 
 	private ServiceContext _serviceContext;
-
-	@Inject
-	private ServiceContextHelper _serviceContextHelper;
 
 	@DeleteAfterTestRun
 	private User _user;

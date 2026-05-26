@@ -38,7 +38,6 @@ import com.liferay.headless.commerce.admin.catalog.client.pagination.Page;
 import com.liferay.headless.commerce.admin.catalog.client.pagination.Pagination;
 import com.liferay.headless.commerce.admin.catalog.client.problem.Problem;
 import com.liferay.headless.commerce.admin.catalog.client.resource.v1_0.ProductResource;
-import com.liferay.headless.commerce.core.helper.ServiceContextHelper;
 import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.object.field.builder.TextObjectFieldBuilder;
 import com.liferay.object.field.util.ObjectFieldUtil;
@@ -66,7 +65,6 @@ import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -117,7 +115,7 @@ public class ProductResourceTest extends BaseProductResourceTestCase {
 			_accountGroup);
 
 		_commerceCatalog = CommerceCatalogLocalServiceUtil.addCommerceCatalog(
-			RandomTestUtil.randomString(), 0L, RandomTestUtil.randomString(),
+			RandomTestUtil.randomString(), 0, RandomTestUtil.randomString(),
 			"USD", LocaleUtil.toLanguageId(LocaleUtil.US), false,
 			serviceContext);
 

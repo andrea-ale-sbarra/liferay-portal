@@ -17,7 +17,6 @@ import com.liferay.commerce.product.service.CPDefinitionService;
 import com.liferay.commerce.product.service.CPDefinitionSpecificationOptionValueLocalService;
 import com.liferay.commerce.product.test.util.CPTestUtil;
 import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.ProductSpecification;
-import com.liferay.headless.commerce.core.helper.ServiceContextHelper;
 import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.portal.configuration.test.util.CompanyConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -431,8 +430,5 @@ public class ProductSpecificationResourceTest
 
 	@DeleteAfterTestRun
 	private CPSpecificationOption _cpSpecificationOption;
-
-	@Inject
-	private ServiceContextHelper _serviceContextHelper;
 
 }

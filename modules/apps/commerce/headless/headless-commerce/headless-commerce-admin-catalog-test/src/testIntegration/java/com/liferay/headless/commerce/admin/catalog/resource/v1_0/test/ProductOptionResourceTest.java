@@ -18,7 +18,6 @@ import com.liferay.commerce.product.service.CPDefinitionService;
 import com.liferay.commerce.product.test.util.CPTestUtil;
 import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.ProductOption;
 import com.liferay.headless.commerce.admin.catalog.client.pagination.Page;
-import com.liferay.headless.commerce.core.helper.ServiceContextHelper;
 import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.portal.configuration.test.util.CompanyConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -141,9 +140,8 @@ public class ProductOptionResourceTest
 		assertEquals(randomProductOption, postProductOption);
 		assertValid(postProductOption);
 
-		_testPostProductIdProductOptionsPageWithOptionExternalReferenceCode();
-
 		_testPostProductIdProductOptionsPageProductVersioning();
+		_testPostProductIdProductOptionsPageWithOptionExternalReferenceCode();
 	}
 
 	@Override
@@ -508,8 +506,5 @@ public class ProductOptionResourceTest
 	private CPInstance _cpInstance;
 	private CProduct _cProduct;
 	private final Map<Long, ProductOption> _productOptions = new HashMap<>();
-
-	@Inject
-	private ServiceContextHelper _serviceContextHelper;
 
 }

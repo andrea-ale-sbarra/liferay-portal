@@ -63,7 +63,7 @@ public class ProductConfigurationResourceTest
 		_user = UserTestUtil.addUser();
 
 		_commerceCatalog = _commerceCatalogLocalService.addCommerceCatalog(
-			RandomTestUtil.randomString(), 0L, RandomTestUtil.randomString(),
+			RandomTestUtil.randomString(), 0, RandomTestUtil.randomString(),
 			"USD", "en_US", false,
 			ServiceContextTestUtil.getServiceContext(
 				testGroup.getGroupId(), _user.getUserId()));

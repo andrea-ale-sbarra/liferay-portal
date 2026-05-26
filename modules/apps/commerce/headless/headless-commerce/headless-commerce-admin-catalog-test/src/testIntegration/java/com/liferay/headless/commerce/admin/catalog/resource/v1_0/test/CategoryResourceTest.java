@@ -20,7 +20,6 @@ import com.liferay.commerce.product.service.CPDefinitionLocalService;
 import com.liferay.commerce.product.service.CPDefinitionService;
 import com.liferay.commerce.product.test.util.CPTestUtil;
 import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.Category;
-import com.liferay.headless.commerce.core.helper.ServiceContextHelper;
 import com.liferay.portal.configuration.test.util.CompanyConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.model.User;
@@ -265,8 +264,5 @@ public class CategoryResourceTest extends BaseCategoryResourceTestCase {
 
 	@Inject
 	private CPDefinitionService _cpDefinitionService;
-
-	@Inject
-	private ServiceContextHelper _serviceContextHelper;
 
 }
