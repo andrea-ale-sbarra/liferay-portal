@@ -16,5 +16,6 @@ Import-Package:\
 	android.*;resolution:=optional,\
 	\
 	*
+Web-ServiceTracking: false
 -dsannotations-options: inherit
 -fixupmessages: Classes found in the wrong directory: ...;is:=ignore
