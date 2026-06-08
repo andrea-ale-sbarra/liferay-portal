@@ -160,7 +160,8 @@ public class ObjectRelationshipExtensionProvider
 				ObjectRelationshipUtil.getRelatedObjectDefinition(
 					objectDefinition, objectRelationship);
 
-			if (!relatedObjectDefinition.isActive() ||
+			if (relatedObjectDefinition == null ||
+				!relatedObjectDefinition.isActive() ||
 				relatedObjectDefinition.isUnmodifiableSystemObject()) {
 
 				continue;
