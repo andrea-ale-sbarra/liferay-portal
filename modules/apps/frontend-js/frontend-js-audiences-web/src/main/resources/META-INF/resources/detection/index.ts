@@ -9,6 +9,7 @@ import {log} from '../log';
 import {getBrowserName} from './attributes/browser_name';
 import {getBrowserVersion} from './attributes/browser_version';
 import {getCookies} from './attributes/cookies';
+import {getCustom} from './attributes/custom';
 import {getHostname} from './attributes/hostname';
 import {getLanguage} from './attributes/language';
 import {getLocalDate} from './attributes/local_date';
@@ -44,7 +45,7 @@ export interface AudienceMatch {
 	retentionType: RetentionType;
 }
 
-type AttributeValue = Set<string> | number | string;
+type AttributeValue = Set<string> | boolean | number | string;
 
 interface OperatorImpl {
 	(actual: any, expected: any): boolean;
@@ -93,6 +94,9 @@ export class Detection {
 		}
 		else if (attr === 'cookies') {
 			return getCookies();
+		}
+		else if (attr.startsWith('custom:')) {
+			return getCustom(attr.slice(7));
 		}
 		else if (attr === 'hostname') {
 			return getHostname();
