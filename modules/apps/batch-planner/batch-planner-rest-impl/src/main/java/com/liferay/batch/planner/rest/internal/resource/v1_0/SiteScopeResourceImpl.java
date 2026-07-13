@@ -9,6 +9,8 @@ import com.liferay.batch.planner.batch.engine.task.TaskItemUtil;
 import com.liferay.batch.planner.rest.dto.v1_0.SiteScope;
 import com.liferay.batch.planner.rest.internal.vulcan.yaml.openapi.OpenAPIYAMLProvider;
 import com.liferay.batch.planner.rest.resource.v1_0.SiteScopeResource;
+import com.liferay.depot.constants.DepotConstants;
+import com.liferay.depot.service.DepotEntryService;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.petra.string.StringPool;
@@ -24,6 +26,7 @@ import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.util.OpenAPIUtil;
 import com.liferay.portal.vulcan.yaml.openapi.OpenAPIYAML;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -77,8 +80,26 @@ public class SiteScopeResourceImpl extends BaseSiteScopeResourceImpl {
 			TaskItemUtil.getSimpleClassName(internalClassNameKey), openAPIYAML);
 	}
 
+	private List<SiteScope> _getDepotSiteScopes() throws Exception {
+		List<Group> groups = new ArrayList<>();
+
+		for (Long groupId :
+				_depotEntryService.getDepotEntryGroupIds(
+					contextCompany.getCompanyId(), contextUser.getUserId(),
+					DepotConstants.TYPE_SPACE)) {
+
+			groups.add(_groupService.getGroup(groupId));
+		}
+
+		return _toSiteScopes(groups);
+	}
+
 	private List<SiteScope> _getSiteScopes(List<String> entityScopes)
 		throws Exception {
+
+		if (entityScopes.contains("depot")) {
+			return _getDepotSiteScopes();
+		}
 
 		if (!entityScopes.contains("site")) {
 			return Collections.emptyList();
@@ -111,6 +132,9 @@ public class SiteScopeResourceImpl extends BaseSiteScopeResourceImpl {
 		Company.class.getName(), Group.class.getName(),
 		Organization.class.getName()
 	};
+
+	@Reference
+	private DepotEntryService _depotEntryService;
 
 	@Reference
 	private GroupService _groupService;

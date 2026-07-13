@@ -10,6 +10,9 @@ package com.liferay.site.pim.site.initializer.internal.constants;
  */
 public class PIMFDSNames {
 
+	public static final String PIM_CONNECTOR =
+		"com.liferay.site.pim.site.initializer-connectors";
+
 	public static final String PRODUCTS =
 		PIMSiteInitializerConstants.BUNDLE_SYMBOLIC_NAME + "-products";
 
