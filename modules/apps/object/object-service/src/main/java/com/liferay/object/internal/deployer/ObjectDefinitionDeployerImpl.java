@@ -21,6 +21,7 @@ import com.liferay.object.definition.security.permission.resource.util.ObjectDef
 import com.liferay.object.definition.tree.util.ObjectDefinitionTreeUtil;
 import com.liferay.object.deployer.ObjectDefinitionDeployer;
 import com.liferay.object.field.business.type.ObjectFieldBusinessTypeRegistry;
+import com.liferay.object.internal.entry.contributor.ObjectEntryFolderSectionContributorRegistry;
 import com.liferay.object.internal.layout.tab.screen.navigation.category.ObjectLayoutTabScreenNavigationCategory;
 import com.liferay.object.internal.notification.handler.ObjectDefinitionNotificationHandler;
 import com.liferay.object.internal.notification.term.contributor.ObjectDefinitionNotificationTermEvaluator;
@@ -144,6 +145,8 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 		ObjectDefinitionLocalService objectDefinitionLocalService,
 		ObjectDefinitionSettingLocalService objectDefinitionSettingLocalService,
 		ObjectEntryFolderLocalService objectEntryFolderLocalService,
+		ObjectEntryFolderSectionContributorRegistry
+			objectEntryFolderSectionContributorRegistry,
 		ObjectEntryLocalService objectEntryLocalService,
 		ObjectEntryService objectEntryService,
 		ObjectFieldBusinessTypeRegistry objectFieldBusinessTypeRegistry,
@@ -183,6 +186,8 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 		_objectDefinitionSettingLocalService =
 			objectDefinitionSettingLocalService;
 		_objectEntryFolderLocalService = objectEntryFolderLocalService;
+		_objectEntryFolderSectionContributorRegistry =
+			objectEntryFolderSectionContributorRegistry;
 		_objectEntryLocalService = objectEntryLocalService;
 		_objectEntryService = objectEntryService;
 		_objectFieldBusinessTypeRegistry = objectFieldBusinessTypeRegistry;
@@ -336,6 +341,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 						_accountEntryOrganizationRelLocalService,
 						_dlFileEntryLocalService,
 						_objectEntryFolderLocalService,
+						_objectEntryFolderSectionContributorRegistry,
 						_objectFieldBusinessTypeRegistry,
 						_textEmbeddingDocumentContributor),
 					HashMapDictionaryBuilder.<String, Object>put(
@@ -677,6 +683,8 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 		_objectDefinitionSettingLocalService;
 	private final ObjectDefinitionTreeFactory _objectDefinitionTreeFactory;
 	private final ObjectEntryFolderLocalService _objectEntryFolderLocalService;
+	private final ObjectEntryFolderSectionContributorRegistry
+		_objectEntryFolderSectionContributorRegistry;
 	private final ObjectEntryLocalService _objectEntryLocalService;
 	private final ObjectEntryService _objectEntryService;
 	private final ObjectFieldBusinessTypeRegistry

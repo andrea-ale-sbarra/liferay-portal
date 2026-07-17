@@ -8,6 +8,7 @@ package com.liferay.object.internal.search;
 import com.liferay.account.service.AccountEntryOrganizationRelLocalService;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.object.field.business.type.ObjectFieldBusinessTypeRegistry;
+import com.liferay.object.internal.entry.contributor.ObjectEntryFolderSectionContributorRegistry;
 import com.liferay.object.internal.search.spi.model.index.contributor.ObjectEntryModelDocumentContributor;
 import com.liferay.object.internal.search.spi.model.result.contributor.ObjectEntryModelSummaryContributor;
 import com.liferay.object.model.ObjectDefinition;
@@ -83,6 +84,7 @@ public class ObjectEntryModelSearchConfigurator
 				new ObjectEntryModelDocumentContributor(
 					_accountEntryOrganizationRelLocalService,
 					_dlFileEntryLocalService, _objectEntryFolderLocalService,
+					_objectEntryFolderSectionContributorRegistry,
 					_objectFieldBusinessTypeRegistry,
 					_textEmbeddingDocumentContributor);
 
@@ -225,6 +227,10 @@ public class ObjectEntryModelSearchConfigurator
 
 	@Reference
 	private ObjectEntryFolderLocalService _objectEntryFolderLocalService;
+
+	@Reference
+	private ObjectEntryFolderSectionContributorRegistry
+		_objectEntryFolderSectionContributorRegistry;
 
 	@Reference
 	private ObjectEntryLocalService _objectEntryLocalService;

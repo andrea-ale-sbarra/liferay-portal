@@ -78,6 +78,7 @@ import com.liferay.object.field.util.ObjectFieldUtil;
 import com.liferay.object.internal.dao.db.ObjectDBManagerUtil;
 import com.liferay.object.internal.deployer.InactiveObjectDefinitionDeployerUtil;
 import com.liferay.object.internal.deployer.ObjectDefinitionDeployerImpl;
+import com.liferay.object.internal.entry.contributor.ObjectEntryFolderSectionContributorRegistry;
 import com.liferay.object.model.ObjectAction;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectDefinitionSetting;
@@ -1094,8 +1095,10 @@ public class ObjectDefinitionLocalServiceImpl
 				_kaleoDefinitionLocalService, _listTypeLocalService,
 				_objectActionLocalService, objectDefinitionLocalService,
 				_objectDefinitionSettingLocalService,
-				_objectEntryFolderLocalService, _objectEntryLocalService,
-				_objectEntryService, _objectFieldBusinessTypeRegistry,
+				_objectEntryFolderLocalService,
+				_objectEntryFolderSectionContributorRegistry,
+				_objectEntryLocalService, _objectEntryService,
+				_objectFieldBusinessTypeRegistry,
 				_objectFieldLocalService, _objectFolderLocalService,
 				_objectLayoutLocalService, _objectLayoutTabLocalService,
 				_objectRelationshipLocalService, _objectScopeProviderRegistry,
@@ -4121,6 +4124,10 @@ public class ObjectDefinitionLocalServiceImpl
 
 	@Reference
 	private ObjectEntryFolderLocalService _objectEntryFolderLocalService;
+
+	@Reference
+	private ObjectEntryFolderSectionContributorRegistry
+		_objectEntryFolderSectionContributorRegistry;
 
 	@Reference
 	private ObjectEntryLocalService _objectEntryLocalService;

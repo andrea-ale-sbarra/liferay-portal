@@ -12,9 +12,9 @@ import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryTable;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalServiceUtil;
-import com.liferay.object.constants.ObjectEntryFolderConstants;
 import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.field.business.type.ObjectFieldBusinessTypeRegistry;
+import com.liferay.object.internal.entry.contributor.ObjectEntryFolderSectionContributorRegistry;
 import com.liferay.object.internal.field.business.type.AssigneeObjectFieldBusinessType;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntry;
@@ -80,6 +80,8 @@ public class ObjectEntryModelDocumentContributor
 			accountEntryOrganizationRelLocalService,
 		DLFileEntryLocalService dlFileEntryLocalService,
 		ObjectEntryFolderLocalService objectEntryFolderLocalService,
+		ObjectEntryFolderSectionContributorRegistry
+			objectEntryFolderSectionContributorRegistry,
 		ObjectFieldBusinessTypeRegistry objectFieldBusinessTypeRegistry,
 		TextEmbeddingDocumentContributor textEmbeddingDocumentContributor) {
 
@@ -87,6 +89,8 @@ public class ObjectEntryModelDocumentContributor
 			accountEntryOrganizationRelLocalService;
 		_dlFileEntryLocalService = dlFileEntryLocalService;
 		_objectEntryFolderLocalService = objectEntryFolderLocalService;
+		_objectEntryFolderSectionContributorRegistry =
+			objectEntryFolderSectionContributorRegistry;
 		_objectFieldBusinessTypeRegistry = objectFieldBusinessTypeRegistry;
 		_textEmbeddingDocumentContributor = textEmbeddingDocumentContributor;
 	}
@@ -586,41 +590,49 @@ public class ObjectEntryModelDocumentContributor
 			return;
 		}
 
-		ObjectEntryFolder rootObjectEntryFolder = _getRootObjectEntryFolder(
-			objectEntryFolder);
+		_contributeSection(document, objectEntryFolder, objectEntryFolderId);
+	}
 
-		if (rootObjectEntryFolder == null) {
-			return;
-		}
+	private void _contributeSection(
+		Document document, ObjectEntryFolder objectEntryFolder,
+		long objectEntryFolderId) {
 
-		String cmsSection = _getCMSSection(
-			rootObjectEntryFolder.getExternalReferenceCode());
+		ObjectEntryFolder rootObjectEntryFolder = objectEntryFolder;
 
-		if (cmsSection == null) {
-			return;
+		String section =
+			_objectEntryFolderSectionContributorRegistry.getSection(
+				objectEntryFolder.getExternalReferenceCode());
+
+		if (section == null) {
+			String[] parts = StringUtil.split(
+				objectEntryFolder.getTreePath(), CharPool.SLASH);
+
+			if (parts.length <= 2) {
+				return;
+			}
+
+			rootObjectEntryFolder =
+				_objectEntryFolderLocalService.fetchObjectEntryFolder(
+					GetterUtil.getLong(parts[1]));
+
+			if (rootObjectEntryFolder == null) {
+				return;
+			}
+
+			section =
+				_objectEntryFolderSectionContributorRegistry.getSection(
+					rootObjectEntryFolder.getExternalReferenceCode());
+
+			if (section == null) {
+				return;
+			}
 		}
 
 		document.addKeyword(
 			"cms_root",
 			rootObjectEntryFolder.getObjectEntryFolderId() ==
 				objectEntryFolderId);
-		document.addKeyword("cms_section", cmsSection);
-	}
-
-	private String _getCMSSection(String externalReferenceCode) {
-		if (externalReferenceCode.equals(
-				ObjectEntryFolderConstants.EXTERNAL_REFERENCE_CODE_CONTENTS)) {
-
-			return "contents";
-		}
-
-		if (externalReferenceCode.equals(
-				ObjectEntryFolderConstants.EXTERNAL_REFERENCE_CODE_FILES)) {
-
-			return "files";
-		}
-
-		return null;
+		document.addKeyword("cms_section", section);
 	}
 
 	private String _getDateString(Object value) {
@@ -738,34 +750,6 @@ public class ObjectEntryModelDocumentContributor
 		return organizationIdsMap.get(accountEntryId);
 	}
 
-	private ObjectEntryFolder _getRootObjectEntryFolder(
-		ObjectEntryFolder objectEntryFolder) {
-
-		if (objectEntryFolder == null) {
-			return null;
-		}
-
-		if (Objects.equals(
-				objectEntryFolder.getExternalReferenceCode(),
-				ObjectEntryFolderConstants.EXTERNAL_REFERENCE_CODE_CONTENTS) ||
-			Objects.equals(
-				objectEntryFolder.getExternalReferenceCode(),
-				ObjectEntryFolderConstants.EXTERNAL_REFERENCE_CODE_FILES)) {
-
-			return objectEntryFolder;
-		}
-
-		String[] parts = StringUtil.split(
-			objectEntryFolder.getTreePath(), CharPool.SLASH);
-
-		if (parts.length <= 2) {
-			return null;
-		}
-
-		return _objectEntryFolderLocalService.fetchObjectEntryFolder(
-			GetterUtil.getLong(parts[1]));
-	}
-
 	private String _getSortableValue(String value) {
 		if (value.length() > 256) {
 			return value.substring(0, 256);
@@ -792,6 +776,8 @@ public class ObjectEntryModelDocumentContributor
 		_accountEntryOrganizationRelLocalService;
 	private final DLFileEntryLocalService _dlFileEntryLocalService;
 	private final ObjectEntryFolderLocalService _objectEntryFolderLocalService;
+	private final ObjectEntryFolderSectionContributorRegistry
+		_objectEntryFolderSectionContributorRegistry;
 	private final ObjectFieldBusinessTypeRegistry
 		_objectFieldBusinessTypeRegistry;
 	private final TextEmbeddingDocumentContributor
