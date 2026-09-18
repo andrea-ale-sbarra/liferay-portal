@@ -8,13 +8,19 @@ package com.liferay.site.pim.site.initializer.internal.connector;
 import com.liferay.depot.constants.DepotConstants;
 import com.liferay.depot.model.DepotEntry;
 import com.liferay.depot.service.DepotEntryLocalService;
+import com.liferay.list.type.model.ListTypeEntry;
+import com.liferay.list.type.service.ListTypeEntryLocalService;
+import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntry;
+import com.liferay.object.model.ObjectField;
 import com.liferay.object.rest.filter.factory.FilterFactory;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
+import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.sql.dsl.expression.Predicate;
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -26,8 +32,10 @@ import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.util.FriendlyURLNormalizer;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.site.pim.site.initializer.connector.PIMConnectorField;
 import com.liferay.site.pim.site.initializer.constants.PIMConnectorFieldConstants;
@@ -61,24 +69,46 @@ public class LiferayCommercePIMConnectorTest {
 
 	@Before
 	public void setUp() throws Exception {
+		Mockito.when(
+			_friendlyURLNormalizer.normalize(Mockito.anyString())
+		).thenAnswer(
+			invocationOnMock -> StringUtil.toLowerCase(
+				StringUtil.replace(
+					invocationOnMock.getArgument(0), CharPool.SPACE,
+					CharPool.DASH))
+		);
+
 		ReflectionTestUtil.setFieldValue(
 			_liferayCommercePIMConnector, "_depotEntryLocalService",
 			_depotEntryLocalService);
 		ReflectionTestUtil.setFieldValue(
 			_liferayCommercePIMConnector, "_filterFactory", _filterFactory);
 		ReflectionTestUtil.setFieldValue(
+			_liferayCommercePIMConnector, "_friendlyURLNormalizer",
+			_friendlyURLNormalizer);
+		ReflectionTestUtil.setFieldValue(
 			_liferayCommercePIMConnector, "_jsonFactory", _jsonFactory);
+		ReflectionTestUtil.setFieldValue(
+			_liferayCommercePIMConnector, "_listTypeEntryLocalService",
+			_listTypeEntryLocalService);
 		ReflectionTestUtil.setFieldValue(
 			_liferayCommercePIMConnector, "_objectDefinitionLocalService",
 			_objectDefinitionLocalService);
 		ReflectionTestUtil.setFieldValue(
 			_liferayCommercePIMConnector, "_objectEntryLocalService",
 			_objectEntryLocalService);
+		ReflectionTestUtil.setFieldValue(
+			_liferayCommercePIMConnector, "_objectFieldLocalService",
+			_objectFieldLocalService);
 	}
 
 	@Test
 	public void testExportProducts() throws Exception {
 		_testExportProducts();
+		_testExportProductsWithDuplicateProductSpecificationMappings();
+		_testExportProductsWithEmptyProductSpecificationValue();
+		_testExportProductsWithFixedValueProductOption();
+		_testExportProductsWithFixedValueProductSpecification();
 		_testExportProductsWithInvalidCatalogId();
 		_testExportProductsWithLegacyFieldMapping();
 		_testExportProductsWithMissingObjectDefinition();
@@ -89,6 +119,10 @@ public class LiferayCommercePIMConnectorTest {
 		_testExportProductsWithMultipleTags();
 		_testExportProductsWithoutTags();
 		_testExportProductsWithoutUnitOfMeasure();
+		_testExportProductsWithPicklistProductSpecification();
+		_testExportProductsWithProductOptions();
+		_testExportProductsWithProductSpecifications();
+		_testExportProductsWithRepeatedProductOptionValue();
 		_testExportProductsWithUnmappedDescription();
 		_testExportProductsWithUnmappedRequiredFields();
 		_testExportProductsWithUnsupportedSource();
@@ -119,11 +153,12 @@ public class LiferayCommercePIMConnectorTest {
 			_liferayCommercePIMConnector.getPIMConnectorFields(LocaleUtil.US);
 
 		Assert.assertEquals(
-			pimConnectorFields.toString(), 5, pimConnectorFields.size());
+			pimConnectorFields.toString(), 7, pimConnectorFields.size());
 
 		Assert.assertEquals(
 			Arrays.asList(
-				"catalogId", "description", "name", "skus[].sku", "tags"),
+				"catalogId", "description", "name", "productOptions",
+				"productSpecifications", "skus[].sku", "tags"),
 			TransformUtil.transform(
 				pimConnectorFields, PIMConnectorField::getName));
 
@@ -132,7 +167,6 @@ public class LiferayCommercePIMConnectorTest {
 		Assert.assertEquals("catalog-id", pimConnectorField.getLabel());
 		Assert.assertEquals(
 			PIMConnectorFieldConstants.TYPE_LONG, pimConnectorField.getType());
-		Assert.assertFalse(pimConnectorField.isMultiple());
 		Assert.assertTrue(pimConnectorField.isRequired());
 
 		pimConnectorField = pimConnectorFields.get(1);
@@ -141,19 +175,26 @@ public class LiferayCommercePIMConnectorTest {
 		Assert.assertEquals(
 			PIMConnectorFieldConstants.TYPE_LOCALIZED_TEXT,
 			pimConnectorField.getType());
-		Assert.assertFalse(pimConnectorField.isMultiple());
 		Assert.assertFalse(pimConnectorField.isRequired());
 
-		pimConnectorField = pimConnectorFields.get(2);
-
-		Assert.assertEquals("name", pimConnectorField.getLabel());
-		Assert.assertEquals(
-			PIMConnectorFieldConstants.TYPE_LOCALIZED_TEXT,
-			pimConnectorField.getType());
-		Assert.assertFalse(pimConnectorField.isMultiple());
-		Assert.assertTrue(pimConnectorField.isRequired());
-
 		pimConnectorField = pimConnectorFields.get(3);
+
+		Assert.assertEquals("product-options", pimConnectorField.getLabel());
+		Assert.assertEquals(
+			PIMConnectorFieldConstants.TYPE_TEXT, pimConnectorField.getType());
+		Assert.assertTrue(pimConnectorField.isMultiple());
+		Assert.assertFalse(pimConnectorField.isRequired());
+
+		pimConnectorField = pimConnectorFields.get(4);
+
+		Assert.assertEquals(
+			"product-specifications", pimConnectorField.getLabel());
+		Assert.assertEquals(
+			PIMConnectorFieldConstants.TYPE_TEXT, pimConnectorField.getType());
+		Assert.assertTrue(pimConnectorField.isMultiple());
+		Assert.assertFalse(pimConnectorField.isRequired());
+
+		pimConnectorField = pimConnectorFields.get(5);
 
 		Assert.assertEquals("sku", pimConnectorField.getLabel());
 		Assert.assertEquals(
@@ -161,11 +202,9 @@ public class LiferayCommercePIMConnectorTest {
 		Assert.assertFalse(pimConnectorField.isMultiple());
 		Assert.assertTrue(pimConnectorField.isRequired());
 
-		pimConnectorField = pimConnectorFields.get(4);
+		pimConnectorField = pimConnectorFields.get(6);
 
 		Assert.assertEquals("tags", pimConnectorField.getLabel());
-		Assert.assertEquals(
-			PIMConnectorFieldConstants.TYPE_TEXT, pimConnectorField.getType());
 		Assert.assertTrue(pimConnectorField.isMultiple());
 		Assert.assertFalse(pimConnectorField.isRequired());
 	}
@@ -270,6 +309,14 @@ public class LiferayCommercePIMConnectorTest {
 		JSONArray jsonArray = jsonObject.getJSONArray("skus");
 
 		Assert.assertEquals(1, jsonArray.length());
+
+		return jsonArray.getJSONObject(0);
+	}
+
+	private JSONObject _getSkuOptionJSONObject(JSONObject jsonObject) {
+		JSONArray jsonArray = jsonObject.getJSONArray("skuOptions");
+
+		Assert.assertEquals(jsonArray.toString(), 1, jsonArray.length());
 
 		return jsonArray.getJSONObject(0);
 	}
@@ -391,6 +438,75 @@ public class LiferayCommercePIMConnectorTest {
 		);
 
 		return objectEntry;
+	}
+
+	private void _mockObjectField(
+		String label, String name, ObjectDefinition objectDefinition) {
+
+		ObjectField objectField = Mockito.mock(ObjectField.class);
+
+		Mockito.when(
+			objectField.getLabel(LocaleUtil.US)
+		).thenReturn(
+			label
+		);
+
+		Mockito.when(
+			_objectFieldLocalService.fetchObjectField(
+				objectDefinition.getObjectDefinitionId(), name)
+		).thenReturn(
+			objectField
+		);
+	}
+
+	private void _mockPicklistObjectField(
+		String key, String label, String name,
+		ObjectDefinition objectDefinition, String value) {
+
+		ObjectField objectField = Mockito.mock(ObjectField.class);
+
+		long listTypeDefinitionId = RandomTestUtil.randomLong();
+
+		Mockito.when(
+			objectField.compareBusinessType(
+				ObjectFieldConstants.BUSINESS_TYPE_PICKLIST)
+		).thenReturn(
+			true
+		);
+
+		Mockito.when(
+			objectField.getLabel(LocaleUtil.US)
+		).thenReturn(
+			label
+		);
+
+		Mockito.when(
+			objectField.getListTypeDefinitionId()
+		).thenReturn(
+			listTypeDefinitionId
+		);
+
+		Mockito.when(
+			_objectFieldLocalService.fetchObjectField(
+				objectDefinition.getObjectDefinitionId(), name)
+		).thenReturn(
+			objectField
+		);
+
+		ListTypeEntry listTypeEntry = Mockito.mock(ListTypeEntry.class);
+
+		Mockito.when(
+			listTypeEntry.getName(LocaleUtil.US)
+		).thenReturn(
+			value
+		);
+
+		Mockito.when(
+			_listTypeEntryLocalService.fetchListTypeEntry(
+				listTypeDefinitionId, key)
+		).thenReturn(
+			listTypeEntry
+		);
 	}
 
 	private ObjectEntry _mockPIMConnectorObjectEntry() throws Exception {
@@ -549,6 +665,133 @@ public class LiferayCommercePIMConnectorTest {
 
 		Assert.assertEquals(
 			"Box", skuUnitOfMeasureNameJSONObject.getString("en_US"));
+	}
+
+	private void _testExportProductsWithDuplicateProductSpecificationMappings()
+		throws Exception {
+
+		ObjectDefinition objectDefinition = _mockObjectDefinition();
+
+		_mockGetObjectEntries(
+			_GROUP_ID, objectDefinition,
+			_mockObjectEntry(
+				"SKU-1", "SKU-1",
+				HashMapBuilder.<String, Serializable>put(
+					"material", "Cotone"
+				).build()));
+		_mockObjectField("Materiale", "material", objectDefinition);
+
+		_mockSpaceDepotEntries(_GROUP_ID);
+
+		JSONObject fieldMappingJSONObject = _getFieldMappingJSONObject();
+
+		JSONObject jsonObject = _getJSONObject(
+			_mockPIMConnectorObjectEntry(
+				fieldMappingJSONObject.put(
+					"productSpecifications",
+					_getAttributeJSONArray("material", "material")
+				).toString()));
+
+		JSONArray productSpecificationsJSONArray = jsonObject.getJSONArray(
+			"productSpecifications");
+
+		Assert.assertEquals(
+			productSpecificationsJSONArray.toString(), 1,
+			productSpecificationsJSONArray.length());
+
+		JSONObject productSpecificationJSONObject =
+			productSpecificationsJSONArray.getJSONObject(0);
+
+		Assert.assertEquals(
+			"material",
+			productSpecificationJSONObject.getString("specificationKey"));
+	}
+
+	private void _testExportProductsWithEmptyProductSpecificationValue()
+		throws Exception {
+
+		ObjectDefinition objectDefinition = _mockObjectDefinition();
+
+		_mockGetObjectEntries(
+			_GROUP_ID, objectDefinition,
+			_mockObjectEntry(
+				"SKU-1", "SKU-1",
+				HashMapBuilder.<String, Serializable>put(
+					"fabricColor", ""
+				).put(
+					"material", "Cotone"
+				).build()));
+		_mockObjectField("Colore", "fabricColor", objectDefinition);
+		_mockObjectField("Materiale", "material", objectDefinition);
+
+		_mockSpaceDepotEntries(_GROUP_ID);
+
+		JSONObject fieldMappingJSONObject = _getFieldMappingJSONObject();
+
+		JSONObject jsonObject = _getJSONObject(
+			_mockPIMConnectorObjectEntry(
+				fieldMappingJSONObject.put(
+					"productSpecifications",
+					_getAttributeJSONArray("fabricColor", "material")
+				).toString()));
+
+		JSONArray productSpecificationsJSONArray = jsonObject.getJSONArray(
+			"productSpecifications");
+
+		Assert.assertEquals(
+			productSpecificationsJSONArray.toString(), 1,
+			productSpecificationsJSONArray.length());
+
+		JSONObject productSpecificationJSONObject =
+			productSpecificationsJSONArray.getJSONObject(0);
+
+		Assert.assertEquals(
+			1, productSpecificationJSONObject.getInt("priority"));
+		Assert.assertEquals(
+			"material",
+			productSpecificationJSONObject.getString("specificationKey"));
+	}
+
+	private void _testExportProductsWithFixedValueProductOption()
+		throws Exception {
+
+		_mockGetObjectEntries(
+			_GROUP_ID, _mockObjectDefinition(),
+			_mockObjectEntry("SKU-1", "SKU-1"));
+		_mockSpaceDepotEntries(_GROUP_ID);
+
+		JSONObject fieldMappingJSONObject = _getFieldMappingJSONObject();
+
+		JSONObject jsonObject = _getJSONObject(
+			_mockPIMConnectorObjectEntry(
+				fieldMappingJSONObject.put(
+					"productOptions", _getFixedValueJSONArray("Acme")
+				).toString()));
+
+		Assert.assertFalse(jsonObject.has("productOptions"));
+
+		JSONObject skuJSONObject = _getSkuJSONObject(jsonObject);
+
+		Assert.assertFalse(skuJSONObject.has("skuOptions"));
+	}
+
+	private void _testExportProductsWithFixedValueProductSpecification()
+		throws Exception {
+
+		_mockGetObjectEntries(
+			_GROUP_ID, _mockObjectDefinition(),
+			_mockObjectEntry("SKU-1", "SKU-1"));
+		_mockSpaceDepotEntries(_GROUP_ID);
+
+		JSONObject fieldMappingJSONObject = _getFieldMappingJSONObject();
+
+		JSONObject jsonObject = _getJSONObject(
+			_mockPIMConnectorObjectEntry(
+				fieldMappingJSONObject.put(
+					"productSpecifications", _getFixedValueJSONArray("Acme")
+				).toString()));
+
+		Assert.assertFalse(jsonObject.has("productSpecifications"));
 	}
 
 	private void _testExportProductsWithInvalidCatalogId() throws Exception {
@@ -789,6 +1032,278 @@ public class LiferayCommercePIMConnectorTest {
 		Assert.assertFalse(skuJSONObject.has("skuUnitOfMeasures"));
 	}
 
+	private void _testExportProductsWithPicklistProductSpecification()
+		throws Exception {
+
+		ObjectDefinition objectDefinition = _mockObjectDefinition();
+
+		_mockGetObjectEntries(
+			_GROUP_ID, objectDefinition,
+			_mockObjectEntry(
+				"SKU-1", "SKU-1",
+				HashMapBuilder.<String, Serializable>put(
+					"fabricColor", "red"
+				).build()));
+		_mockPicklistObjectField(
+			"red", "Colore", "fabricColor", objectDefinition, "Rosso");
+
+		_mockSpaceDepotEntries(_GROUP_ID);
+
+		JSONObject fieldMappingJSONObject = _getFieldMappingJSONObject();
+
+		JSONObject jsonObject = _getJSONObject(
+			_mockPIMConnectorObjectEntry(
+				fieldMappingJSONObject.put(
+					"productSpecifications",
+					_getAttributeJSONArray("fabricColor")
+				).toString()));
+
+		JSONArray productSpecificationsJSONArray = jsonObject.getJSONArray(
+			"productSpecifications");
+
+		Assert.assertEquals(
+			productSpecificationsJSONArray.toString(), 1,
+			productSpecificationsJSONArray.length());
+
+		JSONObject productSpecificationJSONObject =
+			productSpecificationsJSONArray.getJSONObject(0);
+
+		Assert.assertEquals(
+			"fabriccolor",
+			productSpecificationJSONObject.getString("specificationKey"));
+
+		JSONObject valueJSONObject =
+			productSpecificationJSONObject.getJSONObject("value");
+
+		Assert.assertEquals("Rosso", valueJSONObject.getString("en_US"));
+	}
+
+	private void _testExportProductsWithProductOptions() throws Exception {
+		ObjectDefinition objectDefinition = _mockObjectDefinition();
+
+		_mockGetObjectEntries(
+			_GROUP_ID, objectDefinition,
+			_mockObjectEntry(
+				"SKU-1", "ERC-1",
+				HashMapBuilder.<String, Serializable>put(
+					"fabricColor", "Rosso"
+				).build()),
+			_mockObjectEntry(
+				"SKU-2", "ERC-2",
+				HashMapBuilder.<String, Serializable>put(
+					"fabricColor", "Blu"
+				).build()));
+		_mockObjectField("Colore", "fabricColor", objectDefinition);
+
+		_mockSpaceDepotEntries(_GROUP_ID);
+		_mockVariantPIMLinks("cluster-1", "ERC-1", "ERC-2");
+
+		JSONObject fieldMappingJSONObject = _getFieldMappingJSONObject();
+
+		JSONObject jsonObject = _getJSONObject(
+			_mockPIMConnectorObjectEntry(
+				fieldMappingJSONObject.put(
+					"productOptions", _getAttributeJSONArray("fabricColor")
+				).toString()));
+
+		JSONArray productOptionsJSONArray = jsonObject.getJSONArray(
+			"productOptions");
+
+		Assert.assertEquals(
+			productOptionsJSONArray.toString(), 1,
+			productOptionsJSONArray.length());
+
+		JSONObject productOptionJSONObject =
+			productOptionsJSONArray.getJSONObject(0);
+
+		Assert.assertEquals(
+			"fabriccolor",
+			productOptionJSONObject.getString("optionExternalReferenceCode"));
+		Assert.assertEquals(0, productOptionJSONObject.getInt("priority"));
+		Assert.assertTrue(productOptionJSONObject.getBoolean("skuContributor"));
+
+		JSONObject optionNameJSONObject = productOptionJSONObject.getJSONObject(
+			"name");
+
+		Assert.assertEquals("Colore", optionNameJSONObject.getString("en_US"));
+
+		JSONArray productOptionValuesJSONArray =
+			productOptionJSONObject.getJSONArray("productOptionValues");
+
+		Assert.assertEquals(
+			productOptionValuesJSONArray.toString(), 2,
+			productOptionValuesJSONArray.length());
+
+		JSONObject productOptionValueJSONObject =
+			productOptionValuesJSONArray.getJSONObject(0);
+
+		Assert.assertEquals(
+			"rosso", productOptionValueJSONObject.getString("key"));
+		Assert.assertEquals(0, productOptionValueJSONObject.getInt("priority"));
+
+		JSONObject nameJSONObject = productOptionValueJSONObject.getJSONObject(
+			"name");
+
+		Assert.assertEquals("Rosso", nameJSONObject.getString("en_US"));
+
+		productOptionValueJSONObject =
+			productOptionValuesJSONArray.getJSONObject(1);
+
+		Assert.assertEquals(
+			"blu", productOptionValueJSONObject.getString("key"));
+		Assert.assertEquals(1, productOptionValueJSONObject.getInt("priority"));
+
+		JSONArray skusJSONArray = jsonObject.getJSONArray("skus");
+
+		Assert.assertEquals(
+			skusJSONArray.toString(), 2, skusJSONArray.length());
+
+		JSONObject skuOptionJSONObject = _getSkuOptionJSONObject(
+			skusJSONArray.getJSONObject(0));
+
+		Assert.assertEquals(
+			"fabriccolor", skuOptionJSONObject.getString("key"));
+		Assert.assertEquals("rosso", skuOptionJSONObject.getString("value"));
+
+		skuOptionJSONObject = _getSkuOptionJSONObject(
+			skusJSONArray.getJSONObject(1));
+
+		Assert.assertEquals(
+			"fabriccolor", skuOptionJSONObject.getString("key"));
+		Assert.assertEquals("blu", skuOptionJSONObject.getString("value"));
+	}
+
+	private void _testExportProductsWithProductSpecifications()
+		throws Exception {
+
+		ObjectDefinition objectDefinition = _mockObjectDefinition();
+
+		_mockGetObjectEntries(
+			_GROUP_ID, objectDefinition,
+			_mockObjectEntry(
+				"SKU-1", "SKU-1",
+				HashMapBuilder.<String, Serializable>put(
+					"fabricColor", "Rosso"
+				).put(
+					"material", "Cotone"
+				).build()));
+		_mockObjectField("Colore", "fabricColor", objectDefinition);
+		_mockObjectField("Materiale", "material", objectDefinition);
+
+		_mockSpaceDepotEntries(_GROUP_ID);
+
+		JSONObject fieldMappingJSONObject = _getFieldMappingJSONObject();
+
+		JSONObject jsonObject = _getJSONObject(
+			_mockPIMConnectorObjectEntry(
+				fieldMappingJSONObject.put(
+					"productSpecifications",
+					_getAttributeJSONArray("fabricColor", "material")
+				).toString()));
+
+		JSONArray productSpecificationsJSONArray = jsonObject.getJSONArray(
+			"productSpecifications");
+
+		Assert.assertEquals(
+			productSpecificationsJSONArray.toString(), 2,
+			productSpecificationsJSONArray.length());
+
+		JSONObject productSpecificationJSONObject =
+			productSpecificationsJSONArray.getJSONObject(0);
+
+		Assert.assertEquals(
+			0, productSpecificationJSONObject.getInt("priority"));
+		Assert.assertEquals(
+			"fabriccolor",
+			productSpecificationJSONObject.getString("specificationKey"));
+
+		JSONObject labelJSONObject =
+			productSpecificationJSONObject.getJSONObject("label");
+
+		Assert.assertEquals("Colore", labelJSONObject.getString("en_US"));
+
+		JSONObject valueJSONObject =
+			productSpecificationJSONObject.getJSONObject("value");
+
+		Assert.assertEquals("Rosso", valueJSONObject.getString("en_US"));
+
+		productSpecificationJSONObject =
+			productSpecificationsJSONArray.getJSONObject(1);
+
+		Assert.assertEquals(
+			1, productSpecificationJSONObject.getInt("priority"));
+		Assert.assertEquals(
+			"material",
+			productSpecificationJSONObject.getString("specificationKey"));
+
+		labelJSONObject = productSpecificationJSONObject.getJSONObject("label");
+
+		Assert.assertEquals("Materiale", labelJSONObject.getString("en_US"));
+
+		valueJSONObject = productSpecificationJSONObject.getJSONObject("value");
+
+		Assert.assertEquals("Cotone", valueJSONObject.getString("en_US"));
+	}
+
+	private void _testExportProductsWithRepeatedProductOptionValue()
+		throws Exception {
+
+		ObjectDefinition objectDefinition = _mockObjectDefinition();
+
+		_mockGetObjectEntries(
+			_GROUP_ID, objectDefinition,
+			_mockObjectEntry(
+				"SKU-1", "ERC-1",
+				HashMapBuilder.<String, Serializable>put(
+					"fabricColor", "Rosso"
+				).build()),
+			_mockObjectEntry(
+				"SKU-2", "ERC-2",
+				HashMapBuilder.<String, Serializable>put(
+					"fabricColor", "Rosso"
+				).build()),
+			_mockObjectEntry("SKU-3", "ERC-3"));
+		_mockObjectField("Colore", "fabricColor", objectDefinition);
+
+		_mockSpaceDepotEntries(_GROUP_ID);
+		_mockVariantPIMLinks("cluster-1", "ERC-1", "ERC-2", "ERC-3");
+
+		JSONObject fieldMappingJSONObject = _getFieldMappingJSONObject();
+
+		JSONObject jsonObject = _getJSONObject(
+			_mockPIMConnectorObjectEntry(
+				fieldMappingJSONObject.put(
+					"productOptions", _getAttributeJSONArray("fabricColor")
+				).toString()));
+
+		JSONArray productOptionsJSONArray = jsonObject.getJSONArray(
+			"productOptions");
+
+		JSONObject productOptionJSONObject =
+			productOptionsJSONArray.getJSONObject(0);
+
+		JSONArray productOptionValuesJSONArray =
+			productOptionJSONObject.getJSONArray("productOptionValues");
+
+		Assert.assertEquals(
+			productOptionValuesJSONArray.toString(), 1,
+			productOptionValuesJSONArray.length());
+
+		JSONArray skusJSONArray = jsonObject.getJSONArray("skus");
+
+		Assert.assertEquals(
+			skusJSONArray.toString(), 3, skusJSONArray.length());
+
+		JSONObject skuOptionJSONObject = _getSkuOptionJSONObject(
+			skusJSONArray.getJSONObject(1));
+
+		Assert.assertEquals("rosso", skuOptionJSONObject.getString("value"));
+
+		JSONObject skuJSONObject = skusJSONArray.getJSONObject(2);
+
+		Assert.assertFalse(skuJSONObject.has("skuOptions"));
+	}
+
 	private void _testExportProductsWithUnmappedDescription() throws Exception {
 		_mockGetObjectEntries(
 			_GROUP_ID, _mockObjectDefinition(),
@@ -942,12 +1457,18 @@ public class LiferayCommercePIMConnectorTest {
 		DepotEntryLocalService.class);
 	private final FilterFactory<Predicate> _filterFactory = Mockito.mock(
 		FilterFactory.class);
+	private final FriendlyURLNormalizer _friendlyURLNormalizer = Mockito.mock(
+		FriendlyURLNormalizer.class);
 	private final JSONFactory _jsonFactory = new JSONFactoryImpl();
 	private final LiferayCommercePIMConnector _liferayCommercePIMConnector =
 		new LiferayCommercePIMConnector();
+	private final ListTypeEntryLocalService _listTypeEntryLocalService =
+		Mockito.mock(ListTypeEntryLocalService.class);
 	private final ObjectDefinitionLocalService _objectDefinitionLocalService =
 		Mockito.mock(ObjectDefinitionLocalService.class);
 	private final ObjectEntryLocalService _objectEntryLocalService =
 		Mockito.mock(ObjectEntryLocalService.class);
+	private final ObjectFieldLocalService _objectFieldLocalService =
+		Mockito.mock(ObjectFieldLocalService.class);
 
 }

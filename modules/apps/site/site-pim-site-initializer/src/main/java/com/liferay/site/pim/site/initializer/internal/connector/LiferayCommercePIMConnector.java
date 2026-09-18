@@ -8,12 +8,17 @@ package com.liferay.site.pim.site.initializer.internal.connector;
 import com.liferay.depot.constants.DepotConstants;
 import com.liferay.depot.model.DepotEntry;
 import com.liferay.depot.service.DepotEntryLocalService;
+import com.liferay.list.type.model.ListTypeEntry;
+import com.liferay.list.type.service.ListTypeEntryLocalService;
 import com.liferay.object.constants.ObjectDefinitionConstants;
+import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntry;
+import com.liferay.object.model.ObjectField;
 import com.liferay.object.rest.filter.factory.FilterFactory;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
+import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.string.StringBundler;
@@ -27,7 +32,9 @@ import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.FriendlyURLNormalizer;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -207,7 +214,8 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 			ObjectDefinition objectDefinition)
 		throws PortalException {
 
-		PIMFieldMappings pimFieldMappings = new PIMFieldMappings();
+		PIMFieldMappings pimFieldMappings = new PIMFieldMappings(
+			_listTypeEntryLocalService);
 
 		List<String> unmappedNames = new ArrayList<>();
 
@@ -232,6 +240,135 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 		}
 
 		return pimFieldMappings;
+	}
+
+	private JSONArray _getProductOptionsJSONArray(
+		PIMFieldMappings pimFieldMappings,
+		List<Map<String, Serializable>> valuesList) {
+
+		JSONArray jsonArray = _jsonFactory.createJSONArray();
+
+		int priority = 0;
+
+		for (PIMFieldMappingSource pimFieldMappingSource :
+				pimFieldMappings.getPIMFieldMappingSources(
+					_CHANNEL_FIELD_NAME_PRODUCT_OPTIONS)) {
+
+			JSONArray productOptionValuesJSONArray =
+				_jsonFactory.createJSONArray();
+
+			List<String> keys = new ArrayList<>();
+
+			for (Map<String, Serializable> values : valuesList) {
+				String value = pimFieldMappingSource.getValue(values);
+
+				if (Validator.isNull(value)) {
+					continue;
+				}
+
+				String key = _friendlyURLNormalizer.normalize(value);
+
+				if (keys.contains(key)) {
+					continue;
+				}
+
+				productOptionValuesJSONArray.put(
+					JSONUtil.put(
+						"key", key
+					).put(
+						"name", JSONUtil.put("en_US", value)
+					).put(
+						"priority", keys.size()
+					));
+
+				keys.add(key);
+			}
+
+			if (productOptionValuesJSONArray.length() > 0) {
+				jsonArray.put(
+					JSONUtil.put(
+						"name",
+						JSONUtil.put("en_US", pimFieldMappingSource.getLabel())
+					).put(
+						"optionExternalReferenceCode",
+						_friendlyURLNormalizer.normalize(
+							pimFieldMappingSource.getAttributeName())
+					).put(
+						"priority", priority
+					).put(
+						"productOptionValues", productOptionValuesJSONArray
+					).put(
+						"skuContributor", true
+					));
+			}
+
+			priority++;
+		}
+
+		return jsonArray;
+	}
+
+	private JSONArray _getProductSpecificationsJSONArray(
+		PIMFieldMappings pimFieldMappings, Map<String, Serializable> values) {
+
+		JSONArray jsonArray = _jsonFactory.createJSONArray();
+
+		int priority = 0;
+
+		for (PIMFieldMappingSource pimFieldMappingSource :
+				pimFieldMappings.getPIMFieldMappingSources(
+					_CHANNEL_FIELD_NAME_PRODUCT_SPECIFICATIONS)) {
+
+			String value = pimFieldMappingSource.getValue(values);
+
+			if (Validator.isNotNull(value)) {
+				jsonArray.put(
+					JSONUtil.put(
+						"label",
+						JSONUtil.put("en_US", pimFieldMappingSource.getLabel())
+					).put(
+						"priority", priority
+					).put(
+						"specificationKey",
+						_friendlyURLNormalizer.normalize(
+							pimFieldMappingSource.getAttributeName())
+					).put(
+						"value", JSONUtil.put("en_US", value)
+					));
+			}
+
+			priority++;
+		}
+
+		return jsonArray;
+	}
+
+	private JSONArray _getSkuOptionsJSONArray(
+		PIMFieldMappings pimFieldMappings, Map<String, Serializable> values) {
+
+		JSONArray jsonArray = _jsonFactory.createJSONArray();
+
+		for (PIMFieldMappingSource pimFieldMappingSource :
+				pimFieldMappings.getPIMFieldMappingSources(
+					_CHANNEL_FIELD_NAME_PRODUCT_OPTIONS)) {
+
+			String value = pimFieldMappingSource.getValue(values);
+
+			if (Validator.isNull(value)) {
+				continue;
+			}
+
+			jsonArray.put(
+				JSONUtil.put(
+					"key",
+					_friendlyURLNormalizer.normalize(
+						pimFieldMappingSource.getAttributeName())
+				).put(
+					"value", _friendlyURLNormalizer.normalize(value)
+				));
+		}
+
+		return jsonArray;
 	}
 
 	private Map<String, String> _getVariantPIMLinkClusterKeys(
@@ -282,6 +419,16 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 
 		boolean mapped = false;
 
+		boolean keyedByAttribute = false;
+
+		if (name.equals(_CHANNEL_FIELD_NAME_PRODUCT_OPTIONS) ||
+			name.equals(_CHANNEL_FIELD_NAME_PRODUCT_SPECIFICATIONS)) {
+
+			keyedByAttribute = true;
+		}
+
+		List<String> keys = new ArrayList<>();
+
 		JSONArray mappingsJSONArray = PIMFieldMappingUtil.getMappingsJSONArray(
 			fieldMappingJSONObject, name);
 
@@ -292,6 +439,16 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 				String value = mappingJSONObject.getString("value");
 
 				if (Validator.isNull(value)) {
+					continue;
+				}
+
+				if (keyedByAttribute) {
+					if (_log.isWarnEnabled()) {
+						_log.warn(
+							"Ignoring the fixed value mapping for the field " +
+								name);
+					}
+
 					continue;
 				}
 
@@ -320,7 +477,27 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 				continue;
 			}
 
-			pimFieldMappings.addAttributeName(name, attributeName);
+			ObjectField objectField = _objectFieldLocalService.fetchObjectField(
+				objectDefinition.getObjectDefinitionId(), attributeName);
+
+			if (keyedByAttribute) {
+				String key = _friendlyURLNormalizer.normalize(attributeName);
+
+				if (keys.contains(key)) {
+					if (_log.isWarnEnabled()) {
+						_log.warn(
+							StringBundler.concat(
+								"Ignoring the duplicate key ", key,
+								" for the field ", name));
+					}
+
+					continue;
+				}
+
+				keys.add(key);
+			}
+
+			pimFieldMappings.addAttributeName(name, attributeName, objectField);
 
 			mapped = true;
 		}
@@ -381,6 +558,21 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 			jsonObject.put("tags", JSONUtil.putAll(tags.toArray()));
 		}
 
+		JSONArray productOptionsJSONArray = _getProductOptionsJSONArray(
+			pimFieldMappings, valuesList);
+
+		if (productOptionsJSONArray.length() > 0) {
+			jsonObject.put("productOptions", productOptionsJSONArray);
+		}
+
+		JSONArray productSpecificationsJSONArray =
+			_getProductSpecificationsJSONArray(pimFieldMappings, values);
+
+		if (productSpecificationsJSONArray.length() > 0) {
+			jsonObject.put(
+				"productSpecifications", productSpecificationsJSONArray);
+		}
+
 		String description = _getJoinedValue(
 			pimFieldMappings, _CHANNEL_FIELD_NAME_DESCRIPTION, values);
 
@@ -411,6 +603,13 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 		).put(
 			"width", MapUtil.getDouble(values, "width")
 		);
+
+		JSONArray skuOptionsJSONArray = _getSkuOptionsJSONArray(
+			pimFieldMappings, values);
+
+		if (skuOptionsJSONArray.length() > 0) {
+			jsonObject.put("skuOptions", skuOptionsJSONArray);
+		}
 
 		String unitOfMeasureKey = MapUtil.getString(values, "unitOfMeasureKey");
 
@@ -450,6 +649,12 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 
 	private static final String _CHANNEL_FIELD_NAME_NAME = "name";
 
+	private static final String _CHANNEL_FIELD_NAME_PRODUCT_OPTIONS =
+		"productOptions";
+
+	private static final String _CHANNEL_FIELD_NAME_PRODUCT_SPECIFICATIONS =
+		"productSpecifications";
+
 	private static final String _CHANNEL_FIELD_NAME_SKU = "skus[].sku";
 
 	private static final String _CHANNEL_FIELD_NAME_TAGS = "tags";
@@ -470,6 +675,13 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 				_CHANNEL_FIELD_NAME_NAME, false, _CHANNEL_FIELD_NAME_NAME, true,
 				PIMConnectorFieldConstants.TYPE_LOCALIZED_TEXT),
 			new PIMConnectorField(
+				"product-options", true, _CHANNEL_FIELD_NAME_PRODUCT_OPTIONS,
+				false, PIMConnectorFieldConstants.TYPE_TEXT),
+			new PIMConnectorField(
+				"product-specifications", true,
+				_CHANNEL_FIELD_NAME_PRODUCT_SPECIFICATIONS, false,
+				PIMConnectorFieldConstants.TYPE_TEXT),
+			new PIMConnectorField(
 				"sku", false, _CHANNEL_FIELD_NAME_SKU, true,
 				PIMConnectorFieldConstants.TYPE_TEXT),
 			new PIMConnectorField(
@@ -485,7 +697,13 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 	private FilterFactory<Predicate> _filterFactory;
 
 	@Reference
+	private FriendlyURLNormalizer _friendlyURLNormalizer;
+
+	@Reference
 	private JSONFactory _jsonFactory;
+
+	@Reference
+	private ListTypeEntryLocalService _listTypeEntryLocalService;
 
 	@Reference
 	private ObjectDefinitionLocalService _objectDefinitionLocalService;
@@ -493,13 +711,26 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 	@Reference
 	private ObjectEntryLocalService _objectEntryLocalService;
 
+	@Reference
+	private ObjectFieldLocalService _objectFieldLocalService;
+
 	private static class PIMFieldMappings {
 
-		public void addAttributeName(String name, String attributeName) {
+		public PIMFieldMappings(
+			ListTypeEntryLocalService listTypeEntryLocalService) {
+
+			_listTypeEntryLocalService = listTypeEntryLocalService;
+		}
+
+		public void addAttributeName(
+			String name, String attributeName, ObjectField objectField) {
+
 			getPIMFieldMappingSources(
 				name
 			).add(
-				new PIMFieldMappingSource(attributeName, StringPool.BLANK)
+				new PIMFieldMappingSource(
+					attributeName, _listTypeEntryLocalService, objectField,
+					StringPool.BLANK)
 			);
 		}
 
@@ -507,7 +738,8 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 			getPIMFieldMappingSources(
 				name
 			).add(
-				new PIMFieldMappingSource(StringPool.BLANK, value)
+				new PIMFieldMappingSource(
+					StringPool.BLANK, _listTypeEntryLocalService, null, value)
 			);
 		}
 
@@ -536,6 +768,7 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 			return resolvedValues;
 		}
 
+		private final ListTypeEntryLocalService _listTypeEntryLocalService;
 		private final Map<String, List<PIMFieldMappingSource>>
 			_pimFieldMappingSources = new HashMap<>();
 
@@ -543,9 +776,27 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 
 	private static class PIMFieldMappingSource {
 
-		public PIMFieldMappingSource(String attributeName, String value) {
+		public PIMFieldMappingSource(
+			String attributeName,
+			ListTypeEntryLocalService listTypeEntryLocalService,
+			ObjectField objectField, String value) {
+
 			_attributeName = attributeName;
+			_listTypeEntryLocalService = listTypeEntryLocalService;
+			_objectField = objectField;
 			_value = value;
+		}
+
+		public String getAttributeName() {
+			return _attributeName;
+		}
+
+		public String getLabel() {
+			if (_objectField == null) {
+				return StringPool.BLANK;
+			}
+
+			return _objectField.getLabel(LocaleUtil.US);
 		}
 
 		public String getValue(Map<String, Serializable> values) {
@@ -553,10 +804,29 @@ public class LiferayCommercePIMConnector implements PIMConnector {
 				return _value;
 			}
 
-			return MapUtil.getString(values, _attributeName);
+			String value = MapUtil.getString(values, _attributeName);
+
+			if ((_objectField == null) || Validator.isNull(value) ||
+				!_objectField.compareBusinessType(
+					ObjectFieldConstants.BUSINESS_TYPE_PICKLIST)) {
+
+				return value;
+			}
+
+			ListTypeEntry listTypeEntry =
+				_listTypeEntryLocalService.fetchListTypeEntry(
+					_objectField.getListTypeDefinitionId(), value);
+
+			if (listTypeEntry == null) {
+				return value;
+			}
+
+			return listTypeEntry.getName(LocaleUtil.US);
 		}
 
 		private final String _attributeName;
+		private final ListTypeEntryLocalService _listTypeEntryLocalService;
+		private final ObjectField _objectField;
 		private final String _value;
 
 	}
