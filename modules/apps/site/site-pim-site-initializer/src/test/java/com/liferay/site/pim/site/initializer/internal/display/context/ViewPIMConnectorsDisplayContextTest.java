@@ -227,7 +227,7 @@ public class ViewPIMConnectorsDisplayContextTest {
 			fdsActionDropdownItems.get(2);
 
 		Assert.assertEquals(
-			"/o/pim/export-to-liferay-commerce",
+			"/o/pim/export?objectEntryId={id}",
 			exportFDSActionDropdownItem.get("href"));
 		Assert.assertEquals(
 			"download", exportFDSActionDropdownItem.get("icon"));

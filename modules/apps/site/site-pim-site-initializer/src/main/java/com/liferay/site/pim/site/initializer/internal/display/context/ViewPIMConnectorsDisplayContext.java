@@ -103,7 +103,7 @@ public class ViewPIMConnectorsDisplayContext {
 				"fieldMapping"
 			),
 			FDSActionDropdownItemBuilder.setHref(
-				"/o/pim/export-to-liferay-commerce"
+				"/o/pim/export?objectEntryId={id}"
 			).setIcon(
 				"download"
 			).setLabel(
