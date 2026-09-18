@@ -1071,7 +1071,7 @@ public class ProductResourceImpl
 			(serviceContext.getWorkflowAction() ==
 				WorkflowConstants.ACTION_SAVE_DRAFT)) {
 
-			return _cpDefinitionService.copyCPDefinition(
+			return _cpDefinitionService.getOrCopyCPDefinition(
 				cpDefinition.getCPDefinitionId(), cpDefinition.getGroupId(),
 				WorkflowConstants.STATUS_DRAFT);
 		}
