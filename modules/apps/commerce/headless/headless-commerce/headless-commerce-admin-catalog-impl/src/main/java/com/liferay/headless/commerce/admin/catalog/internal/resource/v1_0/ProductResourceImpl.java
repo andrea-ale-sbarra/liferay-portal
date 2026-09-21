@@ -513,8 +513,8 @@ public class ProductResourceImpl
 
 	@Override
 	public Product patchProduct(Long id, Product product) throws Exception {
-		CPDefinition cpDefinition = ProductUtil.fetchCPDefinitionByCProductId(
-			id, _cpDefinitionService);
+		CPDefinition cpDefinition =
+			_cpDefinitionService.fetchCPDefinitionByCProductId(id);
 
 		if (cpDefinition == null) {
 			throw new NoSuchCPDefinitionException(
@@ -1067,9 +1067,8 @@ public class ProductResourceImpl
 			CPDefinition cpDefinition, ServiceContext serviceContext)
 		throws Exception {
 
-		if (!cpDefinition.isDraft() &&
-			(serviceContext.getWorkflowAction() ==
-				WorkflowConstants.ACTION_SAVE_DRAFT)) {
+		if (serviceContext.getWorkflowAction() ==
+				WorkflowConstants.ACTION_SAVE_DRAFT) {
 
 			return _cpDefinitionService.copyCPDefinition(
 				cpDefinition.getCPDefinitionId(), cpDefinition.getGroupId(),

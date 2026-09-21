@@ -1541,6 +1541,30 @@ public class CPDefinitionLocalServiceImpl
 	}
 
 	@Override
+	public CPDefinition fetchCPDefinitionByCProductId(long cProductId) {
+		CPDefinition cpDefinition =
+			cpDefinitionLocalService.fetchCPDefinitionByCProductId(
+				cProductId, false);
+
+		if ((cpDefinition == null) ||
+			!cpDefinitionLocalService.isVersionable(cpDefinition) ||
+			cpDefinition.isDraft()) {
+
+			return cpDefinition;
+		}
+
+		CPDefinition draftCPDefinition =
+			cpDefinitionLocalService.fetchCPDefinitionByCProductId(
+				cProductId, WorkflowConstants.STATUS_DRAFT);
+
+		if (draftCPDefinition != null) {
+			return draftCPDefinition;
+		}
+
+		return cpDefinition;
+	}
+
+	@Override
 	public CPDefinition fetchCPDefinitionByCProductId(
 		long cProductId, boolean excludeDraft) {
 
