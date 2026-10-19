@@ -345,11 +345,13 @@ public class DSRequestManagerImpl implements DSRequestManager {
 			for (long dsRequestId : dsRequestIds) {
 				DSRequest dsRequest = dsRequestsMap.get(dsRequestId);
 
-				if ((dsRequest != null) &&
-					_isEnabled(companyId, dsRequest.getSiteGroupId())) {
+				if ((dsRequest == null) ||
+					!_isEnabled(companyId, dsRequest.getSiteGroupId())) {
 
-					dsRequests.add(dsRequest);
+					continue;
 				}
+
+				dsRequests.add(dsRequest);
 			}
 		}
 		catch (Exception exception) {
@@ -1000,11 +1002,13 @@ public class DSRequestManagerImpl implements DSRequestManager {
 			for (Map.Entry<Long, Long> entry : dsRequestIds.entrySet()) {
 				DSRequest dsRequest = dsRequestsMap.get(entry.getValue());
 
-				if ((dsRequest != null) &&
-					_isEnabled(companyId, dsRequest.getSiteGroupId())) {
+				if ((dsRequest == null) ||
+					!_isEnabled(companyId, dsRequest.getSiteGroupId())) {
 
-					dsRequests.put(entry.getKey(), dsRequest);
+					continue;
 				}
+
+				dsRequests.put(entry.getKey(), dsRequest);
 			}
 		}
 		catch (Exception exception) {
@@ -1440,12 +1444,14 @@ public class DSRequestManagerImpl implements DSRequestManager {
 
 			FileVersion fileVersion = fileEntry.getLatestFileVersion();
 
-			if (fileVersion.getStatus() != WorkflowConstants.STATUS_APPROVED) {
-				_dlFileEntryLocalService.updateStatus(
-					userId, fileVersion.getFileVersionId(),
-					WorkflowConstants.STATUS_APPROVED, serviceContext,
-					new HashMap<>());
+			if (fileVersion.getStatus() == WorkflowConstants.STATUS_APPROVED) {
+				continue;
 			}
+
+			_dlFileEntryLocalService.updateStatus(
+				userId, fileVersion.getFileVersionId(),
+				WorkflowConstants.STATUS_APPROVED, serviceContext,
+				new HashMap<>());
 		}
 	}
 
@@ -1514,15 +1520,17 @@ public class DSRequestManagerImpl implements DSRequestManager {
 				_getServiceContext(
 					companyId, groupId, objectEntry.getUserId()));
 
-			if (Objects.equals(
+			if (!Objects.equals(
 					MapUtil.getString(values, "requestRecipientStatus"),
-					DSRequestConstants.STATUS_CREATED) &&
-				Objects.equals(
+					DSRequestConstants.STATUS_CREATED) ||
+				!Objects.equals(
 					requestRecipientStatus, DSRequestConstants.STATUS_SENT)) {
 
-				dsRequestRecipients.add(
-					new DSRequestRecipient(objectEntry.getValues()));
+				continue;
 			}
+
+			dsRequestRecipients.add(
+				new DSRequestRecipient(objectEntry.getValues()));
 		}
 
 		return dsRequestRecipients;
