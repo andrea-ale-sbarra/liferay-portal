@@ -138,11 +138,13 @@ public class AddDSEnvelopeMVCResourceCommand
 			User recipientUser = _userLocalService.fetchUserByEmailAddress(
 				themeDisplay.getCompanyId(), dsRecipient.getEmailAddress());
 
-			if (recipientUser != null) {
-				UserPermissionUtil.check(
-					themeDisplay.getPermissionChecker(),
-					recipientUser.getUserId(), ActionKeys.VIEW);
+			if (recipientUser == null) {
+				continue;
 			}
+
+			UserPermissionUtil.check(
+				themeDisplay.getPermissionChecker(), recipientUser.getUserId(),
+				ActionKeys.VIEW);
 		}
 
 		DSRequest dsRequest = _dsRequestManager.addDSRequest(
