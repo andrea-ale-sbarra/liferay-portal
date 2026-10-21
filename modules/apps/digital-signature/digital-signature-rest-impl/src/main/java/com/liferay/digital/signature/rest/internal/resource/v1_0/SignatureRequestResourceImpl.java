@@ -268,8 +268,6 @@ public class SignatureRequestResourceImpl
 				setEmailSubject(signatureRequest.getEmailSubject());
 				setExpireAfter(
 					GetterUtil.getInteger(signatureRequest.getExpireAfter()));
-				setExpireWarn(
-					GetterUtil.getInteger(signatureRequest.getExpireWarn()));
 				setName(signatureRequest.getName());
 			}
 		};

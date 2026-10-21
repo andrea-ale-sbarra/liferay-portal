@@ -388,7 +388,6 @@ public class SignatureRequestResourceTest
 
 		_testPostSiteSignatureRequest();
 		_testPostSiteSignatureRequestWhenExpireAfterIsNegative();
-		_testPostSiteSignatureRequestWhenExpireWarnIsNotLessThanExpireAfter();
 		_testPostSiteSignatureRequestWhenFileEntryHasDSRequest();
 		_testPostSiteSignatureRequestWhenFileEntryIdsIsNull();
 		_testPostSiteSignatureRequestWhenRecipientIsDuplicated();
@@ -572,7 +571,6 @@ public class SignatureRequestResourceTest
 		SignatureRequest signatureRequest = randomSignatureRequest();
 
 		signatureRequest.setExpireAfter(0);
-		signatureRequest.setExpireWarn(0);
 
 		FileEntry fileEntry = _dlAppLocalService.addFileEntry(
 			null, TestPropsValues.getUserId(), testGroup.getGroupId(),
@@ -1005,20 +1003,6 @@ public class SignatureRequestResourceTest
 		SignatureRequest signatureRequest = _createSignatureRequest();
 
 		signatureRequest.setExpireAfter(-1);
-
-		_assertProblemStatus(
-			"BAD_REQUEST",
-			() -> signatureRequestResource.postSiteSignatureRequest(
-				testGroup.getGroupId(), signatureRequest));
-	}
-
-	private void _testPostSiteSignatureRequestWhenExpireWarnIsNotLessThanExpireAfter()
-		throws Exception {
-
-		SignatureRequest signatureRequest = _createSignatureRequest();
-
-		signatureRequest.setExpireAfter(5);
-		signatureRequest.setExpireWarn(5);
 
 		_assertProblemStatus(
 			"BAD_REQUEST",
