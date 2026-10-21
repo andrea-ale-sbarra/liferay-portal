@@ -240,9 +240,7 @@ public class DSCommerceOrderAttachmentAdminFDSActionContributorTest {
 		User user = TestPropsValues.getUser();
 
 		Assert.assertEquals(
-			List.of(
-				"request-signature", "resend",
-				"void"),
+			List.of("request-signature", "resend", "void"),
 			_getFDSActionDropdownItemIds(user));
 
 		try (SafeCloseable safeCloseable =

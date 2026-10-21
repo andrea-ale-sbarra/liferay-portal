@@ -2315,6 +2315,7 @@ public class DSRequestManagerTest {
 	private DSRequestManager _dsRequestManager;
 
 	private ObjectDefinition _dsRequestObjectDefinition;
+
 	private ObjectDefinition _dsRequestRecipientObjectDefinition;
 
 	@Inject
