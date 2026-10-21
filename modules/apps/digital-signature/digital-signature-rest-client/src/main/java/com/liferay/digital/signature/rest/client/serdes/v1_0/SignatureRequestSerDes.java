@@ -145,16 +145,6 @@ public class SignatureRequestSerDes {
 			sb.append(signatureRequest.getExpireAfter());
 		}
 
-		if (signatureRequest.getExpireWarn() != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"expireWarn\": ");
-
-			sb.append(signatureRequest.getExpireWarn());
-		}
-
 		if (signatureRequest.getFileEntryBriefs() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -375,14 +365,6 @@ public class SignatureRequestSerDes {
 				String.valueOf(signatureRequest.getExpireAfter()));
 		}
 
-		if (signatureRequest.getExpireWarn() == null) {
-			map.put("expireWarn", null);
-		}
-		else {
-			map.put(
-				"expireWarn", String.valueOf(signatureRequest.getExpireWarn()));
-		}
-
 		if (signatureRequest.getFileEntryBriefs() == null) {
 			map.put("fileEntryBriefs", null);
 		}
@@ -490,9 +472,6 @@ public class SignatureRequestSerDes {
 			else if (Objects.equals(jsonParserFieldName, "expireAfter")) {
 				return false;
 			}
-			else if (Objects.equals(jsonParserFieldName, "expireWarn")) {
-				return false;
-			}
 			else if (Objects.equals(jsonParserFieldName, "fileEntryBriefs")) {
 				return false;
 			}
@@ -567,12 +546,6 @@ public class SignatureRequestSerDes {
 			else if (Objects.equals(jsonParserFieldName, "expireAfter")) {
 				if (jsonParserFieldValue != null) {
 					signatureRequest.setExpireAfter(
-						Integer.valueOf((String)jsonParserFieldValue));
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "expireWarn")) {
-				if (jsonParserFieldValue != null) {
-					signatureRequest.setExpireWarn(
 						Integer.valueOf((String)jsonParserFieldValue));
 				}
 			}
@@ -737,4 +710,4 @@ public class SignatureRequestSerDes {
 	}
 
 }
-// LIFERAY-REST-BUILDER-HASH:-1107473321
+// LIFERAY-REST-BUILDER-HASH:-233590803

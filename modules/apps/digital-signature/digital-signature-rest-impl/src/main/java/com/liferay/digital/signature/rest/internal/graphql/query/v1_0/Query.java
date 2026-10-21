@@ -104,7 +104,7 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {signatureRequest(signatureRequestId: ___){actions, creator, dateCreated, emailMessage, emailSubject, expirationDate, expireAfter, expireWarn, fileEntryBriefs, fileEntryIds, id, name, sendNotifications, signatureRequestRecipients, status, statusDate}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {signatureRequest(signatureRequestId: ___){actions, creator, dateCreated, emailMessage, emailSubject, expirationDate, expireAfter, fileEntryBriefs, fileEntryIds, id, name, sendNotifications, signatureRequestRecipients, status, statusDate}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField(
 		description = "Retrieves a signature request. Requires VIEW permission on the signature request."
@@ -287,4 +287,4 @@ public class Query {
 	private com.liferay.portal.kernel.model.User _user;
 
 }
-// LIFERAY-REST-BUILDER-HASH:-453215692
+// LIFERAY-REST-BUILDER-HASH:-445488691

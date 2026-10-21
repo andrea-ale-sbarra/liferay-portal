@@ -1228,14 +1228,6 @@ public abstract class BaseSignatureRequestResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("expireWarn", additionalAssertFieldName)) {
-				if (signatureRequest.getExpireWarn() == null) {
-					valid = false;
-				}
-
-				continue;
-			}
-
 			if (Objects.equals("fileEntryBriefs", additionalAssertFieldName)) {
 				if (signatureRequest.getFileEntryBriefs() == null) {
 					valid = false;
@@ -1489,17 +1481,6 @@ public abstract class BaseSignatureRequestResourceTestCase {
 				if (!Objects.deepEquals(
 						signatureRequest1.getExpireAfter(),
 						signatureRequest2.getExpireAfter())) {
-
-					return false;
-				}
-
-				continue;
-			}
-
-			if (Objects.equals("expireWarn", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(
-						signatureRequest1.getExpireWarn(),
-						signatureRequest2.getExpireWarn())) {
 
 					return false;
 				}
@@ -1872,12 +1853,6 @@ public abstract class BaseSignatureRequestResourceTestCase {
 			return sb.toString();
 		}
 
-		if (entityFieldName.equals("expireWarn")) {
-			sb.append(String.valueOf(signatureRequest.getExpireWarn()));
-
-			return sb.toString();
-		}
-
 		if (entityFieldName.equals("fileEntryBriefs")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -2080,7 +2055,6 @@ public abstract class BaseSignatureRequestResourceTestCase {
 						"@liferay.com";
 				expirationDate = RandomTestUtil.nextDate();
 				expireAfter = RandomTestUtil.randomInt();
-				expireWarn = RandomTestUtil.randomInt();
 				id = RandomTestUtil.randomLong();
 				name = StringUtil.toLowerCase(RandomTestUtil.randomString());
 				sendNotifications = RandomTestUtil.randomBoolean();
@@ -2336,4 +2310,4 @@ public abstract class BaseSignatureRequestResourceTestCase {
 		_vulcanCRUDItemDelegateBuilderRegistry;
 
 }
-// LIFERAY-REST-BUILDER-HASH:-1777957888
+// LIFERAY-REST-BUILDER-HASH:1988794787

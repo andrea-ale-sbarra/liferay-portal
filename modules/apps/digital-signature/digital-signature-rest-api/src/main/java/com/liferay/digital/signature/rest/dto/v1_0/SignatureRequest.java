@@ -381,51 +381,6 @@ public class SignatureRequest implements Serializable {
 	private Supplier<Integer> _expireAfterSupplier;
 
 	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "Days before expiration to warn the recipients. Must be fewer than the days until expiration. Supplied on creation; not returned on read."
-	)
-	public Integer getExpireWarn() {
-		if (_expireWarnSupplier != null) {
-			expireWarn = _expireWarnSupplier.get();
-
-			_expireWarnSupplier = null;
-		}
-
-		return expireWarn;
-	}
-
-	public void setExpireWarn(Integer expireWarn) {
-		this.expireWarn = expireWarn;
-
-		_expireWarnSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setExpireWarn(
-		UnsafeSupplier<Integer, Exception> expireWarnUnsafeSupplier) {
-
-		_expireWarnSupplier = () -> {
-			try {
-				return expireWarnUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField(
-		description = "Days before expiration to warn the recipients. Must be fewer than the days until expiration. Supplied on creation; not returned on read."
-	)
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected Integer expireWarn;
-
-	@JsonIgnore
-	private Supplier<Integer> _expireWarnSupplier;
-
-	@io.swagger.v3.oas.annotations.media.Schema(
 		description = "The document library file entries to be signed."
 	)
 	@Valid
@@ -917,18 +872,6 @@ public class SignatureRequest implements Serializable {
 			sb.append(expireAfter);
 		}
 
-		Integer expireWarn = getExpireWarn();
-
-		if (expireWarn != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"expireWarn\": ");
-
-			sb.append(expireWarn);
-		}
-
 		FileEntryBrief[] fileEntryBriefs = getFileEntryBriefs();
 
 		if (fileEntryBriefs != null) {
@@ -1190,4 +1133,4 @@ public class SignatureRequest implements Serializable {
 	private Map<String, Serializable> _extendedProperties;
 
 }
-// LIFERAY-REST-BUILDER-HASH:-7225159
+// LIFERAY-REST-BUILDER-HASH:-528775471

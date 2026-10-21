@@ -175,27 +175,6 @@ public class SignatureRequest implements Cloneable, Serializable {
 
 	protected Integer expireAfter;
 
-	public Integer getExpireWarn() {
-		return expireWarn;
-	}
-
-	public void setExpireWarn(Integer expireWarn) {
-		this.expireWarn = expireWarn;
-	}
-
-	public void setExpireWarn(
-		UnsafeSupplier<Integer, Exception> expireWarnUnsafeSupplier) {
-
-		try {
-			expireWarn = expireWarnUnsafeSupplier.get();
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected Integer expireWarn;
-
 	public FileEntryBrief[] getFileEntryBriefs() {
 		return fileEntryBriefs;
 	}
@@ -397,4 +376,4 @@ public class SignatureRequest implements Cloneable, Serializable {
 	}
 
 }
-// LIFERAY-REST-BUILDER-HASH:-1543646478
+// LIFERAY-REST-BUILDER-HASH:-1516081372
