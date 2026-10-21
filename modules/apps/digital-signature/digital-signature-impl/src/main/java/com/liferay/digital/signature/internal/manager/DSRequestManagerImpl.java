@@ -456,6 +456,107 @@ public class DSRequestManagerImpl implements DSRequestManager {
 	}
 
 	@Override
+	public void sendDSRequestReminders(long companyId) {
+		if (!FeatureFlagManagerUtil.isEnabled(companyId, "LPD-69290")) {
+			return;
+		}
+
+		DigitalSignatureConfiguration digitalSignatureConfiguration =
+			DigitalSignatureConfigurationUtil.getDigitalSignatureConfiguration(
+				companyId, 0);
+
+		if (!digitalSignatureConfiguration.signatureReminderEnabled()) {
+			return;
+		}
+
+		ObjectDefinition objectDefinition =
+			_objectDefinitionLocalService.
+				fetchObjectDefinitionByExternalReferenceCode(
+					DSObjectDefinitionConstants.
+						EXTERNAL_REFERENCE_CODE_REQUEST_RECIPIENT,
+					companyId);
+
+		if (objectDefinition == null) {
+			return;
+		}
+
+		try {
+			Set<Long> dsRequestIds = new HashSet<>(
+				TransformUtil.transform(
+					_getValuesList(
+						companyId,
+						StringBundler.concat(
+							"(requestRecipientStatus eq '",
+							DSRequestConstants.STATUS_SENT, "')"),
+						objectDefinition, null),
+					values -> MapUtil.getLong(
+						values,
+						"r_dsRequestToDSRequestRecipients_l_dsRequestId")));
+
+			if (dsRequestIds.isEmpty()) {
+				return;
+			}
+
+			Map<Long, DSRequest> dsRequests = _getDSRequests(
+				companyId, dsRequestIds);
+
+			Map<Long, List<DSRequest>> groupDSRequests = new HashMap<>();
+
+			for (DSRequest dsRequest : dsRequests.values()) {
+				if (!dsRequest.isSyncable() ||
+					!_isEnabled(companyId, dsRequest.getSiteGroupId())) {
+
+					continue;
+				}
+
+				List<DSRequest> siteDSRequests =
+					groupDSRequests.computeIfAbsent(
+						dsRequest.getSiteGroupId(), key -> new ArrayList<>());
+
+				siteDSRequests.add(dsRequest);
+			}
+
+			for (Map.Entry<Long, List<DSRequest>> entry :
+					groupDSRequests.entrySet()) {
+
+				Map<String, DSEnvelope> dsEnvelopes = _getDSEnvelopes(
+					companyId, entry.getValue(), entry.getKey());
+
+				for (DSRequest dsRequest : entry.getValue()) {
+					DSEnvelope dsEnvelope = dsEnvelopes.get(
+						dsRequest.getExternalReferenceCode());
+
+					if (dsEnvelope != null) {
+						_updateDSRequest(
+							dsEnvelope,
+							_getDSRequestObjectEntry(
+								dsRequest.getDSRequestId()));
+					}
+
+					DSRequest updatedDSRequest = fetchDSRequest(
+						companyId, dsRequest.getDSRequestId());
+
+					if ((updatedDSRequest == null) ||
+						updatedDSRequest.isTerminal()) {
+
+						continue;
+					}
+
+					_sendDSRequestNotifications(
+						updatedDSRequest,
+						updatedDSRequest.getDSRequestRecipients());
+				}
+			}
+		}
+		catch (Exception exception) {
+			_log.error(
+				"Unable to send digital signature request reminders for " +
+					"company " + companyId,
+				exception);
+		}
+	}
+
+	@Override
 	public void updateDSRequest(long dsRequestId) throws PortalException {
 		ObjectEntry objectEntry = _getDSRequestObjectEntry(dsRequestId);
 
@@ -665,6 +766,41 @@ public class DSRequestManagerImpl implements DSRequestManager {
 
 		return new DSRequestRecipient(
 			dsRequestRecipientObjectEntry.getValues());
+	}
+
+	private Map<String, DSEnvelope> _getDSEnvelopes(
+		long companyId, List<DSRequest> dsRequests, long groupId) {
+
+		Map<String, DSEnvelope> dsEnvelopes = new HashMap<>();
+
+		String[] dsEnvelopeIds = TransformUtil.transformToArray(
+			dsRequests, DSRequest::getExternalReferenceCode, String.class);
+
+		try {
+			for (int i = 0; i < dsEnvelopeIds.length;
+				 i += _DS_ENVELOPE_IDS_MAX_SIZE) {
+
+				for (DSEnvelope dsEnvelope :
+						_dsEnvelopeManager.getDSEnvelopes(
+							companyId, groupId,
+							ArrayUtil.subset(
+								dsEnvelopeIds, i,
+								Math.min(
+									dsEnvelopeIds.length,
+									i + _DS_ENVELOPE_IDS_MAX_SIZE)))) {
+
+					dsEnvelopes.put(dsEnvelope.getDSEnvelopeId(), dsEnvelope);
+				}
+			}
+		}
+		catch (Exception exception) {
+			_log.error(
+				"Unable to list digital signature envelopes for site " +
+					groupId,
+				exception);
+		}
+
+		return dsEnvelopes;
 	}
 
 	private ObjectEntry _getDSRequestObjectEntry(long dsRequestId)
@@ -1472,6 +1608,8 @@ public class DSRequestManagerImpl implements DSRequestManager {
 			}
 		}
 	}
+
+	private static final int _DS_ENVELOPE_IDS_MAX_SIZE = 50;
 
 	private static final int _IN_FILTER_MAX_SIZE = 1000;
 
