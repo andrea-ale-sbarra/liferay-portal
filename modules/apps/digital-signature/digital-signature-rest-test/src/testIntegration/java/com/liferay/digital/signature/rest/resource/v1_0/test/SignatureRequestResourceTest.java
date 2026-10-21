@@ -209,15 +209,15 @@ public class SignatureRequestResourceTest
 	public void testGetSignatureRequest() throws Exception {
 		super.testGetSignatureRequest();
 
-		User user1 = UserTestUtil.addUser();
+		User recipientUser = UserTestUtil.addUser();
 
 		ObjectEntry dsRequestObjectEntry = _addDSRequestObjectEntry(
-			user1.getEmailAddress(), DSRequestConstants.STATUS_SENT);
-		SignatureRequestResource user1SignatureRequestResource =
-			_getSignatureRequestResource(user1);
+			recipientUser.getEmailAddress(), DSRequestConstants.STATUS_SENT);
+		SignatureRequestResource recipientUserSignatureRequestResource =
+			_getSignatureRequestResource(recipientUser);
 
 		SignatureRequest signatureRequest =
-			user1SignatureRequestResource.getSignatureRequest(
+			recipientUserSignatureRequestResource.getSignatureRequest(
 				dsRequestObjectEntry.getObjectEntryId());
 
 		Creator creator = signatureRequest.getCreator();
@@ -255,12 +255,12 @@ public class SignatureRequestResourceTest
 			String.valueOf(signatureRequest.getId()),
 			HttpComponentsUtil.getParameter(
 				signAction.get("href"), "dsRequestId", false));
+		Assert.assertEquals("GET", signAction.get("method"));
 		Assert.assertTrue(
 			signAction.get("href"),
 			StringUtil.endsWith(
 				HttpComponentsUtil.getPath(signAction.get("href")),
 				"/digital_signature/open_ds_request"));
-		Assert.assertEquals("GET", signAction.get("method"));
 
 		SignatureRequestRecipient[] signatureRequestRecipients =
 			signatureRequest.getSignatureRequestRecipients();
@@ -278,7 +278,7 @@ public class SignatureRequestResourceTest
 			signatureRequestRecipients[0];
 
 		Assert.assertEquals(
-			user1.getEmailAddress(),
+			recipientUser.getEmailAddress(),
 			signatureRequestRecipient.getEmailAddress());
 		Assert.assertEquals(
 			dsRequestRecipient.getName(), signatureRequestRecipient.getName());
@@ -292,7 +292,7 @@ public class SignatureRequestResourceTest
 			dsRequestRecipient.getStatusDate(),
 			signatureRequestRecipient.getStatusDate());
 		Assert.assertEquals(
-			Long.valueOf(user1.getUserId()),
+			Long.valueOf(recipientUser.getUserId()),
 			signatureRequestRecipient.getUserId());
 
 		signatureRequest = signatureRequestResource.getSignatureRequest(
@@ -300,14 +300,14 @@ public class SignatureRequestResourceTest
 
 		Assert.assertTrue(MapUtil.isEmpty(signatureRequest.getActions()));
 
-		User user2 = UserTestUtil.addUser();
+		User user = UserTestUtil.addUser();
 
-		SignatureRequestResource user2SignatureRequestResource =
-			_getSignatureRequestResource(user2);
+		SignatureRequestResource userSignatureRequestResource =
+			_getSignatureRequestResource(user);
 
 		_assertProblemStatus(
 			"NOT_FOUND",
-			() -> user2SignatureRequestResource.getSignatureRequest(
+			() -> userSignatureRequestResource.getSignatureRequest(
 				dsRequestObjectEntry.getObjectEntryId()));
 	}
 
