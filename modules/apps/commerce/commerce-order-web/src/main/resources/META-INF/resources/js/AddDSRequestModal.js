@@ -194,17 +194,11 @@ function moveRecipient(recipients, index, offset) {
 	return movedRecipients;
 }
 
-function validate({emailSubject, expireAfter, expireWarn, recipients}) {
+function validate({emailSubject, recipients}) {
 	const errors = {};
 
 	if (!emailSubject.trim()) {
 		errors.emailSubject = Liferay.Language.get('this-field-is-required');
-	}
-
-	if (Number(expireAfter) > 0 && Number(expireWarn) >= Number(expireAfter)) {
-		errors.expireWarn = Liferay.Language.get(
-			'days-to-warn-recipients-must-be-fewer-than-days-until-expiration'
-		);
 	}
 
 	const recipientErrors = recipients.map(({userId}) =>
@@ -236,7 +230,6 @@ export default function AddDSRequestModal({
 	const [emailSubject, setEmailSubject] = useState('');
 	const [errors, setErrors] = useState({});
 	const [expireAfter, setExpireAfter] = useState(120);
-	const [expireWarn, setExpireWarn] = useState(3);
 	const rowKeyRef = useRef(0);
 
 	const createRecipient = (user) => ({
@@ -280,8 +273,6 @@ export default function AddDSRequestModal({
 
 		const nextErrors = validate({
 			emailSubject,
-			expireAfter,
-			expireWarn,
 			recipients,
 		});
 
@@ -296,7 +287,6 @@ export default function AddDSRequestModal({
 		formData.append(`${portletNamespace}emailMessage`, emailMessage);
 		formData.append(`${portletNamespace}emailSubject`, emailSubject);
 		formData.append(`${portletNamespace}expireAfter`, expireAfter);
-		formData.append(`${portletNamespace}expireWarn`, expireWarn);
 		formData.append(`${portletNamespace}sequential`, sequential);
 
 		recipients.forEach(({userId}) =>
@@ -600,28 +590,6 @@ export default function AddDSRequestModal({
 						type="number"
 						value={expireAfter}
 					/>
-				</ClayForm.Group>
-
-				<ClayForm.Group
-					className={errors.expireWarn ? 'has-error' : undefined}
-				>
-					<label htmlFor={`${portletNamespace}expireWarn`}>
-						{Liferay.Language.get(
-							'days-to-warn-recipients-before-expiration'
-						)}
-					</label>
-
-					<ClayInput
-						id={`${portletNamespace}expireWarn`}
-						min="0"
-						onChange={(event) => setExpireWarn(event.target.value)}
-						type="number"
-						value={expireWarn}
-					/>
-
-					{errors.expireWarn && (
-						<ErrorFeedback error={errors.expireWarn} />
-					)}
 				</ClayForm.Group>
 			</ClayModal.Body>
 

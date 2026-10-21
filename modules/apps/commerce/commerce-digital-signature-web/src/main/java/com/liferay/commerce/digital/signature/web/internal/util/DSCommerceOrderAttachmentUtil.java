@@ -253,9 +253,6 @@ public class DSCommerceOrderAttachmentUtil {
 			DSCommerceOrderAttachmentException.UnsupportedFileExtension.class,
 			"this-file-extension-is-not-supported-by-docusign"
 		).put(
-			DSRequestException.ExpireWarnMustBeLessThanExpireAfter.class,
-			"days-to-warn-recipients-must-be-fewer-than-days-until-expiration"
-		).put(
 			DSRequestException.FileEntryHasDSRequest.class,
 			"this-document-already-has-an-active-or-completed-signature-request"
 		).put(

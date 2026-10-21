@@ -13,7 +13,6 @@ import com.liferay.commerce.model.CommerceOrderAttachment;
 import com.liferay.commerce.service.CommerceOrderAttachmentLocalService;
 import com.liferay.commerce.service.CommerceOrderLocalService;
 import com.liferay.digital.signature.constants.DigitalSignatureConstants;
-import com.liferay.digital.signature.exception.DSRequestException;
 import com.liferay.digital.signature.manager.DSEnvelopeManager;
 import com.liferay.digital.signature.manager.DSRequestManager;
 import com.liferay.digital.signature.model.DSEnvelope;
@@ -151,16 +150,6 @@ public class AddDSRequestMVCResourceCommand
 						commerceOrderAttachment.getCommerceOrderAttachmentId());
 			}
 
-			int expireAfterDays = ParamUtil.getInteger(
-				resourceRequest, "expireAfter");
-			int expireWarnDays = ParamUtil.getInteger(
-				resourceRequest, "expireWarn");
-
-			if ((expireAfterDays > 0) && (expireWarnDays >= expireAfterDays)) {
-				throw new DSRequestException.
-					ExpireWarnMustBeLessThanExpireAfter();
-			}
-
 			DSRequest dsRequest = _dsRequestManager.addDSRequest(
 				commerceOrder.getCompanyId(),
 				DSCommerceOrderAttachmentUtil.getSiteGroupId(commerceOrder),
@@ -178,8 +167,9 @@ public class AddDSRequestMVCResourceCommand
 						setEmailSubject(
 							ParamUtil.getString(
 								resourceRequest, "emailSubject"));
-						setExpireAfter(expireAfterDays);
-						setExpireWarn(expireWarnDays);
+						setExpireAfter(
+							ParamUtil.getInteger(
+								resourceRequest, "expireAfter"));
 						setName(commerceOrderAttachment.getTitle());
 					}
 				},
