@@ -27,6 +27,12 @@ public interface DSRequestManager {
 
 	public DSRequest fetchDSRequest(long companyId, long dsRequestId);
 
+	public List<DSRequest> getGroupDSRequests(
+		long companyId, long groupId, String search, int start, int end);
+
+	public int getGroupDSRequestsCount(
+		long companyId, long groupId, String search);
+
 	public Map<Long, DSRequest> getLatestFileEntryDSRequests(
 		long companyId, long[] fileEntryIds);
 
@@ -39,5 +45,8 @@ public interface DSRequestManager {
 		throws PortalException;
 
 	public void updateDSRequest(long dsRequestId) throws PortalException;
+
+	public void voidDSRequest(long dsRequestId, String reason)
+		throws PortalException;
 
 }

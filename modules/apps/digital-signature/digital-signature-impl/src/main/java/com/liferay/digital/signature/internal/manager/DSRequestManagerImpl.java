@@ -278,6 +278,90 @@ public class DSRequestManagerImpl implements DSRequestManager {
 	}
 
 	@Override
+	public List<DSRequest> getGroupDSRequests(
+		long companyId, long groupId, String search, int start, int end) {
+
+		if (!_isEnabled(companyId, groupId)) {
+			return new ArrayList<>();
+		}
+
+		ObjectDefinition objectDefinition =
+			_objectDefinitionLocalService.
+				fetchObjectDefinitionByExternalReferenceCode(
+					DSObjectDefinitionConstants.EXTERNAL_REFERENCE_CODE_REQUEST,
+					companyId);
+
+		if (objectDefinition == null) {
+			return new ArrayList<>();
+		}
+
+		try {
+			List<Long> dsRequestIds = _objectEntryLocalService.getPrimaryKeys(
+				new Long[] {0L}, companyId, objectDefinition.getUserId(),
+				objectDefinition.getObjectDefinitionId(),
+				_filterFactory.create(
+					"siteGroupId eq " + groupId, objectDefinition),
+				false, search, start, end,
+				new Sort[] {
+					new Sort(Field.CREATE_DATE, Sort.LONG_TYPE, true),
+					new Sort("id", Sort.LONG_TYPE, true)
+				});
+
+			if (dsRequestIds.isEmpty()) {
+				return new ArrayList<>();
+			}
+
+			Map<Long, DSRequest> dsRequests = _getDSRequests(
+				companyId, new HashSet<>(dsRequestIds));
+
+			return TransformUtil.transform(dsRequestIds, dsRequests::get);
+		}
+		catch (Exception exception) {
+			_log.error(
+				"Unable to load digital signature requests for site " + groupId,
+				exception);
+
+			return new ArrayList<>();
+		}
+	}
+
+	@Override
+	public int getGroupDSRequestsCount(
+		long companyId, long groupId, String search) {
+
+		if (!_isEnabled(companyId, groupId)) {
+			return 0;
+		}
+
+		ObjectDefinition objectDefinition =
+			_objectDefinitionLocalService.
+				fetchObjectDefinitionByExternalReferenceCode(
+					DSObjectDefinitionConstants.EXTERNAL_REFERENCE_CODE_REQUEST,
+					companyId);
+
+		if (objectDefinition == null) {
+			return 0;
+		}
+
+		try {
+			return _objectEntryLocalService.getValuesListCount(
+				new Long[] {0L}, companyId, objectDefinition.getUserId(),
+				objectDefinition.getObjectDefinitionId(),
+				_filterFactory.create(
+					"siteGroupId eq " + groupId, objectDefinition),
+				false, search);
+		}
+		catch (Exception exception) {
+			_log.error(
+				"Unable to count digital signature requests for site " +
+					groupId,
+				exception);
+
+			return 0;
+		}
+	}
+
+	@Override
 	public Map<Long, DSRequest> getLatestFileEntryDSRequests(
 		long companyId, long[] fileEntryIds) {
 
@@ -396,6 +480,51 @@ public class DSRequestManagerImpl implements DSRequestManager {
 		}
 
 		_sendDSRequestNotifications(dsRequest, nextDSRequestRecipients);
+	}
+
+	@Override
+	public void voidDSRequest(long dsRequestId, String reason)
+		throws PortalException {
+
+		ObjectEntry objectEntry = _getDSRequestObjectEntry(dsRequestId);
+
+		long companyId = objectEntry.getCompanyId();
+		long groupId = MapUtil.getLong(objectEntry.getValues(), "siteGroupId");
+
+		if (!_isEnabled(companyId, groupId)) {
+			throw new DSRequestException.NotEnabled(groupId);
+		}
+
+		try {
+			_dsEnvelopeManager.voidDSEnvelope(
+				companyId, groupId, objectEntry.getExternalReferenceCode(),
+				reason);
+		}
+		catch (DSEnvelopeException.NotVoidable dsEnvelopeException) {
+			_updateDSRequest(objectEntry);
+
+			objectEntry = _objectEntryLocalService.getObjectEntry(dsRequestId);
+
+			String requestStatus = MapUtil.getString(
+				objectEntry.getValues(), "requestStatus");
+
+			if (Objects.equals(
+					requestStatus, DSRequestConstants.STATUS_VOIDED)) {
+
+				return;
+			}
+
+			if (ArrayUtil.contains(
+					DSRequestConstants.STATUSES_REQUEST_TERMINAL,
+					requestStatus)) {
+
+				throw new DSRequestException.NotActive(dsRequestId);
+			}
+
+			throw dsEnvelopeException;
+		}
+
+		_updateDSRequest(objectEntry);
 	}
 
 	private DSRequest _addDSRequest(
