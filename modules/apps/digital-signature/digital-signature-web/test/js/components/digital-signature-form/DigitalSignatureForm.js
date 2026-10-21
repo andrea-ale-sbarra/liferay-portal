@@ -86,37 +86,6 @@ describe('DigitalSignatureForm', () => {
 		expect(asFragment()).toMatchSnapshot();
 	});
 
-	it('Validates the days to warn recipients only when the envelope expires', async () => {
-		const {getByLabelText, getByText, queryByText} = render(
-			<AppContext.Provider value={{embeddedViewEnabled: true}}>
-				<DigitalSignatureForm />
-			</AppContext.Provider>
-		);
-
-		const inputExpireAfter = getByLabelText('days-until-expiration');
-		const inputExpireWarn = getByLabelText(
-			'days-to-warn-recipients-before-expiration'
-		);
-
-		await userEvent.clear(inputExpireWarn);
-		await userEvent.type(inputExpireWarn, '120');
-
-		expect(
-			getByText(
-				'days-to-warn-recipients-must-be-fewer-than-days-until-expiration'
-			)
-		).toBeInTheDocument();
-
-		await userEvent.clear(inputExpireAfter);
-		await userEvent.type(inputExpireAfter, '0');
-
-		expect(
-			queryByText(
-				'days-to-warn-recipients-must-be-fewer-than-days-until-expiration'
-			)
-		).toBeNull();
-	});
-
 	it('Sends the expiration days with the envelope', async () => {
 		const navigate = jest.fn();
 
@@ -177,14 +146,9 @@ describe('DigitalSignatureForm', () => {
 		);
 
 		const inputExpireAfter = getByLabelText('days-until-expiration');
-		const inputExpireWarn = getByLabelText(
-			'days-to-warn-recipients-before-expiration'
-		);
 
 		await userEvent.clear(inputExpireAfter);
 		await userEvent.type(inputExpireAfter, '30');
-		await userEvent.clear(inputExpireWarn);
-		await userEvent.type(inputExpireWarn, '5');
 		await userEvent.click(getByText('send'));
 
 		await waitFor(() => expect(navigate).toHaveBeenCalled());
@@ -194,7 +158,7 @@ describe('DigitalSignatureForm', () => {
 		);
 
 		expect(body.get('_namespace_expireAfter')).toBe('30');
-		expect(body.get('_namespace_expireWarn')).toBe('5');
+		expect(body.has('_namespace_expireWarn')).toBeFalsy();
 	});
 
 	it('Restricts recipients to existing users when the embedded view is enabled', () => {

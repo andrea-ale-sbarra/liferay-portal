@@ -124,15 +124,8 @@ public class DSRequestManagerImpl implements DSRequestManager {
 			throw new DSRequestException.MustHaveFileEntry();
 		}
 
-		int expireAfter = dsEnvelope.getExpireAfter();
-		int expireWarn = dsEnvelope.getExpireWarn();
-
-		if ((expireAfter < 0) || (expireWarn < 0)) {
+		if (dsEnvelope.getExpireAfter() < 0) {
 			throw new DSRequestException.ExpirationMustNotBeNegative();
-		}
-
-		if ((expireAfter > 0) && (expireWarn >= expireAfter)) {
-			throw new DSRequestException.ExpireWarnMustBeLessThanExpireAfter();
 		}
 
 		Map<Long, DSRequest> dsRequests = _getLatestFileEntryDSRequests(

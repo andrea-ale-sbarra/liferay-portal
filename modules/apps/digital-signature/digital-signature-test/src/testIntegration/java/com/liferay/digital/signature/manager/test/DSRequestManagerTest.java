@@ -1115,31 +1115,15 @@ public class DSRequestManagerTest {
 		DSEnvelope dsEnvelope = _createDSEnvelope(TestPropsValues.getUser());
 
 		dsEnvelope.setExpireAfter(-1);
-		dsEnvelope.setExpireWarn(0);
 
 		FileEntry fileEntry = _addFileEntry();
 
 		AssertUtils.assertFailure(
 			DSRequestException.ExpirationMustNotBeNegative.class,
-			"Expire after and expire warn must not be negative",
+			"Expire after must not be negative",
 			() -> _addDSRequest(dsEnvelope, fileEntry));
 
 		dsEnvelope.setExpireAfter(5);
-		dsEnvelope.setExpireWarn(-1);
-
-		AssertUtils.assertFailure(
-			DSRequestException.ExpirationMustNotBeNegative.class,
-			"Expire after and expire warn must not be negative",
-			() -> _addDSRequest(dsEnvelope, fileEntry));
-
-		dsEnvelope.setExpireWarn(5);
-
-		AssertUtils.assertFailure(
-			DSRequestException.ExpireWarnMustBeLessThanExpireAfter.class,
-			"Expire warn must be less than expire after",
-			() -> _addDSRequest(dsEnvelope, fileEntry));
-
-		dsEnvelope.setExpireWarn(4);
 
 		DSRequest dsRequest = _addDSRequest(dsEnvelope, fileEntry);
 

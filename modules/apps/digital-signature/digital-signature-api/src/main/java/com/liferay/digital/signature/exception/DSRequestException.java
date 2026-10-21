@@ -26,16 +26,7 @@ public class DSRequestException extends PortalException {
 	public static class ExpirationMustNotBeNegative extends DSRequestException {
 
 		public ExpirationMustNotBeNegative() {
-			super("Expire after and expire warn must not be negative");
-		}
-
-	}
-
-	public static class ExpireWarnMustBeLessThanExpireAfter
-		extends DSRequestException {
-
-		public ExpireWarnMustBeLessThanExpireAfter() {
-			super("Expire warn must be less than expire after");
+			super("Expire after must not be negative");
 		}
 
 	}

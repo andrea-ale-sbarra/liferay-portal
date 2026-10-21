@@ -38,10 +38,6 @@ public class DSEnvelopeTest {
 	public void testToJSONObject() {
 		DSEnvelope dsEnvelope = new DSEnvelope();
 
-		int expireWarn = RandomTestUtil.randomInt();
-
-		dsEnvelope.setExpireWarn(expireWarn);
-
 		JSONObject jsonObject = dsEnvelope.toJSONObject();
 
 		Assert.assertFalse(jsonObject.has("notification"));
@@ -63,9 +59,6 @@ public class DSEnvelopeTest {
 			expirationsJSONObject.getString("expireAfter"));
 		Assert.assertEquals(
 			"true", expirationsJSONObject.getString("expireEnabled"));
-		Assert.assertEquals(
-			String.valueOf(expireWarn),
-			expirationsJSONObject.getString("expireWarn"));
 
 		Assert.assertEquals(
 			"false", notificationJSONObject.getString("useAccountDefaults"));

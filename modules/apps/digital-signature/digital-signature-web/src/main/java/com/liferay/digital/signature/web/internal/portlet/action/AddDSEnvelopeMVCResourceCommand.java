@@ -93,8 +93,6 @@ public class AddDSEnvelopeMVCResourceCommand
 		if (embeddedViewEnabled) {
 			dsEnvelope.setExpireAfter(
 				ParamUtil.getInteger(resourceRequest, "expireAfter"));
-			dsEnvelope.setExpireWarn(
-				ParamUtil.getInteger(resourceRequest, "expireWarn"));
 		}
 
 		long[] fileEntryIds = ParamUtil.getLongValues(

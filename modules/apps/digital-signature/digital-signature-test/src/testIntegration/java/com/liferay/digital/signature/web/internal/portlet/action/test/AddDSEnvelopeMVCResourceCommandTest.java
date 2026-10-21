@@ -102,8 +102,6 @@ public class AddDSEnvelopeMVCResourceCommandTest {
 
 		mockLiferayResourceRequest.setParameter(
 			"expireAfter", String.valueOf(days));
-		mockLiferayResourceRequest.setParameter(
-			"expireWarn", String.valueOf(days - 1));
 
 		mockLiferayResourceRequest.setParameter("recipients", "[]");
 
@@ -146,8 +144,6 @@ public class AddDSEnvelopeMVCResourceCommandTest {
 
 							Assert.assertEquals(
 								days, dsEnvelope.getExpireAfter());
-							Assert.assertEquals(
-								days - 1, dsEnvelope.getExpireWarn());
 
 							return new DSRequest(
 								TestPropsValues.getCompanyId(), null,
@@ -212,7 +208,6 @@ public class AddDSEnvelopeMVCResourceCommandTest {
 			WebKeys.THEME_DISPLAY, themeDisplay);
 
 		mockLiferayResourceRequest.setParameter("expireAfter", "5");
-		mockLiferayResourceRequest.setParameter("expireWarn", "5");
 		mockLiferayResourceRequest.setParameter("recipients", "[]");
 
 		String dsEnvelopeId = RandomTestUtil.randomString();
@@ -227,7 +222,6 @@ public class AddDSEnvelopeMVCResourceCommandTest {
 						DSEnvelope dsEnvelope = (DSEnvelope)arguments[2];
 
 						Assert.assertEquals(0, dsEnvelope.getExpireAfter());
-						Assert.assertEquals(0, dsEnvelope.getExpireWarn());
 
 						dsEnvelope.setDSEnvelopeId(dsEnvelopeId);
 
