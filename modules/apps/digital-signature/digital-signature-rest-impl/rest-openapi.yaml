@@ -140,10 +140,6 @@ components:
                     description:
                         Days until the signature request expires. Zero leaves it open. Supplied on creation; not returned on read.
                     type: integer
-                expireWarn:
-                    description:
-                        Days before expiration to warn the recipients. Must be fewer than the days until expiration. Supplied on creation; not returned on read.
-                    type: integer
                 fileEntryBriefs:
                     description:
                         The document library file entries to be signed.
