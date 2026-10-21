@@ -98,7 +98,9 @@ public class OpenDSRequestStrutsActionTest {
 			OpenDSRequestStrutsActionTest.class,
 			new String[] {
 				".com.liferay.digital.signature.internal.batch.01.object." +
-					"definition"
+					"definition",
+				".com.liferay.digital.signature.internal.batch.02.object." +
+					"relationship"
 			});
 
 		_companyConfigurationTemporarySwapper =
@@ -202,14 +204,14 @@ public class OpenDSRequestStrutsActionTest {
 
 		String redirectedURL = mockHttpServletResponse.getRedirectedUrl();
 
+		Assert.assertEquals(
+			WindowState.MAXIMIZED.toString(),
+			HttpComponentsUtil.getParameter(redirectedURL, "p_p_state", false));
 		Assert.assertTrue(
 			redirectedURL,
 			redirectedURL.contains(
 				layout.getFriendlyURL() + "/-/digital_signature/sign/" +
 					dsRequestId));
-		Assert.assertEquals(
-			WindowState.MAXIMIZED.toString(),
-			HttpComponentsUtil.getParameter(redirectedURL, "p_p_state", false));
 	}
 
 	private MockHttpServletResponse _execute(
@@ -365,11 +367,6 @@ public class OpenDSRequestStrutsActionTest {
 
 		String redirectedURL = mockHttpServletResponse.getRedirectedUrl();
 
-		Assert.assertTrue(
-			redirectedURL,
-			redirectedURL.contains(
-				layout.getFriendlyURL() + "/-/digital_signature/sign/" +
-					dsRequestId));
 		Assert.assertEquals(
 			LiferayWindowState.POP_UP.toString(),
 			HttpComponentsUtil.getParameter(redirectedURL, "p_p_state", false));
@@ -378,6 +375,11 @@ public class OpenDSRequestStrutsActionTest {
 			URLCodec.decodeURL(
 				HttpComponentsUtil.getParameter(
 					redirectedURL, portletNamespace + "backURL", false)));
+		Assert.assertTrue(
+			redirectedURL,
+			redirectedURL.contains(
+				layout.getFriendlyURL() + "/-/digital_signature/sign/" +
+					dsRequestId));
 	}
 
 	private void _testExecuteWithSignDigitalSignaturePortletLayout()

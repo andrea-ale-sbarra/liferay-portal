@@ -94,7 +94,9 @@ public class SignDSRequestMVCRenderCommandTest {
 			SignDSRequestMVCRenderCommandTest.class,
 			new String[] {
 				".com.liferay.digital.signature.internal.batch.01.object." +
-					"definition"
+					"definition",
+				".com.liferay.digital.signature.internal.batch.02.object." +
+					"relationship"
 			});
 
 		_companyConfigurationTemporarySwapper =
@@ -262,15 +264,15 @@ public class SignDSRequestMVCRenderCommandTest {
 
 		String redirectedURL = mockHttpServletResponse.getRedirectedUrl();
 
-		Assert.assertTrue(
-			redirectedURL, redirectedURL.contains(layout.getFriendlyURL()));
-		Assert.assertFalse(
-			redirectedURL,
-			redirectedURL.contains("/-/digital_signature/sign/"));
 		Assert.assertEquals(
 			String.valueOf(dsRequestId),
 			HttpComponentsUtil.getParameter(
 				redirectedURL, "dsRequestId", false));
+		Assert.assertFalse(
+			redirectedURL,
+			redirectedURL.contains("/-/digital_signature/sign/"));
+		Assert.assertTrue(
+			redirectedURL, redirectedURL.contains(layout.getFriendlyURL()));
 	}
 
 	private void _testRenderWhenStateIsPopUp() throws Exception {

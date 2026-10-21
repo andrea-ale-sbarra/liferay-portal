@@ -89,7 +89,9 @@ public class CompleteDSRecipientViewMVCActionCommandTest {
 			CompleteDSRecipientViewMVCActionCommandTest.class,
 			new String[] {
 				".com.liferay.digital.signature.internal.batch.01.object." +
-					"definition"
+					"definition",
+				".com.liferay.digital.signature.internal.batch.02.object." +
+					"relationship"
 			});
 
 		_companyConfigurationTemporarySwapper =
