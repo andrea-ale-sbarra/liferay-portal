@@ -5,6 +5,7 @@
 
 package com.liferay.digital.signature.internal.manager;
 
+import com.liferay.digital.signature.exception.DSEnvelopeException;
 import com.liferay.digital.signature.internal.http.DSHttp;
 import com.liferay.digital.signature.manager.DSCustomFieldManager;
 import com.liferay.digital.signature.manager.DSEnvelopeManager;
@@ -13,6 +14,7 @@ import com.liferay.digital.signature.model.DSDocument;
 import com.liferay.digital.signature.model.DSEnvelope;
 import com.liferay.digital.signature.model.DSRecipient;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -23,6 +25,7 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
@@ -62,26 +65,53 @@ public class DSEnvelopeManagerImpl implements DSEnvelopeManager {
 				"DocuSign did not return a digital signature envelope ID");
 		}
 
-		_dsCustomFieldManager.addDSCustomFields(
-			companyId, groupId, dsEnvelope.getDSEnvelopeId(),
-			new DSCustomField() {
-				{
-					name = "envelopeName";
-					show = true;
-					value = dsEnvelopeName;
-				}
-			},
-			new DSCustomField() {
-				{
-					name = "envelopeSenderEmailAddress";
-					show = true;
-					value = dsEnvelopeSenderEmailAddress;
-				}
-			});
+		String dsEnvelopeId = dsEnvelope.getDSEnvelopeId();
 
-		return getDSEnvelope(
-			companyId, groupId, dsEnvelope.getDSEnvelopeId(),
-			"custom_fields,recipients");
+		try {
+			_dsCustomFieldManager.addDSCustomFields(
+				companyId, groupId, dsEnvelopeId,
+				new DSCustomField() {
+					{
+						name = "envelopeName";
+						show = true;
+						value = dsEnvelopeName;
+					}
+				},
+				new DSCustomField() {
+					{
+						name = "envelopeSenderEmailAddress";
+						show = true;
+						value = dsEnvelopeSenderEmailAddress;
+					}
+				});
+
+			DSEnvelope addedDSEnvelope = getDSEnvelope(
+				companyId, groupId, dsEnvelopeId, "custom_fields,recipients");
+
+			if (Validator.isNull(addedDSEnvelope.getDSEnvelopeId())) {
+				throw new SystemException(
+					"Unable to read digital signature envelope " +
+						dsEnvelopeId);
+			}
+
+			return addedDSEnvelope;
+		}
+		catch (Exception exception1) {
+			try {
+				voidDSEnvelope(
+					companyId, groupId, dsEnvelopeId,
+					"Unable to finish creating the digital signature envelope");
+			}
+			catch (Exception exception2) {
+				_log.error(
+					"Unable to void digital signature envelope " + dsEnvelopeId,
+					exception2);
+
+				exception1.addSuppressed(exception2);
+			}
+
+			throw exception1;
+		}
 	}
 
 	@Override
@@ -107,6 +137,17 @@ public class DSEnvelopeManagerImpl implements DSEnvelopeManager {
 	}
 
 	@Override
+	public byte[] getDSDocumentAsBytes(
+		long companyId, long groupId, String dsDocumentId,
+		String dsEnvelopeId) {
+
+		return _dsHttp.getAsBytes(
+			companyId, groupId,
+			StringBundler.concat(
+				"envelopes/", dsEnvelopeId, "/documents/", dsDocumentId));
+	}
+
+	@Override
 	public DSEnvelope getDSEnvelope(
 		long companyId, long groupId, String dsEnvelopeId) {
 
@@ -125,6 +166,28 @@ public class DSEnvelopeManagerImpl implements DSEnvelopeManager {
 				"envelopes/", dsEnvelopeId, "?include=", include));
 
 		return _toDSEnvelope(jsonObject);
+	}
+
+	@Override
+	public List<DSEnvelope> getDSEnvelopes(
+			long companyId, long groupId, String... dsEnvelopeIds)
+		throws PortalException {
+
+		JSONObject jsonObject = _dsHttp.get(
+			companyId, groupId,
+			StringBundler.concat(
+				"envelopes?envelope_ids=", StringUtil.merge(dsEnvelopeIds),
+				"&include=custom_fields,recipients"));
+
+		if (Validator.isNotNull(jsonObject.getString("errorCode"))) {
+			throw new PortalException(
+				"Unable to list digital signature envelopes: " +
+					jsonObject.getString("message"));
+		}
+
+		return JSONUtil.toList(
+			jsonObject.getJSONArray("envelopes"),
+			envelopeJSONObject -> _toDSEnvelope(envelopeJSONObject), _log);
 	}
 
 	@Override
@@ -172,6 +235,36 @@ public class DSEnvelopeManagerImpl implements DSEnvelopeManager {
 			pagination, jsonObject.getInt("totalSetSize"));
 	}
 
+	@Override
+	public void voidDSEnvelope(
+			long companyId, long groupId, String dsEnvelopeId, String reason)
+		throws PortalException {
+
+		JSONObject jsonObject = _dsHttp.put(
+			companyId, groupId, "envelopes/" + dsEnvelopeId,
+			JSONUtil.put(
+				"status", "voided"
+			).put(
+				"voidedReason", reason
+			));
+
+		String errorCode = jsonObject.getString("errorCode");
+
+		if (Validator.isNull(errorCode)) {
+			return;
+		}
+
+		String message = StringBundler.concat(
+			"Unable to void digital signature envelope ", dsEnvelopeId, ": ",
+			jsonObject.getString("message"));
+
+		if (Objects.equals(errorCode, "ENVELOPE_CANNOT_VOID_INVALID_STATE")) {
+			throw new DSEnvelopeException.NotVoidable(message);
+		}
+
+		throw new PortalException(message);
+	}
+
 	private List<DSDocument> _getDSDocuments(JSONArray jsonArray) {
 		return JSONUtil.toList(
 			jsonArray,
@@ -195,9 +288,12 @@ public class DSEnvelopeManagerImpl implements DSEnvelopeManager {
 			jsonObject.getJSONArray("signers"),
 			signerJSONObject -> new DSRecipient() {
 				{
+					dsClientUserId = signerJSONObject.getString("clientUserId");
 					dsRecipientId = signerJSONObject.getString("recipientId");
 					emailAddress = signerJSONObject.getString("email");
 					name = signerJSONObject.getString("name");
+					routingOrder = GetterUtil.getInteger(
+						signerJSONObject.getString("routingOrder"));
 					sentLocalDateTime = _toLocalDateTime(
 						signerJSONObject.getString("sentDateTime"));
 					status = signerJSONObject.getString("status");
