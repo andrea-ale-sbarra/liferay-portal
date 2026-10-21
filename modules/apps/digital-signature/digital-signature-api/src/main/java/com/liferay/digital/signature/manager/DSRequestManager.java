@@ -30,6 +30,9 @@ public interface DSRequestManager {
 
 	public DSRequest fetchFileEntryDSRequest(long companyId, long fileEntryId);
 
+	public List<DSRequest> getFileEntryDSRequests(
+		long companyId, long fileEntryId);
+
 	public List<DSRequest> getGroupDSRequests(
 		long companyId, long groupId, String search, int start, int end);
 

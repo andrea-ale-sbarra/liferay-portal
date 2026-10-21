@@ -71,6 +71,15 @@ public class DSCommerceOrderAttachmentUtil {
 			});
 	}
 
+	public static String getActionURL(String path, ThemeDisplay themeDisplay) {
+		String url = HttpComponentsUtil.addParameter(
+			StringBundler.concat(
+				themeDisplay.getPortalURL(), PortalUtil.getPathModule(), path),
+			"backURL", themeDisplay.getURLCurrent());
+
+		return url + "&commerceOrderAttachmentId={id}";
+	}
+
 	public static Map<String, String> getDSRequestStatuses(
 		Map<Long, DSRequest> dsRequests) {
 
