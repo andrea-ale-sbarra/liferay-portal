@@ -407,13 +407,13 @@ public class OpenDSRequestStrutsActionTest {
 		String redirectedURL = mockHttpServletResponse.getRedirectedUrl();
 
 		Assert.assertEquals(
-			LiferayWindowState.POP_UP.toString(),
-			HttpComponentsUtil.getParameter(redirectedURL, "p_p_state", false));
-		Assert.assertEquals(
 			backURL,
 			URLCodec.decodeURL(
 				HttpComponentsUtil.getParameter(
 					redirectedURL, portletNamespace + "backURL", false)));
+		Assert.assertEquals(
+			LiferayWindowState.POP_UP.toString(),
+			HttpComponentsUtil.getParameter(redirectedURL, "p_p_state", false));
 		Assert.assertTrue(
 			redirectedURL,
 			redirectedURL.contains(
